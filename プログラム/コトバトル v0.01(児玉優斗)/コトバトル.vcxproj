@@ -178,6 +178,7 @@
     <ClCompile Include="sceneX.cpp" />
     <ClCompile Include="select.cpp" />
     <ClCompile Include="SelectMenu.cpp" />
+    <ClCompile Include="SetObject.cpp" />
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="texture.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="sceneX.h" />
     <ClInclude Include="select.h" />
     <ClInclude Include="SelectMenu.h" />
+    <ClInclude Include="SetObject.h" />
     <ClInclude Include="sound.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="texture.h" />

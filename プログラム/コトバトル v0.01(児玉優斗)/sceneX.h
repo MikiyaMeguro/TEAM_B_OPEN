@@ -13,10 +13,6 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODEL_NAME			"data\\MODEL\\customer.x"	// 車のモデル名
-#define PLAYER_MODEL_NAME	"data\\MODEL\\rikisi.x"		// 車のモデル名
-#define ENEMY_MODEL_NAME	"data\\MODEL\\rikisi2.x"		// 車のモデル名
-#define DOHYO_MODEL_NAME	"data\\MODEL\\dohyo.x"	// 土俵のモデル名
 
 //========================================
 // クラスの定義
@@ -37,7 +33,7 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	static CSceneX *Create(D3DXVECTOR3 pos, CLoad::MODEL model);	// オブジェクトの生成
+	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot,D3DXVECTOR3 Scale, CLoad::MODEL model);	// オブジェクトの生成
 
 	D3DXVECTOR3 GetPosition(void);						// 位置の取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置の設定
