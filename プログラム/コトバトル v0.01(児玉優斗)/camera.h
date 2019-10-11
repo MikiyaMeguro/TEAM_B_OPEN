@@ -39,7 +39,7 @@ public:
 	D3DXVECTOR3 GetRotation(void) { return m_rot; };
 	float GetLength(void) { return m_fLength; };
 	D3DVIEWPORT9 GetViewPort(void) { return m_ViewPort; };
-
+	CAMERA_TYPE GetType(void) { return m_Type; };
 	/*Set*/
 	//SPECTOR—p
 	void SetPosV(D3DXVECTOR3 posV) { m_posV = posV; };

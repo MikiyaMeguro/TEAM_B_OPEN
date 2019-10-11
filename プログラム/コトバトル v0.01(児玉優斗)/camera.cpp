@@ -102,8 +102,8 @@ void CCamera::Update(void)
 		}
 		m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
 		m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
-									  sinf(m_rot.x) * m_fLength,
-									  cosf(m_rot.y) * m_fLength);
+			sinf(m_rot.x) * m_fLength,
+			cosf(m_rot.y) * m_fLength);
 		m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 
 
@@ -112,38 +112,17 @@ void CCamera::Update(void)
 		break;
 	}
 
-	//視点移動
-	if (pInput->GetPress(DIK_LEFT) == true)//時計回り
+
+	//角度Yの補正
+	if (m_rot.y < -D3DX_PI)
 	{
-		m_rot.y -= ANGLE_MOVE;
-		if (m_rot.y < -D3DX_PI)
-		{
-			m_rot.y += D3DX_PI * 2.0f;
-		}
+		m_rot.y += D3DX_PI * 2.0f;
 	}
-	if (pInput->GetPress(DIK_RIGHT) == true)//反時計回り
+	if (m_rot.y > D3DX_PI)
 	{
-		m_rot.y += ANGLE_MOVE;
-		if (m_rot.y > D3DX_PI)
-		{
-			m_rot.y -= D3DX_PI * 2.0f;
-		}
+		m_rot.y -= D3DX_PI * 2.0f;
 	}
 
-	if (pInput->GetPress(DIK_UP) == true)
-	{
-		if (m_rot.x < D3DX_PI * 0.2f)
-		{
-			m_rot.x += ANGLE_MOVE;
-		}
-	}
-	if (pInput->GetPress(DIK_DOWN) == true)
-	{
-		if (m_rot.x > D3DX_PI * -0.2f)
-		{
-			m_rot.x -= ANGLE_MOVE;
-		}
-	}
 }
 
 //=============================================================================

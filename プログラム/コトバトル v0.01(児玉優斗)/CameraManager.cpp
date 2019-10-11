@@ -108,7 +108,7 @@ bool CCameraManager::CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVEC
 			}
 		}
 		else
-		{
+		{//Šù‚ÉƒJƒƒ‰‚ª¶¬‚³‚ê‚Ä‚¢‚ê‚Î
 			result->pCamera->Set(type, pos, rot, fLength);
 		}
 	}
