@@ -17,6 +17,11 @@ class CWordManager;
 class CPlayer;
 class CTube;
 
+//
+//
+//
+#define MAX_PLAYER (4)
+
 //クラス（シーン2Dの派生クラス）
 class CGame
 {
@@ -31,14 +36,14 @@ public:
 	static CGame *Create(void);
 
 	// 取得の関数
-	static CWordManager *GetWordManager(void) { return m_pWordManager; }		// 言葉管理の取得
-	static CPlayer *GetPlayer(void) { return m_pPlayer; }					// プレイヤーの取得
-	static CTube *GetTube(void) { return m_pTube; }							// 文字の可視化UIの取得
+	static CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理の取得
+	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
+	static CTube *GetTube(void) { return m_pTube; }										// 文字の可視化UIの取得
 
 private:
 	void CameraSetting(void);
 	static CWordManager *m_pWordManager;
-	static CPlayer *m_pPlayer;
+	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CTube *m_pTube;
 };
 #endif

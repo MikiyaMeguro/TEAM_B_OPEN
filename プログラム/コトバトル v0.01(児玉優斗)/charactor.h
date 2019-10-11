@@ -46,6 +46,9 @@ public:
 	D3DXVECTOR3& GetMove(void) { return m_Move; };
 	D3DXVECTOR3& GetSpin(void) { return m_Spin; };
 	float&		 GetSpeed(void) { return m_fSpeed; };
+	float&		GetStep(void) { return m_fStep; };
+	float&		 GetMoveCoeffient(void) { return m_fMoveCoeffient; };
+	float&		GetSpinCoeffient(void) { return m_fSpinCoeffient; };
 
 	CHARACTOR_MOVE_TYPE GetMoveType(void) { return m_type; };
 
@@ -59,7 +62,11 @@ private:
 	D3DXVECTOR3 m_rot;				//角度
 	D3DXVECTOR3 m_Move;				//移動量
 	D3DXVECTOR3 m_Spin;				//回転量
+
 	float m_fSpeed;					//移動速度
+	float m_fStep;					//ステップ移動の移動量
+	float m_fMoveCoeffient;			//移動の慣性
+	float m_fSpinCoeffient;			//回転の慣性
 
 	CHARACTOR_MOVE_TYPE m_type;		//移動タイプ
 

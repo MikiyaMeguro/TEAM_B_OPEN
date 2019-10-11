@@ -36,7 +36,7 @@
 //静的メンバ変数宣言
 //============================================================================
 CWordManager *CGame::m_pWordManager = NULL;
-CPlayer *CGame::m_pPlayer = NULL;
+CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
 CTube *CGame::m_pTube = NULL;
 //=============================================================================
 //	コンストラクタ
@@ -85,24 +85,14 @@ void CGame::Init(void)
 	p3D = CScene3D::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), "BLOCK");
 	p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
 
-	/*CPlayer* pPlayer = NULL;
-
-	pPlayer = CPlayer::Create();
-	if (pPlayer != NULL)
-	{
-		pPlayer->Set(D3DXVECTOR3(100.0f,-20.0f,100.0f),CCharaBase::MOVETYPE_PLAYER_INPUT);
-		pPlayer->SetCameraName("1P_CAMERA");
-		pCameraManager->SetCameraHomingChara("1P_CAMERA",(C3DCharactor*)pPlayer->GetCharaMover());
-
-	}*/
 
 	// プレイヤーの生成
-	m_pPlayer = CPlayer::Create();
-	if (m_pPlayer != NULL)
+	m_pPlayer[0] = CPlayer::Create();
+	if (m_pPlayer[0] != NULL)
 	{
-		m_pPlayer->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT);
-		m_pPlayer->SetCameraName("1P_CAMERA");
-		pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer->GetCharaMover());
+		m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT);
+		m_pPlayer[0]->SetCameraName("1P_CAMERA");
+		pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 
 	}
 
@@ -163,11 +153,6 @@ void CGame::Init(void)
 //=============================================================================
 void CGame::Uninit(void)
 {
-	if (m_pPlayer != NULL)
-	{	// プレイヤーの破棄
-		m_pPlayer->Uninit();
-		m_pPlayer = NULL;
-	}
 	if (m_pTube != NULL)
 	{	// 文字の可視化UI(2D)の破棄
 		m_pTube->Uninit();

@@ -13,9 +13,10 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MOVE_COEFFICIENT (0.85f);	//移動にかかる係数
-#define SPIN_COEFFICIENT (0.10f);	//回転にかかる係数
-
+#define MOVE_DEFAULT_SPEED (0.25f)			//デフォルトの移動スピード
+#define STEP_DEFAULT_MOVEMENT (6.0f)		//デフォルトのステップ量
+#define MOVE_DEFAULT_COEFFICIENT (0.85f)	//デフォルトの移動にかかる係数
+#define SPIN_DEFAULT_COEFFICIENT (0.10f)	//デフォルトの回転にかかる係数
 
 //=============================================================================
 // 設定処理
@@ -29,7 +30,11 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 
 	m_Move = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_Spin = D3DXVECTOR3(0.0f,0.0f,0.0f);
-	m_fSpeed = 0.25f;
+	m_fSpeed = MOVE_DEFAULT_SPEED;
+	m_fStep = STEP_DEFAULT_MOVEMENT;
+	m_fMoveCoeffient = MOVE_DEFAULT_COEFFICIENT;
+	m_fSpinCoeffient = SPIN_DEFAULT_COEFFICIENT;
+
 	m_nCntStepCoolTime = 0;
 	CCommand::RegistCommand("PLAYERMOVE_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_W);
 	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_S);
@@ -121,8 +126,6 @@ void C3DCharactor::CharaMove_Input(void)
 	D3DXVECTOR3& spin = CCharaBase::GetSpin();
 	float		 speed = CCharaBase::GetSpeed();
 
-
-
 	//移動の向き設定
 	if (CCommand::GetCommand("PLAYERMOVE_RIGHT"))
 	{
@@ -130,8 +133,6 @@ void C3DCharactor::CharaMove_Input(void)
 		{
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.25f)) * speed;
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.25f)) * speed;
-
-
 		}
 		else if (CCommand::GetCommand("PLAYERMOVE_DOWN"))
 		{
@@ -211,7 +212,7 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
 
-	move *= MOVE_COEFFICIENT;
+	move *= MOVE_DEFAULT_COEFFICIENT;
 	pos += move;
 
 	spin.y = CameraRot.y - rot.y;
@@ -226,7 +227,7 @@ void C3DCharactor::CharaMove_Input(void)
 		spin.y += D3DX_PI * 2.0f;
 	}
 
-	rot.y += spin.y * SPIN_COEFFICIENT;
+	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
 
 	if (rot.y > D3DX_PI)
 	{
