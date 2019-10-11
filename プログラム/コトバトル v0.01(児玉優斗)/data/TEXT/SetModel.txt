@@ -9,16 +9,19 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 4
+NUM_MODEL = 8
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
 #------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/box000.x"
-MODEL_FILENAME = data/MODEL/car000.x"
-MODEL_FILENAME = data/MODEL/car001.x"
-MODEL_FILENAME = data/MODEL/car002.x"
-
+MODEL_FILENAME = data/MODEL/car000.x"				#0
+MODEL_FILENAME = data/MODEL/car001.x"				#1
+MODEL_FILENAME = data/MODEL/Desk.x"					#2 (机)
+MODEL_FILENAME = data/MODEL/Pulin.x"				#3 プリン
+MODEL_FILENAME = data/MODEL/Knife.x"				#4 ナイフ
+MODEL_FILENAME = data/MODEL/apple.x"				#5 リンゴ
+MODEL_FILENAME = data/MODEL/box000.x"				#6
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#7
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
