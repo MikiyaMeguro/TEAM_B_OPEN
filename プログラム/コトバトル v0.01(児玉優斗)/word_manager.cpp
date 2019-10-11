@@ -148,26 +148,22 @@ void CWordManager::Reset(void)
 //=============================================================================
 void CWordManager::Delete(void)
 {
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_BACKSPACE))
+	if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
 	{
-		if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
-		{
-			if (m_nCntNum < 3)
-			{	// 3‚ÂˆÈ‰º‚Ìê‡
-				if (m_nCntNum > 0)
+		if (m_nCntNum < 3)
+		{	// 3‚ÂˆÈ‰º‚Ìê‡
+			if (m_nCntNum > 0)
+			{
+				m_nCntNum--;
+				CGame::GetTube()->Delete();
+				m_aWord[0].nNum = 99;	// ‹ó‚Ìó‘Ô‚É
+				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
 				{
-					m_nCntNum--;
-					CGame::GetTube()->Delete();
-					m_aWord[0].nNum = 99;	// ‹ó‚Ìó‘Ô‚É
-					for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
-					{
-						m_aWord[nCntWord].nNum = m_aWord[nCntWord + 1].nNum;
-						WordDebug(nCntWord);
-					}
+					m_aWord[nCntWord].nNum = m_aWord[nCntWord + 1].nNum;
+					WordDebug(nCntWord);
 				}
 			}
 		}
-
 	}
 }
 //=============================================================================
