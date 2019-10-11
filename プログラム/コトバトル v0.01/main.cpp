@@ -1,33 +1,39 @@
 //=============================================================================
 //
 // メイン処理 [main.cpp]
-// Author : Kodama Yuto
+// Author : 目黒 未来也
 //
 //=============================================================================
 #include "main.h"
-#include "Manager.h"
-#include "DebugProc.h"
+#include "renderer.h"
+#include "scene2D.h"
+#include "manager.h"
 
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define CLASS_NAME		"AppClass"				// ウインドウのクラス名
-#define WINDOW_NAME		"超字言　コトバトル"	// ウインドウのキャプション名
+#define CLASS_NAME		"AppClass"			// ウインドウのクラス名
+#define WINDOW_NAME		"つっぱり超相撲"	// ウインドウのキャプション名
 
 //*****************************************************************************
 // プロトタイプ宣言
 //*****************************************************************************
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+//*****************************************************************************
+// グローバル変数:
+//*****************************************************************************
+#ifdef _DEBUG
+int						g_nCountFPS;			// FPSカウンタ
+#endif
+
 //=============================================================================
 // メイン関数
 //=============================================================================
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
-	//メモリリーク検出
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-	//インスタンス生成
 	WNDCLASSEX wcex =
 	{
 		sizeof(WNDCLASSEX),
@@ -43,14 +49,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		CLASS_NAME,
 		NULL
 	};
-	RECT rect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT};
+	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	HWND hWnd;
 	MSG msg;
 	DWORD dwCurrentTime;
 	DWORD dwFrameCount;
 	DWORD dwExecLastTime;
 	DWORD dwFPSLastTime;
-	int nCountFPS = 0;
+
 	// ウィンドウクラスの登録
 	RegisterClassEx(&wcex);
 
@@ -59,24 +65,29 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// ウィンドウの作成
 	hWnd = CreateWindow(CLASS_NAME,
-						WINDOW_NAME,
-						WS_OVERLAPPEDWINDOW,
-						CW_USEDEFAULT,
-						CW_USEDEFAULT,
-						(rect.right - rect.left),
-						(rect.bottom - rect.top),
-						NULL,
-						NULL,
-						hInstance,
-						NULL);
+		WINDOW_NAME,
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		(rect.right - rect.left),
+		(rect.bottom - rect.top),
+		NULL,
+		NULL,
+		hInstance,
+		NULL);
 
-	//マネージャの生成
 	CManager *pManager = NULL;
-	pManager = new CManager;
 
-	if (pManager != NULL)
+	// マネージャの生成
+	if (pManager == NULL)
 	{
-		pManager->Init(hInstance,hWnd);
+		// マネージャクラスの生成
+		pManager = new CManager;
+
+		if (pManager != NULL)
+		{
+			pManager->Init(hInstance, hWnd, true);
+		}
 	}
 
 	// 分解能を設定
@@ -84,20 +95,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	// フレームカウント初期化
 	dwCurrentTime =
-	dwFrameCount = 0;
+		dwFrameCount = 0;
 	dwExecLastTime =
-	dwFPSLastTime = timeGetTime();
+		dwFPSLastTime = timeGetTime();
 
 	// ウインドウの表示
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
 	// メッセージループ
-	while(1)
+	while (1)
 	{
-        if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
-			if(msg.message == WM_QUIT)
+			if (msg.message == WM_QUIT)
 			{// PostQuitMessage()が呼ばれたらループ終了
 				break;
 			}
@@ -107,30 +118,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
-        }
+		}
 		else
 		{
 			dwCurrentTime = timeGetTime();	// 現在の時間を取得
-			if((dwCurrentTime - dwFPSLastTime) >= 500)
+			if ((dwCurrentTime - dwFPSLastTime) >= 500)
 			{// 0.5秒ごとに実行
 #ifdef _DEBUG
-				// FPSを算出
-				nCountFPS = dwFrameCount * 1000 / (dwCurrentTime - dwFPSLastTime);
+					 // FPSを算出
+				g_nCountFPS = dwFrameCount * 1000 / (dwCurrentTime - dwFPSLastTime);
 #endif
 				dwFPSLastTime = dwCurrentTime;	// 現在の時間を保存
 				dwFrameCount = 0;
 			}
 
-			if((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
+			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{// 1/60秒経過
 				dwExecLastTime = dwCurrentTime;	// 現在の時間を保存
 
 				if (pManager != NULL)
 				{
-#ifdef _DEBUG
-					CDebugProc::Print("FPS:%d\n", nCountFPS);//FPSセット
-#endif
+					// 更新処理
 					pManager->Update();
+
+					// 描画処理
 					pManager->Draw();
 				}
 
@@ -139,14 +150,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 	}
 
-	//マネージャの解放
 	if (pManager != NULL)
-	{
+	{// レンダリングクラスの破棄
+	 // 終了処理
 		pManager->Uninit();
-
 		delete pManager;
 		pManager = NULL;
-
 	}
 
 	// ウィンドウクラスの登録を解除
@@ -163,7 +172,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 //=============================================================================
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	switch(uMsg)
+	switch (uMsg)
 	{
 	case WM_CREATE:
 		break;
@@ -173,7 +182,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		break;
 
 	case WM_KEYDOWN:
-		switch(wParam)
+		switch (wParam)
 		{
 		case VK_ESCAPE:				// [ESC]キーが押された
 			DestroyWindow(hWnd);	// ウィンドウを破棄するよう指示する
@@ -188,3 +197,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
+#ifdef _DEBUG
+//=============================================================================
+// FPSを取得
+//=============================================================================
+int GetFPS(void)
+{
+	return g_nCountFPS;
+}
+#endif

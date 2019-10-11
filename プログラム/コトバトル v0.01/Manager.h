@@ -1,115 +1,131 @@
 //=============================================================================
 //
-// 管理クラス処理 [Manager.h]
-// Author : Kodama Yuto
+// マネージャ処理 [manager.h]
+// Author : 目黒 未来也
 //
 //=============================================================================
 #ifndef _MANAGER_H_
 #define _MANAGER_H_
+
 #include "main.h"
+#include "sound.h"
 #include "renderer.h"
-#include "input.h"
-#include "scene.h"
-#include "InputKeyboard.h"
-#include "camera.h"
-#include "CameraManager.h"
-#include "light.h"
-#include "DebugProc.h"
+
 #include "texture.h"
 #include "Command.h"
-#include "sound.h"
-class CTitle;
-class CTutorial;
-class CGame;
-class CResult;
-class CRanking;
+//=============================================================================
+// 前方宣言
+//=============================================================================
+class CRenderer;
+class CInputKeyboard;
+class CCamera;
+class CLight;
+class CDebugProc;
+class CMask;
 class CFade;
-class CPause;
-//==================================================================
-//	クラスの定義
-//==================================================================
-//管理クラス
+class CGame;
+class CTitle;
+class CSelect;
+class CResult;
+class CUltimate;
+class CCharacterMove;
+class CXInputJoyPad;
+class CSound;
+class CTutorial;
+
+class CCameraManager;
+//=============================================================================
+// マクロ
+//=============================================================================
+#define PLAYER_RIGHT		(DIK_D)
+#define PLAYER_LEFT			(DIK_A)
+#define PLAYER_A_BUTTON		(DIK_F)
+#define PLAYER_B_BUTTON		(DIK_G)
+#define PLAYER_C_BUTTON		(DIK_S)
+
+#define ENEMY_RIGHT			(DIK_NUMPAD6)
+#define ENEMY_LEFT			(DIK_NUMPAD4)
+#define ENEMY_A_BUTTON		(DIK_ADD)
+#define ENEMY_B_BUTTON		(DIK_NUMPADENTER)
+#define ENEMY_C_BUTTON		(DIK_NUMPAD5)
+#define PLAYER_C_BUTTON		(DIK_S)
+#define MAX_SOUND			(3)
+
+//=============================================================================
+// マクロ(コントローラー)
+//=============================================================================
+
+//=============================================================================
+// クラスの定義
+//=============================================================================
+//=====================
+// マネージャクラス
+//=====================
 class CManager
 {
 public:
-	typedef enum
-	{
-		DIR_UP,
-		DIR_RIGHT,
-		DIR_LEFT,
-		DIR_DOWN,
-		DIR_MAX
-	}DIRECTION;
 
 	typedef enum
-	{//画面の定義
-		MODE_NONE = 0,	//モード無(初期値)
-		MODE_LOGO,		//ロゴ表示画面
-		MODE_TITLE,		//タイトル画面
-		MODE_SELECT,	//セレクト画面
-		MODE_TUTORIAL,	//チュートリアル画面
-		MODE_GAME,		//ゲーム画面
-		MODE_RESULT,	//リザルト画面
-		MODE_RANKING,	//ランキング画面
-		MODE_OPTION,	//オプション画面
+	{//モードの構造体
+		MODE_NONE = 0,
+		MODE_TITLE,
+		MODE_SELECT,
+		MODE_TUTORIAL,
+		MODE_GAME,
+		MODE_RESULT,
 		MODE_MAX
 	}MODE;
 
-	CManager();
-	~CManager();
+	CManager();		// コンストラクタ
+	~CManager();	// デストラクタ
 
-	HRESULT Init(HINSTANCE hInstance,HWND hWnd);
-	void	Uninit(void);
-	void	Update(void);
-	void	Draw(void);
+	HRESULT Init(HINSTANCE hInstance, HWND hWnd, bool bWindow);
+	void Uninit(void);
+	void Update(void);
+	void Draw(void);
+	static CRenderer *GetRenderer(void);
+	static CInputKeyboard *GetInputKeyboard(void);
+	//static CCamera *GetCamera(void);
+	static CMask *GetMask(void);
+	static CCharacterMove *GetCharacterMove(void);
+	static CFade *GetFade(void) { return m_pFade; };
+	static MODE GetMode(void) { return m_mode; };
+	static void SetMode(MODE mode);
+	static CGame *GetGame(void) { return m_pGame; }
+	static CTitle *GetTitle(void) { return m_pTitle; }
+	static CSelect *GetSelect(void) { return m_pSelect; }
+	static CTutorial *GetTutorial(void) { return m_pTutorial; }
+	static CResult *GetResult(void) { return m_pResult; }
+	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
+	static CSound *GetSound(int nNum);
 
-
-	static CRenderer*		GetRenderer(void) { return m_pRenderer; };
-	static CInputKeyboard*  GetInputKeyboard(void) { return m_pInputKeyboard; };
-	static CCameraManager*  GetCameraManager(void) { return m_pCameraManager; };
-	static CLight*  GetLight(void) { return m_pLight; };
-	static CDebugProc* GetDebugProc(void) { return m_pDebugProc; };
-	static CFade* GetFade(void) { return m_pFade; };
-	static CPause* GetPause(void) { return m_pPause; };
-	static CSound* GetSound(void) { return m_pSound; };
-
-
-	static CGame* GetGame(void) { return m_pGame; };
-	static HRESULT SetMode(MODE mode);
-	static LPCSTR GetModeName(void);
-
-	static bool GetPauseFlag(void) { return m_bPauseFlag; };
-	static void ChangePauseFlag(void) { m_bPauseFlag ^= 1; };		//フラグ反転
-
+	static CCameraManager* GetCameraManager(void) { return m_pCameraManager; };
 private:
-	static CRenderer*		m_pRenderer;
-	static CInputKeyboard*	m_pInputKeyboard;
+	static CRenderer *m_pRenderer;
+	static CInputKeyboard *m_pInputKeyboard;
+	//static CCamera *m_pCamera;
+	static CLight *m_pLight;
+	static CDebugProc *m_pDebugProc;
+
+	static CMask *m_pMask;
+	static CFade *m_pFade;
+	static CCharacterMove *m_pCharacterMove;
+	static CGame *m_pGame;
+	static CTitle *m_pTitle;
+	static CSelect *m_pSelect;
+	static CTutorial *m_pTutorial;
+	static CResult *m_pResult;
+
 	static CCameraManager* m_pCameraManager;
-	static CLight*			m_pLight;
-	static CDebugProc*		m_pDebugProc;
-	static CPause*			m_pPause;
-	static CSound*			m_pSound;
-
-	static CFade*			m_pFade;
-	//状態遷移用ポインタ
-	static CTitle*			m_pTitle;			//タイトル
-	static CTutorial*		m_pTutorial;		//チュートリアル
-	static CGame*			m_pGame;			//ゲーム
-	static CResult*			m_pResult;			//リザルト
-	static CRanking*		m_pRanking;			//ランキング
-
-
-	//その他変数
-	static MODE m_Mode;		//現在の画面状態
-	static MODE m_OrgMode;	//一つ前の画面状態
-
-	static bool m_bPauseFlag;		//ポーズ処理
+	static CXInputJoyPad *m_pXInput;
+	static MODE m_mode;
+	static CSound			*m_pSound[MAX_SOUND];	// サウンドのポインタ
 };
 
 //==================================================================================================//
 //     テンプレート定義(Scene系以外の生成)
 //==================================================================================================//
-template<class T> bool Create(T *&pObj)
+template<class T> bool ObjCreate(T *&pObj)
 {
 	pObj = NULL;
 	pObj = new T;
@@ -120,7 +136,7 @@ template<class T> bool Create(T *&pObj)
 //==================================================================================================//
 //     テンプレート定義(Scene系以外の解放)
 //==================================================================================================//
-template<class T> bool Release(T *&pObj)
+template<class T> bool ObjRelease(T *&pObj)
 {
 	if (pObj != NULL)
 	{
@@ -132,5 +148,4 @@ template<class T> bool Release(T *&pObj)
 	return false;
 }
 
-#endif // !_MANAGER_H_
-
+#endif

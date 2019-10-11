@@ -9,7 +9,7 @@
 
 #include "main.h"
 
-class CCharaBase;
+class C3DCharactor;
 //===================================================================
 // クラスの定義
 //===================================================================
@@ -26,7 +26,7 @@ public:
 	CCamera();
 	~CCamera();
 
-	void Set(CAMERA_TYPE type,D3DXVECTOR3 pos,D3DXVECTOR3 rot,float fLength);
+	void Set(CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLength);
 
 	void Init(void);
 	void Uninit(void);
@@ -54,7 +54,7 @@ public:
 	void SetLength(float fLength) { m_fLength = fLength; };
 
 	void SetViewPort(D3DVIEWPORT9 ViewPort) { m_ViewPort = ViewPort; };
-	void SetViewPort(int X,int Y,int Width,int Height,float MinZ = 0.0f,float MaxZ = 1.0f)
+	void SetViewPort(int X, int Y, int Width, int Height, float MinZ = 0.0f, float MaxZ = 1.0f)
 	{
 		m_ViewPort.X = X;
 		m_ViewPort.Y = Y;
@@ -64,8 +64,8 @@ public:
 		m_ViewPort.MaxZ = MaxZ;
 	};
 
-	void SetLockOnChara(CCharaBase* pChara) { m_pLockOnChara = pChara; };
-	void SetHomingChara(CCharaBase* pChara) { m_pHomingChara = pChara; };
+	void SetLockOnChara(C3DCharactor* pChara) { m_pLockOnChara = pChara; };
+	void SetHomingChara(C3DCharactor* pChara) { m_pHomingChara = pChara; };
 
 private:
 	D3DXVECTOR3 m_posV;		//視点
@@ -79,13 +79,13 @@ private:
 	float m_fLength;	//PosVからPosRまでの距離
 
 	D3DXMATRIX m_mtxProjection; //プロジェクションマトリックス
-	D3DXMATRIX m_mtxView;	//ビューマトリックス
+	D3DXMATRIX m_mtxView;		//ビューマトリックス
 
-	D3DVIEWPORT9 m_ViewPort; //ビューポート
-	float m_fCameraAngle;	//カメラ角
+	D3DVIEWPORT9 m_ViewPort;	//ビューポート
+	float m_fCameraAngle;		//カメラ角
 
 	CAMERA_TYPE m_Type;			//カメラのタイプ
-	CCharaBase* m_pLockOnChara;	//ロックオンしているキャラのポインタ(NULLならロックオンしてない状態)
-	CCharaBase* m_pHomingChara;	//追従するキャラのポインタ(NULLなら追従なし)
+	C3DCharactor* m_pLockOnChara;	//posRでロックオンしているキャラのポインタ(NULLならロックオンしてない状態)
+	C3DCharactor* m_pHomingChara;	//posVで追従するキャラのポインタ(NULLなら追従なし)
 };
 #endif // !_CAMERA_H_
