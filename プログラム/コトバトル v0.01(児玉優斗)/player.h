@@ -18,6 +18,13 @@ class CSceneX;
 class CPlayer : public CScene
 {
 public:
+	typedef enum
+	{
+		TYPE_NORMAL = 0,
+		TYPE_POWER,
+		TYPE_SPEED,
+		TYPE_REACH,
+	}PLAYER_TYPE;
 	CPlayer(int nPriority = 3);
 	~CPlayer();
 
@@ -43,7 +50,7 @@ private:
 
 	CSceneX* m_pPlayerModel;				//プレイヤーのモデル(仮、後で↓の変数に差し替える)
 	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
-
+	PLAYER_TYPE m_PlayerType;
 	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
 };
 #endif // !_PLAYER_H_
