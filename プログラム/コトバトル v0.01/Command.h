@@ -61,17 +61,15 @@ public:
 	};	//コマンドの情報
 
 	static void RegistCommand(LPCSTR CommandName, INPUT_TYPE InputType, INPUT_STATE InputState, int nKey);			//コマンド情報登録(作成)
-	static bool GetCommand(LPCSTR CommandName, GET_COMMAND_OPTION option = COMMAND_EACH_TRUE,int nPlayerID = 0);	//コマンド呼び出し(PlayerID = コントローラの識別用)
+	static bool GetCommand(LPCSTR CommandName, int nPlayerID = 0, GET_COMMAND_OPTION option = COMMAND_EACH_TRUE);	//コマンド呼び出し(PlayerID = コントローラの識別用)
 	static void ResetCommandAll(void);
 	static bool ResetCommand(LPCSTR CommandName);
 
 private:
-	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);
-	static bool CheckKey_DXController(INPUT_STATE InputState, int nKey);
-
-
 	static std::vector<CommandState> m_Command;		//コマンド
 
+	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);
+	static bool CheckKey_DXController(INPUT_STATE InputState, int nKey);
 };
 
 #endif // !_COMMAND_H_

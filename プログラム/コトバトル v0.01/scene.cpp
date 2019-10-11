@@ -1,239 +1,342 @@
 //=============================================================================
 //
-// シーン処理 [scene.cpp]
-// Author : Kodama Yuto
+// シーン処理 [scene.h]
+// Author : 目黒 未来也
 //
 //=============================================================================
 #include "scene.h"
-#include "DebugProc.h"
+#include "scene2D.h"
+#include "debugProc.h"
+#include "input.h"
+#include "manager.h"
+#include "fade.h"
 
-//===================================================================
-//	静的メンバ変数宣言
-//===================================================================
-int     CScene::m_nNumAll[PRIORITY_MAX] = {};
-CScene* CScene::m_apTop[PRIORITY_MAX] = {};
-CScene* CScene::m_apCur[PRIORITY_MAX] = {};
+//=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
+int CScene::m_nNumAll = 0;
+int CScene::m_nNumPriority[NUM_PRIORITY] = {};
+CScene *CScene::m_apTop[NUM_PRIORITY] = {};
+CScene *CScene::m_apCur[NUM_PRIORITY] = {};
+bool    CScene::m_bPause = false;
 
-//===================================================================
-//	コンストラクタ
-//===================================================================
-CScene::CScene(PRIORITY pri, OBJTYPE type)
+//=============================================================================
+// シーンクラスのコンストラクタ
+//=============================================================================
+CScene::CScene(int nPriority, OBJTYPE objType)
 {
-	CScene* pScene = this;
-
-	pScene->AddList(pri);
-
-	m_Priority = pri;
-	m_objType = type;
+	// 値のクリア
+	m_nID = 0;
+	m_pPrev = NULL;
+	m_pNext = NULL;
 	m_bDeath = false;
-}
+	m_bPause = false;
 
-//===================================================================
-//	死亡フラグ立て
-//===================================================================
-void CScene::Release(void)
-{
-	m_bDeath = true; //死亡フラグ
-}
-
-//===================================================================
-//	一括メモリ解放
-//===================================================================
-void CScene::ReleaseAll(bool bFadeRelease)
-{
-	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
-	{
-		CScene* pScene = m_apTop[nCntPri];
-		if (pScene != NULL)
-		{
-			do
-			{
-				CScene* pSceneNext = pScene->m_pNext;
-				if (bFadeRelease == false)
-				{//フェードは消さないなら
-					if (pScene->GetObjType() != OBJTYPE_FADE)
-					{//オブジェクトがフェードポリゴンでなければ
-						pScene->Uninit();
-					}
-				}
-				else
-				{
-					pScene->Uninit();
-				}
-					pScene = pSceneNext;
-			} while (pScene != NULL);
-		}
-
-		if (m_nNumAll[nCntPri] <= 0)
-		{
-			m_apTop[nCntPri] = NULL;
-			m_apCur[nCntPri] = NULL;
-		}
-
-		DeadCheck((PRIORITY)nCntPri);
-
-		m_nNumAll[nCntPri] = 0;
-	}
-
-}
-
-//===================================================================
-//	一括更新
-//===================================================================
-void CScene::UpdateAll(void)
-{
-	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
-	{
-		CScene* pScene = m_apTop[nCntPri];
-		if (pScene != NULL)
-		{
-			do
-			{
-				CScene* pSceneNext = pScene->m_pNext;		//いったん退避させる
-				pScene->Update();
-				pScene = pSceneNext;
-			} while (pScene != NULL); //(pScene)← これと同じ条件式
-		}
-
-		DeadCheck((PRIORITY)nCntPri);
-	}
-
-	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
-	{
-		DeadCheck((PRIORITY)nCntPri);
-	}
-
-#ifdef _DEBUG
-	//デバッグ
-	int  nSum = 0;
-	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
-	{
-		CDebugProc::Print("OBJECT_%d:%d\n", nCntPri, m_nNumAll[nCntPri]);
-		nSum += m_nNumAll[nCntPri];
-	}
-	CDebugProc::Print("OBJECT_SUM:%d\n", nSum);
-#endif
-
-
-}
-
-//===================================================================
-//	一括描画
-//===================================================================
-void CScene::DrawAll(void)
-{
-	for (int nCntPri = 0; nCntPri < NUM_PRIORITY; nCntPri++)
-	{
-		CScene* pScene = m_apTop[nCntPri];
-		if (pScene != NULL)
-		{
-			do
-			{
-				CScene* pSceneNext = pScene->m_pNext;
-				pScene->Draw();
-				pScene = pSceneNext;
-			} while (pScene != NULL);
-		}
-	}
-
-}
-
-//===================================================================
-//	リストに追加
-//===================================================================
-void CScene::AddList(CScene::PRIORITY pri)
-{
-	//先端と末端を決める
-	if (m_apTop[pri] == NULL)
-	{//1つ目の場合
-		m_apTop[pri] = this;
-		m_apCur[pri] = this;
+	if (m_apCur[nPriority] == NULL)
+	{// カレントがNULLなら現在の位置が先頭
+		m_apTop[nPriority] = this;
 	}
 	else
-	{//それ以降の場合
-		CScene* pScene = m_apCur[pri];		//いったん退避
-
-		m_apCur[pri] = this;
-		m_apCur[pri]->m_pPrev = pScene;
-		m_apCur[pri]->m_pNext = NULL;
-		pScene->m_pNext = m_apCur[pri];
+	{// カレントがNULLじゃなかったら
+	 // 前回のSceneのm_pNextに今作ったSceneを入れる
+		m_apCur[nPriority]->m_pNext = this;
 	}
 
-	//m_nID = m_nNumAll[pri];
-	m_nNumAll[pri]++;
+	m_pPrev = m_apCur[nPriority];	// 今作ったSceneのm_pPrevに前回のSceneを入れる
+	m_pNext = NULL;					// 次のシーンはまだ作られていないからNULL
+	m_apCur[nPriority] = this;		// カレントの位置を今作ったSceneに移動する
+	m_nPriority = nPriority;		// プライオリティを保存
+	m_objType = objType;			// オブジェクトの種類を保存
+	m_nNumPriority[nPriority]++;
+
 }
 
-//===================================================================
-//	リストから削除
-//===================================================================
-void CScene::DeleteList(CScene::PRIORITY pri)
+//=============================================================================
+// デストラクタ
+//=============================================================================
+CScene::~CScene()
 {
-	//退避
-	CScene* pScene = this;
-	CScene* pScenePrev = pScene->m_pPrev;
-	CScene* pSceneNext = pScene->m_pNext;
-
-	if (pScene == m_apTop[pri])
-	{//このオブジェクトが先端なら
-		m_apTop[pri] = pSceneNext;
-		if (m_apTop[pri] != NULL)
-		{
-			m_apTop[pri]->m_pPrev = NULL;
-		}
-	}
-	else if (pScene == m_apCur[pri])
-	{//このオブジェクトが末端なら
-		m_apCur[pri] = pScenePrev;
-		if (m_apTop[pri] != NULL)
-		{
-			m_apCur[pri]->m_pNext = NULL;
-		}
-	}
-	else
-	{//それ以外なら
-		pScenePrev->m_pNext = pSceneNext;
-		pSceneNext->m_pPrev = pScenePrev;
-	}
-
-	m_nNumAll[pri]--;
 }
 
-//===================================================================
-//	死亡チェック(死亡フラグが立っているものを消す処理)
-//===================================================================
-void CScene::DeadCheck(CScene::PRIORITY pri)
+//=============================================================================
+// 全てのオブジェクトの解放処理
+//=============================================================================
+void CScene::ReleseAll(void)
 {
-	CScene* pScene = m_apTop[pri];
-	if (pScene != NULL)
-	{
-		do
+	CScene *pScene = NULL;
+
+	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+	{// 優先順位の数分繰り返す
+		// 先頭を取得する
+		pScene = m_apTop[nCntPriority];
+
+		while (pScene != NULL)
+		{// 空になるまでアップデートする
+		 // Updateの最中に消える可能性があるから先に記録しておく
+			CScene *pSceneNext = pScene->m_pNext;
+
+			// 更新
+			pScene->Uninit();
+
+			// 次のシーンに進める
+			pScene = pSceneNext;
+		}
+	}
+
+	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+	{// 優先順位の数分繰り返す
+		pScene = m_apTop[nCntPriority];
+
+		while (pScene != NULL)
 		{
-			CScene* pSceneNext = pScene->m_pNext;		//いったん退避させる
+			// Updateの最中に消える可能性があるから先に記録しておく
+			CScene *pSceneNext = pScene->m_pNext;
+
 			if (pScene->m_bDeath == true)
 			{
-				pScene->DeleteList(pri);
-				//削除
-				delete pScene;
-				pScene = NULL;
+				// フラグが立っているオブジェクトを消していく
+				pScene->DeleteAll();
 			}
+
+			// 次のシーンに進める
 			pScene = pSceneNext;
-		} while (pScene != NULL); //(pScene)← これと同じ条件式
+		}
 	}
 }
 
-//===================================================================
-//	優先順位(レイヤー)の変更
-//===================================================================
-void CScene::SetPriority(PRIORITY pri)
+//=============================================================================
+// 全てのオブジェクトの更新処理
+//=============================================================================
+void CScene::UpdeteAll(void)
 {
-	CScene* pScene = this;	//いったん逃がす
-	PRIORITY priority = pScene->GetPriority();
+	CScene *pScene = NULL;
 
-	pScene->DeleteList(priority);	//現在のリストから消す
+	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+	CXInputJoyPad *pXInput = NULL;
+	pXInput = CManager::GetXInput();
 
-	pScene->m_Priority = pri;					//優先順位変更
 
-	pScene->AddList(pri);						//新しいリストに追加
+	//フェードしていないときにポーズできる
+	//if (pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
+	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START,0) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
+	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START,1) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
+	//	|| pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_TUTORIAL
+	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_TUTORIAL
+	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START, 1) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_TUTORIAL)
+	//{
+	//	m_bPause = m_bPause ? false : true;
+	//	//CPause::SetPauseBool(m_bPause);
+	//}
 
+	if (m_bPause == false)
+	{
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+			// 先頭を取得する
+			pScene = m_apTop[nCntPriority];
 
+			while (pScene != NULL)
+			{// 空になるまでアップデートする
+
+				// Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+
+				// 更新
+				pScene->Update();
+
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+		}
+
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+			pScene = m_apTop[nCntPriority];
+
+			while (pScene != NULL)
+			{
+				// Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+
+				if (pScene->m_bDeath == true)
+				{
+					// フラグが立っているオブジェクトを消していく
+					pScene->DeleteAll();
+				}
+
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+		}
+	}
+	else
+	{
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+		 // 先頭を取得する
+			pScene = m_apTop[nCntPriority];
+
+			while (pScene != NULL)
+			{// 空になるまでアップデートする
+
+			 // Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+				if (pScene->GetObjType() == OBJTYPE_PAUSE)
+				{
+					// 更新
+					pScene->Update();
+				}
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+		}
+
+		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+		{// 優先順位の数分繰り返す
+			pScene = m_apTop[nCntPriority];
+
+			while (pScene != NULL)
+			{
+				// Updateの最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->m_pNext;
+
+				if (pScene->m_bDeath == true)
+				{
+					// フラグが立っているオブジェクトを消していく
+					pScene->DeleteAll();
+				}
+
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+		}
+	}
+//#ifdef _DEBUG
+//	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+//	{// 優先順位の数分繰り返す
+//		// デバック表示の更新
+//		CDebugProc::Print("ncn", nCntPriority, " : ", m_nNumPriority[nCntPriority]);
+//	}
+//#endif
+}
+
+//=============================================================================
+// 全てのオブジェクトの描画処理
+//=============================================================================
+void CScene::DrawAll(void)
+{
+	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+	{// 優先順位の数分繰り返す
+		// 先頭の場所を取得
+		CScene *pScene = m_apTop[nCntPriority];
+
+		while (pScene != NULL)
+		{// 空になるまで描画する
+			// Drawの最中に消える可能性があるから先に記録しておく
+			CScene *pSceneNext = pScene->m_pNext;
+
+			// 描画
+			pScene->Draw();
+
+			// 次のシーンに進める
+			pScene = pSceneNext;
+		}
+	}
+}
+
+//=============================================================================
+// オブジェクトの解放処理
+//=============================================================================
+void CScene::Release(void)
+{
+	// 死亡フラグを立てる
+	m_bDeath = true;
+}
+
+//=============================================================================
+// フラグが立ったオブジェクトの解放処理
+//=============================================================================
+void CScene::DeleteAll(void)
+{
+	int nPriority;
+	nPriority = m_nPriority;
+
+	// 消えるオブジェクトの前がいるかどうか
+	if (m_pPrev == NULL)
+	{// 前がいない時
+	 // 先頭を次にずらす
+		m_apTop[nPriority] = m_pNext;
+	}
+	else
+	{// 前がいる時
+	 // 前のオブジェクトにある自分の情報を次のオブジェクトに渡す
+		m_pPrev->m_pNext = m_pNext;
+	}
+
+	// 消えるオブジェクトの次がいるかどうか
+	if (m_pNext == NULL)
+	{// 次がいない時
+	 // 現在（最後尾）のオブジェクトを前のオブジェクトに渡す
+		m_apCur[nPriority] = m_pPrev;
+	}
+	else
+	{// 次がいる時
+	 // 次にいるオブジェクトにある自分の情報を前のオブジェクトに渡す
+		m_pNext->m_pPrev = m_pPrev;
+	}
+
+	// 自分を消す
+	delete this;
+
+	m_nNumPriority[nPriority]--;
+}
+
+//=============================================================================
+// オブジェクトの種類の設定
+//=============================================================================
+void CScene::SetObjType(OBJTYPE objType)
+{
+	m_objType = objType;
+}
+
+//=============================================================================
+// 優先順位の取得
+//=============================================================================
+int CScene::GetPriority(void)
+{
+	return m_nPriority;
+}
+
+//=============================================================================
+// 先頭のオブジェクトを取得
+//=============================================================================
+CScene *CScene::GetTop(int nPriority)
+{
+	return m_apTop[nPriority];
+}
+
+//=============================================================================
+// 次のオブジェクトのポインタを取得
+//=============================================================================
+CScene *CScene::GetNext(void)
+{
+	return m_pNext;
+}
+
+//=============================================================================
+// 死亡フラグを取得
+//=============================================================================
+bool CScene::GetDeath(void)
+{
+	return m_bDeath;
+}
+
+//=============================================================================
+// オブジェクトの種類の取得
+//=============================================================================
+CScene::OBJTYPE CScene::GetObjType(void)
+{
+	return m_objType;
 }
