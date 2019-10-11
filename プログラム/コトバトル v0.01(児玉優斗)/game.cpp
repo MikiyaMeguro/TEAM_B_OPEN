@@ -64,12 +64,12 @@ void CGame::Init(void)
 	if (pCameraManager != NULL)
 	{
 		pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-			D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), 250.0f);
-		pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 620, SCREEN_HEIGHT);
+			D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), 100.0f);
+		pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, 355);
 
 		pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
 			D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), 300.0f);
-		pCameraManager->SetCameraViewPort("2P_CAMERA", 660, 0, 620, SCREEN_HEIGHT);
+		pCameraManager->SetCameraViewPort("2P_CAMERA", 0, 365, SCREEN_WIDTH, 340);
 
 		//pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
 		//	D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(-0.2f, D3DX_PI * -0.5f, 0.0f), 200.0f);

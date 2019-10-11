@@ -97,7 +97,7 @@ void CCamera::Update(void)
 			}
 			else
 			{
-				m_posRdest = m_pHomingChara->GetPosition();
+				m_posRdest = m_pHomingChara->GetCameraPosR();
 			}
 		}
 		m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;

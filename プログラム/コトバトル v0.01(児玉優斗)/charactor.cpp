@@ -239,5 +239,5 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	spin.y = 0.0f;
 
-
+	m_CameraPosR = pos + D3DXVECTOR3(0.0f,20.0f,0.0f);
 }
