@@ -32,6 +32,8 @@ public:
 	D3DXVECTOR3 GetPos(void);
 	void SetCol(D3DXCOLOR col);
 	LPDIRECT3DVERTEXBUFFER9 GetVtx(void);
+	void SetTexture(int PatternAnim, int X, int Y, int nNum);
+
 
 private:
 	//ƒƒ“ƒo•Ï”

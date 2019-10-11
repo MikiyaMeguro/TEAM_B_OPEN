@@ -26,10 +26,14 @@ class CLoad
 public:
 	typedef enum // cppのやつと数と並びを揃える
 	{
-		MODEL_BOX = 0,	// 箱
-		MODEL_CAR00,	// 車1
-		MODEL_CAR01,	// 車2
-		MODEL_CAR02,	// 車3
+		MODEL_CAR0 = 0,	// 車0
+		MODEL_CAR1,		// 車1
+		MODEL_DESK,		// 机
+		MODEL_PULIN,	// プリン
+		MODE_KNIFE,		// ナイフ
+		MODE_APPLE,		// アップル
+		MODEL_BOX,		// 箱
+		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_MAX,
 	} MODEL;
 
@@ -54,6 +58,7 @@ private:
 	static LPD3DXBUFFER		*m_pBuffMat;		// マテリアル情報へのポインタ
 	static DWORD			*m_nNumMat;		// マテリアル情報の数
 	static char m_apModelName[MODEL_MAX][256];
+	static const char *m_apModelFilename[];
 	static int m_nCntModel;
 	static int m_nMaxModel;
 };
