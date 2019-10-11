@@ -47,7 +47,7 @@ CSelect::~CSelect()
 void CSelect::Init(void)
 {
 	//CPlayerSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
-	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150, 220, CSelectMenu::MENU_TYPE_RESULT);
+	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150, 220, CSelectMenu::MENU_TYPE_TUTORIAL);
 }
 
 //=============================================================================
