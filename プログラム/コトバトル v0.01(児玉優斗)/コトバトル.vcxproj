@@ -191,7 +191,6 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="charactor.h" />
-    <ClInclude Include="CharaParts.h" />
     <ClInclude Include="CharaSelect.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="debugProc.h" />
