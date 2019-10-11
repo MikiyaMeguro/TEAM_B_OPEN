@@ -25,9 +25,13 @@ class CLoad
 public:
 	typedef enum // cppのやつと数と並びを揃える
 	{
-		MODEL_CAR0 = 0,			// 車0
-		MODEL_CAR1,				// 車1
-		MODEL_BOX,				// 箱
+		MODEL_CAR0 = 0,	// 車0
+		MODEL_CAR1,		// 車1
+		MODEL_DESK,		// 机
+		MODEL_PULIN,	// プリン
+		MODE_KNIFE,		// ナイフ
+		MODE_APPLE,		// アップル
+		MODEL_BOX,		// 箱
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 	} MODEL;
 

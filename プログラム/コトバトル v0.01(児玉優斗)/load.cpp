@@ -22,7 +22,11 @@ const char *CLoad::m_apModelFilename[] =
 {// モデル
 	"data\\MODEL\\car000.x",				//0
 	"data\\MODEL\\car001.x",				//1
-	"data\\MODEL\\box000.x",				//2
+	"data\\MODEL\\Desk.x",				//2 (机)
+	"data\\MODEL\\Pulin.x",				// プリン
+	"data\\MODEL\\Knife.x",				// ナイフ
+	"data\\MODEL\\apple.x",				// リンゴ
+	"data\\MODEL\\box000.x",				//3
 	"data\\MODEL\\SampleModel_Player.x",	//3
 };
 

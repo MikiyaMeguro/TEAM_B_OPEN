@@ -15,6 +15,9 @@
 #include "input.h"
 #include "InputKeyboard.h"
 #include "CameraManager.h"
+#include "word_manager.h"
+#include "word.h"
+#include "tube.h"
 
 #include "PlayerNumSelect.h"
 
@@ -27,9 +30,14 @@
 #define SIZE_Y (SCREEN_HEIGHT)
 #define COLISIONSIZE (20.0f)
 #define TIME_INI		(60)
+#define WORD_TUBE_POS	(D3DXVECTOR3(50.0f, 240.0f, 0.0f))
+#define WORD_TUBE_SIZE	(D3DXVECTOR2(60.0f, 130.0f))
 //============================================================================
 //静的メンバ変数宣言
-
+//============================================================================
+CWordManager *CGame::m_pWordManager = NULL;
+CPlayer *CGame::m_pPlayer = NULL;
+CTube *CGame::m_pTube = NULL;
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -77,7 +85,7 @@ void CGame::Init(void)
 	p3D = CScene3D::Create(D3DXVECTOR3(0.0f, 50.0f, 0.0f), "BLOCK");
 	p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
 
-	CPlayer* pPlayer = NULL;
+	/*CPlayer* pPlayer = NULL;
 
 	pPlayer = CPlayer::Create();
 	if (pPlayer != NULL)
@@ -86,7 +94,18 @@ void CGame::Init(void)
 		pPlayer->SetCameraName("1P_CAMERA");
 		pCameraManager->SetCameraHomingChara("1P_CAMERA",(C3DCharactor*)pPlayer->GetCharaMover());
 
+	}*/
+
+	// プレイヤーの生成
+	m_pPlayer = CPlayer::Create();
+	if (m_pPlayer != NULL)
+	{
+		m_pPlayer->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT);
+		m_pPlayer->SetCameraName("1P_CAMERA");
+		pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer->GetCharaMover());
+
 	}
+
 
 	//pPlayer = CPlayer::Create();
 	//if (pPlayer != NULL)
@@ -115,14 +134,57 @@ void CGame::Init(void)
 
 	//}
 
+	// 文字管理の生成
+	if (m_pWordManager == NULL)
+	{
+		m_pWordManager = new CWordManager;
+		m_pWordManager->Init();
+	}
+
+	// 文字の可視化UI(2D)の生成
+	if (m_pTube == NULL)
+	{
+		m_pTube = CTube::Create(WORD_TUBE_POS, WORD_TUBE_SIZE, "TUBE", 3);
+	}
+
+	// 机
+	CWord::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 17);
+	CWord::Create(D3DXVECTOR3(-300.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);
+	CWord::Create(D3DXVECTOR3(-400.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
+
+	// リンゴ
+	CWord::Create(D3DXVECTOR3(-200.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 39);
+	CWord::Create(D3DXVECTOR3(-100.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 45);
+	CWord::Create(D3DXVECTOR3(-50.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
+
 }
 //=============================================================================
 // 終了処理
 //=============================================================================
 void CGame::Uninit(void)
 {
+	if (m_pPlayer != NULL)
+	{	// プレイヤーの破棄
+		m_pPlayer->Uninit();
+		m_pPlayer = NULL;
+	}
+	if (m_pTube != NULL)
+	{	// 文字の可視化UI(2D)の破棄
+		m_pTube->Uninit();
+		m_pTube = NULL;
+	}
 	//全ての終了処理
 	CScene::ReleseAll();
+
+	if (m_pWordManager != NULL)
+	{// ライトクラスの破棄
+	 // 終了処理
+		m_pWordManager->Uninit();
+
+		// メモリを開放
+		delete m_pWordManager;
+		m_pWordManager = NULL;
+	}
 }
 
 //=============================================================================
@@ -152,6 +214,10 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 	}
+
+	// 文字管理の更新
+	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
+
 
 #ifdef _DEBUG
 
