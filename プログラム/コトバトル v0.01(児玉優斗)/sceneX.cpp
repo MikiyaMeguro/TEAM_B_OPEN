@@ -27,8 +27,9 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_pMesh = NULL;							// メッシュ情報（頂点情報）へのポインタ
 	m_pBuffMat = NULL;						// マテリアル情報へのポインタ
 	m_nNumMat = 0;							// マテリアル情報の数
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 向き
+	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);	//大きさ
 }
 
 //=============================================================================
@@ -150,12 +151,19 @@ void CSceneX::Draw(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
+	//頂点法線の自動正規化
+	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
+
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
 	// 回転を反映
 	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	//拡大縮小の反映
+	D3DXMatrixScaling(&mtxScale, m_Scale.x, m_Scale.y, m_Scale.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScale);
 
 	// 移動を反映
 	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
@@ -199,6 +207,10 @@ void CSceneX::Draw(void)
 
 	// マテリアルをデフォルトに戻す
 	pDevice->SetMaterial(&matDef);
+
+	//頂点法線の自動正規化
+	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
+
 }
 
 //=============================================================================
@@ -258,6 +270,10 @@ void CSceneX::SetVtx(void)
 	}
 	//頂点バッファをアンロック
 	m_pMesh->UnlockVertexBuffer();
+
+	// 大きさに合わせて調整
+	m_VtxMax = D3DXVECTOR3(m_VtxMax.x * m_Scale.x, m_VtxMax.y * m_Scale.y, m_VtxMax.z * m_Scale.z);
+	m_VtxMin = D3DXVECTOR3(m_VtxMin.x * m_Scale.x, m_VtxMin.y * m_Scale.y, m_VtxMin.z * m_Scale.z);
 }
 
 //=============================================================================

@@ -67,6 +67,7 @@ private:
 	D3DXVECTOR3				m_VtxMin, m_VtxMax;	// モデルの最小値、最大値
 	D3DXVECTOR3				m_pos;				// ポリゴンの位置
 	D3DXVECTOR3				m_rot;				// 上方向ベクトル
+	D3DXVECTOR3				m_Scale;			// スケール
 };
 
 #endif
