@@ -23,6 +23,8 @@
 #include "result.h"
 #include "tutorial.h"
 #include "select.h"
+#include "CharaSelect.h"
+#include "StageSelect.h"
 #include "mask.h"
 #include "Command.h"
 #include "CameraManager.h"
@@ -40,6 +42,8 @@ CMask *CManager::m_pMask = NULL;
 CGame *CManager::m_pGame = NULL;
 CTitle *CManager::m_pTitle = NULL;
 CSelect *CManager::m_pSelect = NULL;
+CCharaSelect *CManager::m_pCharaSelect = NULL;
+CStageSelect *CManager::m_pStageSelect = NULL;
 CTutorial *CManager::m_pTutorial = NULL;
 CResult *CManager::m_pResult = NULL;
 CFade *CManager::m_pFade = NULL;
@@ -316,6 +320,23 @@ void CManager::Uninit(void)
 			//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
 		}
 		break;
+		//キャラセレクトモードの終了処理
+	case CManager::MODE_CHARASELECT:
+		if (m_pCharaSelect != NULL)
+		{
+			m_pCharaSelect->Uninit();
+			delete m_pCharaSelect;
+			m_pCharaSelect = NULL;
+		}
+		break;
+		//ステージセレクトモードの終了処理
+	case CManager::MODE_STAGESELECT:
+		if (m_pStageSelect != NULL)
+		{
+			m_pStageSelect->Uninit();
+			delete m_pStageSelect;
+			m_pStageSelect = NULL;
+		}
 	}
 
 	//サウンド
@@ -431,6 +452,19 @@ void CManager::Update(void)
 		{
 			m_pSelect->Update();
 		}
+		//キャラセレクトモード更新処理
+	case CManager::MODE_CHARASELECT:
+		if (m_pCharaSelect != NULL)
+		{
+			m_pCharaSelect->Update();
+		}
+		break;
+		//ステージセレクトモードの更新処理
+	case CManager::MODE_STAGESELECT:
+		if (m_pStageSelect != NULL)
+		{
+			m_pStageSelect->Update();
+		}
 		break;
 	}
 }
@@ -537,7 +571,30 @@ void CManager::SetMode(MODE mode)
 			m_pTutorial = NULL;
 		}
 		break;
-
+	case CManager::MODE_CHARASELECT:
+		//キャラセレクトモード破棄
+		if (m_pCharaSelect != NULL)
+		{
+			// 終了処理
+			m_pCharaSelect->Uninit();
+			//メモリの開放
+			delete m_pCharaSelect;
+			//NULLにする
+			m_pCharaSelect = NULL;
+		}
+		break;
+	case CManager::MODE_STAGESELECT:
+		//ステージセレクトモードの破棄
+		if (m_pStageSelect != NULL)
+		{
+			// 終了処理
+			m_pStageSelect->Uninit();
+			//メモリの開放
+			delete m_pStageSelect;
+			//NULLにする
+			m_pStageSelect = NULL;
+		}
+		break;
 	case CManager::MODE_GAME:
 		//ゲームクラスの破棄
 		if (m_pGame != NULL)
@@ -603,7 +660,54 @@ void CManager::SetMode(MODE mode)
 		}
 
 		break;
+	case CManager::MODE_CHARASELECT:
+		//キャラセレクトモード初期化
+		if (m_pCharaSelect == NULL)
+		{
+			//キャラセレクトモードメモリを動的確保
+			m_pCharaSelect = new CCharaSelect;
+			if (m_pCharaSelect != NULL)
+			{
+				//リザルトのBGMを再生
+				//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
 
+				// 初期化処理
+				m_pCharaSelect->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
+	case CManager::MODE_STAGESELECT:
+		//ステージセレクトモードの初期化
+		if (m_pStageSelect == NULL)
+		{
+			//ステージセレクトモードのメモリを動的確保
+			m_pStageSelect = new CStageSelect;
+			if (m_pStageSelect != NULL)
+			{
+				//ステージセレクトモードのBGMを再生
+				//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
+
+				// 初期化処理
+				m_pStageSelect->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
 	case CManager::MODE_GAME:
 		//ゲームの初期化
 		if (m_pGame == NULL)

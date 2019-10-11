@@ -7,6 +7,7 @@
 #include "scene2D.h"
 #include "input.h"
 #include "manager.h"
+#include "PlayerNumSelect.h"
 #include "fade.h"
 #include "renderer.h"
 #include "load.h"
@@ -15,14 +16,15 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODESELECT_WIDTH		(2.0f)		//ポリゴンの大きさ(横)
+#define MODESELECT_WIDTH		(3.0f)		//ポリゴンの大きさ(横)
 #define MODESELECT_HEIGHT		(0.9f)		//ポリゴンの大きさ(縦)
 #define MENU_WIDTH				(450.0f)	//ポリゴンとポリゴンの間の大きさ(横)
-#define MENU_HEIGHT				(220.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
+#define MENU_HEIGHT				(180.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
 #define MENU_INITPOS			(180.0f)	//メニューの初期位置
 #define MENU_NUM_HEIGHT			(2)
 #define MENU_NUM_WIDTH			(2)
-#define MENU_INIT_POS			(400.0f)
+#define MENU_INIT_POS			(270.0f)
+#define MENU_BG					(150.0f)	//ポリゴンの大きさ
 
 //--------------------------------------------
 //静的メンバ変数宣言
@@ -37,6 +39,16 @@ bool CSelectMenu::m_bModeSelect = false;
 //--------------------------------------------
 CSelectMenu::CSelectMenu(int nPriority) : CScene(7)
 {
+	//値の初期化
+	m_nSelect = 0;
+	m_TexMove = D3DXVECTOR3(0, 0, 0);
+	m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
+	m_aModeSelectMenu[1].select = SELECTTYPE_NONE;
+	m_aModeSelectMenu[2].select = SELECTTYPE_NONE;
+	m_bModeSelect = true;
+
+	m_fSpace = 0;
+	m_fInitYpos = 0;
 }
 
 //--------------------------------------------
@@ -49,7 +61,7 @@ CSelectMenu::~CSelectMenu()
 //--------------------------------------------
 //オブジェクトの生成
 //--------------------------------------------
-CSelectMenu *CSelectMenu::Create(D3DXVECTOR3 pos, float m_fWidth, MENU_TYPE type)
+CSelectMenu *CSelectMenu::Create(D3DXVECTOR3 pos, float m_fWidth, float fSpace, MENU_TYPE type)
 {
 	//セレクトメニューのポインタ
 	CSelectMenu *pMenuSelect;
@@ -58,19 +70,34 @@ CSelectMenu *CSelectMenu::Create(D3DXVECTOR3 pos, float m_fWidth, MENU_TYPE type
 	pMenuSelect->m_InitPos = pos;
 	pMenuSelect->m_fWidth = m_fWidth;
 	pMenuSelect->m_fHeight = m_fWidth;
+	pMenuSelect->m_fSpace = fSpace;
 	//セレクトメニューの初期化
-	pMenuSelect->Init(pos);
+	pMenuSelect->Init();
 	//セレクトメニューの情報を返す
 	return pMenuSelect;
 }
-
-
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CSelectMenu::Init(D3DXVECTOR3 pos)
+HRESULT CSelectMenu::Init()
 {
-	for (int nCnt = 0; nCnt < MAX_SELECTMENU; nCnt++)
+	switch (m_MenuType)
+	{
+	case MENU_TYPE_TUTORIAL:
+		m_nMaxMenu = 3;
+		m_fInitYpos = 400;
+		break;
+	case MENU_TYPE_RESULT:
+		m_fInitYpos = 270.0f;
+		m_nMaxMenu = 4;
+		break;
+	case MENU_TYPE_PAUSE:
+		m_nMaxMenu = 2;
+		break;
+	}
+
+
+	for (int nCnt = 0; nCnt < m_nMaxMenu; nCnt++)
 	{
 		m_apPolygon[nCnt] = NULL;
 	}
@@ -79,21 +106,22 @@ HRESULT CSelectMenu::Init(D3DXVECTOR3 pos)
 	m_pTexture[0] = CTexture::GetTexture("BLOCK");
 	m_pTexture[1] = CTexture::GetTexture("BLOCK");
 	m_pTexture[2] = CTexture::GetTexture("BLOCK");
+	m_pTexture[3] = CTexture::GetTexture("BLOCK");
 
 	//BGの初期化
 	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z),"BLOCK");
 	m_apPolygonBG->BindTexture(m_pTextureBG);
-	m_apPolygonBG->SetWidthHeight(m_fWidth * 4.5f, m_fHeight * 3.5f);
+	m_apPolygonBG->SetWidthHeight(MENU_BG * 4.5f, MENU_BG * 3.5f);
 	m_apPolygonBG->SetbDraw(true);
 
 	m_InitPos.y = MENU_INITPOS;
 
-	for (int nCnt = 0; nCnt < MAX_SELECTMENU; nCnt++)
+	for (int nCnt = 0; nCnt < m_nMaxMenu; nCnt++)
 	{
 		m_Pos[nCnt] = m_InitPos;
-		m_Pos[nCnt].y = m_InitPos.y + MENU_INIT_POS;
+		m_Pos[nCnt].y = m_InitPos.y + m_fInitYpos;
 		//位置をずらす
-		m_Pos[nCnt].y = m_Pos[nCnt].y + (MENU_HEIGHT * (nCnt - 2));
+		m_Pos[nCnt].y = m_Pos[nCnt].y + (m_fSpace * (nCnt - 2));
 
 
 		if (m_apPolygon[nCnt] == NULL)
@@ -147,7 +175,7 @@ void CSelectMenu::Update(void)
 	CSound *pSound = CManager::GetSound(0);
 
 	//表示切替
-	for (int nCnt = 0; nCnt < MAX_SELECTMENU; nCnt++)
+	for (int nCnt = 0; nCnt < m_nMaxMenu; nCnt++)
 	{
 		m_apPolygon[nCnt]->SetbDraw(m_bModeSelect);
 	}
@@ -162,16 +190,16 @@ void CSelectMenu::Update(void)
 #endif
 
 	//セレクトメニュー中
-	if (m_bModeSelect == true)
+	if (m_bModeSelect == true && pFade->GetFade() == CFade::FADE_NONE)
 	{
 		//選択処理
 		if (CCommand::GetCommand("DOWN"))
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
-			if (m_nSelect < 2)
+			if (m_nSelect < m_nMaxMenu - 1)
 			{
-				m_nSelect = (m_nSelect + MAX_SELECTMENU / 2) % MAX_SELECTMENU;
+				m_nSelect = (m_nSelect + 1) % m_nMaxMenu;
 			}
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
 		}
@@ -181,7 +209,7 @@ void CSelectMenu::Update(void)
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 			if (m_nSelect > 0)
 			{
-				m_nSelect = (m_nSelect + 2) % MAX_SELECTMENU;
+				m_nSelect = (m_nSelect + (m_nMaxMenu - 1)) % m_nMaxMenu;
 			}
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
 		}
@@ -193,7 +221,7 @@ void CSelectMenu::Update(void)
 			if (m_nSelect == 0)
 			{
 				m_SelectMode = SELECT_MENU_ONE;
-				MenuDecide(SELECT_MENU_TWO);
+				MenuDecide(SELECT_MENU_ONE);
 			}
 			else if (m_nSelect == 1)
 			{
@@ -203,21 +231,18 @@ void CSelectMenu::Update(void)
 			else if (m_nSelect == 2)
 			{
 				m_SelectMode = SELECT_MENU_THREE;
-				MenuDecide(SELECT_MENU_TWO);
+				MenuDecide(SELECT_MENU_THREE);
 			}
 			else if (m_nSelect == 3)
 			{
 				m_SelectMode = SELECT_MENU_FOUR;
-				MenuDecide(SELECT_MENU_TWO);
+				MenuDecide(SELECT_MENU_FOUR);
 			}
-
 				m_bModeSelect = false;
-
-
 		}
 
 		//色変え
-		for (int nCnt = 0; nCnt < MAX_SELECTMENU; nCnt++)
+		for (int nCnt = 0; nCnt < m_nMaxMenu; nCnt++)
 		{
 			if (m_aModeSelectMenu[nCnt].select == SELECTTYPE_SELECT)
 			{//選択中の色
@@ -329,5 +354,64 @@ void CSelectMenu::SetModeSelectBool(bool ModeSelectBool)
 //=============================================================================
 void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 {
-}
+	//フェードを取得
+	CManager *pManager = NULL;
+	CFade *pFade = pManager->GetFade();
 
+	switch (m_MenuType)
+	{
+	case MENU_TYPE_TUTORIAL:
+		switch (MenuSelect)
+		{
+		case SELECT_MENU_ONE:
+			CPlayerSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+			break;
+		case SELECT_MENU_TWO:
+			CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_THREE:
+			CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_FOUR:
+			CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
+			break;
+		}
+		break;
+
+	case MENU_TYPE_RESULT:
+		switch (MenuSelect)
+		{
+		case SELECT_MENU_ONE:
+			CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_TWO:
+			CFade::SetFade(CManager::MODE_CHARASELECT, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_THREE:
+			CFade::SetFade(CManager::MODE_STAGESELECT, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_FOUR:
+			CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
+			break;
+		}
+		break;
+
+	case MENU_TYPE_PAUSE:
+		switch (MenuSelect)
+		{
+		case SELECT_MENU_ONE:
+			CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_TWO:
+			CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_THREE:
+			CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+			break;
+		case SELECT_MENU_FOUR:
+			CFade::SetFade(CManager::MODE_GAME, pFade->FADE_OUT);
+			break;
+		}
+		break;
+	}
+}

@@ -1,10 +1,10 @@
 //=============================================================================
 //
-// チュートリアル処理 [tutorial.cpp]
+// キャラセレクト処理 [CharaSelect.cpp]
 // Author : 目黒 未来也
 //
 //=============================================================================
-#include "tutorial.h"
+#include "CharaSelect.h"
 #include "manager.h"
 #include "light.h"
 #include "camera.h"
@@ -31,7 +31,7 @@
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
-CTutorial::CTutorial()
+CCharaSelect::CCharaSelect()
 {
 
 }
@@ -39,33 +39,37 @@ CTutorial::CTutorial()
 //=============================================================================
 //デストラクタ
 //=============================================================================
-CTutorial::~CTutorial()
+CCharaSelect::~CCharaSelect()
 {
 
 }
 
 //=============================================================================
-// ポリゴンの初期化処理
+// キャラセレクトの初期化処理
 //=============================================================================
-void CTutorial::Init(void)
+void CCharaSelect::Init(void)
 {
 	//インスタンス
 	CManager *pManager = NULL;
+
+	CScene2D* p2D = NULL;
+	p2D = CScene2D::Create(D3DXVECTOR3(300, 100, 0), "BLOCK");
+
 }
 
 //=============================================================================
-// ポリゴンの終了処理
+// キャラセレクトの終了処理
 //=============================================================================
-void CTutorial::Uninit(void)
+void CCharaSelect::Uninit(void)
 {
 	//全ての終了処理
 	CScene::ReleseAll();
 }
 
 //=============================================================================
-// ポリゴンの更新処理
+// キャラセレクトの更新処理
 //=============================================================================
-void CTutorial::Update(void)
+void CCharaSelect::Update(void)
 {
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
@@ -73,26 +77,23 @@ void CTutorial::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
-	// ランダムな値を更新
-	srand((unsigned int)time(NULL));
+
 	//任意のキーENTER
 	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
-		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
+		pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
 	}
 
-
-
 #ifdef _DEBUG
-	CDebugProc::Print("c", "チュートリアル");
+	CDebugProc::Print("c", "キャラセレクト");
 #endif
 
 }
 
 //=============================================================================
-// ポリゴンの描画処理
+// キャラセレクトの描画処理
 //=============================================================================
-void CTutorial::Draw(void)
+void CCharaSelect::Draw(void)
 {
 
 }

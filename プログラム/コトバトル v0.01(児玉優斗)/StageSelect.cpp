@@ -1,10 +1,10 @@
 //=============================================================================
 //
-// チュートリアル処理 [tutorial.cpp]
+// ステージセレクト処理 [StageSelect.cpp]
 // Author : 目黒 未来也
 //
 //=============================================================================
-#include "tutorial.h"
+#include "StageSelect.h"
 #include "manager.h"
 #include "light.h"
 #include "camera.h"
@@ -31,7 +31,7 @@
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
-CTutorial::CTutorial()
+CStageSelect::CStageSelect()
 {
 
 }
@@ -39,33 +39,36 @@ CTutorial::CTutorial()
 //=============================================================================
 //デストラクタ
 //=============================================================================
-CTutorial::~CTutorial()
+CStageSelect::~CStageSelect()
 {
 
 }
 
 //=============================================================================
-// ポリゴンの初期化処理
+// ステージセレクトの初期化処理
 //=============================================================================
-void CTutorial::Init(void)
+void CStageSelect::Init(void)
 {
 	//インスタンス
 	CManager *pManager = NULL;
+	CScene2D* p2D = NULL;
+	p2D = CScene2D::Create(D3DXVECTOR3(500, 100, 0), "BLOCK");
+
 }
 
 //=============================================================================
-// ポリゴンの終了処理
+// ステージセレクトの終了処理
 //=============================================================================
-void CTutorial::Uninit(void)
+void CStageSelect::Uninit(void)
 {
 	//全ての終了処理
 	CScene::ReleseAll();
 }
 
 //=============================================================================
-// ポリゴンの更新処理
+// ステージセレクトの更新処理
 //=============================================================================
-void CTutorial::Update(void)
+void CStageSelect::Update(void)
 {
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
@@ -78,21 +81,21 @@ void CTutorial::Update(void)
 	//任意のキーENTER
 	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
-		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
+		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}
 
 
 
 #ifdef _DEBUG
-	CDebugProc::Print("c", "チュートリアル");
+	CDebugProc::Print("c", "ステージセレクト");
 #endif
 
 }
 
 //=============================================================================
-// ポリゴンの描画処理
+// ステージセレクトの描画処理
 //=============================================================================
-void CTutorial::Draw(void)
+void CStageSelect::Draw(void)
 {
 
 }

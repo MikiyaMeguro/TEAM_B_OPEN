@@ -12,6 +12,7 @@
 #include "fade.h"
 #include "time.h"
 #include "camera.h"
+#include "SelectMenu.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -41,9 +42,9 @@ CResult::~CResult()
 void CResult::Init(void)
 {
 	//CManager::GetCamera()->Init();
-	CScene2D* p2D = NULL;
-	p2D = CScene2D::Create(D3DXVECTOR3(200, 100, 0), "BLOCK");
-
+	//CScene2D* p2D = NULL;
+	//p2D = CScene2D::Create(D3DXVECTOR3(200, 100, 0), "BLOCK");
+	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 }
 
 //=============================================================================
@@ -70,7 +71,7 @@ void CResult::Update(void)
 	//任意のキーENTER
 	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
-		pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
+	//	pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
 	}
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");

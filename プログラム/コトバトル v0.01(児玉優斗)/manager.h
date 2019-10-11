@@ -32,7 +32,8 @@ class CCharacterMove;
 class CXInputJoyPad;
 class CSound;
 class CTutorial;
-
+class CCharaSelect;
+class CStageSelect;
 class CCameraManager;
 //=============================================================================
 // É}ÉNÉç
@@ -71,6 +72,8 @@ public:
 		MODE_TITLE,
 		MODE_SELECT,
 		MODE_TUTORIAL,
+		MODE_STAGESELECT,
+		MODE_CHARASELECT,
 		MODE_GAME,
 		MODE_RESULT,
 		MODE_MAX
@@ -95,6 +98,8 @@ public:
 	static CTitle *GetTitle(void) { return m_pTitle; }
 	static CSelect *GetSelect(void) { return m_pSelect; }
 	static CTutorial *GetTutorial(void) { return m_pTutorial; }
+	static CCharaSelect *GetCharaSelect(void) { return m_pCharaSelect; }
+	static CStageSelect *GetStageSelect(void) { return m_pStageSelect; }
 	static CResult *GetResult(void) { return m_pResult; }
 	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
 	static CSound *GetSound(int nNum);
@@ -115,6 +120,8 @@ private:
 	static CSelect *m_pSelect;
 	static CTutorial *m_pTutorial;
 	static CResult *m_pResult;
+	static CCharaSelect *m_pCharaSelect;
+	static CStageSelect *m_pStageSelect;
 
 	static CCameraManager* m_pCameraManager;
 	static CXInputJoyPad *m_pXInput;

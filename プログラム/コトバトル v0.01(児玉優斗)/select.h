@@ -23,5 +23,8 @@ public:
 	void Draw(void);
 	static CSelect *Create(void);
 
+	//メンバ変数
+private:
+	int m_nTimer;		//終了タイマー加算
 };
 #endif
