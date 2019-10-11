@@ -23,9 +23,15 @@
 class CSceneX : public CScene
 {
 public:
+	//モデルの種類
+	typedef enum
+	{
+		COLLISIONTYPE_NONE = 0,	//無し
+		COLLISIONTYPE_BOX,		//箱
+	}COLLISIONTYPE;
+
 	CSceneX(int nPriority = SCENEX_PRIORITY, OBJTYPE objType = OBJTYPE_SCENEX);					// コンストラクタ
 	~CSceneX();									// デストラクタ
-
 	HRESULT Init(void) { return S_OK; };
 	HRESULT Init(D3DXVECTOR3 pos);				// 3Dオブジェクト初期化処理
 
@@ -33,7 +39,7 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot,D3DXVECTOR3 Scale, CLoad::MODEL model);	// オブジェクトの生成
+	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot,D3DXVECTOR3 Scale, CLoad::MODEL model,int nCollision);	// オブジェクトの生成
 
 	D3DXVECTOR3 GetPosition(void);						// 位置の取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置の設定
@@ -64,6 +70,7 @@ private:
 	D3DXVECTOR3				m_pos;				// ポリゴンの位置
 	D3DXVECTOR3				m_rot;				// 上方向ベクトル
 	D3DXVECTOR3				m_Scale;			// スケール
+	COLLISIONTYPE			m_CollisionType;		// 当たり判定
 };
 
 #endif

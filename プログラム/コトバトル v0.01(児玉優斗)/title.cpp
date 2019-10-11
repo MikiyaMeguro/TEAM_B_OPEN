@@ -48,7 +48,7 @@ void CTitle::Init(void)
 	CScene3D::Create(D3DXVECTOR3(0,0,0),"BLOCK");
 	CScene2D* p2D = NULL;
 	p2D = CScene2D::Create(D3DXVECTOR3(200,100,0),"BLOCK");
-	CSceneX::Create(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_BOX);
+	CSceneX::Create(D3DXVECTOR3(0, 0, 0), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_BOX,1);
 	CSceneBillBoard::Create(D3DXVECTOR3(0, 0, 0),100,100, "BLOCK");
 	CSetObject::Create();
 }

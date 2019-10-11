@@ -94,7 +94,7 @@ void CWordManager::Update(void)
 		{
 			if (m_nCntaAnswer == MAX_WORD)
 			{	// // éwíËÇµÇΩï∂éöÇ»ÇÁíeÇê∂ê¨Ç∑ÇÈ
-				CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType);
+				CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType,1);
 				Reset();		// ê›íËÇñﬂÇ∑
 			}
 			else
