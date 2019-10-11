@@ -42,7 +42,7 @@ CSceneX::~CSceneX()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CSceneX *CSceneX::Create(D3DXVECTOR3 pos, CLoad::MODEL model)
+CSceneX *CSceneX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CLoad::MODEL model)
 {
 	CSceneX *pSceneX = NULL;
 
@@ -54,7 +54,11 @@ CSceneX *CSceneX::Create(D3DXVECTOR3 pos, CLoad::MODEL model)
 		if (pSceneX != NULL)
 		{
 			pSceneX->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));
+			pSceneX->m_pos = pos;
+			pSceneX->m_rot = Rot;
+			pSceneX->m_Scale = Scale;
 			pSceneX->Init(pos);
+
 		}
 	}
 
@@ -79,11 +83,6 @@ HRESULT CSceneX::Init(D3DXVECTOR3 pos)
 	{
 		pDevice = pRenderer->GetDevice();
 	}
-
-	// 位置・向きの初期設定
-	m_pos = pos;
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	//m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	// 頂点座標の設定
 	SetVtx();
