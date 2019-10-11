@@ -34,7 +34,9 @@ public:
 	static CTube *Create(D3DXVECTOR3 pos, D3DXVECTOR2 size,LPCSTR Tag, int nPriority = 3);				// オブジェクトの生成
 
 	//設定の関数
-	void SetWordNum(int nWordNum, int nNum); 
+	void SetWordNum(int nWordNum, int nNum);
+	void AllDelete(void);
+	void Delete(void);
 private:
 	CScene2D *m_apWord[MAX_WORD];
 };
