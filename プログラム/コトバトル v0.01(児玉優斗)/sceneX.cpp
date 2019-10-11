@@ -30,6 +30,7 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 向き
 	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);	//大きさ
+	m_CollisionType = COLLISIONTYPE_NONE;
 }
 
 //=============================================================================
@@ -42,7 +43,7 @@ CSceneX::~CSceneX()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CSceneX *CSceneX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CLoad::MODEL model)
+CSceneX *CSceneX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CLoad::MODEL model, int nCollision)
 {
 	CSceneX *pSceneX = NULL;
 
@@ -57,8 +58,8 @@ CSceneX *CSceneX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CL
 			pSceneX->m_pos = pos;
 			pSceneX->m_rot = Rot;
 			pSceneX->m_Scale = Scale;
+			pSceneX->m_CollisionType = (COLLISIONTYPE)nCollision;
 			pSceneX->Init(pos);
-
 		}
 	}
 

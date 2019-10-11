@@ -118,6 +118,7 @@ void CSetObject::LoadFile(void)
 	D3DXVECTOR3 ModelPos;	//モデルの位置
 	D3DXVECTOR3 ModelRot;
 	D3DXVECTOR3 ModelScale;
+	int			nCollisionType;
 
 	//ファイルを開く 読み込み
 	pFile = fopen(FILE_NAME0, "r");
@@ -237,13 +238,28 @@ void CSetObject::LoadFile(void)
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
 				}
+				//COLLISIONを読み込み
+				if (memcmp(pStrcur, "COLLISION = ", strlen("COLLISION = ")) == 0)
+				{
+					//頭出し
+					pStrcur += strlen("COLLISION = ");
+					//文字列の先頭を設定
+					strcpy(aStr, pStrcur);
+
+					//文字数を返してもらう
+					nWord = PopString(pStrcur, &aStr[0]);
+					//文字列変換
+					nCollisionType = (int)atoi(pStrcur);
+					//文字列の先頭を設定
+					pStrcur = ReadLine(pFile, &aLine[0]);
+				}
 			}
 			//モデルを生成
 			if (memcmp(pStrcur, "END_MODELSET", strlen("END_MODELSET")) == 0)
 			{
 				//CObjectBG::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 				//	, (CObjectBG::MODELTYPE)nType, CObjectBG::MOVETYPE_NONE, 1);
-				CSceneX::Create(ModelPos, ModelRot, ModelScale, (CLoad::MODEL)nType);
+				CSceneX::Create(ModelPos, ModelRot, ModelScale, (CLoad::MODEL)nType, nCollisionType);
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)
