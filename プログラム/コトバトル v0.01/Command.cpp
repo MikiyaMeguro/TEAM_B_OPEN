@@ -57,7 +57,7 @@ void CCommand::RegistCommand(LPCSTR CommandName, INPUT_TYPE InputType, INPUT_STA
 //===================================================================
 //	コマンド呼び出し処理
 //===================================================================
-bool CCommand::GetCommand(LPCSTR CommandName, GET_COMMAND_OPTION option, int nPlayerID)
+bool CCommand::GetCommand(LPCSTR CommandName, int nPlayerID, GET_COMMAND_OPTION option)
 {
 	CInputKeyboard* pInputK = CManager::GetInputKeyboard();	//キーボードのポインタ
 
@@ -78,6 +78,7 @@ bool CCommand::GetCommand(LPCSTR CommandName, GET_COMMAND_OPTION option, int nPl
 				bCommand_ETrue = CheckKey_Keyboard(pInputK,(*itr).state, (*itr).nKey);
 				break;
 			case INPUTTYPE_CONTROLLER_DIRECT:
+				CheckKey_DXController(/*DXコントローラーのポインタ,*/(*itr).state, (*itr).nKey);
 				break;
 			case INPUTTYPE_CONTROLLER_X:
 				break;
@@ -151,6 +152,16 @@ bool  CCommand::CheckKey_Keyboard(CInputKeyboard* pInputK, INPUT_STATE InputStat
 		case INPUTSTATE_TRIGGER://トリガー
 			bCommand = pInputK->GetTrigger(nKey);
 			break;
+		case INPUTSTATE_RELEASE://リリース
+			bCommand = pInputK->GetRelease(nKey);
+			break;
+		case INPUTSTATE_NOTPRESS://ノットプレス(押してない時)
+			bCommand = !(pInputK->GetPress(nKey));
+			break;
+		case INPUTSTATE_REPEAT://リピート
+			bCommand = pInputK->GetRepeat(nKey);
+			break;
+
 		}
 	}
 	return bCommand;

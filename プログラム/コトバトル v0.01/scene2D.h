@@ -1,79 +1,73 @@
 //=============================================================================
 //
-// オブジェクト2D処理 [scene2D.h]
-// Author : Kodama Yuto
+// シーン処理 [scene2D.h]
+// Author : 目黒 未来也
 //
 //=============================================================================
 #ifndef _SCENE2D_H_
 #define _SCENE2D_H_
 
+#include "main.h"
 #include "scene.h"
 
-//==================================================================
-//	クラスの定義
-//==================================================================
-//オブジェクト2Dクラス
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define PLAYER_NAME		"data/TEXTURE/player000.png"	// プレイヤーのテクスチャ名
+#define BULLET_NAME		"data/TEXTURE/bullet000.png"	// 弾のテクスチャ名
+#define MAX_TEX_TYPE	(2)								// テクスチャの種類
+
+//========================================
+// クラスの定義
+//========================================
+//=====================
+// オブジェクトクラス
+//=====================
 class CScene2D : public CScene
 {
 public:
+	CScene2D(int nPriority = 3, OBJTYPE objType = OBJTYPE_SCENE2D);											// コンストラクタ
+	~CScene2D();										// デストラクタ
 
-	CScene2D();
-	CScene2D(CScene::PRIORITY pri);
+	HRESULT Init(void) { return S_OK; };
+	virtual HRESULT Init(D3DXVECTOR3 pos);				// 2Dオブジェクト初期化処理
 
-	~CScene2D();
+	virtual void Uninit(void);							// 2Dオブジェクト終了処理
+	virtual void Update(void);							// 2Dオブジェクト更新処理
+	virtual void Draw(void);							// 2Dオブジェクト描画処理
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	D3DXVECTOR3 GetPosition(void);						// 位置を取得
+	void SetPosition(D3DXVECTOR3 pos);					// 位置を設定
 
-	void Set(D3DXVECTOR3 pos, LPCSTR TexTag,
-		bool bRoll = false,float fRot = 0.0f,
-		D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2 Size = D3DXVECTOR2(100.0f,100.0f),
-		D3DXVECTOR2 UVrectMin = D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2 UVrectMax = D3DXVECTOR2(1.0f, 1.0f));
+	static CScene2D *Create(D3DXVECTOR3 pos, LPCSTR Tag, int nPriority = 3);				// オブジェクトの生成
+	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
 
-	void SetColor(D3DXCOLOR col);
-	void SetUV(D3DXVECTOR2 MinRect, D3DXVECTOR2 MaxRect);
+	void BindTexture(LPCSTR TexTag);
 
-	void        SetPosition(D3DXVECTOR3 pos);
-	void        SetPosition(D3DXVECTOR3 pos, D3DXVECTOR2 Size);
-	void        SetPosition(D3DXVECTOR3 pos, D3DXVECTOR3 MinOffset, D3DXVECTOR3 MaxOffset);
-
-	void		SetRotation(float fRot);
-
-	D3DXVECTOR3 GetPosition(void) { return m_pos; };
-	D3DXVECTOR2 GetSize(void) { return m_Size; };
-	float GetRotation(void) { return m_fRot; };
-	void		BindTexture(LPCSTR TexTag);
-
-	//	---<<追加>>---
-	void SetScroll(float fSpeed, int nScrollType);	//	スクロール(速度 , 縦or横)
-	//	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★
-
+	void SetPos(D3DXVECTOR3 pos, float fSpin, float fScale, D3DXCOLOR col);
+	void SetRot(float fSpin);
+	void SetWidthHeight(float fWidth, float fHeight);
+	void SetRIghtLeft(float fRight, float fLeft);
+	void SetCol(D3DXCOLOR col);
+	void SetTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax);
+	LPDIRECT3DVERTEXBUFFER9 GetBuff(void) { return m_pVtxBuff; }
+	void SetBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff) { m_pVtxBuff = pVtxBuff; }
+	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
+	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 
 private:
-	void UpdateVtx(void);
+	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
 
-	LPDIRECT3DTEXTURE9		m_pTexture = NULL;			// テクスチャへのポインタ
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff = NULL;			// 頂点バッファへのポインタ
-	D3DXVECTOR3				m_pos;						// ポリゴンの位置
-	D3DXCOLOR				m_Col;						// 色
-	D3DXVECTOR2				m_Size;						// サイズ変更用
-
-	D3DXVECTOR2				m_UVRectMin;				//ポリゴンの左上のUV位置
-	D3DXVECTOR2				m_UVRectMax;				//ポリゴンの右下のUV位置
-
-	bool m_bFreezeRotate;	//回転するオブジェクトかどうかの判定用
-	float m_fRot;			//角度
-
-
-	//	---<<追加>>---
-	float m_fScrollCnt;
-	//	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★	★
-
+	D3DXVECTOR3				m_Pos;						// ポリゴンの位置
+	float					m_fSpin;				// 回転
+	float					m_fWidth, m_fHeight;	// 幅高さ
+	float					m_fRight, m_fLeft;		// 左右の長さ
+	float					m_fLength;				// 大きさ
+	float					m_fScale;				// 大きさ変更
+	D3DXCOLOR				m_Col;
+	bool					m_bDraw;
 
 };
 
-
-#endif // !_SCENE2D_H_
-
+#endif

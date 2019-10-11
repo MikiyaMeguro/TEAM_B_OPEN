@@ -1,49 +1,47 @@
 //=============================================================================
 //
-// ビルボード処理 [sceneBillboard.h]
-// Author : Kodama Yuto
+// ビルボードの処理 [billboard.h]
+// Author :  Meguro Mikiya
 //
 //=============================================================================
-#ifndef _SCENE_BILLBOARD_H_
-#define _SCENE_BILLBOARD_H_
+#ifndef _BILLBOARD_H_
+#define _BILLBOARD_H_
 
+#include "main.h"
 #include "scene.h"
 
-//==================================================================
-//	クラスの定義
-//==================================================================
-class CSceneBillboard : public CScene
+//*********************************************************************
+//ビルボードクラスの定義
+//*********************************************************************
+class CSceneBillBoard : public CScene //派生クラス
 {
 public:
+	CSceneBillBoard();
+	~CSceneBillBoard();
+	HRESULT Init(void) { return S_OK; };
+	HRESULT Init(D3DXVECTOR3 pos);
 
-	CSceneBillboard();
-	CSceneBillboard(CScene::PRIORITY pri);
-	~CSceneBillboard();
-
-	void Set(D3DXVECTOR3 pos,LPCSTR TexTag,
-		D3DXVECTOR2 Size);
-	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-
-
-
-	void        SetPosition(D3DXVECTOR3 pos);
-	void        SetSize(D3DXVECTOR2 Size);
-	D3DXVECTOR3 GetPosition(void) { return m_pos; };
-
-	void		BindTexture(LPCSTR TexTag);
-
-
-protected:
+	void Setpos(D3DXVECTOR3 pos);
+	void SetBillboard(D3DXVECTOR3 pos, float fHeight, float fWidth);
+	static CSceneBillBoard *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag);
+	void BindTexture(LPDIRECT3DTEXTURE9	Texture);	//TEXTUREを割り当てる
+	void BindTexture(LPCSTR TexTag);
+	D3DXVECTOR3 GetPos(void);
+	void SetCol(D3DXCOLOR col);
+	LPDIRECT3DVERTEXBUFFER9 GetVtx(void);
 
 private:
+	//メンバ変数
+	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff = NULL;			//頂点バッファへのポインタ
 	LPDIRECT3DTEXTURE9		m_pTexture = NULL;			// テクスチャへのポインタ
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff = NULL;			// 頂点バッファへのポインタ
-	D3DXVECTOR3				m_pos;						//ポリゴンの位置
-	D3DXVECTOR3				m_rot;
-	D3DXMATRIX				m_mtxWorld;					//ポリゴンのマトリックス
-	D3DXVECTOR2				m_Size;
+	D3DXVECTOR3				m_pos;						// ポリゴンの位置
+	D3DXVECTOR3				m_move;						// 移動量
+	float					m_fWidth, m_fHeight;		// 幅,高さ
+	D3DXMATRIX				m_mtrxWorld;				// ワールドマトリックス
+
 };
-#endif //!_SCENE_BILLBOARD_H_
+
+#endif

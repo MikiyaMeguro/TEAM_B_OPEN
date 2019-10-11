@@ -7,14 +7,21 @@
 #include "InputKeyboard.h"
 
 //===================================================================
+//	マクロ定義
+//===================================================================
+#define REPEAT_TIME (12)		//リピートの繰り返し時間
+//===================================================================
 //	コンストラクタ&デストラクタ
 //===================================================================
 CInputKeyboard::CInputKeyboard()
 {
 	for (int nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
 	{
-		m_aKeyState[nCntKey] = 0;	//プレス
-		m_aKeyStateTrigger[nCntKey] = 0;
+		m_aState[nCntKey].KeyState = 0;
+		m_aState[nCntKey].KeyStateTrigger = 0;
+		m_aState[nCntKey].KeyStateRelease = 0;
+		m_aState[nCntKey].KeyStateRepeat = 0;
+		m_aState[nCntKey].nCntRepeatTime = 0;
 	}
 
 }
@@ -67,7 +74,6 @@ void CInputKeyboard::Uninit(void)
 //===================================================================
 void CInputKeyboard::Update(void)
 {
-
 	BYTE aKeyState[NUM_KEY_MAX];
 	int nCntKey;
 	// 入力デバイスからデータを取得
@@ -75,16 +81,29 @@ void CInputKeyboard::Update(void)
 	{
 		for (nCntKey = 0; nCntKey < NUM_KEY_MAX; nCntKey++)
 		{
-			m_aKeyStateTrigger[nCntKey] = (m_aKeyState[nCntKey] ^ aKeyState[nCntKey]) & aKeyState[nCntKey];	 //トリガー
-			m_aKeyState[nCntKey] = aKeyState[nCntKey];	//プレス
+            m_aState[nCntKey].KeyStateRelease = (m_aState[nCntKey].KeyState ^ aKeyState[nCntKey]) & m_aState[nCntKey].KeyState;//リリース
+			m_aState[nCntKey].KeyStateTrigger = (m_aState[nCntKey].KeyState ^ aKeyState[nCntKey]) & aKeyState[nCntKey];//トリガー
+			m_aState[nCntKey].KeyState = aKeyState[nCntKey];//プレス
+			m_aState[nCntKey].KeyStateRepeat = 0;
 
+			if (GetPress(nCntKey))
+			{
+				m_aState[nCntKey].nCntRepeatTime++;
+				if (m_aState[nCntKey].nCntRepeatTime % REPEAT_TIME == 1)
+				{
+					m_aState[nCntKey].KeyStateRepeat = aKeyState[nCntKey];	//リピート
+				}
+			}
+			else
+			{
+				m_aState[nCntKey].nCntRepeatTime = 0;
+			}
 		}
 	}
 	else
 	{
 		m_pDevice->Acquire();
 	}
-
 }
 
 //===================================================================
@@ -92,13 +111,21 @@ void CInputKeyboard::Update(void)
 //===================================================================
 bool CInputKeyboard::GetPress(int nKey)
 {
-	return (m_aKeyState[nKey] & 0x80) ? true : false;
+	return (m_aState[nKey].KeyState & 0x80) ? true : false;
 }
 //=============================================================================
 // キーボードの入力情報(トリガー情報)を取得
 //=============================================================================
 bool CInputKeyboard::GetTrigger(int nKey)
 {
-	return(m_aKeyStateTrigger[nKey] & 0x80) ? true : false;
+	return(m_aState[nKey].KeyStateTrigger & 0x80) ? true : false;
 }
 
+bool CInputKeyboard::GetRelease(int nKey)
+{
+	return(m_aState[nKey].KeyStateRelease & 0x80) ? true : false;
+}
+bool CInputKeyboard::GetRepeat(int nKey)
+{
+	return(m_aState[nKey].KeyStateRepeat & 0x80) ? true : false;
+}

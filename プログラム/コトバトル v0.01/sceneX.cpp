@@ -1,185 +1,166 @@
 //=============================================================================
 //
-// xファイルオブジェクト処理 [sceneX.cpp]
-// Author : Kodama Yuto
+// 3Dモデル処理 [sceneX.cpp]
+// Author : 目黒 未来也
 //
 //=============================================================================
 #include "sceneX.h"
-#include "Manager.h"
+#include "input.h"
+#include "input.h"
+#include "renderer.h"
+#include "manager.h"
+#include "debugProc.h"
+#include "load.h"
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define SCENEX_SIZE	(2.0f)	// サイズの調節
 
-//==================================================================
-// 静的メンバ変数宣言
-//==================================================================
-LPCSTR CSceneX::m_ModelNameInfo[CSceneX::MODEL_MAX] =
+//=============================================================================
+// 3Dモデルクラスのコンストラクタ
+//=============================================================================
+CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 {
-	{ "data/MODEL/airplane000.x" },
-	{ "data/MODEL/car002.x" },
-	{ "data/MODEL/KATANA.x" },
-};
-
-//==================================================================
-// コンストラクタ&デストラクタ
-//==================================================================
-CSceneX::CSceneX(CScene::PRIORITY pri = CScene::PRIORITY_3) : CScene(pri, OBJTYPE_XFILE)
-{
-	m_pBuffMat = NULL;
-	m_pMesh = NULL;
-	m_pTexture = NULL;
+	// 値をクリア
+	m_pTexture = NULL;						// テクスチャへのポインタ
+	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
+	m_pMesh = NULL;							// メッシュ情報（頂点情報）へのポインタ
+	m_pBuffMat = NULL;						// マテリアル情報へのポインタ
+	m_nNumMat = 0;							// マテリアル情報の数
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
 }
+
+//=============================================================================
+// デストラクタ
+//=============================================================================
 CSceneX::~CSceneX()
 {
-
 }
 
-//==================================================================
-// 初期化処理
-//==================================================================
-void CSceneX::Set(D3DXVECTOR3 pos, CSceneX::MODEL_PROPERTY prop,D3DXVECTOR3 rot)
+//=============================================================================
+// オブジェクトの生成処理
+//=============================================================================
+CSceneX *CSceneX::Create(D3DXVECTOR3 pos, CLoad::MODEL model)
 {
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	CSceneX *pSceneX = NULL;
+
+	if (pSceneX == NULL)
+	{
+		// オブジェクトクラスの生成
+		pSceneX = new CSceneX;
+
+		if (pSceneX != NULL)
+		{
+			pSceneX->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));
+			pSceneX->Init(pos);
+		}
+	}
+
+	return pSceneX;
+}
+
+//=============================================================================
+// 初期化処理
+//=============================================================================
+HRESULT CSceneX::Init(D3DXVECTOR3 pos)
+{
+	// オブジェクトの種類の設定
+	//SetObjType(CScene::OBJTYPE_SCENEX);
+
+	// レンダラーを取得
+	CRenderer *pRenderer;
+	pRenderer = CManager::GetRenderer();
+
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+
+	if (pRenderer != NULL)
+	{
+		pDevice = pRenderer->GetDevice();
+	}
 
 	// 位置・向きの初期設定
 	m_pos = pos;
-	m_rot = rot;
-	m_modelProperty = prop;
-
-	if (m_pBuffMat == NULL)
-	{
-		// Xファイルの読み込み
-		D3DXLoadMeshFromX(m_ModelNameInfo[prop],
-			D3DXMESH_SYSTEMMEM,
-			pDevice,
-			NULL,
-			&m_pBuffMat,
-			NULL,
-			&m_nNumMat,
-			&m_pMesh);
-
-		// マテリアル情報からテクスチャを引き出す
-		D3DXMATERIAL* pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
-		D3DMATERIAL9* pMatBuff = new D3DMATERIAL9[m_nNumMat];
-		m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
-
-		for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
-		{// 頂点数の数だけ繰り返し
-		 // マテリアル情報を読み込む
-			pMatBuff[nCntMat] = pMat[nCntMat].MatD3D;
-
-			// 環境光を初期化する
-			pMatBuff[nCntMat].Ambient = pMatBuff[nCntMat].Diffuse;
-
-			// テクスチャ情報を初期化
-			m_pTexture[nCntMat] = NULL;
-
-			// テクスチャの情報を読み込む
-			if (pMat[nCntMat].pTextureFilename != NULL &&
-				lstrlen(pMat[nCntMat].pTextureFilename) > 0)
-			{// テクスチャのファイル名がある
-				D3DXCreateTextureFromFile(pDevice,
-					pMat[nCntMat].pTextureFilename,
-					&m_pTexture[nCntMat]);
-			}
-		}
-		delete[] pMatBuff;
-		pMatBuff = NULL;
-	}
-
-	//移動量・回転量の初期化
-	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_rotMove = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	//頂点の取得
-	GetVertex();
-
-	m_bTargetFlag = false;
-
-}
-
-//==================================================================
-// 初期化処理
-//==================================================================
-HRESULT CSceneX::Init(void)
-{
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	//m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// 頂点座標の設定
+	SetVtx();
 
 	return S_OK;
 }
 
-//==================================================================
+//=============================================================================
 // 終了処理
-//==================================================================
+//=============================================================================
 void CSceneX::Uninit(void)
 {
-	// メッシュの解放
-	if (m_pMesh != NULL)
+	//ポインタのNULLチェック (家)
+	if (m_pTexture != NULL)
 	{
-		m_pMesh->Release();
-		m_pMesh = NULL;
-	}
-	//テクスチャの開放
-	for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
-	{
-		if (m_pTexture[nCntMat] != NULL)
+		for (int nCnt = 0; nCnt < (int)m_nNumMat; nCnt++)
 		{
-			m_pTexture[nCntMat]->Release();
-			m_pTexture[nCntMat] = NULL;
+			//ポインタ内のポインタのNULLチェック (家具)
+			if (m_pTexture[nCnt] != NULL)
+			{
+				//テクスチャ破棄
+				m_pTexture[nCnt]->Release();
+				m_pTexture[nCnt] = NULL;
+			}
 		}
+		//メモリを開放 (解体)
+		delete[] m_pTexture;
+		//NULLを入れる (更地)
+		m_pTexture = NULL;
 	}
-	delete[] m_pTexture;
-	//マテリアルの解放
-	if (m_pBuffMat != NULL)
-	{
-		m_pBuffMat->Release();
-		m_pBuffMat = NULL;
-	}
-
+	// オブジェクトの解放
 	Release();
 }
 
-//==================================================================
+//=============================================================================
 // 更新処理
-//==================================================================
+//=============================================================================
 void CSceneX::Update(void)
 {
 
+
+#ifdef _DEBUG
+	//CDebugProc::Print("cfccfccfc", "ModelPos : x", m_pos.x, "f", "   y", m_pos.y, "f", "  z", m_pos.z, "f");
+#endif
 }
 
-//==================================================================
+//=============================================================================
 // 描画処理
-//==================================================================
+//=============================================================================
 void CSceneX::Draw(void)
 {
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	D3DXMATRIX mtxRot, mtxTrans, mtxScale;				// 計算用マトリックス
+	D3DMATERIAL9 matDef;						// 現在のマテリアル保存用
+	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
-	D3DXMATRIX mtxRot, mtxTrans;
-	D3DMATERIAL9 matDef;		//現在のマテリアル保存用
-	D3DXMATERIAL *pMat;			//マテリアルデータのポインタ
+	// レンダラーを取得
+	CRenderer *pRenderer;
+	pRenderer = CManager::GetRenderer();
+
+	// デバイスを取得
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+
+	if (pRenderer != NULL)
+	{
+		pDevice = pRenderer->GetDevice();
+	}
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot,
-		m_rot.y,
-		m_rot.x,
-		m_rot.z);
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
 
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxRot);
+	// 移動を反映
+	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTrans,
-		m_pos.x,
-		m_pos.y,
-		m_pos.z);
-
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxTrans);
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
@@ -194,8 +175,23 @@ void CSceneX::Draw(void)
 		// マテリアルの設定
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-		/*テクスチャの設定*/
-		pDevice->SetTexture(0, m_pTexture[nCntMat]);//テクスチャの設定(使わなければNULLを入れる)
+		if (pMat[nCntMat].pTextureFilename != NULL)
+		{// マテリアルにテクスチャがあった場合
+
+			if (m_pTexture != NULL)
+			{
+				// テクスチャの設定
+				pDevice->SetTexture(0, m_pTexture[nCntMat]);
+			}
+			else
+			{// マテリアルにテクスチャが無かった場合
+				pDevice->SetTexture(0, NULL);
+			}
+		}
+		else
+		{// マテリアルにテクスチャが無かった場合
+			pDevice->SetTexture(0, NULL);
+		}
 
 		// モデル(パーツ)の描画
 		m_pMesh->DrawSubset(nCntMat);
@@ -203,83 +199,248 @@ void CSceneX::Draw(void)
 
 	// マテリアルをデフォルトに戻す
 	pDevice->SetMaterial(&matDef);
-
 }
-//==================================================================
-// 頂点座標取得処理
-//==================================================================
-void CSceneX::GetVertex(void)
+
+//=============================================================================
+// 頂点座標の設定処理
+//=============================================================================
+void CSceneX::SetVtx(void)
 {
-	//変数宣言
+	DWORD sizeFvF;	//頂点フォーマットのサイズ
+	D3DXVECTOR3 vtx;
 	int nNumVtx;	//頂点数
-	DWORD sizeFVF;	//頂点フォーマットのサイズ
 	BYTE *pVtxBuff;	//頂点バッファへのポインタ
 
-	m_vtxMin = D3DXVECTOR3(1000000.0f, 1000000.0f, 1000000.0f);
-	m_vtxMax = D3DXVECTOR3(-1000000.0f, -1000000.0f, -1000000.0f);
-
-	//頂点数の取得
+					// 頂点数を取得
 	nNumVtx = m_pMesh->GetNumVertices();
+	// 頂点フォーマットのサイズを取得
+	sizeFvF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
 
-	//頂点フォーマットのサイズを取得
-	sizeFVF = D3DXGetFVFVertexSize(m_pMesh->GetFVF());
+	// 頂点の最小値と最大値を代入
+	m_VtxMin = D3DXVECTOR3(10000, 10000, 10000);
+	m_VtxMax = D3DXVECTOR3(-10000, -10000, -10000);
 
-
-	//頂点バッファのロック
+	//頂点バッファをロック
 	m_pMesh->LockVertexBuffer(D3DLOCK_READONLY, (void**)&pVtxBuff);
 
 	for (int nCntVtx = 0; nCntVtx < nNumVtx; nCntVtx++)
-	{
-		D3DXVECTOR3 vtx = *(D3DXVECTOR3*)pVtxBuff;	//頂点座標の代入
+	{//頂点座標の代入
+		vtx = *(D3DXVECTOR3*)pVtxBuff;
 
-		//頂点を比較してモデルの最小・最大を抜き出す
-		//x
-		if (m_vtxMin.x > vtx.x)
+		if (m_VtxMin.x > vtx.x)
 		{
-			m_vtxMin.x = vtx.x;
+			m_VtxMin.x = vtx.x;
 		}
-		if (m_vtxMax.x < vtx.x)
+		if (m_VtxMin.y > vtx.y)
 		{
-			m_vtxMax.x = vtx.x;
+			m_VtxMin.y = vtx.y;
 		}
-
-		//y
-		if (m_vtxMin.y > vtx.y)
+		if (m_VtxMin.z > vtx.z)
 		{
-			m_vtxMin.y = vtx.y;
-		}
-		if (m_vtxMax.y < vtx.y)
-		{
-			m_vtxMax.y = vtx.y;
+			m_VtxMin.z = vtx.z;
 		}
 
-		//z
-		if (m_vtxMin.z > vtx.z)
+		if (m_VtxMax.x < vtx.x)
 		{
-			m_vtxMin.z = vtx.z;
+			m_VtxMax.x = vtx.x;
 		}
-		if (m_vtxMax.z < vtx.z)
+		if (m_VtxMax.y < vtx.y)
 		{
-			m_vtxMax.z = vtx.z;
+			m_VtxMax.y = vtx.y;
+		}
+		if (m_VtxMax.z < vtx.z)
+		{
+			m_VtxMax.z = vtx.z;
 		}
 
-		pVtxBuff += sizeFVF;		//サイズ分ポインタを進める
+		//サイズ分ポインタを進める
+		pVtxBuff += sizeFvF;
 	}
-	//アンロック
+	//頂点バッファをアンロック
 	m_pMesh->UnlockVertexBuffer();
-
 }
 
-//==================================================================
-// 各種設定処理
-//==================================================================
+//=============================================================================
+// ブロックとの当たり判定処理
+//=============================================================================
+bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
+{
+	bool bLand = false;	// 乗っていない状態
+
+	D3DXVECTOR3 ScaleVtxMax;
+	D3DXVECTOR3 ScaleVtxMin;
+
+	// 拡大を反映
+	ScaleVtxMax.x = m_VtxMax.x * m_mtxWorld._11;
+	ScaleVtxMax.y = m_VtxMax.y * m_mtxWorld._22;
+	ScaleVtxMax.z = m_VtxMax.z * m_mtxWorld._33;
+	ScaleVtxMin.x = m_VtxMin.x * m_mtxWorld._11;
+	ScaleVtxMin.y = m_VtxMin.y * m_mtxWorld._22;
+	ScaleVtxMin.z = m_VtxMin.z * m_mtxWorld._33;
+
+	if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
+		|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && pos->y <= m_pos.y + ScaleVtxMin.y
+		|| pos->y + radius.y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y >= m_pos.y + ScaleVtxMin.y)
+	{// yの範囲の中
+		if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
+		{// zの範囲の中
+			if (posOld->x + radius.x <= m_pos.x + ScaleVtxMin.x
+				&& pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
+			{// X座標の中に左から入った
+				pos->x = posOld->x;
+				move->x = 0.0f;
+			}
+			else if (posOld->x - radius.x >= m_pos.x + ScaleVtxMax.x
+				&& pos->x - radius.x < m_pos.x + ScaleVtxMax.x)
+			{// X座標の中に右から入った
+				pos->x = posOld->x;
+				move->x = 0.0f;
+			}
+		}
+		if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x >= m_pos.x + ScaleVtxMin.x)
+		{// xの範囲の中
+			if (posOld->z + radius.z <= m_pos.z + ScaleVtxMin.z
+				&& pos->z + radius.z > m_pos.z + ScaleVtxMin.z)
+			{// Z座標の中に手前から入った
+				pos->z = posOld->z;
+				move->z = 0.0f;
+			}
+			else if (posOld->z - radius.z >= m_pos.z + ScaleVtxMax.z
+				&& pos->z - radius.z < m_pos.z + ScaleVtxMax.z)
+			{// Z座標の中に後ろから入った
+				pos->z = posOld->z;
+				move->z = 0.0f;
+			}
+		}
+	}
+
+	if (pos->x - radius.x < m_pos.x + ScaleVtxMax.x - SCENEX_SIZE && pos->x + radius.x > m_pos.x + ScaleVtxMin.x + SCENEX_SIZE
+		&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
+	{// 障害物の内側に乗った
+		if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y < m_pos.y + ScaleVtxMax.y
+			|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y > m_pos.y + ScaleVtxMax.y)
+		{// 上からブロックに当たったとき
+			bLand = true;  // 乗った判定を返す
+			pos->y = m_pos.y + ScaleVtxMax.y;
+			move->y = 0.0f;  // 移動量をなくす
+		}
+
+		if (posOld->y + radius.y < m_pos.y + ScaleVtxMin.y && pos->y + radius.y >= m_pos.y + ScaleVtxMin.y
+			|| pos->y + radius.y > m_pos.y + ScaleVtxMin.y && posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y)
+		{// 下からブロックに当たったとき
+			pos->y = posOld->y;
+			move->y = 0.0f;  // 移動量をなくす
+		}
+	}
+
+	return bLand;	// ブロックに乗っているかどうかを返す
+}
+
+//=============================================================================
+// 位置の取得
+//=============================================================================
+D3DXVECTOR3 CSceneX::GetPosition(void)
+{
+	return m_pos;
+}
+
+//=============================================================================
+// 位置の設定
+//=============================================================================
 void CSceneX::SetPosition(D3DXVECTOR3 pos)
-{//座標のみ設定
+{
 	m_pos = pos;
 }
 
-void CSceneX::SetRotation(D3DXVECTOR3 rot)
-{//角度のみ設定
+//=============================================================================
+// 位置の取得
+//=============================================================================
+D3DXVECTOR3 CSceneX::GetRot(void)
+{
+	return m_rot;
+}
+
+//=============================================================================
+// 位置の設定
+//=============================================================================
+void CSceneX::SetRot(D3DXVECTOR3 rot)
+{
 	m_rot = rot;
 }
 
+//=============================================================================
+// モデルを割り当てる
+//=============================================================================
+void CSceneX::BindModel(LPD3DXBUFFER pBuffMat, DWORD nNumMat, LPD3DXMESH pMesh)
+{
+	m_pBuffMat = pBuffMat;
+	m_nNumMat = nNumMat;
+	m_pMesh = pMesh;
+
+	//デバイスを取得
+	CRenderer *pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	//マテリアルデータへのポインタ
+	D3DXMATERIAL *pMat;
+	//マテリアル情報からテクスチャの取得
+	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+
+	//テクスチャをマテリアルの数分動的確保
+	m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
+
+	//マテリアルの数回す
+	for (int nCntMatTex = 0; nCntMatTex < (int)m_nNumMat; nCntMatTex++)
+	{
+		//NULLを入れる 中身を空に
+		m_pTexture[nCntMatTex] = NULL;
+
+		if (pMat[nCntMatTex].pTextureFilename != NULL)
+		{
+			// テクスチャの設定
+			D3DXCreateTextureFromFile(pDevice,		// デバイスへのポインタ
+				pMat[nCntMatTex].pTextureFilename,	// ファイルの名前
+				&m_pTexture[nCntMatTex]);		// テクスチャへのポインタ
+		}
+	}
+
+}
+
+//=============================================================================
+// テクスチャマテリアルを割り当てる
+//=============================================================================
+void CSceneX::BindTex(LPDIRECT3DTEXTURE9 *pTexture)
+{
+	m_pTexture = pTexture;
+}
+
+//=============================================================================
+// 頂点情報の最大値の取得
+//=============================================================================
+D3DXVECTOR3 CSceneX::GetVtxMax(void)
+{
+	return m_VtxMax;
+}
+
+//=============================================================================
+// 頂点情報の最大値の設定
+//=============================================================================
+void CSceneX::SetVtxMax(D3DXVECTOR3 VtxMax)
+{
+	m_VtxMax = VtxMax;
+}
+
+//=============================================================================
+// 頂点情報の最小値の取得
+//=============================================================================
+D3DXVECTOR3 CSceneX::GetVtxMin(void)
+{
+	return m_VtxMin;
+}
+
+//=============================================================================
+// 頂点情報の最小値の設定
+//=============================================================================
+void CSceneX::SetVtxMin(D3DXVECTOR3 VtxMin)
+{
+	m_VtxMin = VtxMin;
+}

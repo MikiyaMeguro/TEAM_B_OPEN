@@ -12,7 +12,7 @@
 //
 //====================================================================================
 START_LOAD
-DATA = 00000 data/TEXTURE/block000.jpg  BLOCK
+DATA = 00000 data/TEXTURE/SampleTex000.png  BLOCK
 DATA = 00001 data/TEXTURE/field000.jpg  FIELD
 DATA = 00002 data/TEXTURE/Wall0001.png  WALL
 DATA = 00003 data/TEXTURE/Marker000.png MARKER

@@ -27,6 +27,7 @@ HRESULT CTexture::Load(void) {
 	//テクスチャのデータ読み込み
 	//変数宣言
 	CRenderer *pRenderer = CManager::GetRenderer();
+
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
 	FILE* pFile = NULL;		// ファイルポインタ

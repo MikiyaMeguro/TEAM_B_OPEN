@@ -20,6 +20,15 @@
 class CInputKeyboard : public CInput
 {
 public:
+	typedef struct
+	{
+		BYTE KeyState;			//プレス用のキー情報
+		BYTE KeyStateTrigger;	//トリガー用のキー情報
+		BYTE KeyStateRelease;	//リリース用のキー情報
+		BYTE KeyStateRepeat;	//リピート用のキー情報
+
+		int nCntRepeatTime;		//リピート用のカウンタ
+	}KEY_STATE;		//キー情報の構造体
 	CInputKeyboard();
 	~CInputKeyboard();
 
@@ -29,9 +38,10 @@ public:
 
 	bool GetPress(int nKey);
 	bool GetTrigger(int nKey);
+	bool GetRelease(int nKey);
+	bool GetRepeat(int nKey);
 private:
-	BYTE m_aKeyState[NUM_KEY_MAX];
-	BYTE m_aKeyStateTrigger[NUM_KEY_MAX];
+	KEY_STATE m_aState[NUM_KEY_MAX];	//キー情報構造体(キー数分)
 };
 
 #endif // !_INPUTKEYBOARD_H_

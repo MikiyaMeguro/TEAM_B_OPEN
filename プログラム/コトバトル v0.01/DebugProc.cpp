@@ -1,98 +1,152 @@
 //=============================================================================
 //
-// デバック情報表示処理 [DebugProc.cpp]
-// Author : Kodama Yuto
+// デバック表示処理 [debugProc.cpp]
+// Author : 目黒 未来也
 //
 //=============================================================================
-#include "DebugProc.h"
-#include "Manager.h"
+#include "debugProc.h"
+#include "manager.h"
+#include "renderer.h"
 
-//==================================================================
-//	静的メンバ(staticメンバ)変数宣言
-//==================================================================
+//=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
 LPD3DXFONT CDebugProc::m_pFont = NULL;
-char CDebugProc::m_aStr[MAX_CHARDATA] = {};
+char CDebugProc::m_aStr[1024] = {};
 
-//==================================================================
-//	コンストラクタ&デストラクタ
-//==================================================================
+//=============================================================================
+// デバック表示クラスのコンストラクタ
+//=============================================================================
 CDebugProc::CDebugProc()
 {
-
 }
+
+//=============================================================================
+// デストラクタ
+//=============================================================================
 CDebugProc::~CDebugProc()
 {
-
 }
 
-//==================================================================
-//	初期化処理
-//==================================================================
+//=============================================================================
+// デバック表示の初期化処理
+//=============================================================================
 void CDebugProc::Init(void)
 {
-	//変数宣言
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+#ifdef _DEBUG
+	// レンダラーを取得
+	CRenderer *pRenderer;
+	pRenderer = CManager::GetRenderer();
 
-	//フォントの作成
-	D3DXCreateFont(pDevice, 20, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+
+	if (pRenderer != NULL)
+	{
+		pDevice = pRenderer->GetDevice();
+	}
+
+	// デバッグ情報表示用フォントの生成
+	D3DXCreateFont(pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &m_pFont);
+#endif
 
 }
 
-//==================================================================
-//	終了処理
-//==================================================================
+//=============================================================================
+// デバック表示の終了処理
+//=============================================================================
 void CDebugProc::Uninit(void)
 {
+#ifdef _DEBUG
 	// デバッグ情報表示用フォントの破棄
 	if (m_pFont != NULL)
 	{
 		m_pFont->Release();
 		m_pFont = NULL;
 	}
-}
-//==================================================================
-//	入力処理(printfとほぼ同様の処理)
-//==================================================================
-void CDebugProc::Print(char* fmt, ...)
-{/*可変長引数を編集したいときは必ずva_startとva_endの間でやること*/
-
-	//変数宣言
-	va_list args;				//可変長引数のリスト	[va = variable(可変)]
-	char cPrint[256];			//編集できるようにするためにいったん格納しておく変数
-
-	va_start(args, fmt);			//可変長引数の編集開始
-
-	vsprintf_s(cPrint,fmt, args);	//変数にfmtとargsを合成したものを入れる
-
-	va_end(args);					//可変長引数の編集終了
-
-	/*文字列を編集したいときはここでやる*/
-
-	strcat_s(m_aStr, cPrint);		//描画用の変数に文字列を格納する
+#endif
 }
 
-//==================================================================
-//	描画(出力)処理
-//==================================================================
+//=============================================================================
+// デバック表示の表示処理
+//=============================================================================
+void CDebugProc::Print(char *fmt, ...)
+{
+#ifdef _DEBUG
+
+	int nNum = 0;
+	double fNum = 0.0f;
+	char cNum[1024];
+
+	// 任意個の引数を１個の変数に変換
+	va_list ap;
+
+	// 可変長引数を１個の変数にまとめる
+	va_start(ap, fmt);
+
+	while (*fmt)
+	{
+		switch (*fmt)
+		{
+		case 'c':	// char型
+			strcat(m_aStr, va_arg(ap, char*));	// リストの中のキャラ型を取り出して、m_aStrに入れる
+			break;
+
+		case 'n':	// int型
+			nNum = va_arg(ap, int);		// リストの中のint型数字を引き出す
+
+			sprintf(cNum, "%d", nNum);	// %dに入るint型をcNumのキャラ型に入れる
+
+			strcat(m_aStr, cNum);		// 文字のデータにint型の数字を入れる
+
+			break;
+
+		case 'f':	// float型
+			fNum = va_arg(ap, double);		// リストの中のfloat型数字を引き出す
+
+			sprintf(cNum, "%.1f", fNum);	// %.1fに入るfloat型をcNumのキャラ型に入れる
+
+			strcat(m_aStr, cNum);			// 文字のデータにfloat型の数字を入れる
+
+			break;
+		}
+
+		fmt++;	// フォーマットの文字を１文字進める
+	}
+
+
+	strcat(m_aStr, "\n");
+
+	va_end(ap);
+#endif
+}
+
+//=============================================================================
+// デバック表示の削除処理
+//=============================================================================
+void CDebugProc::ReleseStr(void)
+{
+#ifdef _DEBUG
+	for (int nCntStr = 0; nCntStr < 1024; nCntStr++)
+	{
+		if (m_aStr[nCntStr] != NULL)
+		{
+			m_aStr[nCntStr] = NULL;
+		}
+	}
+#endif
+}
+
+//=============================================================================
+// デバック表示の表示処理
+//=============================================================================
 void CDebugProc::Draw(void)
 {
 #ifdef _DEBUG
-	//変数宣言
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-
-	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };	//描画範囲の指定
+	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 	// テキスト描画
-	m_pFont->DrawText(NULL,
-		m_aStr,
-		-1,
-		&rect,
-		DT_LEFT,
-		D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	m_pFont->DrawText(NULL, m_aStr, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
 #endif
-	//文字列初期化
-	ZeroMemory(m_aStr,sizeof(char) * MAX_CHARDATA);
+
 }

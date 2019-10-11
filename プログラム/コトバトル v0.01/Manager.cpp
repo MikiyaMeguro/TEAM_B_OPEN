@@ -1,426 +1,704 @@
 //=============================================================================
 //
-// 管理クラス処理 [Manager.cpp]
-// Author : Kodama Yuto
+// マネージャ処理 [manager.cpp]
+// Author : 目黒 未来也
 //
 //=============================================================================
-#include "Manager.h"
+#include "manager.h"
+#include "main.h"
+
 #include "scene2D.h"
 #include "scene3D.h"
 #include "sceneX.h"
-#include "sceneBillboard.h"
-
-#include "pause.h"
+#include "renderer.h"
+#include "input.h"
+#include "InputKeyboard.h"
+#include "camera.h"
+#include "light.h"
+#include "debugProc.h"
 #include "fade.h"
-#include "title.h"
-#include "tutorial.h"
 #include "game.h"
+#include "sound.h"
+#include "title.h"
 #include "result.h"
-#include "ranking.h"
-//==================================================================
-// 静的メンバ変数
-//==================================================================
-CRenderer* CManager::m_pRenderer = NULL;
-CInputKeyboard* CManager::m_pInputKeyboard = NULL;
+#include "tutorial.h"
+#include "select.h"
+#include "mask.h"
+#include "Command.h"
+#include "CameraManager.h"
+
+//=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
+CRenderer *CManager::m_pRenderer = NULL;
+CInputKeyboard *CManager::m_pInputKeyboard = NULL;
+//CCamera *CManager::m_pCamera = NULL;
 CCameraManager* CManager::m_pCameraManager = NULL;
-CLight* CManager::m_pLight = NULL;
-CDebugProc* CManager::m_pDebugProc = NULL;
+CLight *CManager::m_pLight = NULL;
+CDebugProc *CManager::m_pDebugProc = NULL;
+CMask *CManager::m_pMask = NULL;
+CGame *CManager::m_pGame = NULL;
+CTitle *CManager::m_pTitle = NULL;
+CSelect *CManager::m_pSelect = NULL;
+CTutorial *CManager::m_pTutorial = NULL;
+CResult *CManager::m_pResult = NULL;
+CFade *CManager::m_pFade = NULL;
+CCharacterMove *CManager::m_pCharacterMove = NULL;
+CXInputJoyPad *CManager::m_pXInput = NULL;
+CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
+CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
-CFade*			CManager::m_pFade = NULL;
-CPause*			CManager::m_pPause = NULL;
-CSound*				CManager::m_pSound = NULL;
-
-//状態遷移用のポインタ
-CTitle* CManager::m_pTitle = NULL;							//タイトル
-CTutorial* CManager::m_pTutorial = NULL;					//チュートリアル
-CGame* CManager::m_pGame = NULL;							//ゲーム
-CResult* CManager::m_pResult = NULL;						//リザルト
-CRanking* CManager::m_pRanking = NULL;						//ゲーム
-
-CManager::MODE CManager::m_Mode = CManager::MODE_TITLE;		//現在の画面状態
-CManager::MODE CManager::m_OrgMode = CManager::MODE_NONE;	//一つ前の画面状態
-bool CManager::m_bPauseFlag = false;
-
-//==================================================================
-// コンストラクタ&デストラクタ
-//==================================================================
+//=============================================================================
+// マネージャクラスのコンストラクタ
+//=============================================================================
 CManager::CManager()
 {
-
 }
+
+//=============================================================================
+// デストラクタ
+//=============================================================================
 CManager::~CManager()
 {
-
 }
 
-//==================================================================
-// 初期化処理
-//==================================================================
-HRESULT CManager::Init(HINSTANCE hInstance,HWND hWnd)
+//=============================================================================
+// マネージャ初期化処理
+//=============================================================================
+HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 {
-	srand((unsigned int)time(0));
-
-	//レンダラの生成
 	if (m_pRenderer == NULL)
 	{
+		// レンダリングクラスの生成
 		m_pRenderer = new CRenderer;
-	}
 
-	if (m_pRenderer != NULL)
-	{
-		// 初期化処理(ウィンドウを作成してから行う)
-		if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
+		if (m_pRenderer != NULL)
 		{
-			// 終了処理
-			m_pRenderer->Uninit();
-
-			delete m_pRenderer;
-			m_pRenderer = NULL;
-			return -1;
+			// 初期化処理
+			if (FAILED(m_pRenderer->Init(hWnd, TRUE)))
+			{
+				return -1;
+			}
 		}
 	}
-	m_pSound = CSound::Create(hWnd);
-
-	CTexture::Load();
-
-	//デバック管理クラスの生成
-	Create(m_pDebugProc);
-
-	//ポーズ画面の生成
-	Create(m_pPause);
 
 	//カメラ・ライトの生成
-	if (Create(m_pCameraManager))
+	if (ObjCreate(m_pCameraManager))
 	{
-		m_pCameraManager->CreateCamera("1P_CAMERA",CCamera::TYPE_TPS,
-			D3DXVECTOR3(0.0f,0.0f,-100.0f),D3DXVECTOR3(0.0f,0.0f,0.0f),100.0f);
+		m_pCameraManager->CreateCamera("DEFAULT_CAMERA", CCamera::TYPE_TPS,
+			D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100.0f);
+		m_pCameraManager->SetCameraViewPort("DEFAULT_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-		m_pCameraManager->SetCameraViewPort("1P_CAMERA",0,0,620,340);
-
-		m_pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-			D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), 100.0f);
-
-		m_pCameraManager->SetCameraViewPort("2P_CAMERA", 660, 0, 620, 340);
-
-		m_pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-			D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), 100.0f);
-		m_pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 380, 620, 340);
-
-		m_pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-			D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), 100.0f);
-
-		m_pCameraManager->SetCameraViewPort("4P_CAMERA", 660, 380, 620, 340);
 	}
 
-	Create(m_pLight);
 
-	//入力デバイスの生成
-	m_pInputKeyboard = new CInputKeyboard;
-
-	if (m_pInputKeyboard != NULL)
+	if (m_pLight == NULL)
 	{
-		// 初期化処理(ウィンドウを作成してから行う)
-		if (FAILED(m_pInputKeyboard->Init(hInstance,hWnd)))
-		{
-			// 終了処理
-			m_pInputKeyboard->Uninit();
+		// ライトクラスの生成
+		m_pLight = new CLight;
 
-			delete m_pInputKeyboard;
-			m_pInputKeyboard = NULL;
-			return -1;
+		if (m_pLight != NULL)
+		{
+			m_pLight->Init();
 		}
 	}
-	//フェードの生成
-	m_pFade = CFade::Create(CManager::MODE_TITLE);
 
-	//モードの設定
-	SetMode(m_Mode);
+	if (m_pInputKeyboard == NULL)
+	{
+		// 入力クラスの生成
+		m_pInputKeyboard = new CInputKeyboard;
 
-	//コマンド登録
+		if (m_pInputKeyboard != NULL)
+		{
+			m_pInputKeyboard->Init(hInstance, hWnd);
+		}
+	}
+
+	if (m_pMask == NULL)
+	{
+		m_pMask = CMask::Create();
+	}
+
+	//サウンド
+	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
+	{
+		m_pSound[nCnt] = new CSound;
+		if (m_pSound[nCnt] != NULL)
+		{
+			m_pSound[nCnt]->InitSound(hWnd);
+		}
+	}
+#ifdef _DEBUG
+	if (m_pDebugProc == NULL)
+	{
+		// デバック表示クラスの生成
+		m_pDebugProc = new CDebugProc;
+
+		if (m_pDebugProc != NULL)
+		{
+			m_pDebugProc->Init();
+		}
+	}
+#endif
+
+	//テクスチャロード
+	CTexture::Load();
+	//モデルロード
+	CLoad::LoadModel();
+
+	if (m_pFade == NULL)
+	{
+		//フェードの生成
+		m_pFade = CFade::Create();
+
+		if (m_pFade != NULL)
+		{
+			m_pFade->SetFade(m_mode, m_pFade->FADE_IN);
+		}
+	}
+
+	// モード切替
+	//SetMode(m_mode);
+
 	CCommand::RegistCommand("ENTER", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_RETURN);
-
-	CCommand::RegistCommand("PAUSE", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_P);
-
-	CCommand::RegistCommand("PAUSE_MENU_UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_UP);
-	CCommand::RegistCommand("PAUSE_MENU_UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_W);
-	CCommand::RegistCommand("PAUSE_MENU_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_DOWN);
-	CCommand::RegistCommand("PAUSE_MENU_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_S);
+	CCommand::RegistCommand("RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_RIGHT);
+	CCommand::RegistCommand("RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_D);
+	CCommand::RegistCommand("LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LEFT);
+	CCommand::RegistCommand("LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_A);
+	CCommand::RegistCommand("UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_UP);
+	CCommand::RegistCommand("UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_W);
+	CCommand::RegistCommand("DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_DOWN);
+	CCommand::RegistCommand("DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_S);
 
 	return S_OK;
 }
 
-//==================================================================
-// 終了処理
-//==================================================================
+//=============================================================================
+// マネージャ終了処理
+//=============================================================================
 void CManager::Uninit(void)
 {
-	//オブジェクト全破棄
-	CScene::ReleaseAll(true);
-
-	//フェード破棄
-	Release(m_pFade);
-
-	//Uninit
-	switch (m_Mode)
-	{
-	case CManager::MODE_LOGO:
-		break;
-	case CManager::MODE_TITLE:
-		Release(m_pTitle);
-		break;
-	case CManager::MODE_SELECT:
-		break;
-	case CManager::MODE_TUTORIAL:
-		Release(m_pTutorial);
-		break;
-	case CManager::MODE_GAME:
-		Release(m_pGame);
-		break;
-	case CManager::MODE_RESULT:
-		Release(m_pResult);
-		break;
-	case CManager::MODE_RANKING:
-		Release(m_pRanking);
-		break;
-	case CManager::MODE_OPTION:
-		break;
+	if (m_pMask != NULL)
+	{// フェードの終了
+		m_pMask->Uninit();
+		delete m_pMask;
+		m_pMask = NULL;
 	}
 
-	if (m_pSound != NULL)
-	{
-		m_pSound->StopAll();
-		Release(m_pSound);
+	if (m_pRenderer != NULL)
+	{// レンダリングクラスの破棄
+		// 終了処理
+		m_pRenderer->Uninit();
+
+		// メモリを開放
+		delete m_pRenderer;
+		m_pRenderer = NULL;
 	}
-
-	//キーボード
-	Release(m_pInputKeyboard);
-
-	//テクスチャ破棄
-	CTexture::Unload();
-
-	//ポーズ画面の生成
-	Release(m_pPause);
 
 	//カメラ
-	Release(m_pCameraManager);
+	ObjRelease(m_pCameraManager);
 
-	//ライト
-	Release(m_pLight);
 
-	//デバック
-	Release(m_pDebugProc);
+	if (m_pLight != NULL)
+	{// ライトクラスの破棄
+	 // 終了処理
+		m_pLight->Uninit();
 
-	//レンダラの削除
-	Release(m_pRenderer);
+		// メモリを開放
+		delete m_pLight;
+		m_pLight = NULL;
+	}
 
+	if (m_pInputKeyboard != NULL)
+	{// レンダリングクラスの破棄
+		 // 終了処理
+		m_pInputKeyboard->Uninit();
+
+		// メモリを開放
+		delete m_pInputKeyboard;
+		m_pInputKeyboard = NULL;
+	}
+
+	//if (m_pXInput != NULL)
+	//{// レンダリングクラスの破棄
+	// // 終了処理
+
+	// // メモリを開放
+	//	delete m_pXInput;
+	//	m_pXInput = NULL;
+	//}
+
+	//テクスチャの破棄
+	CTexture::Unload();
+	//モデルの破棄
+	CLoad::UnloadModel();
+	//フェードクラスの破棄
+	if (m_pFade != NULL)
+	{
+		// 終了処理
+		m_pFade->Uninit();
+
+		//メモリの開放
+		delete m_pFade;
+
+		//NULLにする
+		m_pFade = NULL;
+	}
+
+#ifdef _DEBUG
+	if (m_pDebugProc != NULL)
+	{// デバック表示クラスの破棄
+		// 終了処理
+		m_pDebugProc->Uninit();
+
+		// メモリを開放
+		delete m_pDebugProc;
+		m_pDebugProc = NULL;
+	}
+#endif
+
+	switch (m_mode)
+	{
+		//タイトルモードの終了処理
+	case CManager::MODE_TITLE:
+		if (m_pTitle != NULL)
+		{
+			m_pTitle->Uninit();
+			delete m_pTitle;
+			m_pTitle = NULL;
+
+			//タイトルのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_TITLE);
+		}
+		break;
+
+	case CManager::MODE_TUTORIAL:
+		if (m_pTutorial != NULL)
+		{
+			m_pTutorial->Uninit();
+			delete m_pTutorial;
+			m_pTutorial = NULL;
+		}
+		break;
+
+		//ゲームモードの終了処理
+	case CManager::MODE_GAME:
+		if (m_pGame != NULL)
+		{
+			m_pGame->Uninit();
+			delete m_pGame;
+			m_pGame = NULL;
+		}
+		break;
+
+		//リザルトモードの終了処理
+	case CManager::MODE_RESULT:
+		if (m_pResult != NULL)
+		{
+			m_pResult->Uninit();
+			delete m_pResult;
+			m_pResult = NULL;
+
+			//タイトルのBGMを止める
+		//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
+		}
+		break;
+
+		//セレクトモードの終了処理
+	case CManager::MODE_SELECT:
+		if (m_pSelect != NULL)
+		{
+			m_pSelect->Uninit();
+			delete m_pSelect;
+			m_pSelect = NULL;
+
+			//タイトルのBGMを止める
+			//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
+		}
+		break;
+	}
+
+	//サウンド
+	for (int nCnt = 0; nCnt < MAX_SOUND; nCnt++)
+	{
+		if (m_pSound[nCnt] != NULL)
+		{
+			m_pSound[nCnt]->UninitSound();
+			delete m_pSound[nCnt];
+			m_pSound[nCnt] = NULL;
+		}
+	}
+
+	// 全てのオブジェクトを解放
+	CScene::ReleseAll();
 }
 
-//==================================================================
-// 更新処理
-//==================================================================
+//=============================================================================
+// マネージャ更新処理
+//=============================================================================
 void CManager::Update(void)
 {
-	//Update
-	switch (m_Mode)
+#ifdef _DEBUG
+	// デバック表示を消す
+	CDebugProc::ReleseStr();
+#endif
+
+	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+
+	//ランダムに
+	srand((unsigned int)time(NULL));
+
+
+	//bool bPause = CPause::GetPauseBool();
+
+
+	if (m_pRenderer != NULL)
+	{// レンダラー更新処理
+		m_pRenderer->Update();
+	}
+
+	//if (bPause == false)
 	{
-	case CManager::MODE_LOGO:
-		break;
-	case CManager::MODE_TITLE:
-		if (m_pTitle != NULL) { m_pTitle->Update(); }
-		break;
-	case CManager::MODE_SELECT:
-		break;
-	case CManager::MODE_TUTORIAL:
-		if (m_pTutorial != NULL) { m_pTutorial->Update(); }
-		break;
-	case CManager::MODE_GAME:
-		if (m_pGame != NULL) { m_pGame->Update(); }
-		break;
-	case CManager::MODE_RESULT:
-		if (m_pResult != NULL) { m_pResult->Update(); }
-		break;
-	case CManager::MODE_RANKING:
-		if (m_pRanking != NULL) { m_pRanking->Update(); }
-		break;
-	case CManager::MODE_OPTION:
-		break;
+		//カメラ
+		if (m_pCameraManager != NULL)
+		{
+			m_pCameraManager->Update();
+		}
+
+		if (m_pLight != NULL)
+		{// ライト更新処理
+			m_pLight->Update();
+		}
 	}
 
 
 	if (m_pInputKeyboard != NULL)
-	{
-		// 更新処理
+	{// キーボード入力更新処理
 		m_pInputKeyboard->Update();
 	}
 
-	//カメラ
-	if (m_pCameraManager != NULL)
-	{
-		m_pCameraManager->Update();
-	}
-
-	if (m_pLight != NULL)
-	{
-		// 更新処理
-		m_pLight->Update();
+	if (m_pMask != NULL)
+	{// フェード更新処理
+		m_pMask->Update();
 	}
 
 	if (m_pFade != NULL)
-	{
+	{//フェードの更新処理
 		m_pFade->Update();
 	}
 
-	if (m_bPauseFlag == false)
-	{	//レンダラの更新
-		if (m_pRenderer != NULL)
-		{
-			m_pRenderer->Update();
-		}
-	}
-	else
-	{//ポーズの更新
-		if (m_pPause != NULL)
-		{
-			m_pPause->Update();
-		}
-	}
-
-	if (m_pInputKeyboard->GetPress(DIK_Q) == true &&
-		m_pInputKeyboard->GetTrigger(DIK_P) == true)
+	switch (m_mode)
 	{
-		//オブジェクト全破棄
-		CScene::ReleaseAll(false);
-	}
+		//タイトルモードの更新処理
+	case CManager::MODE_TITLE:
+		if (m_pTitle != NULL)
+		{
+			m_pTitle->Update();
+		}
+		break;
 
-	CDebugProc::Print("TEXNUM = %d\n",CTexture::GetTexNum(true));
-	CDebugProc::Print("MODE = %s\n",GetModeName());
+	case CManager::MODE_TUTORIAL:
+		if (m_pTutorial != NULL)
+		{
+			m_pTutorial->Update();
+		}
+		break;
+
+		//ゲームモードの更新処理
+	case CManager::MODE_GAME:
+		if (m_pGame != NULL)
+		{
+			//if (bPause == false)
+			{
+				m_pGame->Update();
+			}
+		}
+		break;
+
+		//リザルトモードの更新処理
+	case CManager::MODE_RESULT:
+		if (m_pResult != NULL)
+		{
+			m_pResult->Update();
+		}
+		break;
+
+		//セレクトモードの更新処理
+	case CManager::MODE_SELECT:
+		if (m_pSelect != NULL)
+		{
+			m_pSelect->Update();
+		}
+		break;
+	}
 }
 
-//==================================================================
+//=============================================================================
 // 描画処理
-//==================================================================
+//=============================================================================
 void CManager::Draw(void)
 {
-	//Draw
-	switch (m_Mode)
-	{
-	case CManager::MODE_LOGO:
-		break;
-	case CManager::MODE_TITLE:
-		if (m_pTitle != NULL) { m_pTitle->Draw(); }
-		break;
-	case CManager::MODE_SELECT:
-		break;
-	case CManager::MODE_TUTORIAL:
-		if (m_pTutorial != NULL) { m_pTutorial->Draw(); }
-		break;
-	case CManager::MODE_GAME:
-		if (m_pGame != NULL) { m_pGame->Draw(); }
-		break;
-	case CManager::MODE_RESULT:
-		if (m_pResult != NULL) { m_pResult->Draw(); }
-		break;
-	case CManager::MODE_RANKING:
-		if (m_pRanking != NULL) { m_pRanking->Draw(); }
-		break;
-	case CManager::MODE_OPTION:
-		break;
-	}
-
 	if (m_pRenderer != NULL)
-	{
-		// 描画処理
+	{// レンダラー描画処理
 		m_pRenderer->Draw();
 	}
 }
 
-//==================================================================
-// モード設定処理
-//==================================================================
-HRESULT CManager::SetMode(MODE mode)
+//=============================================================================
+// レンダラーの取得
+//=============================================================================
+CRenderer *CManager::GetRenderer(void)
 {
-	//Uninit
-	switch (m_Mode)
+	return m_pRenderer;
+}
+
+//=============================================================================
+// 入力情報の取得
+//=============================================================================
+CInputKeyboard *CManager::GetInputKeyboard(void)
+{
+	return m_pInputKeyboard;
+}
+
+//=============================================================================
+// マスクの取得
+//=============================================================================
+CCharacterMove *CManager::GetCharacterMove(void)
+{
+	return m_pCharacterMove;
+}
+
+//=============================================================================
+// マスクの取得
+//=============================================================================
+CMask *CManager::GetMask(void)
+{
+	return m_pMask;
+}
+
+//=============================================================================
+// マネージャークラス サウンドを取得
+//=============================================================================
+CSound *CManager::GetSound(int nNum)
+{
+	return m_pSound[nNum];
+}
+
+//=============================================================================
+// モードの設定
+//=============================================================================
+void CManager::SetMode(MODE mode)
+{
+	switch (m_mode)
 	{
-	case CManager::MODE_LOGO:
-		break;
 	case CManager::MODE_TITLE:
-		Release(m_pTitle);//解放
+		//タイトルクラスの破棄
+		if (m_pTitle != NULL)
+		{
+			// 終了処理
+			m_pTitle->Uninit();
+
+			//メモリの開放
+			delete m_pTitle;
+
+			//NULLにする
+			m_pTitle = NULL;
+
+			//タイトルのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_TITLE);
+		}
 		break;
 	case CManager::MODE_SELECT:
+		//リザルトクラスの破棄
+		if (m_pSelect != NULL)
+		{
+			// 終了処理
+			m_pSelect->Uninit();
+
+			//メモリの開放
+			delete m_pSelect;
+
+			//NULLにする
+			m_pSelect = NULL;
+
+			//リザルトのBGMを止める
+			//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
+		}
 		break;
 	case CManager::MODE_TUTORIAL:
-		Release(m_pTutorial);
+		//
+		if (m_pTutorial != NULL)
+		{
+			//
+			m_pTutorial->Uninit();
+			delete m_pTutorial;
+			m_pTutorial = NULL;
+		}
 		break;
+
 	case CManager::MODE_GAME:
-		Release(m_pGame);
+		//ゲームクラスの破棄
+		if (m_pGame != NULL)
+		{
+			// 終了処理
+			m_pGame->Uninit();
+
+			delete m_pGame;
+
+			m_pGame = NULL;
+
+			//ゲームのBGMを止める
+		//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_VOICE);
+		}
 		break;
+
 	case CManager::MODE_RESULT:
-		Release(m_pResult);
-		break;
-	case CManager::MODE_RANKING:
-		Release(m_pRanking);
-		break;
-	case CManager::MODE_OPTION:
+		//リザルトクラスの破棄
+		if (m_pResult != NULL)
+		{
+			// 終了処理
+			m_pResult->Uninit();
+
+			//メモリの開放
+			delete m_pResult;
+
+			//NULLにする
+			m_pResult = NULL;
+
+			//リザルトのBGMを止める
+		//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
+		}
 		break;
 	}
+	m_mode = mode;
 
 	switch (mode)
 	{
-	case CManager::MODE_LOGO:
-		break;
 	case CManager::MODE_TITLE:
-		Create(m_pTitle); //生成
+		//タイトルの初期化
+		if (m_pTitle == NULL)
+		{
+			//キーボードのメモリを動的確保
+			m_pTitle = new CTitle;
+
+			if (m_pTitle != NULL)
+			{
+				//タイトルのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TITLE);
+
+				// 初期化処理
+				m_pTitle->Init();
+
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "aaaNULLでした", "警告", MB_OK);
+		}
+
 		break;
-	case CManager::MODE_SELECT:
-		break;
-	case CManager::MODE_TUTORIAL:
-		Create(m_pTutorial);
-		break;
+
 	case CManager::MODE_GAME:
-		Create(m_pGame);
+		//ゲームの初期化
+		if (m_pGame == NULL)
+		{
+			//ゲームのメモリを動的確保
+			m_pGame = new CGame;
+
+			if (m_pGame != NULL)
+			{
+			//	m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_SE_NOISE);
+				// 初期化処理
+				m_pGame->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
 		break;
+
 	case CManager::MODE_RESULT:
-		Create(m_pResult);
+		//リザルトの初期化
+		if (m_pResult == NULL)
+		{
+			//リザルトのメモリを動的確保
+			m_pResult = new CResult;
+
+			if (m_pResult != NULL)
+			{
+				//リザルトのBGMを再生
+			//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
+
+				// 初期化処理
+				m_pResult->Init();
+			}
+			else
+			{
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+			}
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
 		break;
-	case CManager::MODE_RANKING:
-		Create(m_pRanking);
-		break;
-	case CManager::MODE_OPTION:
-		break;
+
+		case CManager::MODE_TUTORIAL:
+			//
+			if (m_pTutorial == NULL)
+			{
+				//
+				m_pTutorial = new CTutorial;
+
+				if (m_pTutorial != NULL)
+				{	//
+					m_pTutorial->Init();
+				}
+				else
+				{
+					MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+				}
+			}
+			else
+			{
+				MessageBox(0, "NULLでした", "警告", MB_OK);
+			}
+			break;
+		case CManager::MODE_SELECT:
+			//リザルトの初期化
+			if (m_pSelect == NULL)
+			{
+				//リザルトのメモリを動的確保
+				m_pSelect = new CSelect;
+
+				if (m_pSelect != NULL)
+				{
+					//リザルトのBGMを再生
+					//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
+
+					// 初期化処理
+					m_pSelect->Init();
+				}
+				else
+				{
+					MessageBox(0, "NULLじゃないです", "警告", MB_OK);
+				}
+			}
+			else
+			{
+				MessageBox(0, "NULLでした", "警告", MB_OK);
+			}
+			break;
 	}
-	m_OrgMode = m_Mode;	//遷移前のモードを格納
-	m_Mode = mode;		//現在のモードを変更
-	return S_OK;
-}
-
-
-//==================================================================
-// モード名取得処理
-//==================================================================
-LPCSTR CManager::GetModeName(void)
-{
-	LPCSTR name = "";
-
-	switch (m_Mode)
-	{
-	case CManager::MODE_LOGO:		name = "LOGO";
-		break;
-	case CManager::MODE_TITLE:		name = "TITLE";
-		break;
-	case CManager::MODE_SELECT:		name = "SELECT";
-		break;
-	case CManager::MODE_TUTORIAL:	name = "TUTORIAL";
-		break;
-	case CManager::MODE_GAME:		name = "GAME";
-		break;
-	case CManager::MODE_RESULT:		name = "RESULT";
-		break;
-	case CManager::MODE_RANKING:	name = "RANKING";
-		break;
-	case CManager::MODE_OPTION:		name = "OPTION";
-		break;
-	}
-
-	return name;
 }

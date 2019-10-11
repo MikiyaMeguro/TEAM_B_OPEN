@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // レンダリング処理 [renderer.h]
-// Author : Kodama Yuto
+// Author : 目黒 未来也
 //
 //=============================================================================
 #ifndef _RENDERER_H_
@@ -9,25 +9,36 @@
 
 #include "main.h"
 
-//=============================================================================
-//	レンダリングクラス
-//=============================================================================
+//========================================
+// クラスの定義
+//========================================
+//=====================
+// レンダリングクラス
+//=====================
 class CRenderer
 {
 public:
+	CRenderer();	// コンストラクタ
+	~CRenderer();	// デストラクタ
+	
+	HRESULT Init(HWND hWnd, bool bWindow);	// レンダラーの初期化処理
+	void Uninit(void);						// レンダラーの終了処理
+	void Update(void);						// レンダラーの更新処理
+	void Draw(void);						// レンダラーの描画処理
 
-	CRenderer();
-	~CRenderer();
-
-	HRESULT Init(HWND hWnd, bool bWindow);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
-
-	LPDIRECT3DDEVICE9 GetDevice(void) /*{ return m_pD3DDevice; }*/;
+	LPDIRECT3DDEVICE9 GetDevice(void); /*{ return m_pD3DDevice; }*/
 
 private:
-	LPDIRECT3D9			m_pD3D = NULL;			// Direct3Dオブジェクト
-	LPDIRECT3DDEVICE9	m_pD3DDevice;			// Deviceオブジェクト(描画に必要)
+//#ifdef _DEBUG
+//	void DrawFPS(void);
+//#endif
+
+	LPDIRECT3D9				m_pD3D;			// Direct3Dオブジェクト
+	LPDIRECT3DDEVICE9		m_pD3DDevice;	// Deviceオブジェクト(描画に必要)
+
+//#ifdef _DEBUG
+//	LPD3DXFONT				m_pFont;			// フォントへのポインタ
+//#endif
 };
+
 #endif

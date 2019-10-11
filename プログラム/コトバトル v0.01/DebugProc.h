@@ -1,37 +1,36 @@
 //=============================================================================
 //
-// デバック情報表示処理 [DebugProc.h]
-// Author : Kodama Yuto
+// デバック表示処理 [debugProc.h]
+// Author : 目黒 未来也
 //
 //=============================================================================
-#ifndef _DEBUG_PROC_H_
-#define _DEBUG_PROC_H_
+#ifndef _DEBUGPROC_H_
+#define _DEBUGPROC_H_
 
 #include "main.h"
 
-//==================================================================
-//	マクロ定義
-//==================================================================
-#define MAX_CHARDATA (2048)	//文字数
-
-//==================================================================
-//	クラスの定義
-//==================================================================
+//========================================
+// クラスの定義
+//========================================
+//=====================
+// カメラクラス
+//=====================
 class CDebugProc
 {
 public:
-	CDebugProc();
-	~CDebugProc();
+	CDebugProc();		// コンストラクタ
+	~CDebugProc();		// デストラクタ
 
-	void    Init(void);
-	void    Uninit(void);
+	void Init(void);
+	void Uninit(void);
 
-	static void    Print(char* fmt,...);
-	static void    Draw(void);
+	static void Print(char *fmt, ...);				// デバック表示
+	static void ReleseStr(void);					// デバック表示を消す
+	static void Draw(void);
 
 private:
-	static LPD3DXFONT m_pFont;				//フォント用のポインタ
-	static char m_aStr[MAX_CHARDATA];		//デバック情報表示用の変数
-
+	static LPD3DXFONT m_pFont;			// フォントへのポインタ
+	static char m_aStr[1024];			// 文字のデータの数
 };
-#endif // !_DEBUG_PROC_H_
+
+#endif

@@ -1,106 +1,103 @@
 //=============================================================================
 //
-// オブジェクト処理 [scene.h]
-// Author : Kodama Yuto
+// シーン処理 [scene.h]
+// Author : 目黒 未来也
 //
 //=============================================================================
 #ifndef _SCENE_H_
 #define _SCENE_H_
 
 #include "main.h"
-//===================================================================
-//	マクロ定義
-//===================================================================
-#define NUM_PRIORITY (8)	//レイヤー数
 
-//===================================================================
-//	クラスの定義
-//===================================================================
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define MAX_OBJECT		(256)	// テクスチャの数
+#define NUM_PRIORITY	(8)		// 優先順位の数
+#define SCENEX_PRIORITY	(3)
+#define DOHYO_PRIORITY	(3)
+#define CUSTOMER_PRIORITY	(3)
+#define ENEMY_PRIORITY	(2)
+#define PLAYER_PRIORITY	(2)
+#define CPU_PRIORITY	(2)
+#define SELECT_PRIORITY	(3)
+#define SHADOW_PRIORITY	(6)
+
+//========================================
+// クラスの定義
+//========================================
+//=====================
+// オブジェクトクラス
+//=====================
 class CScene
 {
 public:
-	//オブジェクトの種類列挙
 	typedef enum
-	{
+	{// オブジェクトの種類
 		OBJTYPE_NONE = 0,
-		OBJTYPE_2D,
-		OBJTYPE_3D,
-		OBJTYPE_XFILE,
-		OBJTYPE_BILLBOARD,
-		OBJTYPE_FADE,
-		OBJTYPE_BAGGAGE,
-		OBJTYPE_MAX
-	}OBJTYPE;
+		OBJTYPE_SCENE2D,	// 2Dポリゴン
+		OBJTYPE_SCENE3D,	// 3Dポリゴン
+		OBJTYPE_SCENEX,		// モデル
+		OBJTYPE_BILLBOARD,	// ビルボード
+		OBJTYPE_MESHFIELD,	// メッシュフィールド
+		OBJTYPE_PLAYER,
+		OBJTYPE_ENEMY,
+		OBJTYPE_SHADOW,
+		OBJTYPE_DOHYO,
+		OBJTYPE_DOHYOCIRCLE,
+		OBJTYPE_TUPPARI,	// つっぱり
+		OBJTYPE_UI,
+		OBJTYPE_EFFECT,
+		OBJTYPE_ANIM,
+		OBJTYPE_WALL,
+		OBJTYPE_FIELD,
+		OBJTYPE_PARTICLE,
+		OBJTYPE_PAUSE,
+		OBJTYPE_MODESELECT,
+		OBJTYPE_CUSTOMER,
+		OBJTYPE_MAX			// 総数
+	} OBJTYPE;
 
-	typedef enum
-	{
-		PRIORITY_1,
-		PRIORITY_2,
-		PRIORITY_3,
-		PRIORITY_4,
-		PRIORITY_5,
-		PRIORITY_6,
-		PRIORITY_7,
-		PRIORITY_8,
-		PRIORITY_MAX
-	}PRIORITY;	//レイヤー番号(数字が小さい順に処理される)
-
-	CScene() {};
-	CScene(PRIORITY pri = PRIORITY_3,OBJTYPE type = OBJTYPE_NONE);
-
-	virtual ~CScene() {}
+	CScene(int nPriority = 3, OBJTYPE objType = OBJTYPE_NONE);	// コンストラクタ
+	virtual ~CScene();											// デストラクタ
 
 	virtual HRESULT Init(void) = 0;
 	virtual void Uninit(void) = 0;
 	virtual void Update(void) = 0;
 	virtual void Draw(void) = 0;
 
-	static void ReleaseAll(bool bFadeRelease);			//一括終了
+	//virtual void SetScene(D3DXVECTOR3 pos) = 0;
 
-	static void UpdateAll(void);			//一括更新
-	static void DrawAll(void);				//一括描画
-	static void DeadCheck(PRIORITY pri);	//死亡フラグチェック
+	static void ReleseAll(void);								// 全てのオブジェクトの解放
+	static void UpdeteAll(void);								// 全てのオブジェクトの更新
+	static void DrawAll(void);									// 全てのオブジェクトの描画
+	static CScene *GetTop(int nPriority);						// 先頭のオブジェクトを取得
+	CScene *GetNext(void);										// 次のオブジェクトのポインタを取得
+	bool GetDeath(void);										// 死亡フラグを取得
+	OBJTYPE GetObjType(void);									// オブジェクトの種類の取得
+	void SetObjType(OBJTYPE objType);							// オブジェクトの種類の設定
+	int GetPriority(void);
+	static void SetbPause(bool bPause) { m_bPause = bPause; };
+	static bool GetbPause(void) { return m_bPause; };
 
-	void AddList(PRIORITY pri);				//リストに追加
-	void DeleteList(PRIORITY pri);			//リストから削除
-
-	static CScene* GetTop(PRIORITY pri) { return m_apTop[pri]; };
-	CScene* GetNext(void) { return m_pNext; };
-
-	void	 SetPriority(PRIORITY pri);
-	PRIORITY GetPriority(void) { return m_Priority; };
-
-	void		SetObjType(OBJTYPE type) { m_objType = type; };
-	OBJTYPE		GetObjType(void) { return m_objType; };
+protected:
+	void Release(void);											// 死亡フラグを立てる
 
 private:
-	static CScene* m_apTop[PRIORITY_MAX];
-	static CScene* m_apCur[PRIORITY_MAX];
-	CScene* m_pPrev;
-	CScene* m_pNext;
+	void DeleteAll(void);										// 死亡フラグが立ったオブジェクトを消す
 
-	bool m_bDeath;
-protected:
-	void Release(void);						//削除
+	static CScene *m_apTop[NUM_PRIORITY];						// 先頭オブジェクトへのポインタ
+	static CScene *m_apCur[NUM_PRIORITY];						// 現在（最後尾）のオブジェクトへのポインタ
+	CScene *m_pPrev;											// 前のオブジェクトへのポインタ
+	CScene *m_pNext;											// 次のオブジェクトへのポインタ
+	bool m_bDeath;												// 死亡フラグ
+	static int m_nNumAll;										// 敵の総数 『静的メンバ変数』
+	int m_nID;													// 自分自身のID
+	int m_nPriority;											// 優先順位の番号
+	static int m_nNumPriority[NUM_PRIORITY];					// その優先順位にあるオブジェクトの数
+	OBJTYPE m_objType;											// オブジェクトの種類
+	static bool	m_bPause;										// ポーズ
 
-	static int	   m_nNumAll[PRIORITY_MAX];	//オブジェクト数(優先順位別)
-	int			m_nCount = 0;				//カウンタ
-	PRIORITY	   m_Priority;				//優先順位(レイヤー番号)
-	OBJTYPE m_objType;						//オブジェクトの種類
 };
 
-//==================================================================================================//
-//     テンプレート(Scene系のオブジェクトの生成)
-//==================================================================================================//
-template<class T> T* SceneCreate(T *&pScene, CScene::PRIORITY Priority)
-{
-	pScene = NULL;
-	pScene = new T(Priority);
-	if (pScene != NULL) { pScene->Init(); return pScene; }
-
-	return NULL;
-}
-
-
-#endif // !_SCENE_H_
-
+#endif

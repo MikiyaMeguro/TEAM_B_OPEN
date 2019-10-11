@@ -8,9 +8,13 @@
 #include "InputKeyboard.h"
 #include "Manager.h"
 #include "renderer.h"
+#include "debugProc.h"
 
+#include "charactor.h"
 #define ANGLE_MOVE  (0.03f) //カメラ角度の移動量
 #define CAMERA_POSR_COEFFICIENT (0.18f);	//カメラ注視点の係数
+#define CAMERA_POSV_COEFFICIENT (0.18f);	//カメラ視点の係数
+
 #define CAMERA_POS_INTERVAL (20.0f)			//カメラの注視点の位置
 
 //=============================================================================
@@ -19,6 +23,8 @@
 CCamera::CCamera()
 {
 	m_fCameraAngle = 45.0f;
+	m_pHomingChara = NULL;
+	m_pLockOnChara = NULL;
 }
 CCamera::~CCamera()
 {
@@ -38,7 +44,7 @@ void CCamera::Set(CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLen
 	{
 	case CCamera::TYPE_FPS:
 		m_posV = pos;
-		m_posR = pos + D3DXVECTOR3(sinf(rot.y) * fLength,sinf(rot.x) * fLength,cosf(rot.y) * fLength);
+		m_posR = pos + D3DXVECTOR3(sinf(rot.y) * fLength, sinf(rot.x) * fLength, cosf(rot.y) * fLength);
 		break;
 	case CCamera::TYPE_TPS:
 		m_posR = pos;
@@ -54,13 +60,13 @@ void CCamera::Set(CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLen
 //=============================================================================
 void CCamera::Init(void)
 {
-	m_posV		= D3DXVECTOR3(0.0f,0.0f,0.0f);
-	m_posVdest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_posR		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_posRdest	= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_vecU		= D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-	m_rot		= D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_fLength	= 0.0f;
+	m_posV = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_posVdest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_posR = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_posRdest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fLength = 0.0f;
 }
 
 //=============================================================================
@@ -78,34 +84,32 @@ void CCamera::Update(void)
 {
 	CInputKeyboard* pInput = CManager::GetInputKeyboard();
 
-	if (pInput->GetPress(DIK_A) == true)
+	switch (m_Type)
 	{
-		m_posV.x += sinf(m_rot.y + (D3DX_PI * -0.5f))  * 1.0f;
-		m_posV.z += cosf(m_rot.y + (D3DX_PI * -0.5f))  * 1.0f;
-	}
-	if (pInput->GetPress(DIK_D) == true)
-	{
-		m_posV.x += sinf(m_rot.y + (D3DX_PI * 0.5f))  * 1.0f;
-		m_posV.z += cosf(m_rot.y + (D3DX_PI * 0.5f))  * 1.0f;
-	}
-	if (pInput->GetPress(DIK_W) == true)
-	{
-		m_posV.x += sinf(m_rot.y + (D3DX_PI * 0.0f))  * 1.0f;
-		m_posV.z += cosf(m_rot.y + (D3DX_PI * 0.0f))  * 1.0f;
-	}
-	if (pInput->GetPress(DIK_S) == true)
-	{
-		m_posV.x += sinf(m_rot.y + (D3DX_PI * 1.0f))  * 1.0f;
-		m_posV.z += cosf(m_rot.y + (D3DX_PI * 1.0f))  * 1.0f;
-	}
+	case TYPE_FPS:
+		break;
+	case TYPE_TPS:
+		if (m_pHomingChara != NULL)
+		{
+			if (m_pLockOnChara != NULL)
+			{
+				D3DXVec3Lerp(&m_posRdest, &m_pLockOnChara->GetPosition(), &m_pHomingChara->GetPosition(), 0.5f);
+			}
+			else
+			{
+				m_posRdest = m_pHomingChara->GetPosition();
+			}
+		}
+		m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
+		m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
+									  sinf(m_rot.x) * m_fLength,
+									  cosf(m_rot.y) * m_fLength);
+		m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 
-	if (pInput->GetPress(DIK_R) == true)
-	{
-		m_posV.y += 1.0f;
-	}
-	if (pInput->GetPress(DIK_F) == true)
-	{
-		m_posV.y -= 1.0f;
+
+		break;
+	case TYPE_SPECTOR:
+		break;
 	}
 
 	//視点移動
@@ -128,27 +132,18 @@ void CCamera::Update(void)
 
 	if (pInput->GetPress(DIK_UP) == true)
 	{
-		m_rot.x += ANGLE_MOVE;
-		if (m_rot.x < -D3DX_PI)
+		if (m_rot.x < D3DX_PI * 0.2f)
 		{
-			m_rot.x += D3DX_PI * 2.0f;
+			m_rot.x += ANGLE_MOVE;
 		}
 	}
 	if (pInput->GetPress(DIK_DOWN) == true)
 	{
-		m_rot.x -= ANGLE_MOVE;
-
-		if (m_rot.x > D3DX_PI)
+		if (m_rot.x > D3DX_PI * -0.2f)
 		{
-			m_rot.x -= D3DX_PI * 2.0f;
+			m_rot.x -= ANGLE_MOVE;
 		}
-
 	}
-
-	m_posR = m_posV + D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
-		sinf(m_rot.x) * m_fLength,
-		cosf(m_rot.y) * m_fLength);
-
 }
 
 //=============================================================================
@@ -168,7 +163,7 @@ void CCamera::SetCamera(void)
 	// プロジェクションマトリックスを作成
 	D3DXMatrixPerspectiveFovLH(&m_mtxProjection,
 		D3DXToRadian(m_fCameraAngle),
-		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,
+		(float)m_ViewPort.Width / (float)m_ViewPort.Height,
 		10.0f,
 		10000.0f);
 
@@ -187,10 +182,10 @@ void CCamera::SetCamera(void)
 
 	// ビューマトリックスの設定
 	pDevice->SetTransform(D3DTS_VIEW, &m_mtxView);
-#ifdef _DEBUG
-	CDebugProc::Print("Camera.PosV : (%f,%f,%f)\n", m_posV.x, m_posV.y, m_posV.z);
-	CDebugProc::Print("Camera.PosR : (%f,%f,%f)\n", m_posR.x, m_posR.y, m_posR.z);
-#endif
 
+#ifdef _DEBUG
+	CDebugProc::Print("cff", "Camera.PosV :", m_posV.x, m_posV.y, m_posV.z);
+	CDebugProc::Print("cff","Camera.PosR :", m_posR.x, m_posR.y, m_posR.z);
+#endif
 
 }

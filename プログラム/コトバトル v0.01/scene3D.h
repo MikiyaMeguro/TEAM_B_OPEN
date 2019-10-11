@@ -1,61 +1,65 @@
 //=============================================================================
 //
-// オブジェクト3D処理 [scene3D.h]
-// Author : Kodama Yuto
+// 3Dポリゴン処理 [scene3D.h]
+// Author : 目黒 未来也
 //
 //=============================================================================
 #ifndef _SCENE3D_H_
 #define _SCENE3D_H_
 
+#include "main.h"
 #include "scene.h"
 
-//==================================================================
-//	クラスの定義
-//==================================================================
-//オブジェクト3Dクラス
+//*****************************************************************************
+// マクロ定義
+//*****************************************************************************
+#define GROUND_TEXTURE_NAME			"data\\TEXTURE\\field.jpg"	// 地面のテクスチャ名
+#define GROUND_SIZE					(130.0f)							// 地面の大きさ
+#define NUM_VTX						(4)								// 頂点の数
+//========================================
+// クラスの定義
+//========================================
+//=====================
+// オブジェクトクラス
+//=====================
 class CScene3D : public CScene
 {
 public:
+	CScene3D(int nPriority = 3, OBJTYPE objType = OBJTYPE_SCENE3D);											// コンストラクタ
+	~CScene3D();										// デストラクタ
 
-	CScene3D();
-	CScene3D(CScene::PRIORITY pri);
+	HRESULT Init(void) { return S_OK; };
+	HRESULT Init(D3DXVECTOR3 pos);				// 3Dオブジェクト初期化処理
+	void Uninit(void);							// 3Dオブジェクト終了処理
+	void Update(void);							// 3Dオブジェクト更新処理
+	void Draw(void);							// 3Dオブジェクト描画処理
 
-	~CScene3D();
-	void Set(D3DXVECTOR3 pos,LPCSTR TexTag,
-		D3DXVECTOR3 Size = D3DXVECTOR3(100.0f,0.0f,100.0f),
-		D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXCOLOR col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),
-		D3DXVECTOR2 UVrectMin = D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2 UVrectMax = D3DXVECTOR2(1.0f, 1.0f));
+	D3DXVECTOR3 GetNor(int nIdx);				// 法線を取得
+	void SetNor(D3DXVECTOR3 nor);				// 法線を設定
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	float GetHeight(D3DXVECTOR3 pos);			// 高さの取得
 
+	static CScene3D *Create(D3DXVECTOR3 pos, LPCSTR Tag);			// オブジェクトの生成
+	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
+	void BindTexture(LPCSTR TexTag);
+	void SetSize(float fHeight,float fWidth);
+	void SetRot(D3DXVECTOR3 rot);
+	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 	void SetColor(D3DXCOLOR col);
-	void SetUV(D3DXVECTOR2 MinRect, D3DXVECTOR2 MaxRect);
-
-	void        SetPosition(D3DXVECTOR3 pos);
-	D3DXVECTOR3 GetPosition(void) { return m_pos; };
-
-	void        SetRotation(D3DXVECTOR3 rot);
-	D3DXVECTOR3 GetRotation(void) { return m_rot; };
-
-	D3DXMATRIX GetMatrix(void) { return m_mtxWorld; };
-	void		BindTexture(LPCSTR TexTag);
-
+	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
 private:
-	LPDIRECT3DTEXTURE9		m_pTexture = NULL;			// テクスチャへのポインタ
-	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff = NULL;			// 頂点バッファへのポインタ
+	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
+	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
+	D3DXMATRIX				m_mtxWorld;					// ワールドマトリックス
+	D3DXVECTOR3				m_Nor;					// 法線
+	D3DXVECTOR3				m_aVec[NUM_VTX];					// ベクトル
 	D3DXVECTOR3				m_pos;						// ポリゴンの位置
-	D3DXVECTOR3				m_rot;						// 角度
-	D3DXCOLOR				m_Col;						// 色
-	D3DXMATRIX				m_mtxWorld;					// ポリゴンのマトリックス
-	D3DXVECTOR3				m_Size;						// 大きさ
-
-	D3DXVECTOR2				m_UVRectMin;				// ポリゴンの左上のUV位置
-	D3DXVECTOR2				m_UVRectMax;				// ポリゴンの右下のUV位置
+	D3DXVECTOR3				m_aPos[NUM_VTX];					// 頂点の位置
+	D3DXVECTOR3				m_rot;						// 上方向ベクトル
+	D3DXCOLOR               m_col;
+	float					m_fSize;					// 大きさ
+	float					m_fHeight;
+	float					m_fWidth;
 };
 
-
-#endif // !_SCENE2D_H_
-
+#endif
