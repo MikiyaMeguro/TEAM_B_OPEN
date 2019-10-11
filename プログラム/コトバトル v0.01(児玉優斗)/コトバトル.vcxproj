@@ -155,6 +155,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="charactor.cpp" />
+    <ClCompile Include="CharaSelect.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="fade.cpp" />
@@ -178,6 +179,7 @@
     <ClCompile Include="select.cpp" />
     <ClCompile Include="SelectMenu.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="tutorial.cpp" />
@@ -186,6 +188,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="charactor.h" />
+    <ClInclude Include="CharaSelect.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="fade.h" />
@@ -210,6 +213,7 @@
     <ClInclude Include="select.h" />
     <ClInclude Include="SelectMenu.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="StageSelect.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="tutorial.h" />
