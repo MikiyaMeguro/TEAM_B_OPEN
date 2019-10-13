@@ -28,7 +28,8 @@ public:
 		BYTE KeyStateRepeat;	//リピート用のキー情報
 
 		int nCntRepeatTime;		//リピート用のカウンタ
-	}KEY_STATE;		//キー情報の構造体
+
+	}KEYBOARD_STATE;		//キー情報の構造体
 	CInputKeyboard();
 	~CInputKeyboard();
 
@@ -41,7 +42,7 @@ public:
 	bool GetRelease(int nKey);
 	bool GetRepeat(int nKey);
 private:
-	KEY_STATE m_aState[NUM_KEY_MAX];	//キー情報構造体(キー数分)
+	KEYBOARD_STATE m_aState[NUM_KEY_MAX];	//キー情報構造体(キー数分)
 };
 
 #endif // !_INPUTKEYBOARD_H_

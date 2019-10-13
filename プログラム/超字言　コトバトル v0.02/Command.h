@@ -66,10 +66,10 @@ public:
 	static bool ResetCommand(LPCSTR CommandName);
 
 private:
-	static std::vector<CommandState> m_Command;		//コマンド
-
 	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);
 	static bool CheckKey_DXController(INPUT_STATE InputState, int nKey);
+
+	static std::vector<CommandState> m_Command;		//コマンド
 };
 
 #endif // !_COMMAND_H_
