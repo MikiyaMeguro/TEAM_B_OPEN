@@ -162,6 +162,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="input.cpp" />
     <ClCompile Include="InputKeyboard.cpp" />
+    <ClCompile Include="InputXPad.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="load.cpp" />
     <ClCompile Include="main.cpp" />
