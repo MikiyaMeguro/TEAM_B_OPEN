@@ -17,11 +17,9 @@ class CWordManager;
 class CPlayer;
 class CTube;
 
-//=============================================================================
-// マクロ定義
-//=============================================================================
-#define WORD_TUBE_POS	(D3DXVECTOR3(50.0f, 240.0f, 0.0f))
-#define WORD_TUBE_SIZE	(D3DXVECTOR2(60.0f, 160.0f))
+//
+//
+//
 #define MAX_PLAYER (4)
 
 //クラス（シーン2Dの派生クラス）
