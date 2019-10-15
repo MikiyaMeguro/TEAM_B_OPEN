@@ -95,12 +95,10 @@ void CWordManager::Update(void)
 			if (m_nCntaAnswer == MAX_WORD)
 			{	// // w’è‚µ‚½•¶š‚È‚ç’e‚ğ¶¬‚·‚é
 				CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType,1);
-				CGame::GetTube()->AllDelete();
 				Reset();		// İ’è‚ğ–ß‚·
 			}
 			else
 			{	// ‚»‚êˆÈŠO‚Ìê‡
-				CGame::GetTube()->AllDelete();
 				Reset();		// İ’è‚ğ–ß‚·
 			}
 		}
@@ -123,7 +121,6 @@ void CWordManager::SetWord(int nType)
 	{
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
-		CGame::GetTube()->SetWordNum(nType, m_nCntNum);
 		m_nCntNum++;
 	}
 }
@@ -148,20 +145,19 @@ void CWordManager::Reset(void)
 //=============================================================================
 void CWordManager::Delete(void)
 {
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
+	if (CManager::GetInputKeyboard()->GetTrigger(DIK_BACKSPACE))
 	{
 		if (m_nCntNum < 3)
 		{	// 3‚ÂˆÈ‰º‚Ìê‡
 			if (m_nCntNum > 0)
 			{
 				m_nCntNum--;
-				CGame::GetTube()->Delete();
-				m_aWord[0].nNum = 99;	// ‹ó‚Ìó‘Ô‚É
-				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
-				{
-					m_aWord[nCntWord].nNum = m_aWord[nCntWord + 1].nNum;
-					WordDebug(nCntWord);
-				}
+			}
+			m_aWord[0].nNum = 99;	// ‹ó‚Ìó‘Ô‚É
+			for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
+			{
+				m_aWord[nCntWord].nNum = m_aWord[nCntWord + 1].nNum;
+				WordDebug(nCntWord);
 			}
 		}
 	}

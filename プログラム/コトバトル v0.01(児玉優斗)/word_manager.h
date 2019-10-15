@@ -43,7 +43,6 @@ public:
 
 	// 取得用の関数
 	int GetCntNum(void) { return m_nCntNum; }
-	int GetWordNum(int nNum) { return m_aWord[nNum].nNum; }
 
 	// デバック用
 	void CreateOblDebug(void);

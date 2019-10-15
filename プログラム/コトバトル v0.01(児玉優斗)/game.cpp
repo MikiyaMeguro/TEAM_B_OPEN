@@ -30,6 +30,8 @@
 #define SIZE_Y (SCREEN_HEIGHT)
 #define COLISIONSIZE (20.0f)
 #define TIME_INI		(60)
+#define WORD_TUBE_POS	(D3DXVECTOR3(50.0f, 240.0f, 0.0f))
+#define WORD_TUBE_SIZE	(D3DXVECTOR2(60.0f, 130.0f))
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
@@ -149,14 +151,6 @@ void CGame::Init(void)
 //=============================================================================
 void CGame::Uninit(void)
 {
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-	{
-		if (m_pPlayer[nCntPlayer] != NULL)
-		{	// プレイヤーの破棄
-			m_pPlayer[nCntPlayer]->Uninit();
-			m_pPlayer[nCntPlayer] = NULL;
-		}
-	}
 	if (m_pTube != NULL)
 	{	// 文字の可視化UI(2D)の破棄
 		m_pTube->Uninit();
