@@ -76,6 +76,14 @@ void CInputXPad::Update(void)
 		CheckDeadZone(state);
 		if (m_bConnect == false)
 		{
+			for (int nCntInput = 0; nCntInput < XPAD_MAX; nCntInput++)
+			{
+				m_State.abPadStatePress[nCntInput] = false;
+				m_State.abPadStateTrigger[nCntInput] = false;
+				m_State.abPadStateRelease[nCntInput] = false;
+				m_State.abPadStateRepeat[nCntInput] = false;
+				m_State.nCntRepeatTime[nCntInput] = 0;
+			}
 			m_bConnect = true;
 		}
 
