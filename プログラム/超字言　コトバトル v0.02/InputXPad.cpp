@@ -38,7 +38,6 @@ HRESULT CInputXPad::Init(HINSTANCE hInstance, HWND hWnd)
 {
 	XINPUT_STATE state;
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
-	CInput::Init(hInstance, hWnd);
 
 	// Simply get the state of the controller from XInput.
 	DWORD dwResult = XInputGetState(m_nID, &state);
@@ -60,7 +59,7 @@ HRESULT CInputXPad::Init(HINSTANCE hInstance, HWND hWnd)
 //===================================================================
 void CInputXPad::Uninit(void)
 {
-	CInput::Uninit();
+	XInputEnable(false);
 }
 
 //===================================================================
@@ -77,6 +76,14 @@ void CInputXPad::Update(void)
 		CheckDeadZone(state);
 		if (m_bConnect == false)
 		{
+			for (int nCntInput = 0; nCntInput < XPAD_MAX; nCntInput++)
+			{
+				m_State.abPadStatePress[nCntInput] = false;
+				m_State.abPadStateTrigger[nCntInput] = false;
+				m_State.abPadStateRelease[nCntInput] = false;
+				m_State.abPadStateRepeat[nCntInput] = false;
+				m_State.nCntRepeatTime[nCntInput] = 0;
+			}
 			m_bConnect = true;
 		}
 
@@ -128,7 +135,7 @@ void CInputXPad::Update(void)
 void CInputXPad::SetInputState(XPAD_KEY key, bool bPress)
 {
 	m_State.abPadStateTrigger[key] = (m_State.abPadStatePress[key] ^ bPress) & bPress;	//トリガー
-	m_State.abPadStateRelease[key] = (m_State.abPadStatePress[key] ^ bPress) & m_State.abPadStatePress[key];	//トリガー
+	m_State.abPadStateRelease[key] = (m_State.abPadStatePress[key] ^ bPress) & m_State.abPadStatePress[key];	//リリース
 	m_State.abPadStatePress[key] = bPress;	//プレス
 	m_State.abPadStateRepeat[key] = false;
 
@@ -137,7 +144,7 @@ void CInputXPad::SetInputState(XPAD_KEY key, bool bPress)
 		m_State.nCntRepeatTime[key]++;
 		if ((m_State.nCntRepeatTime[key] % REPEAT_TIME) == 1)
 		{
-			m_State.abPadStateRepeat[key] = true;
+			m_State.abPadStateRepeat[key] = true;	//リピート
 		}
 	}
 	else

@@ -49,7 +49,7 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 // Ý’èˆ—
 //=============================================================================
-void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, D3DXVECTOR3 rot)
+void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID, D3DXVECTOR3 rot)
 {
 	if (m_pCharactorMove == NULL)
 	{
@@ -58,6 +58,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, D3DXVEC
 			m_pCharactorMove->Set(pos,rot,type,this);
 		}
 	}
+	m_nID = (nPlayerID % 4);//”ÍˆÍŠO‚Ì”Žš‚ª“ü‚Á‚½‚ç‚»‚ê‚ð0`3‚Ü‚Å‚Ì”Žš‚É‚·‚é
 
 	m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
 	m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);

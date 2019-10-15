@@ -32,6 +32,7 @@ public:
 		MODEL_PULIN,	// プリン
 		MODE_KNIFE,		// ナイフ
 		MODE_APPLE,		// アップル
+		MODE_PALLET,	// 絵具
 		MODEL_BOX,		// 箱
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_MAX,

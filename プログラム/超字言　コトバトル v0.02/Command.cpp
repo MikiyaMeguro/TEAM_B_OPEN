@@ -60,7 +60,7 @@ void CCommand::RegistCommand(LPCSTR CommandName, INPUT_TYPE InputType, INPUT_STA
 bool CCommand::GetCommand(LPCSTR CommandName, int nPlayerID, GET_COMMAND_OPTION option)
 {
 	CInputKeyboard* pInputK = CManager::GetInputKeyboard();	//キーボードのポインタ
-
+	CInputXPad* pInputX = CManager::GetXInput(nPlayerID);
 	bool bCommand_ETrue = false;		//COMMAND_EACH_TRUEで使用する返り値
 	bool bCommand_ATrue = true;			//COMMAND_ALL_TRUEで使用する返り値
 
@@ -78,9 +78,9 @@ bool CCommand::GetCommand(LPCSTR CommandName, int nPlayerID, GET_COMMAND_OPTION 
 				bCommand_ETrue = CheckKey_Keyboard(pInputK,(*itr).state, (*itr).nKey);
 				break;
 			case INPUTTYPE_CONTROLLER_DIRECT:
-				CheckKey_DXController(/*DXコントローラーのポインタ,*/(*itr).state, (*itr).nKey);
 				break;
 			case INPUTTYPE_CONTROLLER_X:
+				bCommand_ETrue = CheckKey_XController(pInputX,(*itr).state, (*itr).nKey);
 				break;
 			}
 
@@ -166,9 +166,34 @@ bool  CCommand::CheckKey_Keyboard(CInputKeyboard* pInputK, INPUT_STATE InputStat
 	}
 	return bCommand;
 }
-bool  CCommand::CheckKey_DXController(INPUT_STATE InputState, int nKey)
+bool  CCommand::CheckKey_XController(CInputXPad* pInputX, INPUT_STATE InputState, int nKey)
 {
 	bool bCommand = false;									//関数の返り値
+	if (nKey >= CInputXPad::XPAD_MAX)
+	{
+		return false;
+	}
+	if (pInputX != NULL)
+	{
+		switch (InputState)
+		{
+		case INPUTSTATE_PRESS:	//プレス
+			bCommand = pInputX->GetPress((CInputXPad::XPAD_KEY)nKey);
+			break;
+		case INPUTSTATE_TRIGGER://トリガー
+			bCommand = pInputX->GetTrigger((CInputXPad::XPAD_KEY)nKey);
+			break;
+		case INPUTSTATE_RELEASE://リリース
+			bCommand = pInputX->GetRelease((CInputXPad::XPAD_KEY)nKey);
+			break;
+		case INPUTSTATE_NOTPRESS://ノットプレス(押してない時)
+			bCommand = !(pInputX->GetPress((CInputXPad::XPAD_KEY)nKey));
+			break;
+		case INPUTSTATE_REPEAT://リピート
+			bCommand = pInputX->GetRepeat((CInputXPad::XPAD_KEY)nKey);
+			break;
+		}
+	}
 
 	return bCommand;
 

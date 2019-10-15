@@ -40,6 +40,7 @@ public:
 
 	// İ’è‚ÌŠÖ”
 	void SetWord(int nType);
+	void BulletCreate(void);
 
 	// æ“¾—p‚ÌŠÖ”
 	int GetCntNum(void) { return m_nCntNum; }

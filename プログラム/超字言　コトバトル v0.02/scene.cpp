@@ -114,9 +114,6 @@ void CScene::UpdeteAll(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
-	CXInputJoyPad *pXInput = NULL;
-	pXInput = CManager::GetXInput();
-
 
 	//フェードしていないときにポーズできる
 	//if (pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
