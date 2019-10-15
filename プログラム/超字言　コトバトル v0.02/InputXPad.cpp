@@ -135,7 +135,7 @@ void CInputXPad::Update(void)
 void CInputXPad::SetInputState(XPAD_KEY key, bool bPress)
 {
 	m_State.abPadStateTrigger[key] = (m_State.abPadStatePress[key] ^ bPress) & bPress;	//トリガー
-	m_State.abPadStateRelease[key] = (m_State.abPadStatePress[key] ^ bPress) & m_State.abPadStatePress[key];	//トリガー
+	m_State.abPadStateRelease[key] = (m_State.abPadStatePress[key] ^ bPress) & m_State.abPadStatePress[key];	//リリース
 	m_State.abPadStatePress[key] = bPress;	//プレス
 	m_State.abPadStateRepeat[key] = false;
 
@@ -144,7 +144,7 @@ void CInputXPad::SetInputState(XPAD_KEY key, bool bPress)
 		m_State.nCntRepeatTime[key]++;
 		if ((m_State.nCntRepeatTime[key] % REPEAT_TIME) == 1)
 		{
-			m_State.abPadStateRepeat[key] = true;
+			m_State.abPadStateRepeat[key] = true;	//リピート
 		}
 	}
 	else
