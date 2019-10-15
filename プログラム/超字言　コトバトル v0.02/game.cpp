@@ -88,7 +88,7 @@ void CGame::Init(void)
 	m_pPlayer[0] = CPlayer::Create();
 	if (m_pPlayer[0] != NULL)
 	{
-		m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT);
+		m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
 		m_pPlayer[0]->SetCameraName("1P_CAMERA");
 		pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 	}
@@ -96,9 +96,9 @@ void CGame::Init(void)
 	m_pPlayer[1] = CPlayer::Create();
 	if (m_pPlayer[1] != NULL)
 	{
-		m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI);
-		//m_pPlayer[1]->SetCameraName("2P_CAMERA");
-		//pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
+		m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
+		m_pPlayer[1]->SetCameraName("2P_CAMERA");
+		pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 	}
 
 	//pPlayer = CPlayer::Create();

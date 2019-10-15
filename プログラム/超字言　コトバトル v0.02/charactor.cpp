@@ -62,36 +62,6 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 
 //=============================================================================
 //
-// 2Dキャラクター処理 (C2DCharactor)[charactor.cpp]
-// Author : Kodama Yuto
-//
-//=============================================================================
-//=============================================================================
-// 初期化処理
-//=============================================================================
-HRESULT C2DCharactor::Init(void)
-{
-	return S_OK;
-}
-
-//=============================================================================
-// 更新処理
-//=============================================================================
-void C2DCharactor::Update(void)
-{
-	switch (CCharaBase::GetMoveType())
-	{
-	case CCharaBase::MOVETYPE_PLAYER_INPUT:
-
-
-		break;
-	case CCharaBase::MOVETYPE_NPC_AI:
-		break;
-	}
-}
-
-//=============================================================================
-//
 // 3Dキャラクター処理 (C3DCharactor)[charactor.cpp]
 // Author : Kodama Yuto
 //
@@ -130,6 +100,7 @@ void C3DCharactor::CharaMove_Input(void)
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
 	CCamera* pCamera = pCameraManager->GetCamera(GetThisCharactor()->GetCameraName());
+	int nID = GetThisCharactor()->GetID();
 	D3DXVECTOR3 CameraRot = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	if (pCamera != NULL)
 	{
@@ -143,14 +114,14 @@ void C3DCharactor::CharaMove_Input(void)
 	float		 speed = CCharaBase::GetSpeed();
 
 	//移動の向き設定
-	if (CCommand::GetCommand("PLAYERMOVE_RIGHT"))
+	if (CCommand::GetCommand("PLAYERMOVE_RIGHT", nID))
 	{
-		if (CCommand::GetCommand("PLAYERMOVE_UP"))
+		if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 		{
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.25f)) * speed;
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.25f)) * speed;
 		}
-		else if (CCommand::GetCommand("PLAYERMOVE_DOWN"))
+		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 		{
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.75f)) * speed;
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.75f)) * speed;
@@ -163,16 +134,16 @@ void C3DCharactor::CharaMove_Input(void)
 
 		}
 	}
-	else if (CCommand::GetCommand("PLAYERMOVE_LEFT"))
+	else if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID))
 	{
-		if (CCommand::GetCommand("PLAYERMOVE_UP"))
+		if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 		{
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.25f)) * speed;
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.25f)) * speed;
 
 
 		}
-		else if (CCommand::GetCommand("PLAYERMOVE_DOWN"))
+		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 		{
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.75f)) * speed;
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.75f)) * speed;
@@ -185,45 +156,45 @@ void C3DCharactor::CharaMove_Input(void)
 
 		}
 	}
-	else if (CCommand::GetCommand("PLAYERMOVE_UP"))
+	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * speed;
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * speed;
 
 	}
-	else if (CCommand::GetCommand("PLAYERMOVE_DOWN"))
+	else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
 		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
 
 	}
 
-	if (CCommand::GetCommand("TESTUP"))
-	{
-		move.y += 10;
-	}
-	if (CCommand::GetCommand("TESTDOWN"))
-	{
-		move.y -= 10;
-	}
+	//if (CCommand::GetCommand("TESTUP"))
+	//{
+	//	move.y += 10;
+	//}
+	//if (CCommand::GetCommand("TESTDOWN"))
+	//{
+	//	move.y -= 10;
+	//}
 
 	//ステップ移動の設定
-	if (CCommand::GetCommand("PLAYERMOVE_STEP"))
+	if (CCommand::GetCommand("PLAYERMOVE_STEP", nID))
 	{
 		if (m_nCntStepCoolTime <= 0)
 		{
 			float fStepRot = 0.0f;
-			if (CCommand::GetCommand("PLAYERMOVE_UP")) { fStepRot = D3DX_PI * 0.0f; }
-			if (CCommand::GetCommand("PLAYERMOVE_DOWN")) { fStepRot = D3DX_PI * 1.0f; }
-			if (CCommand::GetCommand("PLAYERMOVE_LEFT")) {
+			if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.0f; }
+			if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 1.0f; }
+			if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID)) {
 				fStepRot = D3DX_PI * -0.5f;
-				if (CCommand::GetCommand("PLAYERMOVE_UP")) { fStepRot = D3DX_PI * -0.25f; }
-				if (CCommand::GetCommand("PLAYERMOVE_DOWN")) { fStepRot = D3DX_PI * -0.75f; }
+				if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * -0.25f; }
+				if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * -0.75f; }
 			}
-			if (CCommand::GetCommand("PLAYERMOVE_RIGHT")) {
+			if (CCommand::GetCommand("PLAYERMOVE_RIGHT", nID)) {
 				fStepRot = D3DX_PI * 0.5f;
-				if (CCommand::GetCommand("PLAYERMOVE_UP")) { fStepRot = D3DX_PI * 0.25f; }
-				if (CCommand::GetCommand("PLAYERMOVE_DOWN")) { fStepRot = D3DX_PI * 0.75f; }
+				if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.25f; }
+				if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 0.75f; }
 			}
 			move.x += sinf(CameraRot.y + fStepRot) * 6.0f;
 			move.z += cosf(CameraRot.y + fStepRot) * 6.0f;
@@ -267,17 +238,17 @@ void C3DCharactor::CharaMove_Input(void)
 	//カメラ位置制御
 	//視点移動
 	//Y
-	if (CCommand::GetCommand("CAMERAMOVE_LEFT"))//時計回り
+	if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//時計回り
 	{
 		CameraRot.y -= 0.03f;
 	}
-	if (CCommand::GetCommand("CAMERAMOVE_RIGHT"))//反時計回り
+	if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//反時計回り
 	{
 		CameraRot.y += 0.03f;
 	}
 
 	//X
-	if (CCommand::GetCommand("CAMERAMOVE_UP"))
+	if (CCommand::GetCommand("CAMERAMOVE_UP", nID))
 	{
 		if (CameraRot.x < D3DX_PI * 0.2f)
 		{
@@ -288,7 +259,7 @@ void C3DCharactor::CharaMove_Input(void)
 			CameraRot.x = D3DX_PI * 0.2f;
 		}
 	}
-	if (CCommand::GetCommand("CAMERAMOVE_DOWN"))
+	if (CCommand::GetCommand("CAMERAMOVE_DOWN", nID))
 	{
 		if (CameraRot.x > D3DX_PI * -0.2f)
 		{
