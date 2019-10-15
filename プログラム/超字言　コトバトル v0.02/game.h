@@ -37,6 +37,8 @@ public:
 	void LoadChara(void);
 	static CGame *Create(void);
 
+	void WordCreate(void);	// 文字の生成の管理
+
 	// 取得の関数
 	static CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理の取得
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得

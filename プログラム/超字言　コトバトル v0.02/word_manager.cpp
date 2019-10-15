@@ -91,18 +91,8 @@ void CWordManager::Update(void)
 		}
 
 		if (pInputKeyboard->GetTrigger(DIK_LSHIFT))
-		{
-			if (m_nCntaAnswer == MAX_WORD)
-			{	// // 指定した文字なら弾を生成する
-				CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType,1);
-				CGame::GetTube()->AllDelete();
-				Reset();		// 設定を戻す
-			}
-			else
-			{	// それ以外の場合
-				CGame::GetTube()->AllDelete();
-				Reset();		// 設定を戻す
-			}
+		{	// 弾の生成
+			BulletCreate();
 		}
 	}
 
@@ -166,6 +156,24 @@ void CWordManager::Delete(void)
 		}
 	}
 }
+//=============================================================================
+// 弾の生成
+//=============================================================================
+void CWordManager::BulletCreate()
+{
+	if (m_nCntaAnswer == MAX_WORD)
+	{	// // 指定した文字なら弾を生成する
+		CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 1);
+		CGame::GetTube()->AllDelete();
+		Reset();		// 設定を戻す
+	}
+	else
+	{	// それ以外の場合
+		CGame::GetTube()->AllDelete();
+		Reset();		// 設定を戻す
+	}
+}
+
 //=============================================================================
 // 文字で生成のデバック用(数字管理)
 //=============================================================================
