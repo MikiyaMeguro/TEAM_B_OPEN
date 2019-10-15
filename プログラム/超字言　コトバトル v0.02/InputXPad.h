@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// 入力処理 [inputXPad.h]
+// XInputコントローラ入力処理 [inputXPad.h]
 // Author : Kodama Yuto
 //
 //=============================================================================
@@ -27,16 +27,22 @@ public:
 		XPAD_B,					//Bボタン
 		XPAD_X,					//Xボタン
 		XPAD_Y,					//Yボタン
+		XPAD_LEFT_TRIGGER,		//LT(L2)ボタン
+		XPAD_RIGHT_TRIGGER,		//RT(R2)ボタン
+		XPAD_RIGHTSTICK_UP,		//右スティック上入力
+		XPAD_RIGHTSTICK_DOWN,	//右スティック下入力
+		XPAD_RIGHTSTICK_LEFT,	//右スティック右入力
+		XPAD_RIGHTSTICK_RIGHT,	//右スティック左入力
 		XPAD_MAX
 	}XPAD_KEY;
 
 	typedef struct
 	{
-		XINPUT_GAMEPAD PadStatePress;		//プレス情報
-		XINPUT_GAMEPAD PadStateTrigger;		//トリガー情報
-		XINPUT_GAMEPAD PadStateRelease;		//リリース情報
-		XINPUT_GAMEPAD PadStateRepeat;		//リピート情報
-		int nCntRepeatTime;
+		bool abPadStatePress[XPAD_MAX];			//プレス情報
+		bool abPadStateTrigger[XPAD_MAX];		//トリガー情報
+		bool abPadStateRelease[XPAD_MAX];		//リリース情報
+		bool abPadStateRepeat[XPAD_MAX];		//リピート情報
+		int nCntRepeatTime[XPAD_MAX];
 	}XPAD_STATE;
 	CInputXPad();
 	~CInputXPad();
@@ -49,11 +55,15 @@ public:
 	bool GetTrigger(XPAD_KEY key);
 	bool GetRelease(XPAD_KEY key);
 	bool GetRepeat(XPAD_KEY key);
-
+	bool GetConnect(void) { return m_bConnect; };
 private:
-	WORD XPadKeyConverseBit(XPAD_KEY key);
+	void SetInputState(XPAD_KEY key,bool bPress);
+	WORD ThumbToDPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone);
+	void CheckDeadZone(XINPUT_STATE& state);
 
-	XPAD_STATE m_PadState;
+	XPAD_STATE m_State;			//入力情報
 	static int m_nCntXPadNum;	//XInputコントローラーの接続数
+	int m_nID;					//プレイヤーID
+	bool m_bConnect;			//つながっているか
 };
 #endif // !_INPUT_X_PAD_H_
