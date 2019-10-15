@@ -48,7 +48,7 @@ CTutorial *CManager::m_pTutorial = NULL;
 CResult *CManager::m_pResult = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
-CXInputJoyPad *CManager::m_pXInput = NULL;
+CInputXPad *CManager::m_pXInput[MAX_PLAYER] = {};
 CManager::MODE CManager::m_mode = CManager::MODE_GAME;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
@@ -109,12 +109,24 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 
 	if (m_pInputKeyboard == NULL)
 	{
-		// 入力クラスの生成
+		// 入力クラス(キーボード)の生成
 		m_pInputKeyboard = new CInputKeyboard;
 
 		if (m_pInputKeyboard != NULL)
 		{
 			m_pInputKeyboard->Init(hInstance, hWnd);
+		}
+	}
+	for (int nCntXPad = 0; nCntXPad < MAX_PLAYER; nCntXPad++)
+	{
+		//入力クラス(XInputコントローラー)の生成
+		if (m_pXInput[nCntXPad] == NULL)
+		{
+			m_pXInput[nCntXPad] = new CInputXPad;
+			if (m_pXInput[nCntXPad] != NULL)
+			{
+				m_pXInput[nCntXPad]->Init(hInstance, hWnd);
+			}
 		}
 	}
 
@@ -222,7 +234,19 @@ void CManager::Uninit(void)
 		delete m_pInputKeyboard;
 		m_pInputKeyboard = NULL;
 	}
+	for (int nCntXPad = 0; nCntXPad < MAX_PLAYER; nCntXPad++)
+	{
+		if (m_pXInput[nCntXPad] != NULL)
+		{
+			// 終了処理
+			m_pXInput[nCntXPad]->Uninit();
 
+			// メモリを開放
+			delete m_pXInput[nCntXPad];
+			m_pXInput[nCntXPad] = NULL;
+		}
+
+	}
 	//if (m_pXInput != NULL)
 	//{// レンダリングクラスの破棄
 	// // 終了処理
@@ -400,6 +424,17 @@ void CManager::Update(void)
 		m_pInputKeyboard->Update();
 	}
 
+	bool bConnect = false;
+	for (int nCntXPad = 0; nCntXPad < MAX_PLAYER; nCntXPad++)
+	{
+		if (m_pXInput[nCntXPad] != NULL)
+		{
+			// XInputコントローラ更新処理
+			m_pXInput[nCntXPad]->Update();
+			bConnect = m_pXInput[nCntXPad]->GetConnect();
+		}
+		m_pDebugProc->Print("cn","XINPUT_CONNECT ::",(bConnect == true) ? 1 : 0);
+	}
 	if (m_pMask != NULL)
 	{// フェード更新処理
 		m_pMask->Update();

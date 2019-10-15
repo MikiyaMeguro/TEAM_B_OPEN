@@ -38,7 +38,6 @@ HRESULT CInputXPad::Init(HINSTANCE hInstance, HWND hWnd)
 {
 	XINPUT_STATE state;
 	ZeroMemory(&state, sizeof(XINPUT_STATE));
-	CInput::Init(hInstance, hWnd);
 
 	// Simply get the state of the controller from XInput.
 	DWORD dwResult = XInputGetState(m_nID, &state);
@@ -60,7 +59,7 @@ HRESULT CInputXPad::Init(HINSTANCE hInstance, HWND hWnd)
 //===================================================================
 void CInputXPad::Uninit(void)
 {
-	CInput::Uninit();
+	XInputEnable(false);
 }
 
 //===================================================================
