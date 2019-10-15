@@ -27,10 +27,34 @@ MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#7
 #------------------------------------------------------------
 MODELSET
 	TYPE = 0
-	POS = -50.0 0.0 131.8
-	ROT = 0.0 0.8 0.0
-	SCALE = 5.0 5.0 5.0
-	COLLISION = 0
+	POS = -50.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 50.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = -100.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 3
+	POS = 100.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
 END_MODELSET
 
 END_SCRIPT		# Ç±ÇÃçsÇÕê‚ëŒè¡Ç≥Ç»Ç¢Ç±Ç∆ÅI

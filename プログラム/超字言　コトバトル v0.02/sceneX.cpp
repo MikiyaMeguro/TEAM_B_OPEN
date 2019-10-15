@@ -14,7 +14,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define SCENEX_SIZE	(2.0f)	// サイズの調節
+#define SCENEX_SIZE	(1.0f)	// サイズの調節
 
 //=============================================================================
 // 3Dモデルクラスのコンストラクタ
@@ -72,7 +72,7 @@ CSceneX *CSceneX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CL
 HRESULT CSceneX::Init(D3DXVECTOR3 pos)
 {
 	// オブジェクトの種類の設定
-	//SetObjType(CScene::OBJTYPE_SCENEX);
+	SetObjType(CScene::OBJTYPE_SCENEX);
 
 	// レンダラーを取得
 	CRenderer *pRenderer;
@@ -287,65 +287,68 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 	D3DXVECTOR3 ScaleVtxMin;
 
 	// 拡大を反映
-	ScaleVtxMax.x = m_VtxMax.x * m_mtxWorld._11;
-	ScaleVtxMax.y = m_VtxMax.y * m_mtxWorld._22;
-	ScaleVtxMax.z = m_VtxMax.z * m_mtxWorld._33;
-	ScaleVtxMin.x = m_VtxMin.x * m_mtxWorld._11;
-	ScaleVtxMin.y = m_VtxMin.y * m_mtxWorld._22;
-	ScaleVtxMin.z = m_VtxMin.z * m_mtxWorld._33;
+	ScaleVtxMax.x = m_VtxMax.x;
+	ScaleVtxMax.y = m_VtxMax.y;
+	ScaleVtxMax.z = m_VtxMax.z;
+	ScaleVtxMin.x = m_VtxMin.x;
+	ScaleVtxMin.y = m_VtxMin.y;
+	ScaleVtxMin.z = m_VtxMin.z;
 
-	if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
-		|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && pos->y <= m_pos.y + ScaleVtxMin.y
-		|| pos->y + radius.y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y >= m_pos.y + ScaleVtxMin.y)
-	{// yの範囲の中
-		if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
-		{// zの範囲の中
-			if (posOld->x + radius.x <= m_pos.x + ScaleVtxMin.x
-				&& pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
-			{// X座標の中に左から入った
-				pos->x = posOld->x;
-				move->x = 0.0f;
+	if (m_CollisionType == COLLISIONTYPE_BOX)
+	{
+		if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
+			|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && pos->y <= m_pos.y + ScaleVtxMin.y
+			|| pos->y + radius.y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y >= m_pos.y + ScaleVtxMin.y)
+		{// yの範囲の中
+			if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
+			{// zの範囲の中
+				if (posOld->x + radius.x <= m_pos.x + ScaleVtxMin.x
+					&& pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
+				{// X座標の中に左から入った
+					pos->x = posOld->x;
+					move->x = 0.0f;
+				}
+				else if (posOld->x - radius.x >= m_pos.x + ScaleVtxMax.x
+					&& pos->x - radius.x < m_pos.x + ScaleVtxMax.x)
+				{// X座標の中に右から入った
+					pos->x = posOld->x;
+					move->x = 0.0f;
+				}
 			}
-			else if (posOld->x - radius.x >= m_pos.x + ScaleVtxMax.x
-				&& pos->x - radius.x < m_pos.x + ScaleVtxMax.x)
-			{// X座標の中に右から入った
-				pos->x = posOld->x;
-				move->x = 0.0f;
+			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x >= m_pos.x + ScaleVtxMin.x)
+			{// xの範囲の中
+				if (posOld->z + radius.z <= m_pos.z + ScaleVtxMin.z
+					&& pos->z + radius.z > m_pos.z + ScaleVtxMin.z)
+				{// Z座標の中に手前から入った
+					pos->z = posOld->z;
+					move->z = 0.0f;
+				}
+				else if (posOld->z - radius.z >= m_pos.z + ScaleVtxMax.z
+					&& pos->z - radius.z < m_pos.z + ScaleVtxMax.z)
+				{// Z座標の中に後ろから入った
+					pos->z = posOld->z;
+					move->z = 0.0f;
+				}
 			}
 		}
-		if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x >= m_pos.x + ScaleVtxMin.x)
-		{// xの範囲の中
-			if (posOld->z + radius.z <= m_pos.z + ScaleVtxMin.z
-				&& pos->z + radius.z > m_pos.z + ScaleVtxMin.z)
-			{// Z座標の中に手前から入った
-				pos->z = posOld->z;
-				move->z = 0.0f;
-			}
-			else if (posOld->z - radius.z >= m_pos.z + ScaleVtxMax.z
-				&& pos->z - radius.z < m_pos.z + ScaleVtxMax.z)
-			{// Z座標の中に後ろから入った
-				pos->z = posOld->z;
-				move->z = 0.0f;
-			}
-		}
-	}
 
-	if (pos->x - radius.x < m_pos.x + ScaleVtxMax.x - SCENEX_SIZE && pos->x + radius.x > m_pos.x + ScaleVtxMin.x + SCENEX_SIZE
-		&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
-	{// 障害物の内側に乗った
-		if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y < m_pos.y + ScaleVtxMax.y
-			|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y > m_pos.y + ScaleVtxMax.y)
-		{// 上からブロックに当たったとき
-			bLand = true;  // 乗った判定を返す
-			pos->y = m_pos.y + ScaleVtxMax.y;
-			move->y = 0.0f;  // 移動量をなくす
-		}
+		if (pos->x - radius.x < m_pos.x + ScaleVtxMax.x - SCENEX_SIZE && pos->x + radius.x > m_pos.x + ScaleVtxMin.x + SCENEX_SIZE
+			&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
+		{// 障害物の内側に乗った
+			if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y < m_pos.y + ScaleVtxMax.y
+				|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y > m_pos.y + ScaleVtxMax.y)
+			{// 上からブロックに当たったとき
+				bLand = true;  // 乗った判定を返す
+				pos->y = m_pos.y + ScaleVtxMax.y;
+				move->y = 0.0f;  // 移動量をなくす
+			}
 
-		if (posOld->y + radius.y < m_pos.y + ScaleVtxMin.y && pos->y + radius.y >= m_pos.y + ScaleVtxMin.y
-			|| pos->y + radius.y > m_pos.y + ScaleVtxMin.y && posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y)
-		{// 下からブロックに当たったとき
-			pos->y = posOld->y;
-			move->y = 0.0f;  // 移動量をなくす
+			if (posOld->y + radius.y < m_pos.y + ScaleVtxMin.y && pos->y + radius.y >= m_pos.y + ScaleVtxMin.y
+				|| pos->y + radius.y > m_pos.y + ScaleVtxMin.y && posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y)
+			{// 下からブロックに当たったとき
+				pos->y = posOld->y;
+				move->y = 0.0f;  // 移動量をなくす
+			}
 		}
 	}
 

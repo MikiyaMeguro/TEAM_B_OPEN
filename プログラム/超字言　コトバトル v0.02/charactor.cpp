@@ -188,6 +188,15 @@ void C3DCharactor::CharaMove_Input(void)
 
 	}
 
+	if (CCommand::GetCommand("TESTUP"))
+	{
+		move.y += 10;
+	}
+	if (CCommand::GetCommand("TESTDOWN"))
+	{
+		move.y -= 10;
+	}
+
 	//ステップ移動の設定
 	if (CCommand::GetCommand("PLAYERMOVE_STEP"))
 	{

@@ -8,6 +8,7 @@
 #include "manager.h"
 #include "light.h"
 #include "scene3D.h"
+#include "sceneX.h"
 #include "game.h"
 #include "debugProc.h"
 #include "scene.h"
@@ -23,6 +24,7 @@
 
 #include "player.h"
 #include "charactor.h"
+#include "SetObject.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -142,6 +144,10 @@ void CGame::Init(void)
 	CWord::Create(D3DXVECTOR3(-200.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 39);
 	CWord::Create(D3DXVECTOR3(-100.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 45);
 	CWord::Create(D3DXVECTOR3(-50.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
+
+	// テストオブジェクト
+	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 0);
+	CSetObject::Create();
 
 }
 //=============================================================================
