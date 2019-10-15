@@ -32,6 +32,25 @@ public:
 		MOVETYPE_MAX
 	}CHARACTOR_MOVE_TYPE;
 
+	typedef enum
+	{
+		THINK_WORD,				//文字を考える
+		THINK_SIGHT,			//敵が見えたとき
+		THINK_MISSING,			//敵を見失ったとき
+		THINK_HAVEBULLET,		//弾を持っているとき
+		THINK_NOTBULLET,		//弾を持ってないとき
+		THINK_PICKUP,			//弾を拾いに行く
+		THINK_ENEMY_HAVEBULLET,	//敵が弾を持っているとき
+		THINK_ENEMY_NOBULLET,	//敵が弾を持ってないとき
+		THINK_ESCAPE,			//逃げる
+		THINK_DODGE,			//かわす
+		THINK_ATTACK,			//攻撃をするとき
+		THINK_NEAR_ENEMY,		//近い
+		THINK_FUR_ENEMY,		//遠い
+		THINK_MOVE,				//移動
+		THINK_MAX
+	}CPU_THINK;
+
 	CCharaBase() {};
 	~CCharaBase() {};
 
@@ -104,6 +123,7 @@ public:
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
 private:
 	void CharaMove_Input(void);
+	void CharaMove_CPU(void);
 
 	D3DXVECTOR3 m_CameraPosR;
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス

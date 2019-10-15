@@ -107,7 +107,7 @@ void C3DCharactor::Update(void)
 		CharaMove_Input();
 		break;
 	case CCharaBase::MOVETYPE_NPC_AI:
-
+		CharaMove_CPU();
 		break;
 	}
 }
@@ -298,4 +298,101 @@ void C3DCharactor::CharaMove_Input(void)
 
 	//カメラの参照位置制御
 	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
+}
+
+//=============================================================================
+// CPUの処理
+//=============================================================================
+void C3DCharactor::CharaMove_CPU(void)
+{
+	CCameraManager* pCameraManager = CManager::GetCameraManager();
+
+	CCamera* pCamera = pCameraManager->GetCamera(GetThisCharactor()->GetCameraName());
+	D3DXVECTOR3 CameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	if (pCamera != NULL)
+	{
+		CameraRot = pCamera->GetRotation();
+	}
+
+	D3DXVECTOR3& pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
+
+
+
+
+
+
+	move *= MOVE_DEFAULT_COEFFICIENT;
+	pos += move;
+
+	spin.y = CameraRot.y - rot.y;
+
+	//回転制御
+	if (spin.y > D3DX_PI)
+	{
+		spin.y -= D3DX_PI * 2.0f;
+	}
+	else if (spin.y < -D3DX_PI)
+	{
+		spin.y += D3DX_PI * 2.0f;
+	}
+
+	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+
+	if (rot.y > D3DX_PI)
+	{
+		rot.y -= D3DX_PI * 2.0f;
+	}
+	else if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI * 2.0f;
+	}
+	spin.y = 0.0f;
+
+	//カメラ位置制御
+	//視点移動
+	//Y
+	if (CCommand::GetCommand("CAMERAMOVE_LEFT"))//時計回り
+	{
+		CameraRot.y -= 0.03f;
+	}
+	if (CCommand::GetCommand("CAMERAMOVE_RIGHT"))//反時計回り
+	{
+		CameraRot.y += 0.03f;
+	}
+
+	//X
+	if (CCommand::GetCommand("CAMERAMOVE_UP"))
+	{
+		if (CameraRot.x < D3DX_PI * 0.2f)
+		{
+			CameraRot.x += 0.03f;
+		}
+		else
+		{
+			CameraRot.x = D3DX_PI * 0.2f;
+		}
+	}
+	if (CCommand::GetCommand("CAMERAMOVE_DOWN"))
+	{
+		if (CameraRot.x > D3DX_PI * -0.2f)
+		{
+			CameraRot.x -= 0.03f;
+		}
+		else
+		{
+			CameraRot.x = -D3DX_PI * 0.2f;
+		}
+	}
+	//カメラ設定
+	//pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
+	//	pCamera->GetType(),
+	//	pCamera->GetPosR(),
+	//	CameraRot, pCamera->GetLength());
+	////カメラの参照位置制御
+	//m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
 }
