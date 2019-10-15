@@ -12,7 +12,7 @@
 
 #include "main.h"
 #include "InputKeyboard.h"
-
+#include "InputXPad.h"
 
 //コマンドクラス
 class CCommand
@@ -67,7 +67,7 @@ public:
 
 private:
 	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);
-	static bool CheckKey_DXController(INPUT_STATE InputState, int nKey);
+	static bool CheckKey_XController(CInputXPad* pInputX,INPUT_STATE InputState, int nKey);
 
 	static std::vector<CommandState> m_Command;		//コマンド
 };

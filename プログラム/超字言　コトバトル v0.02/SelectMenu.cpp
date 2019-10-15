@@ -163,9 +163,6 @@ void CSelectMenu::Update(void)
 {
 	//キーボード情報を取得
 	CInputKeyboard *pInput = CManager::GetInputKeyboard();
-	//ジョイパッド情報を取得
-	CXInputJoyPad *pXInput = NULL;
-	pXInput = CManager::GetXInput();
 	//フェードを取得
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();

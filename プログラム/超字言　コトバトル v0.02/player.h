@@ -30,7 +30,7 @@ public:
 
 	static CPlayer* Create(void);
 
-	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE type, D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
+	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -42,7 +42,7 @@ public:
 
 	D3DXVECTOR3 GetPosition(void) { return GetCharaMover()->GetPosition(); };
 	D3DXVECTOR3 GetRotation(void) { return GetCharaMover()->GetRotation(); };
-
+	int GetID(void) { return m_nID; };
 	LPCSTR GetCameraName(void) { return m_ChildCameraName; };
 	void SetCameraName(LPCSTR name) { m_ChildCameraName = name; };
 
@@ -50,7 +50,7 @@ public:
 
 private:
 	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
-
+	int m_nID;	//識別ID(0～3の間)
 	CSceneX* m_pPlayerModel;				//プレイヤーのモデル(仮、後で↓の変数に差し替える)
 	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
 	PLAYER_TYPE m_PlayerType;

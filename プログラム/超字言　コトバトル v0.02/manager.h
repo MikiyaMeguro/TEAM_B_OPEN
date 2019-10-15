@@ -29,7 +29,7 @@ class CSelect;
 class CResult;
 class CUltimate;
 class CCharacterMove;
-class CXInputJoyPad;
+class CInputXPad;
 class CSound;
 class CTutorial;
 class CCharaSelect;
@@ -51,7 +51,7 @@ class CCameraManager;
 #define ENEMY_C_BUTTON		(DIK_NUMPAD5)
 #define PLAYER_C_BUTTON		(DIK_S)
 #define MAX_SOUND			(3)
-
+#define MAX_PLAYER			(4)
 //=============================================================================
 // マクロ(コントローラー)
 //=============================================================================
@@ -101,7 +101,7 @@ public:
 	static CCharaSelect *GetCharaSelect(void) { return m_pCharaSelect; }
 	static CStageSelect *GetStageSelect(void) { return m_pStageSelect; }
 	static CResult *GetResult(void) { return m_pResult; }
-	static CXInputJoyPad *GetXInput(void) { return m_pXInput; }
+	static CInputXPad *GetXInput(int nID) { return m_pXInput[nID]; }
 	static CSound *GetSound(int nNum);
 
 	static CCameraManager* GetCameraManager(void) { return m_pCameraManager; };
@@ -124,7 +124,7 @@ private:
 	static CStageSelect *m_pStageSelect;
 
 	static CCameraManager* m_pCameraManager;
-	static CXInputJoyPad *m_pXInput;
+	static CInputXPad *m_pXInput[MAX_PLAYER];
 	static MODE m_mode;
 	static CSound			*m_pSound[MAX_SOUND];	// サウンドのポインタ
 };

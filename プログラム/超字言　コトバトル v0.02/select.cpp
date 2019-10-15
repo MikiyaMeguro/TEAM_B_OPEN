@@ -70,8 +70,6 @@ void CSelect::Update(void)
 	// “ü—Íî•ñ‚ğæ“¾
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
-	CXInputJoyPad *pXInput = NULL;
-	pXInput = CManager::GetXInput();
 	//”CˆÓ‚ÌƒL[ENTER
 	if (CCommand::GetCommand("ENTER"))
 	{
