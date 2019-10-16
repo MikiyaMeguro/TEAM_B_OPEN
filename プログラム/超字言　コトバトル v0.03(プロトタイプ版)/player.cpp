@@ -108,6 +108,15 @@ void CPlayer::Update(void)
 		m_pCharactorMove->Update();
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
+		testpos = m_pCharactorMove->GetPosition();
+		testmove = m_pCharactorMove->GetMove();
+
+		D3DXVECTOR3 testposFRONT = D3DXVECTOR3(sinf(m_pCharactorMove->GetRotation().y) * 10,
+			sinf(m_pCharactorMove->GetRotation().x) * 10,
+			cosf(m_pCharactorMove->GetRotation().y) * 10);
+		testpos += testposFRONT;
+		//前にObjectがあるかどうか
+		m_pCharactorMove->m_bFront = CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
 		m_pPlayerModel->SetPosition(m_pCharactorMove->GetPosition());
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
@@ -133,8 +142,9 @@ void CPlayer::Draw(void)
 //=============================================================================
 // 当たり判定処理
 //=============================================================================
-void CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
+bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
 {
+	bool bHit;
 	CScene *pScene = NULL;
 
 	// 先頭のオブジェクトを取得
@@ -152,10 +162,17 @@ void CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR
 				m_bLand = ((CSceneX*)pScene)->Collision(pos, posOld, move, radius);
 				if (m_bLand == true)
 				{// モデルに当たる
+					bHit = true;
+					break;
+				}
+				else
+				{
+					bHit = false;
 				}
 			}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
+	return bHit;
 }

@@ -46,7 +46,7 @@ public:
 	LPCSTR GetCameraName(void) { return m_ChildCameraName; };
 	void SetCameraName(LPCSTR name) { m_ChildCameraName = name; };
 
-	void CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
+	bool CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 
 private:
 	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
