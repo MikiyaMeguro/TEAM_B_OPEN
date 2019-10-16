@@ -307,12 +307,14 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 				{// X座標の中に左から入った
 					pos->x = posOld->x;
 					move->x = 0.0f;
+					bLand = true;
 				}
 				else if (posOld->x - radius.x >= m_pos.x + ScaleVtxMax.x
 					&& pos->x - radius.x < m_pos.x + ScaleVtxMax.x)
 				{// X座標の中に右から入った
 					pos->x = posOld->x;
 					move->x = 0.0f;
+					bLand = true;
 				}
 			}
 			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x >= m_pos.x + ScaleVtxMin.x)
@@ -322,12 +324,14 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 				{// Z座標の中に手前から入った
 					pos->z = posOld->z;
 					move->z = 0.0f;
+					bLand = true;
 				}
 				else if (posOld->z - radius.z >= m_pos.z + ScaleVtxMax.z
 					&& pos->z - radius.z < m_pos.z + ScaleVtxMax.z)
 				{// Z座標の中に後ろから入った
 					pos->z = posOld->z;
 					move->z = 0.0f;
+					bLand = true;
 				}
 			}
 		}
@@ -348,6 +352,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 			{// 下からブロックに当たったとき
 				pos->y = posOld->y;
 				move->y = 0.0f;  // 移動量をなくす
+				bLand = true;
 			}
 		}
 	}
