@@ -1,0 +1,61 @@
+#============================================================
+#
+# [モデル配置ツール]スクリプトファイル [data\TEXT\SetModel.txt]
+#  Author : MIKIYA MEGURO
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------
+#         モデル数 ※プログラム内でも変更してください
+#------------------------------------------------------------
+NUM_MODEL = 9
+
+#------------------------------------------------------------
+#    モデルファイル名  ※プログラム内でも変更してください
+#------------------------------------------------------------
+MODEL_FILENAME = data/MODEL/Car.x"					#0
+MODEL_FILENAME = data/MODEL/car001.x"				#1
+MODEL_FILENAME = data/MODEL/Desk.x"					#2 (机)
+MODEL_FILENAME = data/MODEL/Pulin.x"				#3 プリン
+MODEL_FILENAME = data/MODEL/Knife.x"				#4 ナイフ
+MODEL_FILENAME = data/MODEL/apple.x"				#5 リンゴ
+MODEL_FILENAME = data/MODEL/Palette.x"				#6 絵具
+MODEL_FILENAME = data/MODEL/box000.x"				#8
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#9
+#------------------------------------------------------------
+#                      モデル配置情報
+#------------------------------------------------------------
+MODELSET
+	TYPE = 0
+	POS = -50.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 50.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = -100.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 3
+	POS = 100.0 0.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 1
+END_MODELSET
+
+END_SCRIPT		# この行は絶対消さないこと！
