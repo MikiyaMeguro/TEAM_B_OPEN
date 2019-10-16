@@ -62,8 +62,8 @@ void CGame::Init(void)
 {
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
-	CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-
+	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
 	CameraSetting((int)NumPlayer);
 
 	//壁、床設定
@@ -188,8 +188,8 @@ void CGame::Draw(void)
 //=============================================================================
 void CGame::CameraSetting(int nNumPlayer)
 {
-	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
-	//CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;
+	//CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	////CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	if (pCameraManager != NULL)
@@ -243,7 +243,7 @@ void CGame::CameraSetting(int nNumPlayer)
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 340);
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(-2.0f, D3DX_PI * -0.5f, 0.0f), 650.0f);
+				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), 100.0f);
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 620, 340);
 			break;
 
@@ -260,9 +260,9 @@ void CGame::CameraSetting(int nNumPlayer)
 				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), 100.0f);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 340);
 
-			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(-2.0f, D3DX_PI * -0.5f, 0.0f), 650.0f);
-			pCameraManager->SetCameraViewPort("TOPVIEW_CAMERA", 645, 365, 620, 340);
+			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 620, 340);
 			break;
 		}
 	}
@@ -317,7 +317,7 @@ void CGame::PlayerSetting(int nNum)
 	else
 	{
 		// 人数分を生成
-		for (int nCntPlayer = 0; nCntPlayer < 3; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
 		{
 			if (m_pPlayer[nCntPlayer] == NULL)
 			{
@@ -345,7 +345,12 @@ void CGame::PlayerSetting(int nNum)
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
-
+		if (m_pPlayer[3] != NULL)
+		{
+			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
+			m_pPlayer[3]->SetCameraName("4P_CAMERA");
+			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
+		}
 	}
 }
 
