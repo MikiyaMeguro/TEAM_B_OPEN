@@ -146,7 +146,7 @@ void CGame::Init(void)
 	WordCreate();
 
 	// テストオブジェクト
-	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 0);
+	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 1);
 	CSetObject::Create();
 
 	CTime::Create((int)CPlayerSelect::GetModeSelectMode());

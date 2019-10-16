@@ -163,7 +163,7 @@ void CWordManager::BulletCreate()
 {
 	if (m_nCntaAnswer == MAX_WORD)
 	{	// // w’è‚µ‚½•¶š‚È‚ç’e‚ğ¶¬‚·‚é
-		CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 1);
+		CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 0);
 		CGame::GetTube()->AllDelete();
 		Reset();		// İ’è‚ğ–ß‚·
 	}
