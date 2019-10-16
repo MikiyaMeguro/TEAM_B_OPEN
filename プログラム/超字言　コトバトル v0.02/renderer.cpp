@@ -191,6 +191,10 @@ void CRenderer::Draw(void)
 				{
 					CScene::DrawAll();
 				}
+				if (pCameraManager->SetCamera("TOPVIEW_CAMERA"))
+				{
+					CScene::DrawAll();
+				}
 				break;
 
 			default:

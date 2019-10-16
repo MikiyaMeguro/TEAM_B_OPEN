@@ -62,23 +62,23 @@ void CGame::Init(void)
 {
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
+	CameraSetting();
+	//if (pCameraManager != NULL)
+	//{
+	//	pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
+	//		D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), 100.0f);
+	//	pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, 355);
+	//	pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+	//		D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), 100.0f);
+	//	pCameraManager->SetCameraViewPort("2P_CAMERA", 0, 365, SCREEN_WIDTH, 340);
+	//	//pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
+	//	//	D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(-0.2f, D3DX_PI * -0.5f, 0.0f), 200.0f);
+	//	//pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 380, 620, 340);
 
-	if (pCameraManager != NULL)
-	{
-		pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-			D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), 100.0f);
-		pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, 355);
-		pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-			D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), 100.0f);
-		pCameraManager->SetCameraViewPort("2P_CAMERA", 0, 365, SCREEN_WIDTH, 340);
-		//pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-		//	D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(-0.2f, D3DX_PI * -0.5f, 0.0f), 200.0f);
-		//pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 380, 620, 340);
-
-		//pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-		//	D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(-0.2f, D3DX_PI * 0.5f, 0.0f), 200.0f);
-		//pCameraManager->SetCameraViewPort("4P_CAMERA", 660, 380, 620, 340);
-	}
+	//	//pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
+	//	//	D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(-0.2f, D3DX_PI * 0.5f, 0.0f), 200.0f);
+	//	//pCameraManager->SetCameraViewPort("4P_CAMERA", 660, 380, 620, 340);
+	//}
 
 	CScene3D* p3D = NULL;
 	p3D = CScene3D::Create(D3DXVECTOR3(0.0f, -50.0f, 0.0f), "BLOCK");
@@ -103,23 +103,6 @@ void CGame::Init(void)
 		pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 	}
 
-	//pPlayer = CPlayer::Create();
-	//if (pPlayer != NULL)
-	//{
-	//	pPlayer->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT);
-	//	pPlayer->SetCameraName("2P_CAMERA");
-	//	pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)pPlayer->GetCharaMover());
-
-	//}
-
-	//pPlayer = CPlayer::Create();
-	//if (pPlayer != NULL)
-	//{
-	//	pPlayer->Set(D3DXVECTOR3(100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT);
-	//	pPlayer->SetCameraName("3P_CAMERA");
-	//	pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)pPlayer->GetCharaMover());
-
-	//}
 
 	//pPlayer = CPlayer::Create();
 	//if (pPlayer != NULL)
@@ -146,7 +129,7 @@ void CGame::Init(void)
 	WordCreate();
 
 	// テストオブジェクト
-	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 1);
+	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 0);
 	CSetObject::Create();
 
 	CTime::Create((int)CPlayerSelect::GetModeSelectMode());
@@ -215,7 +198,13 @@ void CGame::Update(void)
 	// 文字管理の更新
 	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
 
-
+	//カメラ操作（テスト）
+	CCameraManager *pCameraManager = CManager::GetCameraManager();
+	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");
+	if (pCam != NULL)
+	{
+		pCam->SetRotation(pCam->GetRotation() + D3DXVECTOR3(0.0f,0.001f,0.0f));
+	}
 #ifdef _DEBUG
 
 #endif
@@ -234,7 +223,8 @@ void CGame::Draw(void)
 //=============================================================================
 void CGame::CameraSetting(void)
 {
-	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	//CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	if (pCameraManager != NULL)
@@ -242,11 +232,38 @@ void CGame::CameraSetting(void)
 		switch (NumPlayer)
 		{
 		case CPlayerSelect::SELECTPLAYER_1P:
+			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			break;
+
 		case CPlayerSelect::SELECTPLAYER_2P:
+			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, 355);
+			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("2P_CAMERA", 0, 365, SCREEN_WIDTH, 340);
 			break;
+
 		case CPlayerSelect::SELECTPLAYER_3P:
+			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 620, 340);
+
+			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("2P_CAMERA", 660, 0, 620, 340);
+
+			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), 100.0f);
+			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 380, 620, 340);
+
+			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(50.0f, 0.0f, 0.0f), D3DXVECTOR3(-2.0f, D3DX_PI * -0.5f, 0.0f), 250.0f);
+			pCameraManager->SetCameraViewPort("TOPVIEW_CAMERA", 660, 380, 620, 340);
 			break;
+
 		case CPlayerSelect::SELECTPLAYER_4P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
 				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 100.0f);
