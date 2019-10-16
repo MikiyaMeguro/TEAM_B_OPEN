@@ -90,9 +90,10 @@ void CWordManager::Update(void)
 			}
 		}
 
+		//テスト
 		if (pInputKeyboard->GetTrigger(DIK_LSHIFT))
 		{	// 弾の生成
-			BulletCreate();
+			BulletCreate(0);
 		}
 	}
 
@@ -159,11 +160,11 @@ void CWordManager::Delete(void)
 //=============================================================================
 // 弾の生成
 //=============================================================================
-void CWordManager::BulletCreate()
+void CWordManager::BulletCreate(int nID)
 {
 	if (m_nCntaAnswer == MAX_WORD)
 	{	// // 指定した文字なら弾を生成する
-		CSceneX::Create(CGame::GetPlayer()->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 0);
+		CSceneX::Create(CGame::GetPlayer(nID)->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 0);
 		CGame::GetTube()->AllDelete();
 		Reset();		// 設定を戻す
 	}
