@@ -45,7 +45,8 @@ public:
 	static CTube *GetTube(void) { return m_pTube; }										// 文字の可視化UIの取得
 
 private:
-	void CameraSetting(void);
+	void CameraSetting(int nNum);		// 人数に応じたカメラ生成
+	void PlayerSetting(int nNum);		// 人数に応じたプレイヤー生成
 	static CWordManager *m_pWordManager;
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CTube *m_pTube;
