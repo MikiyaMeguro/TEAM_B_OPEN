@@ -192,6 +192,7 @@
     <ClCompile Include="word_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="charactor.h" />
