@@ -34,6 +34,7 @@ public:
 
 	typedef enum
 	{
+		THINK_NONE,				//何も考えてない
 		THINK_WORD,				//文字を考える
 		THINK_SIGHT,			//敵が見えたとき
 		THINK_MISSING,			//敵を見失ったとき
@@ -50,6 +51,25 @@ public:
 		THINK_MOVE,				//移動
 		THINK_MAX
 	}CPU_THINK;
+
+	typedef enum
+	{
+		CPU_MOVE_FRONT,			//前へ移動
+		CPU_MOVE_BACK,			//後ろへ移動
+		CPU_MOVE_RIGHT,			//右へ移動
+		CPU_MOVE_LEFT,			//左へ移動
+		CPU_MOVE_NONE,			//移動していない
+		CPU_MOVE_MAX
+	}CPU_MOVE;
+
+	typedef enum
+	{
+		CPU_NODE_NONE,			//何もしていない
+		CPU_NODE_RUN,			//実行中
+		CPU_NODE_SUCCESS,		//成功した
+		CPU_NODE_FAILURE,		//失敗した
+		CPU_NODE_MAX
+	}CPU_NODE;
 
 	CCharaBase() {};
 	~CCharaBase() {};
@@ -90,7 +110,10 @@ private:
 	CHARACTOR_MOVE_TYPE m_type;		//移動タイプ
 
 	CPlayer* m_pThisCharactor;		//このインスタンスを所持しているプレイヤー
-
+public:
+	CPU_THINK m_CpuThink;
+	CPU_MOVE m_CpuMove;
+	CPU_NODE m_CpuNode;
 };
 
 class C2DCharactor : public CCharaBase
@@ -124,9 +147,17 @@ public:
 private:
 	void CharaMove_Input(void);
 	void CharaMove_CPU(void);
+	void Think_CPU(void);	//考える
+	void Action_CPU(void);	//行動
 
 	D3DXVECTOR3 m_CameraPosR;
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
+
+	//CPUで使うメンバ変数
+	int m_nThinkTimer;			//考える時間
+	int m_nActionTimer;			//行動している時間
+	int m_nCntActionRepeat;		//同じ行動を何度したか
+
 };
 
 #endif // !_CHARACTOR_H_

@@ -71,6 +71,10 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 //=============================================================================
 HRESULT C3DCharactor::Init(void)
 {
+	m_CpuThink = THINK_NONE;
+	m_CpuMove = CPU_MOVE_NONE;
+	m_CpuNode = CPU_NODE_NONE;
+	m_nActionTimer = 0;
 	return S_OK;
 }
 
@@ -87,7 +91,14 @@ void C3DCharactor::Update(void)
 		CharaMove_Input();
 		break;
 	case CCharaBase::MOVETYPE_NPC_AI:
-		CharaMove_CPU();
+		if (m_nActionTimer == 0)
+		{	//考える
+			Think_CPU();
+		}
+		else
+		{	//行動する
+			Action_CPU();
+		}
 		break;
 	}
 }
@@ -166,7 +177,6 @@ void C3DCharactor::CharaMove_Input(void)
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
 		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
-
 	}
 
 	//if (CCommand::GetCommand("TESTUP"))
@@ -302,8 +312,28 @@ void C3DCharactor::CharaMove_CPU(void)
 	float		 speed = CCharaBase::GetSpeed();
 
 
+	m_CpuMove = (CPU_MOVE)(rand() % (CPU_MOVE_MAX -1));
 
-
+	//移動処理
+	switch (m_CpuMove)
+	{
+	case CPU_MOVE_FRONT:
+		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * speed;
+		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * speed;
+		break;
+	case CPU_MOVE_BACK:
+		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
+		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
+		break;
+	case CPU_MOVE_RIGHT:
+		move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * speed;
+		move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * speed;
+		break;
+	case CPU_MOVE_LEFT:
+		move.x += sinf(CameraRot.y + (D3DX_PI * -0.5f)) * speed;
+		move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * speed;
+		break;
+	}
 
 
 
@@ -345,35 +375,35 @@ void C3DCharactor::CharaMove_CPU(void)
 	{
 		CameraRot.y += 0.03f;
 	}
+}
 
-	//X
-	if (CCommand::GetCommand("CAMERAMOVE_UP"))
+//=============================================================================
+// CPUの思考処理
+//=============================================================================
+void C3DCharactor::Think_CPU(void)
+{
+	//行動を決める条件文
+	m_CpuThink = THINK_MOVE;
+	m_nActionTimer = 60;
+
+}
+
+//=============================================================================
+// CPUの行動処理
+//=============================================================================
+void C3DCharactor::Action_CPU(void)
+{
+	//行動を実行に移す
+	switch (m_CpuThink)
 	{
-		if (CameraRot.x < D3DX_PI * 0.2f)
-		{
-			CameraRot.x += 0.03f;
-		}
-		else
-		{
-			CameraRot.x = D3DX_PI * 0.2f;
-		}
+	case  THINK_MOVE:
+		CharaMove_CPU();
+		m_CpuNode = CPU_NODE_RUN;
+		break;
+	default:
+		break;
 	}
-	if (CCommand::GetCommand("CAMERAMOVE_DOWN"))
-	{
-		if (CameraRot.x > D3DX_PI * -0.2f)
-		{
-			CameraRot.x -= 0.03f;
-		}
-		else
-		{
-			CameraRot.x = -D3DX_PI * 0.2f;
-		}
-	}
-	//カメラ設定
-	//pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
-	//	pCamera->GetType(),
-	//	pCamera->GetPosR(),
-	//	CameraRot, pCamera->GetLength());
-	////カメラの参照位置制御
-	//m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
+
+	//タイマーを減らす
+	m_nActionTimer--;
 }

@@ -74,7 +74,6 @@ void CGame::Init(void)
 	p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
 	p3D->SetSize(1000.0f, 1000.0f);
 
-	// ƒvƒŒƒCƒ„[‚Ì¶¬
 	PlayerSetting((int)NumPlayer);
 
 	// •¶šŠÇ—‚Ì¶¬
