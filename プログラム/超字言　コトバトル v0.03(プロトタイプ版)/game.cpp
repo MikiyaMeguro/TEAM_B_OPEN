@@ -37,9 +37,8 @@
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
-CWordManager *CGame::m_pWordManager = NULL;
 CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
-CTube *CGame::m_pTube = NULL;
+CTube *CGame::m_apTube[MAX_PLAYER] = {};
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -63,7 +62,7 @@ void CGame::Init(void)
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;//テスト
 	CameraSetting((int)NumPlayer);
 
 	//壁、床設定
@@ -77,19 +76,8 @@ void CGame::Init(void)
 	// プレイヤーの生成
 	PlayerSetting((int)NumPlayer);
 
-	// 文字管理の生成
-	if (m_pWordManager == NULL)
-	{
-		ObjCreate(m_pWordManager);
-		//m_pWordManager = new CWordManager;
-		//m_pWordManager->Init();
-	}
-
 	// 文字の可視化UI(2D)の生成
-	if (m_pTube == NULL)
-	{
-		m_pTube = CTube::Create(WORD_TUBE_POS, WORD_TUBE_SIZE, "TUBE", 3);
-	}
+	TubeSetting((int)NumPlayer);
 
 	WordCreate();
 
@@ -97,8 +85,12 @@ void CGame::Init(void)
 	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 0);
 	CSetObject::Create();
 
-	CTime::Create((int)CPlayerSelect::GetModeSelectMode());
-
+	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
+	{
+		CTime::Create((int)NumPlayer);
+		CTime::Create((int)NumPlayer);
+	}
+	else if (NumPlayer != CPlayerSelect::SELECTPLAYER_2P) { CTime::Create((int)NumPlayer); }
 }
 //=============================================================================
 // 終了処理
@@ -113,23 +105,16 @@ void CGame::Uninit(void)
 			m_pPlayer[nCntPlayer] = NULL;
 		}
 	}
-	if (m_pTube != NULL)
-	{	// 文字の可視化UI(2D)の破棄
-		m_pTube->Uninit();
-		m_pTube = NULL;
+	for (int nCntTube = 0; nCntTube < MAX_PLAYER; nCntTube++)
+	{
+		if (m_apTube[nCntTube] != NULL)
+		{	// 文字の可視化UI(2D)の破棄
+			m_apTube[nCntTube]->Uninit();
+			m_apTube[nCntTube] = NULL;
+		}
 	}
 	//全ての終了処理
 	CScene::ReleseAll();
-
-	if (m_pWordManager != NULL)
-	{// ライトクラスの破棄
-	 // 終了処理
-		m_pWordManager->Uninit();
-
-		// メモリを開放
-		delete m_pWordManager;
-		m_pWordManager = NULL;
-	}
 }
 
 //=============================================================================
@@ -158,9 +143,6 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 	}
-
-	// 文字管理の更新
-	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
 
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
@@ -317,7 +299,7 @@ void CGame::PlayerSetting(int nNum)
 	else
 	{
 		// 人数分を生成
-		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < 3; nCntPlayer++)
 		{
 			if (m_pPlayer[nCntPlayer] == NULL)
 			{
@@ -353,6 +335,62 @@ void CGame::PlayerSetting(int nNum)
 		}
 	}
 }
+
+//=============================================================================
+// 人数に応じた筒の生成処理
+//=============================================================================
+void CGame::TubeSetting(int nNum)
+{
+	switch (nNum)
+	{
+	case 1:
+		if (m_apTube[0] == NULL)
+		{
+			m_apTube[0] = CTube::Create(WORD_TUBE001_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3);
+		}
+		break;
+
+	case 2:
+		for (int nCntTube = 0; nCntTube < nNum; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE002_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE002_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
+		break;
+
+	case 3:
+		for (int nCntTube = 0; nCntTube < nNum; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 2) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_3P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
+		break;
+
+	case 4:
+		for (int nCntTube = 0; nCntTube < nNum; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 2) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_3P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 3) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE004_POS_4P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
 
 //=============================================================================
 // 文字管理の処理

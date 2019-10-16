@@ -13,7 +13,7 @@
 // マクロ定義
 //===================================================================
 #define MAX_WORD	(3)			// 文字数
-#define MAX_ANSWER	(7)			// 答えの数
+#define MAX_ANSWER	(10)			// 答えの数
 //===================================================================
 // クラスの定義
 //===================================================================
@@ -41,6 +41,7 @@ public:
 	// 設定の関数
 	void SetWord(int nType);
 	void BulletCreate(int nID);
+	void SetID(int nID) { m_nPlayerID = nID; }
 
 	// 取得用の関数
 	int GetCntNum(void) { return m_nCntNum; }
@@ -56,6 +57,7 @@ private:
 	int m_nCreateType;
 	int m_nCntNum;
 	int m_nCntaAnswer;
+	int m_nPlayerID;
 	bool m_bPress;
 };
 

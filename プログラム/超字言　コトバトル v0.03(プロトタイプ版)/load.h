@@ -33,6 +33,9 @@ public:
 		MODE_KNIFE,		// ナイフ
 		MODE_APPLE,		// アップル
 		MODE_PALLET,	// 絵具
+		MODE_TAICO,		// タイヤ
+		MODE_WHEEL,		// 太鼓
+		MODE_COIN,		// コイン
 		MODEL_BOX,		// 箱
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_MAX,

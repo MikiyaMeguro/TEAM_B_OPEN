@@ -9,6 +9,7 @@
 #include "game.h"
 #include "player.h"
 #include "InputKeyboard.h"
+#include "PlayerNumSelect.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -24,6 +25,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_bFlagUninit = false;
 	m_bMoveFlag = false;
 	m_bScaleFlag = false;
+	m_nNumPlayerGet = 0;
 }
 
 //--------------------------------------------
@@ -84,22 +86,41 @@ void CWord::Uninit(void)
 void CWord::Update(void)
 {
 	// ローカル変数
+	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;//テスト
+
 	D3DXVECTOR3 pos = CSceneBillBoard::GetPos();	//位置の取得
 	D3DXVECTOR3 PosOld = pos;						// 位置を保存
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 1.0f, 0.0f);// 移動
-	CPlayer *pPlayer = CGame::GetPlayer();			// プレイヤーを取得
-	D3DXVECTOR3 PlayerPos = pPlayer->GetPosition();	// プレイヤーの位置を取得
+	CPlayer *pPlayer[MAX_PLAYER];
+	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
+	for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
+	{
+		pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
+		PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
+	}
 
 	//pos = Move(pos);
 
-	if (CGame::GetWordManager()->GetCntNum() < 3)
-	{	// 3個取ったら取らない
-		// 文字がプレイヤーに集まる(範囲で判定を取る)
-		move = Approach(pos, PlayerPos, AREA_CHASE);
+	for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
+	{
+		if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
+		{	// 3個取ったら取らない
+			// 文字がプレイヤーに集まる(範囲で判定を取る)
+			move = Approach(pos, PlayerPos[nCntPlayer], AREA_CHASE);
 
-		// 当たり判定(円を使った判定)
-		Circle(pos, PlayerPos, AREA_COILLSION);
+			// 当たり判定(円を使った判定)
+			Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
+
+			if (m_bFlagUninit == true)
+			{	// 終了フラグが立った場合
+				pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
+				Uninit();
+				return;
+			}
+		}
 	}
+
 
 	//ScaleSize();
 
@@ -108,13 +129,6 @@ void CWord::Update(void)
 	//if (m_bMoveFlag == false) { pos.y += move.y; }
 	//if (m_bMoveFlag == true) { pos.y -= move.y; }
 	pos.z += move.z;
-
-	if (m_bFlagUninit == true)
-	{	// 終了フラグが立った場合
-		CGame::GetWordManager()->SetWord(m_nWordNum);
-		Uninit();
-		return;
-	}
 
 	CSceneBillBoard::Update();
 	CSceneBillBoard::SetBillboard(pos, m_size.x, m_size.y);

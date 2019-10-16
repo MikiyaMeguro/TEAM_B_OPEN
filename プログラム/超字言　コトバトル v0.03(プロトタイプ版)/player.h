@@ -14,6 +14,7 @@
 
 //class CScene3D;
 class CSceneX;
+class CWordManager;
 
 class CPlayer : public CScene
 {
@@ -48,6 +49,7 @@ public:
 
 	bool CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 
+	CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理の取得
 private:
 	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
 	int m_nID;	//識別ID(0～3の間)
@@ -57,5 +59,7 @@ private:
 	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
 	bool m_bLand;		// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
+
+	CWordManager *m_pWordManager;
 };
 #endif // !_PLAYER_H_

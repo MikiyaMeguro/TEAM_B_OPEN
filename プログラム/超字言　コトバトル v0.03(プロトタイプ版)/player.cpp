@@ -6,6 +6,7 @@
 //=============================================================================
 #include "player.h"
 #include "manager.h"
+#include "word_manager.h"
 
 #include "sceneX.h"
 
@@ -23,6 +24,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 {
 	m_bLand = false;
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_pWordManager = NULL;
 }
 CPlayer::~CPlayer()
 {
@@ -59,6 +61,12 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 		}
 	}
 	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+	// 文字管理の生成
+	if (m_pWordManager == NULL)
+	{
+		ObjCreate(m_pWordManager);
+		m_pWordManager->SetID(m_nID);
+	}
 
 	m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
 	m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);
@@ -86,6 +94,16 @@ void CPlayer::Uninit(void)
 	{
 		m_pPlayerModel->Uninit();
 		m_pPlayerModel = NULL;
+	}
+
+	if (m_pWordManager != NULL)
+	{// ライトクラスの破棄
+	 // 終了処理
+		m_pWordManager->Uninit();
+
+		// メモリを開放
+		delete m_pWordManager;
+		m_pWordManager = NULL;
 	}
 
 	Release();
@@ -116,11 +134,20 @@ void CPlayer::Update(void)
 			cosf(m_pCharactorMove->GetRotation().y) * 10);
 		testpos += testposFRONT;
 		//前にObjectがあるかどうか
-		m_pCharactorMove->m_bFront = CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
+		//m_pCharactorMove->m_bFront = CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
 		m_pPlayerModel->SetPosition(m_pCharactorMove->GetPosition());
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
 	}
+
+	if (CManager::GetInputKeyboard()->GetTrigger(DIK_LSHIFT))
+	{	// 弾の生成
+		if (m_pWordManager != NULL)
+		{
+			m_pWordManager->BulletCreate(m_nID);
+		}
+	}
+
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
 	testmove = m_pCharactorMove->GetMove();
@@ -128,6 +155,8 @@ void CPlayer::Update(void)
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x," ",testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
 #endif
+
+	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
 
 }
 

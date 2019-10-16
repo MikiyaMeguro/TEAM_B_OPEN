@@ -37,6 +37,7 @@ private:
 	bool m_bMoveFlag;		// 上下移動のフラグ
 	bool m_bScaleFlag;		// 拡大縮小するフラグ
 	int m_nWordNum;			// 文字の番号
+	int m_nNumPlayerGet;	// 取得された時のプレイヤーの番号
 };
 
 #endif
