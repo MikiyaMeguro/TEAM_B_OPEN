@@ -98,7 +98,7 @@ void CGame::Init(void)
 	m_pPlayer[1] = CPlayer::Create();
 	if (m_pPlayer[1] != NULL)
 	{
-		m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
+		m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
 		m_pPlayer[1]->SetCameraName("2P_CAMERA");
 		pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 	}

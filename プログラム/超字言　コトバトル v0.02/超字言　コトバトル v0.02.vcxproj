@@ -168,6 +168,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="mask.cpp" />
+    <ClCompile Include="number.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="PlayerNumSelect.cpp" />
     <ClCompile Include="renderer.cpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="sound.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="texture.cpp" />
+    <ClCompile Include="time.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="tube.cpp" />
     <ClCompile Include="tutorial.cpp" />
@@ -206,6 +208,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="mask.h" />
+    <ClInclude Include="number.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="PlayerNumSelect.h" />
     <ClInclude Include="renderer.h" />
@@ -221,6 +224,7 @@
     <ClInclude Include="sound.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="texture.h" />
+    <ClInclude Include="time.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="tube.h" />
     <ClInclude Include="tutorial.h" />
