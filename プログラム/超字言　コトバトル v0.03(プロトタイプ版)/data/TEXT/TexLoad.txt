@@ -1,0 +1,31 @@
+//====================================================================================
+//
+//	テクスチャロード用テキスト[TexLoad.txt]
+//	Author : Kodama Yuto(児玉 優斗)
+//	Editor : 						←最後に編集した人の名前を書く
+//
+//	書き方→ DATA = (ID) (アドレス(.exeから見た相対アドレス)) (タグ)
+//				 ↑↑　↑									↑
+//					半角スペースを必ず空ける!!
+//
+//		IDの五桁目(10000～)はモデルに貼るテクスチャに使うので使わないこと
+//
+//====================================================================================
+START_LOAD
+DATA = 00000 data/TEXTURE/SampleTex000.png  BLOCK
+DATA = 00001 data/TEXTURE/field000.jpg  FIELD
+DATA = 00002 data/TEXTURE/Wall0001.png  WALL
+DATA = 00003 data/TEXTURE/Marker000.png MARKER
+DATA = 00004 data/TEXTURE/player000.png PLAYER
+DATA = 00005 data/TEXTURE/number.png NUMBER
+DATA = 00006 data/TEXTURE/50音一覧.png WORD
+DATA = 00007 data/TEXTURE/Tube.png TUBE
+DATA = 00008 data/TEXTURE/time.png TIME
+DATA = 00009 data/TEXTURE/colon.png COLON
+DATA = 00010 data/TEXTURE/bg_fream.png BG_FREAME
+
+DATA = 00006 data/TEXTURE/pause100.png  PAUSE_BG
+DATA = 00007 data/TEXTURE/Tutorial.jpg 	PAUSE_TUTORIAL
+DATA = 00008 data/TEXTURE/pause000.png  PAUSE_MENU_CONTINUE
+DATA = 00009 data/TEXTURE/pause001.png  PAUSE_MENU_QUIT
+END_LOAD
