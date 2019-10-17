@@ -8,6 +8,7 @@
 #define _WORD_H_
 
 #include "sceneBillboard.h"
+#include "game.h"
 
 //*********************************************************************
 //ビルボードクラスの定義
@@ -24,8 +25,10 @@ public:
 	static CWord *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord);
 
 	// 関数
-	D3DXVECTOR3 Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle);
+	D3DXVECTOR3 Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle, float fDistance);
 	void Circle(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle);				// 円を作る
+	void Distance(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNumPlayer);							// 距離だけを測る
+	int ComparisonDistance(int nNumPlayer);		// 距離の比較
 
 private:
 	D3DXVECTOR3 Move(D3DXVECTOR3 pos);
@@ -38,6 +41,7 @@ private:
 	bool m_bScaleFlag;		// 拡大縮小するフラグ
 	int m_nWordNum;			// 文字の番号
 	int m_nNumPlayerGet;	// 取得された時のプレイヤーの番号
+	float m_fDistance[MAX_PLAYER];	// プレイヤーとの距離
 };
 
 #endif

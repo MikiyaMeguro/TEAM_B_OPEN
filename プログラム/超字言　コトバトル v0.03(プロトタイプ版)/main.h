@@ -19,6 +19,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <vector>
+#include <list>
 #include <stdlib.h>
 #include <XInput.h>						// XInput API
 #include "xaudio2.h"					// サウンド処理で必要
