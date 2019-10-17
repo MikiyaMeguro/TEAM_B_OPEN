@@ -25,9 +25,12 @@ CBulletBase::~CBulletBase()
 //=============================================================================
 // 設定処理(CBulletBase)
 //=============================================================================
-void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife)
 {
-
+	m_pos = pos;
+	m_rot = rot;
+	m_fMove = fSpeed;
+	m_nLife = nLife;
 }
 
 //=============================================================================
@@ -55,7 +58,20 @@ void CBulletBase::Uninit(void)
 //=============================================================================
 void CBulletBase::Update(void)
 {
+	//マトリックスを使用して移動量を求める
+	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, m_fMove);
 
+	D3DXMATRIX Mtxmove, Mtxrot, Mtxtrans;
+	D3DXMatrixIdentity(&Mtxmove);
+
+	D3DXMatrixTranslation(&Mtxtrans, move.x, move.y, move.z);
+	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &Mtxtrans);
+	D3DXMatrixRotationYawPitchRoll(&Mtxrot, m_rot.y, m_rot.x, m_rot.z);
+	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &Mtxrot);
+
+	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
+
+	m_pos += move;
 }
 
 //=============================================================================
@@ -83,13 +99,25 @@ CModelBullet::~CModelBullet()
 {
 
 }
-
 //=============================================================================
 // 設定処理(CModelBullet)
 //=============================================================================
-void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot)
+CModelBullet* CModelBullet::Create(void)
 {
-	CBulletBase::Set(pos,rot);
+	CModelBullet* pBullet = NULL;
+	pBullet = new CModelBullet(1);
+	if (pBullet != NULL)
+	{
+		pBullet->Init();
+	}
+	return pBullet;
+}
+//=============================================================================
+// 設定処理(CModelBullet)
+//=============================================================================
+void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife)
+{
+	CBulletBase::Set(pos,rot,fSpeed,nLife);
 }
 
 //=============================================================================
@@ -109,7 +137,6 @@ HRESULT CModelBullet::Init(void)
 void CModelBullet::Uninit(void)
 {
 	CBulletBase::Uninit();
-
 }
 
 //=============================================================================
@@ -118,6 +145,13 @@ void CModelBullet::Uninit(void)
 void CModelBullet::Update(void)
 {
 	CBulletBase::Update();
+	int nLife = GetLife();
+	nLife--;
+	if (nLife < 0)
+	{
+		Uninit();
+	}
+
 }
 
 //=============================================================================
@@ -147,11 +181,25 @@ CWordBullet::~CWordBullet()
 }
 
 //=============================================================================
+// 設定処理(CModelBullet)
+//=============================================================================
+CWordBullet* CWordBullet::Create(void)
+{
+	CWordBullet* pBullet = NULL;
+	pBullet = new CWordBullet(1);
+	if (pBullet != NULL)
+	{
+		pBullet->Init();
+	}
+	return pBullet;
+}
+
+//=============================================================================
 // 設定処理(CWordBullet)
 //=============================================================================
-void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, int nWordNum)
+void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nWordNum)
 {
-	CBulletBase::Set(pos, rot);
+	CBulletBase::Set(pos, rot,fSpeed,nLife);
 	m_pWord = CSceneBillBoard::Create(pos,30.0f,30.0f,"WORD");
 	if (m_pWord != NULL) { m_pWord->SetTexture(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)),
 											   D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f))); };
@@ -172,6 +220,12 @@ HRESULT CWordBullet::Init(void)
 //=============================================================================
 void CWordBullet::Uninit(void)
 {
+	if (m_pWord != NULL)
+	{
+		m_pWord->Uninit();
+		m_pWord = NULL;
+	}
+
 	CBulletBase::Uninit();
 
 }
@@ -182,6 +236,14 @@ void CWordBullet::Uninit(void)
 void CWordBullet::Update(void)
 {
 	CBulletBase::Update();
+
+	m_pWord->Setpos(GetPosition());
+	int& nLife = GetLife();
+	nLife--;
+	if (nLife < 0)
+	{
+		Uninit();
+	}
 }
 
 //=============================================================================

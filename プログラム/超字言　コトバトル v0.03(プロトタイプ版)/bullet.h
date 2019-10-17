@@ -21,7 +21,8 @@ public:
 	CBulletBase(int nPriority = 1);
 	~CBulletBase();
 
-	void Set(D3DXVECTOR3 pos,D3DXVECTOR3 rot);
+
+	void Set(D3DXVECTOR3 pos,D3DXVECTOR3 rot,float fSpeed,int nLife);
 
 	virtual HRESULT Init(void);
 	virtual void	Uninit(void);
@@ -30,15 +31,14 @@ public:
 
 	D3DXVECTOR3& GetPosition(void) { return m_pos;};
 	D3DXVECTOR3& GetRotation(void) { return m_rot;};
-	D3DXVECTOR3& GetMove(void) { return m_Move; };
-
-	void SetID(int nID) { m_nID = nID; };
+	float& GetMove(void) { return m_fMove; };
+	int& GetLife(void) { return m_nLife; };
 private:
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_rot;				//角度
-	D3DXVECTOR3 m_Move;				//移動量
+	float m_fMove;				//移動量
 
-	int m_nID;
+	int m_nLife;	//体力
 };
 
 //モデル弾クラス
@@ -49,8 +49,9 @@ public:
 	CModelBullet(int nPriority = 1);
 
 	~CModelBullet();
+	static CModelBullet* Create(void);
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife);
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -69,7 +70,8 @@ public:
 	CWordBullet(int nPriority = 1);
 	~CWordBullet();
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot,int nWordNum);
+	static CWordBullet* Create(void);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife,int nWordNum);
 
 	HRESULT Init(void);
 	void Uninit(void);
