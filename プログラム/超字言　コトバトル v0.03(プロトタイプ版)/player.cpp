@@ -131,6 +131,7 @@ void CPlayer::Update(void)
 
 		//移動、回転の更新
 		m_pCharactorMove->Update();
+		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
 
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
@@ -142,7 +143,7 @@ void CPlayer::Update(void)
 			cosf(m_pCharactorMove->GetRotation().y) * 10);
 		testpos += testposFRONT;
 		//前にObjectがあるかどうか
-		//m_pCharactorMove->m_bFront = CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
+		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
 		//描画するモデルに情報を入れる
 		m_pPlayerModel->SetPosition(m_pCharactorMove->GetPosition());
@@ -202,8 +203,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR
 				if (m_bLand == true)
 				{// モデルに当たる
 					bHit = true;
-
-					break;
+					m_pCharactorMove->m_bFront = true;
 				}
 				else
 				{

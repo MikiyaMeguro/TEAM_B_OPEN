@@ -34,6 +34,7 @@ public:
 
 	typedef enum
 	{
+		THINK_NONE,				//何も考えてない
 		THINK_WORD,				//文字を考える
 		THINK_SIGHT,			//敵が見えたとき
 		THINK_MISSING,			//敵を見失ったとき
@@ -48,8 +49,49 @@ public:
 		THINK_NEAR_ENEMY,		//近い
 		THINK_FUR_ENEMY,		//遠い
 		THINK_MOVE,				//移動
+		THINK_ROTATION,			//回転
+		THINK_PATROL,			//巡回
+		THINK_HOMING,			//追いかける
+		THINK_WATCH,			//見る
 		THINK_MAX
 	}CPU_THINK;
+
+	typedef enum
+	{
+		CPU_MOVE_FRONT,			//前へ移動
+		CPU_MOVE_BACK,			//後ろへ移動
+		CPU_MOVE_RIGHT,			//右へ移動
+		CPU_MOVE_LEFT,			//左へ移動
+		CPU_MOVE_PATROL,		//巡回
+		CPU_MOVE_NONE,			//移動していない
+		CPU_MOVE_MAX
+	}CPU_MOVE;
+
+	typedef enum
+	{
+		CPU_ROTATION_RIGHT,			//右へ回転
+		CPU_ROTATION_LEFT,			//左へ回転
+		CPU_ROTATION_BACK,			//後ろへ回転
+		CPU_ROTATION_MAX
+	}CPU_ROTATION;
+
+	typedef enum
+	{
+		CPU_NODE_NONE,			//何もしていない
+		CPU_NODE_RUN,			//実行中
+		CPU_NODE_SUCCESS,		//成功した
+		CPU_NODE_FAILURE,		//失敗した
+		CPU_NODE_MAX
+	}CPU_NODE;
+
+	typedef enum
+	{
+		CPU_TYPE_NONE,			//特になし
+		CPU_TYPE_PATROL,		//巡回型
+		CPU_TYPE_ESCAPE,		//逃走
+		CPU_TYPE_HOMING,		//追尾
+		CPU_TYPE_MAX
+	}CPU_TYPE;
 
 	CCharaBase() {};
 	~CCharaBase() {};
@@ -90,7 +132,13 @@ private:
 	CHARACTOR_MOVE_TYPE m_type;		//移動タイプ
 
 	CPlayer* m_pThisCharactor;		//このインスタンスを所持しているプレイヤー
-
+public:
+	CPU_THINK m_CpuThink;		//現在の考え
+	CPU_THINK m_OldCpuThink;	//過去の考え
+	CPU_MOVE m_CpuMove;			//行動
+	CPU_ROTATION m_CpuRotation;	//回転
+	CPU_NODE m_CpuNode;			//ノードの状態
+	CPU_TYPE m_Type;
 };
 
 class C2DCharactor : public CCharaBase
@@ -124,9 +172,23 @@ public:
 private:
 	void CharaMove_Input(void);
 	void CharaMove_CPU(void);
+	void Think_CPU(void);		//考える
+	void Action_CPU(void);		//行動
+	void Rotation_CPU(void);	//回転
+	void Escape_CPU(void);		//逃避
+	void Homing_CPU(void);		//追尾
 
 	D3DXVECTOR3 m_CameraPosR;
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
+	//CPUで使うメンバ変数
+	int m_nThinkTimer;			//考える時間
+	int m_nActionTimer;			//行動している時間
+	int m_nCntActionRepeat;		//同じ行動を何度したか
+	int m_nCntSameCnt;
+
+	int m_PatrolTimer;			//巡回のタイマー
+public:
+	bool m_bFront;
 };
 
 #endif // !_CHARACTOR_H_

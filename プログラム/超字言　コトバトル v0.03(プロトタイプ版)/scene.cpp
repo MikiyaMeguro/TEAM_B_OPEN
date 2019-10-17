@@ -116,16 +116,11 @@ void CScene::UpdeteAll(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 	//フェードしていないときにポーズできる
-	//if (pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
-	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START,0) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
-	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START,1) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME
-	//	|| pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_TUTORIAL
-	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START, 0) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_TUTORIAL
-	//	|| pXInput->GetTrigger(XINPUT_GAMEPAD_START, 1) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_TUTORIAL)
-	//{
-	//	m_bPause = m_bPause ? false : true;
-	//	//CPause::SetPauseBool(m_bPause);
-	//}
+	if (pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
+	{
+		m_bPause = m_bPause ? false : true;
+		//CPause::SetPauseBool(m_bPause);
+	}
 
 	if (m_bPause == false)
 	{
