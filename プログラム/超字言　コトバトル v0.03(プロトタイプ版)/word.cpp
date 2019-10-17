@@ -14,9 +14,9 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define AREA_CHASE		(10.0f)			// エリア
+#define AREA_CHASE		(40.0f)			// エリア
 #define AREA_COILLSION	(5.0f)			// コリジョンの範囲
-#define CHASE_MOVE		(0.8f)			// 追従時の速度
+#define CHASE_MOVE		(1.0f)			// 追従時の速度
 //--------------------------------------------
 // コンストラクタ
 //--------------------------------------------
@@ -94,6 +94,7 @@ void CWord::Update(void)
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 1.0f, 0.0f);// 移動
 	CPlayer *pPlayer[MAX_PLAYER];
 	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
+
 	for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
 	{
 		pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
@@ -106,8 +107,8 @@ void CWord::Update(void)
 	{
 		if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
 		{	// 3個取ったら取らない
-			// 文字がプレイヤーに集まる(範囲で判定を取る)
-			move = Approach(pos, PlayerPos[nCntPlayer], AREA_CHASE);
+
+			Distance(pos, PlayerPos[nCntPlayer], nCntPlayer);
 
 			// 当たり判定(円を使った判定)
 			Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
@@ -119,8 +120,16 @@ void CWord::Update(void)
 				return;
 			}
 		}
+		else
+		{
+			Distance(pos,D3DXVECTOR3(9999999990.0f, 0.0f, 9999999990.0f), nCntPlayer);
+		}
 	}
 
+	int nNum = ComparisonDistance((int)NumPlayer);
+
+	// 文字がプレイヤーに集まる(範囲で判定を取る)
+	move = Approach(pos, PlayerPos[nNum], AREA_CHASE, m_fDistance[nNum]);
 
 	//ScaleSize();
 
@@ -191,6 +200,34 @@ void CWord::ScaleSize(void)
 }
 
 //=============================================================================
+// プレイヤーと文字ビルボードとの距離を測る処理
+//=============================================================================
+void CWord::Distance(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNumPlayer)
+{
+	// 距離を測る
+	m_fDistance[nNumPlayer] = ((Pos.x - OtherPos.x) * (Pos.x - OtherPos.x)) + ((Pos.z - OtherPos.z) * (Pos.z - OtherPos.z));	
+}
+
+//=============================================================================
+// 測った距離を元に一番近い距離を選ぶ処理
+//=============================================================================
+int CWord::ComparisonDistance(int nNum)
+{
+	int nNumPlayer = 0;
+
+	for (int nCntPlayer = 0; nCntPlayer < (int)nNum - 1; nCntPlayer++)
+	{
+		if (m_fDistance[nCntPlayer] > m_fDistance[nCntPlayer + 1])
+		{	// 数値を代入
+			nNumPlayer = nCntPlayer + 1;
+		}
+	}
+
+	return nNumPlayer;
+}
+
+
+//=============================================================================
 // 範囲の処理
 //=============================================================================
 void CWord::Circle(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle)
@@ -203,16 +240,13 @@ void CWord::Circle(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle)
 //=============================================================================
 // プレイヤーに集まるの処理
 //=============================================================================
-D3DXVECTOR3 CWord::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle)
+D3DXVECTOR3 CWord::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle, float fDistance)
 {
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f,0.0f);
 
-	// 距離を測る
-	float fCircle = ((Pos.x - OtherPos.x) * (Pos.x - OtherPos.x)) + ((Pos.z - OtherPos.z) * (Pos.z - OtherPos.z));
-	if (fCircle < fAngle * fAngle)
+	if (fDistance < fAngle * fAngle)
 	{	// 距離内に入ったら
 		// プレイヤーに近づける
-
 		move.x = sinf(atan2f(OtherPos.x - Pos.x, OtherPos.z - Pos.z)) * CHASE_MOVE;
 		move.z = cosf(atan2f(OtherPos.x - Pos.x, OtherPos.z - Pos.z)) * CHASE_MOVE;
 	}
