@@ -54,7 +54,7 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 			pWord->SetBillboard(pos, fHeight, fWidth);
 			pWord->m_size = D3DXVECTOR3(fHeight, fWidth, 0.0f);
 			pWord->m_sizeOld = D3DXVECTOR3(fHeight, fWidth, 0.0f);
-			pWord->m_nWordNum = nWord; 
+			pWord->m_nWordNum = nWord;
 			pWord->SetTexture(nWord, 10, 5, 1);
 		}
 	}
@@ -87,7 +87,7 @@ void CWord::Update(void)
 {
 	// ローカル変数
 	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;//テスト
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//テスト
 
 	D3DXVECTOR3 pos = CSceneBillBoard::GetPos();	//位置の取得
 	D3DXVECTOR3 PosOld = pos;						// 位置を保存
@@ -172,7 +172,7 @@ void CWord::ScaleSize(void)
 {
 	if (m_bScaleFlag == false)
 	{	// 拡大する
-		m_size.x += 0.2f; 
+		m_size.x += 0.2f;
 		m_size.y += 0.2f;
 		if (m_size.x > 15.0f && m_size.y > 15.0f)
 		{	// 縮小するフラグへ

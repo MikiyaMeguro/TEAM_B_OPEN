@@ -53,6 +53,7 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID, D3DXVECTOR3 rot)
 {
+
 	if (m_pCharactorMove == NULL)
 	{
 		if (ObjCreate(m_pCharactorMove))
@@ -61,6 +62,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 		}
 	}
 	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+
 	// 文字管理の生成
 	if (m_pWordManager == NULL)
 	{
@@ -124,6 +126,8 @@ void CPlayer::Update(void)
 		m_posOld = m_pCharactorMove->GetPosition();
 
 		m_pCharactorMove->Update();
+		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
+
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
 		testpos = m_pCharactorMove->GetPosition();
@@ -134,7 +138,7 @@ void CPlayer::Update(void)
 			cosf(m_pCharactorMove->GetRotation().y) * 10);
 		testpos += testposFRONT;
 		//前にObjectがあるかどうか
-		//m_pCharactorMove->m_bFront = CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
+		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
 		m_pPlayerModel->SetPosition(m_pCharactorMove->GetPosition());
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
@@ -192,7 +196,8 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR
 				if (m_bLand == true)
 				{// モデルに当たる
 					bHit = true;
-					break;
+					m_pCharactorMove->m_bFront = true;
+					//break;
 				}
 				else
 				{
