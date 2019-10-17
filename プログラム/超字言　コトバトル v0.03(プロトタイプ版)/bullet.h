@@ -13,18 +13,20 @@
 class CSceneX;
 class CSceneBillBoard;
 
-class CBulletBase
+//弾基本クラス
+class CBulletBase : public CScene
 {
 public:
-	CBulletBase();
+	CBulletBase() {};
+	CBulletBase(int nPriority = 1);
 	~CBulletBase();
 
-	virtual void Set(D3DXVECTOR3 pos,D3DXVECTOR3 rot);
+	void Set(D3DXVECTOR3 pos,D3DXVECTOR3 rot);
 
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
+	virtual HRESULT Init(void);
+	virtual void	Uninit(void);
+	virtual void	Update(void);
+	virtual void	Draw(void);
 
 	D3DXVECTOR3& GetPosition(void) { return m_pos;};
 	D3DXVECTOR3& GetRotation(void) { return m_rot;};
@@ -39,10 +41,13 @@ private:
 	int m_nID;
 };
 
+//モデル弾クラス
 class CModelBullet : public CBulletBase
 {
 public:
 	CModelBullet();
+	CModelBullet(int nPriority = 1);
+
 	~CModelBullet();
 
 	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
@@ -53,15 +58,18 @@ public:
 	void Draw(void);
 
 private:
-
+	CSceneX* m_pModel;
 };
+
+//文字弾クラス
 class CWordBullet : public CBulletBase
 {
 public:
 	CWordBullet();
+	CWordBullet(int nPriority = 1);
 	~CWordBullet();
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot,int nWordNum);
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -69,6 +77,7 @@ public:
 	void Draw(void);
 
 private:
+	CSceneBillBoard* m_pWord;
 };
 
 #endif // !_BULLET_H_

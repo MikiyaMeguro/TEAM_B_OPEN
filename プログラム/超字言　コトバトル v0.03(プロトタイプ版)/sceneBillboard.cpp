@@ -294,3 +294,20 @@ void CSceneBillBoard::SetTexture(int PatternAnim, int X, int Y, int nNum)
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
+void CSceneBillBoard::SetTexture(D3DXVECTOR2 minRect, D3DXVECTOR2 maxRect)
+{
+	VERTEX_3D *pVtx;//頂点情報へのポインタ
+
+					//頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(minRect.x, minRect.y);
+	pVtx[1].tex = D3DXVECTOR2(maxRect.x, minRect.y);
+	pVtx[2].tex = D3DXVECTOR2(minRect.x, maxRect.y);
+	pVtx[3].tex = D3DXVECTOR2(maxRect.x, maxRect.y);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+}
