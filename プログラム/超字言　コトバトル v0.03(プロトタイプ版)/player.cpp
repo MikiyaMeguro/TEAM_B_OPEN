@@ -80,6 +80,10 @@ HRESULT CPlayer::Init(void)
 	m_pPlayerModel = NULL;
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
+
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_LSHIFT);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
+
 	return S_OK;
 }
 
@@ -140,7 +144,7 @@ void CPlayer::Update(void)
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
 	}
 
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_LSHIFT))
+	if (CCommand::GetCommand("PLAYER_SHOTBULLET",m_nID))
 	{	// íeÇÃê∂ê¨
 		if (m_pWordManager != NULL)
 		{
