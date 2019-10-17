@@ -193,6 +193,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="charactor.h" />
