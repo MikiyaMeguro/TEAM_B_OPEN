@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="charactor.cpp" />
@@ -192,6 +193,8 @@
     <ClCompile Include="word_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bullet.h" />
+    <ClInclude Include="BulletManager.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="charactor.h" />

@@ -6,6 +6,7 @@
 //=============================================================================
 #include "player.h"
 #include "manager.h"
+#include "word_manager.h"
 
 #include "sceneX.h"
 
@@ -23,6 +24,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 {
 	m_bLand = false;
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_pWordManager = NULL;
 }
 CPlayer::~CPlayer()
 {
@@ -51,6 +53,7 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID, D3DXVECTOR3 rot)
 {
+	//キャラ情報クラス生成
 	if (m_pCharactorMove == NULL)
 	{
 		if (ObjCreate(m_pCharactorMove))
@@ -58,8 +61,18 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 			m_pCharactorMove->Set(pos,rot,type,this);
 		}
 	}
+
+	//キャラのID設定
 	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
 
+	// 文字管理クラス生成
+	if (m_pWordManager == NULL)
+	{
+		ObjCreate(m_pWordManager);
+		m_pWordManager->SetID(m_nID);
+	}
+
+	//描画用モデル生成
 	m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
 	m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);
 }
@@ -69,9 +82,15 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 //=============================================================================
 HRESULT CPlayer::Init(void)
 {
+	//変数初期化
 	m_pPlayerModel = NULL;
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
+
+	//コマンドセット
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_LEFT_SHOULDER);
+
 	return S_OK;
 }
 
@@ -80,16 +99,21 @@ HRESULT CPlayer::Init(void)
 //=============================================================================
 void CPlayer::Uninit(void)
 {
+	//キャラ情報クラス削除
 	ObjRelease(m_pCharactorMove);
 
+	//描画モデル終了処理
 	if (m_pPlayerModel != NULL)
 	{
 		m_pPlayerModel->Uninit();
 		m_pPlayerModel = NULL;
 	}
 
-	Release();
+	// 文字管理クラスの削除
+	ObjRelease(m_pWordManager);
 
+	//プレイヤー自体の削除
+	Release();
 }
 
 //=============================================================================
@@ -105,13 +129,39 @@ void CPlayer::Update(void)
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
 
+		//移動、回転の更新
 		m_pCharactorMove->Update();
+		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
+
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
+		testpos = m_pCharactorMove->GetPosition();
+		testmove = m_pCharactorMove->GetMove();
 
+		D3DXVECTOR3 testposFRONT = D3DXVECTOR3(sinf(m_pCharactorMove->GetRotation().y) * 10,
+			sinf(m_pCharactorMove->GetRotation().x) * 10,
+			cosf(m_pCharactorMove->GetRotation().y) * 10);
+		testpos += testposFRONT;
+		//前にObjectがあるかどうか
+		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
+
+		//描画するモデルに情報を入れる
 		m_pPlayerModel->SetPosition(m_pCharactorMove->GetPosition());
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
 	}
+
+	// 弾の生成
+	if (CCommand::GetCommand("PLAYER_SHOTBULLET",m_nID))
+	{
+		if (m_pWordManager != NULL)
+		{//文字管理クラスに弾の生成を委託する
+			m_pWordManager->BulletCreate(m_nID);
+		}
+	}
+
+	//文字管理クラスの更新
+	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
+
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
 	testmove = m_pCharactorMove->GetMove();
@@ -119,7 +169,6 @@ void CPlayer::Update(void)
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x," ",testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
 #endif
-
 }
 
 //=============================================================================
@@ -127,14 +176,15 @@ void CPlayer::Update(void)
 //=============================================================================
 void CPlayer::Draw(void)
 {
-
+	//モデルはSceneクラスの子供なので個別のDrawは必要ない
 }
 
 //=============================================================================
 // 当たり判定処理
 //=============================================================================
-void CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
+bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
 {
+	bool bHit;
 	CScene *pScene = NULL;
 
 	// 先頭のオブジェクトを取得
@@ -152,10 +202,17 @@ void CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR
 				m_bLand = ((CSceneX*)pScene)->Collision(pos, posOld, move, radius);
 				if (m_bLand == true)
 				{// モデルに当たる
+					bHit = true;
+					m_pCharactorMove->m_bFront = true;
+				}
+				else
+				{
+					bHit = false;
 				}
 			}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
+	return bHit;
 }

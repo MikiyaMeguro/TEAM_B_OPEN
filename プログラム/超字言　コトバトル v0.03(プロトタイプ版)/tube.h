@@ -36,7 +36,7 @@ public:
 	//ê›íËÇÃä÷êî
 	void SetWordNum(int nWordNum, int nNum);
 	void AllDelete(void);
-	void Delete(void);
+	void Delete(int nID);
 private:
 	CScene2D *m_apWord[MAX_WORD];
 };

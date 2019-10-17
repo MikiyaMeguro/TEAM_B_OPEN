@@ -33,6 +33,7 @@ public:
 	void SetCol(D3DXCOLOR col);
 	LPDIRECT3DVERTEXBUFFER9 GetVtx(void);
 	void SetTexture(int PatternAnim, int X, int Y, int nNum);
+	void SetTexture(D3DXVECTOR2 minRect,D3DXVECTOR2 maxRect);
 
 
 private:

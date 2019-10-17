@@ -37,9 +37,8 @@
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
-CWordManager *CGame::m_pWordManager = NULL;
 CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
-CTube *CGame::m_pTube = NULL;
+CTube *CGame::m_apTube[MAX_PLAYER] = {};
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -63,7 +62,7 @@ void CGame::Init(void)
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//テスト
 	CameraSetting((int)NumPlayer);
 
 	//壁、床設定
@@ -77,28 +76,24 @@ void CGame::Init(void)
 	// プレイヤーの生成
 	PlayerSetting((int)NumPlayer);
 
-	// 文字管理の生成
-	if (m_pWordManager == NULL)
-	{
-		ObjCreate(m_pWordManager);
-		//m_pWordManager = new CWordManager;
-		//m_pWordManager->Init();
-	}
-
 	// 文字の可視化UI(2D)の生成
-	if (m_pTube == NULL)
-	{
-		m_pTube = CTube::Create(WORD_TUBE_POS, WORD_TUBE_SIZE, "TUBE", 3);
-	}
+	TubeSetting((int)NumPlayer);
 
 	WordCreate();
 
 	// テストオブジェクト
-	CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(2.0f, 2.0f, 2.0f), CLoad::MODEL_BOX, 0);
+	//CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(100.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(-100.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
 	CSetObject::Create();
 
-	CTime::Create((int)CPlayerSelect::GetModeSelectMode());
-
+	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
+	{
+		CTime::Create((int)NumPlayer);
+		CTime::Create((int)NumPlayer);
+	}
+	else if (NumPlayer != CPlayerSelect::SELECTPLAYER_2P) { CTime::Create((int)NumPlayer); }
 }
 //=============================================================================
 // 終了処理
@@ -113,23 +108,16 @@ void CGame::Uninit(void)
 			m_pPlayer[nCntPlayer] = NULL;
 		}
 	}
-	if (m_pTube != NULL)
-	{	// 文字の可視化UI(2D)の破棄
-		m_pTube->Uninit();
-		m_pTube = NULL;
+	for (int nCntTube = 0; nCntTube < MAX_PLAYER; nCntTube++)
+	{
+		if (m_apTube[nCntTube] != NULL)
+		{	// 文字の可視化UI(2D)の破棄
+			m_apTube[nCntTube]->Uninit();
+			m_apTube[nCntTube] = NULL;
+		}
 	}
 	//全ての終了処理
 	CScene::ReleseAll();
-
-	if (m_pWordManager != NULL)
-	{// ライトクラスの破棄
-	 // 終了処理
-		m_pWordManager->Uninit();
-
-		// メモリを開放
-		delete m_pWordManager;
-		m_pWordManager = NULL;
-	}
 }
 
 //=============================================================================
@@ -158,9 +146,6 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 	}
-
-	// 文字管理の更新
-	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
 
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
@@ -285,7 +270,25 @@ void CGame::PlayerSetting(int nNum)
 				m_pPlayer[nCntPlayer] = CPlayer::Create();
 			}
 		}
+		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+		{
+			if (m_pPlayer[nCntPlayer] == NULL)
+			{
+				m_pPlayer[nCntPlayer] = CPlayer::Create();
+			}
+		}
 
+		if (m_pPlayer[0] != NULL)
+		{
+			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
+			m_pPlayer[0]->SetCameraName("1P_CAMERA");
+			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
+			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
+			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 2);
+			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 3);
+		}
+
+#if 0
 		if (m_pPlayer[0] != NULL)
 		{
 			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
@@ -313,11 +316,12 @@ void CGame::PlayerSetting(int nNum)
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}
+#endif
 	}
 	else
 	{
 		// 人数分を生成
-		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < 3; nCntPlayer++)
 		{
 			if (m_pPlayer[nCntPlayer] == NULL)
 			{
@@ -355,6 +359,62 @@ void CGame::PlayerSetting(int nNum)
 }
 
 //=============================================================================
+// 人数に応じた筒の生成処理
+//=============================================================================
+void CGame::TubeSetting(int nNum)
+{
+	switch (nNum)
+	{
+	case 1:
+		if (m_apTube[0] == NULL)
+		{
+			m_apTube[0] = CTube::Create(WORD_TUBE001_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3);
+		}
+		break;
+
+	case 2:
+		for (int nCntTube = 0; nCntTube < nNum; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE002_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE002_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
+		break;
+
+	case 3:
+		for (int nCntTube = 0; nCntTube < nNum; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 2) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_3P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
+		break;
+
+	case 4:
+		for (int nCntTube = 0; nCntTube < nNum; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 2) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_3P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 3) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE004_POS_4P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
+		break;
+
+	default:
+		break;
+	}
+}
+
+
+//=============================================================================
 // 文字管理の処理
 //=============================================================================
 void CGame::WordCreate(void)
@@ -376,7 +436,7 @@ void CGame::WordCreate(void)
 
 	// リンゴ
 	CWord::Create(D3DXVECTOR3(-200.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 39);
-	CWord::Create(D3DXVECTOR3(-100.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 45);
+	CWord::Create(D3DXVECTOR3(-200.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 45);
 	CWord::Create(D3DXVECTOR3(-50.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
 
 	//CWord::Create(D3DXVECTOR3(-100.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 6);

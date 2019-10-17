@@ -23,11 +23,15 @@
 #define GAME_TIME_MAX		(960)							// ゲームの時間最大数
 #define POWER_X				(10)
 #define TIME_POS_1P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 70.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
+#define TIME_POS_3P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 140.0f, 440.0f, 0.0f))	// 制限時間の位置(3Pだけの場合)
 #define WAIT_TIME_END		(180)							// 待ち時間
 //=============================================================================
 //	静的メンバ変数
 //=============================================================================
 int						CTime::m_nTime = 0;
+int						CTime::m_nTimeNumCount = 0;
+int						CTime::m_nTimeCount = 0;
 //=============================================================================
 // 生成処理
 //=============================================================================
@@ -44,10 +48,12 @@ CTime *CTime::Create(int nNumPlayer)
 		if (pTime != NULL)
 		{
 			//位置の設定
-			//if (nNumPlayer == 1 || nNumPlayer == 0)
-			{
-				pTime->m_pos = TIME_POS_1P;
-			}
+			if (nNumPlayer == 1) { pTime->m_pos = TIME_POS_1P; }
+			if (nNumPlayer == 2 && m_nTimeNumCount == 0) { pTime->m_pos = TIME_POS_1P; }
+			else if (nNumPlayer == 2 && m_nTimeNumCount == 1) { pTime->m_pos = TIME_POS_2P; }
+			if (nNumPlayer == 3) { pTime->m_pos = TIME_POS_3P; }
+			pTime->m_nNumPlayer = nNumPlayer;
+
 			//初期化処理
 			pTime->Init();
 		}
@@ -65,6 +71,7 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nTimeNum = 1;
 	m_nWaitTime = 0;
 	m_pColon = NULL;
+	m_bStart = false;
 }
 
 //=============================================================================
@@ -82,9 +89,24 @@ HRESULT CTime::Init(void)
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
 
 	// 後ろの背景
-	CScene2D *pBg= CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 50.0f, 0.0f), "BG_FREAME", 5);
-	pBg->SetWidthHeight(80.0f, 60.0f);
-	pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
+	{
+		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 50.0f, 0.0f), "BG_FREAME", 5);
+		pBg->SetWidthHeight(80.0f, 60.0f);
+		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	if (m_nNumPlayer == 2 && m_nTimeNumCount == 1)
+	{
+		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 420.0f, 0.0f), "BG_FREAME", 5);
+		pBg->SetWidthHeight(80.0f, 60.0f);
+		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	if (m_nNumPlayer == 3)
+	{
+		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 100.0f, 420.0f, 0.0f), "BG_FREAME", 5);
+		pBg->SetWidthHeight(80.0f, 60.0f);
+		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
 
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
@@ -104,17 +126,51 @@ HRESULT CTime::Init(void)
 		TexTime(nTexData);
 	}
 
-	if (m_pColon == NULL)
+	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
 	{
-		m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 70.0f, 0.0f), "COLON", 5);
-		m_pColon->SetWidthHeight(15.0f, 20.0f);
-		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
+		if (m_pColon == NULL)
+		{
+			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 70.0f, 0.0f), "COLON", 5);
+			m_pColon->SetWidthHeight(15.0f, 20.0f);
+			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
 
-	// Timeのロゴ
-	CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 35.0f, 0.0f), "TIME", 5);
-	pLogo->SetWidthHeight(40.0f, 20.0f);
-	pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		// Timeのロゴ
+		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 35.0f, 0.0f), "TIME", 5);
+		pLogo->SetWidthHeight(40.0f, 20.0f);
+		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+
+		if (m_nNumPlayer == 2) { m_nTimeNumCount++; }
+	}
+	else if (m_nNumPlayer == 2 && m_nTimeNumCount == 1)
+	{
+		if (m_pColon == NULL)
+		{
+			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 440.0f, 0.0f), "COLON", 5);
+			m_pColon->SetWidthHeight(15.0f, 20.0f);
+			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+
+		// Timeのロゴ
+		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 405.0f, 0.0f), "TIME", 5);
+		pLogo->SetWidthHeight(40.0f, 20.0f);
+		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+		m_bStart = true;
+	}
+	else if (m_nNumPlayer == 3)
+	{
+		if (m_pColon == NULL)
+		{
+			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 82.0f, 440.0f, 0.0f), "COLON", 5);
+			m_pColon->SetWidthHeight(15.0f, 20.0f);
+			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+
+		// Timeのロゴ
+		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 100.0f, 405.0f, 0.0f), "TIME", 5);
+		pLogo->SetWidthHeight(40.0f, 20.0f);
+		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+	}
 
 	return S_OK;
 }
@@ -142,6 +198,8 @@ void CTime::Uninit(void)
 		m_pColon = NULL;
 	}
 
+	m_nTimeNumCount = 0;
+
 	Release();
 }
 
@@ -157,9 +215,11 @@ void CTime::Update(void)
 	if ((GameMode == CManager::MODE_GAME) || (GameMode == CManager::MODE_TUTORIAL))
 	{//制限時間
 	 //ゲーム
-		m_nTimeCount++;
-
-		TimeManagement();	// 時間の管理
+		if (m_bStart == false)
+		{
+			m_nTimeCount++;
+			TimeManagement();	// 時間の管理
+		}
 
 		int nTexData = 0;
 		// 数字のテクスチャ設定

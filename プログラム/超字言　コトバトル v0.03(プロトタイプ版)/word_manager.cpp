@@ -12,6 +12,7 @@
 #include "debugProc.h"
 #include "game.h"
 
+#include "bullet.h"
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -26,6 +27,7 @@ CWordManager::CWordManager()
 	m_nCntNum = 0;			// 回数のカウント
 	m_nCreateType = 0;		// 生成するタイプ
 	m_nCntaAnswer = 0;		// 正解との比較して合っている数
+	m_nPlayerID = 0;		// プレイヤーが何番かの保存
 	m_bPress = false;		// 指定した文字以上をいれないフラグ
 
 	for (int nCntAnswer = 0; nCntAnswer < MAX_ANSWER; nCntAnswer++)
@@ -37,6 +39,9 @@ CWordManager::CWordManager()
 		else if (nCntAnswer == 4) { AnswerNum[nCntAnswer] = D3DXVECTOR3(20.0f, 1.0f, 27.0f); }		// ナイフ
 		else if (nCntAnswer == 5) { AnswerNum[nCntAnswer] = D3DXVECTOR3(39.0f, 45.0f, 9.0f); }		// リンゴ
 		else if (nCntAnswer == 6) { AnswerNum[nCntAnswer] = D3DXVECTOR3(3.0f, 24.0f, 7.0f); }		// 絵具
+		else if (nCntAnswer == 7) { AnswerNum[nCntAnswer] = D3DXVECTOR3(15.0f, 1.0f, 35.0f); }		// タイヤ
+		else if (nCntAnswer == 8) { AnswerNum[nCntAnswer] = D3DXVECTOR3(15.0f, 1.0f, 9.0f); }		// 太鼓
+		else if (nCntAnswer == 9) { AnswerNum[nCntAnswer] = D3DXVECTOR3(9.0f, 1.0f, 45.0f); }		// 太鼓
 	}
 }
 //=============================================================================
@@ -91,10 +96,10 @@ void CWordManager::Update(void)
 		}
 
 		//テスト
-		if (pInputKeyboard->GetTrigger(DIK_LSHIFT))
-		{	// 弾の生成
-			BulletCreate(0);
-		}
+		//if (pInputKeyboard->GetTrigger(DIK_LSHIFT))
+		//{	// 弾の生成
+		//	BulletCreate(0);
+		//}
 	}
 
 #ifdef _DEBUG
@@ -114,7 +119,7 @@ void CWordManager::SetWord(int nType)
 	{
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
-		CGame::GetTube()->SetWordNum(nType, m_nCntNum);
+		CGame::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum);
 		m_nCntNum++;
 	}
 }
@@ -146,7 +151,7 @@ void CWordManager::Delete(void)
 			if (m_nCntNum > 0)
 			{
 				m_nCntNum--;
-				CGame::GetTube()->Delete();
+				CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
 				m_aWord[0].nNum = 99;	// 空の状態に
 				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
 				{
@@ -164,13 +169,19 @@ void CWordManager::BulletCreate(int nID)
 {
 	if (m_nCntaAnswer == MAX_WORD)
 	{	// // 指定した文字なら弾を生成する
-		CSceneX::Create(CGame::GetPlayer(nID)->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 0);
-		CGame::GetTube()->AllDelete();
+		//CSceneX::Create(CGame::GetPlayer(nID)->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 0);
+		CGame::GetTube(m_nPlayerID)->AllDelete();
 		Reset();		// 設定を戻す
 	}
 	else
 	{	// それ以外の場合
-		CGame::GetTube()->AllDelete();
+		CWordBullet* pWord = CWordBullet::Create();
+		if (pWord != NULL)
+		{
+			pWord->Set(CGame::GetPlayer(nID)->GetPosition() + D3DXVECTOR3(0.0f,20.0f,0.0f),
+				CGame::GetPlayer(nID)->GetRotation(),5.0f,100,0);
+		}
+		CGame::GetTube(m_nPlayerID)->AllDelete();
 		Reset();		// 設定を戻す
 	}
 }

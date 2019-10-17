@@ -101,7 +101,7 @@ void CTube::SetWordNum(int nWordNum, int nNum)
 {
 	if (m_apWord[nNum] == NULL)
 	{
-		m_apWord[nNum] = CScene2D::Create(D3DXVECTOR3(WORD_TUBE_POS.x, (WORD_TUBE_POS.y + WORD_TUBE_SIZE.y - 80.0f) - (nNum * 65.0f), 0.0f), "WORD", 3);
+		m_apWord[nNum] = CScene2D::Create(D3DXVECTOR3(CScene2D::GetPosition().x, (CScene2D::GetPosition().y + WORD_TUBE002_SIZE.y - 80.0f) - (nNum * 65.0f), 0.0f), "WORD", 3);
 		m_apWord[nNum]->SetWidthHeight(45.0f, 45.0f);	// ÉTÉCÉYê›íË
 		m_apWord[nNum]->SetTex(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f)));
 	}
@@ -125,13 +125,13 @@ void CTube::AllDelete(void)
 //=============================================================================
 // àÍïîÇÃï∂éöÇçÌèú
 //=============================================================================
-void CTube::Delete(void)
+void CTube::Delete(int nID)
 {
 	for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
 	{
 		if (m_apWord[nCntWord] != NULL&& m_apWord[nCntWord + 1] != NULL)
 		{
-			int nNum = CGame::GetWordManager()->GetWordNum(nCntWord + 1);	// êîéöÇéÊìæ
+			int nNum = CGame::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// êîéöÇéÊìæ
 			m_apWord[nCntWord]->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
 		}
 		else if (m_apWord[nCntWord] != NULL && m_apWord[nCntWord + 1] == NULL)
