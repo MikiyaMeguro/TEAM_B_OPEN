@@ -56,6 +56,12 @@ public:
 	bool GetRelease(XPAD_KEY key);
 	bool GetRepeat(XPAD_KEY key);
 	bool GetConnect(void) { return m_bConnect; };
+
+	SHORT GetLStickRotX(void) { return m_sLStickRotX; };
+	SHORT GetLStickRotY(void) { return m_sLStickRotY; };
+	SHORT GetRStickRotX(void) { return m_sRStickRotX; };
+	SHORT GetRStickRotY(void) { return m_sRStickRotY; };
+
 private:
 	void SetInputState(XPAD_KEY key,bool bPress);
 	WORD ThumbToDPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone);
@@ -65,5 +71,10 @@ private:
 	static int m_nCntXPadNum;	//XInputコントローラーの接続数
 	int m_nID;					//プレイヤーID
 	bool m_bConnect;			//つながっているか
+
+	SHORT m_sLStickRotX;
+	SHORT m_sLStickRotY;
+	SHORT m_sRStickRotX;
+	SHORT m_sRStickRotY;
 };
 #endif // !_INPUT_X_PAD_H_
