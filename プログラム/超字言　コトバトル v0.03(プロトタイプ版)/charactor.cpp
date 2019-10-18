@@ -14,9 +14,9 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MOVE_DEFAULT_SPEED (0.4f)			//デフォルトの移動スピード
+#define MOVE_DEFAULT_SPEED (0.6f)			//デフォルトの移動スピード
 #define STEP_DEFAULT_MOVEMENT (6.0f)		//デフォルトのステップ量
-#define MOVE_DEFAULT_COEFFICIENT (0.15f)	//デフォルトの移動にかかる係数
+#define MOVE_DEFAULT_COEFFICIENT (0.20f)	//デフォルトの移動にかかる係数
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
 #define CIRCLE_ANGLE	(100)
@@ -133,24 +133,38 @@ void C3DCharactor::CharaMove_Input(void)
 	D3DXVECTOR3& spin = CCharaBase::GetSpin();
 	float		 speed = CCharaBase::GetSpeed();
 
+
+	float fMoveCoefficientX = 1.0f;	//移動係数(X)
+	float fMoveCoefficientZ = 1.0f;	//移動係数(Z)
+	float fMoveCofBlend = 1.0f;	//移動係数の二つを掛け合わせたもの
+	if (CManager::GetXInput(nID) != NULL)
+	{
+		if (CManager::GetXInput(nID)->GetConnect() == true)
+		{
+			fMoveCoefficientX = fabsf(CCommand::GetXPadStickRotation(true, false, nID));
+			fMoveCoefficientZ = fabsf(CCommand::GetXPadStickRotation(true, true, nID));
+			fMoveCofBlend = (fMoveCoefficientX > fMoveCoefficientZ) ? fMoveCoefficientX : fMoveCoefficientZ;
+		}
+	}
+
 	//移動の向き設定
 	if (CCommand::GetCommand("PLAYERMOVE_RIGHT", nID))
 	{
 		if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 		{
-			move.x += sinf(CameraRot.y + (D3DX_PI * 0.25f)) * speed;
-			move.z += cosf(CameraRot.y + (D3DX_PI * 0.25f)) * speed;
+			move.x += sinf(CameraRot.y + (D3DX_PI * 0.25f)) * (speed * fMoveCofBlend);
+			move.z += cosf(CameraRot.y + (D3DX_PI * 0.25f)) *  (speed * fMoveCofBlend);
 		}
 		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 		{
-			move.x += sinf(CameraRot.y + (D3DX_PI * 0.75f)) * speed;
-			move.z += cosf(CameraRot.y + (D3DX_PI * 0.75f)) * speed;
+			move.x += sinf(CameraRot.y + (D3DX_PI * 0.75f)) *  (speed * fMoveCofBlend);
+			move.z += cosf(CameraRot.y + (D3DX_PI * 0.75f)) *  (speed * fMoveCofBlend);
 
 		}
 		else
 		{
-			move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * speed;
-			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * speed;
+			move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
+			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 
 		}
 	}
@@ -158,34 +172,34 @@ void C3DCharactor::CharaMove_Input(void)
 	{
 		if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 		{
-			move.x += sinf(CameraRot.y + (D3DX_PI * -0.25f)) * speed;
-			move.z += cosf(CameraRot.y + (D3DX_PI * -0.25f)) * speed;
+			move.x += sinf(CameraRot.y + (D3DX_PI * -0.25f)) *  (speed * fMoveCofBlend);
+			move.z += cosf(CameraRot.y + (D3DX_PI * -0.25f)) *  (speed * fMoveCofBlend);
 
 
 		}
 		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 		{
-			move.x += sinf(CameraRot.y + (D3DX_PI * -0.75f)) * speed;
-			move.z += cosf(CameraRot.y + (D3DX_PI * -0.75f)) * speed;
+			move.x += sinf(CameraRot.y + (D3DX_PI * -0.75f)) *  (speed * fMoveCofBlend);
+			move.z += cosf(CameraRot.y + (D3DX_PI * -0.75f)) *  (speed * fMoveCofBlend);
 
 		}
 		else
 		{
-			move.x += sinf(CameraRot.y + (D3DX_PI * -0.5f)) * speed;
-			move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * speed;
+			move.x += sinf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
+			move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
 
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 	{
-		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * speed;
-		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * speed;
+		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
+		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 	{
-		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
-		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * speed;
+		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
+		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
 
 	}
 
@@ -260,24 +274,24 @@ void C3DCharactor::CharaMove_Input(void)
 	spin.y = 0.0f;
 
 	//カメラ位置制御
-	float fCoefficient = 1.0f;
+	float fCameraCoefficient = 1.0f;
 	//視点移動
 	//Y
 	if (CManager::GetXInput(nID) != NULL)
 	{
 		if (CManager::GetXInput(nID)->GetConnect() == true)
 		{
-			fCoefficient = fabsf(CCommand::GetXPadStickRotation(false,false,nID));
+			fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false,false,nID));
 		}
 	}
 	//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
 	if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//時計回り
 	{
-		CameraRot.y -= CAMERA_MOVE_SPEED * fCoefficient;
+		CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
 	}
 	if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//反時計回り
 	{
-		CameraRot.y += CAMERA_MOVE_SPEED * fCoefficient;
+		CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
 	}
 
 	//X
@@ -285,7 +299,7 @@ void C3DCharactor::CharaMove_Input(void)
 	{
 		if (CManager::GetXInput(nID)->GetConnect() == true)
 		{
-			fCoefficient = fabsf(CCommand::GetXPadStickRotation(false, true, nID));
+			fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false, true, nID));
 		}
 	}
 
@@ -294,7 +308,7 @@ void C3DCharactor::CharaMove_Input(void)
 	{
 		if (CameraRot.x < D3DX_PI * 0.2f)
 		{
-			CameraRot.x += CAMERA_MOVE_SPEED * fCoefficient;
+			CameraRot.x += CAMERA_MOVE_SPEED * fCameraCoefficient;
 		}
 		else
 		{
@@ -305,7 +319,7 @@ void C3DCharactor::CharaMove_Input(void)
 	{
 		if (CameraRot.x > D3DX_PI * -0.2f)
 		{
-			CameraRot.x -= CAMERA_MOVE_SPEED * fCoefficient;
+			CameraRot.x -= CAMERA_MOVE_SPEED * fCameraCoefficient;
 		}
 		else
 		{
