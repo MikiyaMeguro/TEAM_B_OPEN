@@ -13,6 +13,7 @@
 #include "game.h"
 
 #include "bullet.h"
+#include "CameraManager.h"
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -167,6 +168,8 @@ void CWordManager::Delete(void)
 //=============================================================================
 void CWordManager::BulletCreate(int nID)
 {
+	CCameraManager *pCameraManager = CManager::GetCameraManager();
+
 	if (m_nCntaAnswer == MAX_WORD)
 	{	// // 指定した文字なら弾を生成する
 		//CSceneX::Create(CGame::GetPlayer(nID)->GetPosition(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), (CLoad::MODEL)m_nCreateType, 0);
@@ -175,11 +178,21 @@ void CWordManager::BulletCreate(int nID)
 	}
 	else
 	{	// それ以外の場合
-		CWordBullet* pWord = CWordBullet::Create();
-		if (pWord != NULL)
+		if (CGame::GetPlayer(nID) != NULL)
 		{
-			pWord->Set(CGame::GetPlayer(nID)->GetPosition() + D3DXVECTOR3(0.0f,20.0f,0.0f),
-				CGame::GetPlayer(nID)->GetRotation(),5.0f,100,0);
+			CWordBullet* pWord = CWordBullet::Create();
+			if (pWord != NULL)
+			{
+				CCamera* pCam = pCameraManager->GetCamera(CGame::GetPlayer(nID)->GetCameraName());
+				D3DXVECTOR3 BulletPos = CGame::GetPlayer(nID)->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+				D3DXVECTOR3 BulletRot = CGame::GetPlayer(nID)->GetRotation();
+				if (pCam != NULL)
+				{
+					//BulletPos = pCam->GetPosV();
+					BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y,0.0f);
+				}
+				pWord->Set(BulletPos, BulletRot, 5.0f, 100, 0);
+			}
 		}
 		CGame::GetTube(m_nPlayerID)->AllDelete();
 		Reset();		// 設定を戻す
