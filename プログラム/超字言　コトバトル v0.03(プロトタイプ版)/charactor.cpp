@@ -548,8 +548,12 @@ void C3DCharactor::CharaMove_CPU(void)
 		m_PatrolTimer++;
 		break;
 	}
-	move *= MOVE_DEFAULT_COEFFICIENT;
 	pos += move;
+	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
+	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
+
 
 	if (CPU_MOVE_PATROL == m_CpuMove)
 	{
@@ -740,18 +744,21 @@ void C3DCharactor::Homing_CPU(void)
 	{
 		if (m_CpuThink == THINK_HOMING)
 		{
-			move *= MOVE_DEFAULT_COEFFICIENT;
 			Pos.x += move.x;
-			Pos.z += move.z;
 			Pos.y += move.y;
+			Pos.z += move.z;
+			move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+			move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
+			move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
 		}
 		else if (m_CpuThink == THINK_ESCAPE)
 		{
-			move.x *= MOVE_DEFAULT_COEFFICIENT;
-			move.z *= MOVE_DEFAULT_COEFFICIENT;
 			Pos.x -= move.x;
-			Pos.z -= move.z;
 			Pos.y += move.y;
+			Pos.z -= move.z;
+			move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+			move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
+			move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
 		}
 	}
 }
