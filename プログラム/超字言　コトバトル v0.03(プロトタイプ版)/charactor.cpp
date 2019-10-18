@@ -12,6 +12,7 @@
 #include "game.h"
 #include "debugProc.h"
 #include "meshField.h"
+#include "word_manager.h"
 //=============================================================================
 // ƒ}ƒNƒ’è‹`
 //=============================================================================
@@ -464,6 +465,10 @@ void C3DCharactor::Action_CPU(void)
 		Homing_CPU();
 		m_CpuNode = CPU_NODE_RUN;
 		break;
+	case  THINK_ATTACK:
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+		m_CpuNode = CPU_NODE_RUN;
+		break;
 	default:
 		break;
 	}
@@ -734,6 +739,11 @@ void C3DCharactor::Homing_CPU(void)
 					if (rot.y < -D3DX_PI)
 					{
 						rot.y += D3DX_PI * 2.0f;
+					}
+
+					if (m_CpuThink == THINK_HOMING)
+					{
+						m_CpuThink = THINK_ATTACK;
 					}
 				}
 			}

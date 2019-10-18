@@ -7,6 +7,7 @@
 #include "player.h"
 #include "manager.h"
 #include "word_manager.h"
+#include "object.h"
 
 #include "sceneX.h"
 
@@ -184,7 +185,7 @@ void CPlayer::Draw(void)
 //=============================================================================
 bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
 {
-	bool bHit;
+	bool bHit = false;
 	CScene *pScene = NULL;
 
 	// 先頭のオブジェクトを取得
@@ -199,15 +200,30 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR
 		{// 死亡フラグが立っていないもの
 			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
 			{// オブジェクトの種類を確かめる
-				m_bLand = ((CSceneX*)pScene)->Collision(pos, posOld, move, radius);
-				if (m_bLand == true)
-				{// モデルに当たる
-					bHit = true;
-					m_pCharactorMove->m_bFront = true;
-				}
-				else
+				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
-					bHit = false;
+					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+					if (m_bLand == true)
+					{// モデルに当たる
+						bHit = true;
+						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+						{	// ベルトコンベアの判定
+							pSceneObj->BeltConveyor(move);
+						}
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+						{	// ノックバックの判定
+							pSceneObj->KnockBack(move);
+						}
+						break;
+					}
+					else
+					{
+						bHit = false;
+					}
 				}
 			}
 		}
