@@ -10,6 +10,7 @@
 #define _BULLET_H_
 
 #include "scene.h"
+#include "load.h"
 class CSceneX;
 class CSceneBillBoard;
 
@@ -51,7 +52,7 @@ public:
 	~CModelBullet();
 	static CModelBullet* Create(void);
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, float fSpeed, int nLife);
 
 	HRESULT Init(void);
 	void Uninit(void);

@@ -21,6 +21,8 @@
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
 #define CIRCLE_ANGLE	(100)
 #define PATROL_FLAME	(240 * 2)
+
+#define CAMERA_MOVE_SPEED (0.05f)
 //=============================================================================
 // 設定処理
 //=============================================================================
@@ -229,9 +231,9 @@ void C3DCharactor::CharaMove_Input(void)
 	//move *= MOVE_DEFAULT_COEFFICIENT;
 
 	pos += move;
-	move.x += (0.0 - move.x) * MOVE_DEFAULT_COEFFICIENT;
-	move.y += (0.0 - move.y) * MOVE_DEFAULT_COEFFICIENT;
-	move.z += (0.0 - move.z) * MOVE_DEFAULT_COEFFICIENT;
+	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
+	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
 
 	spin.y = CameraRot.y - rot.y;
 
@@ -258,23 +260,41 @@ void C3DCharactor::CharaMove_Input(void)
 	spin.y = 0.0f;
 
 	//カメラ位置制御
+	float fCoefficient = 1.0f;
 	//視点移動
 	//Y
+	if (CManager::GetXInput(nID) != NULL)
+	{
+		if (CManager::GetXInput(nID)->GetConnect() == true)
+		{
+			fCoefficient = fabsf(CCommand::GetXPadStickRotation(false,false,nID));
+		}
+	}
+	//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
 	if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//時計回り
 	{
-		CameraRot.y -= 0.03f;
+		CameraRot.y -= CAMERA_MOVE_SPEED * fCoefficient;
 	}
 	if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//反時計回り
 	{
-		CameraRot.y += 0.03f;
+		CameraRot.y += CAMERA_MOVE_SPEED * fCoefficient;
 	}
 
 	//X
+	if (CManager::GetXInput(nID) != NULL)
+	{
+		if (CManager::GetXInput(nID)->GetConnect() == true)
+		{
+			fCoefficient = fabsf(CCommand::GetXPadStickRotation(false, true, nID));
+		}
+	}
+
+	//fCoefficient = CCommand::GetXPadStickRotation(false, true, nID);
 	if (CCommand::GetCommand("CAMERAMOVE_UP", nID))
 	{
 		if (CameraRot.x < D3DX_PI * 0.2f)
 		{
-			CameraRot.x += 0.03f;
+			CameraRot.x += CAMERA_MOVE_SPEED * fCoefficient;
 		}
 		else
 		{
@@ -285,7 +305,7 @@ void C3DCharactor::CharaMove_Input(void)
 	{
 		if (CameraRot.x > D3DX_PI * -0.2f)
 		{
-			CameraRot.x -= 0.03f;
+			CameraRot.x -= CAMERA_MOVE_SPEED * fCoefficient;
 		}
 		else
 		{

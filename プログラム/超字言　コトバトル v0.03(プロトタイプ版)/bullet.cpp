@@ -115,8 +115,11 @@ CModelBullet* CModelBullet::Create(void)
 //=============================================================================
 // Ý’èˆ—(CModelBullet)
 //=============================================================================
-void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife)
+void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, float fSpeed, int nLife)
 {
+	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
+
+
 	CBulletBase::Set(pos,rot,fSpeed,nLife);
 }
 
@@ -136,6 +139,12 @@ HRESULT CModelBullet::Init(void)
 //=============================================================================
 void CModelBullet::Uninit(void)
 {
+	if (m_pModel != NULL)
+	{
+		m_pModel->Uninit();
+		m_pModel = NULL;
+	}
+
 	CBulletBase::Uninit();
 }
 
@@ -145,7 +154,9 @@ void CModelBullet::Uninit(void)
 void CModelBullet::Update(void)
 {
 	CBulletBase::Update();
-	int nLife = GetLife();
+	m_pModel->SetPosition(GetPosition());
+	m_pModel->SetRot(GetRotation());
+	int& nLife = GetLife();
 	nLife--;
 	if (nLife < 0)
 	{
@@ -200,7 +211,7 @@ CWordBullet* CWordBullet::Create(void)
 void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nWordNum)
 {
 	CBulletBase::Set(pos, rot,fSpeed,nLife);
-	m_pWord = CSceneBillBoard::Create(pos,30.0f,30.0f,"WORD");
+	m_pWord = CSceneBillBoard::Create(pos,20.0f,20.0f,"WORD");
 	if (m_pWord != NULL) { m_pWord->SetTexture(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)),
 											   D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f))); };
 }
