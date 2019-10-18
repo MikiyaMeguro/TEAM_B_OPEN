@@ -14,9 +14,9 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MOVE_DEFAULT_SPEED (0.25f)			//デフォルトの移動スピード
+#define MOVE_DEFAULT_SPEED (0.4f)			//デフォルトの移動スピード
 #define STEP_DEFAULT_MOVEMENT (6.0f)		//デフォルトのステップ量
-#define MOVE_DEFAULT_COEFFICIENT (0.85f)	//デフォルトの移動にかかる係数
+#define MOVE_DEFAULT_COEFFICIENT (0.15f)	//デフォルトの移動にかかる係数
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
 #define CIRCLE_ANGLE	(100)
@@ -226,8 +226,12 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
 
-	move *= MOVE_DEFAULT_COEFFICIENT;
+	//move *= MOVE_DEFAULT_COEFFICIENT;
+
 	pos += move;
+	move.x += (0.0 - move.x) * MOVE_DEFAULT_COEFFICIENT;
+	move.y += (0.0 - move.y) * MOVE_DEFAULT_COEFFICIENT;
+	move.z += (0.0 - move.z) * MOVE_DEFAULT_COEFFICIENT;
 
 	spin.y = CameraRot.y - rot.y;
 
