@@ -9,6 +9,7 @@
 #include "light.h"
 #include "scene3D.h"
 #include "sceneX.h"
+#include "meshField.h"
 #include "game.h"
 #include "debugProc.h"
 #include "scene.h"
@@ -39,6 +40,7 @@
 //============================================================================
 CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
 CTube *CGame::m_apTube[MAX_PLAYER] = {};
+CMeshField *CGame::m_pMeshField = NULL;
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -66,12 +68,17 @@ void CGame::Init(void)
 	CameraSetting((int)NumPlayer);
 
 	//壁、床設定
-	CScene3D* p3D = NULL;
-	p3D = CScene3D::Create(D3DXVECTOR3(0.0f, -50.0f, 0.0f), "BLOCK");
-	p3D->SetSize(1000.0f,1000.0f);
-	p3D = CScene3D::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), "BLOCK");
-	p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
-	p3D->SetSize(1000.0f, 1000.0f);
+	//CScene3D* p3D = NULL;
+	//p3D = CScene3D::Create(D3DXVECTOR3(0.0f, -50.0f, 0.0f), "BLOCK");
+	//p3D->SetSize(1000.0f,1000.0f);
+	//p3D = CScene3D::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), "BLOCK");
+	//p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
+	//p3D->SetSize(1000.0f, 1000.0f);
+
+	if (m_pMeshField == NULL)
+	{
+		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
 
 	// プレイヤーの生成
 	PlayerSetting((int)NumPlayer);
@@ -82,10 +89,10 @@ void CGame::Init(void)
 	WordCreate();
 
 	// テストオブジェクト
-	//CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
-	//CSceneX::Create(D3DXVECTOR3(0.0f, -20.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
-	//CSceneX::Create(D3DXVECTOR3(100.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
-	//CSceneX::Create(D3DXVECTOR3(-100.0f, -20.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
+	//CSceneX::Create(D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
 	CSetObject::Create();
 
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
@@ -280,39 +287,39 @@ void CGame::PlayerSetting(int nNum)
 
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
+			m_pPlayer[0]->Set(D3DXVECTOR3(80.0f, 0.0f, -80.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
-			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
-			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 2);
-			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 3);
+			m_pPlayer[1]->Set(D3DXVECTOR3(-80.0f, 0.0f, 80.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
+			m_pPlayer[2]->Set(D3DXVECTOR3(80.0f, 0.0f, 80.0f), CCharaBase::MOVETYPE_NPC_AI, 2);
+			m_pPlayer[3]->Set(D3DXVECTOR3(-80.0f, 0.0f, -80.0f), CCharaBase::MOVETYPE_NPC_AI, 3);
 		}
 
 #if 0
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
+			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
 
 		if (m_pPlayer[1] != NULL)
 		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
+			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 		}
 
 		if (m_pPlayer[2] != NULL)
 		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2);
+			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2);
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
 
 		if (m_pPlayer[3] != NULL)
 		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
+			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}
@@ -331,27 +338,27 @@ void CGame::PlayerSetting(int nNum)
 
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
+			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
 
 		if (m_pPlayer[1] != NULL)
 		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
+			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 		}
 
 		if (m_pPlayer[2] != NULL)
 		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2);
+			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2);
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
 		if (m_pPlayer[3] != NULL)
 		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
+			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}
@@ -420,26 +427,26 @@ void CGame::TubeSetting(int nNum)
 void CGame::WordCreate(void)
 {
 	// 机
-	//CWord::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 17);
-	//CWord::Create(D3DXVECTOR3(-300.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);
-	//CWord::Create(D3DXVECTOR3(-400.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
+	//CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 17);
+	//CWord::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);
+	//CWord::Create(D3DXVECTOR3(-400.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
 
 	// 絵具
-	/*CWord::Create(D3DXVECTOR3(0.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
-	CWord::Create(D3DXVECTOR3(-300.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 24);
-	CWord::Create(D3DXVECTOR3(-400.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);*/
+	/*CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
+	CWord::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 24);
+	CWord::Create(D3DXVECTOR3(-400.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);*/
 
 	// くるま
-	CWord::Create(D3DXVECTOR3(0.0f, -20.0f, -60.0f), 12.0f, 12.0f, "WORD", 7);
-	CWord::Create(D3DXVECTOR3(-300.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 40);
-	CWord::Create(D3DXVECTOR3(-400.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 30);
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, -60.0f), 12.0f, 12.0f, "WORD", 7);
+	CWord::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 40);
+	CWord::Create(D3DXVECTOR3(-400.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 30);
 
 	// リンゴ
-	CWord::Create(D3DXVECTOR3(-200.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 39);
-	CWord::Create(D3DXVECTOR3(-200.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 45);
-	CWord::Create(D3DXVECTOR3(-50.0f, -20.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
+	CWord::Create(D3DXVECTOR3(-200.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 39);
+	CWord::Create(D3DXVECTOR3(-200.0f, 0.0f, 150.0f), 12.0f, 12.0f, "WORD", 45);
+	CWord::Create(D3DXVECTOR3(-50.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
 
-	//CWord::Create(D3DXVECTOR3(-100.0f, -20.0f, 150.0f), 12.0f, 12.0f, "WORD", 6);
+	//CWord::Create(D3DXVECTOR3(-100.0f, 0.0f, 150.0f), 12.0f, 12.0f, "WORD", 6);
 }
 
 

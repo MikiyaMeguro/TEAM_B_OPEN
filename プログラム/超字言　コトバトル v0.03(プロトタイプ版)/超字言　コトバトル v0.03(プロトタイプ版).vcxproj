@@ -169,6 +169,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="mask.cpp" />
+    <ClCompile Include="meshField.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="PlayerNumSelect.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="mask.h" />
+    <ClInclude Include="meshField.h" />
     <ClInclude Include="number.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="PlayerNumSelect.h" />

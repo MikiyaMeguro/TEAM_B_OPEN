@@ -11,22 +11,24 @@
 #include "player.h"
 #include "game.h"
 #include "debugProc.h"
+#include "meshField.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define MOVE_DEFAULT_SPEED (0.25f)			//デフォルトの移動スピード
+#define MOVE_DEFAULT_SPEED (0.4f)			//デフォルトの移動スピード
 #define STEP_DEFAULT_MOVEMENT (6.0f)		//デフォルトのステップ量
 #define MOVE_DEFAULT_COEFFICIENT (0.85f)	//デフォルトの移動にかかる係数
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
 #define CIRCLE_ANGLE	(100)
-#define PATROL_FLAME	(240 * 2)
+#define PATROL_FLAME	(60)
 //=============================================================================
 // 設定処理
 //=============================================================================
 void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type, CPlayer* pThis)
 {
 	m_pos = pos;
+	m_RespawnPos = pos;
 	m_rot = rot;
 	m_type = type;
 	m_pThisCharactor = pThis;
@@ -102,12 +104,20 @@ void C3DCharactor::Update(void)
 		{	//行動する
 			Action_CPU();
 		}
+
 		break;
 	}
-
-	//move.y -= 0.5f;
-	//move *= MOVE_DEFAULT_COEFFICIENT;
-	//pos += move;
+	//メッシュフィールドとの当たり判定
+	CMeshField *pMesh = CGame::GetMeshField();
+	pos.y = pMesh->GetHeight(pos);
+	//重力
+	move.y = -3.0f;
+	//落下高度
+	if (pos.y <= -100.0f)
+	{
+		pos = m_RespawnPos;
+		move.y = 0.0f;
+	}
 }
 
 //=============================================================================
@@ -298,133 +308,6 @@ void C3DCharactor::CharaMove_Input(void)
 	//カメラの参照位置制御
 	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
 }
-
-//=============================================================================
-// CPUの処理
-//=============================================================================
-void C3DCharactor::CharaMove_CPU(void)
-{
-	CCameraManager* pCameraManager = CManager::GetCameraManager();
-
-	CCamera* pCamera = pCameraManager->GetCamera(GetThisCharactor()->GetCameraName());
-	D3DXVECTOR3 CameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	if (pCamera != NULL)
-	{
-		CameraRot = pCamera->GetRotation();
-	}
-
-	D3DXVECTOR3& pos = CCharaBase::GetPosition();
-	D3DXVECTOR3& move = CCharaBase::GetMove();
-	D3DXVECTOR3& rot = CCharaBase::GetRotation();
-	D3DXVECTOR3& spin = CCharaBase::GetSpin();
-	float		 speed = CCharaBase::GetSpeed();
-	D3DXVECTOR3 ChangeRot(0.0f, 0.0f, 0.0f);
-
-
-	//移動処理
-	switch (m_CpuMove)
-	{
-	case CPU_MOVE_FRONT:
-		move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
-		move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
-		break;
-	case CPU_MOVE_BACK:
-		move.x += sinf(rot.y + (D3DX_PI * 1.0f)) * speed;
-		move.z += cosf(rot.y + (D3DX_PI * 1.0f)) * speed;
-		break;
-	case CPU_MOVE_RIGHT:
-		move.x += sinf(rot.y + (D3DX_PI * 0.5f)) * speed;
-		move.z += cosf(rot.y + (D3DX_PI * 0.5f)) * speed;
-		break;
-	case CPU_MOVE_LEFT:
-		move.x += sinf(rot.y + (D3DX_PI * -0.5f)) * speed;
-		move.z += cosf(rot.y + (D3DX_PI * -0.5f)) * speed;
-		break;
-	case CPU_MOVE_PATROL:
-
-		if (m_PatrolTimer <= PATROL_FLAME / 4 && m_PatrolTimer >= 0)
-		{
-			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			ChangeRot.y = (D3DX_PI * 0.0f);
-		}
-		else if (m_PatrolTimer <= PATROL_FLAME / 2 && m_PatrolTimer > PATROL_FLAME /4)
-		{
-			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			ChangeRot.y = (D3DX_PI * 0.5f);
-		}
-		else if (m_PatrolTimer <= PATROL_FLAME / 1.3f && m_PatrolTimer > PATROL_FLAME /2)
-		{
-			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			ChangeRot.y = (D3DX_PI * 1.0f);
-		}
-		else if (m_PatrolTimer <= PATROL_FLAME && m_PatrolTimer > PATROL_FLAME / 1.3f)
-		{
-			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
-			ChangeRot.y = (D3DX_PI * -0.5f);
-		}
-		else if(m_PatrolTimer >= PATROL_FLAME)
-		{
-			m_PatrolTimer = 0;
-		}
-		m_PatrolTimer++;
-		break;
-	}
-	move *= MOVE_DEFAULT_COEFFICIENT;
-	pos += move;
-
-	if(CPU_MOVE_PATROL == m_CpuMove)
-	{
-		rot.y = ChangeRot.y;
-	}
-	else
-	{
-		spin.y = rot.y - rot.y;
-	}
-
-
-	//回転制御
-	if (spin.y > D3DX_PI)
-	{
-		spin.y -= D3DX_PI * 2.0f;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y += D3DX_PI * 2.0f;
-	}
-
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
-
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
-	spin.y = 0.0f;
-
-
-	//移動中に壁にぶつかった
-	if (m_bFront == true)
-	{
-		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 1;
-		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
-		m_bFront = false;
-	}
-
-#ifdef _DEBUG
-	CDebugProc::Print("cn", "ActionTimer :", m_nActionTimer);
-	CDebugProc::Print("cn", "CpuMove :", m_CpuMove);
-#endif
-
-}
-
 //=============================================================================
 // CPUの思考処理
 //=============================================================================
@@ -550,6 +433,136 @@ void C3DCharactor::Action_CPU(void)
 	//タイマーを減らす
 	m_nActionTimer--;
 }
+
+//=============================================================================
+// CPUの処理
+//=============================================================================
+void C3DCharactor::CharaMove_CPU(void)
+{
+	CCameraManager* pCameraManager = CManager::GetCameraManager();
+
+	CCamera* pCamera = pCameraManager->GetCamera(GetThisCharactor()->GetCameraName());
+	D3DXVECTOR3 CameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	if (pCamera != NULL)
+	{
+		CameraRot = pCamera->GetRotation();
+	}
+
+	D3DXVECTOR3& pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+	D3DXVECTOR3 ChangeRot(0.0f, 0.0f, 0.0f);
+
+
+	//移動処理
+	switch (m_CpuMove)
+	{
+	case CPU_MOVE_FRONT:
+		move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
+		move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
+		break;
+	case CPU_MOVE_BACK:
+		move.x += sinf(rot.y + (D3DX_PI * 1.0f)) * speed;
+		move.z += cosf(rot.y + (D3DX_PI * 1.0f)) * speed;
+		break;
+	case CPU_MOVE_RIGHT:
+		move.x += sinf(rot.y + (D3DX_PI * 0.5f)) * speed;
+		move.z += cosf(rot.y + (D3DX_PI * 0.5f)) * speed;
+		break;
+	case CPU_MOVE_LEFT:
+		move.x += sinf(rot.y + (D3DX_PI * -0.5f)) * speed;
+		move.z += cosf(rot.y + (D3DX_PI * -0.5f)) * speed;
+		break;
+	case CPU_MOVE_PATROL:
+		if (m_PatrolTimer <= PATROL_FLAME * 1 && m_PatrolTimer > 0)
+		{
+			ChangeRot.y = (D3DX_PI * 0.0f);
+			rot.y = ChangeRot.y;
+			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
+			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
+		}
+		else if (m_PatrolTimer <= PATROL_FLAME * 2 && m_PatrolTimer > PATROL_FLAME * 1)
+		{
+			ChangeRot.y = (D3DX_PI * 0.5f);
+			rot.y = ChangeRot.y;
+			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
+			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
+		}
+		else if (m_PatrolTimer <= PATROL_FLAME * 3 && m_PatrolTimer > PATROL_FLAME * 2)
+		{
+			ChangeRot.y = (D3DX_PI * 1.0f);
+			rot.y = ChangeRot.y;
+			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
+			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
+		}
+		else if (m_PatrolTimer <= PATROL_FLAME * 4 && m_PatrolTimer > PATROL_FLAME * 3)
+		{
+			ChangeRot.y = (D3DX_PI * -0.5f);
+			rot.y = ChangeRot.y;
+			move.x += sinf(rot.y + (D3DX_PI * 0.0f)) * speed;
+			move.z += cosf(rot.y + (D3DX_PI * 0.0f)) * speed;
+		}
+		else if (m_PatrolTimer > PATROL_FLAME * 4)
+		{
+			m_PatrolTimer = 0;
+		}
+		m_PatrolTimer++;
+		break;
+	}
+	move *= MOVE_DEFAULT_COEFFICIENT;
+	pos += move;
+
+	if (CPU_MOVE_PATROL == m_CpuMove)
+	{
+		rot.y = ChangeRot.y;
+	}
+	else
+	{
+		spin.y = rot.y - rot.y;
+	}
+
+
+	//回転制御
+	if (spin.y > D3DX_PI)
+	{
+		spin.y -= D3DX_PI * 2.0f;
+	}
+	else if (spin.y < -D3DX_PI)
+	{
+		spin.y += D3DX_PI * 2.0f;
+	}
+
+	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+
+	if (rot.y > D3DX_PI)
+	{
+		rot.y -= D3DX_PI * 2.0f;
+	}
+	else if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI * 2.0f;
+	}
+	spin.y = 0.0f;
+
+
+	//移動中に壁にぶつかった
+	if (m_bFront == true)
+	{
+		m_CpuThink = THINK_ROTATION;
+		m_nActionTimer = 1;
+		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
+		m_bFront = false;
+	}
+
+#ifdef _DEBUG
+	CDebugProc::Print("cn", "ActionTimer :", m_nActionTimer);
+	CDebugProc::Print("cn", "CpuMove :", m_CpuMove);
+#endif
+
+}
+
 
 //=============================================================================
 // CPUの回転処理
@@ -691,13 +704,17 @@ void C3DCharactor::Homing_CPU(void)
 		if (m_CpuThink == THINK_HOMING)
 		{
 			move *= MOVE_DEFAULT_COEFFICIENT;
-			Pos += move;
+			Pos.x += move.x;
+			Pos.z += move.z;
+			Pos.y += move.y;
 		}
 		else if (m_CpuThink == THINK_ESCAPE)
 		{
-			move *= MOVE_DEFAULT_COEFFICIENT;
-			Pos -= move;
-
+			move.x *= MOVE_DEFAULT_COEFFICIENT;
+			move.z *= MOVE_DEFAULT_COEFFICIENT;
+			Pos.x -= move.x;
+			Pos.z -= move.z;
+			Pos.y += move.y;
 		}
 	}
 }
