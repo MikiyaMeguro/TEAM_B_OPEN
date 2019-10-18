@@ -65,6 +65,8 @@ public:
 	static void ResetCommandAll(void);
 	static bool ResetCommand(LPCSTR CommandName);
 
+	//コントローラーのスティックの傾け率取得
+	static float GetXPadStickRotation(bool LorR,bool XorY,int nPlayerID);//LorR = trueがLスティック、falseがRスティックの判定 || XorY = trueがX軸、falseがY軸の判定
 private:
 	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);
 	static bool CheckKey_XController(CInputXPad* pInputX,INPUT_STATE InputState, int nKey);

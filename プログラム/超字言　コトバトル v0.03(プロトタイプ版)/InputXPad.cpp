@@ -5,6 +5,8 @@
 //
 //=============================================================================
 #include "InputXPad.h"
+#include "debugProc.h"
+#include "manager.h"
 //===================================================================
 //	ê√ìIÉÅÉìÉoïœêîêÈåæ
 //===================================================================
@@ -73,7 +75,19 @@ void CInputXPad::Update(void)
 	if (dwResult == ERROR_SUCCESS)
 	{
 		WORD RightStick = 0;
+
+		//â°Ç™YÅAècÇ™XÇ…Ç»Ç¡ÇƒÇ¢ÇÈÇÃÇ≈ãtÇ…Ç∑ÇÈ
+		m_sLStickRotX = state.Gamepad.sThumbLY;
+		m_sLStickRotY = state.Gamepad.sThumbLX;
+		m_sRStickRotX = state.Gamepad.sThumbRY;
+		m_sRStickRotY = state.Gamepad.sThumbRX;
+
 		CheckDeadZone(state);
+		CDebugProc::Print("cn","L_STICKROT_X : ", m_sLStickRotX);
+		CDebugProc::Print("cn", "L_STICKROT_Y : ", m_sLStickRotY);
+		CDebugProc::Print("cn", "R_STICKROT_X : ", m_sRStickRotX);
+		CDebugProc::Print("cn", "R_STICKROT_Y : ", m_sRStickRotY);
+
 		if (m_bConnect == false)
 		{
 			for (int nCntInput = 0; nCntInput < XPAD_MAX; nCntInput++)

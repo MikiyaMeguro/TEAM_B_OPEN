@@ -123,7 +123,6 @@ private:
 	D3DXVECTOR3 m_rot;				//角度
 	D3DXVECTOR3 m_Move;				//移動量
 	D3DXVECTOR3 m_Spin;				//回転量
-
 	float m_fSpeed;					//移動速度
 	float m_fStep;					//ステップ移動の移動量
 	float m_fMoveCoeffient;			//移動の慣性
@@ -139,6 +138,7 @@ public:
 	CPU_ROTATION m_CpuRotation;	//回転
 	CPU_NODE m_CpuNode;			//ノードの状態
 	CPU_TYPE m_Type;
+	D3DXVECTOR3 m_RespawnPos;		//出現位置
 };
 
 class C2DCharactor : public CCharaBase

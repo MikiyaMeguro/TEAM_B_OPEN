@@ -53,13 +53,13 @@ public:
 private:
 	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
 	int m_nID;	//識別ID(0～3の間)
-	CSceneX* m_pPlayerModel;				//プレイヤーのモデル(仮、後で↓の変数に差し替える)
-	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
 	PLAYER_TYPE m_PlayerType;
 	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
 	bool m_bLand;		// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
 
+	CSceneX* m_pPlayerModel;				//プレイヤーのモデル(仮、後で↓の変数に差し替える)
+	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
 	CWordManager *m_pWordManager;
 };
 #endif // !_PLAYER_H_

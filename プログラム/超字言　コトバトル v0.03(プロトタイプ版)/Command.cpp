@@ -198,3 +198,42 @@ bool  CCommand::CheckKey_XController(CInputXPad* pInputX, INPUT_STATE InputState
 	return bCommand;
 
 }
+
+//===================================================================
+//コントローラーのスティックの傾け率取得処理
+//===================================================================
+float CCommand::GetXPadStickRotation(bool LorR, bool XorY, int nPlayerID)
+{
+	float fResult = 0.0f;
+	SHORT sRot = 0;
+	CInputXPad* pInputX = CManager::GetXInput(nPlayerID);
+	if (pInputX != NULL)
+	{
+		if (LorR == true)
+		{//L
+			if (XorY == true)
+			{//X
+				sRot = pInputX->GetLStickRotX();
+			}
+			else
+			{//Y
+
+				sRot = pInputX->GetLStickRotY();
+			}
+		}
+		else
+		{//R
+			if (XorY == true)
+			{//X
+				sRot = pInputX->GetRStickRotX();
+			}
+			else
+			{//Y
+				sRot = pInputX->GetRStickRotY();
+			}
+		}
+		fResult = ((float)sRot) / 32767.0f;
+
+	}
+	return fResult;
+}
