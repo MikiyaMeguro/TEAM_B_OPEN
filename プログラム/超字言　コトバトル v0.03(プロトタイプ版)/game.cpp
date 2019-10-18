@@ -22,6 +22,7 @@
 #include "tube.h"
 #include "time.h"
 #include "PlayerNumSelect.h"
+#include "object.h"
 
 #include "PlayerNumSelect.h"
 
@@ -93,6 +94,19 @@ void CGame::Init(void)
 	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
 	//CSceneX::Create(D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
 	//CSceneX::Create(D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
+
+	// ベルトコンベアのモデル
+	CObject::Create(D3DXVECTOR3(0.0f, -19.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(2.0f, 0.5f, 6.0f), (CSceneX::COLLISIONTYPE)2, CLoad::MODEL_BOX);
+	CObject::Create(D3DXVECTOR3(-80.0f, -19.0f, 150.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(6.0f, 0.5f, 2.0f), (CSceneX::COLLISIONTYPE)3, CLoad::MODEL_BOX);
+	CObject::Create(D3DXVECTOR3(-240.0f, -19.0f, 30.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(2.0f, 0.5f, 15.0f), (CSceneX::COLLISIONTYPE)4, CLoad::MODEL_BOX);
+	CObject::Create(D3DXVECTOR3(-180.0f, -19.0f, -290.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(8.0f, 0.5f, 2.0f), (CSceneX::COLLISIONTYPE)5, CLoad::MODEL_BOX);
+
+	// ノックバックするモデル
+	CObject::Create(D3DXVECTOR3(130.0f, -10.0f, -100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 1.0f), (CSceneX::COLLISIONTYPE)6, CLoad::MODEL_BOX);
+	CObject::Create(D3DXVECTOR3(100.0f, -10.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 1.0f), (CSceneX::COLLISIONTYPE)7, CLoad::MODEL_BOX);
+	CObject::Create(D3DXVECTOR3(150.0f, -10.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 1.0f), (CSceneX::COLLISIONTYPE)8, CLoad::MODEL_BOX);
+
+
 	CSetObject::Create();
 
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)

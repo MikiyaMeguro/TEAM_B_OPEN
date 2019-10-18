@@ -28,6 +28,13 @@ public:
 	{
 		COLLISIONTYPE_NONE = 0,	//無し
 		COLLISIONTYPE_BOX,		//箱
+		COLLSIONTYPE_CONVEYOR_FRONT,	// 当たり判定(ベルトコンベア 前方)
+		COLLSIONTYPE_CONVEYOR_RIHHT,	// 当たり判定(ベルトコンベア 右)
+		COLLSIONTYPE_CONVEYOR_BACK,		// 当たり判定(ベルトコンベア 後方)
+		COLLSIONTYPE_CONVEYOR_LEFT,		// 当たり判定(ベルトコンベア 左)
+		COLLSIONTYPE_KNOCKBACK_SMALL,	// 当たり判定(ノックバック 小)
+		COLLSIONTYPE_KNOCKBACK_DURING,	// 当たり判定(ノックバック 中)
+		COLLSIONTYPE_KNOCKBACK_BIG,		// 当たり判定(ノックバック 大)
 	}COLLISIONTYPE;
 
 	CSceneX(int nPriority = SCENEX_PRIORITY, OBJTYPE objType = OBJTYPE_SCENEX);					// コンストラクタ
@@ -59,6 +66,14 @@ public:
 	void BindModel(LPD3DXBUFFER pBuffMat, DWORD nNumMat, LPD3DXMESH pMesh);	// モデルを割り当てる
 	void BindTex(LPDIRECT3DTEXTURE9	*m_pTexture);	// テクスチャマテリアルを割り当てる
 
+	void SetCollsionType(COLLISIONTYPE type) { m_CollisionType = type; }
+	COLLISIONTYPE GetCollsionType(void) { return m_CollisionType; }		// 当たり判定の種類を取得
+
+	void SetScale(D3DXVECTOR3 Scale) { m_Scale = Scale; }				// スケールを取得
+
+	int GetCollsionNum(void) { return m_nCollsionNum; }
+
+
 private:
 	LPDIRECT3DTEXTURE9		*m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -70,7 +85,9 @@ private:
 	D3DXVECTOR3				m_pos;				// ポリゴンの位置
 	D3DXVECTOR3				m_rot;				// 上方向ベクトル
 	D3DXVECTOR3				m_Scale;			// スケール
-	COLLISIONTYPE			m_CollisionType;		// 当たり判定
+	COLLISIONTYPE			m_CollisionType;	// 当たり判定
+	int						m_nCollsionNum;		// 当たり判定を行った場所
+
 };
 
 #endif

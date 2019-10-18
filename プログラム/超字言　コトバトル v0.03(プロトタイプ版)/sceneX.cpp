@@ -31,6 +31,8 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);		// 向き
 	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);	//大きさ
 	m_CollisionType = COLLISIONTYPE_NONE;
+	m_nCollsionNum = 0;
+
 }
 
 //=============================================================================
@@ -84,6 +86,8 @@ HRESULT CSceneX::Init(D3DXVECTOR3 pos)
 	{
 		pDevice = pRenderer->GetDevice();
 	}
+
+	SetPosition(pos);
 
 	// 頂点座標の設定
 	SetVtx();
@@ -282,6 +286,7 @@ void CSceneX::SetVtx(void)
 bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
 {
 	bool bLand = false;	// 乗っていない状態
+	bool bHit = false;	// ヒット判定のフラグ
 
 	D3DXVECTOR3 ScaleVtxMax;
 	D3DXVECTOR3 ScaleVtxMin;
@@ -294,7 +299,13 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 	ScaleVtxMin.y = m_VtxMin.y;
 	ScaleVtxMin.z = m_VtxMin.z;
 
-	if (m_CollisionType == COLLISIONTYPE_BOX)
+	if (m_CollisionType == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || m_CollisionType == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL ||
+		m_CollisionType == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG || m_CollisionType == CSceneX::COLLISIONTYPE_BOX)
+	{	// ベルトコンベア以外の場合
+		bHit = true;
+	}
+
+	if (m_CollisionType != COLLISIONTYPE_NONE)
 	{
 		if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
 			|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && pos->y <= m_pos.y + ScaleVtxMin.y
@@ -306,14 +317,22 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 					&& pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
 				{// X座標の中に左から入った
 					pos->x = posOld->x;
-					move->x = 0.0f;
+					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+					{	// ノックバック以外の種類なら
+						move->x = 0.0f;
+					}
+					m_nCollsionNum = 0;
 					bLand = true;
 				}
 				else if (posOld->x - radius.x >= m_pos.x + ScaleVtxMax.x
 					&& pos->x - radius.x < m_pos.x + ScaleVtxMax.x)
 				{// X座標の中に右から入った
 					pos->x = posOld->x;
-					move->x = 0.0f;
+					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+					{	// ノックバック以外の種類なら
+						move->x = 0.0f;
+					}
+					m_nCollsionNum = 1;
 					bLand = true;
 				}
 			}
@@ -323,14 +342,22 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 					&& pos->z + radius.z > m_pos.z + ScaleVtxMin.z)
 				{// Z座標の中に手前から入った
 					pos->z = posOld->z;
-					move->z = 0.0f;
+					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+					{	// ノックバック以外の種類なら
+						move->x = 0.0f;
+					}
+					m_nCollsionNum = 2;
 					bLand = true;
 				}
 				else if (posOld->z - radius.z >= m_pos.z + ScaleVtxMax.z
 					&& pos->z - radius.z < m_pos.z + ScaleVtxMax.z)
 				{// Z座標の中に後ろから入った
 					pos->z = posOld->z;
-					move->z = 0.0f;
+					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+					{	// ノックバック以外の種類なら
+						move->x = 0.0f;
+					}
+					m_nCollsionNum = 3;
 					bLand = true;
 				}
 			}
@@ -339,6 +366,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 		if (pos->x - radius.x < m_pos.x + ScaleVtxMax.x - SCENEX_SIZE && pos->x + radius.x > m_pos.x + ScaleVtxMin.x + SCENEX_SIZE
 			&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
 		{// 障害物の内側に乗った
+			if (bHit == false) { bLand = true; }	// ベルトコンベアの場合
 			if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y < m_pos.y + ScaleVtxMax.y
 				|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y > m_pos.y + ScaleVtxMax.y)
 			{// 上からブロックに当たったとき
