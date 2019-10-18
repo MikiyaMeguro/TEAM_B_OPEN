@@ -64,7 +64,7 @@ public:
 
 	// 取得の関数
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
-	static CTube *GetTube(int nNum) { return m_apTube[nNum]; }										// 文字の可視化UIの取得
+	static CTube *GetTube(int nNum);		// 文字の可視化UIの取得
 	static CMeshField *GetMeshField(void) { return m_pMeshField; }										// 文字の可視化UIの取得
 private:
 	void CameraSetting(int nNum);		// 人数に応じたカメラ生成

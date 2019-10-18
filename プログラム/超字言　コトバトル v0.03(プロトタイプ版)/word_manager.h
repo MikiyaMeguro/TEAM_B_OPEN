@@ -46,6 +46,7 @@ public:
 	// 取得用の関数
 	int GetCntNum(void) { return m_nCntNum; }
 	int GetWordNum(int nNum) { return m_aWord[nNum].nNum; }
+	bool GetBulletFlag(void) { return m_bPress; }		// 弾が撃てるようになる条件
 
 	// デバック用
 	void CreateOblDebug(void);
