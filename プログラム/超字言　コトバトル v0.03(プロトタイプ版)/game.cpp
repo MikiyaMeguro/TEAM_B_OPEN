@@ -75,6 +75,8 @@ void CGame::Init(void)
 	//p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
 	//p3D->SetSize(1000.0f, 1000.0f);
 
+	//���b�V���t�B�[���h����
+	m_pMeshField = NULL;
 	if (m_pMeshField == NULL)
 	{
 		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
