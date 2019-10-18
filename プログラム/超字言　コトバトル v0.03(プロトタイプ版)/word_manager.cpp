@@ -196,7 +196,10 @@ void CWordManager::BulletCreate(int nID)
 				pWord->Set(BulletPos, BulletRot, 5.0f, 100, 0);
 			}
 		}
-		CGame::GetTube(m_nPlayerID)->AllDelete();
+		if (CGame::GetTube(m_nPlayerID) != NULL)
+		{
+			CGame::GetTube(m_nPlayerID)->AllDelete();
+		}
 		Reset();		// İ’è‚ğ–ß‚·
 	}
 }
