@@ -64,7 +64,7 @@ void CGame::Init(void)
 	//ƒJƒƒ‰‚ÌƒNƒŠƒGƒCƒg
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;//ƒeƒXƒg
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//ƒeƒXƒg
 	CameraSetting((int)NumPlayer);
 
 	//•ÇA°Ý’è
@@ -75,7 +75,7 @@ void CGame::Init(void)
 	//p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
 	//p3D->SetSize(1000.0f, 1000.0f);
 
-	//ï¿½ï¿½ï¿½bï¿½Vï¿½ï¿½ï¿½tï¿½Bï¿½[ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½
+	//ƒƒbƒVƒ…ƒtƒB[ƒ‹ƒh¶¬
 	m_pMeshField = NULL;
 	if (m_pMeshField == NULL)
 	{
