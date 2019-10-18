@@ -13,7 +13,7 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MESHFIELD_TEXTURE_NAME	"data\\TEXTURE\\exclamation000.jpg"	// 地面のテクスチャ名
+#define MESHFIELD_TEXTURE_NAME	"data\\TEXTURE\\field001.jpg"	// 地面のテクスチャ名
 #define	TOUL_FILENAME			"toul.bin"					// ツールのテキスト
 #define POLYGON_X				(20)						// ポリゴンの数（X）
 #define POLYGON_Z				(20)						// ポリゴンの数（Z）
