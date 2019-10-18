@@ -6,6 +6,7 @@
 #include "game.h"
 #include "fade.h"
 #include "sceneX.h"
+#include "object.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -259,7 +260,7 @@ void CSetObject::LoadFile(void)
 			{
 				//CObjectBG::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 				//	, (CObjectBG::MODELTYPE)nType, CObjectBG::MOVETYPE_NONE, 1);
-				CSceneX::Create(ModelPos, ModelRot, ModelScale, (CLoad::MODEL)nType, nCollisionType);
+				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType);
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)
