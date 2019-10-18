@@ -64,7 +64,7 @@ void CGame::Init(void)
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;//テスト
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_2P;//テスト
 	CameraSetting((int)NumPlayer);
 
 	//壁、床設定
@@ -278,13 +278,13 @@ void CGame::PlayerSetting(int nNum)
 			}
 		}
 
-		//for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
-		//{
-		//	if (m_pPlayer[nCntPlayer] == NULL)
-		//	{
-		//		m_pPlayer[nCntPlayer] = CPlayer::Create();
-		//	}
-		//}
+		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+		{
+			if (m_pPlayer[nCntPlayer] == NULL)
+			{
+				m_pPlayer[nCntPlayer] = CPlayer::Create();
+			}
+		}
 
 		//if (m_pPlayer[0] != NULL)
 		//{
@@ -323,21 +323,42 @@ void CGame::PlayerSetting(int nNum)
 
 		if (m_pPlayer[1] != NULL)
 		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
+			if (nNum > 1)
+			{
+				m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1);
+			}
+			else
+			{
+				m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
+			}
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 		}
 
 		if (m_pPlayer[2] != NULL)
 		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2);
+			if (nNum > 2)
+			{
+				m_pPlayer[2]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2);
+			}
+			else
+			{
+				m_pPlayer[2]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 2);
+			}
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
 
 		if (m_pPlayer[3] != NULL)
 		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
+			if (nNum > 3)
+			{
+				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3);
+			}
+			else
+			{
+				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 3);
+			}
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}
