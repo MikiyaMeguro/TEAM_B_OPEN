@@ -177,6 +177,7 @@ private:
 	void Rotation_CPU(void);	//回転
 	void Escape_CPU(void);		//逃避
 	void Homing_CPU(void);		//追尾
+	void Attack_CPU(void);		//攻撃
 
 	D3DXVECTOR3 m_CameraPosR;
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
