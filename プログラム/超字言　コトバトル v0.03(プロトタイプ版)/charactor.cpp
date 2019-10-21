@@ -370,10 +370,10 @@ void C3DCharactor::Think_CPU(void)
 		m_Type = CPU_TYPE_ESCAPE;
 		break;
 	case 2:
-		m_Type = CPU_TYPE_PATROL;
+		m_Type = CPU_TYPE_HOMING;
 		break;
 	case 3:
-		m_Type = CPU_TYPE_HOMING;
+		m_Type = CPU_TYPE_PATROL;
 		break;
 	default:
 		break;
@@ -484,7 +484,17 @@ void C3DCharactor::Action_CPU(void)
 	default:
 		break;
 	}
-	pos += move;
+
+	if (m_CpuThink == THINK_ESCAPE)
+	{
+		pos.x -= move.x;
+		pos.y += move.y;
+		pos.z -= move.z;
+	}
+	else
+	{
+		pos += move;
+	}
 	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
 	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
 	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
@@ -700,6 +710,10 @@ void C3DCharactor::Homing_CPU(void)
 		fAngle += 50;
 		fLength = 0;
 	}
+	else if(m_CpuThink == THINK_ESCAPE)
+	{//ESCAPEÇÃéûÇÕñ⁄ê¸Ç…ì¸Ç¡ÇΩéûì¶Ç∞ÇÈ
+		fLength = 0;
+	}
 
 
 	CPlayer *pPlayer[MAX_PLAYER];
@@ -757,7 +771,7 @@ void C3DCharactor::Homing_CPU(void)
 
 					if (m_CpuThink == THINK_WATCH)
 					{
-						m_CpuThink = THINK_ATTACK;
+						//m_CpuThink = THINK_ATTACK;
 					}
 				}
 			}
@@ -768,22 +782,31 @@ void C3DCharactor::Homing_CPU(void)
 	{
 		if (m_CpuThink == THINK_HOMING)
 		{
-			Pos.x += move.x;
-			Pos.y += move.y;
-			Pos.z += move.z;
-			move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-			move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-			move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+			//Pos.x += move.x;
+			//Pos.y += move.y;
+			//Pos.z += move.z;
+			//move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+			//move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
+			//move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
 		}
 		else if (m_CpuThink == THINK_ESCAPE)
 		{
-			Pos.x -= move.x;
+			/*Pos.x += move.x;
 			Pos.y += move.y;
-			Pos.z -= move.z;
-			move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+			Pos.z += move.z;*/
+			//move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		/*	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
 			move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-			move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+			move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;*/
+		//	move.x *= -1;
+		//	move.z *= -1;
 		}
+	}
+	else
+	{
+		move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	}
 }
 

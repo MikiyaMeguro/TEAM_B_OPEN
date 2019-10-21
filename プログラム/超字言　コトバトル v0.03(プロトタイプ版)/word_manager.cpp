@@ -185,7 +185,7 @@ void CWordManager::BulletCreate(int nID)
 			CModelBullet* pModel = CModelBullet::Create();
 			if (pModel != NULL)
 			{
-				pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100);
+				pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
 			}
 		}
 		else
@@ -193,7 +193,7 @@ void CWordManager::BulletCreate(int nID)
 			CWordBullet* pWord = CWordBullet::Create();
 			if (pWord != NULL)
 			{
-				pWord->Set(BulletPos, BulletRot, 5.0f, 100, 0);
+				pWord->Set(BulletPos, BulletRot, 5.0f, 100, 0, nID);
 			}
 		}
 		if (CGame::GetTube(m_nPlayerID) != NULL)
