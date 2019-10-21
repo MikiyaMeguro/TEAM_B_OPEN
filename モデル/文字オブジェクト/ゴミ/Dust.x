@@ -435,7 +435,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game105\\Desktop\\MODEL\\Dust2.jpg";
+    "data\\TEXTURE\\UV\\Dust2.jpg";
    }
   }
  }
