@@ -7,6 +7,10 @@
 #include "InputXPad.h"
 #include "debugProc.h"
 #include "manager.h"
+
+#define XPAD_L_DEADZONE (XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE - 3000)
+#define XPAD_R_DEADZONE (XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE - 3000)
+
 //===================================================================
 //	静的メンバ変数宣言
 //===================================================================
@@ -102,9 +106,9 @@ void CInputXPad::Update(void)
 		}
 
 		//スティック入力を方向キー入力に変換してマージする
-		state.Gamepad.wButtons |= ThumbToDPad(state.Gamepad.sThumbLX, state.Gamepad.sThumbLY, XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE);
+		state.Gamepad.wButtons |= ThumbToDPad(state.Gamepad.sThumbLX, state.Gamepad.sThumbLY, XPAD_L_DEADZONE);
 		//右スティックの入力は個別に設定
-		RightStick = ThumbToDPad(state.Gamepad.sThumbRX, state.Gamepad.sThumbRY, XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE);
+		RightStick = ThumbToDPad(state.Gamepad.sThumbRX, state.Gamepad.sThumbRY, XPAD_R_DEADZONE);
 
 		//入力情報設定
 		SetInputState(XPAD_KEY::XPAD_UP, (state.Gamepad.wButtons & XINPUT_GAMEPAD_DPAD_UP ? true : false));
@@ -201,18 +205,18 @@ WORD CInputXPad::ThumbToDPad(SHORT sThumbX, SHORT sThumbY, SHORT sDeadZone)
 void CInputXPad::CheckDeadZone(XINPUT_STATE& state)
 {
 	// デッドゾーンの設定
-	if ((state.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
-		state.Gamepad.sThumbLX > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) &&
-		(state.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE &&
-			state.Gamepad.sThumbLY > -XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE))
+	if ((state.Gamepad.sThumbLX < XPAD_L_DEADZONE &&
+		state.Gamepad.sThumbLX > -XPAD_L_DEADZONE) &&
+		(state.Gamepad.sThumbLY < XPAD_L_DEADZONE &&
+			state.Gamepad.sThumbLY > -XPAD_L_DEADZONE))
 	{
 		state.Gamepad.sThumbLX = 0;
 		state.Gamepad.sThumbLY = 0;
 	}
-	if ((state.Gamepad.sThumbRX < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
-		state.Gamepad.sThumbRX > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE) &&
-		(state.Gamepad.sThumbRY < XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE &&
-			state.Gamepad.sThumbRY > -XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE))
+	if ((state.Gamepad.sThumbRX < XPAD_R_DEADZONE &&
+		state.Gamepad.sThumbRX > -XPAD_R_DEADZONE) &&
+		(state.Gamepad.sThumbRY < XPAD_R_DEADZONE &&
+			state.Gamepad.sThumbRY > -XPAD_R_DEADZONE))
 	{
 		state.Gamepad.sThumbRX = 0;
 		state.Gamepad.sThumbRY = 0;
