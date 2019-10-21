@@ -89,7 +89,9 @@ private:
 	bool						m_bCreate2D;								// 2Dを作ったかどうか
 
 	CScene2D					*m_pCaution2D;								// 警告のポリゴン
-	CScene2D					*m_pSelect2D[MAX_CAUTIONMENU];							// メニューのポリゴン
+	CScene2D					*m_pCaution2DBG;							// 警告のポリゴンBG
+	CScene2D					*m_pMenuLogo;						// メニューのポリゴン
+	CScene2D					*m_pSelect2D[MAX_CAUTIONMENU];				// メニューのポリゴン
 	int							m_nSelectCaution;							// 選択している番号
 	SELECTMENU					m_SelectCaution[MAX_CAUTIONMENU];							// メニュー
 };
