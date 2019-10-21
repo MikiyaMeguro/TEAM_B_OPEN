@@ -19,6 +19,7 @@
 #define MOVE_DEFAULT_SPEED (0.6f)			//デフォルトの移動スピード
 #define STEP_DEFAULT_MOVEMENT (6.0f)		//デフォルトのステップ量
 #define MOVE_DEFAULT_COEFFICIENT (0.20f)	//デフォルトの移動にかかる係数
+#define MOVE_AIR_COEFFICIENT (0.10f);
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
 #define CIRCLE_ANGLE	(100)
@@ -106,12 +107,16 @@ void C3DCharactor::Update(void)
 		{	//行動する
 			Action_CPU();
 		}
-
 		break;
 	}
 	//メッシュフィールドとの当たり判定
 	CMeshField *pMesh = CGame::GetMeshField();
-	pos.y = pMesh->GetHeight(pos);
+
+	float fHeight = pMesh->GetHeight(pos);
+	if (pos.y < fHeight)
+	{
+		pos.y = fHeight;
+	}
 	//重力
 	move.y = -3.0f;
 	//落下高度
@@ -438,6 +443,12 @@ void C3DCharactor::Think_CPU(void)
 //=============================================================================
 void C3DCharactor::Action_CPU(void)
 {
+	D3DXVECTOR3& pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
 	//行動を実行に移す
 	switch (m_CpuThink)
 	{
@@ -473,6 +484,13 @@ void C3DCharactor::Action_CPU(void)
 	default:
 		break;
 	}
+	pos += move;
+	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
+	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
+	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
+
+
 	//タイマーを減らす
 	m_nActionTimer--;
 }
@@ -554,11 +572,6 @@ void C3DCharactor::CharaMove_CPU(void)
 		m_PatrolTimer++;
 		break;
 	}
-	pos += move;
-	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
-
 
 
 	if (CPU_MOVE_PATROL == m_CpuMove)

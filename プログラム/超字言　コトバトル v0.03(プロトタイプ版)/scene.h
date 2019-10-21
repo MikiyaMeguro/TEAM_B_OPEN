@@ -50,6 +50,7 @@ public:
 		OBJTYPE_PAUSE,
 		OBJTYPE_MODESELECT,
 		OBJTYPE_TIME,		// éûä‘
+		OBJTYPE_BULLET,
 		OBJTYPE_MAX			// ëçêî
 	} OBJTYPE;
 

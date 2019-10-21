@@ -12,7 +12,7 @@
 #include "sceneX.h"
 
 #include "debugProc.h"
-
+#include "bullet.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -134,6 +134,9 @@ void CPlayer::Update(void)
 		m_pCharactorMove->Update();
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
 
+		//弾との当たり判定
+		CollisionBullet();
+
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
 		testpos = m_pCharactorMove->GetPosition();
@@ -181,9 +184,70 @@ void CPlayer::Draw(void)
 }
 
 //=============================================================================
-// 当たり判定処理
+// 当たり判定(弾)処理
 //=============================================================================
-bool CPlayer::CollisonObject(D3DXVECTOR3 * pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
+bool CPlayer::CollisionBullet(void)
+{
+	bool bHit = false;
+	CScene *pScene = NULL;
+
+	D3DXVECTOR3 PlayerPos = m_pCharactorMove->GetPosition();
+	D3DXVECTOR3 BulletPos,BulletRot;
+
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(BULLET_PRIORITY);
+
+	while (pScene != NULL)
+	{// 優先順位が弾と同じオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+		if (pScene->GetDeath() == false)
+		{// 死亡フラグが立っていないもの
+			if (pScene->GetObjType() == CScene::OBJTYPE_BULLET)
+			{// オブジェクトの種類を確かめる
+				CBulletBase *pBullet = ((CBulletBase*)pScene);		// CBulletBaseへキャスト(型の変更)
+				BulletPos = pBullet->GetPosition();
+				BulletRot = pBullet->GetRotation();
+
+				float X = (BulletPos.x - PlayerPos.x) * (BulletPos.x - PlayerPos.x);
+				float Y = (BulletPos.y - PlayerPos.y) * (BulletPos.y - PlayerPos.y);
+				float Z = (BulletPos.z - PlayerPos.z) * (BulletPos.z - PlayerPos.z);
+
+				if(sqrtf(X + Y + Z) < BULLET_COLLISION_SIZE &&
+					m_nID != pBullet->GetID())
+				{//球の判定
+					//吹き飛ばし
+					DamageReaction(10.0f,BulletRot);
+					//弾削除
+					pBullet->Uninit();
+
+					return true;
+				}
+			}
+		}
+		pScene = pSceneNext;
+	}
+	return false;
+}
+
+//=============================================================================
+// ダメージの反応処理
+//=============================================================================
+void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
+{
+	D3DXVECTOR3& move = m_pCharactorMove->GetMove();
+
+	//
+	move.x += sinf(HitRotation.y) * fDamageValue;
+	move.z += cosf(HitRotation.y) * fDamageValue;
+
+	move.y += fDamageValue;
+}
+
+//=============================================================================
+// 当たり判定(オブジェクト)処理
+//=============================================================================
+bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3 * move, D3DXVECTOR3 radius)
 {
 	bool bHit = false;
 	CScene *pScene = NULL;
