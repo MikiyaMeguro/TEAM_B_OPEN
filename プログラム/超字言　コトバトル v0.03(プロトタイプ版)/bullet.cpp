@@ -25,12 +25,14 @@ CBulletBase::~CBulletBase()
 //=============================================================================
 // Ý’èˆ—(CBulletBase)
 //=============================================================================
-void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife)
+void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nID)
 {
 	m_pos = pos;
 	m_rot = rot;
 	m_fMove = fSpeed;
 	m_nLife = nLife;
+
+	m_nID = (nID % 4);//”ÍˆÍŠO‚Ì”Žš‚ª“ü‚Á‚½‚ç‚»‚ê‚ð0`3‚Ü‚Å‚Ì”Žš‚É‚·‚é
 }
 
 //=============================================================================
@@ -39,7 +41,7 @@ void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife)
 HRESULT CBulletBase::Init(void)
 {
 
-
+	SetObjType(OBJTYPE_BULLET);
 	return S_OK;
 }
 
@@ -105,7 +107,7 @@ CModelBullet::~CModelBullet()
 CModelBullet* CModelBullet::Create(void)
 {
 	CModelBullet* pBullet = NULL;
-	pBullet = new CModelBullet(1);
+	pBullet = new CModelBullet(BULLET_PRIORITY);
 	if (pBullet != NULL)
 	{
 		pBullet->Init();
@@ -115,12 +117,12 @@ CModelBullet* CModelBullet::Create(void)
 //=============================================================================
 // Ý’èˆ—(CModelBullet)
 //=============================================================================
-void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, float fSpeed, int nLife)
+void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, float fSpeed, int nLife, int nID)
 {
 	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
 
 
-	CBulletBase::Set(pos,rot,fSpeed,nLife);
+	CBulletBase::Set(pos,rot,fSpeed,nLife, nID);
 }
 
 //=============================================================================
@@ -197,7 +199,7 @@ CWordBullet::~CWordBullet()
 CWordBullet* CWordBullet::Create(void)
 {
 	CWordBullet* pBullet = NULL;
-	pBullet = new CWordBullet(1);
+	pBullet = new CWordBullet(BULLET_PRIORITY);
 	if (pBullet != NULL)
 	{
 		pBullet->Init();
@@ -208,9 +210,9 @@ CWordBullet* CWordBullet::Create(void)
 //=============================================================================
 // Ý’èˆ—(CWordBullet)
 //=============================================================================
-void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nWordNum)
+void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nWordNum, int nID)
 {
-	CBulletBase::Set(pos, rot,fSpeed,nLife);
+	CBulletBase::Set(pos, rot,fSpeed,nLife,nID);
 	m_pWord = CSceneBillBoard::Create(pos,20.0f,20.0f,"WORD");
 	if (m_pWord != NULL) { m_pWord->SetTexture(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)),
 											   D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f))); };

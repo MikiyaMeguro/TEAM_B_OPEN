@@ -73,7 +73,6 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	void DamageReaction(float fDamageValue) {};
 
 	CCharaBase* GetCharaMover(void) { return m_pCharactorMove; };
 
@@ -83,10 +82,13 @@ public:
 	LPCSTR GetCameraName(void) { return m_ChildCameraName; };
 	void SetCameraName(LPCSTR name) { m_ChildCameraName = name; };
 
-	bool CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
-
 	CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理の取得
 private:
+	bool CollisionBullet(void);
+	void DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
+	bool CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
+
+
 	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
 	int m_nID;	//識別ID(0～3の間)
 	PLAYER_TYPE m_PlayerType;
