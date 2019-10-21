@@ -12,6 +12,8 @@
 #include "charactor.h"
 #include "scene.h"
 
+#define PLAYER_MODELNUM (13)
+
 //class CScene3D;
 class CSceneX;
 class CWordManager;
@@ -21,17 +23,51 @@ class CPlayer : public CScene
 public:
 	typedef enum
 	{
-		TYPE_NORMAL = 0,
-		TYPE_POWER,
-		TYPE_SPEED,
-		TYPE_REACH,
-	}PLAYER_TYPE;
+		TYPE_NORMAL = 0,			//ノーマル
+		TYPE_POWER,					//パワー
+		TYPE_SPEED,					//スピード
+		TYPE_REACH,					//リーチ
+	}PLAYER_TYPE;	//プレイヤーの操作タイプ
+
+	typedef enum
+	{
+		STATE_NORMAL,		//モーション再生状態
+		STATE_BLEND,		//モーションブレンド状態
+	}MOTION_STATE;
+
+	typedef struct
+	{
+		int nFrame;							//フレーム数
+		D3DXVECTOR3 Pos[PLAYER_MODELNUM];	//位置
+		D3DXVECTOR3 Rot[PLAYER_MODELNUM];	//向き
+	}KeyProperty;
+
+	typedef struct
+	{
+		LPCSTR MotionName;							//モーション名
+		int	  nLoop;								//ループするかどうか : -1 無限ループ | 0 ループなし
+		int   nKeyNum;								//キー数
+		std::vector<KeyProperty> vecKey;			//キー情報
+	}MotionProperty;
+
+	typedef struct
+	{
+		int nIndex;
+		int nParent;
+		D3DXVECTOR3 pos;
+		D3DXVECTOR3 rot;
+	}PartsLoadInfo;
+
 	CPlayer(int nPriority = 3);
 	~CPlayer();
 
 	static CPlayer* Create(void);
 
 	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
+
+	void Load(void);
+	void Unload(void);
+
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
@@ -58,7 +94,7 @@ private:
 	bool m_bLand;		// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
 
-	CSceneX* m_pPlayerModel;				//プレイヤーのモデル(仮、後で↓の変数に差し替える)
+	CSceneX* m_pPlayerModel;						//プレイヤーのモデル(仮、後で↓の変数に差し替える)
 	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
 	CWordManager *m_pWordManager;
 };
