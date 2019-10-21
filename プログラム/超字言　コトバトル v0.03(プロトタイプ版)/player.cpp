@@ -238,12 +238,11 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 	D3DXVECTOR3& move = m_pCharactorMove->GetMove();
 
 	//
-	move.x += sinf(HitRotation.y) * fDamageValue;
-	move.z += cosf(HitRotation.y) * fDamageValue;
+	move.x += sinf(HitRotation.y) * fDamageValue * 2.0f;
+	move.z += cosf(HitRotation.y) * fDamageValue * 2.0f;
 
 	move.y += fDamageValue;
 }
-
 //=============================================================================
 // 当たり判定(オブジェクト)処理
 //=============================================================================

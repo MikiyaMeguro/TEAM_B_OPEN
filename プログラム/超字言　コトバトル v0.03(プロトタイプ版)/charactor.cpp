@@ -793,6 +793,6 @@ void C3DCharactor::Homing_CPU(void)
 void C3DCharactor::Attack_CPU(void)
 {
 	//’e‚Ì¶¬
-	GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+	//GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
 
 }
