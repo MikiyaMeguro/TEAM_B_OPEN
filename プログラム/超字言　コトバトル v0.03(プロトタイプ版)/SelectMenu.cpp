@@ -16,8 +16,8 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODESELECT_WIDTH		(3.0f)		//ポリゴンの大きさ(横)
-#define MODESELECT_HEIGHT		(0.9f)		//ポリゴンの大きさ(縦)
+#define MODESELECT_WIDTH		(4.3f)		//ポリゴンの大きさ(横)
+#define MODESELECT_HEIGHT		(1.3f)		//ポリゴンの大きさ(縦)
 #define MENU_WIDTH				(450.0f)	//ポリゴンとポリゴンの間の大きさ(横)
 #define MENU_HEIGHT				(180.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
 #define MENU_INITPOS			(180.0f)	//メニューの初期位置
@@ -81,15 +81,28 @@ CSelectMenu *CSelectMenu::Create(D3DXVECTOR3 pos, float m_fWidth, float fSpace, 
 //=============================================================================
 HRESULT CSelectMenu::Init()
 {
+	m_pTexture[0] = CTexture::GetTexture("MENU_NUMPLAYER");
+	m_pTexture[1] = CTexture::GetTexture("MENU_TITLE");
+	m_pTexture[2] = CTexture::GetTexture("MENU_CHARA");
+	m_pTexture[3] = CTexture::GetTexture("MENU_CONTINUE");
+
 	switch (m_MenuType)
 	{
 	case MENU_TYPE_TUTORIAL:
 		m_nMaxMenu = 3;
 		m_fInitYpos = 400;
+		m_pTexture[0] = CTexture::GetTexture("MENU_NUMPLAYER");
+		m_pTexture[1] = CTexture::GetTexture("MENU_MOZI");
+		m_pTexture[2] = CTexture::GetTexture("MENU_TITLE");
+
 		break;
 	case MENU_TYPE_RESULT:
 		m_fInitYpos = 270.0f;
 		m_nMaxMenu = 4;
+		m_pTexture[0] = CTexture::GetTexture("MENU_RETRY");
+		m_pTexture[1] = CTexture::GetTexture("MENU_CHARA");
+		m_pTexture[2] = CTexture::GetTexture("MENU_STAGE");
+		m_pTexture[3] = CTexture::GetTexture("MENU_TITLE");
 		break;
 	case MENU_TYPE_PAUSE:
 		m_nMaxMenu = 2;
@@ -103,10 +116,6 @@ HRESULT CSelectMenu::Init()
 	}
 
 	//m_pTextureBG = CLoad::GetTexture(CLoad::TEXTURE_MODESELECT_BG);
-	m_pTexture[0] = CTexture::GetTexture("BLOCK");
-	m_pTexture[1] = CTexture::GetTexture("BLOCK");
-	m_pTexture[2] = CTexture::GetTexture("BLOCK");
-	m_pTexture[3] = CTexture::GetTexture("BLOCK");
 
 	//BGの初期化
 	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z),"BLOCK");
@@ -132,6 +141,8 @@ HRESULT CSelectMenu::Init()
 			m_apPolygon[nCnt]->SetbDraw(true);
 		}
 	}
+
+
 
 	//値の初期化
 	m_nSelect = 0;
@@ -243,11 +254,11 @@ void CSelectMenu::Update(void)
 		{
 			if (m_aModeSelectMenu[nCnt].select == SELECTTYPE_SELECT)
 			{//選択中の色
-				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 			}
 			else
 			{//未選択の色
-				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
 			//頂点情報へのポインタ

@@ -15,16 +15,21 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODESELECT_WIDTH		(2.0f)		//ポリゴンの大きさ(横)
+#define MODESELECT_WIDTH		(3.0f)		//ポリゴンの大きさ(横)
 #define MODESELECT_HEIGHT		(1.5f)		//ポリゴンの大きさ(縦)
 #define MENU_WIDTH				(450.0f)	//ポリゴンとポリゴンの間の大きさ(横)
-#define MENU_HEIGHT				(350.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
-#define MENU_INITPOS			(180.0f)	//メニューの初期位置
+#define MENU_HEIGHT				(250.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
+#define MENU_INITPOS			(320.0f)	//メニューの初期位置
 #define MENU_NUM_HEIGHT			(2)
 #define MENU_NUM_WIDTH			(2)
+#define LOGO_POS				(100.0f)
+#define LOGO_WIDTH				(4.5f)		//ポリゴンの大きさ(横)
+#define LOGO_HEIGHT				(1.2f)		//ポリゴンの大きさ(縦)
 
-#define CAUTION_WIDTH			(750.0f)	//ポリゴンとポリゴンの間の大きさ(横)
-#define CAUTION_HEIGHT			(450.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
+#define CAUTIONBG_WIDTH			(750.0f)	//ポリゴンとポリゴンの間の大きさ(横)
+#define CAUTIONBG_HEIGHT		(450.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
+#define CAUTION_WIDTH			(650.0f)	//ポリゴンとポリゴンの間の大きさ(横)
+#define CAUTION_HEIGHT			(250.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
 
 
 
@@ -93,20 +98,26 @@ HRESULT CPlayerSelect::Init(void)
 	m_pSelect2D[0] = NULL;
 	m_pSelect2D[1] = NULL;
 	m_pCaution2D = NULL;
-
+	m_pCaution2DBG = NULL;
 	//m_pTextureBG = CLoad::GetTexture(CLoad::TEXTURE_MODESELECT_BG);
-	m_pTexture[0] = CTexture::GetTexture("BLOCK");
-	m_pTexture[1] = CTexture::GetTexture("BLOCK");
-	m_pTexture[2] = CTexture::GetTexture("BLOCK");
-	m_pTexture[3] = CTexture::GetTexture("BLOCK");
+	m_pTexture[0] = CTexture::GetTexture("MENU_1P");
+	m_pTexture[1] = CTexture::GetTexture("MENU_2P");
+	m_pTexture[2] = CTexture::GetTexture("MENU_3P");
+	m_pTexture[3] = CTexture::GetTexture("MENU_4P");
 
 	//BGの初期化
 	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z),"BLOCK");
 	m_apPolygonBG->BindTexture(m_pTextureBG);
-	m_apPolygonBG->SetWidthHeight(m_fWidth * 4.5f, m_fHeight * 3.5f);
+	m_apPolygonBG->SetWidthHeight(m_fWidth * 4.9f, m_fHeight * 3.5f);
 	m_apPolygonBG->SetbDraw(true);
 
 	m_InitPos.y = MENU_INITPOS;
+
+	m_pMenuLogo = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, LOGO_POS, m_InitPos.z), "MENU_NUMPLAYER");
+	m_pMenuLogo->SetWidthHeight(m_fWidth * LOGO_WIDTH, m_fHeight * LOGO_HEIGHT);
+	m_pMenuLogo->SetbDraw(true);
+
+
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER_SELECTMENU; nCnt++)
 	{
@@ -314,24 +325,38 @@ void CPlayerSelect::Update(void)
 		{
 			if (m_bCreate2D == false)
 			{
-				m_pCaution2D = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), "BLOCK");
+				//警告を生成
+				m_pCaution2DBG = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), "BLOCK");
+				m_pCaution2DBG->SetWidthHeight(CAUTIONBG_WIDTH, CAUTIONBG_HEIGHT);
+				m_pCaution2DBG->SetbDraw(true);
+				m_pCaution2DBG->BindTexture(m_pTextureBG);
+
+				m_pCaution2D = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3.0f, 0), "BLOCK");
 				m_pCaution2D->SetWidthHeight(CAUTION_WIDTH, CAUTION_HEIGHT);
-				m_pCaution2D->BindTexture(m_pTextureBG);
+				m_pCaution2D->BindTexture(CTexture::GetTexture("MENU_START"));
 				m_pCaution2D->SetbDraw(true);
+
 				//YES or NO　ポリゴン生成
 				for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
 				{
 					//ポリゴンの位置を左上に初期化
 					m_Pos[nCnt] = m_InitPos;
-					m_Pos[nCnt].x = m_InitPos.x - (500 / 2);
+					m_Pos[nCnt].x = m_InitPos.x - (350 / 2);
 					//位置をずらす
-					m_Pos[nCnt].x = m_Pos[nCnt].x + (500 * nCnt);
+					m_Pos[nCnt].x = m_Pos[nCnt].x + (360 * nCnt);
 					m_Pos[nCnt].y = 500.0f;
 					if (m_pSelect2D[nCnt] == NULL)
 					{	//生成
-						m_pSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z), "BLOCK");
-						m_pSelect2D[nCnt]->SetWidthHeight(300, 100);
-						m_pSelect2D[nCnt]->BindTexture(m_pTexture[nCnt]);
+						m_pSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z), "MENU_START");
+						m_pSelect2D[nCnt]->SetWidthHeight(600, 300);
+						if (nCnt == 0)
+						{
+							m_pSelect2D[nCnt]->BindTexture(CTexture::GetTexture("MENU_YES"));
+						}
+						if (nCnt == 1)
+						{
+							m_pSelect2D[nCnt]->BindTexture(CTexture::GetTexture("MENU_NO"));
+						}
 						m_pSelect2D[nCnt]->SetbDraw(true);
 					}
 				}
@@ -345,11 +370,11 @@ void CPlayerSelect::Update(void)
 				{
 					if (m_SelectCaution[nCnt].select == SELECTTYPE_SELECT)
 					{//選択中の色
-						m_SelectCaution[nCnt].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+						m_SelectCaution[nCnt].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 					}
 					else
 					{//未選択の色
-						m_SelectCaution[nCnt].col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+						m_SelectCaution[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 					}
 					//頂点情報へのポインタ
 					VERTEX_2D *pVtx;
@@ -394,11 +419,11 @@ void CPlayerSelect::Update(void)
 		{
 			if (m_aModeSelectMenu[nCnt].select == SELECTTYPE_SELECT)
 			{//選択中の色
-				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.0f, 0.0f, 0.0f, 1.0f);
+				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 			}
 			else
 			{//未選択の色
-				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(0.9f, 0.9f, 0.9f, 1.0f);
+				m_aModeSelectMenu[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			}
 
 			//頂点情報へのポインタ
@@ -507,6 +532,12 @@ void CPlayerSelect::Caution2DUninit(void)
 	{
 		m_pCaution2D->Uninit();
 		m_pCaution2D = NULL;
+		m_bCaution = false;
+	}
+	if (m_pCaution2DBG != NULL)
+	{
+		m_pCaution2DBG->Uninit();
+		m_pCaution2DBG = NULL;
 		m_bCaution = false;
 	}
 	for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
