@@ -344,7 +344,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 					pos->z = posOld->z;
 					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
 					{	// ノックバック以外の種類なら
-						move->x = 0.0f;
+						move->z = 0.0f;
 					}
 					m_nCollsionNum = 2;
 					bLand = true;
@@ -355,7 +355,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 					pos->z = posOld->z;
 					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
 					{	// ノックバック以外の種類なら
-						move->x = 0.0f;
+						move->z = 0.0f;
 					}
 					m_nCollsionNum = 3;
 					bLand = true;
