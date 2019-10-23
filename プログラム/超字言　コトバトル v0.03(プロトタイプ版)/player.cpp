@@ -8,6 +8,9 @@
 #include "manager.h"
 #include "word_manager.h"
 #include "object.h"
+#include "point.h"
+#include "game.h"
+#include "tutorial.h"
 
 #include "sceneX.h"
 
@@ -17,7 +20,7 @@
 // マクロ定義
 //=============================================================================
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 20.0f, 5.0f))			//キャラクターの当たり判定
-
+#define MODEL_LOAD_TEXT "data/MOTION/motion_bea.txt"
 //=============================================================================
 // コンストラクタ&デストラクタ
 //=============================================================================
@@ -26,6 +29,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_bLand = false;
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_pWordManager = NULL;
+	m_nCntTransTime = 0;
 }
 CPlayer::~CPlayer()
 {
@@ -47,6 +51,28 @@ CPlayer* CPlayer::Create(void)
 	}
 
 	return pPlayer;
+}
+//=============================================================================
+// モデルロード処理
+//=============================================================================
+HRESULT CPlayer::ModelLoad(LPCSTR pFileName)
+{
+	FILE* pFile = NULL;		// ファイルポインタ
+	char ReadText[256];		// 読み込んだ文字列を入れておく
+	char HeadText[256];		// 比較用
+	char DustBox[256];		// 使用しないものを入れておく
+
+	//ファイルオープン
+	pFile = fopen(pFileName, "r");
+
+	if (pFile != NULL)
+	{//ファイルが開かれていれば
+
+	}
+
+	fclose(pFile);
+
+	return S_OK;
 }
 
 //=============================================================================
@@ -73,6 +99,8 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 		m_pWordManager->SetID(m_nID);
 	}
 
+	ModelLoad(MODEL_LOAD_TEXT);
+
 	//描画用モデル生成
 	m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
 	m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);
@@ -87,6 +115,8 @@ HRESULT CPlayer::Init(void)
 	m_pPlayerModel = NULL;
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
+	m_nCntTransTime = 0;
+
 
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
@@ -133,9 +163,11 @@ void CPlayer::Update(void)
 		//移動、回転の更新
 		m_pCharactorMove->Update();
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
-
-		//弾との当たり判定
-		CollisionBullet();
+		if (m_nCntTransTime <= 0)
+		{
+			//弾との当たり判定
+			CollisionBullet();
+		}
 
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
@@ -165,6 +197,22 @@ void CPlayer::Update(void)
 
 	//文字管理クラスの更新
 	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
+
+	//無敵時間のカウントダウン
+	if (m_nCntTransTime > 0)
+	{
+		m_nCntTransTime--;
+
+		if (m_nCntTransTime % 2 == 0)
+		{
+			m_pPlayerModel->SetDrawFlag(!(m_pPlayerModel->GetDrawFlag()));
+		}
+	}
+	else
+	{
+		m_pPlayerModel->SetDrawFlag(true);
+	}
+
 
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
@@ -212,12 +260,24 @@ bool CPlayer::CollisionBullet(void)
 				float X = (BulletPos.x - PlayerPos.x) * (BulletPos.x - PlayerPos.x);
 				float Y = (BulletPos.y - PlayerPos.y) * (BulletPos.y - PlayerPos.y);
 				float Z = (BulletPos.z - PlayerPos.z) * (BulletPos.z - PlayerPos.z);
-
+				
 				if(sqrtf(X + Y + Z) < BULLET_COLLISION_SIZE &&
 					m_nID != pBullet->GetID())
 				{//球の判定
+
+					/*得点加算 (当てたキャラのIDはpBulletのGetIDで取得できる)*/
+					if (pBullet->GetType() == CBulletBase::TYPE_MODEL)
+					{	// モデルの場合はポイント加算
+						CPoint *pPoint = NULL;
+						if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
+						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /*チュートリアルで取得する*/ }
+
+						if (pPoint != NULL) { pPoint->AddPoint(1); }
+					}
+
 					//吹き飛ばし
 					DamageReaction(10.0f,BulletRot);
+
 					//弾削除
 					pBullet->Uninit();
 
@@ -242,6 +302,7 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 	move.z += cosf(HitRotation.y) * fDamageValue * 2.0f;
 
 	move.y += fDamageValue;
+	m_nCntTransTime = 30;
 }
 //=============================================================================
 // 当たり判定(オブジェクト)処理

@@ -36,6 +36,8 @@ public:
 		MODE_TAICO,		// タイヤ
 		MODE_WHEEL,		// 太鼓
 		MODE_COIN,		// コイン
+		MODE_WALL_SMALL,// 小さい壁
+		MODE_WALL_BIG,	// 大きい壁
 		MODEL_BOX,		// 箱
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_MAX,

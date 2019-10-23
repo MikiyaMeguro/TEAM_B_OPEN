@@ -21,6 +21,14 @@ class CSceneBillBoard;
 class CBulletBase : public CScene
 {
 public:
+	typedef enum
+	{
+		TYPE_NONE = 0,
+		TYPE_WORD,
+		TYPE_MODEL,
+		TYPE_MAX
+	}BULLET_TYPE;
+
 	CBulletBase() {};
 	CBulletBase(int nPriority = BULLET_PRIORITY);
 	~CBulletBase();
@@ -39,6 +47,9 @@ public:
 	int& GetLife(void) { return m_nLife; };
 	int GetID(void) { return m_nID; };
 
+	BULLET_TYPE GetType(void) { return m_Type; };
+protected:
+	BULLET_TYPE m_Type;
 private:
 	D3DXVECTOR3 m_pos;				//ˆÊ’u
 	D3DXVECTOR3 m_rot;				//Šp“x

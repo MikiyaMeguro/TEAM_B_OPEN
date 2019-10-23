@@ -32,7 +32,7 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_Scale = D3DXVECTOR3(1.0f, 1.0f, 1.0f);	//大きさ
 	m_CollisionType = COLLISIONTYPE_NONE;
 	m_nCollsionNum = 0;
-
+	m_bDraw = true;
 }
 
 //=============================================================================
@@ -178,41 +178,46 @@ void CSceneX::Draw(void)
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
-	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
 
-	// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+	if (m_bDraw == true)
+	{//モデルが見える状態なら
+		// 現在のマテリアルを取得
+		pDevice->GetMaterial(&matDef);
 
-	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
-	{
-		// マテリアルの設定
-		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+		// マテリアルデータへのポインタを取得
+		pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
 
-		if (pMat[nCntMat].pTextureFilename != NULL)
-		{// マテリアルにテクスチャがあった場合
+		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+		{
+			// マテリアルの設定
+			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-			if (m_pTexture != NULL)
-			{
-				// テクスチャの設定
-				pDevice->SetTexture(0, m_pTexture[nCntMat]);
+			if (pMat[nCntMat].pTextureFilename != NULL)
+			{// マテリアルにテクスチャがあった場合
+
+				if (m_pTexture != NULL)
+				{
+					// テクスチャの設定
+					pDevice->SetTexture(0, m_pTexture[nCntMat]);
+				}
+				else
+				{// マテリアルにテクスチャが無かった場合
+					pDevice->SetTexture(0, NULL);
+				}
 			}
 			else
 			{// マテリアルにテクスチャが無かった場合
 				pDevice->SetTexture(0, NULL);
 			}
-		}
-		else
-		{// マテリアルにテクスチャが無かった場合
-			pDevice->SetTexture(0, NULL);
+
+			// モデル(パーツ)の描画
+			m_pMesh->DrawSubset(nCntMat);
 		}
 
-		// モデル(パーツ)の描画
-		m_pMesh->DrawSubset(nCntMat);
+		// マテリアルをデフォルトに戻す
+		pDevice->SetMaterial(&matDef);
+
 	}
-
-	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
 
 	//頂点法線の自動正規化
 	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);

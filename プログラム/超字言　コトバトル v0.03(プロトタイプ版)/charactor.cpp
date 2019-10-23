@@ -13,6 +13,7 @@
 #include "debugProc.h"
 #include "meshField.h"
 #include "word_manager.h"
+#include "point.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -124,7 +125,22 @@ void C3DCharactor::Update(void)
 	{
 		pos = m_RespawnPos;
 		move.y = 0.0f;
+
+		CPoint *pPoint = NULL;
+		pPoint = CGame::GetPoint(GetThisCharactor()->GetID());
+
+		if (pPoint != NULL)
+		{
+			pPoint->AddPoint(-1);
+		}
 	}
+
+	//ステップの待機時間のカウントダウン
+	if (m_nCntStepCoolTime > 0)
+	{
+		m_nCntStepCoolTime--;
+	}
+
 }
 
 //=============================================================================
@@ -245,15 +261,12 @@ void C3DCharactor::CharaMove_Input(void)
 				if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.25f; }
 				if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 0.75f; }
 			}
-			move.x += sinf(CameraRot.y + fStepRot) * 6.0f;
-			move.z += cosf(CameraRot.y + fStepRot) * 6.0f;
 
-			m_nCntStepCoolTime = 30;
+			fStepRot += CameraRot.y;
+
+			StepMove(move,fStepRot);
+
 		}
-	}
-	if (m_nCntStepCoolTime > 0)
-	{
-		m_nCntStepCoolTime--;
 	}
 	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
 
@@ -801,4 +814,16 @@ void C3DCharactor::Attack_CPU(void)
 	{
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
 	}
+}
+
+//=============================================================================
+// ステップ処理
+//=============================================================================
+void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
+{
+	move.x += sinf(fRot) * STEP_DEFAULT_MOVEMENT;
+	move.z += cosf(fRot) * STEP_DEFAULT_MOVEMENT;
+
+	m_nCntStepCoolTime = 30;
+
 }
