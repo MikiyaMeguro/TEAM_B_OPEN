@@ -25,7 +25,7 @@ DWORD *CLoad::m_nNumMat = 0;				// マテリアル情報の数
 int	CLoad::m_nMaxModel = 0;
 int	CLoad::m_nCntModel = 0;
 char CLoad::m_apModelName[MODEL_MAX][256] = {NULL};
-
+LPDIRECT3DTEXTURE9 *CLoad::m_pTexture[MODEL_MAX] = { NULL };
 //const char *CLoad::m_apModelFilename[] =
 //{// モデル
 //	"data\\MODEL\\car000.x",				//0
@@ -121,6 +121,14 @@ HRESULT CLoad::LoadModel(void)
 			&m_nNumMat[nCntModel],
 			&m_pMesh[nCntModel]);
 	}
+
+
+	for (int nCntModel = 0; nCntModel < MODEL_MAX; nCntModel++)
+	{
+		//テクスチャ初期化
+		TextureSetting(nCntModel);
+	}
+
 	return S_OK;
 }
 
@@ -129,6 +137,30 @@ HRESULT CLoad::LoadModel(void)
 //=============================================================================
 void CLoad::UnloadModel(void)
 {
+	//ポインタのNULLチェック
+	if (m_pTexture != NULL)
+	{
+		for (int nCntModel = 0; nCntModel < MODEL_MAX; nCntModel++)
+		{
+			for (int nCnt = 0; nCnt < (int)m_nNumMat[nCntModel]; nCnt++)
+			{
+				//ポインタ内のポインタのNULLチェック
+				if (m_pTexture[nCntModel][nCnt] != NULL)
+				{
+					//テクスチャ破棄
+					m_pTexture[nCntModel][nCnt]->Release();
+					m_pTexture[nCntModel][nCnt] = NULL;
+				}
+			}
+			//メモリを開放
+			delete[] m_pTexture[nCntModel];
+		}
+	}
+	//NULLを入れる
+	*m_pTexture = NULL;
+
+
+
 	if (m_pBuffMat != NULL)
 	{
 		// メモリを解放する
@@ -173,6 +205,44 @@ LPD3DXBUFFER CLoad::GetBuffMat(int nIdx)
 DWORD CLoad::GetNumMat(int nIdx)
 {
 	return m_nNumMat[nIdx];
+}
+
+//=============================================================================
+// テクスチャの設定
+//=============================================================================
+void CLoad::TextureSetting(int nModel)
+{
+	//デバイスを取得
+	CRenderer *pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	//マテリアルデータへのポインタ
+	D3DXMATERIAL *pMat;
+	//マテリアル情報からテクスチャの取得
+	pMat = (D3DXMATERIAL*)m_pBuffMat[nModel]->GetBufferPointer();
+	//テクスチャをマテリアルの数分動的確保
+	m_pTexture[nModel] = new LPDIRECT3DTEXTURE9[m_nNumMat[nModel]];
+	//マテリアルの数回す
+	for (int nCntMatTex = 0; nCntMatTex < (int)m_nNumMat[nModel]; nCntMatTex++)
+	{
+		//NULLを入れる 中身を空に
+		m_pTexture[nModel][nCntMatTex] = NULL;
+
+		if (pMat[nCntMatTex].pTextureFilename != NULL)
+		{
+			// テクスチャの設定
+			D3DXCreateTextureFromFile(pDevice,			// デバイスへのポインタ
+				pMat[nCntMatTex].pTextureFilename,			// ファイルの名前
+				&m_pTexture[nModel][nCntMatTex]);		// テクスチャへのポインタ
+		}
+	}
+}
+
+//=============================================================================
+// テクスチャの取得処理
+//=============================================================================
+LPDIRECT3DTEXTURE9 *CLoad::GetTexture(MODEL Model)
+{
+	return m_pTexture[Model];
 }
 
 

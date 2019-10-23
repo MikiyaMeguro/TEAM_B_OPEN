@@ -56,6 +56,7 @@ CSceneX *CSceneX::Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CL
 
 		if (pSceneX != NULL)
 		{
+			pSceneX->m_ModelType = model;
 			pSceneX->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));
 			pSceneX->m_pos = pos;
 			pSceneX->m_rot = Rot;
@@ -109,14 +110,14 @@ void CSceneX::Uninit(void)
 			if (m_pTexture[nCnt] != NULL)
 			{
 				//テクスチャ破棄
-				m_pTexture[nCnt]->Release();
-				m_pTexture[nCnt] = NULL;
+				//m_pTexture[nCnt]->Release();
+				//m_pTexture[nCnt] = NULL;
 			}
 		}
 		//メモリを開放 (解体)
-		delete[] m_pTexture;
+		//delete[] m_pTexture;
 		//NULLを入れる (更地)
-		m_pTexture = NULL;
+		//m_pTexture = NULL;
 	}
 	// オブジェクトの解放
 	Release();
@@ -128,7 +129,6 @@ void CSceneX::Uninit(void)
 void CSceneX::Update(void)
 {
 
-
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "ModelPos : x", m_pos.x, "f", "   y", m_pos.y, "f", "  z", m_pos.z, "f");
 #endif
@@ -139,6 +139,8 @@ void CSceneX::Update(void)
 //=============================================================================
 void CSceneX::Draw(void)
 {
+#if 1
+
 	D3DXMATRIX mtxRot, mtxTrans, mtxScale;				// 計算用マトリックス
 	D3DMATERIAL9 matDef;						// 現在のマテリアル保存用
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
@@ -215,6 +217,7 @@ void CSceneX::Draw(void)
 	//頂点法線の自動正規化
 	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
 
+#endif
 }
 
 //=============================================================================
@@ -438,23 +441,26 @@ void CSceneX::BindModel(LPD3DXBUFFER pBuffMat, DWORD nNumMat, LPD3DXMESH pMesh)
 	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
 
 	//テクスチャをマテリアルの数分動的確保
-	m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
+	//m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
+
+	m_pTexture = CLoad::GetTexture(m_ModelType);
+
+
 
 	//マテリアルの数回す
-	for (int nCntMatTex = 0; nCntMatTex < (int)m_nNumMat; nCntMatTex++)
-	{
-		//NULLを入れる 中身を空に
-		m_pTexture[nCntMatTex] = NULL;
+	//for (int nCntMatTex = 0; nCntMatTex < (int)m_nNumMat; nCntMatTex++)
+	//{
+	//	//NULLを入れる 中身を空に
+	//	m_pTexture[nCntMatTex] = NULL;
 
-		if (pMat[nCntMatTex].pTextureFilename != NULL)
-		{
-			// テクスチャの設定
-			D3DXCreateTextureFromFile(pDevice,		// デバイスへのポインタ
-				pMat[nCntMatTex].pTextureFilename,	// ファイルの名前
-				&m_pTexture[nCntMatTex]);		// テクスチャへのポインタ
-		}
-	}
-
+	//	if (pMat[nCntMatTex].pTextureFilename != NULL)
+	//	{
+	//		// テクスチャの設定
+	//		D3DXCreateTextureFromFile(pDevice,		// デバイスへのポインタ
+	//			pMat[nCntMatTex].pTextureFilename,	// ファイルの名前
+	//			&m_pTexture[nCntMatTex]);		// テクスチャへのポインタ
+	//	}
+	//}
 }
 
 //=============================================================================

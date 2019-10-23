@@ -498,24 +498,7 @@ void CMeshField::Update(void)
 #endif
 
 #ifdef _DEBUG
-	//if (pInputKeyboard->GetTrigger(DIK_9) == true)
-	//{// 9キーが押されたら
-	//	LoadHeight();
-	//}
-	/*for (int nCntNor = 0; nCntNor < 25; nCntNor++)
-	{
-		CDebugProc::Print("cncfcfcfc", "法線[", nCntNor, "] : (", pVtx[nCntNor].nor.x, ", ", pVtx[nCntNor].nor.y, ", ", pVtx[nCntNor].nor.z, ")");
-	}*/
-
-	/*for (int nCntNor = 0; nCntNor < 25; nCntNor++)
-	{
-		CDebugProc::Print("cncfcfcfc", "法線[", nCntNor, "] : (", m_aNor[nCntNor].x, ", ", m_aNor[nCntNor].y, ", ", m_aNor[nCntNor].z, ")");
-	}*/
-
-	//for (int nCntNor = 0; nCntNor < 16; nCntNor++)
-	//{
-	//	CDebugProc::Print("cncfcfcfc", "pos[", nCntNor, "] : (", pVtx[nCntNor].pos.x, ", ", pVtx[nCntNor].pos.y, ", ", pVtx[nCntNor].pos.z, ")");
-	//}
+	CDebugProc::Print("c", "フィールド");
 
 #endif
 
