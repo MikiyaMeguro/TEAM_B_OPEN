@@ -216,6 +216,9 @@ bool CPlayer::CollisionBullet(void)
 				if(sqrtf(X + Y + Z) < BULLET_COLLISION_SIZE &&
 					m_nID != pBullet->GetID())
 				{//‹…‚Ì”»’è
+
+					/*“¾“_‰ÁZ (“–‚Ä‚½ƒLƒƒƒ‰‚ÌID‚ÍpBullet‚ÌGetID‚Åæ“¾‚Å‚«‚é)*/
+
 					//‚«”ò‚Î‚µ
 					DamageReaction(10.0f,BulletRot);
 					//’eíœ
