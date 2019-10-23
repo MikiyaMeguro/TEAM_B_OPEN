@@ -43,6 +43,8 @@ public:
 	static int GetTime(void) { return m_nTime; };
 	static void AddTime(int nTime);
 
+	static bool GetTimeFlag(void) { return m_bCountFlag; };
+	static void SetTimeFlag(bool bFlag) { m_bCountFlag = bFlag; };
 private:
 	void DebugKey(void);
 	void TimeManagement(void);
@@ -51,11 +53,15 @@ private:
 	static int				m_nTime;			// 時間
 	static int				m_nTimeNumCount;	// 時間の表示回数
 	static int				m_nTimeCount;		// 時間のカウンタ
+	static int				m_nTimeOld;
 	int						m_nTimeNum;			// 時間の表示数字数
 	int						m_nWaitTime;		// ゲーム終了時の待ち時間
 	int						m_nNumPlayer;		// 人数保管
 	bool					m_bStart;
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pColon;			// コロン
+
+	static bool m_bCountFlag;			//時間をカウントするか
+
 };
 #endif

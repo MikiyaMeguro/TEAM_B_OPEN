@@ -32,6 +32,8 @@
 int						CTime::m_nTime = 0;
 int						CTime::m_nTimeNumCount = 0;
 int						CTime::m_nTimeCount = 0;
+bool					CTime::m_bCountFlag = true;			//ŽžŠÔ‚ðƒJƒEƒ“ƒg‚·‚é‚©
+int						CTime::m_nTimeOld = 0;
 //=============================================================================
 // ¶¬ˆ—
 //=============================================================================
@@ -86,6 +88,7 @@ HRESULT CTime::Init(void)
 {
 	int nTexData = 0;
 	m_nTime = GAME_TIME;
+	m_nTimeOld = GAME_TIME - 30;
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
 
 	// Œã‚ë‚Ì”wŒi
@@ -217,8 +220,11 @@ void CTime::Update(void)
 	 //ƒQ[ƒ€
 		if (m_bStart == false)
 		{
-			m_nTimeCount++;
-			TimeManagement();	// ŽžŠÔ‚ÌŠÇ—
+			if (m_bCountFlag == true)
+			{
+				m_nTimeCount++;
+				TimeManagement();	// ŽžŠÔ‚ÌŠÇ—
+			}
 		}
 
 		int nTexData = 0;
@@ -292,6 +298,7 @@ void CTime::AddTime(int nTime)
 	if (m_nTime > 0)
 	{
 		m_nTime += nTime;
+		m_nTimeOld += nTime;
 	}
 
 	if (GAME_TIME_MAX < m_nTime) { m_nTime = GAME_TIME_MAX; }
@@ -324,7 +331,8 @@ void CTime::TimeManagement(void)
 	if (m_nTimeCount % 60 == 0)
 	{// 1•b‚²‚Æ‚ÉŒ¸ŽZ(§ŒÀŽžŠÔ)
 		m_nTime--;
-		if ((m_nTime % 100) == 0) { m_nTime -= 41; }
+		int nNum = m_nTime - m_nTimeOld;
+		if (nNum < 0) { m_nTime -= 40; m_nTimeOld -= 100; }
 		if (m_nTime < 0) { m_nTime = 0; }
 		//m_nTimeNum = PowerCalculation(m_nTime, 0);
 	}

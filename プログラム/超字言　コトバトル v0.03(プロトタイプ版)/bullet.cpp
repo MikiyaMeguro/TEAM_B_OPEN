@@ -74,6 +74,9 @@ void CBulletBase::Update(void)
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//À•W(ˆÚ“®—Ê)‚ğæ‚èo‚·
 
 	m_pos += move;
+
+	//°‚Æ‚Ì”»’è
+
 }
 
 //=============================================================================
