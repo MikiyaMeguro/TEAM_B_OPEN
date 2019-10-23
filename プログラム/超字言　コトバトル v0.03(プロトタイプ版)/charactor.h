@@ -179,6 +179,8 @@ private:
 	void Homing_CPU(void);		//追尾
 	void Attack_CPU(void);		//攻撃
 
+	void StepMove(D3DXVECTOR3& move,float& fRot);
+
 	D3DXVECTOR3 m_CameraPosR;
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
 	//CPUで使うメンバ変数

@@ -125,6 +125,13 @@ void C3DCharactor::Update(void)
 		pos = m_RespawnPos;
 		move.y = 0.0f;
 	}
+
+	//ステップの待機時間のカウントダウン
+	if (m_nCntStepCoolTime > 0)
+	{
+		m_nCntStepCoolTime--;
+	}
+
 }
 
 //=============================================================================
@@ -245,15 +252,12 @@ void C3DCharactor::CharaMove_Input(void)
 				if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.25f; }
 				if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 0.75f; }
 			}
-			move.x += sinf(CameraRot.y + fStepRot) * 6.0f;
-			move.z += cosf(CameraRot.y + fStepRot) * 6.0f;
 
-			m_nCntStepCoolTime = 30;
+			fStepRot += CameraRot.y;
+
+			StepMove(move,fStepRot);
+
 		}
-	}
-	if (m_nCntStepCoolTime > 0)
-	{
-		m_nCntStepCoolTime--;
 	}
 	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
 
@@ -806,7 +810,7 @@ void C3DCharactor::Homing_CPU(void)
 	}
 	else
 	{
-		move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		//move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	}
 }
 
@@ -817,5 +821,17 @@ void C3DCharactor::Attack_CPU(void)
 {
 	//弾の生成
 	//GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+
+}
+
+//=============================================================================
+// ステップ処理
+//=============================================================================
+void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
+{
+	move.x += sinf(fRot) * STEP_DEFAULT_MOVEMENT;
+	move.z += cosf(fRot) * STEP_DEFAULT_MOVEMENT;
+
+	m_nCntStepCoolTime = 30;
 
 }
