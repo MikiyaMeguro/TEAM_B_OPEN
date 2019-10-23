@@ -131,7 +131,7 @@ HRESULT CPlayer::Init(void)
 
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_LEFT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_RIGHT_SHOULDER);
 
 	return S_OK;
 }
@@ -284,7 +284,7 @@ bool CPlayer::CollisionBullet(void)
 				float X = (BulletPos.x - PlayerPos.x) * (BulletPos.x - PlayerPos.x);
 				float Y = (BulletPos.y - PlayerPos.y) * (BulletPos.y - PlayerPos.y);
 				float Z = (BulletPos.z - PlayerPos.z) * (BulletPos.z - PlayerPos.z);
-				
+
 				if(sqrtf(X + Y + Z) < BULLET_COLLISION_SIZE &&
 					m_nID != pBullet->GetID())
 				{//球の判定
