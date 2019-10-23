@@ -83,6 +83,7 @@ public:
 	LPCSTR GetCameraName(void) { return m_ChildCameraName; };
 	void SetCameraName(LPCSTR name) { m_ChildCameraName = name; };
 
+	void SetTransTime(int nTime) { m_nCntTransTime = nTime; };
 	CWordManager *GetWordManager(void) { return m_pWordManager; }				// Œ¾—tŠÇ—‚Ìæ“¾
 private:
 	bool CollisionBullet(void);

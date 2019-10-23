@@ -43,6 +43,8 @@ public:
 	static int GetTime(void) { return m_nTime; };
 	static void AddTime(int nTime);
 
+	static bool GetTimeFlag(void) { return m_bCountFlag; };
+	static void SetTimeFlag(bool bFlag) { m_bCountFlag = bFlag; };
 private:
 	void DebugKey(void);
 	void TimeManagement(void);
@@ -58,5 +60,8 @@ private:
 	bool					m_bStart;
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pColon;			// コロン
+
+	static bool m_bCountFlag;			//時間をカウントするか
+
 };
 #endif

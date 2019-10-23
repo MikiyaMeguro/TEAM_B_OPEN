@@ -83,8 +83,11 @@ HRESULT CMeshField::Init(void)
 	m_bRand = false;
 
 	//’†‰›‚É”z’u
-	float TestX = (POLYGON_X / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE / 2);
-	float TestZ = (POLYGON_Z / 2) * MESHFIELD_SIZE - (MESHFIELD_SIZE / 2);
+	float TestX = MESH_CENTER;
+	float TestZ = -MESH_CENTER;
+	//TestX = MESH_CENTER;
+
+	//MESH_CENTER
 	//m_pos.x = (POLYGON_X / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE / 2);
 	//m_pos.z = (POLYGON_Z / 2) * MESHFIELD_SIZE - (MESHFIELD_SIZE / 2);
 
@@ -587,8 +590,8 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 		{
 			float  test = MESH_CENTER - MESHFIELD_SIZE + (nCntX * MESHFIELD_SIZE);
 			float  test1 = MESH_CENTER + MESHFIELD_SIZE + (nCntX * MESHFIELD_SIZE);
-			float  test2 = MESH_CENTER + (nCntZ * MESHFIELD_SIZE);
-			float  test3 = MESH_CENTER + MESHFIELD_SIZE + (nCntZ * MESHFIELD_SIZE);
+			float  test2 = MESH_CENTER - MESHFIELD_SIZE + (nCntZ * MESHFIELD_SIZE);
+			float  test3 = MESH_CENTER  + (nCntZ * MESHFIELD_SIZE);
 
 			if (pos.x >= test && pos.x < test1)
 			{
