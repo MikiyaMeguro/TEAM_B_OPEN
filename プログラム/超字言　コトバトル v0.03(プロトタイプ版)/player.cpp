@@ -20,7 +20,7 @@
 // マクロ定義
 //=============================================================================
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 20.0f, 5.0f))			//キャラクターの当たり判定
-
+#define MODEL_LOAD_TEXT "data/MOTION/motion_bea.txt"
 //=============================================================================
 // コンストラクタ&デストラクタ
 //=============================================================================
@@ -52,6 +52,28 @@ CPlayer* CPlayer::Create(void)
 
 	return pPlayer;
 }
+//=============================================================================
+// モデルロード処理
+//=============================================================================
+HRESULT CPlayer::ModelLoad(LPCSTR pFileName)
+{
+	FILE* pFile = NULL;		// ファイルポインタ
+	char ReadText[256];		// 読み込んだ文字列を入れておく
+	char HeadText[256];		// 比較用
+	char DustBox[256];		// 使用しないものを入れておく
+
+	//ファイルオープン
+	pFile = fopen(pFileName, "r");
+
+	if (pFile != NULL)
+	{//ファイルが開かれていれば
+
+	}
+
+	fclose(pFile);
+
+	return S_OK;
+}
 
 //=============================================================================
 // 設定処理
@@ -77,6 +99,8 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 		m_pWordManager->SetID(m_nID);
 	}
 
+	ModelLoad(MODEL_LOAD_TEXT);
+
 	//描画用モデル生成
 	m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
 	m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);
@@ -92,6 +116,8 @@ HRESULT CPlayer::Init(void)
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
 	m_nCntTransTime = 0;
+
+
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_LEFT_SHOULDER);

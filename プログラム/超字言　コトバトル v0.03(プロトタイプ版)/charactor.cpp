@@ -13,6 +13,7 @@
 #include "debugProc.h"
 #include "meshField.h"
 #include "word_manager.h"
+#include "point.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -124,6 +125,14 @@ void C3DCharactor::Update(void)
 	{
 		pos = m_RespawnPos;
 		move.y = 0.0f;
+
+		CPoint *pPoint = NULL;
+		pPoint = CGame::GetPoint(GetThisCharactor()->GetID());
+
+		if (pPoint != NULL)
+		{
+			pPoint->AddPoint(-1);
+		}
 	}
 
 	//ステップの待機時間のカウントダウン
