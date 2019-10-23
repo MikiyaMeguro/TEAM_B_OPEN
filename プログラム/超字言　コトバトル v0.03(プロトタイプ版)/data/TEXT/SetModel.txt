@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 14
+NUM_MODEL = 16
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -26,8 +26,10 @@ MODEL_FILENAME = data/MODEL/Taico.x"				#8 太鼓
 MODEL_FILENAME = data/MODEL/coin.x"					#9 コイン
 MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#10 小さい壁  
 MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#11 大きい壁
-MODEL_FILENAME = data/MODEL/box000.x"				#12
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#13
+MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#12 歯車
+MODEL_FILENAME = data/MODEL/Dust.x"					#13 ゴミ
+MODEL_FILENAME = data/MODEL/box000.x"				#14
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#15
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
@@ -103,35 +105,28 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 11
-	POS = 360.0 0.0 150.0
+	TYPE = 12
+	POS = 0.0 0.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	COLLISION = 6
 END_MODELSET
 
 MODELSET
-	TYPE = 11
-	POS = 360.0 0.0 -150.0
+	TYPE = 12
+	POS = 360.0 0.0 -300.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	COLLISION = 7
 END_MODELSET
 
 MODELSET
-	TYPE = 11
-	POS = -400.0 0.0 150.0
+	TYPE = 12
+	POS = 400.0 0.0 300.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	COLLISION = 8
 END_MODELSET
 
-MODELSET
-	TYPE = 11
-	POS = -400.0 0.0 -150.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
-END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！

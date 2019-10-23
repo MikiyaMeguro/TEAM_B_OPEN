@@ -77,8 +77,6 @@ void CWordManager::Update(void)
 
 	CreateOblDebug();		// 数字で文字の管理(デバック用)
 
-	Delete();				// 文字の削除
-
 	if (m_bPress == true)
 	{
 		if (m_nCntaAnswer == 0)
@@ -145,7 +143,7 @@ void CWordManager::Reset(void)
 //=============================================================================
 void CWordManager::Delete(void)
 {
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
+	//if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
 	{
 		if (m_nCntNum < 3)
 		{	// 3つ以下の場合
@@ -180,27 +178,46 @@ void CWordManager::BulletCreate(int nID)
 			BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
 		}
 
-		if (m_nCntaAnswer == MAX_WORD)
-		{	// // 指定した文字なら弾を生成する
-			CModelBullet* pModel = CModelBullet::Create();
-			if (pModel != NULL)
-			{
-				pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
-			}
-		}
-		else
-		{	// それ以外の場合
-			CWordBullet* pWord = CWordBullet::Create();
-			if (pWord != NULL)
-			{
-				pWord->Set(BulletPos, BulletRot, 5.0f, 100, 0, nID);
-			}
-		}
-		if (CGame::GetTube(m_nPlayerID) != NULL)
+		if (m_bPress == true)
 		{
-			CGame::GetTube(m_nPlayerID)->AllDelete();
+			if (m_nCntaAnswer == MAX_WORD)
+			{	// // 指定した文字なら弾を生成する
+				CModelBullet* pModel = CModelBullet::Create();
+				if (pModel != NULL)
+				{
+					pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
+				}
+			}
+			else if (m_nCntaAnswer < MAX_WORD)
+			{	// ゴミモデルを出す 
+				CModelBullet* pModel = CModelBullet::Create();
+				if (pModel != NULL)
+				{
+					pModel->Set(BulletPos, BulletRot, CLoad::MODE_DUST, 5.0f, 100, nID);
+				}
+			}
+
+			Reset();		// 設定を戻す
+			if (CGame::GetTube(m_nPlayerID) != NULL)
+			{
+				CGame::GetTube(m_nPlayerID)->AllDelete();
+			}
 		}
-		Reset();		// 設定を戻す
+		else if(m_bPress == false)
+		{	// それ以外の場合
+			if (m_nCntNum > 0)
+			{
+				CWordBullet* pWord = CWordBullet::Create();
+
+				if (pWord != NULL)
+				{
+					pWord->Set(BulletPos, BulletRot, 5.0f, 100, GetWordNum(0), nID);
+				}
+
+				Delete();		// 文字を一部削除
+
+			}
+		}
 	}
 }
 
