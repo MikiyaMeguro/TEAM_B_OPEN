@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // メッシュフィールドの処理 [meshFiled.h]
-// Author : 長山拓実
+// Author :
 //
 //=============================================================================
 #ifndef _MESHFIELD_H_
@@ -19,7 +19,7 @@
 #define POLYGON_Z				(20)						// ポリゴンの数（Z）
 #define MESHFIELD_SIZE			(40.0f)						// メッシュフィールドの大きさ
 #define NUM_POLYGON				(10000)						// メッシュフィールドの大きさ
-#define MESH_CENTER				((POLYGON_X / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE / 2))	//中央値
+#define MESH_CENTER				((POLYGON_X / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE))	//中央値
 
 //========================================
 // クラスの定義
