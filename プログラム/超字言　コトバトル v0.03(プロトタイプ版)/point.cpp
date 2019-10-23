@@ -110,7 +110,7 @@ HRESULT CPoint::Init(void)
 //=============================================================================
 void CPoint::Uninit(void)
 {
-	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
 	{	// タイマーの破棄
 		if (m_apNumber[nCntPoint] != NULL)
 		{
