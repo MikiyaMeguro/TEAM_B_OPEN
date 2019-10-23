@@ -51,6 +51,7 @@ public:
 		OBJTYPE_MODESELECT,
 		OBJTYPE_TIME,		// éûä‘
 		OBJTYPE_BULLET,
+		OBJTYPE_POINT,		// É|ÉCÉìÉg
 		OBJTYPE_MAX			// ëçêî
 	} OBJTYPE;
 

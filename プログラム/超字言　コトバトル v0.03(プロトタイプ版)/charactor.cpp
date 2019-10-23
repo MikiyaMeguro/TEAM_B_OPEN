@@ -744,10 +744,12 @@ void C3DCharactor::Homing_CPU(void)
 				float fCircle = ((Pos.x - PlayerPos[nCntPlayer].x) * (Pos.x - PlayerPos[nCntPlayer].x)) + ((Pos.z - PlayerPos[nCntPlayer].z) * (Pos.z - PlayerPos[nCntPlayer].z));
 				if (fCircle < fAngle * fAngle && fCircle > fLength)
 				{	// 距離内に入ったら
-					// プレイヤーに近づける
-					move.x += sinf(atan2f(PlayerPos[nCntPlayer].x - Pos.x, PlayerPos[nCntPlayer].z - Pos.z)) * speed;
-					move.z += cosf(atan2f(PlayerPos[nCntPlayer].x - Pos.x, PlayerPos[nCntPlayer].z - Pos.z)) * speed;
-
+					if (m_CpuThink != THINK_WATCH)
+					{
+						// プレイヤーに近づける
+						move.x += sinf(atan2f(PlayerPos[nCntPlayer].x - Pos.x, PlayerPos[nCntPlayer].z - Pos.z)) * speed;
+						move.z += cosf(atan2f(PlayerPos[nCntPlayer].x - Pos.x, PlayerPos[nCntPlayer].z - Pos.z)) * speed;
+					}
 					float DiffDis = (PlayerPos[nCntPlayer].x + Pos.x) / 2;
 					testpos = D3DXVECTOR3((PlayerPos[nCntPlayer].x + Pos.x) / 2, (PlayerPos[nCntPlayer].y + Pos.y) / 2, (PlayerPos[nCntPlayer].z + Pos.z) / 2);
 					// 目的の角度
@@ -773,9 +775,22 @@ void C3DCharactor::Homing_CPU(void)
 						rot.y += D3DX_PI * 2.0f;
 					}
 
+
+					if (fDestAngle > D3DX_PI)
+					{
+						fDestAngle -= D3DX_PI * 2.0f;
+					}
+					if (fDestAngle < -D3DX_PI)
+					{
+						fDestAngle += D3DX_PI * 2.0f;
+					}
+
 					if (m_CpuThink == THINK_WATCH)
 					{
-						//m_CpuThink = THINK_ATTACK;
+						if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
+						{
+							m_CpuThink = THINK_ATTACK;
+						}
 					}
 				}
 			}
@@ -820,8 +835,10 @@ void C3DCharactor::Homing_CPU(void)
 void C3DCharactor::Attack_CPU(void)
 {
 	//弾の生成
-	//GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
-
+	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+	{
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+	}
 }
 
 //=============================================================================
