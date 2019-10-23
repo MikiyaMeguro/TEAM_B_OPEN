@@ -23,6 +23,7 @@
 #include "time.h"
 #include "PlayerNumSelect.h"
 #include "object.h"
+#include "point.h"
 
 #include "PlayerNumSelect.h"
 
@@ -42,6 +43,7 @@
 CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
 CTube *CGame::m_apTube[MAX_PLAYER] = {};
 CMeshField *CGame::m_pMeshField = NULL;
+CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -88,6 +90,8 @@ void CGame::Init(void)
 
 	// 文字の可視化UI(2D)の生成
 	TubeSetting((int)NumPlayer);
+
+	SetPointFrame((int)NumPlayer);	// ポイントの設定
 
 	WordCreate();
 
@@ -137,6 +141,14 @@ void CGame::Uninit(void)
 		{	// 文字の可視化UI(2D)の破棄
 			m_apTube[nCntTube]->Uninit();
 			m_apTube[nCntTube] = NULL;
+		}
+	}
+	for (int nCntPoint = 0; nCntPoint < MAX_PLAYER; nCntPoint++)
+	{
+		if (m_pPoint[nCntPoint] != NULL)
+		{	// ポイントの破棄
+			m_pPoint[nCntPoint]->Uninit();
+			m_pPoint[nCntPoint] = NULL;
 		}
 	}
 	//全ての終了処理
@@ -472,6 +484,30 @@ void CGame::TubeSetting(int nNum)
 
 	default:
 		break;
+	}
+}
+
+//=============================================================================
+// ポイントの生成処理
+//=============================================================================
+void CGame::SetPointFrame(int nNumPlayer)
+{
+	if (nNumPlayer <= MAX_PLAYER && nNumPlayer >= 0)
+	{	// 指定人数の範囲内
+		for (int nCount = 0; nCount < MAX_PLAYER; nCount++)
+		{
+			if (m_pPoint[nCount] == NULL)
+			{
+				if (nNumPlayer > nCount)
+				{	// プレイ人数分ポイント生成
+					m_pPoint[nCount] = CPoint::Create(nCount, nNumPlayer, CPoint::TYPR_PLAYER);
+				}
+				else
+				{	// CPUのポイント生成
+					m_pPoint[nCount] = CPoint::Create(nCount, nNumPlayer, CPoint::TYPE_CPU);
+				}
+			}
+		}
 	}
 }
 
