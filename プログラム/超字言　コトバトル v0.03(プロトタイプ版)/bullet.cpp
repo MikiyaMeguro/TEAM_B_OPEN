@@ -15,7 +15,7 @@
 //=============================================================================
 CBulletBase::CBulletBase(int nPriority) : CScene(nPriority)
 {
-
+	m_Type = TYPE_NONE;
 }
 CBulletBase::~CBulletBase()
 {
@@ -132,7 +132,7 @@ HRESULT CModelBullet::Init(void)
 {
 	CBulletBase::Init();
 
-
+	m_Type = TYPE_MODEL;
 	return S_OK;
 }
 
@@ -224,6 +224,7 @@ void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife,
 HRESULT CWordBullet::Init(void)
 {
 	CBulletBase::Init();
+	m_Type = TYPE_WORD;
 
 	return S_OK;
 }
