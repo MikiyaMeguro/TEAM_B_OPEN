@@ -11,6 +11,7 @@
 
 #include "charactor.h"
 #include "scene.h"
+#include "sceneBillboard.h"
 
 #define PLAYER_MODELNUM (13)
 
@@ -100,5 +101,6 @@ private:
 	CSceneX* m_pPlayerModel;						//プレイヤーのモデル(仮、後で↓の変数に差し替える)
 	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
 	CWordManager *m_pWordManager;
+	CSceneBillBoard *m_pPlayerNum;	// プレイヤー番号
 };
 #endif // !_PLAYER_H_

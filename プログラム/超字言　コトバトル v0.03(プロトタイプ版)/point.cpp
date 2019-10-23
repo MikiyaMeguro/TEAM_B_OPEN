@@ -195,6 +195,20 @@ void CPoint::AddPoint(int nPoint)
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 }
 //=============================================================================
+// É^ÉCÉÄå∏éZèàóù
+//=============================================================================
+void CPoint::SubtractionPoint(int nPoint)
+{
+	if (m_nTotalPoint < MAX_POINT)
+	{
+		m_nTotalPoint -= nPoint;
+	}
+
+	if (0 > m_nTotalPoint) { m_nTotalPoint = 0; }
+	m_nPointNum = PowerCalculation(m_nTotalPoint);
+}
+
+//=============================================================================
 // Ç◊Ç´èÊÇÃåvéZ
 //=============================================================================
 int CPoint::PowerCalculation(int nData)

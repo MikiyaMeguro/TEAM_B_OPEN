@@ -49,7 +49,13 @@ public:
 	// İ’è@æ“¾@‚ÌŠÖ”
 	//============================
 	int GetPoint(void) { return m_nTotalPoint; };
-	void AddPoint(int nPoint);
+
+	//============================
+	// ‰ÁZ@Œ¸Z@‚ÌŠÖ”
+	//============================
+	void AddPoint(int nPoint);				// ‰ÁZˆ—
+	void SubtractionPoint(int nPoint);		// Œ¸Zˆ—
+
 
 private:
 	void DebugKey(void);
