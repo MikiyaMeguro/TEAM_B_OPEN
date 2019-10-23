@@ -8,6 +8,9 @@
 #include "manager.h"
 #include "word_manager.h"
 #include "object.h"
+#include "point.h"
+#include "game.h"
+#include "tutorial.h"
 
 #include "sceneX.h"
 
@@ -237,6 +240,11 @@ bool CPlayer::CollisionBullet(void)
 				{//球の判定
 
 					/*得点加算 (当てたキャラのIDはpBulletのGetIDで取得できる)*/
+					CPoint *pPoint = NULL;
+					if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
+					if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /*チュートリアルで取得する*/ }
+
+					if (pPoint != NULL) { pPoint->AddPoint(1); }
 
 					//吹き飛ばし
 					DamageReaction(10.0f,BulletRot);

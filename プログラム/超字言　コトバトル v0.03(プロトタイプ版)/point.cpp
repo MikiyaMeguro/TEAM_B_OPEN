@@ -88,7 +88,7 @@ HRESULT CPoint::Init(void)
 
 	PointBGCreate();		// ポイントの背景生成
 
-	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
 	{	// ポイント初期設定
 		m_apNumber[nCntPoint] = new CNumber;
 		m_apNumber[nCntPoint]->Init(D3DXVECTOR3((m_pos.x - TIMER_SPACE * nCntPoint), m_pos.y, m_pos.z), 0);
@@ -186,7 +186,7 @@ void CPoint::TexPoint(int nTexData)
 //=============================================================================
 void CPoint::AddPoint(int nPoint)
 {
-	if (m_nTotalPoint > 0)
+	if (m_nTotalPoint < MAX_POINT)
 	{
 		m_nTotalPoint += nPoint;
 	}
