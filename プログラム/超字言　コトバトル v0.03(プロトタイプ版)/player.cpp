@@ -260,17 +260,20 @@ bool CPlayer::CollisionBullet(void)
 				float X = (BulletPos.x - PlayerPos.x) * (BulletPos.x - PlayerPos.x);
 				float Y = (BulletPos.y - PlayerPos.y) * (BulletPos.y - PlayerPos.y);
 				float Z = (BulletPos.z - PlayerPos.z) * (BulletPos.z - PlayerPos.z);
-
+				
 				if(sqrtf(X + Y + Z) < BULLET_COLLISION_SIZE &&
 					m_nID != pBullet->GetID())
 				{//球の判定
 
 					/*得点加算 (当てたキャラのIDはpBulletのGetIDで取得できる)*/
-					CPoint *pPoint = NULL;
-					if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
-					if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /*チュートリアルで取得する*/ }
+					if (pBullet->GetType() == CBulletBase::TYPE_MODEL)
+					{	// モデルの場合はポイント加算
+						CPoint *pPoint = NULL;
+						if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
+						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /*チュートリアルで取得する*/ }
 
-					if (pPoint != NULL) { pPoint->AddPoint(1); }
+						if (pPoint != NULL) { pPoint->AddPoint(1); }
+					}
 
 					//吹き飛ばし
 					DamageReaction(10.0f,BulletRot);
