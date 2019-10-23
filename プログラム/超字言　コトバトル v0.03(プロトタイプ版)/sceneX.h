@@ -70,6 +70,7 @@ public:
 	COLLISIONTYPE GetCollsionType(void) { return m_CollisionType; }		// 当たり判定の種類を取得
 
 	void SetScale(D3DXVECTOR3 Scale) { m_Scale = Scale; }				// スケールを取得
+	void SetModelType(CLoad::MODEL model) { m_ModelType = model; }				// スケールを取得
 
 	bool GetDrawFlag(void) { return m_bDraw; };
 	void SetDrawFlag(bool bDraw) { m_bDraw = bDraw; };

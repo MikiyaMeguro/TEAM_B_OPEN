@@ -38,6 +38,8 @@ public:
 		MODE_COIN,		// コイン
 		MODE_WALL_SMALL,// 小さい壁
 		MODE_WALL_BIG,	// 大きい壁
+		MODE_GEAR,		// 歯車
+		MODE_DUST,		// ゴミ
 		MODEL_BOX,		// 箱
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_MAX,

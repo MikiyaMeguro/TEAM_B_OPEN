@@ -43,24 +43,25 @@ CObject::~CObject()
 //=============================================================================
 CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model)
 {
-	CObject *pSceneX = NULL;
+	CObject *pObject = NULL;
 
-	if (pSceneX == NULL)
+	if (pObject == NULL)
 	{
 		// オブジェクトクラスの生成
-		pSceneX = new CObject;
+		pObject = new CObject;
 
-		if (pSceneX != NULL)
+		if (pObject != NULL)
 		{
-			pSceneX->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));		// モデルの割り当て
-			pSceneX->SetScale(Scale);	// スケールの設定
-			pSceneX->Init(pos);			// 初期化
-			pSceneX->SetRot(rot);		// 向きの設定
-			pSceneX->SetCollsionType(type);	// コリジョンのタイプ設定
+			pObject->SetModelType(model);
+			pObject->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));		// モデルの割り当て
+			pObject->SetScale(Scale);	// スケールの設定
+			pObject->Init(pos);			// 初期化
+			pObject->SetRot(rot);		// 向きの設定
+			pObject->SetCollsionType(type);	// コリジョンのタイプ設定
 		}
 	}
 
-	return pSceneX;
+	return pObject;
 }
 
 //=============================================================================

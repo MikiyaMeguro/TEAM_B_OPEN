@@ -460,8 +460,6 @@ void CSceneX::BindModel(LPD3DXBUFFER pBuffMat, DWORD nNumMat, LPD3DXMESH pMesh)
 
 	m_pTexture = CLoad::GetTexture(m_ModelType);
 
-
-
 	//ƒ}ƒeƒŠƒAƒ‹‚Ì”‰ñ‚·
 	//for (int nCntMatTex = 0; nCntMatTex < (int)m_nNumMat; nCntMatTex++)
 	//{
