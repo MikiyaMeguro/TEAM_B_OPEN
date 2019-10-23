@@ -123,6 +123,10 @@ void CGame::Init(void)
 		CTime::Create((int)NumPlayer);
 	}
 	else if (NumPlayer != CPlayerSelect::SELECTPLAYER_2P) { CTime::Create((int)NumPlayer); }
+
+	//デバック用
+	CTime::SetTimeFlag(false);
+	CCommand::RegistCommand("(DEBUG)TIMECOUNT_STOP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_TRIGGER,DIK_M);
 }
 //=============================================================================
 // 終了処理
@@ -190,6 +194,12 @@ void CGame::Update(void)
 	if (pCam != NULL)
 	{
 		pCam->SetRotation(pCam->GetRotation() + D3DXVECTOR3(0.0f,0.001f,0.0f));
+	}
+
+	//時間停止(デバック用)
+	if (CCommand::GetCommand("(DEBUG)TIMECOUNT_STOP"))
+	{
+		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));
 	}
 
 #ifdef _DEBUG

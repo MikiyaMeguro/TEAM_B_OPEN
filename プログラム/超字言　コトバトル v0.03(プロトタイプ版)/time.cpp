@@ -32,6 +32,8 @@
 int						CTime::m_nTime = 0;
 int						CTime::m_nTimeNumCount = 0;
 int						CTime::m_nTimeCount = 0;
+
+bool					CTime::m_bCountFlag = true;			//時間をカウントするか
 //=============================================================================
 // 生成処理
 //=============================================================================
@@ -217,8 +219,11 @@ void CTime::Update(void)
 	 //ゲーム
 		if (m_bStart == false)
 		{
-			m_nTimeCount++;
-			TimeManagement();	// 時間の管理
+			if (m_bCountFlag == true)
+			{
+				m_nTimeCount++;
+				TimeManagement();	// 時間の管理
+			}
 		}
 
 		int nTexData = 0;
