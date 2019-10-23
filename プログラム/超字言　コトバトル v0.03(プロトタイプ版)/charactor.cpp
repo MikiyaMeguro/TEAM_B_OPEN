@@ -394,7 +394,7 @@ void C3DCharactor::Think_CPU(void)
 
 	//s“®‚ðŒˆ‚ß‚éðŒ•¶
 	if (m_bFront == true)
-	{
+	{	//•Ç‚É“–‚½‚Á‚Ä‚é
 		m_CpuThink = THINK_ROTATION;
 		m_nActionTimer = 1;
 		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
@@ -420,9 +420,6 @@ void C3DCharactor::Think_CPU(void)
 		default:
 			break;
 		}
-
-
-
 #if 0
 		m_CpuThink = THINK_MOVE;
 		/*
@@ -499,7 +496,7 @@ void C3DCharactor::Action_CPU(void)
 	}
 
 	if (m_CpuThink == THINK_ESCAPE)
-	{
+	{	//“¦‚°‚é‚Æ‚«‚¾‚¯‹t‚ÉˆÚ“®
 		pos.x -= move.x;
 		pos.y += move.y;
 		pos.z -= move.z;
@@ -805,37 +802,6 @@ void C3DCharactor::Homing_CPU(void)
 			}
 		}
 	}
-
-	if (m_CpuThink != THINK_WATCH)
-	{
-		if (m_CpuThink == THINK_HOMING)
-		{
-			//Pos.x += move.x;
-			//Pos.y += move.y;
-			//Pos.z += move.z;
-			//move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-			//move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-			//move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
-
-		}
-		else if (m_CpuThink == THINK_ESCAPE)
-		{
-			/*Pos.x += move.x;
-			Pos.y += move.y;
-			Pos.z += move.z;*/
-			//move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-		/*	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-			move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-			move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;*/
-		//	move.x *= -1;
-		//	move.z *= -1;
-		}
-	}
-	else
-	{
-		//move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
 }
 
 //=============================================================================
@@ -843,7 +809,7 @@ void C3DCharactor::Homing_CPU(void)
 //=============================================================================
 void C3DCharactor::Attack_CPU(void)
 {
-	//’e‚Ì¶¬
+	//’e‚Ì¶¬	’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());

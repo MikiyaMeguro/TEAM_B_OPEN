@@ -133,6 +133,14 @@ void CGame::Init(void)
 //=============================================================================
 void CGame::Uninit(void)
 {
+	//メッシュフィールドの破棄
+	if (m_pMeshField != NULL)
+	{
+		m_pMeshField->Uninit();
+		m_pMeshField = NULL;
+	}
+
+
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		if (m_pPlayer[nCntPlayer] != NULL)

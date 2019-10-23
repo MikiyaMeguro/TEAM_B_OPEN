@@ -9,6 +9,7 @@
 #include "light.h"
 #include "camera.h"
 #include "scene3D.h"
+#include "sceneX.h"
 #include "game.h"
 #include "debugProc.h"
 #include "scene.h"
@@ -16,7 +17,7 @@
 #include "input.h"
 #include "InputKeyboard.h"
 #include <time.h>
-
+#include "load.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -51,6 +52,8 @@ void CTutorial::Init(void)
 {
 	//インスタンス
 	CManager *pManager = NULL;
+
+	//CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 }
 
 //=============================================================================

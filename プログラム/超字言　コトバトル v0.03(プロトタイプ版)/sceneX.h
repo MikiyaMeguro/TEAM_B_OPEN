@@ -78,7 +78,7 @@ public:
 
 
 private:
-	LPDIRECT3DTEXTURE9		*m_pTexture;			// テクスチャへのポインタ
+	LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
 	LPD3DXMESH				m_pMesh;			// メッシュ情報（頂点情報）へのポインタ
 	LPD3DXBUFFER			m_pBuffMat;			// マテリアル情報へのポインタ
@@ -88,6 +88,7 @@ private:
 	D3DXVECTOR3				m_pos;				// ポリゴンの位置
 	D3DXVECTOR3				m_rot;				// 上方向ベクトル
 	D3DXVECTOR3				m_Scale;			// スケール
+	CLoad::MODEL			m_ModelType;		// モデル番号
 	COLLISIONTYPE			m_CollisionType;	// 当たり判定
 	int						m_nCollsionNum;		// 当たり判定を行った場所
 

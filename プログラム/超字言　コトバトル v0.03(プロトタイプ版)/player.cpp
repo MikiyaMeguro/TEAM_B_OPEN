@@ -30,6 +30,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
+	m_pPlayerNum = NULL;
 }
 CPlayer::~CPlayer()
 {
@@ -99,6 +100,16 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 		m_pWordManager->SetID(m_nID);
 	}
 
+	if (m_pPlayerNum == NULL)
+	{
+		int nID = m_nID;
+		if (type == CCharaBase::MOVETYPE_NPC_AI) { nID = MAX_PLAYER; }	// COM表示にする
+		m_pPlayerNum = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, pos.y + 22.0f, pos.z), 7.0f, 3.0f, "プレイ人数");
+		m_pPlayerNum->SetTexture(D3DXVECTOR2(0.0f, nID * 0.2f), D3DXVECTOR2(1.0f, (nID * 0.2f) + 0.2f));
+		m_pPlayerNum->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+
+
 	ModelLoad(MODEL_LOAD_TEXT);
 
 	//描画用モデル生成
@@ -132,6 +143,14 @@ void CPlayer::Uninit(void)
 {
 	//キャラ情報クラス削除
 	ObjRelease(m_pCharactorMove);
+
+	// プレイヤー番号破棄
+	if (m_pPlayerNum != NULL)
+	{
+		m_pPlayerNum->Uninit();
+		m_pPlayerNum = NULL;
+	}
+
 
 	//描画モデル終了処理
 	if (m_pPlayerModel != NULL)
@@ -211,6 +230,11 @@ void CPlayer::Update(void)
 	else
 	{
 		m_pPlayerModel->SetDrawFlag(true);
+	}
+
+	if (m_pPlayerNum != NULL)
+	{
+		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 22.0f, m_pCharactorMove->GetPosition().z));
 	}
 
 

@@ -52,7 +52,8 @@ public:
 	static LPD3DXMESH GetMesh(int nIdx);
 	static LPD3DXBUFFER GetBuffMat(int nIdx);
 	static DWORD GetNumMat(int nIdx);
-
+	static void TextureSetting(int nModel);
+	static LPDIRECT3DTEXTURE9 *GetTexture(MODEL Model);
 
 	static void LoadFile(void);
 	static char *ReadLine(FILE *pFile, char *pDst);	//1行読み込み
@@ -67,6 +68,8 @@ private:
 	static const char *m_apModelFilename[];
 	static int m_nCntModel;
 	static int m_nMaxModel;
+
+	static LPDIRECT3DTEXTURE9	*m_pTexture[MODEL_MAX];			// テクスチャへのポインタ
 };
 
 #endif
