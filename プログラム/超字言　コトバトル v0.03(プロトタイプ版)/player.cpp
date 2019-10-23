@@ -26,6 +26,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_bLand = false;
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_pWordManager = NULL;
+	m_nCntTransTime = 0;
 }
 CPlayer::~CPlayer()
 {
@@ -87,7 +88,7 @@ HRESULT CPlayer::Init(void)
 	m_pPlayerModel = NULL;
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
-
+	m_nCntTransTime = 0;
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_LEFT_SHOULDER);
@@ -133,9 +134,11 @@ void CPlayer::Update(void)
 		//移動、回転の更新
 		m_pCharactorMove->Update();
 		m_pPlayerModel->SetRot(m_pCharactorMove->GetRotation());
-
-		//弾との当たり判定
-		CollisionBullet();
+		if (m_nCntTransTime <= 0)
+		{
+			//弾との当たり判定
+			CollisionBullet();
+		}
 
 		// モデルとの当たり判定
 		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
@@ -165,6 +168,22 @@ void CPlayer::Update(void)
 
 	//文字管理クラスの更新
 	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
+
+	//無敵時間のカウントダウン
+	if (m_nCntTransTime > 0)
+	{
+		m_nCntTransTime--;
+
+		if (m_nCntTransTime % 2 == 0)
+		{
+			m_pPlayerModel->SetDrawFlag(!(m_pPlayerModel->GetDrawFlag()));
+		}
+	}
+	else
+	{
+		m_pPlayerModel->SetDrawFlag(true);
+	}
+
 
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
@@ -221,6 +240,7 @@ bool CPlayer::CollisionBullet(void)
 
 					//吹き飛ばし
 					DamageReaction(10.0f,BulletRot);
+
 					//弾削除
 					pBullet->Uninit();
 
@@ -245,6 +265,7 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 	move.z += cosf(HitRotation.y) * fDamageValue * 2.0f;
 
 	move.y += fDamageValue;
+	m_nCntTransTime = 30;
 }
 //=============================================================================
 // 当たり判定(オブジェクト)処理

@@ -93,8 +93,9 @@ private:
 	int m_nID;	//識別ID(0～3の間)
 	PLAYER_TYPE m_PlayerType;
 	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
-	bool m_bLand;		// モデルに乗っているかどうか
+	bool m_bLand;					// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
+	int m_nCntTransTime;			//無敵時間
 
 	CSceneX* m_pPlayerModel;						//プレイヤーのモデル(仮、後で↓の変数に差し替える)
 	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ

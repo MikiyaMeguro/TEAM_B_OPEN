@@ -46,7 +46,7 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot,D3DXVECTOR3 Scale, CLoad::MODEL model,int nCollision);	// オブジェクトの生成
+	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CLoad::MODEL model, int nCollision);	// オブジェクトの生成
 
 	D3DXVECTOR3 GetPosition(void);						// 位置の取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置の設定
@@ -71,6 +71,9 @@ public:
 
 	void SetScale(D3DXVECTOR3 Scale) { m_Scale = Scale; }				// スケールを取得
 
+	bool GetDrawFlag(void) { return m_bDraw; };
+	void SetDrawFlag(bool bDraw) { m_bDraw = bDraw; };
+
 	int GetCollsionNum(void) { return m_nCollsionNum; }
 
 
@@ -88,6 +91,7 @@ private:
 	COLLISIONTYPE			m_CollisionType;	// 当たり判定
 	int						m_nCollsionNum;		// 当たり判定を行った場所
 
+	bool					m_bDraw;			//透明化フラグ(falseで消える)
 };
 
 #endif
