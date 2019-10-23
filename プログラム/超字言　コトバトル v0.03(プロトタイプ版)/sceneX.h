@@ -76,7 +76,7 @@ public:
 
 	int GetCollsionNum(void) { return m_nCollsionNum; }
 
-
+	void SetParent(D3DXMATRIX* pParent) { m_pParentMatrix = pParent; };
 private:
 	LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -93,6 +93,7 @@ private:
 	int						m_nCollsionNum;		// 当たり判定を行った場所
 
 	bool					m_bDraw;			//透明化フラグ(falseで消える)
+	D3DXMATRIX*				m_pParentMatrix;		//親マトリックス
 };
 
 #endif

@@ -33,6 +33,7 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_CollisionType = COLLISIONTYPE_NONE;
 	m_nCollsionNum = 0;
 	m_bDraw = true;
+	m_pParentMatrix = NULL;
 }
 
 //=============================================================================
@@ -141,7 +142,7 @@ void CSceneX::Draw(void)
 {
 #if 1
 
-	D3DXMATRIX mtxRot, mtxTrans, mtxScale;				// 計算用マトリックス
+	D3DXMATRIX mtxRot, mtxTrans, mtxScale,mtxParent;				// 計算用マトリックス
 	D3DMATERIAL9 matDef;						// 現在のマテリアル保存用
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
@@ -174,6 +175,15 @@ void CSceneX::Draw(void)
 	// 移動を反映
 	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+
+	if (m_pParentMatrix != NULL)
+	{
+		//親のマトリックスを掛け合わせる
+		D3DXMatrixMultiply(&m_mtxWorld,
+			&m_mtxWorld,
+			m_pParentMatrix);
+	}
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);

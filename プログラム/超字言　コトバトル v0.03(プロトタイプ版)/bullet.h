@@ -16,7 +16,6 @@
 class CSceneX;
 class CSceneBillBoard;
 
-
 //’eŠî–{ƒNƒ‰ƒX
 class CBulletBase : public CScene
 {

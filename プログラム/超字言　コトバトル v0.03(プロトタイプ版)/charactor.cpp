@@ -92,6 +92,7 @@ void C3DCharactor::Update(void)
 {
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 	D3DXVECTOR3& pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 	D3DXVECTOR3& move = CCharaBase::GetMove();
 
 	switch (CCharaBase::GetMoveType())
@@ -140,6 +141,18 @@ void C3DCharactor::Update(void)
 	{
 		m_nCntStepCoolTime--;
 	}
+
+	D3DXMATRIX mtxRot, mtxTrans;				// 計算用マトリックス
+	// ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	// 回転を反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	// 移動を反映
+	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
 }
 

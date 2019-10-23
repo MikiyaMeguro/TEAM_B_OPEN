@@ -12,8 +12,10 @@
 #include "charactor.h"
 #include "scene.h"
 #include "sceneBillboard.h"
+#include "CharaParts.h"
 
-#define PLAYER_MODELNUM (13)
+
+#define PLAYER_MODELNUM (14)
 
 //class CScene3D;
 class CSceneX;
@@ -57,6 +59,7 @@ public:
 		int nParent;
 		D3DXVECTOR3 pos;
 		D3DXVECTOR3 rot;
+		LPCSTR FileName;
 	}PartsLoadInfo;
 
 	CPlayer(int nPriority = 3);
@@ -99,9 +102,11 @@ private:
 	D3DXVECTOR3 m_posOld;
 	int m_nCntTransTime;			//無敵時間
 
-	CSceneX* m_pPlayerModel;						//プレイヤーのモデル(仮、後で↓の変数に差し替える)
-	//std::vector<CCharaParts*> m_pVecPlayerParts;	//キャラクターの構成パーツ
+
+	CSceneX* m_pPlayerModel;							//プレイヤーのモデル(仮、後で↓の変数に差し替える)
+
+	CCharaParts* m_pPlayerParts[PLAYER_MODELNUM];	//キャラクターの構成パーツ
 	CWordManager *m_pWordManager;
-	CSceneBillBoard *m_pPlayerNum;	// プレイヤー番号
+	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号
 };
 #endif // !_PLAYER_H_
