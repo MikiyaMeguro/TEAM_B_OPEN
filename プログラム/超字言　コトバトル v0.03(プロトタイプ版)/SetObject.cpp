@@ -43,9 +43,14 @@ CSetObject *CSetObject::Create()
 {
 	//オブジェクトポインタ
 	CSetObject *pSetObject;
-	pSetObject = new CSetObject;
-	//オブジェクトの初期化
-	pSetObject->Init();
+	if (pSetObject == NULL)
+	{
+		pSetObject = new CSetObject;
+		if (pSetObject != NULL)
+		{//オブジェクトの初期化
+			pSetObject->Init();
+		}
+	}
 	//オブジェクトの情報を返す
 	return pSetObject;
 }
