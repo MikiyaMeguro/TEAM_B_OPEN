@@ -42,7 +42,7 @@ CSetObject::~CSetObject()
 CSetObject *CSetObject::Create()
 {
 	//オブジェクトポインタ
-	CSetObject *pSetObject;
+	CSetObject *pSetObject = NULL;
 	if (pSetObject == NULL)
 	{
 		pSetObject = new CSetObject;
