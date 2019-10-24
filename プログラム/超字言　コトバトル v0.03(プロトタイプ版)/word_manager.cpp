@@ -150,7 +150,10 @@ void CWordManager::Delete(void)
 			if (m_nCntNum > 0)
 			{
 				m_nCntNum--;
-				CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+				if (CGame::GetTube(m_nPlayerID) != NULL)
+				{	// •¶š•ÛŠÇ‚ªNULL‚¶‚á‚È‚¢ê‡
+					CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+				}
 				m_aWord[0].nNum = 99;	// ‹ó‚Ìó‘Ô‚É
 				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
 				{
