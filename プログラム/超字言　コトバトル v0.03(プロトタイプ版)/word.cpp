@@ -86,13 +86,13 @@ void CWord::Uninit(void)
 void CWord::Update(void)
 {
 	// ローカル変数
-	//CPlayerSelect::SELECTPLAYER *NumPlayer = CPlayerSelect::GetModeSelectMode();
-	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//テスト
+	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	//CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//テスト
 
 	D3DXVECTOR3 pos = CSceneBillBoard::GetPos();	//位置の取得
 	D3DXVECTOR3 PosOld = pos;						// 位置を保存
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 1.0f, 0.0f);// 移動
-	CPlayer *pPlayer[MAX_PLAYER];
+	CPlayer *pPlayer[MAX_PLAYER] = {};
 	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
 
 	for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
