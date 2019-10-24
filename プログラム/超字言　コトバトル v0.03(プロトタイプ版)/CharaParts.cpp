@@ -10,10 +10,8 @@
 //=============================================================================
 //	コンストラクタ&デストラクタ
 //=============================================================================
-CCharaParts::CCharaParts(int nPriority) : CScene(nPriority)
-{
+CCharaParts::CCharaParts(){
 	m_pTexture = NULL;
-	m_pVtxBuff = NULL;
 	m_pMesh = NULL;
 	m_pBuffMat = NULL;
 	m_nNumMat = 0;
@@ -21,23 +19,6 @@ CCharaParts::CCharaParts(int nPriority) : CScene(nPriority)
 CCharaParts::~CCharaParts()
 {
 
-}
-
-//=============================================================================
-//	生成処理
-//=============================================================================
-CCharaParts* CCharaParts::Create(void)
-{
-	CCharaParts* pParts = NULL;
-
-	pParts = new CCharaParts(1);
-
-	if (pParts != NULL)
-	{
-		pParts->Init();
-	}
-
-	return pParts;
 }
 
 //=============================================================================
@@ -98,7 +79,6 @@ void CCharaParts::Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMA
 HRESULT CCharaParts::Init(void)
 {
 	m_pTexture = NULL;
-	m_pVtxBuff = NULL;
 	m_pMesh = NULL;
 	m_pBuffMat = NULL;
 	m_nNumMat = 0;
@@ -125,14 +105,14 @@ void CCharaParts::Uninit(void)
 			m_pTexture[nCntMat] = NULL;
 		}
 	}
+	delete m_pTexture;
+
 	//マテリアルの解放
 	if (m_pBuffMat != NULL)
 	{
 		m_pBuffMat->Release();
 		m_pBuffMat = NULL;
 	}
-
-	Release();
 }
 
 //=============================================================================

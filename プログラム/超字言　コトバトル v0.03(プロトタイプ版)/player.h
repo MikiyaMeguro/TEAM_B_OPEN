@@ -15,7 +15,7 @@
 #include "CharaParts.h"
 
 
-#define PLAYER_MODELNUM (14)
+#define PLAYER_MODELNUM (20)
 
 //class CScene3D;
 class CSceneX;
@@ -59,7 +59,7 @@ public:
 		int nParent;
 		D3DXVECTOR3 pos;
 		D3DXVECTOR3 rot;
-		LPCSTR FileName;
+		char FileName[256];
 	}PartsLoadInfo;
 
 	CPlayer(int nPriority = 3);

@@ -15,6 +15,7 @@
 #include "word_manager.h"
 #include "point.h"
 #include "word.h"
+#include "tutorial.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -129,11 +130,12 @@ void C3DCharactor::Update(void)
 		move.y = 0.0f;
 
 		CPoint *pPoint = NULL;
-		pPoint = CGame::GetPoint(GetThisCharactor()->GetID());
+		if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(GetThisCharactor()->GetID()); }
+		else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */}
 
 		if (pPoint != NULL)
 		{
-			pPoint->AddPoint(-1);
+			pPoint->SubtractionPoint(1);
 		}
 	}
 
@@ -376,7 +378,7 @@ void C3DCharactor::CharaMove_Input(void)
 		CameraRot,pCamera->GetLength());
 
 	//カメラの参照位置制御
-	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
+	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
 }
 //=============================================================================
 // CPUの思考処理
@@ -832,7 +834,7 @@ void C3DCharactor::Attack_CPU(void)
 	//弾の生成	弾を持っているときだけ
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),GetThisCharactor()->GetPosition());
 	}
 }
 

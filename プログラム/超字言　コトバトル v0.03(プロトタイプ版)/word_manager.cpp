@@ -85,10 +85,20 @@ void CWordManager::Update(void)
 			{	// 答えの数だけ回す
 				for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 				{	// 答との比較
-					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
-					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
-					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
+					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum && m_bAnswer[0] == false) { m_bAnswer[0] = true; }
+					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum && m_bAnswer[1] == false) { m_bAnswer[1] = true; }
+					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
 				}
+
+				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; }
+				else if (m_nCntaAnswer < MAX_WORD)
+				{
+					for (int nCount = 0; nCount < MAX_WORD; nCount++)
+					{
+					m_bAnswer[nCount] = false;
+					}
+				}
+
 				if (m_nCntaAnswer == MAX_WORD) { m_nCreateType = nCntAnswer; return; }
 				else { m_nCntaAnswer = 0; }
 			}
@@ -133,6 +143,12 @@ void CWordManager::Reset(void)
 		m_aWord[nCntWord].nNum = 99;
 		m_aWord[nCntWord].cWord = "NULL";
 	}
+
+	for (int nCount = 0; nCount < MAX_WORD; nCount++)
+	{
+		m_bAnswer[nCount] = false;
+	}
+
 	m_nCntaAnswer = 0;
 	m_nCntNum = 0;
 	m_bPress = false;
@@ -167,14 +183,14 @@ void CWordManager::Delete(void)
 //=============================================================================
 // 弾の生成
 //=============================================================================
-void CWordManager::BulletCreate(int nID)
+void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 {
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 
 	if (CGame::GetPlayer(nID) != NULL)
 	{//指定したプレイヤーが存在していれば
 		CCamera* pCam = pCameraManager->GetCamera(CGame::GetPlayer(nID)->GetCameraName());
-		D3DXVECTOR3 BulletPos = CGame::GetPlayer(nID)->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+		D3DXVECTOR3 BulletPos = BulletMuzzle;
 		D3DXVECTOR3 BulletRot = CGame::GetPlayer(nID)->GetRotation();
 		if (pCam != NULL)
 		{
@@ -192,7 +208,7 @@ void CWordManager::BulletCreate(int nID)
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
-			{	// ゴミモデルを出す 
+			{	// ゴミモデルを出す
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{

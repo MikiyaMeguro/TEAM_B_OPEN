@@ -14,14 +14,12 @@
 //=============================================================================
 //	ƒNƒ‰ƒX’è‹`
 //=============================================================================
-class CCharaParts : public CScene
+class CCharaParts
 {
 public:
 	CCharaParts();
-	CCharaParts(int nPriority = 1);
 	~CCharaParts();
 
-	static CCharaParts* Create(void);
 
 	void Set(LPCSTR ModelFile,D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXMATRIX* pParent);
 
