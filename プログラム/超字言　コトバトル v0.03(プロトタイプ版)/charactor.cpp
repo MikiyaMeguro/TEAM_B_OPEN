@@ -375,7 +375,7 @@ void C3DCharactor::CharaMove_Input(void)
 		CameraRot,pCamera->GetLength());
 
 	//カメラの参照位置制御
-	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
+	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
 }
 //=============================================================================
 // CPUの思考処理

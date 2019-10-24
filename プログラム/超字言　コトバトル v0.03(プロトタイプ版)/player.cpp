@@ -63,136 +63,136 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 HRESULT CPlayer::ModelLoad(LPCSTR pFileName)
 {
-	//FILE* pFile = NULL;		// ファイルポインタ
-	//char ReadText[256];		// 読み込んだ文字列を入れておく
-	//char HeadText[256];		// 比較用
-	//char DustBox[256];		// 使用しないものを入れておく
+	FILE* pFile = NULL;		// ファイルポインタ
+	char ReadText[256];		// 読み込んだ文字列を入れておく
+	char HeadText[256];		// 比較用
+	char DustBox[256];		// 使用しないものを入れておく
 
-	//int nCntMotionSetType = 0;					// モーションセットの種類の数
-	////int nCntMotionType = (int)MOTION_NEUTRAL;	// モーションの種類の数
-	//int nCntKeySet = 0;							// キーセット数
-	//int nCntKey = 0;							// キー数
-	//int nCntPartsSet = 0;						// パーツ数
-	//int nCntFileNameNum = 0;
-	//PartsLoadInfo LoadInfo[PLAYER_MODELNUM];		//ロード情報
-	//int nPartsNum = 0;
+	int nCntMotionSetType = 0;					// モーションセットの種類の数
+	//int nCntMotionType = (int)MOTION_NEUTRAL;	// モーションの種類の数
+	int nCntKeySet = 0;							// キーセット数
+	int nCntKey = 0;							// キー数
+	int nCntPartsSet = 0;						// パーツ数
+	int nCntFileNameNum = 0;
+	PartsLoadInfo LoadInfo[PLAYER_MODELNUM];		//ロード情報
+	int nPartsNum = 0;
 
-	//for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
-	//{
-	//	if (m_pPlayerParts[nCntParts] != NULL)
-	//	{
-	//		m_pPlayerParts[nCntParts]->Uninit();
-	//	}
-	//	m_pPlayerParts[nCntParts] = NULL;
-	//}
+	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	{
+		ObjRelease(m_pPlayerParts[nCntParts]);
+		m_pPlayerParts[nCntParts] = NULL;
+	}
 
-	////ファイルオープン
-	//pFile = fopen(pFileName, "r");
+	//ファイルオープン
+	pFile = fopen(pFileName, "r");
 
-	//if (pFile != NULL)
-	//{//ファイルが開かれていれば
-	//	while (strcmp(HeadText, "SCRIPT") != 0)
-	//	{// "SCRIPT" が読み込まれるまで繰り返し文字列を読み取る
-	//		fgets(ReadText, sizeof(ReadText), pFile);
-	//		sscanf(ReadText, "%s", &HeadText);
-	//	}
-	//	if (strcmp(HeadText, "SCRIPT") == 0)
-	//	{// "SCRIPT" が読み取れた場合、処理開始
-	//		while (strcmp(HeadText, "END_SCRIPT") != 0)
-	//		{// "END_SCRIPT" が読み込まれるまで繰り返し文字列を読み取る
-	//			fgets(ReadText, sizeof(ReadText), pFile);
-	//			sscanf(ReadText, "%s", &HeadText);
+	if (pFile != NULL)
+	{//ファイルが開かれていれば
+		while (strcmp(HeadText, "SCRIPT") != 0)
+		{// "SCRIPT" が読み込まれるまで繰り返し文字列を読み取る
+			fgets(ReadText, sizeof(ReadText), pFile);
+			sscanf(ReadText, "%s", &HeadText);
+		}
+		if (strcmp(HeadText, "SCRIPT") == 0)
+		{// "SCRIPT" が読み取れた場合、処理開始
+			while (strcmp(HeadText, "END_SCRIPT") != 0)
+			{// "END_SCRIPT" が読み込まれるまで繰り返し文字列を読み取る
+				fgets(ReadText, sizeof(ReadText), pFile);
+				sscanf(ReadText, "%s", &HeadText);
 
-	//			if (strcmp(HeadText, "\n") == 0)
-	//			{// 文字列の先頭が [\n](改行) の場合処理しない
+				if (strcmp(HeadText, "\n") == 0)
+				{// 文字列の先頭が [\n](改行) の場合処理しない
 
-	//			}
-	//			else if (strcmp(HeadText, "MODEL_FILENAME") == 0)
-	//			{
-	//				char cName[256];
-	//				sscanf(ReadText, "%s %c %s", &DustBox, &DustBox, cName);
+				}
+				else if (strcmp(HeadText, "MODEL_FILENAME") == 0)
+				{
+					char cName[256];
+					sscanf(ReadText, "%s %c %s", &DustBox, &DustBox, cName);
 
-	//				LoadInfo[nCntFileNameNum].FileName = (LPCSTR)cName;
-	//				nCntFileNameNum++;
-	//			}
-	//			else if (strcmp(HeadText, "CHARACTERSET") == 0)
-	//			{//キャラ
-	//				while (strcmp(HeadText, "END_CHARACTERSET") != 0)
-	//				{// "END_CHARACTERSET" が読み取れるまで繰り返し文字列を読み取る
-	//					fgets(ReadText, sizeof(ReadText), pFile);
-	//					sscanf(ReadText, "%s", &HeadText);
-	//					if (strcmp(HeadText, "\n") == 0)
-	//					{// 文字列の先頭が [\n](改行) の場合処理しない
+					strcpy(LoadInfo[nCntFileNameNum].FileName,cName);
+					nCntFileNameNum++;
+				}
+				else if (strcmp(HeadText, "CHARACTERSET") == 0)
+				{//キャラ
+					while (strcmp(HeadText, "END_CHARACTERSET") != 0)
+					{// "END_CHARACTERSET" が読み取れるまで繰り返し文字列を読み取る
+						fgets(ReadText, sizeof(ReadText), pFile);
+						sscanf(ReadText, "%s", &HeadText);
+						if (strcmp(HeadText, "\n") == 0)
+						{// 文字列の先頭が [\n](改行) の場合処理しない
 
-	//					}
-	//					if (strcmp(HeadText, "NUM_PARTS") == 0)
-	//					{
-	//						sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &nPartsNum);
-	//					}
-	//					else if (strcmp(HeadText, "PARTSSET") == 0)
-	//					{//PARTSSETを読みとったら
-	//						while (strcmp(HeadText, "END_PARTSSET") != 0)
-	//						{
-	//							fgets(ReadText, sizeof(ReadText), pFile);
-	//							sscanf(ReadText, "%s", &HeadText);
+						}
+						if (strcmp(HeadText, "NUM_PARTS") == 0)
+						{
+							sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &nPartsNum);
+						}
+						else if (strcmp(HeadText, "PARTSSET") == 0)
+						{//PARTSSETを読みとったら
+							while (strcmp(HeadText, "END_PARTSSET") != 0)
+							{
+								fgets(ReadText, sizeof(ReadText), pFile);
+								sscanf(ReadText, "%s", &HeadText);
 
-	//							if (strcmp(HeadText, "INDEX") == 0)
-	//							{
-	//								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &LoadInfo[nCntPartsSet].nIndex);
-	//							}
-	//							else if (strcmp(HeadText, "PARENT") == 0)
-	//							{
-	//								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &LoadInfo[nCntPartsSet].nParent);
-	//							}
-	//							else if (strcmp(HeadText, "POS") == 0)
-	//							{
-	//								sscanf(ReadText, "%s %c %f %f %f", &DustBox,
-	//									&DustBox,
-	//									&LoadInfo[nCntPartsSet].pos.x,
-	//									&LoadInfo[nCntPartsSet].pos.y,
-	//									&LoadInfo[nCntPartsSet].pos.z);
-	//							}
-	//							else if (strcmp(HeadText, "ROT") == 0)
-	//							{
-	//								sscanf(ReadText, "%s %c %f %f %f", &DustBox,
-	//									&DustBox,
-	//									&LoadInfo[nCntPartsSet].rot.x,
-	//									&LoadInfo[nCntPartsSet].rot.y,
-	//									&LoadInfo[nCntPartsSet].rot.z);
-	//							}
-	//						}
-	//						nCntPartsSet++;
+								if (strcmp(HeadText, "INDEX") == 0)
+								{
+									sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &LoadInfo[nCntPartsSet].nIndex);
+								}
+								else if (strcmp(HeadText, "PARENT") == 0)
+								{
+									sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &LoadInfo[nCntPartsSet].nParent);
+								}
+								else if (strcmp(HeadText, "POS") == 0)
+								{
+									sscanf(ReadText, "%s %c %f %f %f", &DustBox,
+										&DustBox,
+										&LoadInfo[nCntPartsSet].pos.x,
+										&LoadInfo[nCntPartsSet].pos.y,
+										&LoadInfo[nCntPartsSet].pos.z);
+								}
+								else if (strcmp(HeadText, "ROT") == 0)
+								{
+									sscanf(ReadText, "%s %c %f %f %f", &DustBox,
+										&DustBox,
+										&LoadInfo[nCntPartsSet].rot.x,
+										&LoadInfo[nCntPartsSet].rot.y,
+										&LoadInfo[nCntPartsSet].rot.z);
+								}
+							}
+							nCntPartsSet++;
 
-	//				}
-	//				nCntPartsSet = 0;
-	//				}
-	//			}
-	//		}
-	//	}
+						}
+					}
+				}
+			}
+		}
 
-	//}
+	}
 
-	//fclose(pFile);
+	fclose(pFile);
 
 
-	//for (int nCntParts = 0; nCntParts < nPartsNum; nCntParts++)
-	//{
-	//	m_pPlayerParts[nCntParts] = CCharaParts::Create();
-	//	if (m_pPlayerParts[nCntParts] != NULL)
-	//	{
-	//		m_pPlayerParts[nCntParts]->Set(LoadInfo[nCntParts].FileName, LoadInfo[nCntParts].pos, LoadInfo[nCntParts].pos,NULL);
-	//	}
-	//}
+	for (int nCntParts = 0; nCntParts < nPartsNum; nCntParts++)
+	{
+		ObjCreate(m_pPlayerParts[nCntParts]);
+		if (m_pPlayerParts[nCntParts] != NULL)
+		{
+			m_pPlayerParts[nCntParts]->Set(LoadInfo[nCntParts].FileName, LoadInfo[nCntParts].pos, LoadInfo[nCntParts].rot,NULL);
+		}
+	}
 
-	////親マトリクスセット
-	//for (int nCntParts = 0; nCntParts < nPartsNum; nCntParts++)
-	//{
-	//	int nNum = LoadInfo[nCntParts].nParent;
-	//	if (nNum != 1)
-	//	{
-	//		m_pPlayerParts[nCntParts]->SetParent(m_pPlayerParts[nNum]->GetMatrix());
-	//	}
-	//}
+	//親マトリクスセット
+	for (int nCntParts = 0; nCntParts < nPartsNum; nCntParts++)
+	{
+		int nNum = LoadInfo[nCntParts].nParent;
+		if (nNum != -1)
+		{
+			m_pPlayerParts[nCntParts]->SetParent(m_pPlayerParts[nNum]->GetMatrix());
+		}
+		else
+		{
+			m_pPlayerParts[nCntParts]->SetParent(m_pCharactorMove->GetMatrix());
+		}
+	}
 
 	return S_OK;
 }
@@ -266,10 +266,7 @@ void CPlayer::Uninit(void)
 
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
-		if (m_pPlayerParts[nCntParts] != NULL)
-		{
-			m_pPlayerParts[nCntParts]->Uninit();
-		}
+		ObjRelease(m_pPlayerParts[nCntParts]);
 		m_pPlayerParts[nCntParts] = NULL;
 	}
 
@@ -367,6 +364,13 @@ void CPlayer::Update(void)
 		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 22.0f, m_pCharactorMove->GetPosition().z));
 	}
 
+	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	{
+		if (m_pPlayerParts[nCntParts] != NULL)
+		{
+			m_pPlayerParts[nCntParts]->Update();
+		}
+	}
 
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
@@ -383,7 +387,13 @@ void CPlayer::Update(void)
 void CPlayer::Draw(void)
 {
 
-	//モデルはSceneクラスの子供なので個別のDrawは必要ない
+	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	{
+		if (m_pPlayerParts[nCntParts] != NULL)
+		{
+			m_pPlayerParts[nCntParts]->Draw();
+		}
+	}
 }
 
 //=============================================================================

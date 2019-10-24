@@ -38,7 +38,8 @@
 #define COLISIONSIZE (20.0f)
 #define TIME_INI		(60)
 
-#define CAMERA_DEFAULT_LENGTH (75.0f)
+#define CAMERA_DEFAULT_LENGTH (100.0f)
+#define CAMERA_ROTX (-0.05f)
 //============================================================================
 //Ã“Iƒƒ“ƒo•Ï”éŒ¾
 //============================================================================
