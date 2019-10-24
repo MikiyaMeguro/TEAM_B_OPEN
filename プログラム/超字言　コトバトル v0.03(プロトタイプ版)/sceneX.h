@@ -70,14 +70,16 @@ public:
 	COLLISIONTYPE GetCollsionType(void) { return m_CollisionType; }		// 当たり判定の種類を取得
 
 	void SetScale(D3DXVECTOR3 Scale) { m_Scale = Scale; }				// スケールを取得
-	void SetModelType(CLoad::MODEL model) { m_ModelType = model; }				// スケールを取得
+
+	void SetModelType(CLoad::MODEL model) { m_ModelType = model; }		// モデルの種類設定
+	CLoad::MODEL GetModelType(void) { return m_ModelType; }				// モデルの種類取得
 
 	bool GetDrawFlag(void) { return m_bDraw; };
 	void SetDrawFlag(bool bDraw) { m_bDraw = bDraw; };
 
 	int GetCollsionNum(void) { return m_nCollsionNum; }
 
-
+	void SetParent(D3DXMATRIX* pParent) { m_pParentMatrix = pParent; };
 private:
 	LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -94,6 +96,7 @@ private:
 	int						m_nCollsionNum;		// 当たり判定を行った場所
 
 	bool					m_bDraw;			//透明化フラグ(falseで消える)
+	D3DXMATRIX*				m_pParentMatrix;		//親マトリックス
 };
 
 #endif

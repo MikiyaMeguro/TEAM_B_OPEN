@@ -18,7 +18,7 @@
 #define KNOCKBACK_MOVE_SMALL		(4.0f)			// ノックバックの強度(小)
 #define KNOCKBACK_MOVE_DURING		(6.0f)			// ノックバックの強度(中)
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
-#define GEAR_ROT_Y					(0.2f)			// ギアの回転量　ベース情報
+#define GEAR_ROT_Y					(0.1f)			// ギアの回転量　ベース情報
 
 //*****************************************************************************
 // 静的メンバ変数

@@ -156,6 +156,7 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
     <ClCompile Include="charactor.cpp" />
+    <ClCompile Include="CharaParts.cpp" />
     <ClCompile Include="CharaSelect.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="debugProc.cpp" />
@@ -174,6 +175,7 @@
     <ClCompile Include="object.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="PlayerNumSelect.cpp" />
+    <ClCompile Include="point.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="result.cpp" />
     <ClCompile Include="scene.cpp" />
@@ -200,6 +202,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
     <ClInclude Include="charactor.h" />
+    <ClInclude Include="CharaParts.h" />
     <ClInclude Include="CharaSelect.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="debugProc.h" />
@@ -218,6 +221,7 @@
     <ClInclude Include="object.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="PlayerNumSelect.h" />
+    <ClInclude Include="point.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="result.h" />
     <ClInclude Include="scene.h" />

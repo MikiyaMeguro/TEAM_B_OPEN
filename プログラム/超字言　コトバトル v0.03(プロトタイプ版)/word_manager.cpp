@@ -77,8 +77,6 @@ void CWordManager::Update(void)
 
 	CreateOblDebug();		// 数字で文字の管理(デバック用)
 
-	Delete();				// 文字の削除
-
 	if (m_bPress == true)
 	{
 		if (m_nCntaAnswer == 0)
@@ -87,10 +85,20 @@ void CWordManager::Update(void)
 			{	// 答えの数だけ回す
 				for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 				{	// 答との比較
-					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
-					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
-					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
+					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum && m_bAnswer[0] == false) { m_bAnswer[0] = true; }
+					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum && m_bAnswer[1] == false) { m_bAnswer[1] = true; }
+					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
 				}
+
+				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; }
+				else if (m_nCntaAnswer < MAX_WORD)
+				{
+					for (int nCount = 0; nCount < MAX_WORD; nCount++)
+					{
+					m_bAnswer[nCount] = false;
+					}
+				}
+
 				if (m_nCntaAnswer == MAX_WORD) { m_nCreateType = nCntAnswer; return; }
 				else { m_nCntaAnswer = 0; }
 			}
@@ -135,6 +143,12 @@ void CWordManager::Reset(void)
 		m_aWord[nCntWord].nNum = 99;
 		m_aWord[nCntWord].cWord = "NULL";
 	}
+
+	for (int nCount = 0; nCount < MAX_WORD; nCount++)
+	{
+		m_bAnswer[nCount] = false;
+	}
+
 	m_nCntaAnswer = 0;
 	m_nCntNum = 0;
 	m_bPress = false;
@@ -145,14 +159,17 @@ void CWordManager::Reset(void)
 //=============================================================================
 void CWordManager::Delete(void)
 {
-	if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
+	//if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
 	{
 		if (m_nCntNum < 3)
 		{	// 3つ以下の場合
 			if (m_nCntNum > 0)
 			{
 				m_nCntNum--;
-				CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+				if (CGame::GetTube(m_nPlayerID) != NULL)
+				{	// 文字保管がNULLじゃない場合
+					CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+				}
 				m_aWord[0].nNum = 99;	// 空の状態に
 				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
 				{
@@ -166,41 +183,60 @@ void CWordManager::Delete(void)
 //=============================================================================
 // 弾の生成
 //=============================================================================
-void CWordManager::BulletCreate(int nID)
+void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 {
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 
 	if (CGame::GetPlayer(nID) != NULL)
 	{//指定したプレイヤーが存在していれば
 		CCamera* pCam = pCameraManager->GetCamera(CGame::GetPlayer(nID)->GetCameraName());
-		D3DXVECTOR3 BulletPos = CGame::GetPlayer(nID)->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+		D3DXVECTOR3 BulletPos = BulletMuzzle;
 		D3DXVECTOR3 BulletRot = CGame::GetPlayer(nID)->GetRotation();
 		if (pCam != NULL)
 		{
 			BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
 		}
 
-		if (m_nCntaAnswer == MAX_WORD)
-		{	// // 指定した文字なら弾を生成する
-			CModelBullet* pModel = CModelBullet::Create();
-			if (pModel != NULL)
-			{
-				pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
-			}
-		}
-		else
-		{	// それ以外の場合
-			CWordBullet* pWord = CWordBullet::Create();
-			if (pWord != NULL)
-			{
-				pWord->Set(BulletPos, BulletRot, 5.0f, 100, 0, nID);
-			}
-		}
-		if (CGame::GetTube(m_nPlayerID) != NULL)
+		if (m_bPress == true)
 		{
-			CGame::GetTube(m_nPlayerID)->AllDelete();
+			if (m_nCntaAnswer == MAX_WORD)
+			{	// // 指定した文字なら弾を生成する
+				CModelBullet* pModel = CModelBullet::Create();
+				if (pModel != NULL)
+				{
+					pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
+				}
+			}
+			else if (m_nCntaAnswer < MAX_WORD)
+			{	// ゴミモデルを出す
+				CModelBullet* pModel = CModelBullet::Create();
+				if (pModel != NULL)
+				{
+					pModel->Set(BulletPos, BulletRot, CLoad::MODE_DUST, 5.0f, 100, nID);
+				}
+			}
+
+			Reset();		// 設定を戻す
+			if (CGame::GetTube(m_nPlayerID) != NULL)
+			{
+				CGame::GetTube(m_nPlayerID)->AllDelete();
+			}
 		}
-		Reset();		// 設定を戻す
+		else if(m_bPress == false)
+		{	// それ以外の場合
+			if (m_nCntNum > 0)
+			{
+				CWordBullet* pWord = CWordBullet::Create();
+
+				if (pWord != NULL)
+				{
+					pWord->Set(BulletPos, BulletRot, 5.0f, 100, GetWordNum(0), nID);
+				}
+
+				Delete();		// 文字を一部削除
+
+			}
+		}
 	}
 }
 

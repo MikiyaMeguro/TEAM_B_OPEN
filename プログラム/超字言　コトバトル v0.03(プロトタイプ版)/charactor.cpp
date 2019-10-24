@@ -14,6 +14,7 @@
 #include "meshField.h"
 #include "word_manager.h"
 #include "point.h"
+#include "tutorial.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -92,6 +93,7 @@ void C3DCharactor::Update(void)
 {
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 	D3DXVECTOR3& pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 	D3DXVECTOR3& move = CCharaBase::GetMove();
 
 	switch (CCharaBase::GetMoveType())
@@ -127,11 +129,12 @@ void C3DCharactor::Update(void)
 		move.y = 0.0f;
 
 		CPoint *pPoint = NULL;
-		pPoint = CGame::GetPoint(GetThisCharactor()->GetID());
+		if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(GetThisCharactor()->GetID()); }
+		else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */}
 
 		if (pPoint != NULL)
 		{
-			pPoint->AddPoint(-1);
+			pPoint->SubtractionPoint(1);
 		}
 	}
 
@@ -140,6 +143,18 @@ void C3DCharactor::Update(void)
 	{
 		m_nCntStepCoolTime--;
 	}
+
+	D3DXMATRIX mtxRot, mtxTrans;				// 計算用マトリックス
+	// ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	// 回転を反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	// 移動を反映
+	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
 }
 
@@ -362,7 +377,7 @@ void C3DCharactor::CharaMove_Input(void)
 		CameraRot,pCamera->GetLength());
 
 	//カメラの参照位置制御
-	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f);
+	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
 }
 //=============================================================================
 // CPUの思考処理
@@ -812,7 +827,7 @@ void C3DCharactor::Attack_CPU(void)
 	//弾の生成	弾を持っているときだけ
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),GetThisCharactor()->GetPosition());
 	}
 }
 
