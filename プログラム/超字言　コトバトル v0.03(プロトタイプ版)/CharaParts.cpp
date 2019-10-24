@@ -44,31 +44,32 @@ void CCharaParts::Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMA
 		&m_pMesh);
 
 	// マテリアル情報からテクスチャを引き出す
-	D3DXMATERIAL* pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
-	D3DMATERIAL9* pMatBuff = new D3DMATERIAL9[m_nNumMat];
-	m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
+	//D3DXMATERIAL* pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+	//D3DMATERIAL9* pMatBuff = new D3DMATERIAL9[m_nNumMat];
+	//m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
 
-	for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
-	{// 頂点数の数だけ繰り返し
-	 // マテリアル情報を読み込む
-		pMatBuff[nCntMat] = pMat[nCntMat].MatD3D;
+	//for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
+	//{// 頂点数の数だけ繰り返し
+	// // マテリアル情報を読み込む
+	//	pMatBuff[nCntMat] = pMat[nCntMat].MatD3D;
 
-		// 環境光を初期化する
-		pMatBuff[nCntMat].Ambient = pMatBuff[nCntMat].Diffuse;
+	//	// 環境光を初期化する
+	//	pMatBuff[nCntMat].Ambient = pMatBuff[nCntMat].Diffuse;
 
-		// テクスチャ情報を初期化
-		m_pTexture[nCntMat] = NULL;
+	//	// テクスチャ情報を初期化
+	//	m_pTexture[nCntMat] = NULL;
 
-		// テクスチャの情報を読み込む
-		if (pMat[nCntMat].pTextureFilename != NULL &&
-			lstrlen(pMat[nCntMat].pTextureFilename) > 0)
-		{// テクスチャのファイル名がある
-			D3DXCreateTextureFromFile(pDevice,
-				pMat[nCntMat].pTextureFilename,
-				&m_pTexture[nCntMat]);
-		}
-	}
-	delete[] pMatBuff;
+	//	// テクスチャの情報を読み込む
+	//	if (pMat[nCntMat].pTextureFilename != NULL &&
+	//		lstrlen(pMat[nCntMat].pTextureFilename) > 0)
+	//	{// テクスチャのファイル名がある
+	//		D3DXCreateTextureFromFile(pDevice,
+	//			pMat[nCntMat].pTextureFilename,
+	//			&m_pTexture[nCntMat]);
+	//	}
+	//}
+	//delete[] pMatBuff;
+	m_pTexture = CTexture::GetTexture("KUMA_UV");
 
 
 }
@@ -96,16 +97,16 @@ void CCharaParts::Uninit(void)
 		m_pMesh->Release();
 		m_pMesh = NULL;
 	}
-	//テクスチャの開放
-	for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
-	{
-		if (m_pTexture[nCntMat] != NULL)
-		{
-			m_pTexture[nCntMat]->Release();
-			m_pTexture[nCntMat] = NULL;
-		}
-	}
-	delete m_pTexture;
+	////テクスチャの開放
+	//for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
+	//{
+	//	if (m_pTexture[nCntMat] != NULL)
+	//	{
+	//		m_pTexture[nCntMat]->Release();
+	//		m_pTexture[nCntMat] = NULL;
+	//	}
+	//}
+	//delete m_pTexture;
 
 	//マテリアルの解放
 	if (m_pBuffMat != NULL)
@@ -181,9 +182,10 @@ void CCharaParts::Draw(void)
 		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
 		/*テクスチャの設定*/
-		pDevice->SetTexture(0, m_pTexture[nCntMat]);//テクスチャの設定(使わなければNULLを入れる)
+		//pDevice->SetTexture(0, m_pTexture[nCntMat]);//テクスチャの設定(使わなければNULLを入れる)
+		pDevice->SetTexture(0, m_pTexture);//テクスチャの設定(使わなければNULLを入れる)
 
-													// モデル(パーツ)の描画
+		// モデル(パーツ)の描画
 		m_pMesh->DrawSubset(nCntMat);
 	}
 

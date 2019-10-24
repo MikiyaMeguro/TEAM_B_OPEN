@@ -55,6 +55,7 @@ DATA = 00039 data/TEXTURE/CharacterIcon/コトモン_リーチ_アイコン.png キャラ(リー
 DATA = 00040 data/TEXTURE/PlayerNum.png プレイ人数
 DATA = 00041 data/TEXTURE/point.png POINT
 
+DATA = 00042 data/TEXTURE/kuma_uv.jpg KUMA_UV
 
 DATA = 00006 data/TEXTURE/pause100.png  PAUSE_BG
 DATA = 00007 data/TEXTURE/Tutorial.jpg 	PAUSE_TUTORIAL

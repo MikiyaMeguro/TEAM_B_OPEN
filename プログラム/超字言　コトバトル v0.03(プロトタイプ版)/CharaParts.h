@@ -38,7 +38,7 @@ public:
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
 
 private:
-	LPDIRECT3DTEXTURE9*     m_pTexture;			// テクスチャへのポインタ
+	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
 	LPD3DXMESH				m_pMesh;			// メッシュ情報（頂点情報）へのポインタ
 	LPD3DXBUFFER			m_pBuffMat;			// マテリアル情報へのポインタ
