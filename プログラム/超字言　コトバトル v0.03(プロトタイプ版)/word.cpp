@@ -68,7 +68,7 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 HRESULT CWord::Init(D3DXVECTOR3 pos)
 {
 	CSceneBillBoard::Init(pos);
-
+	CSceneBillBoard::SetObjType(CScene::OBJTYPE_WORD);
 	return S_OK;
 }
 
@@ -205,7 +205,7 @@ void CWord::ScaleSize(void)
 void CWord::Distance(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNumPlayer)
 {
 	// ‹——£‚ð‘ª‚é
-	m_fDistance[nNumPlayer] = ((Pos.x - OtherPos.x) * (Pos.x - OtherPos.x)) + ((Pos.z - OtherPos.z) * (Pos.z - OtherPos.z));	
+	m_fDistance[nNumPlayer] = ((Pos.x - OtherPos.x) * (Pos.x - OtherPos.x)) + ((Pos.z - OtherPos.z) * (Pos.z - OtherPos.z));
 }
 
 //=============================================================================
