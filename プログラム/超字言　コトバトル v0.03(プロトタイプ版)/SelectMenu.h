@@ -20,7 +20,8 @@ class CScene2D;
 // マクロ定義
 //*****************************************************************************
 #define MAX_SELECTMENU			(4)							//最大ポリゴン数数
-
+#define MAX_SELETMODE_BG		(6)							//BGの最大ポリゴン
+#define BAND_SIZE				(0.5f)						//帯のサイズ
 //*********************************************************************
 //ゲームクラスの定義
 //*********************************************************************
@@ -74,8 +75,24 @@ public:
 	static bool GetModeSelectBool(void);
 	static void SetModeSelectBool(bool ModeSelectBool);
 	void MenuDecide(SELECT_MENU MenuSelect);
+
 	//メンバ変数
 private:
+	/* 背景の種類 */
+	typedef enum
+	{
+		SELECTMODEBGTYPE_BG = 0,
+		SELECTMODEBGTYPE_BAND_L,
+		SELECTMODEBGTYPE_BAND_R,
+		SELECTMODEBGTYPE_FRAME,
+		SELECTMODEBGTYPE_EXPLANATION
+
+	}SELECTMODEBGTYPE;
+
+	void ScrollMenu(SELECTMODEBGTYPE type, float fScroolSpeed);
+	void SelectModeExplanation(int MenuSelect);
+	void SelectAnimation(int MenuSelect);
+
 	D3DXVECTOR3					m_InitPos;
 	float						m_fWidth, m_fHeight;	// 幅高さ
 	float						m_fSpace;
@@ -86,7 +103,7 @@ private:
 	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;							// 頂点バッファへのポインタ
 	static LPDIRECT3DTEXTURE9	m_pTextureBG;						// テクスチャポインタ
 	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuffBG;						// 頂点バッファへのポインタ
-	CScene2D					*m_apPolygonBG;						// メニューのポリゴン
+	CScene2D					*m_apPolygonBG[MAX_SELETMODE_BG];	// メニューのポリゴン
 	MENU_TYPE					m_MenuType;							// メニューのタイプ
 	SELECTMENU					m_aModeSelectMenu[MAX_SELECTMENU];	// セレクトメニュー
 	D3DXVECTOR3					m_Pos[MAX_SELECTMENU];				// 位置
@@ -95,6 +112,11 @@ private:
 	CScene2D					*m_apPolygon[MAX_SELECTMENU];		// メニューのポリゴン
 	static	bool				m_bModeSelect;						// セレクトメニューの状態
 	int							m_nMaxMenu;							// メニュー最大数
+
+	/* 演出面変数 */
+	int m_nCntScrool;	//スクロールカウンター
+	int m_nCntAnim;		//アニメカウンター
+	int m_nPatturnAnim;	//アニメパターン
 };
 
 #endif

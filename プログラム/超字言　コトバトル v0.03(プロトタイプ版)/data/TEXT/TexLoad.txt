@@ -43,14 +43,17 @@ DATA = 00027 data/TEXTURE/TITLE/TitleRogo_Main.png TITLE_ROGO_M
 DATA = 00028 data/TEXTURE/TITLE/TitleRogo_sub.png TITLE_ROGO_S
 DATA = 00029 data/TEXTURE/TITLE/TitleBg_Hibana.png TITLE_HIBANA
 DATA = 00030 data/TEXTURE/UI/PRESS_ANY_BUTTON.png PRESS
-DATA = 00031 data/TEXTURE/CharacterIcon/コトモン_スピード_アイコン.png キャラ(スピード)
-DATA = 00032 data/TEXTURE/CharacterIcon/コトモン_バランス_アイコン.png キャラ(バランス)
-DATA = 00033 data/TEXTURE/CharacterIcon/コトモン_パワー_アイコン.png キャラ(パワー)
-DATA = 00034 data/TEXTURE/CharacterIcon/コトモン_リーチ_アイコン.png キャラ(リーチ)
-DATA = 00035 data/TEXTURE/PlayerNum.png プレイ人数
-DATA = 00036 data/TEXTURE/point.png POINT
-
-
+DATA = 00031 data/TEXTURE/ModeSelect/Frame.png FRAME
+DATA = 00032 data/TEXTURE/ModeSelect/SelectMode_UI.png SELECTMODE_UI
+DATA = 00033 data/TEXTURE/ModeSelect/BG.png SELECTMODE_BG
+DATA = 00034 data/TEXTURE/ModeSelect/SelectMode_Explanation.png SELECTMODE_EXPLANATION
+DATA = 00035 data/TEXTURE/ModeSelect/Titleback_anim.png TITLEBACK_A
+DATA = 00036 data/TEXTURE/CharacterIcon/コトモン_スピード_アイコン.png キャラ(スピード)
+DATA = 00037 data/TEXTURE/CharacterIcon/コトモン_バランス_アイコン.png キャラ(バランス)
+DATA = 00038 data/TEXTURE/CharacterIcon/コトモン_パワー_アイコン.png キャラ(パワー)
+DATA = 00039 data/TEXTURE/CharacterIcon/コトモン_リーチ_アイコン.png キャラ(リーチ)
+DATA = 00040 data/TEXTURE/PlayerNum.png プレイ人数
+DATA = 00041 data/TEXTURE/point.png POINT
 
 
 DATA = 00006 data/TEXTURE/pause100.png  PAUSE_BG

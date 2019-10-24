@@ -16,11 +16,11 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MODESELECT_WIDTH		(4.3f)		//ポリゴンの大きさ(横)
-#define MODESELECT_HEIGHT		(1.3f)		//ポリゴンの大きさ(縦)
+#define MODESELECT_WIDTH		(1.0f)		//ポリゴンの大きさ(横)
+#define MODESELECT_HEIGHT		(1.0f)		//ポリゴンの大きさ(縦)
 #define MENU_WIDTH				(450.0f)	//ポリゴンとポリゴンの間の大きさ(横)
 #define MENU_HEIGHT				(180.0f)	//ポリゴンとポリゴンの間の大きさ(縦)
-#define MENU_INITPOS			(180.0f)	//メニューの初期位置
+#define MENU_INITPOS			(100.0f)	//メニューの初期位置
 #define MENU_NUM_HEIGHT			(2)
 #define MENU_NUM_WIDTH			(2)
 #define MENU_INIT_POS			(270.0f)
@@ -47,8 +47,21 @@ CSelectMenu::CSelectMenu(int nPriority) : CScene(7)
 	m_aModeSelectMenu[2].select = SELECTTYPE_NONE;
 	m_bModeSelect = true;
 
+	for (int nCnt = 0; nCnt < MAX_SELETMODE_BG; nCnt++)
+	{
+		if (m_apPolygonBG[nCnt] != NULL)
+		{
+			m_apPolygonBG[nCnt] = NULL;
+		}
+	}
+
 	m_fSpace = 0;
 	m_fInitYpos = 0;
+
+	/* 演出面変数の初期化 */
+	m_nCntScrool = 0;
+	m_nCntAnim = 0;
+	m_nPatturnAnim = 0;
 }
 
 //--------------------------------------------
@@ -90,7 +103,7 @@ HRESULT CSelectMenu::Init()
 	{
 	case MENU_TYPE_TUTORIAL:
 		m_nMaxMenu = 3;
-		m_fInitYpos = 400;
+		m_fInitYpos = 300.0f;
 		m_pTexture[0] = CTexture::GetTexture("MENU_NUMPLAYER");
 		m_pTexture[1] = CTexture::GetTexture("MENU_MOZI");
 		m_pTexture[2] = CTexture::GetTexture("MENU_TITLE");
@@ -117,20 +130,40 @@ HRESULT CSelectMenu::Init()
 
 	//m_pTextureBG = CLoad::GetTexture(CLoad::TEXTURE_MODESELECT_BG);
 
-	//BGの初期化
-	m_apPolygonBG = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z),"BLOCK");
-	m_apPolygonBG->BindTexture(m_pTextureBG);
-	m_apPolygonBG->SetWidthHeight(MENU_BG * 4.5f, MENU_BG * 3.5f);
-	m_apPolygonBG->SetbDraw(true);
+	//背景
+	m_apPolygonBG[0] = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z),"SELECTMODE_BG");
+	m_apPolygonBG[0]->SetWidthHeight(MENU_BG*6.0f, MENU_BG * 3.5f);
+
+	//モード名帯（左）
+	m_apPolygonBG[1] = CScene2D::Create(D3DXVECTOR3(50.0f, SCREEN_HEIGHT/2, m_InitPos.z), "SELECTMODE_UI");
+	m_apPolygonBG[1]->SetWidthHeight(MENU_BG*BAND_SIZE, MENU_BG * 3.5f);
+
+	//モード名帯（右）
+	m_apPolygonBG[2] = CScene2D::Create(D3DXVECTOR3(1230.0f, SCREEN_HEIGHT / 2, m_InitPos.z), "SELECTMODE_UI");
+	m_apPolygonBG[2]->SetWidthHeight(MENU_BG*BAND_SIZE, MENU_BG * 3.5f);
+
+	//フレーム
+	m_apPolygonBG[3] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 600.0f, m_InitPos.z), "FRAME");
+	m_apPolygonBG[3]->SetWidthHeight(SCREEN_WIDTH / 2 * 1.1f, MENU_BG * 1.1f);
+
+	//説明文
+	m_apPolygonBG[4] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 590.0f, m_InitPos.z), "SELECTMODE_EXPLANATION");
+	m_apPolygonBG[4]->SetWidthHeight(SCREEN_WIDTH / 2 * 1.0f, MENU_BG * 0.9f);
+	m_apPolygonBG[4]->SetAnimation(0, 1.0f, 0.33f);
+
+	//背景
+	m_apPolygonBG[5] = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y, m_InitPos.z), "TITLEBACK_A");
+	m_apPolygonBG[5]->SetWidthHeight(MENU_BG*2.0f, MENU_BG * 2.0f);
+	m_apPolygonBG[5]->SetAnimation(0, 0.5f, 1.0f);
 
 	m_InitPos.y = MENU_INITPOS;
 
 	for (int nCnt = 0; nCnt < m_nMaxMenu; nCnt++)
 	{
 		m_Pos[nCnt] = m_InitPos;
-		m_Pos[nCnt].y = m_InitPos.y + m_fInitYpos;
+		m_Pos[nCnt].x = m_InitPos.x + m_fInitYpos;
 		//位置をずらす
-		m_Pos[nCnt].y = m_Pos[nCnt].y + (m_fSpace * (nCnt - 2));
+		m_Pos[nCnt].x = m_Pos[nCnt].x + (m_fSpace * (nCnt - 2));
 
 
 		if (m_apPolygon[nCnt] == NULL)
@@ -141,8 +174,6 @@ HRESULT CSelectMenu::Init()
 			m_apPolygon[nCnt]->SetbDraw(true);
 		}
 	}
-
-
 
 	//値の初期化
 	m_nSelect = 0;
@@ -187,7 +218,7 @@ void CSelectMenu::Update(void)
 	{
 		m_apPolygon[nCnt]->SetbDraw(m_bModeSelect);
 	}
-	m_apPolygonBG->SetbDraw(m_bModeSelect);
+	m_apPolygonBG[0]->SetbDraw(m_bModeSelect);
 
 
 #ifdef  _DEBUG
@@ -201,7 +232,7 @@ void CSelectMenu::Update(void)
 	if (m_bModeSelect == true && pFade->GetFade() == CFade::FADE_NONE)
 	{
 		//選択処理
-		if (CCommand::GetCommand("DOWN"))
+		if (CCommand::GetCommand("RIGHT"))
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
@@ -211,7 +242,7 @@ void CSelectMenu::Update(void)
 			}
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
 		}
-		else if (CCommand::GetCommand("UP"))
+		else if (CCommand::GetCommand("LEFT"))
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
 			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
@@ -275,21 +306,13 @@ void CSelectMenu::Update(void)
 			// 頂点バッファをアンロックする
 			m_pVtxBuff->Unlock();
 		}
-
-		//頂点情報へのポインタ
-		VERTEX_2D *pVtx;
-		//頂点バッファを取得
-		m_pVtxBuff = m_apPolygonBG->GetBuff();
-		//頂点バッファをロックし頂点データのポインタを取得
-		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-		//頂点テクスチャ
-		pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-		pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-		pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-		pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-		// 頂点バッファをアンロックする
-		m_pVtxBuff->Unlock();
 	}
+
+	ScrollMenu(SELECTMODEBGTYPE_BAND_L,-0.005f);
+	ScrollMenu(SELECTMODEBGTYPE_BAND_R, 0.005f);
+
+	SelectModeExplanation(m_nSelect);
+	SelectAnimation(m_nSelect);
 #ifdef _DEBUG
 	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
 #endif
@@ -421,5 +444,74 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 			break;
 		}
 		break;
+	}
+}
+
+//=============================================================================
+// 横の文字スクロール処理
+//=============================================================================
+void CSelectMenu::ScrollMenu(SELECTMODEBGTYPE type,float fScroolSpeed)
+{
+	m_nCntScrool++;
+
+	m_apPolygonBG[type]->SetTex(D3DXVECTOR2(0.0f , 0.0f + (m_nCntScrool*fScroolSpeed)),D3DXVECTOR2(1.0f, 1.0f + (m_nCntScrool*fScroolSpeed)));
+}
+
+//=============================================================================
+// 選択肢と説明文の同期処理
+//=============================================================================
+void CSelectMenu::SelectModeExplanation(int MenuSelect)
+{
+	if (m_MenuType == MENU_TYPE_TUTORIAL)
+	{
+		switch (MenuSelect)
+		{
+		case 0:
+			m_apPolygonBG[4]->SetAnimation(0, 0.333f, 1.0f);
+			break;
+
+		case 1:
+			m_apPolygonBG[4]->SetAnimation(1, 0.333f, 1.0f);
+			break;
+
+		case 2:
+			m_apPolygonBG[4]->SetAnimation(2, 0.333f, 1.0f);
+			break;
+
+		}
+	}
+
+}
+//=============================================================================
+// セレクトしてるモードのアニメーション
+//=============================================================================
+void CSelectMenu::SelectAnimation(int MenuSelect)
+{
+	if (m_MenuType == MENU_TYPE_TUTORIAL)
+	{
+		switch (MenuSelect)
+		{
+		case 0:
+			break;
+
+		case 1:
+			break;
+
+		case 2:
+			m_nCntAnim++;
+			if (m_nCntAnim > 20)
+			{
+				m_nPatturnAnim++;
+				m_nCntAnim = 0;
+
+				m_apPolygonBG[5]->SetAnimation(m_nPatturnAnim, 0.5f, 1.0f);
+
+				if (m_nPatturnAnim > 2)
+				{
+					m_nPatturnAnim = 0;
+				}
+			}
+			break;
+		}
 	}
 }
