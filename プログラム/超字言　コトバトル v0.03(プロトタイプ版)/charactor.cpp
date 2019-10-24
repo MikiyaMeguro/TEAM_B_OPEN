@@ -827,7 +827,7 @@ void C3DCharactor::Attack_CPU(void)
 	//’e‚Ì¶¬	’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),GetThisCharactor()->GetPosition());
 	}
 }
 

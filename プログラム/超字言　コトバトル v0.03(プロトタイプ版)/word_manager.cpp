@@ -183,14 +183,14 @@ void CWordManager::Delete(void)
 //=============================================================================
 // 弾の生成
 //=============================================================================
-void CWordManager::BulletCreate(int nID)
+void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 {
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 
 	if (CGame::GetPlayer(nID) != NULL)
 	{//指定したプレイヤーが存在していれば
 		CCamera* pCam = pCameraManager->GetCamera(CGame::GetPlayer(nID)->GetCameraName());
-		D3DXVECTOR3 BulletPos = CGame::GetPlayer(nID)->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f);
+		D3DXVECTOR3 BulletPos = BulletMuzzle;
 		D3DXVECTOR3 BulletRot = CGame::GetPlayer(nID)->GetRotation();
 		if (pCam != NULL)
 		{
@@ -208,7 +208,7 @@ void CWordManager::BulletCreate(int nID)
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
-			{	// ゴミモデルを出す 
+			{	// ゴミモデルを出す
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
