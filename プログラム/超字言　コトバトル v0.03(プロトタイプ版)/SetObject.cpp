@@ -25,7 +25,7 @@
 //--------------------------------------------
 //オブジェクトクラス コンストラクタ
 //--------------------------------------------
-CSetObject::CSetObject() : CScene(3, CScene::OBJTYPE_SCENEX)
+CSetObject::CSetObject() : CScene(3, CScene::OBJTYPE_SETOBJECT)
 {
 }
 
@@ -42,12 +42,17 @@ CSetObject::~CSetObject()
 CSetObject *CSetObject::Create()
 {
 	//オブジェクトポインタ
-	CSetObject *pObjectBG;
-	pObjectBG = new CSetObject;
-	//オブジェクトの初期化
-	pObjectBG->Init();
+	CSetObject *pSetObject;
+	if (pSetObject == NULL)
+	{
+		pSetObject = new CSetObject;
+		if (pSetObject != NULL)
+		{//オブジェクトの初期化
+			pSetObject->Init();
+		}
+	}
 	//オブジェクトの情報を返す
-	return pObjectBG;
+	return pSetObject;
 }
 
 //=============================================================================
@@ -56,7 +61,7 @@ CSetObject *CSetObject::Create()
 HRESULT CSetObject::Init()
 {
 	//オブジェクト種類の設定
-	CScene::SetObjType(CScene::OBJTYPE_SCENEX);
+	CScene::SetObjType(CScene::OBJTYPE_SETOBJECT);
 
 	return S_OK;
 }
@@ -90,10 +95,10 @@ void CSetObject::Update(void)
 void CSetObject::Draw(void)
 {
 	//デバイスを取得
-	CRenderer *pRenderer = CManager::GetRenderer();
-	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-	D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
-	D3DXMATRIX mtxParent;
+	//CRenderer *pRenderer = CManager::GetRenderer();
+	//LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	//D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
+	//D3DXMATRIX mtxParent;
 
 }
 
@@ -258,8 +263,8 @@ void CSetObject::LoadFile(void)
 			//モデルを生成
 			if (memcmp(pStrcur, "END_MODELSET", strlen("END_MODELSET")) == 0)
 			{
-				//CObjectBG::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
-				//	, (CObjectBG::MODELTYPE)nType, CObjectBG::MOVETYPE_NONE, 1);
+				//CSetObject::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
+				//	, (CSetObject::MODELTYPE)nType, CSetObject::MOVETYPE_NONE, 1);
 				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType);
 			}
 			//スクリプトの終わり
