@@ -178,6 +178,7 @@ private:
 	void Escape_CPU(void);		//“¦”ğ
 	void Homing_CPU(void);		//’Ç”ö
 	void Attack_CPU(void);		//UŒ‚
+	void PickUP_CPU(void);		//•¶šE‚¤
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
