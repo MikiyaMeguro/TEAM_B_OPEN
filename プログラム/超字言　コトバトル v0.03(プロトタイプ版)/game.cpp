@@ -141,7 +141,6 @@ void CGame::Uninit(void)
 		m_pMeshField = NULL;
 	}
 
-
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		if (m_pPlayer[nCntPlayer] != NULL)
@@ -166,6 +165,7 @@ void CGame::Uninit(void)
 			m_pPoint[nCntPoint] = NULL;
 		}
 	}
+
 	//ëSÇƒÇÃèIóπèàóù
 	CScene::ReleseAll();
 }
@@ -212,7 +212,10 @@ void CGame::Update(void)
 	}
 
 #ifdef _DEBUG
-
+	if (pInputKeyboard->GetTrigger(DIK_LCONTROL))
+	{
+		WordCreate();		// ï∂éöÇÃê∂ê¨
+	}
 #endif
 }
 
@@ -539,14 +542,14 @@ void CGame::SetPointFrame(int nNumPlayer)
 void CGame::WordCreate(void)
 {
 	// ä˜
-	//CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 17);
-	//CWord::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);
-	//CWord::Create(D3DXVECTOR3(-400.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 17);
+	CWord::Create(D3DXVECTOR3(-150.0f, 0.0f, 20.0f), 12.0f, 12.0f, "WORD", 7);
+	CWord::Create(D3DXVECTOR3(400.0f, 0.0f, 10.0f), 12.0f, 12.0f, "WORD", 3);
 
 	// äGãÔ
-	/*CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 3);
-	CWord::Create(D3DXVECTOR3(-300.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 24);
-	CWord::Create(D3DXVECTOR3(-400.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);*/
+	CWord::Create(D3DXVECTOR3(200.0f, 0.0f, 400.0f), 12.0f, 12.0f, "WORD", 3);
+	CWord::Create(D3DXVECTOR3(300.0f, 0.0f, 60.0f), 12.0f, 12.0f, "WORD", 24);
+	CWord::Create(D3DXVECTOR3(150.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 7);
 
 	// Ç≠ÇÈÇ‹
 	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, -60.0f), 12.0f, 12.0f, "WORD", 7);

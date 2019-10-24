@@ -60,6 +60,7 @@ private:
 	int m_nCntaAnswer;
 	int m_nPlayerID;
 	bool m_bPress;
+	bool m_bAnswer[MAX_ANSWER];
 };
 
 #endif

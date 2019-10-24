@@ -85,10 +85,20 @@ void CWordManager::Update(void)
 			{	// “š‚¦‚Ì”‚¾‚¯‰ñ‚·
 				for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 				{	// “š‚Æ‚Ì”äŠr
-					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
-					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
-					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum) { m_nCntaAnswer++; }
+					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum && m_bAnswer[0] == false) { m_bAnswer[0] = true; }
+					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum && m_bAnswer[1] == false) { m_bAnswer[1] = true; }
+					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
 				}
+
+				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; }
+				else if (m_nCntaAnswer < MAX_WORD)
+				{
+					for (int nCount = 0; nCount < MAX_WORD; nCount++)
+					{
+					m_bAnswer[nCount] = false;
+					}
+				}
+
 				if (m_nCntaAnswer == MAX_WORD) { m_nCreateType = nCntAnswer; return; }
 				else { m_nCntaAnswer = 0; }
 			}
@@ -133,6 +143,12 @@ void CWordManager::Reset(void)
 		m_aWord[nCntWord].nNum = 99;
 		m_aWord[nCntWord].cWord = "NULL";
 	}
+
+	for (int nCount = 0; nCount < MAX_WORD; nCount++)
+	{
+		m_bAnswer[nCount] = false;
+	}
+
 	m_nCntaAnswer = 0;
 	m_nCntNum = 0;
 	m_bPress = false;
