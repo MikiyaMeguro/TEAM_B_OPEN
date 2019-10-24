@@ -40,7 +40,7 @@ public:
 
 	// İ’è‚ÌŠÖ”
 	void SetWord(int nType);
-	void BulletCreate(int nID);
+	void BulletCreate(int nID,D3DXVECTOR3 BulletMuzzle);	//BulletMuzzle = ’e‚ªo‚éˆÊ’u
 	void SetID(int nID) { m_nPlayerID = nID; }
 
 	// æ“¾—p‚ÌŠÖ”

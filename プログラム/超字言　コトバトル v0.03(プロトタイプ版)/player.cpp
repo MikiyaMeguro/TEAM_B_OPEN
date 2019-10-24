@@ -106,10 +106,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName)
 				}
 				else if (strcmp(HeadText, "MODEL_FILENAME") == 0)
 				{
-					char cName[256];
-					sscanf(ReadText, "%s %c %s", &DustBox, &DustBox, cName);
-
-					strcpy(LoadInfo[nCntFileNameNum].FileName,cName);
+					sscanf(ReadText, "%s %c %s", &DustBox, &DustBox, LoadInfo[nCntFileNameNum].FileName);
 					nCntFileNameNum++;
 				}
 				else if (strcmp(HeadText, "CHARACTERSET") == 0)
@@ -337,7 +334,7 @@ void CPlayer::Update(void)
 	{
 		if (m_pWordManager != NULL)
 		{//•¶ŽšŠÇ—ƒNƒ‰ƒX‚É’e‚Ì¶¬‚ðˆÏ‘õ‚·‚é
-			m_pWordManager->BulletCreate(m_nID);
+			m_pWordManager->BulletCreate(m_nID,m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f,10.0f,0.0f));
 		}
 	}
 
