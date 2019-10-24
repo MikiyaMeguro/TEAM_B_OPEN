@@ -14,6 +14,7 @@
 #include "meshField.h"
 #include "word_manager.h"
 #include "point.h"
+#include "word.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -418,7 +419,9 @@ void C3DCharactor::Think_CPU(void)
 		switch (m_Type)
 		{
 		case CPU_TYPE_ESCAPE:
-			m_CpuThink = THINK_ESCAPE;
+			//m_CpuThink = THINK_ESCAPE;
+			//m_nActionTimer = 30;
+			m_CpuThink = THINK_PICKUP;
 			m_nActionTimer = 30;
 			break;
 		case CPU_TYPE_HOMING:
@@ -502,6 +505,10 @@ void C3DCharactor::Action_CPU(void)
 		break;
 	case  THINK_ATTACK:
 		Attack_CPU();
+		m_CpuNode = CPU_NODE_RUN;
+		break;
+	case  THINK_PICKUP:
+		PickUP_CPU();
 		m_CpuNode = CPU_NODE_RUN;
 		break;
 	default:
@@ -829,6 +836,44 @@ void C3DCharactor::Attack_CPU(void)
 	}
 }
 
+
+void C3DCharactor::PickUP_CPU(void)
+{
+	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
+	bool bHit = false;
+	CScene *pScene = NULL;
+
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(5);
+
+	while (pScene != NULL)
+	{// 優先順位が3のオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+
+		if (pScene->GetDeath() == false)
+		{// 死亡フラグが立っていないもの
+			if (pScene->GetObjType() == CScene::OBJTYPE_WORD)
+			{// オブジェクトの種類を確かめる
+				CWord *pWord = ((CWord*)pScene);		// CSceneXへキャスト(型の変更)
+														// 距離を測る
+				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
+
+				if (fCircle < 100 * 100 && fCircle > 100)
+				{
+					D3DXVECTOR3 MOKUHYO = pWord->GetPos();
+				}
+			}
+		}
+		// 次のシーンに進める
+		pScene = pSceneNext;
+	}
+}
 //=============================================================================
 // ステップ処理
 //=============================================================================
