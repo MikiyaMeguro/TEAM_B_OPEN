@@ -37,6 +37,9 @@ public:
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
 
 	D3DXVECTOR3 GetWorldPosition(void) { return m_WorldPosition; };
+
+	void SetDrawFlag(bool bFlag) { m_bDrawFlag = bFlag; };
+	bool GetDrawFlag(void) { return m_bDrawFlag; };
 private:
 	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -50,5 +53,6 @@ private:
 	D3DXMATRIX* m_pParent;	//親マトリックス
 
 	D3DXVECTOR3 m_WorldPosition;	//ワールド座標での位置(m_mtxWorldから取り出す)
+	bool m_bDrawFlag;				//描画するかのフラグ
 };
 #endif // !_CHARA_PARTS_H_

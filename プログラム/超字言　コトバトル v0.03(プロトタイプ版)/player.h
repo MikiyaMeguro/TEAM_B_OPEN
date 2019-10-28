@@ -34,6 +34,19 @@ public:
 
 	typedef enum
 	{
+		MOTION_NEUTRAL = 0,		//待機(弾無し)
+		MOTION_WALK,			//歩行(弾無し)
+		MOTION_SETUP_NEUTRAL,	//待機(弾有り)
+		MOTION_SETUP_WALK,		//歩行(弾有り)
+		MOTION_STEP,			//ステップ回避
+		MOTION_SHOT,			//弾を打つ
+		MOTION_DAMAGE,			//ダメージを受ける
+		MOTION_WINNER,			//一位の時
+		MOTION_LOSER,			//最下位の時
+		MOTION_MAX
+	}MOTION;
+	typedef enum
+	{
 		STATE_NORMAL,		//モーション再生状態
 		STATE_BLEND,		//モーションブレンド状態
 	}MOTION_STATE;
@@ -88,6 +101,10 @@ public:
 
 	void SetTransTime(int nTime) { m_nCntTransTime = nTime; };
 	CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理クラスの取得
+
+
+	void SetbSetupBullet(bool bBullet) { m_bSetupBullet = bBullet; };
+	bool GetbSetupBullet(void) { return m_bSetupBullet; };	//弾が撃てる状態の判定用
 private:
 	bool CollisionBullet(void);
 	void DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
@@ -102,11 +119,12 @@ private:
 	D3DXVECTOR3 m_posOld;
 	int m_nCntTransTime;			//無敵時間
 
-
 	CSceneX* m_pPlayerModel;							//プレイヤーのモデル(仮、後で↓の変数に差し替える)
 
 	CCharaParts* m_pPlayerParts[PLAYER_MODELNUM];	//キャラクターの構成パーツ
 	CWordManager *m_pWordManager;
 	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号
+
+	bool m_bSetupBullet;					//弾が撃てる状態の判定用
 };
 #endif // !_PLAYER_H_
