@@ -335,6 +335,10 @@ void CPlayer::Update(void)
 		if (m_pWordManager != NULL)
 		{//•¶ŽšŠÇ—ƒNƒ‰ƒX‚É’e‚Ì¶¬‚ðˆÏ‘õ‚·‚é
 			m_pWordManager->BulletCreate(m_nID,m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f,10.0f,0.0f));
+			if (m_pWordManager->GetCntNum() == 0)
+			{
+				m_bSetupBullet = false;
+			}
 		}
 	}
 

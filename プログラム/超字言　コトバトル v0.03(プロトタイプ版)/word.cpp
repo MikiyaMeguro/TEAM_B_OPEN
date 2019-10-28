@@ -116,6 +116,7 @@ void CWord::Update(void)
 			if (m_bFlagUninit == true)
 			{	// I—¹ƒtƒ‰ƒO‚ª—§‚Á‚½ê‡
 				pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
+				pPlayer[nCntPlayer]->SetbSetupBullet(true);
 				Uninit();
 				return;
 			}
