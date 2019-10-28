@@ -12,6 +12,12 @@
 #include "camera.h"
 #include "CameraManager.h"
 #include "manager.h"
+
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define WINDOW_CLEAR_COLOR (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))
+
 //=============================================================================
 // レンダリングクラスのコンストラクタ
 //=============================================================================
@@ -160,7 +166,7 @@ void CRenderer::Draw(void)
 	m_pD3DDevice->Clear(0,
 		NULL,
 		(D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL),
-		D3DCOLOR_RGBA(255, 255, 255, 255), 1.0f, 0);
+		WINDOW_CLEAR_COLOR, 1.0f, 0);
 
 	CFade *pFade = CManager::GetFade();
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
