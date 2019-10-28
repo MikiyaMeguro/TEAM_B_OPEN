@@ -20,7 +20,6 @@ public:
 	CCharaParts();
 	~CCharaParts();
 
-
 	void Set(LPCSTR ModelFile,D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXMATRIX* pParent);
 
 	HRESULT Init(void);
@@ -37,6 +36,7 @@ public:
 	void SetParent(D3DXMATRIX* pParent) { m_pParent = pParent;};
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
 
+	D3DXVECTOR3 GetWorldPosition(void) { return m_WorldPosition; };
 private:
 	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -45,8 +45,10 @@ private:
 	DWORD					m_nNumMat;			// マテリアル情報の数
 	D3DXMATRIX				m_mtxWorld;			// ワールドマトリックス
 
-	D3DXVECTOR3 m_Pos;
-	D3DXVECTOR3 m_Rot;
-	D3DXMATRIX* m_pParent;
+	D3DXVECTOR3 m_Pos;		//位置(親から見た相対位置)
+	D3DXVECTOR3 m_Rot;		//角度(親から見た相対角度)
+	D3DXMATRIX* m_pParent;	//親マトリックス
+
+	D3DXVECTOR3 m_WorldPosition;	//ワールド座標での位置(m_mtxWorldから取り出す)
 };
 #endif // !_CHARA_PARTS_H_
