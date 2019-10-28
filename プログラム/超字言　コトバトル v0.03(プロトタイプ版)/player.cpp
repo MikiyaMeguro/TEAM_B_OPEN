@@ -322,11 +322,6 @@ void CPlayer::Update(void)
 		//前にObjectがあるかどうか
 		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
-		//描画するモデルに情報を入れる
-		//if (m_pPlayerParts[0] != NULL)
-		//{
-		//	m_pPlayerParts[0]->SetParent(m_pCharactorMove->GetMatrix());
-		//}
 	}
 
 	// 弾の生成
@@ -349,15 +344,17 @@ void CPlayer::Update(void)
 	if (m_nCntTransTime > 0)
 	{
 		m_nCntTransTime--;
-
-		//if (m_nCntTransTime % 2 == 0)
-		//{
-		//	m_pPlayerModel->SetDrawFlag(!(m_pPlayerModel->GetDrawFlag()));
-		//}
 	}
 	else
 	{
-		//m_pPlayerModel->SetDrawFlag(true);
+		m_nCntTransTime = -1;
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			if (m_pPlayerParts[nCntParts] != NULL)
+			{
+				m_pPlayerParts[nCntParts]->SetDrawFlag(true);
+			}
+		}
 	}
 
 	if (m_pPlayerNum != NULL)
@@ -367,8 +364,14 @@ void CPlayer::Update(void)
 
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
+
 		if (m_pPlayerParts[nCntParts] != NULL)
 		{
+			if (m_nCntTransTime % 2 == 0)
+			{//ダメージ時の点滅処理
+				m_pPlayerParts[nCntParts]->SetDrawFlag(!m_pPlayerParts[nCntParts]->GetDrawFlag());
+			}
+
 			m_pPlayerParts[nCntParts]->Update();
 		}
 	}
@@ -387,7 +390,6 @@ void CPlayer::Update(void)
 //=============================================================================
 void CPlayer::Draw(void)
 {
-
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 		if (m_pPlayerParts[nCntParts] != NULL)

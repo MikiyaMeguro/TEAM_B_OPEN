@@ -121,6 +121,7 @@ void CTexture::Unload(void)
 			itr->nID = 0;
 		}
 	}
+
 	m_TexData.clear();
 	m_TexData.shrink_to_fit();
 }

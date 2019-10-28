@@ -60,6 +60,7 @@ HRESULT CCharaParts::Init(void)
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_WorldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	m_bDrawFlag = true;
 	return S_OK;
 }
 //=============================================================================
@@ -134,31 +135,34 @@ void CCharaParts::Draw(void)
 	}
 
 	//ワールドマトリックスから座標を取り出して保管する
-	m_WorldPosition = D3DXVECTOR3(m_mtxWorld._41,m_mtxWorld._42,m_mtxWorld._43);
+	m_WorldPosition = D3DXVECTOR3(m_mtxWorld._41, m_mtxWorld._42, m_mtxWorld._43);
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
-
-	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
-
-	// マテリアルデータへのポインタを取得
-	pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
-
-	for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+	if (m_bDrawFlag == true)
 	{
-		// マテリアルの設定
-		pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-		/*テクスチャの設定*/
-		//pDevice->SetTexture(0, m_pTexture[nCntMat]);//テクスチャの設定(使わなければNULLを入れる)
-		pDevice->SetTexture(0, m_pTexture);//テクスチャの設定(使わなければNULLを入れる)
+		// 現在のマテリアルを取得
+		pDevice->GetMaterial(&matDef);
 
-		// モデル(パーツ)の描画
-		m_pMesh->DrawSubset(nCntMat);
+		// マテリアルデータへのポインタを取得
+		pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
+
+		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+		{
+			// マテリアルの設定
+			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+
+			/*テクスチャの設定*/
+			//pDevice->SetTexture(0, m_pTexture[nCntMat]);//テクスチャの設定(使わなければNULLを入れる)
+			pDevice->SetTexture(0, m_pTexture);//テクスチャの設定(使わなければNULLを入れる)
+
+			// モデル(パーツ)の描画
+			m_pMesh->DrawSubset(nCntMat);
+		}
+
+		// マテリアルをデフォルトに戻す
+		pDevice->SetMaterial(&matDef);
+
 	}
-
-	// マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
-
 }
