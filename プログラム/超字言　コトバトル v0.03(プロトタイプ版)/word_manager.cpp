@@ -128,7 +128,10 @@ void CWordManager::SetWord(int nType)
 	{
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
-		CGame::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum);
+		if (CGame::GetTube(m_nPlayerID) != NULL)
+		{	// NULLチェック
+			CGame::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum);
+		}
 		m_nCntNum++;
 	}
 }
