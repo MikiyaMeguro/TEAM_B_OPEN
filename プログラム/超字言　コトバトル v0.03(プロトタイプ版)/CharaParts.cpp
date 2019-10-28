@@ -45,8 +45,6 @@ void CCharaParts::Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMA
 
 	//テクスチャクラスからテクスチャをもらう
 	m_pTexture = CTexture::GetTexture("KUMA_UV");
-
-
 }
 
 //=============================================================================
@@ -59,6 +57,9 @@ HRESULT CCharaParts::Init(void)
 	m_pBuffMat = NULL;
 	m_nNumMat = 0;
 
+	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_WorldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	return S_OK;
 }
 //=============================================================================
@@ -72,16 +73,6 @@ void CCharaParts::Uninit(void)
 		m_pMesh->Release();
 		m_pMesh = NULL;
 	}
-	////テクスチャの開放
-	//for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
-	//{
-	//	if (m_pTexture[nCntMat] != NULL)
-	//	{
-	//		m_pTexture[nCntMat]->Release();
-	//		m_pTexture[nCntMat] = NULL;
-	//	}
-	//}
-	//delete m_pTexture;
 
 	//マテリアルの解放
 	if (m_pBuffMat != NULL)

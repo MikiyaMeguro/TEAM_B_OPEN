@@ -87,7 +87,7 @@ public:
 	void SetCameraName(LPCSTR name) { m_ChildCameraName = name; };
 
 	void SetTransTime(int nTime) { m_nCntTransTime = nTime; };
-	CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理の取得
+	CWordManager *GetWordManager(void) { return m_pWordManager; }				// 言葉管理クラスの取得
 private:
 	bool CollisionBullet(void);
 	void DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
