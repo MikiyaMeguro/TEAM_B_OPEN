@@ -43,32 +43,7 @@ void CCharaParts::Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMA
 		&m_nNumMat,
 		&m_pMesh);
 
-	// マテリアル情報からテクスチャを引き出す
-	//D3DXMATERIAL* pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
-	//D3DMATERIAL9* pMatBuff = new D3DMATERIAL9[m_nNumMat];
-	//m_pTexture = new LPDIRECT3DTEXTURE9[m_nNumMat];
-
-	//for (DWORD nCntMat = 0; nCntMat < m_nNumMat; nCntMat++)
-	//{// 頂点数の数だけ繰り返し
-	// // マテリアル情報を読み込む
-	//	pMatBuff[nCntMat] = pMat[nCntMat].MatD3D;
-
-	//	// 環境光を初期化する
-	//	pMatBuff[nCntMat].Ambient = pMatBuff[nCntMat].Diffuse;
-
-	//	// テクスチャ情報を初期化
-	//	m_pTexture[nCntMat] = NULL;
-
-	//	// テクスチャの情報を読み込む
-	//	if (pMat[nCntMat].pTextureFilename != NULL &&
-	//		lstrlen(pMat[nCntMat].pTextureFilename) > 0)
-	//	{// テクスチャのファイル名がある
-	//		D3DXCreateTextureFromFile(pDevice,
-	//			pMat[nCntMat].pTextureFilename,
-	//			&m_pTexture[nCntMat]);
-	//	}
-	//}
-	//delete[] pMatBuff;
+	//テクスチャクラスからテクスチャをもらう
 	m_pTexture = CTexture::GetTexture("KUMA_UV");
 
 
@@ -166,6 +141,9 @@ void CCharaParts::Draw(void)
 			&m_mtxWorld,
 			m_pParent);
 	}
+
+	//ワールドマトリックスから座標を取り出して保管する
+	m_WorldPosition = D3DXVECTOR3(m_mtxWorld._41,m_mtxWorld._42,m_mtxWorld._43);
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
