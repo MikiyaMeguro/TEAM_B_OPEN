@@ -29,6 +29,8 @@ public:
 		char TexAddress[256];				//テクスチャのアドレス
 		char TexNameTag[256];				//テクスチャの略称
 		LPDIRECT3DTEXTURE9 pTexture;		//テクスチャのポインタ
+
+		//std::findで検索するときに使う比較関数
 		bool operator == (const int ID)
 		{
 			return (nID == ID);
@@ -58,6 +60,8 @@ public:
 	//テクスチャ数
 	static int GetTexNum(bool bCreate);
 private:
+
+	//内部でのテクスチャ生成関数
 	static void Create(LPCSTR address, LPDIRECT3DTEXTURE9 &pTexture);
 
 	//変数

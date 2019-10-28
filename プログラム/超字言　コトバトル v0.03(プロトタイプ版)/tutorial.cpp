@@ -53,7 +53,9 @@ void CTutorial::Init(void)
 	//インスタンス
 	CManager *pManager = NULL;
 
-	//CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	CScene2D* p2D = NULL;
+	p2D = CScene2D::Create(D3DXVECTOR3(300, 200, 0), "WORD");
+	p2D->SetWidthHeight(200.0f,200.0f);
 }
 
 //=============================================================================
@@ -83,8 +85,6 @@ void CTutorial::Update(void)
 	{
 		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
 	}
-
-
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "チュートリアル");

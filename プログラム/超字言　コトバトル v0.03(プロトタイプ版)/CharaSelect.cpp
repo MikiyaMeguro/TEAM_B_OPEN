@@ -53,7 +53,7 @@ void CCharaSelect::Init(void)
 	CManager *pManager = NULL;
 
 	CScene2D* p2D = NULL;
-	p2D = CScene2D::Create(D3DXVECTOR3(300, 100, 0), "BLOCK");
+	p2D = CScene2D::Create(D3DXVECTOR3(300, 100, 0), "KUMA_UV");
 
 }
 

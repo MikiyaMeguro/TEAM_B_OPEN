@@ -87,7 +87,7 @@ HRESULT CTexture::Load(void) {
 		if (m_TexData.size() > 0)
 		{
 			//テクスチャデータの初期化
-			for (auto itr = m_TexData.begin(); itr != m_TexData.end(); itr++)	//auto itr = vector配列内の位置を指し示すポインタのようなもの(イテレータ)
+			for (auto itr = m_TexData.begin(); itr != m_TexData.end(); ++itr)	//auto itr = vector配列内の位置を指し示すポインタのようなもの(イテレータ)
 			{
 				itr->pTexture = NULL;
 			}
@@ -110,7 +110,7 @@ void CTexture::Unload(void)
 {
 	if (m_TexData.size() > 0)
 	{
-		for (auto itr = m_TexData.begin(); itr != m_TexData.end(); itr++)
+		for (auto itr = m_TexData.begin(); itr != m_TexData.end(); ++itr)	//前置インクリメントの方が後置インクリメントより高速らしいのでこちらを採用
 		{
 			//テクスチャの解放
 			if (itr->pTexture != NULL)
@@ -121,13 +121,15 @@ void CTexture::Unload(void)
 			itr->nID = 0;
 		}
 	}
+	m_TexData.clear();
+	m_TexData.shrink_to_fit();
 }
 //==================================================================
 // テクスチャ取得
 //==================================================================
 LPDIRECT3DTEXTURE9 CTexture::GetTexture(const int nID) {			//ID
 	if (m_TexData.size() > 0)
-	{
+	{//テクスチャ数が0以上なら(このif文を省略してもfindは動くが、0の時にfindの処理を省略するために明示的につける)
 		auto result = std::find(m_TexData.begin(), m_TexData.end(), nID);
 
 		if (result != m_TexData.end())
@@ -143,7 +145,7 @@ LPDIRECT3DTEXTURE9 CTexture::GetTexture(const int nID) {			//ID
 }
 LPDIRECT3DTEXTURE9 CTexture::GetTexture(const LPCSTR Tag) {		//タグ
 	if (m_TexData.size() > 0)
-	{
+	{//テクスチャ数が0以上なら(このif文を省略してもfindは動くが、0の時にfindの処理を省略するために明示的につける)
 		auto result = std::find(m_TexData.begin(), m_TexData.end(), Tag);
 		if (result != m_TexData.end())
 		{//タグが一致したら
@@ -163,7 +165,7 @@ LPDIRECT3DTEXTURE9 CTexture::GetTexture(const LPCSTR Tag) {		//タグ
 void CTexture::Release(const int nID)//ID
 {
 	if (m_TexData.size() > 0)
-	{
+	{//テクスチャ数が0以上なら(このif文を省略してもfindは動くが、0の時にfindの処理を省略するために明示的につける)
 		auto result = std::find(m_TexData.begin(), m_TexData.end(), nID);
 
 		if (result != m_TexData.end())
@@ -179,7 +181,7 @@ void CTexture::Release(const int nID)//ID
 void CTexture::Release(const LPCSTR Tag)//タグ
 {
 	if (m_TexData.size() > 0)
-	{
+	{//テクスチャ数が0以上なら(このif文を省略してもfindは動くが、0の時にfindの処理を省略するために明示的につける)
 		auto result = std::find(m_TexData.begin(), m_TexData.end(), Tag);
 		if (result != m_TexData.end())
 		{//タグが一致したら
@@ -221,11 +223,11 @@ int CTexture::GetTexNum(bool bCreate)
 		if (m_TexData.size() > 0)
 		{//読み込んだテクスチャ数が0以上なら
 
-			for (auto itr = m_TexData.begin(); itr != m_TexData.end(); itr++)
+			for (auto itr = m_TexData.begin(); itr != m_TexData.end(); ++itr)
 			{//Textureが作られていれば++
 				if (itr->pTexture != NULL)
 				{
-					nTexNum++;
+					++nTexNum;
 				}
 			}
 		}
