@@ -20,6 +20,7 @@
 #define _CHARACTOR_H_
 
 #include "scene.h"
+
 class CPlayer;
 
 class CCharaBase
@@ -138,7 +139,8 @@ public:
 	CPU_ROTATION m_CpuRotation;	//回転
 	CPU_NODE m_CpuNode;			//ノードの状態
 	CPU_TYPE m_Type;
-	D3DXVECTOR3 m_RespawnPos;		//出現位置
+	D3DXVECTOR3 m_RespawnPos;	//出現位置
+
 };
 
 class C2DCharactor : public CCharaBase
@@ -174,11 +176,15 @@ private:
 	void CharaMove_CPU(void);
 	void Think_CPU(void);		//考える
 	void Action_CPU(void);		//行動
+	void DiffAngle(float fDiffAngle);		//回転差分
 	void Rotation_CPU(void);	//回転
 	void Escape_CPU(void);		//逃避
 	void Homing_CPU(void);		//追尾
 	void Attack_CPU(void);		//攻撃
 	void PickUP_CPU(void);		//文字拾う
+	void HaveBullet_CPU(void);	//弾をもっている
+	void NotBullet_CPU(void);	//弾をもっていない
+	void NearOrFur_CPU(void);	//近いか遠いか
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
@@ -187,10 +193,11 @@ private:
 	//CPUで使うメンバ変数
 	int m_nThinkTimer;			//考える時間
 	int m_nActionTimer;			//行動している時間
-	int m_nCntActionRepeat;		//同じ行動を何度したか
-	int m_nCntSameCnt;
-
+	int m_nSameCnt;				//同じ行動を何度したか
+	float m_fCompareRange;		//文字までの距離を比較する
 	int m_PatrolTimer;			//巡回のタイマー
+	bool m_bNear[4];			//近い敵のフラグ
+	bool m_bWordNear;
 public:
 	bool m_bFront;
 };

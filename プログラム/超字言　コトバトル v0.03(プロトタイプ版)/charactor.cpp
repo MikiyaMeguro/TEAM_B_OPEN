@@ -28,6 +28,8 @@
 #define CIRCLE_ANGLE	(100)
 #define PATROL_FLAME	(60)
 #define CAMERA_MOVE_SPEED (0.05f)
+#define NEAR_DISTANCE	(100)
+
 //=============================================================================
 // 設定処理
 //=============================================================================
@@ -83,7 +85,14 @@ HRESULT C3DCharactor::Init(void)
 {
 	m_nActionTimer = 0;
 	m_PatrolTimer = 0;
+	m_nSameCnt = 0;
+	m_fCompareRange = 0;
+	m_bWordNear = false;
 
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		m_bNear[nCnt] = false;
+	}
 	return S_OK;
 }
 
@@ -393,20 +402,20 @@ void C3DCharactor::Think_CPU(void)
 	m_CpuNode = CPU_NODE_NONE;
 
 	//プロトタイプ用
-	switch (GetThisCharactor()->GetID())
-	{
-	case 1:
-		m_Type = CPU_TYPE_ESCAPE;
-		break;
-	case 2:
-		m_Type = CPU_TYPE_HOMING;
-		break;
-	case 3:
-		m_Type = CPU_TYPE_PATROL;
-		break;
-	default:
-		break;
-	}
+	//switch (GetThisCharactor()->GetID())
+	//{
+	//case 1:
+	//	m_Type = CPU_TYPE_ESCAPE;
+	//	break;
+	//case 2:
+	//	m_Type = CPU_TYPE_HOMING;
+	//	break;
+	//case 3:
+	//	m_Type = CPU_TYPE_PATROL;
+	//	break;
+	//default:
+	//	break;
+	//}
 
 	//行動を決める条件文
 	if (m_bFront == true)
@@ -418,6 +427,7 @@ void C3DCharactor::Think_CPU(void)
 	}
 	else
 	{
+#if 0
 		switch (m_Type)
 		{
 		case CPU_TYPE_ESCAPE:
@@ -438,7 +448,7 @@ void C3DCharactor::Think_CPU(void)
 		default:
 			break;
 		}
-#if 0
+
 		m_CpuThink = THINK_MOVE;
 		/*
 		敵が前にいる時はBACK
@@ -450,19 +460,31 @@ void C3DCharactor::Think_CPU(void)
 #endif
 	}
 
+	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
+	{	//弾を持っているとき
+		m_Type = CPU_TYPE_NONE;
+		m_CpuThink = THINK_HAVEBULLET;
+		m_nActionTimer = 10;
+	}
+	else
+	{	//弾を持っていないとき
+		m_CpuThink = THINK_NOTBULLET;
+		m_nActionTimer = 10;
+	}
+
 	//同じ行動を3回とらない
 	if (m_OldCpuThink == m_CpuThink)
 	{
-		m_nCntSameCnt++;
-		if (m_nCntSameCnt == 3)
+		m_nSameCnt++;
+		if (m_nSameCnt == 3)
 		{
-			m_nCntSameCnt = 0;
+			m_nSameCnt = 0;
 			m_nActionTimer = 0;
 		}
 	}
 	else
 	{
-		m_nCntSameCnt = 0;
+		m_nSameCnt = 0;
 	}
 }
 
@@ -480,38 +502,52 @@ void C3DCharactor::Action_CPU(void)
 	//行動を実行に移す
 	switch (m_CpuThink)
 	{
-	case  THINK_MOVE:
-		CharaMove_CPU();
-		m_CpuNode = CPU_NODE_RUN;
+	case  THINK_WORD:	//文字を考える
 		break;
-	case  THINK_ROTATION:
+	case  THINK_SIGHT:	//敵が見えたとき
+		break;
+	case  THINK_MISSING:	//敵を見失った
+		break;
+	case  THINK_HAVEBULLET:	//弾を持っているとき
+		HaveBullet_CPU();
+		break;
+	case  THINK_NOTBULLET:	//弾を持っていない
+		NotBullet_CPU();
+		break;
+	case  THINK_PICKUP:	//文字を拾う
+		PickUP_CPU();
+		break;
+	case  THINK_ESCAPE:	//逃げる
+		Homing_CPU();
+		break;
+	case  THINK_ENEMY_HAVEBULLET:	//敵が弾を持っているとき
+		break;
+	case  THINK_ENEMY_NOBULLET:	//敵が弾を持っているとき
+		break;
+	case  THINK_DODGE:	//かわす
+		break;
+	case  THINK_ATTACK:	//攻撃
+		Attack_CPU();
+		break;
+	case  THINK_NEAR_ENEMY:	//敵が近い
+		break;
+	case  THINK_FUR_ENEMY:	//敵が遠い
+		break;
+	case  THINK_MOVE:	//移動処理
+		CharaMove_CPU();
+		break;
+	case  THINK_ROTATION:	//回転処理
 		m_bFront = false;
 		Rotation_CPU();
-		m_CpuNode = CPU_NODE_RUN;
 		break;
-	case  THINK_PATROL:
+	case  THINK_PATROL: //巡回
 		Rotation_CPU();
-		m_CpuNode = CPU_NODE_RUN;
 		break;
-	case  THINK_HOMING:
+	case  THINK_HOMING:	//追尾
 		Homing_CPU();
-		m_CpuNode = CPU_NODE_RUN;
 		break;
-	case  THINK_WATCH:
+	case  THINK_WATCH:	//敵を見る
 		Homing_CPU();
-		m_CpuNode = CPU_NODE_RUN;
-		break;
-	case  THINK_ESCAPE:
-		Homing_CPU();
-		m_CpuNode = CPU_NODE_RUN;
-		break;
-	case  THINK_ATTACK:
-		Attack_CPU();
-		m_CpuNode = CPU_NODE_RUN;
-		break;
-	case  THINK_PICKUP:
-		PickUP_CPU();
-		m_CpuNode = CPU_NODE_RUN;
 		break;
 	default:
 		break;
@@ -531,10 +567,32 @@ void C3DCharactor::Action_CPU(void)
 	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
 	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
 
-
-
 	//タイマーを減らす
 	m_nActionTimer--;
+}
+
+void C3DCharactor::DiffAngle(float fDiffAngle)
+{
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+
+	// 差分
+	if (fDiffAngle > D3DX_PI)
+	{
+		fDiffAngle -= D3DX_PI * 2.0f;
+	}
+	if (fDiffAngle < -D3DX_PI)
+	{
+		fDiffAngle += D3DX_PI * 2.0f;
+	}
+	rot.y += fDiffAngle * 0.1f;
+	if (rot.y > D3DX_PI)
+	{
+		rot.y -= D3DX_PI * 2.0f;
+	}
+	if (rot.y < -D3DX_PI)
+	{
+		rot.y += D3DX_PI * 2.0f;
+	}
 }
 
 //=============================================================================
@@ -688,11 +746,9 @@ void C3DCharactor::Rotation_CPU(void)
 		break;
 	}
 
-	bool Btest = m_bFront;
-
+	//回転制御
 	spin.y = ChangeRot.y - rot.y;
 
-	//回転制御
 	if (spin.y > D3DX_PI)
 	{
 		spin.y -= D3DX_PI * 2.0f;
@@ -747,11 +803,10 @@ void C3DCharactor::Homing_CPU(void)
 		fLength = 0;
 	}
 
-
 	CPlayer *pPlayer[MAX_PLAYER];
 	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
 
-	D3DXVECTOR3 testpos;
+	D3DXVECTOR3 TargetPos;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -779,30 +834,14 @@ void C3DCharactor::Homing_CPU(void)
 						move.z += cosf(atan2f(PlayerPos[nCntPlayer].x - Pos.x, PlayerPos[nCntPlayer].z - Pos.z)) * speed;
 					}
 					float DiffDis = (PlayerPos[nCntPlayer].x + Pos.x) / 2;
-					testpos = D3DXVECTOR3((PlayerPos[nCntPlayer].x + Pos.x) / 2, (PlayerPos[nCntPlayer].y + Pos.y) / 2, (PlayerPos[nCntPlayer].z + Pos.z) / 2);
+					TargetPos = D3DXVECTOR3((PlayerPos[nCntPlayer].x + Pos.x) / 2, (PlayerPos[nCntPlayer].y + Pos.y) / 2, (PlayerPos[nCntPlayer].z + Pos.z) / 2);
 					// 目的の角度
-					float fDestAngle = atan2f((testpos.x - sinf(rot.y)) - Pos.x, (testpos.z - cosf(rot.y)) - Pos.z);
+					float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
 
 					// 差分
 					float fDiffAngle = fDestAngle - rot.y;
-					if (fDiffAngle > D3DX_PI)
-					{
-						fDiffAngle -= D3DX_PI * 2.0f;
-					}
-					if (fDiffAngle < -D3DX_PI)
-					{
-						fDiffAngle += D3DX_PI * 2.0f;
-					}
-					rot.y += fDiffAngle * 0.1f;
-					if (rot.y > D3DX_PI)
-					{
-						rot.y -= D3DX_PI * 2.0f;
-					}
-					if (rot.y < -D3DX_PI)
-					{
-						rot.y += D3DX_PI * 2.0f;
-					}
 
+					DiffAngle(fDiffAngle);
 
 					if (fDestAngle > D3DX_PI)
 					{
@@ -813,12 +852,9 @@ void C3DCharactor::Homing_CPU(void)
 						fDestAngle += D3DX_PI * 2.0f;
 					}
 
-					if (m_CpuThink == THINK_WATCH)
+					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
 					{
-						if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
-						{
-							m_CpuThink = THINK_ATTACK;
-						}
+						m_CpuThink = THINK_ATTACK;
 					}
 				}
 			}
@@ -835,10 +871,13 @@ void C3DCharactor::Attack_CPU(void)
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),GetThisCharactor()->GetPosition());
+		m_CpuThink = THINK_NONE;
 	}
 }
 
-
+//=============================================================================
+// CPUの文字探し処理
+//=============================================================================
 void C3DCharactor::PickUP_CPU(void)
 {
 	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
@@ -847,14 +886,16 @@ void C3DCharactor::PickUP_CPU(void)
 	D3DXVECTOR3& spin = CCharaBase::GetSpin();
 	float		 speed = CCharaBase::GetSpeed();
 
-	bool bHit = false;
 	CScene *pScene = NULL;
+	m_fCompareRange = 1000000;
+	D3DXVECTOR3 MOKUHYO;
+	bool bWord = false;
 
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(5);
 
 	while (pScene != NULL)
-	{// 優先順位が3のオブジェクトを1つ1つ確かめる
+	{// 優先順位が5のオブジェクトを1つ1つ確かめる
 	 // 処理の最中に消える可能性があるから先に記録しておく
 		CScene *pSceneNext = pScene->GetNext();
 
@@ -862,20 +903,123 @@ void C3DCharactor::PickUP_CPU(void)
 		{// 死亡フラグが立っていないもの
 			if (pScene->GetObjType() == CScene::OBJTYPE_WORD)
 			{// オブジェクトの種類を確かめる
-				CWord *pWord = ((CWord*)pScene);		// CSceneXへキャスト(型の変更)
-														// 距離を測る
+				CWord *pWord = ((CWord*)pScene);		// CWordへキャスト(型の変更)
+				// 距離を測る
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
 
-				if (fCircle < 100 * 100 && fCircle > 100)
+				if (fCircle < 300 * 100)
 				{
-					D3DXVECTOR3 MOKUHYO = pWord->GetPos();
+					if (m_fCompareRange > fCircle)
+					{//自分と一番近い文字はどれかを比べる
+						//文字までの距離を記憶
+						m_fCompareRange = fCircle;
+						MOKUHYO = pWord->GetPos();
+						bWord = true;
+					}
 				}
 			}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
+	//ワードが範囲内にある時移動する
+	if (bWord == true)
+	{
+		// 目的の角度
+		float fDestAngle = atan2f((MOKUHYO.x - sinf(rot.y)) - Pos.x, (MOKUHYO.z - cosf(rot.y)) - Pos.z);
+		// 差分
+		float fDiffAngle = fDestAngle - rot.y;
+		DiffAngle(fDiffAngle);
+		//移動
+		move.x += sinf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
+		move.z += cosf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
+	}
 }
+
+//=============================================================================
+// 弾を持っているときの処理
+//=============================================================================
+void C3DCharactor::HaveBullet_CPU(void)
+{
+
+}
+
+//=============================================================================
+// 弾を持っていない時の処理
+//=============================================================================
+void C3DCharactor::NotBullet_CPU(void)
+{
+	bool bPICKUP = false;
+	int	nCntNear = 0;
+
+	//if (m_bWordNear == false)
+	//{	//近くに文字がない時
+	//	m_CpuThink = THINK_MOVE;
+//	}
+//	else
+	{	//誰が近いか
+		NearOrFur_CPU();
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			if (m_bNear[nCntPlayer] == false)
+			{
+				nCntNear++;
+			}
+		}
+
+		if (nCntNear == 4)
+		{
+			m_CpuThink = THINK_PICKUP;
+		}
+
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			m_bNear[nCntPlayer] = false;
+		}
+	}
+}
+
+//=============================================================================
+// 近いか遠いか
+//=============================================================================
+void C3DCharactor::NearOrFur_CPU(void)
+{
+	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
+
+	CPlayer *pPlayer[MAX_PLAYER];
+	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
+	m_fCompareRange = 1000000;
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
+		if (pPlayer[nCntPlayer] != NULL)
+		{
+			PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
+		}
+	}
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		if (pPlayer[nCntPlayer] != NULL)
+		{
+			if (pPlayer[nCntPlayer]->GetID() != GetThisCharactor()->GetID())
+			{//自分のIDと一致していなければ実行
+			 // 距離を測る
+				float fCircle = ((Pos.x - PlayerPos[nCntPlayer].x) * (Pos.x - PlayerPos[nCntPlayer].x)) + ((Pos.z - PlayerPos[nCntPlayer].z) * (Pos.z - PlayerPos[nCntPlayer].z));
+				if (fCircle < 50 * 100)
+				{
+					if (pPlayer[nCntPlayer]->GetWordManager()->GetBulletFlag() == true)
+					{
+						m_bNear[nCntPlayer] = true;
+					}
+				}
+			}
+		}
+	}
+
+}
+
 //=============================================================================
 // ステップ処理
 //=============================================================================
