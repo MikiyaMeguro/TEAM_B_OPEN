@@ -894,11 +894,11 @@ void C3DCharactor::PickUP_CPU(void)
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(5);
 
-	int nCntData = GetThisCharactor()->GetWordManager()->SearchWord();
+	int nCntData = GetThisCharactor()->GetWordManager()->SearchWord();	// 組み立てられる候補の回数を取得
 	float *fAnswerNum = NULL;
 	if (nCntData > 0)
-	{
-		fAnswerNum = GetThisCharactor()->GetWordManager()->GetAnswerData();
+	{	// 候補が0以上の場合
+		fAnswerNum = GetThisCharactor()->GetWordManager()->GetAnswerData();	// 答えを取得
 	}
 
 	while (pScene != NULL)
@@ -914,11 +914,12 @@ void C3DCharactor::PickUP_CPU(void)
 
 				// 距離を測る
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
-				float fNum = (float)pWord->GetWordNum();
+
+				float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
 				for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
-				{
+				{	// 候補の数回して 文字番号と合っているかを比較
 					if (fAnswerNum[nCntAnswer] == fNum)
-					{
+					{	// 合っていた場合 位置を取得しbreakする
 						m_fCompareRange = fCircle;
 						MOKUHYO = pWord->GetPos();
 						bWord = true;

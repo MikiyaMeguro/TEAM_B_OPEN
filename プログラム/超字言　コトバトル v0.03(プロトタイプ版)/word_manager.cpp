@@ -292,10 +292,10 @@ int CWordManager::SearchWord(void)
 							if (nCntData == 0) { m_fAnswerData[nData] = m_AnswerNum[nCntAnswer].x; }
 							else if (nCntData == 1) { m_fAnswerData[nData] = m_AnswerNum[nCntAnswer].y; }
 							else if (nCntData == 2) { m_fAnswerData[nData] = m_AnswerNum[nCntAnswer].z; }
-							nData++;
+							nData++;		// ‰ñ”‚ğ‘‚â‚·
 						}
 					}
-					nAnswer = 0;
+					nAnswer = 0;	// ‡‚Á‚Ä‚¢‚é‰ñ”‚ğƒŠƒZƒbƒg
 				}
 			}
 
