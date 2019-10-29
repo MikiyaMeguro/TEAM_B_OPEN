@@ -20,7 +20,7 @@
 // マクロ定義
 //=============================================================================
 #define MOVE_DEFAULT_SPEED (0.6f)			//デフォルトの移動スピード
-#define STEP_DEFAULT_MOVEMENT (6.0f)		//デフォルトのステップ量
+#define STEP_DEFAULT_MOVEMENT (10.0f)		//デフォルトのステップ量
 #define MOVE_DEFAULT_COEFFICIENT (0.20f)	//デフォルトの移動にかかる係数
 #define MOVE_AIR_COEFFICIENT (0.10f);
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
@@ -987,7 +987,6 @@ void C3DCharactor::PickUP_CPU(void)
 				{//範囲内に文字があった
 					nCntNearWord++;		//加算
 					float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
-
 					for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
 					{	// 候補の数回して 文字番号と合っているかを比較
 						if (fAnswerNum[nCntAnswer] == fNum)
@@ -1012,6 +1011,7 @@ void C3DCharactor::PickUP_CPU(void)
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
+
 	//ワードが範囲内にある時移動する
 	if (bWord == true)
 	{
@@ -1023,8 +1023,6 @@ void C3DCharactor::PickUP_CPU(void)
 		//移動
 		move.x += sinf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
 		move.z += cosf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
-
-		m_bWordNear = false;
 	}
 
 	if (nCntNearWord == 0)
@@ -1132,5 +1130,5 @@ void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 	move.z += cosf(fRot) * STEP_DEFAULT_MOVEMENT;
 
 	m_nCntStepCoolTime = 30;
-
+	GetThisCharactor()->SetTransTime(5);
 }

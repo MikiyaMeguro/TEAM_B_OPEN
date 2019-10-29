@@ -167,6 +167,7 @@
     <ClCompile Include="InputXPad.cpp" />
     <ClCompile Include="light.cpp" />
     <ClCompile Include="load.cpp" />
+    <ClCompile Include="loadText.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="mask.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="InputXPad.h" />
     <ClInclude Include="light.h" />
     <ClInclude Include="load.h" />
+    <ClInclude Include="loadText.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="mask.h" />
