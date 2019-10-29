@@ -36,6 +36,9 @@ public:
 		MODE_TAICO,		// タイヤ
 		MODE_WHEEL,		// 太鼓
 		MODE_COIN,		// コイン
+		MODE_SUIKA,		// すいか
+		MODE_TARAI,		// たらい
+		MODE_POT,		// やかん
 		MODE_WALL_SMALL,// 小さい壁
 		MODE_WALL_BIG,	// 大きい壁
 		MODE_GEAR,		// 歯車

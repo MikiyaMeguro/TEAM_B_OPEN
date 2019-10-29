@@ -42,11 +42,16 @@ public:
 	void SetWord(int nType);
 	void BulletCreate(int nID,D3DXVECTOR3 BulletMuzzle);	//BulletMuzzle = 弾が出る位置
 	void SetID(int nID) { m_nPlayerID = nID; }
+	static void SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum);	// ファイルからリソースの読み込み
+	static void SetWordAnswerNum(int nAnswerNum);
+	int SearchWord(void);							// 文字の組み合わせが合うかどうか
+
 
 	// 取得用の関数
 	int GetCntNum(void) { return m_nCntNum; }
 	int GetWordNum(int nNum) { return m_aWord[nNum].nNum; }
 	bool GetBulletFlag(void) { return m_bPress; }		// 弾が撃てるようになる条件
+	float *GetAnswerData(void) { return m_fAnswerData; }	// 2文字の時に組み合わせることが出来る文字データの取得
 
 	// デバック用
 	void CreateOblDebug(void);
@@ -54,12 +59,15 @@ public:
 
 private:
 	TYPE_WORD m_aWord[MAX_WORD];
-	D3DXVECTOR3 AnswerNum[MAX_ANSWER];
+	static int m_nAnswerDataNum;
+	static D3DXVECTOR3 *m_AnswerNum;
 	int m_nCreateType;
 	int m_nCntNum;
 	int m_nCntaAnswer;
 	int m_nPlayerID;
+	float *m_fAnswerData;
 	bool m_bPress;
+	bool m_bSearch;					// サーチのフラグ
 	bool m_bAnswer[MAX_ANSWER];
 };
 
