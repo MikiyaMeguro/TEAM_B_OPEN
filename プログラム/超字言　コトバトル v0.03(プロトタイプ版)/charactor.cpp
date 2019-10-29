@@ -29,6 +29,7 @@
 #define PATROL_FLAME	(60)
 #define CAMERA_MOVE_SPEED (0.05f)
 #define NEAR_DISTANCE	(100)
+#define FIELD_OUTSIDE	(300)
 
 //=============================================================================
 // 設定処理
@@ -88,6 +89,10 @@ HRESULT C3DCharactor::Init(void)
 	m_nSameCnt = 0;
 	m_fCompareRange = 0;
 	m_bWordNear = false;
+	m_bJyougai = false;
+
+	nTestCnt = 0;
+
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -120,6 +125,30 @@ void C3DCharactor::Update(void)
 		{	//行動する
 			Action_CPU();
 		}
+
+		//CPUが場外行かないように
+		if (m_bJyougai == false)
+		{
+			if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
+				FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
+			{//場外に移動しそうになった時
+				m_bJyougai = true;
+				move.x = 0;
+				move.z = 0;
+				m_CpuThink = THINK_ROTATION;
+				m_nActionTimer = 2;
+				m_CpuRotation = (CPU_ROTATION)(rand() % 3);
+			}
+		}
+		else
+		{
+			if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
+				FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
+			{//場内に移動した
+				m_bJyougai = false;
+			}
+		}
+
 		break;
 	}
 	//メッシュフィールドとの当たり判定
@@ -140,7 +169,7 @@ void C3DCharactor::Update(void)
 
 		CPoint *pPoint = NULL;
 		if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(GetThisCharactor()->GetID()); }
-		else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */}
+		else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */ }
 
 		if (pPoint != NULL)
 		{
@@ -165,6 +194,32 @@ void C3DCharactor::Update(void)
 	// 移動を反映
 	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	if (CCharaBase::GetMoveType() == CCharaBase::MOVETYPE_NPC_AI)
+	{
+		//CPUが場外行かないように
+		if (m_bJyougai == false)
+		{
+			if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
+				FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
+			{//場外に移動しそうになった時
+
+				move.x = 0;
+				move.z = 0;
+				m_CpuThink = THINK_ROTATION;
+				m_nActionTimer = 2;
+				m_CpuRotation = CPU_ROTATION_BACK;
+			}
+		}
+		else
+		{
+			if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
+				FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
+			{//場内に移動した
+				m_bJyougai = true;
+			}
+		}
+	}
 
 }
 
@@ -459,7 +514,7 @@ void C3DCharactor::Think_CPU(void)
 		m_CpuMove = CPU_MOVE_FRONT;
 #endif
 	}
-
+#if 1
 	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
 	{	//弾を持っているとき
 		m_Type = CPU_TYPE_NONE;
@@ -486,6 +541,16 @@ void C3DCharactor::Think_CPU(void)
 	{
 		m_nSameCnt = 0;
 	}
+#endif
+
+	//nTestCnt++;
+	//if (nTestCnt > 60)
+	//{
+	//	m_CpuThink = THINK_ROTATION;
+	//	m_nActionTimer = 2;
+	//	m_CpuRotation = CPU_ROTATION_BACK;
+	//	nTestCnt = 0;
+	//}
 }
 
 //=============================================================================
@@ -704,14 +769,14 @@ void C3DCharactor::CharaMove_CPU(void)
 	{
 		rot.y += D3DX_PI * 2.0f;
 	}
+
 	spin.y = 0.0f;
 
-
 	//移動中に壁にぶつかった
-	if (m_bFront == true)
+	if (m_bFront == true )
 	{
 		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 1;
+		m_nActionTimer = 2;
 		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
 		m_bFront = false;
 	}
@@ -742,7 +807,7 @@ void C3DCharactor::Rotation_CPU(void)
 		ChangeRot.y = (D3DX_PI * -0.5f) + rot.y;
 		break;
 	case CPU_ROTATION_BACK:
-		ChangeRot.y = (D3DX_PI * -1.0f) + rot.y;
+		ChangeRot.y = (D3DX_PI * 1.0f) + rot.y;
 		break;
 	}
 
@@ -751,11 +816,11 @@ void C3DCharactor::Rotation_CPU(void)
 
 	if (spin.y > D3DX_PI)
 	{
-		spin.y -= D3DX_PI * 2.0f;
+		spin.y = D3DX_PI;
 	}
 	else if (spin.y < -D3DX_PI)
 	{
-		spin.y += D3DX_PI * 2.0f;
+		spin.y = -D3DX_PI;
 	}
 
 	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
@@ -887,9 +952,10 @@ void C3DCharactor::PickUP_CPU(void)
 	float		 speed = CCharaBase::GetSpeed();
 
 	CScene *pScene = NULL;
-	m_fCompareRange = 1000000;
-	D3DXVECTOR3 MOKUHYO;
-	bool bWord = false;
+	m_fCompareRange = 1000000;	//初期の距離から近いものを選ぶ
+	D3DXVECTOR3 MOKUHYO;	//一番近い目標位置
+	bool bWord = false;		//文字を見つけた
+	int nCntNearWord = 0;		//近くに何個文字があるか
 
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(5);
@@ -908,7 +974,8 @@ void C3DCharactor::PickUP_CPU(void)
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
 
 				if (fCircle < 300 * 100)
-				{
+				{//範囲内に文字があった
+					nCntNearWord++;		//加算
 					if (m_fCompareRange > fCircle)
 					{//自分と一番近い文字はどれかを比べる
 						//文字までの距離を記憶
@@ -933,6 +1000,13 @@ void C3DCharactor::PickUP_CPU(void)
 		//移動
 		move.x += sinf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
 		move.z += cosf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
+
+		m_bWordNear = false;
+	}
+
+	if (nCntNearWord == 0)
+	{//近くに文字が一つもない
+		m_bWordNear = true;
 	}
 }
 
@@ -952,12 +1026,17 @@ void C3DCharactor::NotBullet_CPU(void)
 	bool bPICKUP = false;
 	int	nCntNear = 0;
 
-	//if (m_bWordNear == false)
-	//{	//近くに文字がない時
-	//	m_CpuThink = THINK_MOVE;
-//	}
-//	else
-	{	//誰が近いか
+
+	if (m_bWordNear == true)
+	{//近くに文字がない時
+		m_CpuThink = THINK_MOVE;
+		m_CpuMove = CPU_MOVE_FRONT;
+		m_nActionTimer = 60;
+		m_bWordNear = false;
+	}
+	else
+	{
+		//誰が近いか
 		NearOrFur_CPU();
 		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 		{
@@ -970,6 +1049,12 @@ void C3DCharactor::NotBullet_CPU(void)
 		if (nCntNear == 4)
 		{
 			m_CpuThink = THINK_PICKUP;
+		}
+		else
+		{
+			m_CpuThink = THINK_MOVE;
+			m_CpuMove = CPU_MOVE_FRONT;
+			m_nActionTimer = 30;
 		}
 
 		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)

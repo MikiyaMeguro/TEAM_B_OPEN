@@ -60,9 +60,9 @@ public:
 	typedef enum
 	{
 		CPU_MOVE_FRONT,			//前へ移動
-		CPU_MOVE_BACK,			//後ろへ移動
 		CPU_MOVE_RIGHT,			//右へ移動
 		CPU_MOVE_LEFT,			//左へ移動
+		CPU_MOVE_BACK,			//後ろへ移動
 		CPU_MOVE_PATROL,		//巡回
 		CPU_MOVE_NONE,			//移動していない
 		CPU_MOVE_MAX
@@ -198,6 +198,9 @@ private:
 	int m_PatrolTimer;			//巡回のタイマー
 	bool m_bNear[4];			//近い敵のフラグ
 	bool m_bWordNear;
+	bool m_bJyougai;
+
+	int nTestCnt = 0;
 public:
 	bool m_bFront;
 };
