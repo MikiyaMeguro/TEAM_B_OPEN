@@ -30,6 +30,8 @@ public:
 	void Distance(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNumPlayer);							// ‹——£‚¾‚¯‚ğ‘ª‚é
 	int ComparisonDistance(int nNumPlayer);		// ‹——£‚Ì”äŠr
 
+	// æ“¾ ‚à‚µ‚­‚Í İ’è‚ÌŠÖ”
+	int GetWordNum(void) { return m_nWordNum; }	// •¶š”Ô†‚ğæ“¾
 private:
 	D3DXVECTOR3 Move(D3DXVECTOR3 pos);
 	void ScaleSize(void);
