@@ -79,7 +79,7 @@ void CStageSelect::Update(void)
 	// ランダムな値を更新
 	srand((unsigned int)time(NULL));
 	//任意のキーENTER
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	if (CCommand::GetCommand("DECISION"))
 	{
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}

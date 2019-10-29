@@ -254,7 +254,7 @@ void CSelectMenu::Update(void)
 		}
 
 		//エンターキー
-		if (pInput->GetTrigger(DIK_RETURN) == true)
+		if (CCommand::GetCommand("DECISION"))
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
 			if (m_nSelect == 0)
