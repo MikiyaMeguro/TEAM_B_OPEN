@@ -86,8 +86,8 @@ void CWord::Uninit(void)
 void CWord::Update(void)
 {
 	// ローカル変数
-	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
-	//CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//テスト
+	//CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
 
 	D3DXVECTOR3 pos = CSceneBillBoard::GetPos();	//位置の取得
 	D3DXVECTOR3 PosOld = pos;						// 位置を保存

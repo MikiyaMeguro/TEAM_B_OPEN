@@ -15,6 +15,11 @@
 #include "bullet.h"
 #include "CameraManager.h"
 //=============================================================================
+// 静的メンバ変数
+//=============================================================================
+D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(99.0f, 99.0f, 99.0f);
+int CWordManager::m_nAnswerDataNum = 0;
+//=============================================================================
 // コンストラクタ
 //=============================================================================
 CWordManager::CWordManager()
@@ -30,20 +35,8 @@ CWordManager::CWordManager()
 	m_nCntaAnswer = 0;		// 正解との比較して合っている数
 	m_nPlayerID = 0;		// プレイヤーが何番かの保存
 	m_bPress = false;		// 指定した文字以上をいれないフラグ
+	m_bSearch = false;		// サーチを開始する時のフラグ
 
-	for (int nCntAnswer = 0; nCntAnswer < MAX_ANSWER; nCntAnswer++)
-	{	// 答えの初期化(答えの入力)
-		if (nCntAnswer == 0) { AnswerNum[nCntAnswer] = D3DXVECTOR3(7.0f, 40.0f, 30.0f); }			// 車
-		else if (nCntAnswer == 1) { AnswerNum[nCntAnswer] = D3DXVECTOR3(27.0f, 19.0f, 45.0f); }		// 布団
-		else if (nCntAnswer == 2) { AnswerNum[nCntAnswer] = D3DXVECTOR3(17.0f, 7.0f, 3.0f); }		// 机
-		else if (nCntAnswer == 3) { AnswerNum[nCntAnswer] = D3DXVECTOR3(27.0f, 39.0f, 45.0f); }		// プリン
-		else if (nCntAnswer == 4) { AnswerNum[nCntAnswer] = D3DXVECTOR3(20.0f, 1.0f, 27.0f); }		// ナイフ
-		else if (nCntAnswer == 5) { AnswerNum[nCntAnswer] = D3DXVECTOR3(39.0f, 45.0f, 9.0f); }		// リンゴ
-		else if (nCntAnswer == 6) { AnswerNum[nCntAnswer] = D3DXVECTOR3(3.0f, 24.0f, 7.0f); }		// 絵具
-		else if (nCntAnswer == 7) { AnswerNum[nCntAnswer] = D3DXVECTOR3(15.0f, 1.0f, 35.0f); }		// タイヤ
-		else if (nCntAnswer == 8) { AnswerNum[nCntAnswer] = D3DXVECTOR3(15.0f, 1.0f, 9.0f); }		// 太鼓
-		else if (nCntAnswer == 9) { AnswerNum[nCntAnswer] = D3DXVECTOR3(9.0f, 1.0f, 45.0f); }		// 太鼓
-	}
 }
 //=============================================================================
 // デストラクタ
@@ -77,6 +70,11 @@ void CWordManager::Update(void)
 
 	CreateOblDebug();		// 数字で文字の管理(デバック用)
 
+	if (m_nCntNum == MAX_WORD)
+	{	// 最大ならこれ以上数字をいれない
+		m_bPress = true;
+	}
+
 	if (m_bPress == true)
 	{
 		if (m_nCntaAnswer == 0)
@@ -85,9 +83,9 @@ void CWordManager::Update(void)
 			{	// 答えの数だけ回す
 				for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 				{	// 答との比較
-					if (AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum && m_bAnswer[0] == false) { m_bAnswer[0] = true; }
-					else if (AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum && m_bAnswer[1] == false) { m_bAnswer[1] = true; }
-					else if (AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
+					if (m_AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum && m_bAnswer[0] == false) { m_bAnswer[0] = true; }
+					else if (m_AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum && m_bAnswer[1] == false) { m_bAnswer[1] = true; }
+					else if (m_AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
 				}
 
 				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; }
@@ -95,7 +93,7 @@ void CWordManager::Update(void)
 				{
 					for (int nCount = 0; nCount < MAX_WORD; nCount++)
 					{
-					m_bAnswer[nCount] = false;
+						m_bAnswer[nCount] = false;
 					}
 				}
 
@@ -109,6 +107,13 @@ void CWordManager::Update(void)
 		//{	// 弾の生成
 		//	BulletCreate(0);
 		//}
+	}
+
+	if (m_nCntNum != 2 && m_bSearch == true)
+	{ // 持っている文字が2文字以外ならサーチのフラグを変更
+		m_bSearch = false;
+		delete m_fAnswerData;
+		*m_fAnswerData = 99.0f;		// 空の番号をいれる
 	}
 
 #ifdef _DEBUG
@@ -242,6 +247,71 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 		}
 	}
 }
+
+//=============================================================================
+// Textから読み込み 答えの割り当て
+//=============================================================================
+void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum)
+{
+	m_AnswerNum[nNumModel] = AnswerNum;
+}
+
+//=============================================================================
+// Textから最大数読み込み 動的確保
+//=============================================================================
+void CWordManager::SetWordAnswerNum(int nAnswerNum)
+{
+	m_nAnswerDataNum = nAnswerNum;
+	m_AnswerNum = new D3DXVECTOR3[m_nAnswerDataNum];
+}
+
+//=============================================================================
+// 文字の組み合わせが合っているかどうかを取得
+//=============================================================================
+int CWordManager::SearchWord(void)
+{
+	if (m_nCntNum == 2 /*&& m_bSearch == false*/)
+	{	// 拾った文字が２文字の場合
+		int nData = 0;
+		m_fAnswerData = new float[m_nAnswerDataNum];
+		for (int nCntAnswer = 0; nCntAnswer < m_nAnswerDataNum; nCntAnswer++)
+		{	// 答えの数だけ回す
+			int nAnswer = 0;
+			for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+			{	// 答との比較
+				if (m_AnswerNum[nCntAnswer].x == m_aWord[nCntWord].nNum && m_bAnswer[0] == false) { m_bAnswer[0] = true; nAnswer++; }
+				else if (m_AnswerNum[nCntAnswer].y == m_aWord[nCntWord].nNum && m_bAnswer[1] == false) { m_bAnswer[1] = true; nAnswer++; }
+				else if (m_AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; nAnswer++; }
+
+				if (nAnswer == 2)
+				{	// 合っている所が2箇所の場合
+					for (int nCntData = 0; nCntData < MAX_WORD; nCntData++)
+					{
+						if (m_bAnswer[nCntData] == false)
+						{	// falseの場所を探す 見つけた答えを代入
+							if (nCntData == 0) { m_fAnswerData[nData] = m_AnswerNum[nCntAnswer].x; }
+							else if (nCntData == 1) { m_fAnswerData[nData] = m_AnswerNum[nCntAnswer].y; }
+							else if (nCntData == 2) { m_fAnswerData[nData] = m_AnswerNum[nCntAnswer].z; }
+							nData++;		// 回数を増やす
+						}
+					}
+					nAnswer = 0;	// 合っている回数をリセット
+				}
+			}
+
+			for (int nCount = 0; nCount < MAX_WORD; nCount++)
+			{	// 全てfalseに戻す
+				m_bAnswer[nCount] = false;
+			}
+		}
+
+		m_bSearch = true;		// Flagをtureに
+		return nData;			// 答えの出た回数
+	}
+
+	return 0;
+}
+
 
 //=============================================================================
 // 文字で生成のデバック用(数字管理)

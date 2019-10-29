@@ -69,7 +69,7 @@ void CResult::Update(void)
 	CFade *pFade = pManager->GetFade();
 
 	//”CˆÓ‚ÌƒL[ENTER
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	if (CCommand::GetCommand("DECISION"))
 	{
 	//	pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
 	}

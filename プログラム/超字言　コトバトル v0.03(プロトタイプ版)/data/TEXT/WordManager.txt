@@ -1,0 +1,95 @@
+#============================================================
+#
+# [モデル配置ツール]スクリプトファイル [data\TEXT\SetModel.txt]
+#  Author : MIKIYA MEGURO
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+	ANSWERNUM = 13			# モデル数
+
+#------------------------------------------------------------
+#    モデルファイル名  ※プログラム内でも変更してください
+#------------------------------------------------------------
+	# 0  : 車
+	# 1  : 布団
+	# 2  : 机
+	# 3  : プリン
+	# 4  : ナイフ
+	# 5  : リンゴ
+	# 6  : 絵具
+	# 7  : タイヤ
+	# 8  : 太鼓
+	# 9  : コイン
+	# 10 : スイカ
+	# 11 : たらい
+	# 12 : ヤカン
+#------------------------------------------------------------
+#                      モデル配置情報
+#------------------------------------------------------------
+MODELSET
+	TYPE = 0					# 車
+	ANSWER = 7.0 40.0 30.0
+END_MODELSET
+
+MODELSET
+	TYPE = 1					# 布団
+	ANSWER = 27.0 19.0 45.0
+END_MODELSET
+
+MODELSET
+	TYPE = 2					# 机
+	ANSWER = 17.0 7.0 3.0
+END_MODELSET
+
+MODELSET
+	TYPE = 3					# プリン
+	ANSWER = 27.0 39.0 45.0
+END_MODELSET
+
+MODELSET
+	TYPE = 4					# ナイフ
+	ANSWER = 20.0 1.0 27.0
+END_MODELSET
+
+MODELSET
+	TYPE = 5					# リンゴ
+	ANSWER = 39.0 45.0 9.0
+END_MODELSET
+
+MODELSET
+	TYPE = 6					# 絵具
+	ANSWER = 3.0 24.0 7.0
+END_MODELSET
+
+MODELSET
+	TYPE = 7					# タイヤ
+	ANSWER = 15.0 1.0 35.0
+END_MODELSET
+
+MODELSET
+	TYPE = 8					# 太鼓
+	ANSWER = 15.0 1.0 9.0
+END_MODELSET
+
+MODELSET
+	TYPE = 9					# コイン
+	ANSWER = 9.0 1.0 45.0
+END_MODELSET
+
+MODELSET
+	TYPE = 10					# すいか
+	ANSWER = 12.0 1.0 5.0
+END_MODELSET
+
+MODELSET
+	TYPE = 11					# たらい
+	ANSWER = 15.0 38.0 1.0
+END_MODELSET
+
+MODELSET
+	TYPE = 12					# やかん
+	ANSWER = 35.0 5.0 45.0
+END_MODELSET
+
+END_SCRIPT		# この行は絶対消さないこと！
