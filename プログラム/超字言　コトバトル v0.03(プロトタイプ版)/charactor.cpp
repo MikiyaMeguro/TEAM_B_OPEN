@@ -195,31 +195,31 @@ void C3DCharactor::Update(void)
 	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
-	if (CCharaBase::GetMoveType() == CCharaBase::MOVETYPE_NPC_AI)
-	{
-		//CPUが場外行かないように
-		if (m_bJyougai == false)
-		{
-			if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
-				FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
-			{//場外に移動しそうになった時
+	//if (CCharaBase::GetMoveType() == CCharaBase::MOVETYPE_NPC_AI)
+	//{
+	//	//CPUが場外行かないように
+	//	if (m_bJyougai == false)
+	//	{
+	//		if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
+	//			FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
+	//		{//場外に移動しそうになった時
 
-				move.x = 0;
-				move.z = 0;
-				m_CpuThink = THINK_ROTATION;
-				m_nActionTimer = 2;
-				m_CpuRotation = CPU_ROTATION_BACK;
-			}
-		}
-		else
-		{
-			if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
-				FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
-			{//場内に移動した
-				m_bJyougai = true;
-			}
-		}
-	}
+	//			move.x = 0;
+	//			move.z = 0;
+	//			m_CpuThink = THINK_ROTATION;
+	//			m_nActionTimer = 2;
+	//			m_CpuRotation = CPU_ROTATION_BACK;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
+	//			FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
+	//		{//場内に移動した
+	//			m_bJyougai = true;
+	//		}
+	//	}
+	//}
 
 }
 
@@ -457,20 +457,20 @@ void C3DCharactor::Think_CPU(void)
 	m_CpuNode = CPU_NODE_NONE;
 
 	//プロトタイプ用
-	//switch (GetThisCharactor()->GetID())
-	//{
-	//case 1:
+	switch (GetThisCharactor()->GetID())
+	{
+	case 1:
 	//	m_Type = CPU_TYPE_ESCAPE;
-	//	break;
-	//case 2:
-	//	m_Type = CPU_TYPE_HOMING;
-	//	break;
-	//case 3:
-	//	m_Type = CPU_TYPE_PATROL;
-	//	break;
-	//default:
-	//	break;
-	//}
+		break;
+	case 2:
+		m_Type = CPU_TYPE_HOMING;
+		break;
+	case 3:
+		m_Type = CPU_TYPE_PATROL;
+		break;
+	default:
+		break;
+	}
 
 	//行動を決める条件文
 	if (m_bFront == true)
@@ -515,6 +515,7 @@ void C3DCharactor::Think_CPU(void)
 #endif
 	}
 #if 1
+
 	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
 	{	//弾を持っているとき
 		m_Type = CPU_TYPE_NONE;
@@ -528,19 +529,19 @@ void C3DCharactor::Think_CPU(void)
 	}
 
 	//同じ行動を3回とらない
-	if (m_OldCpuThink == m_CpuThink)
-	{
-		m_nSameCnt++;
-		if (m_nSameCnt == 3)
-		{
-			m_nSameCnt = 0;
-			m_nActionTimer = 0;
-		}
-	}
-	else
-	{
-		m_nSameCnt = 0;
-	}
+	//if (m_OldCpuThink == m_CpuThink)
+	//{
+	//	m_nSameCnt++;
+	//	if (m_nSameCnt == 3)
+	//	{
+	//		m_nSameCnt = 0;
+	//		m_nActionTimer = 0;
+	//	}
+	//}
+	//else
+	//{
+	//	m_nSameCnt = 0;
+	//}
 #endif
 
 	//nTestCnt++;
@@ -955,6 +956,7 @@ void C3DCharactor::PickUP_CPU(void)
 	m_fCompareRange = 1000000;	//初期の距離から近いものを選ぶ
 	D3DXVECTOR3 MOKUHYO;	//一番近い目標位置
 	bool bWord = false;		//文字を見つけた
+	bool bTango = false;	//単語が完成する可能性がある
 	int nCntNearWord = 0;		//近くに何個文字があるか
 
 	// 先頭のオブジェクトを取得
@@ -984,18 +986,27 @@ void C3DCharactor::PickUP_CPU(void)
 				if (fCircle < 300 * 100)
 				{//範囲内に文字があった
 					nCntNearWord++;		//加算
-				float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
-				for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
-				{	// 候補の数回して 文字番号と合っているかを比較
-					if (fAnswerNum[nCntAnswer] == fNum)
-					{	// 合っていた場合 位置を取得しbreakする
+					float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
+
+					for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
+					{	// 候補の数回して 文字番号と合っているかを比較
+						if (fAnswerNum[nCntAnswer] == fNum)
+						{	// 合っていた場合 位置を取得しbreakする
+							m_fCompareRange = fCircle;
+							MOKUHYO = pWord->GetPos();
+							bWord = true;
+							bTango = true;
+							break;
+						}
+					}
+					if (bTango == false)
+					{//単語が完成しないときは適当に拾う
+						//一番近い距離を記憶
 						m_fCompareRange = fCircle;
 						MOKUHYO = pWord->GetPos();
 						bWord = true;
-						break;
 					}
 				}
-				//if (fCircle < 300 * 100 && bWord == false)
 			}
 		}
 		// 次のシーンに進める
@@ -1019,7 +1030,12 @@ void C3DCharactor::PickUP_CPU(void)
 	if (nCntNearWord == 0)
 	{//近くに文字が一つもない
 		m_bWordNear = true;
+		m_CpuThink = THINK_MOVE;
+		m_CpuMove = CPU_MOVE_FRONT;
+		m_nActionTimer = 30;
+		m_bWordNear = false;
 	}
+
 }
 
 //=============================================================================
@@ -1038,42 +1054,32 @@ void C3DCharactor::NotBullet_CPU(void)
 	bool bPICKUP = false;
 	int	nCntNear = 0;
 
+	//誰が近いか
+	NearOrFur_CPU();
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		if (m_bNear[nCntPlayer] == false)
+		{
+			nCntNear++;
+		}
+	}
 
-	if (m_bWordNear == true)
-	{//近くに文字がない時
-		m_CpuThink = THINK_MOVE;
-		m_CpuMove = CPU_MOVE_FRONT;
-		m_nActionTimer = 60;
-		m_bWordNear = false;
+	if (nCntNear == 4)
+	{
+		m_CpuThink = THINK_PICKUP;
 	}
 	else
 	{
-		//誰が近いか
-		NearOrFur_CPU();
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-		{
-			if (m_bNear[nCntPlayer] == false)
-			{
-				nCntNear++;
-			}
-		}
-
-		if (nCntNear == 4)
-		{
-			m_CpuThink = THINK_PICKUP;
-		}
-		else
-		{
-			m_CpuThink = THINK_MOVE;
-			m_CpuMove = CPU_MOVE_FRONT;
-			m_nActionTimer = 30;
-		}
-
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-		{
-			m_bNear[nCntPlayer] = false;
-		}
+		m_CpuThink = THINK_MOVE;
+		m_CpuMove = CPU_MOVE_FRONT;
+		m_nActionTimer = 30;
 	}
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		m_bNear[nCntPlayer] = false;
+	}
+
 }
 
 //=============================================================================
