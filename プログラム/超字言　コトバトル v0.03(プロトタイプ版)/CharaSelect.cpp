@@ -79,7 +79,7 @@ void CCharaSelect::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 	//”CˆÓ‚ÌƒL[ENTER
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	if (CCommand::GetCommand("DECISION"))
 	{
 		pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
 	}
