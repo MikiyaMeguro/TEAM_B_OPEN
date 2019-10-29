@@ -61,6 +61,12 @@ void CWordManager::Uninit(void)
 		delete[] m_AnswerNum;
 		m_AnswerNum = NULL;
 	}
+
+	if (m_fAnswerData != NULL && m_bSearch == true)
+	{
+		delete[] m_fAnswerData;
+		m_fAnswerData = NULL;
+	}
 }
 
 //=============================================================================
