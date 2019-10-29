@@ -56,7 +56,11 @@ void CWordManager::Init()
 //=============================================================================
 void CWordManager::Uninit(void)
 {
-
+	if (m_AnswerNum != NULL)
+	{
+		delete[] m_AnswerNum;
+		m_AnswerNum = NULL;
+	}
 }
 
 //=============================================================================
