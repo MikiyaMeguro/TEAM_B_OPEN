@@ -984,41 +984,44 @@ void C3DCharactor::PickUP_CPU(void)
 				if (fCircle < 300 * 100)
 				{//範囲内に文字があった
 					nCntNearWord++;		//加算
-				float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
-				for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
-				{	// 候補の数回して 文字番号と合っているかを比較
-					if (fAnswerNum[nCntAnswer] == fNum)
-					{	// 合っていた場合 位置を取得しbreakする
-						m_fCompareRange = fCircle;
-						MOKUHYO = pWord->GetPos();
-						bWord = true;
-						break;
+					float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
+					for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
+					{	// 候補の数回して 文字番号と合っているかを比較
+						if (fAnswerNum[nCntAnswer] == fNum)
+						{	// 合っていた場合 位置を取得しbreakする
+							m_fCompareRange = fCircle;
+							MOKUHYO = pWord->GetPos();
+							bWord = true;
+							break;
+						}
 					}
+					//if (fCircle < 300 * 100 && bWord == false)
 				}
-				//if (fCircle < 300 * 100 && bWord == false)
 			}
 		}
+		//ワードが範囲内にある時移動する
+		if (bWord == true)
+		{
+			// 目的の角度
+			float fDestAngle = atan2f((MOKUHYO.x - sinf(rot.y)) - Pos.x, (MOKUHYO.z - cosf(rot.y)) - Pos.z);
+			// 差分
+			float fDiffAngle = fDestAngle - rot.y;
+			DiffAngle(fDiffAngle);
+			//移動
+			move.x += sinf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
+			move.z += cosf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
+
+			m_bWordNear = false;
+		}
+
+		if (nCntNearWord == 0)
+		{//近くに文字が一つもない
+			m_bWordNear = true;
+		}
+
 		// 次のシーンに進める
 		pScene = pSceneNext;
-	}
-	//ワードが範囲内にある時移動する
-	if (bWord == true)
-	{
-		// 目的の角度
-		float fDestAngle = atan2f((MOKUHYO.x - sinf(rot.y)) - Pos.x, (MOKUHYO.z - cosf(rot.y)) - Pos.z);
-		// 差分
-		float fDiffAngle = fDestAngle - rot.y;
-		DiffAngle(fDiffAngle);
-		//移動
-		move.x += sinf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
-		move.z += cosf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
 
-		m_bWordNear = false;
-	}
-
-	if (nCntNearWord == 0)
-	{//近くに文字が一つもない
-		m_bWordNear = true;
 	}
 }
 
