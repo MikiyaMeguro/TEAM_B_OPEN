@@ -66,6 +66,21 @@ public:
 		int	  nLoop;								//ループするかどうか
 		int   nKeyNum;								//キー数
 		KeyProperty key[MAX_KEY];					//キー情報
+
+		void operator()(void)
+		{
+			nLoop = 0;
+			nKeyNum = 0;
+			for (int nCntKey = 0; nCntKey < MAX_KEY; nCntKey++)
+			{
+				key[nCntKey].nFrame = 0;
+				for (int nCntPlayer = 0; nCntPlayer < PLAYER_MODELNUM; nCntPlayer++)
+				{
+					key[nCntKey].Pos[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+					key[nCntKey].Rot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				}
+			}
+		}
 	}MotionProperty;
 
 	typedef struct
@@ -91,7 +106,7 @@ public:
 
 	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
-	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type);
+	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type,bool bReLoad = false);
 	void Unload(void);
 
 	HRESULT Init(void);

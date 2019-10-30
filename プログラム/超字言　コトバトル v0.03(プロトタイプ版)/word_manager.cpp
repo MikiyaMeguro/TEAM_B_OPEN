@@ -598,7 +598,7 @@ void CWordManager::CreateOblDebug(void)
 			if (pKey->GetTrigger(DIK_NUMPAD1))
 			{	// ‚ç
 				m_aWord[m_nCntNum].nNum = 38;
-				m_aWord[m_nCntNum].cWord = "‚í";
+				m_aWord[m_nCntNum].cWord = "‚ç";
 				m_nCntNum++;
 			}
 			else if (pKey->GetTrigger(DIK_NUMPAD2))
@@ -814,7 +814,7 @@ void CWordManager::WordDebug(int nCntNum)
 	}
 	else if (m_aWord[nCntNum].nNum == 38)
 	{	// ‚ç
-		m_aWord[nCntNum].cWord = "‚í";
+		m_aWord[nCntNum].cWord = "‚ç";
 	}
 	else if (m_aWord[nCntNum].nNum == 39)
 	{	// ‚è

@@ -22,7 +22,7 @@ CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];
 // マクロ定義
 //=============================================================================
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 20.0f, 5.0f))			//キャラクターの当たり判定
-#define MODEL_LOAD_TEXT "data/MOTION/motion_bea.txt"
+#define KUMA_POWER_LOADTEXT "data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
 //=============================================================================
 // コンストラクタ&デストラクタ
 //=============================================================================
@@ -94,7 +94,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 	}
 
 
-	ModelLoad(MODEL_LOAD_TEXT,TYPE_POWER);
+	ModelLoad(KUMA_POWER_LOADTEXT,TYPE_POWER);
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
@@ -414,7 +414,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 //=============================================================================
 // モデルロード処理
 //=============================================================================
-HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type)
+HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 {
 	FILE* pFile = NULL;		// ファイルポインタ
 	char ReadText[256];		// 読み込んだ文字列を入れておく
@@ -422,12 +422,11 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type)
 	char DustBox[256];		// 使用しないものを入れておく
 
 	int nCntMotionSetType = 0;					// モーションセットの種類の数
-												//int nCntMotionType = (int)MOTION_NEUTRAL;	// モーションの種類の数
+	int nCntMotionType = (int)MOTION_NEUTRAL;	// モーションの種類の数
 	int nCntKeySet = 0;							// キーセット数
 	int nCntKey = 0;							// キー数
 	int nCntPartsSet = 0;						// パーツ数
 	int nCntFileNameNum = 0;
-	PartsLoadInfo LoadInfo[PLAYER_MODELNUM];		//ロード情報
 	int nPartsNum = 0;
 
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
@@ -436,8 +435,15 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type)
 		m_pPlayerParts[nCntParts] = NULL;
 	}
 
-	if (m_PlayerLoadState[type].bFlag == false)
-	{//	まだこの情報がロードされていなければ
+
+	if (m_PlayerLoadState[type].bFlag == false ||
+		(m_PlayerLoadState[type].bFlag == true && bReLoad == true))
+	{//	まだこの情報がロードされていないorされているが再度ロードしたければ
+		for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
+		{
+			m_PlayerLoadState[type].prop[nCntMotion]();
+		}
+
 		//ファイルオープン
 		pFile = fopen(pFileName, "r");
 
@@ -485,7 +491,11 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type)
 									fgets(ReadText, sizeof(ReadText), pFile);
 									sscanf(ReadText, "%s", &HeadText);
 
-									if (strcmp(HeadText, "INDEX") == 0)
+									if (strcmp(HeadText, "\n") == 0)
+									{// 文字列の先頭が [\n](改行) の場合処理しない
+
+									}
+									else if (strcmp(HeadText, "INDEX") == 0)
 									{
 										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type].info[nCntPartsSet].nIndex);
 									}
@@ -515,11 +525,86 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type)
 							}
 						}
 					}
+					else if (strcmp(HeadText, "MOTIONSET") == 0)
+					{//モーション
+						while (strcmp(HeadText, "END_MOTIONSET") != 0)
+						{// "END_MOTIONSET" が読み取れるまで繰り返し文字列を読み取る
+							fgets(ReadText, sizeof(ReadText), pFile);
+							sscanf(ReadText, "%s", &HeadText);
+
+							if (strcmp(HeadText, "\n") == 0)
+							{// 文字列の先頭が [\n](改行) の場合処理しない
+
+							}
+							else if (strcmp(HeadText, "LOOP") == 0)
+							{//ループ
+								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
+									&m_PlayerLoadState[type].prop[nCntMotionType].nLoop);
+							}
+							else if (strcmp(HeadText, "NUM_KEY") == 0)
+							{//キー数
+								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
+									&m_PlayerLoadState[type].prop[nCntMotionType].nKeyNum);
+							}
+							else if (strcmp(HeadText, "KEYSET") == 0)
+							{
+								while (strcmp(HeadText, "END_KEYSET") != 0)
+								{// "END_KEYSET" が読み取れるまで繰り返し文字列を読み取る
+									fgets(ReadText, sizeof(ReadText), pFile);
+									sscanf(ReadText, "%s", &HeadText);
+									if (strcmp(HeadText, "\n") == 0)
+									{// 文字列の先頭が [\n](改行) の場合処理しない
+
+									}
+									else if (strcmp(HeadText, "FRAME") == 0)
+									{//補間フレーム
+										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
+											&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].nFrame);
+									}
+									else if (strcmp(HeadText, "KEY") == 0)
+									{//キー情報
+										while (strcmp(HeadText, "END_KEY") != 0)
+										{// "END_KEY" が読み取れるまで繰り返し文字列を読み取る
+											fgets(ReadText, sizeof(ReadText), pFile);
+											sscanf(ReadText, "%s", &HeadText);
+
+											if (strcmp(HeadText, "\n") == 0)
+											{// 文字列の先頭が [\n](改行) の場合処理しない
+
+											}
+											else if (strcmp(HeadText, "POS") == 0)
+											{
+												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
+													&DustBox,
+													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].x,
+													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].y,
+													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].z);
+											}
+											else if (strcmp(HeadText, "ROT") == 0)
+											{
+												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
+													&DustBox,
+													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].x,
+													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].y,
+													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].z);
+											}
+
+										}
+										nCntKey++;
+									}
+								}
+								nCntKeySet++;
+							}
+						}
+						nCntMotionType++;
+
+					}
 				}
 			}
 
 		}
 		fclose(pFile);
+		m_PlayerLoadState[TYPE_POWER].bFlag = true;
 	}
 
 	int nCntParts = 0;
@@ -548,7 +633,6 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type)
 		}
 	}
 
-	m_PlayerLoadState[TYPE_POWER].bFlag = true;
 	return S_OK;
 }
 
