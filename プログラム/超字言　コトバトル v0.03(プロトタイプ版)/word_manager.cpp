@@ -598,7 +598,7 @@ void CWordManager::CreateOblDebug(void)
 			if (pKey->GetTrigger(DIK_NUMPAD1))
 			{	// ‚ç
 				m_aWord[m_nCntNum].nNum = 38;
-				m_aWord[m_nCntNum].cWord = "‚í";
+				m_aWord[m_nCntNum].cWord = "‚ç";
 				m_nCntNum++;
 			}
 			else if (pKey->GetTrigger(DIK_NUMPAD2))
