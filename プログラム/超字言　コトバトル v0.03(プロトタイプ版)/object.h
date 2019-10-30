@@ -21,6 +21,14 @@
 class CObject : public CSceneX
 {
 public:
+	typedef enum
+	{
+		REALTIME_NONE = 0,	// 何もなし
+		REALTIME_INITPOS,	// 最初の位置から出現
+		REALTIME_ENDPOS,	// 最後の位置に向けて移動
+		REALTIME_MAX	// 総数
+	}REALTIME;
+
 	CObject();					// コンストラクタ
 	~CObject();									// デストラクタ
 
@@ -29,15 +37,18 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	// 移動床の処理
-	void BeltConveyor(D3DXVECTOR3 *pMove);
-	void KnockBack(D3DXVECTOR3 *pMove);
+	void BeltConveyor(D3DXVECTOR3 *pMove);		// 移動床の処理
+	void KnockBack(D3DXVECTOR3 *pMove);			// ノックバック
 	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL model);	// オブジェクトの生成
 	static HRESULT Load(void);
 	static void UnLoad(void);
 
+	// 設定 取得の関数
+	REALTIME GetRealTimeType(void) { return m_nRealTime; }
 
 private:
+	bool m_bMoveFlag;		// 移動フラグ
+	REALTIME m_nRealTime;	// リアルタイムで移動するFlagの変数
 };
 
 #endif
