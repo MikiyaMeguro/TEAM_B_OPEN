@@ -375,20 +375,31 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					{// モデルに当たる
 						bHit = true;
 						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
-						{	// ベルトコンベアの判定
-							pSceneObj->BeltConveyor(move);
-						}
-						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
-							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-						{	// ノックバックの判定
-							pSceneObj->KnockBack(move);
+						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
+						{
+							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+							{	// ベルトコンベアの判定
+								pSceneObj->BeltConveyor(move);
+							}
+							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
+								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+							{	// ノックバックの判定
+								pSceneObj->KnockBack(move);
+							}
 						}
 						break;
 					}
 					else
 					{
+						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS) 
+						{
+							if (pos->y + 10.0f > pSceneObj->GetPosition().y - pSceneObj->GetVtxMin().y) 
+							{
+								move->x = 2.0f; 
+							}
+						}
 						bHit = false;
 					}
 				}
