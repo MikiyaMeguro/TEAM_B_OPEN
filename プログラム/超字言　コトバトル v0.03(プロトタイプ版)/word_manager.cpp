@@ -37,6 +37,7 @@ CWordManager::CWordManager()
 	m_bPress = false;		// 指定した文字以上をいれないフラグ
 	m_bSearch = false;		// サーチを開始する時のフラグ
 
+	m_fAnswerData = NULL;
 }
 //=============================================================================
 // デストラクタ
@@ -122,8 +123,12 @@ void CWordManager::Update(void)
 	if (m_nCntNum != 2 && m_bSearch == true)
 	{ // 持っている文字が2文字以外ならサーチのフラグを変更
 		m_bSearch = false;
-		delete m_fAnswerData;
-		*m_fAnswerData = 99.0f;		// 空の番号をいれる
+		if (m_fAnswerData != NULL)
+		{
+			delete[] m_fAnswerData;
+			m_fAnswerData = NULL;
+		}
+		//*m_fAnswerData = 99.0f;		// 空の番号をいれる
 	}
 
 #ifdef _DEBUG
@@ -283,7 +288,11 @@ int CWordManager::SearchWord(void)
 	if (m_nCntNum == 2 /*&& m_bSearch == false*/)
 	{	// 拾った文字が２文字の場合
 		int nData = 0;
-		m_fAnswerData = new float[m_nAnswerDataNum];
+		if (m_fAnswerData == NULL)
+		{
+			m_fAnswerData = new float[m_nAnswerDataNum];
+		}
+
 		for (int nCntAnswer = 0; nCntAnswer < m_nAnswerDataNum; nCntAnswer++)
 		{	// 答えの数だけ回す
 			int nAnswer = 0;
