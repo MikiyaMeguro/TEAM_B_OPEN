@@ -814,7 +814,7 @@ void CWordManager::WordDebug(int nCntNum)
 	}
 	else if (m_aWord[nCntNum].nNum == 38)
 	{	// ‚ç
-		m_aWord[nCntNum].cWord = "‚í";
+		m_aWord[nCntNum].cWord = "‚ç";
 	}
 	else if (m_aWord[nCntNum].nNum == 39)
 	{	// ‚è
