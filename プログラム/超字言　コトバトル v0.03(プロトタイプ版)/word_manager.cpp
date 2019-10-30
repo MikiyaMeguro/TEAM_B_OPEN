@@ -90,7 +90,7 @@ void CWordManager::Update(void)
 	{
 		if (m_nCntaAnswer == 0)
 		{
-			for (int nCntAnswer = 0; nCntAnswer < MAX_ANSWER; nCntAnswer++)
+			for (int nCntAnswer = 0; nCntAnswer < m_nAnswerDataNum; nCntAnswer++)
 			{	// “š‚¦‚Ì”‚¾‚¯‰ñ‚·
 				for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 				{	// “š‚Æ‚Ì”äŠr
