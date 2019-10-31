@@ -113,7 +113,7 @@ HRESULT CPlayer::Init(void)
 
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_RIGHT_SHOULDER);
 
 	return S_OK;
 }
@@ -393,11 +393,11 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					else
 					{
 						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS) 
+						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
 						{
-							if (pos->y + 10.0f > pSceneObj->GetPosition().y - pSceneObj->GetVtxMin().y) 
+							if (pos->y + 10.0f > pSceneObj->GetPosition().y - pSceneObj->GetVtxMin().y)
 							{
-								move->x = 2.0f; 
+								move->x = 2.0f;
 							}
 						}
 						bHit = false;
@@ -573,7 +573,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 
 											}
 											else if (strcmp(HeadText, "POS") == 0)
-											{
+											{//キーごとの位置
 												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 													&DustBox,
 													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].x,
@@ -581,7 +581,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].z);
 											}
 											else if (strcmp(HeadText, "ROT") == 0)
-											{
+											{//キーごとの角度
 												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 													&DustBox,
 													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].x,

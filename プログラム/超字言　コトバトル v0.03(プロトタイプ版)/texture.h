@@ -32,11 +32,11 @@ public:
 
 		//std::find‚ÅŒŸõ‚·‚é‚Æ‚«‚Ég‚¤”äŠrŠÖ”
 		bool operator == (const int ID)
-		{
+		{//ID‚Å”äŠr
 			return (nID == ID);
 		}
 		bool operator == (const LPCSTR Tag)
-		{
+		{//ƒ^ƒO‚Å”äŠr
 			return (strcmp(TexNameTag, Tag) == 0);
 		}
 	};

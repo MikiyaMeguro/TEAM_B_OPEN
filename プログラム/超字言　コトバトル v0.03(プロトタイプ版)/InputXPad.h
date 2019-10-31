@@ -42,21 +42,26 @@ public:
 		bool abPadStateTrigger[XPAD_MAX];		//トリガー情報
 		bool abPadStateRelease[XPAD_MAX];		//リリース情報
 		bool abPadStateRepeat[XPAD_MAX];		//リピート情報
-		int nCntRepeatTime[XPAD_MAX];
+		int nCntRepeatTime[XPAD_MAX];			//リピート用のカウント変数
 	}XPAD_STATE;
+
+	//コンストラクタ&デストラクタ
 	CInputXPad();
 	~CInputXPad();
 
+	//メンバ変数
 	HRESULT Init(HINSTANCE hInstance, HWND hWnd);
 	void    Uninit(void);
 	void    Update(void);
 
+	//入力取得関数
 	bool GetPress(XPAD_KEY key);
 	bool GetTrigger(XPAD_KEY key);
 	bool GetRelease(XPAD_KEY key);
 	bool GetRepeat(XPAD_KEY key);
 	bool GetConnect(void) { return m_bConnect; };
 
+	//スティック角取得
 	SHORT GetLStickRotX(void) { return m_sLStickRotX; };
 	SHORT GetLStickRotY(void) { return m_sLStickRotY; };
 	SHORT GetRStickRotX(void) { return m_sRStickRotX; };
@@ -72,6 +77,7 @@ private:
 	int m_nID;					//プレイヤーID
 	bool m_bConnect;			//つながっているか
 
+	//スティック角
 	SHORT m_sLStickRotX;
 	SHORT m_sLStickRotY;
 	SHORT m_sRStickRotX;
