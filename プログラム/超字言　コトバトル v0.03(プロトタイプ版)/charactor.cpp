@@ -51,26 +51,26 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 
 	m_nCntStepCoolTime = 0;
 	CCommand::RegistCommand("PLAYERMOVE_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_W);
-	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_UP);
+	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_UP);
 	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_S);
-	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_DOWN);
+	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_DOWN);
 	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_D);
-	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHT);
+	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHT);
 	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_A);
-	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT);
+	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT);
 
 
 	CCommand::RegistCommand("PLAYERMOVE_STEP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_SPACE);
-	CCommand::RegistCommand("PLAYERMOVE_STEP", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
+	CCommand::RegistCommand("PLAYERMOVE_STEP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
 
 	CCommand::RegistCommand("CAMERAMOVE_LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_LEFT);
-	CCommand::RegistCommand("CAMERAMOVE_LEFT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_LEFT);
+	CCommand::RegistCommand("CAMERAMOVE_LEFT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_LEFT);
 	CCommand::RegistCommand("CAMERAMOVE_RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_RIGHT);
-	CCommand::RegistCommand("CAMERAMOVE_RIGHT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_RIGHT);
+	CCommand::RegistCommand("CAMERAMOVE_RIGHT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_RIGHT);
 	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_UP);
-	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_UP);
+	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_UP);
 	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_DOWN);
-	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_DOWN);
+	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_DOWN);
 }
 
 //=============================================================================
@@ -277,6 +277,15 @@ void C3DCharactor::CharaMove_Input(void)
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 
+
+		}
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID))
@@ -300,18 +309,58 @@ void C3DCharactor::CharaMove_Input(void)
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
 
 		}
+
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+		}
 
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+		}
 
+	}
+	else
+	{
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_NEUTRAL);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_NEUTRAL);
+			}
+		}
 	}
 
 	//if (CCommand::GetCommand("TESTUP"))
@@ -350,35 +399,20 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
 
-	//move *= MOVE_DEFAULT_COEFFICIENT;
-
 	pos += move;
-	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
+	//‘¬“x‚ÉŒW”‚ðŠ|‚¯‚é
+	CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
 
 	spin.y = CameraRot.y - rot.y;
 
 	//‰ñ“]§Œä
-	if (spin.y > D3DX_PI)
-	{
-		spin.y -= D3DX_PI * 2.0f;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(spin.y);
 
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+	rot.y += spin.y * GetSpinCoeffient();
 
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(rot.y);
+
 	spin.y = 0.0f;
 
 	//ƒJƒƒ‰ˆÊ’u§Œä
@@ -552,6 +586,9 @@ void C3DCharactor::Think_CPU(void)
 	//	m_CpuRotation = CPU_ROTATION_BACK;
 	//	nTestCnt = 0;
 	//}
+	//ƒJƒƒ‰‚ÌŽQÆˆÊ’u§Œä
+	m_CameraPosR = GetPosition() + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
+
 }
 
 //=============================================================================
@@ -629,9 +666,9 @@ void C3DCharactor::Action_CPU(void)
 	{
 		pos += move;
 	}
-	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
+	//‘¬“x‚ÉŒW”‚ðŠ|‚¯‚é
+	CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
 
 	//ƒ^ƒCƒ}[‚ðŒ¸‚ç‚·
 	m_nActionTimer--;
@@ -642,23 +679,9 @@ void C3DCharactor::DiffAngle(float fDiffAngle)
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 
 	// ·•ª
-	if (fDiffAngle > D3DX_PI)
-	{
-		fDiffAngle -= D3DX_PI * 2.0f;
-	}
-	if (fDiffAngle < -D3DX_PI)
-	{
-		fDiffAngle += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(fDiffAngle);
 	rot.y += fDiffAngle * 0.1f;
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(rot.y);
 }
 
 //=============================================================================
@@ -751,25 +774,11 @@ void C3DCharactor::CharaMove_CPU(void)
 
 
 	//‰ñ“]§Œä
-	if (spin.y > D3DX_PI)
-	{
-		spin.y -= D3DX_PI * 2.0f;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(spin.y);
 
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+	rot.y += spin.y * GetSpinCoeffient();
 
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(rot.y);
 
 	spin.y = 0.0f;
 
@@ -815,25 +824,13 @@ void C3DCharactor::Rotation_CPU(void)
 	//‰ñ“]§Œä
 	spin.y = ChangeRot.y - rot.y;
 
-	if (spin.y > D3DX_PI)
-	{
-		spin.y = D3DX_PI;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y = -D3DX_PI;
-	}
+	//‰ñ“]§Œä
+	CUtilityMath::RotateRivisionPI(spin.y);
 
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+	rot.y += spin.y * GetSpinCoeffient();
 
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateRivisionPI(rot.y);
+
 	spin.y = 0.0f;
 
 }
@@ -909,14 +906,7 @@ void C3DCharactor::Homing_CPU(void)
 
 					DiffAngle(fDiffAngle);
 
-					if (fDestAngle > D3DX_PI)
-					{
-						fDestAngle -= D3DX_PI * 2.0f;
-					}
-					if (fDestAngle < -D3DX_PI)
-					{
-						fDestAngle += D3DX_PI * 2.0f;
-					}
+					CUtilityMath::RotateRivisionPI(fDiffAngle);
 
 					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
 					{
@@ -1126,9 +1116,10 @@ void C3DCharactor::NearOrFur_CPU(void)
 //=============================================================================
 void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 {
-	move.x += sinf(fRot) * STEP_DEFAULT_MOVEMENT;
-	move.z += cosf(fRot) * STEP_DEFAULT_MOVEMENT;
+	move.x += sinf(fRot) * GetStep();
+	move.z += cosf(fRot) * GetStep();
 
+	GetThisCharactor()->SetNextMotion(CPlayer::MOTION_STEP);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);
 }

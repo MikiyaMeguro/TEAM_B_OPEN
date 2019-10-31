@@ -11,6 +11,8 @@
 #include "manager.h"
 #include "debugProc.h"
 #include "load.h"
+#include "player.h"
+#include "game.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -19,7 +21,7 @@
 #define KNOCKBACK_MOVE_DURING		(6.0f)			// ノックバックの強度(中)
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
 #define GEAR_ROT_Y					(0.1f)			// ギアの回転量　ベース情報
-#define MODEL_MOVE_Y				(2.0f)			// モデル移動時の移動速度
+#define MODEL_MOVE_Y				(0.5f)			// モデル移動時の移動速度
 
 //*****************************************************************************
 // 静的メンバ変数
@@ -104,13 +106,13 @@ void CObject::Update(void)
 			if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
 				Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 			{	// ベルトコンベアの場合
-				pos.y = 0;
+				pos.y = pos.y - CSceneX::GetVtxMin().y;
 				CSceneX::SetPosition(pos);
 			}
 			else if (Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
 				Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 			{	// ベルトコンベア以外の場合
-				pos.y = 0;
+				pos.y = pos.y - CSceneX::GetVtxMin().y;
 				CSceneX::SetPosition(pos);
 			}
 		}
@@ -187,7 +189,7 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove)
 //=============================================================================
 // ノックバックの処理
 //=============================================================================
-void CObject::KnockBack(D3DXVECTOR3 *pMove)
+void CObject::KnockBack(D3DXVECTOR3 *pMove, int nID)
 {
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
 	float fknockBackMove = 0.0f;	// ノックバックの強度
@@ -205,6 +207,7 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove)
 		fknockBackMove = KNOCKBACK_MOVE_BIG;
 	}
 
+	// プレイヤーの向きが方向転換するようになったら削除
 	if (CSceneX::GetCollsionNum() == 0 || CSceneX::GetCollsionNum() == 1)
 	{	// 左 又は 右 からの判定
 		pMove->x *= -fknockBackMove;
@@ -213,4 +216,19 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove)
 	{	// 前 又は 後ろ からの判定
 		pMove->z *= -fknockBackMove;
 	}
+
+	// プレイヤーの向きが方向転換するようになったらコメントを外す
+	/*float fPlayer = CGame::GetPlayer(nID)->GetRotation().y;
+	pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (20.0f);
+	pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (20.0f);*/
+}
+
+//=============================================================================
+// モデル着地時の受ける影響の処理
+//=============================================================================
+void CObject::AffectedLanding(D3DXVECTOR3 *pMove, int nID)
+{
+	float fPlayer = CGame::GetPlayer(nID)->GetRotation().y;
+	pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (20.0f);
+	pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (20.0f);
 }

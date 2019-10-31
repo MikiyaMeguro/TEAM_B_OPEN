@@ -21,8 +21,7 @@ public:
 	typedef enum
 	{
 		INPUTTYPE_KEYBOARD,				//キーボード
-		INPUTTYPE_CONTROLLER_DIRECT,	//DIRECTINPUT
-		INPUTTYPE_CONTROLLER_X,			//XINPUT
+		INPUTTYPE_PAD_X,			//XINPUT
 		INPUTTYPE_MAX
 	}INPUT_TYPE;		//入力タイプ
 
@@ -60,16 +59,18 @@ public:
 		}
 	};	//コマンドの情報
 
+	//静的メンバ関数
 	static void RegistCommand(LPCSTR CommandName, INPUT_TYPE InputType, INPUT_STATE InputState, int nKey);			//コマンド情報登録(作成)
 	static bool GetCommand(LPCSTR CommandName, int nPlayerID = 0, GET_COMMAND_OPTION option = COMMAND_EACH_TRUE);	//コマンド呼び出し(PlayerID = コントローラの識別用)
-	static void ResetCommandAll(void);
-	static bool ResetCommand(LPCSTR CommandName);
+	static void ResetCommandAll(void);														//全てのコマンド情報リセット
+	static bool ResetCommand(LPCSTR CommandName);											//コマンドごとの情報リセット
 
-	//コントローラーのスティックの傾け率取得
+	//コントローラーのスティックの傾け率(-1.0f～1.0f)取得
 	static float GetXPadStickRotation(bool LorR,bool XorY,int nPlayerID);//LorR = trueがLスティック、falseがRスティックの判定 || XorY = trueがX軸、falseがY軸の判定
 private:
-	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);
-	static bool CheckKey_XController(CInputXPad* pInputX,INPUT_STATE InputState, int nKey);
+	//入力の種類ごとのチェック関数
+	static bool CheckKey_Keyboard(CInputKeyboard* pInputK,INPUT_STATE InputState, int nKey);	//キーボード
+	static bool CheckKey_XPad(CInputXPad* pInputX,INPUT_STATE InputState, int nKey);		//XPad
 
 	static std::vector<CommandState> m_Command;		//コマンド
 };

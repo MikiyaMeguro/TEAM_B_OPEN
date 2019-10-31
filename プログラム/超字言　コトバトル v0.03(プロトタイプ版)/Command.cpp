@@ -13,7 +13,7 @@
 //===================================================================
 //	静的メンバ変数宣言
 //===================================================================
-std::vector<CCommand::CommandState> CCommand::m_Command;
+std::vector<CCommand::CommandState> CCommand::m_Command;		//コマンドのデータベース変数
 
 //===================================================================
 //	コマンド登録処理
@@ -61,6 +61,7 @@ bool CCommand::GetCommand(LPCSTR CommandName, int nPlayerID, GET_COMMAND_OPTION 
 {
 	CInputKeyboard* pInputK = CManager::GetInputKeyboard();	//キーボードのポインタ
 	CInputXPad* pInputX = CManager::GetXInput(nPlayerID);
+
 	bool bCommand_ETrue = false;		//COMMAND_EACH_TRUEで使用する返り値
 	bool bCommand_ATrue = true;			//COMMAND_ALL_TRUEで使用する返り値
 
@@ -74,13 +75,11 @@ bool CCommand::GetCommand(LPCSTR CommandName, int nPlayerID, GET_COMMAND_OPTION 
 			//trueかどうかの判定を行う
 			switch ((*itr).type)
 			{
-			case INPUTTYPE_KEYBOARD:
+			case INPUTTYPE_KEYBOARD:	//キーボード
 				bCommand_ETrue = CheckKey_Keyboard(pInputK,(*itr).state, (*itr).nKey);
 				break;
-			case INPUTTYPE_CONTROLLER_DIRECT:
-				break;
-			case INPUTTYPE_CONTROLLER_X:
-				bCommand_ETrue = CheckKey_XController(pInputX,(*itr).state, (*itr).nKey);
+			case INPUTTYPE_PAD_X://XPad
+				bCommand_ETrue = CheckKey_XPad(pInputX,(*itr).state, (*itr).nKey);
 				break;
 			}
 
@@ -109,12 +108,13 @@ bool CCommand::GetCommand(LPCSTR CommandName, int nPlayerID, GET_COMMAND_OPTION 
 void CCommand::ResetCommandAll(void)
 {
 	for (auto itrCommand = m_Command.begin(); itrCommand != m_Command.end(); itrCommand++)
-	{
+	{//順番に消去
 		(*itrCommand).vec_KeyType.clear();
 	}
 
-	//初期化
+	//初期化&メモリ圧縮
 	m_Command.clear();
+	m_Command.shrink_to_fit();
 }
 
 //===================================================================
@@ -142,8 +142,15 @@ bool CCommand::ResetCommand(LPCSTR CommandName)
 bool  CCommand::CheckKey_Keyboard(CInputKeyboard* pInputK, INPUT_STATE InputState, int nKey)
 {
 	bool bCommand = false;									//関数の返り値
-	if (pInputK != NULL)
+
+	//キーの数字に大きすぎる数字が入っていた場合は処理から抜ける
+	if (nKey >= DIK_SLEEP)
 	{
+		return false;
+	}
+
+	if (pInputK != NULL)
+	{//キーボードクラスが生成されていたら
 		switch (InputState)
 		{
 		case INPUTSTATE_PRESS:	//プレス
@@ -156,25 +163,35 @@ bool  CCommand::CheckKey_Keyboard(CInputKeyboard* pInputK, INPUT_STATE InputStat
 			bCommand = pInputK->GetRelease(nKey);
 			break;
 		case INPUTSTATE_NOTPRESS://ノットプレス(押してない時)
-			bCommand = !(pInputK->GetPress(nKey));
+			bCommand = !(pInputK->GetPress(nKey));	//プレスの逆をとる
 			break;
 		case INPUTSTATE_REPEAT://リピート
 			bCommand = pInputK->GetRepeat(nKey);
+			break;
+		case INPUTSTATE_HOLD://ホールド
+			bCommand = pInputK->GetHold(nKey);
 			break;
 
 		}
 	}
 	return bCommand;
 }
-bool  CCommand::CheckKey_XController(CInputXPad* pInputX, INPUT_STATE InputState, int nKey)
+
+//===================================================================
+//	キー呼び出し処理(XPad)
+//===================================================================
+bool  CCommand::CheckKey_XPad(CInputXPad* pInputX, INPUT_STATE InputState, int nKey)
 {
 	bool bCommand = false;									//関数の返り値
+
+	//キーの数字に大きすぎる数字が入っていた場合は処理から抜ける
 	if (nKey >= CInputXPad::XPAD_MAX)
 	{
 		return false;
 	}
+
 	if (pInputX != NULL)
-	{
+	{//XPadクラスが生成されていたら
 		switch (InputState)
 		{
 		case INPUTSTATE_PRESS:	//プレス
@@ -191,6 +208,9 @@ bool  CCommand::CheckKey_XController(CInputXPad* pInputX, INPUT_STATE InputState
 			break;
 		case INPUTSTATE_REPEAT://リピート
 			bCommand = pInputX->GetRepeat((CInputXPad::XPAD_KEY)nKey);
+			break;
+		case INPUTSTATE_HOLD://ホールド
+			bCommand = pInputX->GetHold((CInputXPad::XPAD_KEY)nKey);
 			break;
 		}
 	}
@@ -209,6 +229,7 @@ float CCommand::GetXPadStickRotation(bool LorR, bool XorY, int nPlayerID)
 	CInputXPad* pInputX = CManager::GetXInput(nPlayerID);
 	if (pInputX != NULL)
 	{
+		//変数で指定した角度を取得
 		if (LorR == true)
 		{//L
 			if (XorY == true)
@@ -232,8 +253,9 @@ float CCommand::GetXPadStickRotation(bool LorR, bool XorY, int nPlayerID)
 				sRot = pInputX->GetRStickRotY();
 			}
 		}
-		fResult = ((float)sRot) / 32767.0f;
 
+		//取得した角度を-1.0fから+1.0fの間に補正
+		fResult = CUtilityMath::Mapping(((float)sRot), -32767.0f,32767.0f,-1.0f,1.0f);
 	}
 	return fResult;
 }

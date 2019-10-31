@@ -69,7 +69,8 @@ public:
 	void SetCollsionType(COLLISIONTYPE type) { m_CollisionType = type; }
 	COLLISIONTYPE GetCollsionType(void) { return m_CollisionType; }		// 当たり判定の種類を取得
 
-	void SetScale(D3DXVECTOR3 Scale) { m_Scale = Scale; }				// スケールを取得
+	void SetScale(D3DXVECTOR3 Scale) { m_Scale = Scale; }				// スケールを設定
+	D3DXVECTOR3 GetScale(void) { return m_Scale; }						// スケールの取得
 
 	void SetModelType(CLoad::MODEL model) { m_ModelType = model; }		// モデルの種類設定
 	CLoad::MODEL GetModelType(void) { return m_ModelType; }				// モデルの種類取得
