@@ -17,7 +17,10 @@ CInputKeyboard::CInputKeyboard()
 		m_aState[nCntKey].KeyStateTrigger = 0;
 		m_aState[nCntKey].KeyStateRelease = 0;
 		m_aState[nCntKey].KeyStateRepeat = 0;
+		m_aState[nCntKey].KeyStateHold = 0;
+
 		m_aState[nCntKey].nCntRepeatTime = 0;
+		m_aState[nCntKey].nCntHoldTime = 0;
 	}
 
 }
@@ -89,9 +92,17 @@ void CInputKeyboard::Update(void)
 				{
 					m_aState[nCntKey].KeyStateRepeat = aKeyState[nCntKey];	//リピート
 				}
+
+				m_aState[nCntKey].nCntHoldTime++;
+				if (m_aState[nCntKey].nCntHoldTime > HOLD_TIME)
+				{
+					m_aState[nCntKey].KeyStateHold = aKeyState[nCntKey];	//リピート
+				}
+
 			}
 			else
 			{
+				m_aState[nCntKey].nCntHoldTime = 0;
 				m_aState[nCntKey].nCntRepeatTime = 0;
 			}
 		}
@@ -124,4 +135,8 @@ bool CInputKeyboard::GetRelease(int nKey)
 bool CInputKeyboard::GetRepeat(int nKey)
 {
 	return(m_aState[nKey].KeyStateRepeat & 0x80) ? true : false;
+}
+bool CInputKeyboard::GetHold(int nKey)
+{
+	return(m_aState[nKey].KeyStateHold & 0x80) ? true : false;
 }

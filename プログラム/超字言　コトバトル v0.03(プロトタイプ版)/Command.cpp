@@ -168,6 +168,9 @@ bool  CCommand::CheckKey_Keyboard(CInputKeyboard* pInputK, INPUT_STATE InputStat
 		case INPUTSTATE_REPEAT://リピート
 			bCommand = pInputK->GetRepeat(nKey);
 			break;
+		case INPUTSTATE_HOLD://ホールド
+			bCommand = pInputK->GetHold(nKey);
+			break;
 
 		}
 	}
@@ -205,6 +208,9 @@ bool  CCommand::CheckKey_XPad(CInputXPad* pInputX, INPUT_STATE InputState, int n
 			break;
 		case INPUTSTATE_REPEAT://リピート
 			bCommand = pInputX->GetRepeat((CInputXPad::XPAD_KEY)nKey);
+			break;
+		case INPUTSTATE_HOLD://ホールド
+			bCommand = pInputX->GetHold((CInputXPad::XPAD_KEY)nKey);
 			break;
 		}
 	}
