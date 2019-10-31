@@ -65,7 +65,6 @@ public:
 	{
 		int	  nLoop;								//ループするかどうか	:1ならループ
 		int   nKeyNum;								//キー数
-		int	  nPriority;							//優先度 :　高いモーションは低いモーションに割り込める
 		KeyProperty key[MAX_KEY];					//キー情報
 
 		//初期化用
@@ -73,7 +72,6 @@ public:
 		{
 			nLoop = 0;
 			nKeyNum = 0;
-			nPriority = -1;
 			for (int nCntKey = 0; nCntKey < MAX_KEY; nCntKey++)
 			{
 				key[nCntKey].nFrame = 0;
@@ -129,6 +127,7 @@ public:
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
 	void			SetNextMotion(MOTION motion);
+	MOTION			GetMotion(void) { return m_motion; };
 private:
 	bool			CollisionBullet(void);
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
@@ -165,7 +164,7 @@ private:
 	int m_nCntKey;									//キー用カウンタ
 	D3DXVECTOR3 m_aKeyPos[PLAYER_MODELNUM];		//キーの差分位置
 	D3DXVECTOR3 m_aKeyRot[PLAYER_MODELNUM];		//キーの差分角度
-
+	bool m_bPlayMotion;
 	int m_nCntBlendMotion;
 };
 #endif // !_PLAYER_H_

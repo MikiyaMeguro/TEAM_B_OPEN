@@ -1498,10 +1498,9 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 1		# キー数
-	PRIORITY = 1	# 優先度
 	
 	KEYSET			# --- << KEY : 0 / 1 >> ---
-		FRAME = 11
+		FRAME = 16
 		KEY	# ----- [ 0 ] -----
 			POS = 0.00 0.00 0.00
 			ROT = -0.02 0.00 0.00
@@ -1580,7 +1579,6 @@ END_MOTIONSET
 MOTIONSET
 	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
 	NUM_KEY = 3		# キー数
-	PRIORITY = 1	# 優先度
 
 	KEYSET			# --- << KEY : 0 / 3 >> ---
 		FRAME = 10

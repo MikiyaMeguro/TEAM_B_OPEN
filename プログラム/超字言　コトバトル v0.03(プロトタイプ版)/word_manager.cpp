@@ -239,6 +239,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 				}
 			}
 
+			CGame::GetPlayer(nID)->SetNextMotion(CPlayer::MOTION_SHOT);
 			Reset();		// İ’è‚ğ–ß‚·
 			if (CGame::GetTube(m_nPlayerID) != NULL)
 			{

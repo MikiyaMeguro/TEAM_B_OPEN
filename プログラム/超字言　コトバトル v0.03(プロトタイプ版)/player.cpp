@@ -38,6 +38,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_motion = MOTION_NONE;
 	m_OldMotion = MOTION_NONE;
 	m_NextMotion = MOTION_NONE;
+	m_bPlayMotion = false;
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 		m_pPlayerParts[nCntParts] = NULL;
@@ -100,7 +101,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 
 	ModelLoad(KUMA_POWER_LOADTEXT,TYPE_POWER);
 
-	SetNextMotion(MOTION_SETUP_WALK);
+	SetNextMotion(MOTION_STEP);
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
@@ -315,7 +316,15 @@ void CPlayer::MotionUpdate(void)
 			m_nCntKey = 0;
 			if (m_propMotion[m_motion].nLoop == 0)
 			{
-				SetNextMotion(m_OldMotion);
+				m_bPlayMotion = false;
+				if (m_pWordManager->GetBulletFlag())
+				{
+					SetNextMotion(MOTION_SETUP_NEUTRAL);
+				}
+				else
+				{
+					SetNextMotion(MOTION_NEUTRAL);
+				}
 			}
 		}
 	}
@@ -328,13 +337,23 @@ void CPlayer::MotionUpdate(void)
 //=============================================================================
 void	CPlayer::SetNextMotion(MOTION motion)
 {
-	if (motion != m_motion)
+	if (motion != m_motion/* && m_bPlayMotion == false*/)
 	{//現在入っているモーションと違うもの
 		m_OldMotion = m_motion;
 		m_motion = motion;
 		m_NextMotion = motion;
 		m_Mstate = STATE_BLEND;
 		m_nCntBlendMotion = 0;
+		m_nCntKey = 0;
+		m_nCntFlame = 0;
+		for (int nCntModel = 0; nCntModel < PLAYER_MODELNUM; nCntModel++)
+		{
+			m_aKeyRot[nCntModel] = D3DXVECTOR3(0.0f,0.0f,0.0f);
+		}
+		if (m_propMotion[m_motion].nLoop == 0)
+		{
+			m_bPlayMotion = true;
+		}
 	}
 }
 
@@ -605,11 +624,6 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 							{//キー数
 								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
 									&m_PlayerLoadState[type].prop[nCntMotionType].nKeyNum);
-							}
-							else if (strcmp(HeadText, "PRIORITY") == 0)
-							{//キー数
-								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
-									&m_PlayerLoadState[type].prop[nCntMotionType].nPriority);
 							}
 							else if (strcmp(HeadText, "KEYSET") == 0)
 							{
