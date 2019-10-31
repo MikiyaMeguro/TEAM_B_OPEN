@@ -371,10 +371,10 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
 					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
 					if (m_bLand == true)
 					{// モデルに当たる
 						bHit = true;
-						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
 						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
 						{
 							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
@@ -385,21 +385,17 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
 								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
 							{	// ノックバックの判定
-								pSceneObj->KnockBack(move);
+								pSceneObj->KnockBack(move, m_nID);
 							}
+						}
+						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
+						{
+							pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
 						}
 						break;
 					}
 					else
 					{
-						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS) 
-						{
-							if (pos->y + 10.0f > pSceneObj->GetPosition().y - pSceneObj->GetVtxMin().y) 
-							{
-								move->x = 2.0f; 
-							}
-						}
 						bHit = false;
 					}
 				}
