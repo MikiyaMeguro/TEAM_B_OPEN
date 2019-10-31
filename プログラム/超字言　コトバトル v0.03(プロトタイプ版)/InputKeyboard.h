@@ -26,8 +26,9 @@ public:
 		BYTE KeyStateTrigger;	//トリガー用のキー情報
 		BYTE KeyStateRelease;	//リリース用のキー情報
 		BYTE KeyStateRepeat;	//リピート用のキー情報
+		BYTE KeyStateHold;		//ホールド用のキー情報
 		int nCntRepeatTime;		//リピート用のカウンタ
-
+		int nCntHoldTime;		//ホールド用のカウンタ
 	}KEYBOARD_STATE;		//キー情報の構造体
 
 	//コンストラクタ&デストラクタ
@@ -45,6 +46,8 @@ public:
 	bool GetTrigger(int nKey);
 	bool GetRelease(int nKey);
 	bool GetRepeat(int nKey);
+	bool GetHold(int nKey);
+
 private:
 	KEYBOARD_STATE m_aState[NUM_KEY_MAX];	//キー情報構造体(キー数分)
 };

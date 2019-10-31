@@ -87,5 +87,11 @@ private:
 	CAMERA_TYPE m_Type;			//カメラのタイプ
 	C3DCharactor* m_pLockOnChara;	//posRでロックオンしているキャラのポインタ(NULLならロックオンしてない状態)
 	C3DCharactor* m_pHomingChara;	//posVで追従するキャラのポインタ(NULLなら追従なし)
+
+	D3DXVECTOR3 m_ORGposV;		//視点
+	D3DXVECTOR3 m_ORGposR;		//注視点
+	D3DXVECTOR3 m_ORGvecU;		//上方向ベクトル
+	D3DXVECTOR3 m_ORGrotDest;	//目標の角度
+
 };
 #endif // !_CAMERA_H_

@@ -586,6 +586,9 @@ void C3DCharactor::Think_CPU(void)
 	//	m_CpuRotation = CPU_ROTATION_BACK;
 	//	nTestCnt = 0;
 	//}
+	//ÉJÉÅÉâÇÃéQè∆à íuêßå‰
+	m_CameraPosR = GetPosition() + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
+
 }
 
 //=============================================================================

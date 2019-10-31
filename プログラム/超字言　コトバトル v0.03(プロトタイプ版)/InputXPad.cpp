@@ -29,7 +29,9 @@ CInputXPad::CInputXPad()
 		m_State.abPadStateTrigger[nCntInput] = false;
 		m_State.abPadStateRelease[nCntInput] = false;
 		m_State.abPadStateRepeat[nCntInput] = false;
+		m_State.abPadStateHold[nCntInput] = false;
 		m_State.nCntRepeatTime[nCntInput] = 0;
+		m_State.nCntHoldTime[nCntInput] = 0;
 	}
 }
 CInputXPad::~CInputXPad()
@@ -100,7 +102,9 @@ void CInputXPad::Update(void)
 				m_State.abPadStateTrigger[nCntInput] = false;
 				m_State.abPadStateRelease[nCntInput] = false;
 				m_State.abPadStateRepeat[nCntInput] = false;
+				m_State.abPadStateHold[nCntInput] = false;
 				m_State.nCntRepeatTime[nCntInput] = 0;
+				m_State.nCntHoldTime[nCntInput] = 0;
 			}
 			m_bConnect = true;
 		}
@@ -140,7 +144,9 @@ void CInputXPad::Update(void)
 			m_State.abPadStateTrigger[nCntInput] = false;
 			m_State.abPadStateRelease[nCntInput] = false;
 			m_State.abPadStateRepeat[nCntInput] = false;
+			m_State.abPadStateHold[nCntInput] = false;
 			m_State.nCntRepeatTime[nCntInput] = 0;
+			m_State.nCntHoldTime[nCntInput] = 0;
 		}
 		m_bConnect = false;
 	}
@@ -156,6 +162,7 @@ void CInputXPad::SetInputState(XPAD_KEY key, bool bPress)
 	m_State.abPadStateRelease[key] = (m_State.abPadStatePress[key] ^ bPress) & m_State.abPadStatePress[key];	//リリース
 	m_State.abPadStatePress[key] = bPress;	//プレス
 	m_State.abPadStateRepeat[key] = false;
+	m_State.abPadStateHold[key] = false;
 
 	if (m_State.abPadStatePress[key] == true)
 	{
@@ -164,9 +171,17 @@ void CInputXPad::SetInputState(XPAD_KEY key, bool bPress)
 		{
 			m_State.abPadStateRepeat[key] = true;	//リピート
 		}
+
+		m_State.nCntHoldTime[key]++;
+		if (m_State.nCntHoldTime[key] > HOLD_TIME)
+		{
+			m_State.abPadStateHold[key] = true;	//ホールド
+		}
+
 	}
 	else
 	{
+		m_State.nCntHoldTime[key] = 0;
 		m_State.nCntRepeatTime[key] = 0;
 	}
 
@@ -244,5 +259,10 @@ bool CInputXPad::GetRelease(CInputXPad::XPAD_KEY key)	//リリース
 bool CInputXPad::GetRepeat(CInputXPad::XPAD_KEY key)	//リピート
 {
 	if (GetConnect()) { return m_State.abPadStateRepeat[key]; }
+	return false;
+}
+bool CInputXPad::GetHold(CInputXPad::XPAD_KEY key)	//ホールド
+{
+	if (GetConnect()) { return m_State.abPadStateHold[key]; }
 	return false;
 }

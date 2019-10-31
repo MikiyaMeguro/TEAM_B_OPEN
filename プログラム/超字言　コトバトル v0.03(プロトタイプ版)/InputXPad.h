@@ -42,6 +42,9 @@ public:
 		bool abPadStateTrigger[XPAD_MAX];		//トリガー情報
 		bool abPadStateRelease[XPAD_MAX];		//リリース情報
 		bool abPadStateRepeat[XPAD_MAX];		//リピート情報
+		bool abPadStateHold[XPAD_MAX];			//ホールド情報
+
+		int nCntHoldTime[XPAD_MAX];				//ホールド用のカウント変数
 		int nCntRepeatTime[XPAD_MAX];			//リピート用のカウント変数
 	}XPAD_STATE;
 
@@ -59,6 +62,8 @@ public:
 	bool GetTrigger(XPAD_KEY key);
 	bool GetRelease(XPAD_KEY key);
 	bool GetRepeat(XPAD_KEY key);
+	bool GetHold(XPAD_KEY key);
+
 	bool GetConnect(void) { return m_bConnect; };
 
 	//スティック角取得

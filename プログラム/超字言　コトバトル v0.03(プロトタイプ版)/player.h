@@ -151,10 +151,10 @@ private:
 
 	bool m_bSetupBullet;					//弾が撃てる状態の判定用
 
-	//モーション管理
-	MotionProperty m_propMotion[MOTION_MAX];
+	C3DCharactor* m_pLockOnCharactor;
 
 	/* Motion */
+	MotionProperty m_propMotion[MOTION_MAX];
 	MOTION m_motion;								//現在のモーション
 	MOTION m_OldMotion;								//一つ前のモーション
 	MOTION m_NextMotion;							//一つ後のモーション

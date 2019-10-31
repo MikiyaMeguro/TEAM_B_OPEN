@@ -16,7 +16,7 @@
 
 #include "debugProc.h"
 #include "bullet.h"
-
+#include "CameraManager.h"
 CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];
 //=============================================================================
 // マクロ定義
@@ -117,10 +117,12 @@ HRESULT CPlayer::Init(void)
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
 	m_nCntTransTime = 0;
-
+	m_pLockOnCharactor = NULL;
 	//コマンドセット
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_LSHIFT);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
+
+	CCommand::RegistCommand("PLAYER_HOMINGSET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
 	return S_OK;
 }
 
@@ -160,6 +162,7 @@ void CPlayer::Update(void)
 {
 	D3DXVECTOR3 testpos;
 	D3DXVECTOR3 testmove;
+	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
 	if (m_pCharactorMove != NULL)
 	{
@@ -186,6 +189,27 @@ void CPlayer::Update(void)
 		//前にObjectがあるかどうか
 		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
+	}
+
+	//セット
+		CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
+	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
+	{
+		//テスト
+		m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(1)->GetCharaMover());
+
+		if (pCam != NULL)
+		{
+			pCam->SetLockOnChara(m_pLockOnCharactor);
+		}
+	}
+	else
+	{
+		m_pLockOnCharactor = NULL;
+		if (pCam != NULL)
+		{
+			pCam->SetLockOnChara(NULL);
+		}
 	}
 
 	// 弾の生成
