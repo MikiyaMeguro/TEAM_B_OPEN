@@ -26,17 +26,21 @@ public:
 		BYTE KeyStateTrigger;	//トリガー用のキー情報
 		BYTE KeyStateRelease;	//リリース用のキー情報
 		BYTE KeyStateRepeat;	//リピート用のキー情報
-
 		int nCntRepeatTime;		//リピート用のカウンタ
 
 	}KEYBOARD_STATE;		//キー情報の構造体
+
+	//コンストラクタ&デストラクタ
 	CInputKeyboard();
 	~CInputKeyboard();
 
+
+	//メンバ関数
 	HRESULT Init(HINSTANCE hInstance, HWND hWnd);
 	void    Uninit(void);
 	void    Update(void);
 
+	//入力取得関数
 	bool GetPress(int nKey);
 	bool GetTrigger(int nKey);
 	bool GetRelease(int nKey);
