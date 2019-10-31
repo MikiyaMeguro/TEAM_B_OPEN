@@ -277,6 +277,15 @@ void C3DCharactor::CharaMove_Input(void)
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 
+
+		}
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID))
@@ -300,18 +309,58 @@ void C3DCharactor::CharaMove_Input(void)
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
 
 		}
+
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+		}
 
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 	{
 		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+		}
+		else
+		{
+			GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+		}
 
+	}
+	else
+	{
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_NEUTRAL);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_NEUTRAL);
+			}
+		}
 	}
 
 	//if (CCommand::GetCommand("TESTUP"))
@@ -1067,6 +1116,7 @@ void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 	move.x += sinf(fRot) * GetStep();
 	move.z += cosf(fRot) * GetStep();
 
+	GetThisCharactor()->SetNextMotion(CPlayer::MOTION_STEP);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);
 }

@@ -34,13 +34,13 @@ MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#16 大きい壁
 MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#17 歯車
 MODEL_FILENAME = data/MODEL/Dust.x"					#18 ゴミ
 MODEL_FILENAME = data/MODEL/box000.x"				#19
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#120
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#20
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
 MODELSET
 	TYPE = 16
-	POS = 0.0 0.0 180.0
+	POS = 0.0 400.0 180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
 	COLLISION = 1
@@ -48,7 +48,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = 0.0 0.0 -180.0
+	POS = 0.0 400.0 -180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
 	COLLISION = 1
@@ -56,7 +56,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = 180.0 0.0 0.0
+	POS = 180.0 400.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
 	COLLISION = 1
@@ -64,7 +64,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = -180.0 0.0 0.0
+	POS = -180.0 400.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
 	COLLISION = 1
@@ -76,7 +76,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = 150.0 0.0 400.0
+	POS = 150.0 400.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -84,7 +84,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = -150.0 0.0 400.0
+	POS = -150.0 400.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -93,7 +93,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = 150.0 0.0 -400.0
+	POS = 150.0 400.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -101,7 +101,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16
-	POS = -150.0 0.0 -400.0
+	POS = -150.0 400.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -111,7 +111,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 17
-	POS = 0.0 0.0 0.0
+	POS = 0.0 400.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 6
@@ -120,7 +120,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 17
-	POS = -150.0 0.0 -250.0
+	POS = -150.0 400.0 -250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 7
@@ -128,7 +128,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 17
-	POS = 150.0 0.0 -250.0
+	POS = 150.0 400.0 -250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 8
@@ -136,7 +136,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 17
-	POS = -150.0 0.0 250.0
+	POS = -150.0 400.0 250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 8
@@ -144,7 +144,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 17
-	POS = 150.0 0.0 250.0
+	POS = 150.0 400.0 250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 7

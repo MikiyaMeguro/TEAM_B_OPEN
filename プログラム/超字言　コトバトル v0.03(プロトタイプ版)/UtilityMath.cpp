@@ -29,6 +29,7 @@ float CUtilityMath::Mapping(const float& value, const float& fromSource, const f
 {
 	return (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
 }
+
 //=============================================================================
 //	ˆÚ“®—Í‚ÉŒW”‚ğŠ|‚¯‚éŠÖ”
 //=============================================================================

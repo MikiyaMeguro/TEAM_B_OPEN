@@ -129,7 +129,6 @@ void CSceneX::Uninit(void)
 //=============================================================================
 void CSceneX::Update(void)
 {
-
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "ModelPos : x", m_pos.x, "f", "   y", m_pos.y, "f", "  z", m_pos.z, "f");
 #endif
@@ -385,16 +384,16 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 			&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
 		{// 障害物の内側に乗った
 			if (bHit == false) { bLand = true; }	// ベルトコンベアの場合
-			if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y < m_pos.y + ScaleVtxMax.y
-				|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y > m_pos.y + ScaleVtxMax.y)
+			if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y <= m_pos.y + ScaleVtxMax.y
+				|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y >= m_pos.y + ScaleVtxMax.y)
 			{// 上からブロックに当たったとき
 				bLand = true;  // 乗った判定を返す
 				pos->y = m_pos.y + ScaleVtxMax.y;
 				move->y = 0.0f;  // 移動量をなくす
 			}
 
-			if (posOld->y + radius.y < m_pos.y + ScaleVtxMin.y && pos->y + radius.y >= m_pos.y + ScaleVtxMin.y
-				|| pos->y + radius.y > m_pos.y + ScaleVtxMin.y && posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y)
+			if (posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y && pos->y + radius.y >= m_pos.y + ScaleVtxMin.y
+				|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y)
 			{// 下からブロックに当たったとき
 				pos->y = posOld->y;
 				move->y = 0.0f;  // 移動量をなくす

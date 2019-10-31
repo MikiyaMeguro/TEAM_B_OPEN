@@ -63,10 +63,11 @@ public:
 
 	typedef struct
 	{
-		int	  nLoop;								//ループするかどうか
+		int	  nLoop;								//ループするかどうか	:1ならループ
 		int   nKeyNum;								//キー数
 		KeyProperty key[MAX_KEY];					//キー情報
 
+		//初期化用
 		void operator()(void)
 		{
 			nLoop = 0;
@@ -126,6 +127,7 @@ public:
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
 	void			SetNextMotion(MOTION motion);
+	MOTION			GetMotion(void) { return m_motion; };
 private:
 	bool			CollisionBullet(void);
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
@@ -152,11 +154,17 @@ private:
 	//モーション管理
 	MotionProperty m_propMotion[MOTION_MAX];
 
-	MOTION m_Motion;
-	MOTION m_NextMotion;
-	MOTION m_OldMotion;
-	int m_nCntMotion;
-	MOTION_STATE m_MotionState;
+	/* Motion */
+	MOTION m_motion;								//現在のモーション
+	MOTION m_OldMotion;								//一つ前のモーション
+	MOTION m_NextMotion;							//一つ後のモーション
+	KeyProperty* m_pKey, *m_pKeyNext;
+	MOTION_STATE m_Mstate;							//モーションの状態
+	int m_nCntFlame;								//フレーム用カウンタ
+	int m_nCntKey;									//キー用カウンタ
+	D3DXVECTOR3 m_aKeyPos[PLAYER_MODELNUM];		//キーの差分位置
+	D3DXVECTOR3 m_aKeyRot[PLAYER_MODELNUM];		//キーの差分角度
+	bool m_bPlayMotion;
 	int m_nCntBlendMotion;
 };
 #endif // !_PLAYER_H_
