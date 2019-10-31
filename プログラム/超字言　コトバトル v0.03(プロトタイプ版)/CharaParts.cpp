@@ -29,6 +29,7 @@ void CCharaParts::Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMA
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
+	//•Ï”İ’è
 	m_pParent = pParent;
 	m_Pos = pos;
 	m_Rot = rot;

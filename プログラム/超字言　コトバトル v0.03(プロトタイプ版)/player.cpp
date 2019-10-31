@@ -33,7 +33,11 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
 	m_pPlayerNum = NULL;
-
+	m_nCntKey = 0;
+	m_nCntFlame = 0;
+	m_motion = MOTION_NONE;
+	m_OldMotion = MOTION_NONE;
+	m_NextMotion = MOTION_NONE;
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 		m_pPlayerParts[nCntParts] = NULL;
@@ -95,6 +99,8 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 
 
 	ModelLoad(KUMA_POWER_LOADTEXT,TYPE_POWER);
+
+	SetNextMotion(MOTION_SETUP_WALK);
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
@@ -220,6 +226,7 @@ void CPlayer::Update(void)
 		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 45.0f, m_pCharactorMove->GetPosition().z));
 	}
 
+	MotionUpdate();
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 
@@ -261,7 +268,60 @@ void CPlayer::Draw(void)
 //=============================================================================
 void CPlayer::MotionUpdate(void)
 {
+	int nFutureKey = (m_nCntKey + 1) % (m_propMotion[m_motion].nKeyNum);
 
+	m_pKey = &m_propMotion[m_motion].key[m_nCntKey];
+	m_pKeyNext = &m_propMotion[m_motion].key[nFutureKey];
+
+	m_nCntFlame++;
+	for (int nCntModel = 0; nCntModel < PLAYER_MODELNUM; nCntModel++)
+	{
+		if (m_pPlayerParts[nCntModel] != NULL)
+		{
+
+			D3DXVECTOR3 rot = m_pPlayerParts[nCntModel]->GetRotation();
+			float fFlameMotion = (float)(m_nCntFlame + 1) / (float)m_pKey->nFrame;
+			m_aKeyRot[nCntModel].x = (m_pKeyNext->Rot[nCntModel].x -
+				m_pKey->Rot[nCntModel].x) *
+				fFlameMotion;
+
+			m_aKeyRot[nCntModel].y = (m_pKeyNext->Rot[nCntModel].y -
+				m_pKey->Rot[nCntModel].y) *
+				fFlameMotion;
+
+			m_aKeyRot[nCntModel].z = (m_pKeyNext->Rot[nCntModel].z -
+				m_pKey->Rot[nCntModel].z) *
+				fFlameMotion;
+
+			rot = m_pKey->Rot[nCntModel] + m_aKeyRot[nCntModel];
+			if (nCntModel == 0)
+			{
+				rot.y += 3.14f;
+			}
+			CUtilityMath::RotateRivisionPI(rot.x);
+			CUtilityMath::RotateRivisionPI(rot.y);
+			CUtilityMath::RotateRivisionPI(rot.z);
+
+			m_pPlayerParts[nCntModel]->SetRotation(rot);
+		}
+	}
+
+	if (m_nCntFlame == m_propMotion[m_motion].key[m_nCntKey].nFrame)
+	{//既定のフレームが経過したら
+
+		m_nCntFlame = 0;
+		m_nCntKey++;	//キーを加算
+		if (m_nCntKey >= m_propMotion[m_motion].nKeyNum)
+		{//キーが既定の数値に達したら
+			m_nCntKey = 0;
+			if (m_propMotion[m_motion].nLoop == 0)
+			{
+				SetNextMotion(m_OldMotion);
+			}
+		}
+	}
+
+	CDebugProc::Print("cn","MOTION = ",(int)m_motion);
 }
 
 //=============================================================================
@@ -269,9 +329,14 @@ void CPlayer::MotionUpdate(void)
 //=============================================================================
 void	CPlayer::SetNextMotion(MOTION motion)
 {
-	m_NextMotion = motion;
-	m_MotionState = STATE_BLEND;
-	m_nCntBlendMotion = 0;
+	if (motion != m_motion)
+	{//現在入っているモーションと違うもの
+		m_OldMotion = m_motion;
+		m_motion = motion;
+		m_NextMotion = motion;
+		m_Mstate = STATE_BLEND;
+		m_nCntBlendMotion = 0;
+	}
 }
 
 //=============================================================================
@@ -546,6 +611,11 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
 									&m_PlayerLoadState[type].prop[nCntMotionType].nKeyNum);
 							}
+							else if (strcmp(HeadText, "PRIORITY") == 0)
+							{//キー数
+								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
+									&m_PlayerLoadState[type].prop[nCntMotionType].nPriority);
+							}
 							else if (strcmp(HeadText, "KEYSET") == 0)
 							{
 								while (strcmp(HeadText, "END_KEYSET") != 0)
@@ -594,12 +664,14 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 									}
 								}
 								nCntKeySet++;
+								nCntKey = 0;
 							}
 						}
 						nCntMotionType++;
-
+						nCntKeySet = 0;
 					}
 				}
+				nCntMotionType = 0;
 			}
 
 		}
@@ -633,6 +705,10 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 		}
 	}
 
+	for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
+	{
+		m_propMotion[nCntMotion] = m_PlayerLoadState[type].prop[nCntMotion];
+	}
 	return S_OK;
 }
 

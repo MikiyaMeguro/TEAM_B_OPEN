@@ -1067,6 +1067,7 @@ void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 	move.x += sinf(fRot) * GetStep();
 	move.z += cosf(fRot) * GetStep();
 
+	GetThisCharactor()->SetNextMotion(CPlayer::MOTION_STEP);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);
 }
