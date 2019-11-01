@@ -16,7 +16,7 @@
 #define PLAYER_DEPTH	(15)		// プレイヤーの幅調整用
 #define PLAYER_HEIGHT	(50.0f)		// プレイヤーの背の高さ
 
-#define FILE_NAME0				("data\\TEXT\\SetModel.txt")
+#define FILE_NAME0				("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
 
 //--------------------------------------------
 //静的メンバ変数宣言

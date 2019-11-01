@@ -24,8 +24,9 @@ class CCameraManager
 public:
 	struct CAMERA_STATE
 	{//カメラ情報の構造体
-		CCamera* pCamera;	//カメラのポインタ
-		LPCSTR CameraTag;	//カメラ識別用のタグ
+		CCamera* pCamera;			//カメラのポインタ
+		D3DXCOLOR BackgroundColor;	//初期化するときの背景色
+		LPCSTR CameraTag;			//カメラ識別用のタグ
 
 		bool operator == (const LPCSTR Tag)
 		{//タグ比較(同じならtrue)
@@ -55,11 +56,15 @@ public:
 	//ロックオンする対象の設定
 	bool SetCameraLockOnChara(LPCSTR Tag, C3DCharactor* pLockOnChara);
 
+	//背景色設定
+	bool SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col);
 
 	//カメラ削除
 	bool DeleteCamera(LPCSTR Tag);
 
+	//カメラ取得
 	CCamera* GetCamera(LPCSTR Tag);
+
 	int GetCameraNum(void) { return m_vecCameraState.size(); };
 private:
 	std::vector<CAMERA_STATE> m_vecCameraState;	//カメラ情報の動的配列
