@@ -554,25 +554,25 @@ void CGame::SetPointFrame(int nNumPlayer)
 //=============================================================================
 void CGame::WordCreate(void)
 {
-	// Š÷
+	// ‚³‚¢‚Ó
 	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 10);
 	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 1);
 	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 27);
 
-	// ŠG‹ï
+	// ‚©‚é‚½
 	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
 	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 40);
 	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 15);
 
-	// ‚­‚é‚Ü
+	// ‚©‚ß‚ç
 	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
 	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 33);
 	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 38);
 
-	// ƒŠƒ“ƒS
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 39);
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 45);
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 9);
+	// ‚±‚¦‚¾
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 9);
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 3);
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 15);
 
 	// •z’c
 	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 27);
