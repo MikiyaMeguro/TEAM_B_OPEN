@@ -223,7 +223,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 		if (m_bPress == true)
 		{
 			if (m_nCntaAnswer == MAX_WORD)
-			{	// // w’è‚µ‚½•¶š‚È‚ç’e‚ğ¶¬‚·‚é
+			{	// w’è‚µ‚½•¶š‚È‚ç’e‚ğ¶¬‚·‚é
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{

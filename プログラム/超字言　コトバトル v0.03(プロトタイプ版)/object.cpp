@@ -22,6 +22,7 @@
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
 #define GEAR_ROT_Y					(0.1f)			// ギアの回転量　ベース情報
 #define MODEL_MOVE_Y				(0.5f)			// モデル移動時の移動速度
+#define AFFECTED_LANDING			(10.0f)			// モデル着地時のノックバック影響量
 
 //*****************************************************************************
 // 静的メンバ変数
@@ -108,16 +109,17 @@ void CObject::Update(void)
 			{	// ベルトコンベアの場合
 				pos.y = pos.y - CSceneX::GetVtxMin().y;
 				CSceneX::SetPosition(pos);
+				m_nRealTime = REALTIME_NONE;
 			}
 			else if (Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
 				Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 			{	// ベルトコンベア以外の場合
 				pos.y = pos.y - CSceneX::GetVtxMin().y;
 				CSceneX::SetPosition(pos);
+				m_nRealTime = REALTIME_NONE;
 			}
 		}
 		CSceneX::SetPosition(pos);
-		if (pos.y == 0) { m_nRealTime = REALTIME_NONE; }
 	}
 	else if (m_nRealTime == REALTIME_NONE)
 	{
@@ -229,6 +231,6 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove, int nID)
 void CObject::AffectedLanding(D3DXVECTOR3 *pMove, int nID)
 {
 	float fPlayer = CGame::GetPlayer(nID)->GetRotation().y;
-	pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (20.0f);
-	pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (20.0f);
+	pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
+	pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
 }

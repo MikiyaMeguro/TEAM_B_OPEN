@@ -41,6 +41,9 @@ public:
 		MODE_POT,		// Ç‚Ç©ÇÒ
 		MODE_IKARI,		// Ç¢Ç©ÇË
 		MODE_IKADA,		// Ç¢Ç©Çæ
+		MODEL_SAIHU,	// ç‡ïz
+		MODEL_KARUTA,	// Ç©ÇÈÇΩ
+		MODEL_CAMERA,	// ÉJÉÅÉâ
 		MODE_WALL_SMALL,// è¨Ç≥Ç¢ï«
 		MODE_WALL_BIG,	// ëÂÇ´Ç¢ï«
 		MODE_GEAR,		// éïé‘
