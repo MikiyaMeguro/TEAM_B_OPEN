@@ -16,12 +16,13 @@
 
 #include "debugProc.h"
 #include "bullet.h"
-
+#include "CameraManager.h"
 CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 20.0f, 5.0f))			//キャラクターの当たり判定
+#define PLAYER_LOCKON_LENGTH (300.0f)
+#define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 #define KUMA_POWER_LOADTEXT "data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
 //=============================================================================
 // コンストラクタ&デストラクタ
@@ -33,7 +34,12 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
 	m_pPlayerNum = NULL;
-
+	m_nCntKey = 0;
+	m_nCntFlame = 0;
+	m_motion = MOTION_NONE;
+	m_OldMotion = MOTION_NONE;
+	m_NextMotion = MOTION_NONE;
+	m_bPlayMotion = false;
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 		m_pPlayerParts[nCntParts] = NULL;
@@ -96,6 +102,8 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 
 	ModelLoad(KUMA_POWER_LOADTEXT,TYPE_POWER);
 
+	SetNextMotion(MOTION_STEP);
+
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
 	//m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);
@@ -110,11 +118,12 @@ HRESULT CPlayer::Init(void)
 	m_pCharactorMove = NULL;
 	m_ChildCameraName = "";
 	m_nCntTransTime = 0;
-
+	m_pLockOnCharactor = NULL;
 	//コマンドセット
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_LSHIFT);
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_LSHIFT);
+	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
 
+	CCommand::RegistCommand("PLAYER_HOMINGSET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
 	return S_OK;
 }
 
@@ -154,6 +163,7 @@ void CPlayer::Update(void)
 {
 	D3DXVECTOR3 testpos;
 	D3DXVECTOR3 testmove;
+	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
 	if (m_pCharactorMove != NULL)
 	{
@@ -182,16 +192,59 @@ void CPlayer::Update(void)
 
 	}
 
-	// 弾の生成
-	if (CCommand::GetCommand("PLAYER_SHOTBULLET",m_nID))
-	{
-		if (m_pWordManager != NULL)
-		{//文字管理クラスに弾の生成を委託する
-			m_pWordManager->BulletCreate(m_nID,m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f,10.0f,0.0f));
-			if (m_pWordManager->GetCntNum() == 0)
-			{
-				m_bSetupBullet = false;
+	//セット
+		CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
+		D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
+
+		// 弾の生成
+		if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
+		{
+			if (m_pWordManager != NULL)
+			{//文字管理クラスに弾の生成を委託する
+				if (pCam != NULL)
+				{
+					BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+				}
+
+				CUtilityMath::RotateNormarizePI(BulletRot.x);
+				CUtilityMath::RotateNormarizePI(BulletRot.y);
+
+				m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
+				if (m_pWordManager->GetCntNum() == 0)
+				{
+					m_bSetupBullet = false;
+				}
 			}
+		}
+
+	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
+	{
+		//テスト
+		int nPlayer = GetNearPlayer();
+		if (nPlayer != -1)
+		{
+			m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+			if (pCam != NULL)
+			{
+				pCam->SetLockOnChara(m_pLockOnCharactor);
+			}
+		}
+		else
+		{
+			m_pLockOnCharactor = NULL;
+			if (pCam != NULL)
+			{
+				pCam->SetLockOnChara(NULL);
+			}
+		}
+	}
+	else
+	{
+		m_pLockOnCharactor = NULL;
+		if (pCam != NULL)
+		{
+			pCam->SetLockOnChara(NULL);
 		}
 	}
 
@@ -220,6 +273,7 @@ void CPlayer::Update(void)
 		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 45.0f, m_pCharactorMove->GetPosition().z));
 	}
 
+	MotionUpdate();
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 
@@ -240,6 +294,10 @@ void CPlayer::Update(void)
 
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x," ",testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
+	CDebugProc::Print("cn", "PLAYER.LockOn : ", m_pLockOnCharactor != NULL ? 1 : 0);
+	CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
+
+
 #endif
 }
 
@@ -261,7 +319,68 @@ void CPlayer::Draw(void)
 //=============================================================================
 void CPlayer::MotionUpdate(void)
 {
+	int nFutureKey = (m_nCntKey + 1) % (m_propMotion[m_motion].nKeyNum);
 
+	m_pKey = &m_propMotion[m_motion].key[m_nCntKey];
+	m_pKeyNext = &m_propMotion[m_motion].key[nFutureKey];
+
+	m_nCntFlame++;
+	for (int nCntModel = 0; nCntModel < PLAYER_MODELNUM; nCntModel++)
+	{
+		if (m_pPlayerParts[nCntModel] != NULL)
+		{
+
+			D3DXVECTOR3 rot = m_pPlayerParts[nCntModel]->GetRotation();
+			float fFlameMotion = (float)(m_nCntFlame + 1) / (float)m_pKey->nFrame;
+			m_aKeyRot[nCntModel].x = (m_pKeyNext->Rot[nCntModel].x -
+				m_pKey->Rot[nCntModel].x) *
+				fFlameMotion;
+
+			m_aKeyRot[nCntModel].y = (m_pKeyNext->Rot[nCntModel].y -
+				m_pKey->Rot[nCntModel].y) *
+				fFlameMotion;
+
+			m_aKeyRot[nCntModel].z = (m_pKeyNext->Rot[nCntModel].z -
+				m_pKey->Rot[nCntModel].z) *
+				fFlameMotion;
+
+			rot = m_pKey->Rot[nCntModel] + m_aKeyRot[nCntModel];
+			if (nCntModel == 0)
+			{
+				rot.y += 3.14f;
+			}
+			CUtilityMath::RotateNormarizePI(rot.x);
+			CUtilityMath::RotateNormarizePI(rot.y);
+			CUtilityMath::RotateNormarizePI(rot.z);
+
+			m_pPlayerParts[nCntModel]->SetRotation(rot);
+		}
+	}
+
+	if (m_nCntFlame == m_propMotion[m_motion].key[m_nCntKey].nFrame)
+	{//既定のフレームが経過したら
+
+		m_nCntFlame = 0;
+		m_nCntKey++;	//キーを加算
+		if (m_nCntKey >= m_propMotion[m_motion].nKeyNum)
+		{//キーが既定の数値に達したら
+			m_nCntKey = 0;
+			if (m_propMotion[m_motion].nLoop == 0)
+			{
+				m_bPlayMotion = false;
+				if (m_pWordManager->GetBulletFlag())
+				{
+					SetNextMotion(MOTION_SETUP_NEUTRAL);
+				}
+				else
+				{
+					SetNextMotion(MOTION_NEUTRAL);
+				}
+			}
+		}
+	}
+
+	CDebugProc::Print("cn","MOTION = ",(int)m_motion);
 }
 
 //=============================================================================
@@ -269,9 +388,24 @@ void CPlayer::MotionUpdate(void)
 //=============================================================================
 void	CPlayer::SetNextMotion(MOTION motion)
 {
-	m_NextMotion = motion;
-	m_MotionState = STATE_BLEND;
-	m_nCntBlendMotion = 0;
+	if (motion != m_motion/* && m_bPlayMotion == false*/)
+	{//現在入っているモーションと違うもの
+		m_OldMotion = m_motion;
+		m_motion = motion;
+		m_NextMotion = motion;
+		m_Mstate = STATE_BLEND;
+		m_nCntBlendMotion = 0;
+		m_nCntKey = 0;
+		m_nCntFlame = 0;
+		for (int nCntModel = 0; nCntModel < PLAYER_MODELNUM; nCntModel++)
+		{
+			m_aKeyRot[nCntModel] = D3DXVECTOR3(0.0f,0.0f,0.0f);
+		}
+		if (m_propMotion[m_motion].nLoop == 0)
+		{
+			m_bPlayMotion = true;
+		}
+	}
 }
 
 //=============================================================================
@@ -365,50 +499,108 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 
 		if (pScene->GetDeath() == false)
 		{// 死亡フラグが立っていないもの
-			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
-			{// オブジェクトの種類を確かめる
-				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
-				{
-					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
-					if (m_bLand == true)
-					{// モデルに当たる
-						bHit = true;
-						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
-						{
-							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
-							{	// ベルトコンベアの判定
-								pSceneObj->BeltConveyor(move);
-							}
-							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
-								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-							{	// ノックバックの判定
-								pSceneObj->KnockBack(move);
-							}
-						}
-						break;
-					}
-					else
+		if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+		{// オブジェクトの種類を確かめる
+			CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+			if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+			{
+				m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+				CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+				if (m_bLand == true)
+				{// モデルに当たる
+					bHit = true;
+					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
 					{
-						CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS) 
-						{
-							if (pos->y + 10.0f > pSceneObj->GetPosition().y - pSceneObj->GetVtxMin().y) 
-							{
-								move->x = 2.0f; 
-							}
+						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+						{	// ベルトコンベアの判定
+							pSceneObj->BeltConveyor(move);
 						}
-						bHit = false;
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+						{	// ノックバックの判定
+							pSceneObj->KnockBack(move, m_nID);
+						}
 					}
+					else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
+					{
+						pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
+					}
+					break;
+				}
+				else
+				{
+					bHit = false;
 				}
 			}
+		}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
 	return bHit;
+}
+//=============================================================================
+// 近いプレイヤーを取得する処理
+//=============================================================================
+int		CPlayer::GetNearPlayer(void)
+{
+	D3DXVECTOR3 PlayerPos[4] = {};
+	D3DXVECTOR3 PlayerRot[4] = {};
+	CCharaBase* pChara = NULL;
+	CPlayer* pPlayer = NULL;
+	int nCntPlayer = 0;
+	//値の取得
+	for (nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		pChara = NULL;
+		pPlayer = NULL;
+
+		pPlayer = CGame::GetPlayer(nCntPlayer);
+		if (pPlayer != NULL)
+		{
+			pChara = pPlayer->GetCharaMover();
+			if (pChara != NULL)
+			{//キャラクラス内にある座標を取得
+				PlayerPos[nCntPlayer] = pChara->GetPosition();
+				PlayerRot[nCntPlayer] = pChara->GetRotation();	//比較に使うためyの値にπを足す
+			}
+			else
+			{//キャラクラスが消えた場合も巨大な値を入れる
+				PlayerPos[nCntPlayer] = D3DXVECTOR3(-99999.9f, -99999.9f, -99999.9f);
+				PlayerRot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+		}
+		else
+		{	//プレイヤーがいない場合は巨大な値を入れる
+			PlayerPos[nCntPlayer] = D3DXVECTOR3(-99999.9f, -99999.9f, -99999.9f);
+			PlayerRot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		}
+	}
+
+	//値の比較
+	float fNearLength = 99999.9f;
+	int nPlayerNum = -1;
+	for (nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		if (nCntPlayer != m_nID)
+		{//自分以外と判定を行う
+
+			//距離を取得(-は省く)
+			float fLength = fabsf(sqrtf(powf(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, 2.0f) +
+				powf(PlayerPos[m_nID].y - PlayerPos[nCntPlayer].y, 2.0f) +
+				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)));
+
+			//角度比較
+				if (fLength < fNearLength &&
+					fLength < PLAYER_LOCKON_LENGTH)
+				{
+					nPlayerNum = nCntPlayer;
+					fNearLength = fLength;
+				}
+		}
+	}
+	return nPlayerNum;
 }
 
 //=============================================================================
@@ -594,12 +786,14 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 									}
 								}
 								nCntKeySet++;
+								nCntKey = 0;
 							}
 						}
 						nCntMotionType++;
-
+						nCntKeySet = 0;
 					}
 				}
+				nCntMotionType = 0;
 			}
 
 		}
@@ -633,6 +827,10 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 		}
 	}
 
+	for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
+	{
+		m_propMotion[nCntMotion] = m_PlayerLoadState[type].prop[nCntMotion];
+	}
 	return S_OK;
 }
 

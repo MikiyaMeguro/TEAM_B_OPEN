@@ -22,7 +22,6 @@
 #define MOVE_DEFAULT_SPEED (0.6f)			//デフォルトの移動スピード
 #define STEP_DEFAULT_MOVEMENT (10.0f)		//デフォルトのステップ量
 #define MOVE_DEFAULT_COEFFICIENT (0.20f)	//デフォルトの移動にかかる係数
-#define MOVE_AIR_COEFFICIENT (0.10f);
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
 #define CIRCLE_ANGLE	(100)
@@ -36,6 +35,7 @@
 //=============================================================================
 void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type, CPlayer* pThis)
 {
+	//変数初期化
 	m_pos = pos;
 	m_RespawnPos = pos;
 	m_rot = rot;
@@ -50,27 +50,28 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 	m_fSpinCoeffient = SPIN_DEFAULT_COEFFICIENT;
 
 	m_nCntStepCoolTime = 0;
-	CCommand::RegistCommand("PLAYERMOVE_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_W);
-	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_UP);
-	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_S);
-	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_DOWN);
-	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_D);
-	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHT);
-	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_A);
-	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT);
 
+	//コマンド定義
+	CCommand::RegistCommand("PLAYERMOVE_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_W);
+	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_UP);
+	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_S);
+	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_DOWN);
+	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_D);
+	CCommand::RegistCommand("PLAYERMOVE_RIGHT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHT);
+	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_A);
+	CCommand::RegistCommand("PLAYERMOVE_LEFT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT);
 
 	CCommand::RegistCommand("PLAYERMOVE_STEP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_SPACE);
-	CCommand::RegistCommand("PLAYERMOVE_STEP", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
+	CCommand::RegistCommand("PLAYERMOVE_STEP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
 
 	CCommand::RegistCommand("CAMERAMOVE_LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_LEFT);
-	CCommand::RegistCommand("CAMERAMOVE_LEFT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_LEFT);
+	CCommand::RegistCommand("CAMERAMOVE_LEFT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_LEFT);
 	CCommand::RegistCommand("CAMERAMOVE_RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_RIGHT);
-	CCommand::RegistCommand("CAMERAMOVE_RIGHT", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_RIGHT);
+	CCommand::RegistCommand("CAMERAMOVE_RIGHT", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_RIGHT);
 	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_UP);
-	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_UP);
+	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_UP);
 	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_DOWN);
-	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_CONTROLLER_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_DOWN);
+	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_DOWN);
 }
 
 //=============================================================================
@@ -92,7 +93,6 @@ HRESULT C3DCharactor::Init(void)
 	m_bJyougai = false;
 
 	nTestCnt = 0;
-
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -238,13 +238,14 @@ void C3DCharactor::CharaMove_Input(void)
 		CameraRot = pCamera->GetRotation();
 	}
 
+	//親クラスから値を取得(参照を使う)
 	D3DXVECTOR3& pos = CCharaBase::GetPosition();
 	D3DXVECTOR3& move = CCharaBase::GetMove();
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 	D3DXVECTOR3& spin = CCharaBase::GetSpin();
 	float		 speed = CCharaBase::GetSpeed();
 
-
+	//XPadコントローラのスティック感度設定
 	float fMoveCoefficientX = 1.0f;	//移動係数(X)
 	float fMoveCoefficientZ = 1.0f;	//移動係数(Z)
 	float fMoveCofBlend = 1.0f;	//移動係数の二つを掛け合わせたもの
@@ -262,72 +263,137 @@ void C3DCharactor::CharaMove_Input(void)
 	if (CCommand::GetCommand("PLAYERMOVE_RIGHT", nID))
 	{
 		if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
-		{
+		{//右上
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.25f)) * (speed * fMoveCofBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.25f)) *  (speed * fMoveCofBlend);
 		}
 		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
-		{
+		{//右下
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.75f)) *  (speed * fMoveCofBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.75f)) *  (speed * fMoveCofBlend);
 
 		}
 		else
-		{
+		{//右
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 
+
+		}
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{//今のモーションがステップでも弾打ちでもなければ
+
+		//モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+			}
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID))
 	{
 		if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
-		{
+		{//左上
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.25f)) *  (speed * fMoveCofBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.25f)) *  (speed * fMoveCofBlend);
 
 
 		}
 		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
-		{
+		{//左下
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.75f)) *  (speed * fMoveCofBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.75f)) *  (speed * fMoveCofBlend);
 
 		}
 		else
-		{
+		{//左
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
 
 		}
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{//今のモーションがステップでも弾打ちでもなければ
+		//モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+			}
+		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
-	{
+	{//上
 		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{//今のモーションがステップでも弾打ちでもなければ
+
+		//モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+			}
+		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
-	{
+	{//下
 		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
 
-	}
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{//今のモーションがステップでも弾打ちでもなければ
 
-	//if (CCommand::GetCommand("TESTUP"))
-	//{
-	//	move.y += 10;
-	//}
-	//if (CCommand::GetCommand("TESTDOWN"))
-	//{
-	//	move.y -= 10;
-	//}
+		//モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+			}
+		}
+	}
+	else
+	{
+		if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
+			GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
+		{//今のモーションがステップでも弾打ちでもなければ
+
+		 //モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_NEUTRAL);
+			}
+			else
+			{
+				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_NEUTRAL);
+			}
+		}
+	}
 
 	//ステップ移動の設定
 	if (CCommand::GetCommand("PLAYERMOVE_STEP", nID))
 	{
 		if (m_nCntStepCoolTime <= 0)
 		{
+			//ステップの角度設定
 			float fStepRot = 0.0f;
 			if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.0f; }
 			if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 1.0f; }
@@ -350,35 +416,20 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
 
-	//move *= MOVE_DEFAULT_COEFFICIENT;
-
 	pos += move;
-	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
+	//速度に係数を掛ける
+	CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
 
 	spin.y = CameraRot.y - rot.y;
 
 	//回転制御
-	if (spin.y > D3DX_PI)
-	{
-		spin.y -= D3DX_PI * 2.0f;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(spin.y);
 
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+	rot.y += spin.y * GetSpinCoeffient();
 
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(rot.y);
+
 	spin.y = 0.0f;
 
 	//カメラ位置制御
@@ -439,7 +490,8 @@ void C3DCharactor::CharaMove_Input(void)
 	pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
 		pCamera->GetType(),
 		pCamera->GetPosR(),
-		CameraRot,pCamera->GetLength());
+		CameraRot,
+		pCamera->GetLength());
 
 	//カメラの参照位置制御
 	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
@@ -552,6 +604,9 @@ void C3DCharactor::Think_CPU(void)
 	//	m_CpuRotation = CPU_ROTATION_BACK;
 	//	nTestCnt = 0;
 	//}
+	//カメラの参照位置制御
+	m_CameraPosR = GetPosition() + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
+
 }
 
 //=============================================================================
@@ -629,9 +684,9 @@ void C3DCharactor::Action_CPU(void)
 	{
 		pos += move;
 	}
-	move.x += (0.0f - move.x) * MOVE_DEFAULT_COEFFICIENT;
-	move.y += (0.0f - move.y) * MOVE_DEFAULT_COEFFICIENT;
-	move.z += (0.0f - move.z) * MOVE_DEFAULT_COEFFICIENT;
+
+	//速度に係数を掛ける
+	CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
 
 	//タイマーを減らす
 	m_nActionTimer--;
@@ -642,23 +697,9 @@ void C3DCharactor::DiffAngle(float fDiffAngle)
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 
 	// 差分
-	if (fDiffAngle > D3DX_PI)
-	{
-		fDiffAngle -= D3DX_PI * 2.0f;
-	}
-	if (fDiffAngle < -D3DX_PI)
-	{
-		fDiffAngle += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(fDiffAngle);
 	rot.y += fDiffAngle * 0.1f;
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(rot.y);
 }
 
 //=============================================================================
@@ -751,25 +792,11 @@ void C3DCharactor::CharaMove_CPU(void)
 
 
 	//回転制御
-	if (spin.y > D3DX_PI)
-	{
-		spin.y -= D3DX_PI * 2.0f;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(spin.y);
 
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+	rot.y += spin.y * GetSpinCoeffient();
 
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(rot.y);
 
 	spin.y = 0.0f;
 
@@ -815,25 +842,13 @@ void C3DCharactor::Rotation_CPU(void)
 	//回転制御
 	spin.y = ChangeRot.y - rot.y;
 
-	if (spin.y > D3DX_PI)
-	{
-		spin.y = D3DX_PI;
-	}
-	else if (spin.y < -D3DX_PI)
-	{
-		spin.y = -D3DX_PI;
-	}
+	//回転制御
+	CUtilityMath::RotateNormarizePI(spin.y);
 
-	rot.y += spin.y * SPIN_DEFAULT_COEFFICIENT;
+	rot.y += spin.y * GetSpinCoeffient();
 
-	if (rot.y > D3DX_PI)
-	{
-		rot.y -= D3DX_PI * 2.0f;
-	}
-	else if (rot.y < -D3DX_PI)
-	{
-		rot.y += D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(rot.y);
+
 	spin.y = 0.0f;
 
 }
@@ -918,11 +933,6 @@ void C3DCharactor::Homing_CPU(void)
 					{
 						fDestAngle += D3DX_PI * 2.0f;
 					}
-					//視野内に入ったら撃つ
-					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
-					{
-						m_CpuThink = THINK_ATTACK;
-					}
 				}
 				else if(fCircle < 100 * 2000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 				{// 距離内に入り弾を持っている時
@@ -933,6 +943,8 @@ void C3DCharactor::Homing_CPU(void)
 
 					// 差分
 					float fDiffAngle = fDestAngle - rot.y;
+
+					CUtilityMath::RotateNormarizePI(fDiffAngle);
 
 					DiffAngle(fDiffAngle);
 
@@ -969,7 +981,7 @@ void C3DCharactor::Attack_CPU(void)
 	//弾の生成	弾を持っているときだけ
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),GetThisCharactor()->GetPosition());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),CCharaBase::GetPosition(), CCharaBase::GetRotation());
 		m_CpuThink = THINK_NONE;
 	}
 }
@@ -1186,9 +1198,10 @@ void C3DCharactor::NearOrFur_CPU(void)
 //=============================================================================
 void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 {
-	move.x += sinf(fRot) * STEP_DEFAULT_MOVEMENT;
-	move.z += cosf(fRot) * STEP_DEFAULT_MOVEMENT;
+	move.x += sinf(fRot) * GetStep();
+	move.z += cosf(fRot) * GetStep();
 
+	GetThisCharactor()->SetNextMotion(CPlayer::MOTION_STEP);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);
 }

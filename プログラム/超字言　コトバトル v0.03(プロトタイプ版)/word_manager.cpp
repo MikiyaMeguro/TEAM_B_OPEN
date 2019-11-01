@@ -206,28 +206,20 @@ void CWordManager::Delete(void)
 //=============================================================================
 // 弾の生成
 //=============================================================================
-void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
+void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot)
 {
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 
 	if (CGame::GetPlayer(nID) != NULL)
 	{//指定したプレイヤーが存在していれば
-		CCamera* pCam = pCameraManager->GetCamera(CGame::GetPlayer(nID)->GetCameraName());
-		D3DXVECTOR3 BulletPos = BulletMuzzle;
-		D3DXVECTOR3 BulletRot = CGame::GetPlayer(nID)->GetRotation();
-		if (pCam != NULL)
-		{
-			BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
-		}
-
 		if (m_bPress == true)
 		{
 			if (m_nCntaAnswer == MAX_WORD)
-			{	// // 指定した文字なら弾を生成する
+			{	// 指定した文字なら弾を生成する
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
-					pModel->Set(BulletPos, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
+					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
@@ -235,10 +227,11 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
-					pModel->Set(BulletPos, BulletRot, CLoad::MODE_DUST, 5.0f, 100, nID);
+					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, 5.0f, 100, nID);
 				}
 			}
 
+			CGame::GetPlayer(nID)->SetNextMotion(CPlayer::MOTION_SHOT);
 			Reset();		// 設定を戻す
 			if (CGame::GetTube(m_nPlayerID) != NULL)
 			{
@@ -253,7 +246,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle)
 
 				if (pWord != NULL)
 				{
-					pWord->Set(BulletPos, BulletRot, 5.0f, 100, GetWordNum(0), nID);
+					pWord->Set(BulletMuzzle, BulletRot, 5.0f, 100, GetWordNum(0), nID);
 				}
 
 				Delete();		// 文字を一部削除

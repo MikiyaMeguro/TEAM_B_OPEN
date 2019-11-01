@@ -97,7 +97,7 @@ void CGame::Init(void)
 
 	SetPointFrame((int)NumPlayer);	// ポイントの設定
 
-	WordCreate();
+	WordCreate();				// 文字の生成
 
 	CLoadText::LoadFile();		// 文字のリソース読み込み
 
@@ -554,25 +554,25 @@ void CGame::SetPointFrame(int nNumPlayer)
 //=============================================================================
 void CGame::WordCreate(void)
 {
-	// 机
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 17);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 7);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 3);
+	// さいふ
+	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 10);
+	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 1);
+	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 27);
 
-	// 絵具
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 3);
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 24);
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 7);
+	// かるた
+	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
+	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 40);
+	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 15);
 
-	// くるま
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 7);
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 40);
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 30);
+	// かめら
+	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
+	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 33);
+	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 38);
 
-	// リンゴ
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 39);
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 45);
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 9);
+	// こえだ
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 9);
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 3);
+	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 15);
 
 	// 布団
 	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 27);

@@ -63,10 +63,11 @@ public:
 
 	typedef struct
 	{
-		int	  nLoop;								//ループするかどうか
+		int	  nLoop;								//ループするかどうか	:1ならループ
 		int   nKeyNum;								//キー数
 		KeyProperty key[MAX_KEY];					//キー情報
 
+		//初期化用
 		void operator()(void)
 		{
 			nLoop = 0;
@@ -126,11 +127,13 @@ public:
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
 	void			SetNextMotion(MOTION motion);
+	MOTION			GetMotion(void) { return m_motion; };
 private:
 	bool			CollisionBullet(void);
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
 	bool			CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
-	void			MotionUpdate(void);
+	void			MotionUpdate(void);			//モーション更新
+	int				GetNearPlayer(void);		//近いプレイヤーを取得
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX];	//パーツ情報
 
@@ -143,20 +146,25 @@ private:
 	bool m_bLand;					// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
 	int m_nCntTransTime;			//無敵時間
-
 	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号
 	CWordManager *m_pWordManager;
 
 	bool m_bSetupBullet;					//弾が撃てる状態の判定用
 
-	//モーション管理
-	MotionProperty m_propMotion[MOTION_MAX];
+	C3DCharactor* m_pLockOnCharactor;
 
-	MOTION m_Motion;
-	MOTION m_NextMotion;
-	MOTION m_OldMotion;
-	int m_nCntMotion;
-	MOTION_STATE m_MotionState;
+	/* Motion */
+	MotionProperty m_propMotion[MOTION_MAX];
+	MOTION m_motion;								//現在のモーション
+	MOTION m_OldMotion;								//一つ前のモーション
+	MOTION m_NextMotion;							//一つ後のモーション
+	KeyProperty* m_pKey, *m_pKeyNext;
+	MOTION_STATE m_Mstate;							//モーションの状態
+	int m_nCntFlame;								//フレーム用カウンタ
+	int m_nCntKey;									//キー用カウンタ
+	D3DXVECTOR3 m_aKeyPos[PLAYER_MODELNUM];		//キーの差分位置
+	D3DXVECTOR3 m_aKeyRot[PLAYER_MODELNUM];		//キーの差分角度
+	bool m_bPlayMotion;
 	int m_nCntBlendMotion;
 };
 #endif // !_PLAYER_H_

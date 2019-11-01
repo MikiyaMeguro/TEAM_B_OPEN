@@ -1,0 +1,161 @@
+#============================================================
+#
+# [モデル配置ツール]スクリプトファイル [data\TEXT\SetModel.txt]
+#  Author : MIKIYA MEGURO
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------
+#         モデル数 ※プログラム内でも変更してください
+#------------------------------------------------------------
+NUM_MODEL = 25
+
+#------------------------------------------------------------
+#    モデルファイル名  ※プログラム内でも変更してください
+#------------------------------------------------------------
+MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#0 小さい壁  
+MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#1 大きい壁
+MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 歯車
+MODEL_FILENAME = data/MODEL/Dust.x"					#3 ゴミ
+MODEL_FILENAME = data/MODEL/box000.x"				#4
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
+
+MODEL_FILENAME = data/MODEL/Car.x"					#6
+MODEL_FILENAME = data/MODEL/Bed.x"					#7 ふとん
+MODEL_FILENAME = data/MODEL/Desk.x"					#8 (机)
+MODEL_FILENAME = data/MODEL/Pulin.x"				#9 プリン
+MODEL_FILENAME = data/MODEL/Knife.x"				#10 ナイフ
+MODEL_FILENAME = data/MODEL/apple.x"				#11 リンゴ
+MODEL_FILENAME = data/MODEL/Palette.x"				#12 絵具
+MODEL_FILENAME = data/MODEL/Wheel.x"				#13 タイヤ
+MODEL_FILENAME = data/MODEL/Taico.x"				#14 太鼓
+MODEL_FILENAME = data/MODEL/coin.x"					#15 コイン
+MODEL_FILENAME = data/MODEL/Suika.x"				#16 すいか
+MODEL_FILENAME = data/MODEL/Tarai.x"				#17 たらい
+MODEL_FILENAME = data/MODEL/pot.x"					#18 やかん
+MODEL_FILENAME = data/MODEL/Ikari.x"				#19 いかり
+MODEL_FILENAME = data/MODEL/Ikada.x"				#20 いかだ
+MODEL_FILENAME = data/MODEL/saihu.x"				#21 財布
+MODEL_FILENAME = data/MODEL/Karuta.x"				#22 かるた
+MODEL_FILENAME = data/MODEL/Camera.x"				#23 かめら
+MODEL_FILENAME = data/MODEL/Twig.x"					#24 こえだ
+
+#------------------------------------------------------------
+#                      モデル配置情報
+#------------------------------------------------------------
+MODELSET
+	TYPE = 1
+	POS = 0.0 400.0 180.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.5 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 0.0 400.0 -180.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.5 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 180.0 400.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 3.5
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -180.0 400.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 3.5
+	COLLISION = 1
+END_MODELSET
+
+
+
+
+
+MODELSET
+	TYPE = 1
+	POS = 150.0 400.0 400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -150.0 400.0 400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+
+MODELSET
+	TYPE = 1
+	POS = 150.0 400.0 -400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -150.0 400.0 -400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+
+
+MODELSET
+	TYPE = 2
+	POS = 0.0 400.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 6
+END_MODELSET
+
+
+MODELSET
+	TYPE = 2
+	POS = -150.0 400.0 -250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 7
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 150.0 400.0 -250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 8
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = -150.0 400.0 250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 8
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 150.0 400.0 250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 7
+END_MODELSET
+
+
+
+END_SCRIPT		# この行は絶対消さないこと！

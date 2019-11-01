@@ -12,8 +12,9 @@
 
 #include "charactor.h"
 #define ANGLE_MOVE  (0.03f) //ƒJƒƒ‰Šp“x‚ÌˆÚ“®—Ê
-#define CAMERA_POSR_COEFFICIENT (0.18f);	//ƒJƒƒ‰’Ž‹“_‚ÌŒW”
+#define CAMERA_POSR_COEFFICIENT (0.50f);	//ƒJƒƒ‰’Ž‹“_‚ÌŒW”
 #define CAMERA_POSV_COEFFICIENT (0.18f);	//ƒJƒƒ‰Ž‹“_‚ÌŒW”
+#define CAMERA_ROT_COEFFICIENT (0.40f);		//ƒJƒƒ‰Šp“x‚ÌŒW”
 
 #define CAMERA_POS_INTERVAL (20.0f)			//ƒJƒƒ‰‚Ì’Ž‹“_‚ÌˆÊ’u
 
@@ -93,18 +94,36 @@ void CCamera::Update(void)
 		{
 			if (m_pLockOnChara != NULL)
 			{
-				D3DXVec3Lerp(&m_posRdest, &m_pLockOnChara->GetPosition(), &m_pHomingChara->GetPosition(), 0.5f);
+				//Šp“x
+				m_rotDest.y = atan2f(m_pLockOnChara->GetCameraPosR().x - m_pHomingChara->GetCameraPosR().x,
+					m_pLockOnChara->GetCameraPosR().z - m_pHomingChara->GetCameraPosR().z) - m_rot.y;
+
+				CUtilityMath::RotateNormarizePI(m_rotDest.y);
+				m_rot.y += m_rotDest.y * CAMERA_ROT_COEFFICIENT;
+
+				m_pHomingChara->GetSpin().y = m_rot.y;
+
+				//À•W
+				//D3DXVec3Lerp(&m_posRdest, &m_pLockOnChara->GetCameraPosR(), &m_pHomingChara->GetCameraPosR(), 1.0f);
+				m_posRdest = m_pHomingChara->GetCameraPosR();
+				m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
+
+				m_posVdest = m_pHomingChara->GetCameraPosR() - D3DXVECTOR3(sinf(m_rot.y) * m_fLength * 2.0f,
+					sinf(m_rot.x) * m_fLength * 2.0f,
+					cosf(m_rot.y) * m_fLength * 2.0f);
+				m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
+
 			}
 			else
 			{
 				m_posRdest = m_pHomingChara->GetCameraPosR();
+				m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
+				m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
+					sinf(m_rot.x) * m_fLength,
+					cosf(m_rot.y) * m_fLength);
+				m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 			}
 		}
-		m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
-		m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
-			sinf(m_rot.x) * m_fLength,
-			cosf(m_rot.y) * m_fLength);
-		m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 
 
 		break;
