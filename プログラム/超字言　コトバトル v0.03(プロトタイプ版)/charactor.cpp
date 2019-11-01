@@ -407,11 +407,11 @@ void C3DCharactor::CharaMove_Input(void)
 	spin.y = CameraRot.y - rot.y;
 
 	//âÒì]êßå‰
-	CUtilityMath::RotateRivisionPI(spin.y);
+	CUtilityMath::RotateNormarizePI(spin.y);
 
 	rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateRivisionPI(rot.y);
+	CUtilityMath::RotateNormarizePI(rot.y);
 
 	spin.y = 0.0f;
 
@@ -679,9 +679,9 @@ void C3DCharactor::DiffAngle(float fDiffAngle)
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 
 	// ç∑ï™
-	CUtilityMath::RotateRivisionPI(fDiffAngle);
+	CUtilityMath::RotateNormarizePI(fDiffAngle);
 	rot.y += fDiffAngle * 0.1f;
-	CUtilityMath::RotateRivisionPI(rot.y);
+	CUtilityMath::RotateNormarizePI(rot.y);
 }
 
 //=============================================================================
@@ -774,11 +774,11 @@ void C3DCharactor::CharaMove_CPU(void)
 
 
 	//âÒì]êßå‰
-	CUtilityMath::RotateRivisionPI(spin.y);
+	CUtilityMath::RotateNormarizePI(spin.y);
 
 	rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateRivisionPI(rot.y);
+	CUtilityMath::RotateNormarizePI(rot.y);
 
 	spin.y = 0.0f;
 
@@ -825,11 +825,11 @@ void C3DCharactor::Rotation_CPU(void)
 	spin.y = ChangeRot.y - rot.y;
 
 	//âÒì]êßå‰
-	CUtilityMath::RotateRivisionPI(spin.y);
+	CUtilityMath::RotateNormarizePI(spin.y);
 
 	rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateRivisionPI(rot.y);
+	CUtilityMath::RotateNormarizePI(rot.y);
 
 	spin.y = 0.0f;
 
@@ -906,7 +906,7 @@ void C3DCharactor::Homing_CPU(void)
 
 					DiffAngle(fDiffAngle);
 
-					CUtilityMath::RotateRivisionPI(fDiffAngle);
+					CUtilityMath::RotateNormarizePI(fDiffAngle);
 
 					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
 					{

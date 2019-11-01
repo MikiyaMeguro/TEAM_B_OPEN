@@ -76,12 +76,13 @@ public:
 	OBJTYPE GetObjType(void);									// オブジェクトの種類の取得
 	void SetObjType(OBJTYPE objType);							// オブジェクトの種類の設定
 	int GetPriority(void);
-	static void SetbPause(bool bPause) { m_bPause = bPause; };
+	static void SetbPause(bool bPause) { m_bPause = bPause;	};
 	static bool GetbPause(void) { return m_bPause; };
 
 protected:
 	void Release(void);											// 死亡フラグを立てる
 
+	int m_nCount;												//汎用カウンタ
 private:
 	void DeleteAll(void);										// 死亡フラグが立ったオブジェクトを消す
 

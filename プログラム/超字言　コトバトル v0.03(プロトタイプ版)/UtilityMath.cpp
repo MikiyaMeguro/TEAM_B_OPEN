@@ -9,7 +9,7 @@
 //=============================================================================
 //	Šp“x•â³ŠÖ”
 //=============================================================================
-float CUtilityMath::RotateRivisionPI(float& value)
+float CUtilityMath::RotateNormarizePI(float& value)
 {
 	if (value > D3DX_PI)
 	{
