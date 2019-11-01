@@ -21,7 +21,7 @@
 #define KNOCKBACK_MOVE_DURING		(6.0f)			// ノックバックの強度(中)
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
 #define GEAR_ROT_Y					(0.1f)			// ギアの回転量　ベース情報
-#define MODEL_MOVE_Y				(0.5f)			// モデル移動時の移動速度
+#define MODEL_MOVE_Y				(2.0f)			// モデル移動時の移動速度
 #define AFFECTED_LANDING			(10.0f)			// モデル着地時のノックバック影響量
 
 //*****************************************************************************

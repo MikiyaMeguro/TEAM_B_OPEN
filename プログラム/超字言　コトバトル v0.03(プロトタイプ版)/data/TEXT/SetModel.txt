@@ -9,40 +9,43 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 24
+NUM_MODEL = 25
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
 #------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/Car.x"					#0
-MODEL_FILENAME = data/MODEL/Bed.x"					#1 ふとん
-MODEL_FILENAME = data/MODEL/Desk.x"					#2 (机)
-MODEL_FILENAME = data/MODEL/Pulin.x"				#3 プリン
-MODEL_FILENAME = data/MODEL/Knife.x"				#4 ナイフ
-MODEL_FILENAME = data/MODEL/apple.x"				#5 リンゴ
-MODEL_FILENAME = data/MODEL/Palette.x"				#6 絵具
-MODEL_FILENAME = data/MODEL/Wheel.x"				#7 タイヤ
-MODEL_FILENAME = data/MODEL/Taico.x"				#8 太鼓
-MODEL_FILENAME = data/MODEL/coin.x"					#9 コイン
-MODEL_FILENAME = data/MODEL/Suika.x"				#10 すいか
-MODEL_FILENAME = data/MODEL/Tarai.x"				#11 たらい
-MODEL_FILENAME = data/MODEL/pot.x"					#12 やかん
-MODEL_FILENAME = data/MODEL/Ikari.x"				#13 いかり
-MODEL_FILENAME = data/MODEL/Ikada.x"				#14 いかだ
-MODEL_FILENAME = data/MODEL/saihu.x"				#15 財布
-MODEL_FILENAME = data/MODEL/Karuta.x"				#16 かるた
-MODEL_FILENAME = data/MODEL/Camera.x"				#17 かめら
-MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#18 小さい壁  
-MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#19 大きい壁
-MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#20 歯車
-MODEL_FILENAME = data/MODEL/Dust.x"					#21 ゴミ
-MODEL_FILENAME = data/MODEL/box000.x"				#22
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#23
+MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#0 小さい壁  
+MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#1 大きい壁
+MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 歯車
+MODEL_FILENAME = data/MODEL/Dust.x"					#3 ゴミ
+MODEL_FILENAME = data/MODEL/box000.x"				#4
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
+
+MODEL_FILENAME = data/MODEL/Car.x"					#6
+MODEL_FILENAME = data/MODEL/Bed.x"					#7 ふとん
+MODEL_FILENAME = data/MODEL/Desk.x"					#8 (机)
+MODEL_FILENAME = data/MODEL/Pulin.x"				#9 プリン
+MODEL_FILENAME = data/MODEL/Knife.x"				#10 ナイフ
+MODEL_FILENAME = data/MODEL/apple.x"				#11 リンゴ
+MODEL_FILENAME = data/MODEL/Palette.x"				#12 絵具
+MODEL_FILENAME = data/MODEL/Wheel.x"				#13 タイヤ
+MODEL_FILENAME = data/MODEL/Taico.x"				#14 太鼓
+MODEL_FILENAME = data/MODEL/coin.x"					#15 コイン
+MODEL_FILENAME = data/MODEL/Suika.x"				#16 すいか
+MODEL_FILENAME = data/MODEL/Tarai.x"				#17 たらい
+MODEL_FILENAME = data/MODEL/pot.x"					#18 やかん
+MODEL_FILENAME = data/MODEL/Ikari.x"				#19 いかり
+MODEL_FILENAME = data/MODEL/Ikada.x"				#20 いかだ
+MODEL_FILENAME = data/MODEL/saihu.x"				#21 財布
+MODEL_FILENAME = data/MODEL/Karuta.x"				#22 かるた
+MODEL_FILENAME = data/MODEL/Camera.x"				#23 かめら
+MODEL_FILENAME = data/MODEL/Twig.x"					#24 こえだ
+
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = 0.0 400.0 180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
@@ -50,7 +53,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = 0.0 400.0 -180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
@@ -58,7 +61,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = 180.0 400.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
@@ -66,7 +69,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = -180.0 400.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
@@ -78,7 +81,7 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = 150.0 400.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
@@ -86,7 +89,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = -150.0 400.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
@@ -95,7 +98,7 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = 150.0 400.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
@@ -103,7 +106,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 19
+	TYPE = 1
 	POS = -150.0 400.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
@@ -113,7 +116,7 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 20
+	TYPE = 2
 	POS = 0.0 400.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
@@ -122,7 +125,7 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 20
+	TYPE = 2
 	POS = -150.0 400.0 -250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
@@ -130,7 +133,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 20
+	TYPE = 2
 	POS = 150.0 400.0 -250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
@@ -138,7 +141,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 20
+	TYPE = 2
 	POS = -150.0 400.0 250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
@@ -146,7 +149,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 20
+	TYPE = 2
 	POS = 150.0 400.0 250.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
