@@ -107,7 +107,7 @@ void CObject::Update(void)
 			if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
 				Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 			{	// ベルトコンベアの場合
-				pos.y = pos.y - CSceneX::GetVtxMin().y;
+				pos.y = pos.y - CSceneX::GetVtxMin().y - 1.9f;
 				CSceneX::SetPosition(pos);
 				m_nRealTime = REALTIME_NONE;
 			}

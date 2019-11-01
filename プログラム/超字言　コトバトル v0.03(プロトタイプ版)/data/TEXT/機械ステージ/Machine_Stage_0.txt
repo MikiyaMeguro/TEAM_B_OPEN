@@ -1,6 +1,6 @@
 #============================================================
 #
-# [モデル配置ツール]スクリプトファイル [data\TEXT\SetModel.txt]
+# [モデル配置ツール]スクリプトファイル 
 #  Author : MIKIYA MEGURO
 #
 #============================================================
@@ -9,44 +9,40 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 25
+NUM_MODEL = 21
 
 #------------------------------------------------------------
-#    モデルファイル名  ※プログラム内でも変更してください
+#    モデルの種類 (読み込み済み)
 #------------------------------------------------------------
-MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#0 小さい壁  
-MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#1 大きい壁
-MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 歯車
-MODEL_FILENAME = data/MODEL/Dust.x"					#3 ゴミ
-MODEL_FILENAME = data/MODEL/box000.x"				#4
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
+	#0 小さい壁  
+	#1 大きい壁
+	#2 歯車
+	#3 ベルトコンベア
 
-MODEL_FILENAME = data/MODEL/Car.x"					#6
-MODEL_FILENAME = data/MODEL/Bed.x"					#7 ふとん
-MODEL_FILENAME = data/MODEL/Desk.x"					#8 (机)
-MODEL_FILENAME = data/MODEL/Pulin.x"				#9 プリン
-MODEL_FILENAME = data/MODEL/Knife.x"				#10 ナイフ
-MODEL_FILENAME = data/MODEL/apple.x"				#11 リンゴ
-MODEL_FILENAME = data/MODEL/Palette.x"				#12 絵具
-MODEL_FILENAME = data/MODEL/Wheel.x"				#13 タイヤ
-MODEL_FILENAME = data/MODEL/Taico.x"				#14 太鼓
-MODEL_FILENAME = data/MODEL/coin.x"					#15 コイン
-MODEL_FILENAME = data/MODEL/Suika.x"				#16 すいか
-MODEL_FILENAME = data/MODEL/Tarai.x"				#17 たらい
-MODEL_FILENAME = data/MODEL/pot.x"					#18 やかん
-MODEL_FILENAME = data/MODEL/Ikari.x"				#19 いかり
-MODEL_FILENAME = data/MODEL/Ikada.x"				#20 いかだ
-MODEL_FILENAME = data/MODEL/saihu.x"				#21 財布
-MODEL_FILENAME = data/MODEL/Karuta.x"				#22 かるた
-MODEL_FILENAME = data/MODEL/Camera.x"				#23 かめら
-MODEL_FILENAME = data/MODEL/Twig.x"					#24 こえだ
+#------------------------------------------------------------
+#    当たり判定の種類 
+#------------------------------------------------------------
+	# 0 : 当たり判定無し
+	# 1 : ボックス当り判定
+	# 2 : ベルトコンベア ( 移動方向 -> 前方 )
+	# 3 : ベルトコンベア ( 移動方向 -> 右 )
+	# 4 : ベルトコンベア ( 移動方向 -> 後方 )
+	# 5 : ベルトコンベア ( 移動方向 -> 左 )
+	# 6 : ノックバック ( 威力-> 小 )
+	# 7 : ノックバック ( 威力-> 中 )
+	# 8 : ノックバック ( 威力-> 大 )
 
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
+
+#------------------------------------------
+# 中央の壁 4個
+#------------------------------------------
+
 MODELSET
 	TYPE = 1
-	POS = 0.0 400.0 180.0
+	POS = 0.0 0.0 180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
 	COLLISION = 1
@@ -54,7 +50,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 0.0 400.0 -180.0
+	POS = 0.0 0.0 -180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
 	COLLISION = 1
@@ -62,7 +58,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 180.0 400.0 0.0
+	POS = 180.0 0.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
 	COLLISION = 1
@@ -70,19 +66,20 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -180.0 400.0 0.0
+	POS = -180.0 0.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
 	COLLISION = 1
 END_MODELSET
 
 
-
-
+#------------------------------------------
+# ステージ端の壁 (奥と手前) 4個
+#------------------------------------------
 
 MODELSET
 	TYPE = 1
-	POS = 150.0 400.0 400.0
+	POS = 150.0 0.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -90,7 +87,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -150.0 400.0 400.0
+	POS = -150.0 0.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -99,7 +96,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 150.0 400.0 -400.0
+	POS = 150.0 0.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -107,55 +104,122 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -150.0 400.0 -400.0
+	POS = -150.0 0.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
 END_MODELSET
 
 
+#------------------------------------------
+# ステージ端の壁 (右 と 左) 4個
+#------------------------------------------
 
 MODELSET
-	TYPE = 2
-	POS = 0.0 400.0 0.0
+	TYPE = 1
+	POS = 400.0 0.0 150.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 6
+	SCALE = 0.8 0.8 3.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -400.0 0.0 150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 3.0
+	COLLISION = 1
 END_MODELSET
 
 
 MODELSET
-	TYPE = 2
-	POS = -150.0 400.0 -250.0
+	TYPE = 1
+	POS = 400.0 0.0 -150.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 7
+	SCALE = 0.8 0.8 3.0
+	COLLISION = 1
 END_MODELSET
 
 MODELSET
-	TYPE = 2
-	POS = 150.0 400.0 -250.0
+	TYPE = 1
+	POS = -400.0 0.0 -150.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 8
+	SCALE = 0.8 0.8 3.0
+	COLLISION = 1
+END_MODELSET
+
+#------------------------------------------
+# ステージ端のベルトコンベア (奥 と 手間) 4個
+#------------------------------------------
+
+MODELSET
+	TYPE = 3
+	POS = 150.0 0.0 368.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 0.1 0.8
+	COLLISION = 3
 END_MODELSET
 
 MODELSET
-	TYPE = 2
-	POS = -150.0 400.0 250.0
+	TYPE = 3
+	POS = -150.0 0.0 368.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 8
+	SCALE = 3.0 0.1 0.8
+	COLLISION = 5
+END_MODELSET
+
+
+MODELSET
+	TYPE = 3
+	POS = 150.0 0.0 -368.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 0.1 0.8
+	COLLISION = 3
 END_MODELSET
 
 MODELSET
-	TYPE = 2
-	POS = 150.0 400.0 250.0
+	TYPE = 3
+	POS = -150.0 0.0 -368.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 7
+	SCALE = 3.0 0.1 0.8
+	COLLISION = 5
+END_MODELSET
+
+#------------------------------------------
+# ステージ端のベルトコンベア (右 と 左) 4個
+#------------------------------------------
+
+MODELSET
+	TYPE = 3
+	POS = 368.0 0.0 150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.1 3.0
+	COLLISION = 4
+END_MODELSET
+
+MODELSET
+	TYPE = 3
+	POS = 368.0 0.0 -150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.1 3.0
+	COLLISION = 2
 END_MODELSET
 
 
+MODELSET
+	TYPE = 3
+	POS = -368.0 0.0 150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.1 3.0
+	COLLISION = 4
+END_MODELSET
+
+MODELSET
+	TYPE = 3
+	POS = -368.0 0.0 -150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.1 3.0
+	COLLISION = 2
+END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
