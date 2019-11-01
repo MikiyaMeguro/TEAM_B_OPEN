@@ -219,6 +219,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
+					m_nCreateType = m_nCreateType + (int)CLoad::MODEL_CAR0;
 					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
 				}
 			}

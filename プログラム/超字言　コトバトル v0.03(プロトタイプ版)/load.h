@@ -51,6 +51,7 @@ public:
 		MODEL_KARUTA,	// Ç©ÇÈÇΩ
 		MODEL_CAMERA,	// ÉJÉÅÉâ
 		MODEL_TWIG,		// Ç±Ç¶Çæ
+		MODEL_STRAWBERRY,// ÉCÉ`ÉS
 		MODEL_MAX,
 	} MODEL;
 
