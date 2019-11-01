@@ -132,7 +132,8 @@ private:
 	bool			CollisionBullet(void);
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
 	bool			CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
-	void			MotionUpdate(void);
+	void			MotionUpdate(void);			//モーション更新
+	int				GetNearPlayer(void);		//近いプレイヤーを取得
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX];	//パーツ情報
 
@@ -145,7 +146,6 @@ private:
 	bool m_bLand;					// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
 	int m_nCntTransTime;			//無敵時間
-
 	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号
 	CWordManager *m_pWordManager;
 

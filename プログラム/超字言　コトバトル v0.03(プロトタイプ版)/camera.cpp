@@ -12,7 +12,7 @@
 
 #include "charactor.h"
 #define ANGLE_MOVE  (0.03f) //カメラ角度の移動量
-#define CAMERA_POSR_COEFFICIENT (0.18f);	//カメラ注視点の係数
+#define CAMERA_POSR_COEFFICIENT (0.50f);	//カメラ注視点の係数
 #define CAMERA_POSV_COEFFICIENT (0.18f);	//カメラ視点の係数
 
 #define CAMERA_POS_INTERVAL (20.0f)			//カメラの注視点の位置
@@ -99,7 +99,7 @@ void CCamera::Update(void)
 				m_pHomingChara->GetSpin().y = m_rot.y;
 
 				//座標
-				D3DXVec3Lerp(&m_posRdest, &m_pLockOnChara->GetCameraPosR(), &m_pHomingChara->GetCameraPosR(), 0.5f);
+				D3DXVec3Lerp(&m_posRdest, &m_pLockOnChara->GetCameraPosR(), &m_pHomingChara->GetCameraPosR(), 1.0f);
 				//m_posRdest = m_pLockOnChara->GetCameraPosR();
 				m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
 

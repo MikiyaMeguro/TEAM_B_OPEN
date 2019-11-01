@@ -21,6 +21,7 @@ CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];
 //=============================================================================
 // マクロ定義
 //=============================================================================
+#define PLAYER_LOCKON_LENGTH (200.0f)
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 #define KUMA_POWER_LOADTEXT "data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
 //=============================================================================
@@ -196,11 +197,15 @@ void CPlayer::Update(void)
 	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
 	{
 		//テスト
-		m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(1)->GetCharaMover());
-
-		if (pCam != NULL)
+		int nPlayer = GetNearPlayer();
+		if (nPlayer != -1)
 		{
-			pCam->SetLockOnChara(m_pLockOnCharactor);
+			m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+			if (pCam != NULL)
+			{
+				pCam->SetLockOnChara(m_pLockOnCharactor);
+			}
 		}
 	}
 	else
@@ -322,9 +327,9 @@ void CPlayer::MotionUpdate(void)
 			{
 				rot.y += 3.14f;
 			}
-			CUtilityMath::RotateRivisionPI(rot.x);
-			CUtilityMath::RotateRivisionPI(rot.y);
-			CUtilityMath::RotateRivisionPI(rot.z);
+			CUtilityMath::RotateNormarizePI(rot.x);
+			CUtilityMath::RotateNormarizePI(rot.y);
+			CUtilityMath::RotateNormarizePI(rot.z);
 
 			m_pPlayerParts[nCntModel]->SetRotation(rot);
 		}
@@ -472,46 +477,113 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 
 		if (pScene->GetDeath() == false)
 		{// 死亡フラグが立っていないもの
-			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
-			{// オブジェクトの種類を確かめる
-				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
-				{
-					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
-					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-					if (m_bLand == true)
-					{// モデルに当たる
-						bHit = true;
-						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
-						{
-							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
-							{	// ベルトコンベアの判定
-								pSceneObj->BeltConveyor(move);
-							}
-							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
-								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-							{	// ノックバックの判定
-								pSceneObj->KnockBack(move, m_nID);
-							}
-						}
-						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
-						{
-							pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
-						}
-						break;
-					}
-					else
+		if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+		{// オブジェクトの種類を確かめる
+			CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+			if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+			{
+				m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+				CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+				if (m_bLand == true)
+				{// モデルに当たる
+					bHit = true;
+					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
 					{
-						bHit = false;
+						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+						{	// ベルトコンベアの判定
+							pSceneObj->BeltConveyor(move);
+						}
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+						{	// ノックバックの判定
+							pSceneObj->KnockBack(move, m_nID);
+						}
 					}
+					else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
+					{
+						pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
+					}
+					break;
+				}
+				else
+				{
+					bHit = false;
 				}
 			}
+		}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
 	return bHit;
+}
+//=============================================================================
+// 近いプレイヤーを取得する処理
+//=============================================================================
+int		CPlayer::GetNearPlayer(void)
+{
+	D3DXVECTOR3 PlayerPos[4] = {};
+	D3DXVECTOR3 PlayerRot[4] = {};
+	CCharaBase* pChara = NULL;
+	CPlayer* pPlayer = NULL;
+	int nCntPlayer = 0;
+	//値の取得
+	for (nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		pChara = NULL;
+		pPlayer = NULL;
+
+		pPlayer = CGame::GetPlayer(nCntPlayer);
+		if (pPlayer != NULL)
+		{
+			pChara = pPlayer->GetCharaMover();
+			if (pChara != NULL)
+			{//キャラクラス内にある座標を取得
+				PlayerPos[nCntPlayer] = pChara->GetPosition();
+				PlayerRot[nCntPlayer] = pChara->GetRotation();	//比較に使うためyの値にπを足す
+			}
+			else
+			{//キャラクラスが消えた場合も巨大な値を入れる
+				PlayerPos[nCntPlayer] = D3DXVECTOR3(-99999.9f, -99999.9f, -99999.9f);
+				PlayerRot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+		}
+		else
+		{	//プレイヤーがいない場合は巨大な値を入れる
+			PlayerPos[nCntPlayer] = D3DXVECTOR3(-99999.9f, -99999.9f, -99999.9f);
+			PlayerRot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		}
+	}
+
+	//値の比較
+	float fNearLength = 99999.9f;
+	int nPlayerNum = -1;
+	for (nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		if (nCntPlayer != m_nID)
+		{//自分以外と判定を行う
+
+			//距離を取得(-は省く)
+			float fLength = fabsf(sqrtf(powf(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, 2.0f) +
+				powf(PlayerPos[m_nID].y - PlayerPos[nCntPlayer].y, 2.0f) +
+				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)
+			)
+			);
+
+			//角度比較
+			//float fRotDest = atan2f(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z);
+			//CUtilityMath::RotateNormarizePI(fRotDest);
+
+				if (fLength < fNearLength &&
+					fLength < PLAYER_LOCKON_LENGTH)
+				{
+					nPlayerNum = nCntPlayer;
+					fNearLength = fLength;
+				}
+		}
+	}
+	return nPlayerNum;
 }
 
 //=============================================================================
