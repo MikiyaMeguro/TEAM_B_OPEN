@@ -473,7 +473,8 @@ void C3DCharactor::CharaMove_Input(void)
 	pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
 		pCamera->GetType(),
 		pCamera->GetPosR(),
-		CameraRot,pCamera->GetLength());
+		CameraRot,
+		pCamera->GetLength());
 
 	//ƒJƒƒ‰‚ÌŽQÆˆÊ’u§Œä
 	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
@@ -926,7 +927,7 @@ void C3DCharactor::Attack_CPU(void)
 	//’e‚Ì¶¬	’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),GetThisCharactor()->GetPosition());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),CCharaBase::GetPosition(), CCharaBase::GetRotation());
 		m_CpuThink = THINK_NONE;
 	}
 }

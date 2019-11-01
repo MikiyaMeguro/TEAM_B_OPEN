@@ -21,7 +21,7 @@ CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_LOCKON_LENGTH (200.0f)
+#define PLAYER_LOCKON_LENGTH (150.0f)
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 #define KUMA_POWER_LOADTEXT "data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
 //=============================================================================
@@ -194,6 +194,29 @@ void CPlayer::Update(void)
 
 	//セット
 		CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
+		D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
+
+		// 弾の生成
+		if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
+		{
+			if (m_pWordManager != NULL)
+			{//文字管理クラスに弾の生成を委託する
+				if (pCam != NULL)
+				{
+					BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+				}
+
+				CUtilityMath::RotateNormarizePI(BulletRot.x);
+				CUtilityMath::RotateNormarizePI(BulletRot.y);
+
+				m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
+				if (m_pWordManager->GetCntNum() == 0)
+				{
+					m_bSetupBullet = false;
+				}
+			}
+		}
+
 	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
 	{
 		//テスト
@@ -207,6 +230,14 @@ void CPlayer::Update(void)
 				pCam->SetLockOnChara(m_pLockOnCharactor);
 			}
 		}
+		else
+		{
+			m_pLockOnCharactor = NULL;
+			if (pCam != NULL)
+			{
+				pCam->SetLockOnChara(NULL);
+			}
+		}
 	}
 	else
 	{
@@ -214,19 +245,6 @@ void CPlayer::Update(void)
 		if (pCam != NULL)
 		{
 			pCam->SetLockOnChara(NULL);
-		}
-	}
-
-	// 弾の生成
-	if (CCommand::GetCommand("PLAYER_SHOTBULLET",m_nID))
-	{
-		if (m_pWordManager != NULL)
-		{//文字管理クラスに弾の生成を委託する
-			m_pWordManager->BulletCreate(m_nID,m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f,10.0f,0.0f));
-			if (m_pWordManager->GetCntNum() == 0)
-			{
-				m_bSetupBullet = false;
-			}
 		}
 	}
 
@@ -276,6 +294,10 @@ void CPlayer::Update(void)
 
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x," ",testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
+	CDebugProc::Print("cn", "PLAYER.LockOn : ", m_pLockOnCharactor != NULL ? 1 : 0);
+	CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
+
+
 #endif
 }
 
@@ -567,14 +589,9 @@ int		CPlayer::GetNearPlayer(void)
 			//距離を取得(-は省く)
 			float fLength = fabsf(sqrtf(powf(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, 2.0f) +
 				powf(PlayerPos[m_nID].y - PlayerPos[nCntPlayer].y, 2.0f) +
-				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)
-			)
-			);
+				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)));
 
 			//角度比較
-			//float fRotDest = atan2f(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z);
-			//CUtilityMath::RotateNormarizePI(fRotDest);
-
 				if (fLength < fNearLength &&
 					fLength < PLAYER_LOCKON_LENGTH)
 				{
