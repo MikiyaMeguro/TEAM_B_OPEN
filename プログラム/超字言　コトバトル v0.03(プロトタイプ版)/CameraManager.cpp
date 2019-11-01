@@ -9,6 +9,7 @@
 
 
 #define CAMERANAME_SETCAMERA_NONE "NONE"	//カメラがまだセットされてない時にm_SetCameraに入れる文字列
+#define BACK_DEFAULT_COLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
 //===================================================================
 // コンストラクタ&デストラクタ
 //===================================================================
@@ -75,7 +76,7 @@ bool CCameraManager::SetCamera(LPCSTR Tag)
 				m_SetCamera = result->CameraTag;
 
 				// バックバッファ＆Ｚバッファのクリア
-				pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 255), 1.0f, 0);
+				pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), result->BackgroundColor, 1.0f, 0);
 
 				return true;
 			}
@@ -103,7 +104,9 @@ bool CCameraManager::CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVEC
 			{
 				CameraState.pCamera->Set(type, pos, rot, fLength);
 				CameraState.CameraTag = Tag;
+				CameraState.BackgroundColor = BACK_DEFAULT_COLOR;
 				m_vecCameraState.emplace_back(CameraState);
+
 				return true;
 			}
 		}
@@ -192,6 +195,28 @@ bool CCameraManager::SetCameraLockOnChara(LPCSTR Tag, C3DCharactor* pLockOnChara
 
 }
 
+//===================================================================
+// 背景色設定処理
+//===================================================================
+bool CCameraManager::SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col)
+{
+	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
+
+	if (result != m_vecCameraState.end())
+	{//カメラ名が定義されていれば
+		result->BackgroundColor = col;
+
+		return true;
+	}
+
+	return false;
+
+
+}
+
+//===================================================================
+// カメラ取得処理
+//===================================================================
 CCamera* CCameraManager::GetCamera(LPCSTR Tag)
 {
 	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
