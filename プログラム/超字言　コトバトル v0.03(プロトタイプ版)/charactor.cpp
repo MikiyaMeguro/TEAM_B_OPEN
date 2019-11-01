@@ -783,8 +783,8 @@ void C3DCharactor::CharaMove_CPU(void)
 	}
 
 #ifdef _DEBUG
-	CDebugProc::Print("cn", "ActionTimer :", m_nActionTimer);
-	CDebugProc::Print("cn", "CpuMove :", m_CpuMove);
+	//CDebugProc::Print("cn", "ActionTimer :", m_nActionTimer);
+	//CDebugProc::Print("cn", "CpuMove :", m_CpuMove);
 #endif
 
 }
@@ -891,6 +891,7 @@ void C3DCharactor::Homing_CPU(void)
 			{//©•ª‚ÌID‚Æˆê’v‚µ‚Ä‚¢‚È‚¯‚ê‚ÎÀs
 				// ‹——£‚ğ‘ª‚é
 				float fCircle = ((Pos.x - PlayerPos[nCntPlayer].x) * (Pos.x - PlayerPos[nCntPlayer].x)) + ((Pos.z - PlayerPos[nCntPlayer].z) * (Pos.z - PlayerPos[nCntPlayer].z));
+
 				if (fCircle < fAngle * fAngle && fCircle > fLength)
 				{	// ‹——£“à‚É“ü‚Á‚½‚ç
 					if (m_CpuThink != THINK_WATCH)
@@ -917,11 +918,43 @@ void C3DCharactor::Homing_CPU(void)
 					{
 						fDestAngle += D3DX_PI * 2.0f;
 					}
-
+					//‹–ì“à‚É“ü‚Á‚½‚çŒ‚‚Â
 					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
 					{
 						m_CpuThink = THINK_ATTACK;
 					}
+				}
+				else if(fCircle < 100 * 2000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+				{// ‹——£“à‚É“ü‚è’e‚ğ‚Á‚Ä‚¢‚é
+					float DiffDis = (PlayerPos[nCntPlayer].x + Pos.x) / 2;
+					TargetPos = D3DXVECTOR3((PlayerPos[nCntPlayer].x + Pos.x) / 2, (PlayerPos[nCntPlayer].y + Pos.y) / 2, (PlayerPos[nCntPlayer].z + Pos.z) / 2);
+					// –Ú“I‚ÌŠp“x
+					float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
+
+					// ·•ª
+					float fDiffAngle = fDestAngle - rot.y;
+
+					DiffAngle(fDiffAngle);
+
+					if (fDestAngle > D3DX_PI)
+					{
+						fDestAngle -= D3DX_PI * 2.0f;
+					}
+					if (fDestAngle < -D3DX_PI)
+					{
+						fDestAngle += D3DX_PI * 2.0f;
+					}
+					//‹–ì“à‚É“ü‚Á‚½‚çŒ‚‚Â
+					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
+					{
+						m_CpuThink = THINK_ATTACK;
+					}
+				}
+				else if(fCircle > 100 * 2000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+				{// ‹——£ŠO‚Å’e‚ğ‚Á‚Ä‚¢‚é
+					m_CpuThink = THINK_MOVE;
+					m_CpuMove = CPU_MOVE_FRONT;
+					m_nActionTimer = 10;
 				}
 			}
 		}
@@ -983,9 +1016,8 @@ void C3DCharactor::PickUP_CPU(void)
 				// ‹——£‚ğ‘ª‚é
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
 
-				if (fCircle < 300 * 100)
-				{//”ÍˆÍ“à‚É•¶š‚ª‚ ‚Á‚½
-					nCntNearWord++;		//‰ÁZ
+				if (fCircle < 10000000 && bTango == false)
+				{
 					float fNum = (float)pWord->GetWordNum();	// •¶š‚Ì”Ô†‚ğæ“¾
 					for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
 					{	// Œó•â‚Ì”‰ñ‚µ‚Ä •¶š”Ô†‚Æ‡‚Á‚Ä‚¢‚é‚©‚ğ”äŠr
@@ -998,7 +1030,11 @@ void C3DCharactor::PickUP_CPU(void)
 							break;
 						}
 					}
-					if (bTango == false)
+				}
+
+				if (fCircle < 50000 && bTango == false)
+				{//”ÍˆÍ“à‚É•¶š‚ª‚ ‚Á‚½
+					nCntNearWord++;		//‰ÁZ
 					{//’PŒê‚ªŠ®¬‚µ‚È‚¢‚Æ‚«‚Í“K“–‚ÉE‚¤
 						//ˆê”Ô‹ß‚¢‹——£‚ğ‹L‰¯
 						m_fCompareRange = fCircle;
@@ -1041,6 +1077,30 @@ void C3DCharactor::PickUP_CPU(void)
 //=============================================================================
 void C3DCharactor::HaveBullet_CPU(void)
 {
+	int	nCntNear = 0;
+
+	//’N‚ª‹ß‚¢‚©
+	NearOrFur_CPU();
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		if (m_bNear[nCntPlayer] == false)
+		{
+			nCntNear++;
+		}
+	}
+
+
+	if (nCntNear > 0)
+	{//‹ß‚­‚É“G‚ª‚¢‚é
+		m_CpuThink = THINK_HOMING;
+		m_nActionTimer = 5;
+	}
+	else
+	{//‹ß‚­‚É“G‚ª‚¢‚È‚¢
+		m_CpuThink = THINK_MOVE;
+		m_CpuMove = CPU_MOVE_FRONT;
+		m_nActionTimer = 30;
+	}
 
 }
 
