@@ -9,7 +9,7 @@ SCRIPT			# Ç±ÇÃçsÇÕê‚ëŒè¡Ç≥Ç»Ç¢Ç±Ç∆ÅI
 #------------------------------------------------------------
 #         ÉÇÉfÉãêî Å¶ÉvÉçÉOÉâÉÄì‡Ç≈Ç‡ïœçXÇµÇƒÇ≠ÇæÇ≥Ç¢
 #------------------------------------------------------------
-NUM_MODEL = 22
+NUM_MODEL = 18
 
 #------------------------------------------------------------
 #    ÉÇÉfÉãÇÃéÌóﬁ (ì«Ç›çûÇ›çœÇ›)
@@ -37,69 +37,28 @@ NUM_MODEL = 22
 #------------------------------------------------------------
 
 #------------------------------------------
-# 1ñ  ï« 2å¬ (X : 1Å`10 Z : 1Å`10)
+# 1ñ  ï« 5å¬ (X : 1Å`10 Z : 1Å`10)
 #------------------------------------------
 
 MODELSET
 	TYPE = 1
-	POS = -200.0 0.0 340.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 6.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = -240.0 0.0 140.0
+	POS = -330.0 0.0 320.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 2.0
 	COLLISION = 1
 END_MODELSET
 
-
-#------------------------------------------
-# 1ñ  ÉMÉA 1å¬ (X : 1Å`10 Z : 1Å`10)
-#------------------------------------------
-
-MODELSET
-	TYPE = 2
-	POS = -75 0.0 340.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 1.0 0.8 1.0
-	COLLISION = 6
-END_MODELSET
-
-#------------------------------------------
-# 2ñ  ï« 5å¬ (X : 11Å`20 Z : 1Å`10)
-#------------------------------------------
-
 MODELSET
 	TYPE = 1
-	POS = 220.0 0.0 340.0
+	POS = -200.0 0.0 40.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
+	SCALE = 0.8 0.8 2.0
 	COLLISION = 1
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 100.0 0.0 100.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = 400.0 0.0 70.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = 100.0 0.0 180.0
+	POS = -200.0 0.0 160.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
@@ -107,7 +66,42 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 100.0 0.0 260.0
+	POS = -171.0 0.0 190.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -142.0 0.0 220.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+#------------------------------------------
+# 2ñ  ï« 3å¬ (X : 11Å`20 Z : 1Å`10)
+#------------------------------------------
+MODELSET
+	TYPE = 1
+	POS = 330.0 0.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.0 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 120.0 0.0 200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 2.0
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 240.0 0.0 180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
@@ -118,29 +112,10 @@ END_MODELSET
 #------------------------------------------
 MODELSET
 	TYPE = 0
-	POS = 100.0 0.0 220.0
+	POS = 180.0 0.0 180.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.5 1.5 6.8
+	SCALE = 3.2 1.5 2.5
 	COLLISION = 1
-END_MODELSET
-
-#------------------------------------------
-# 2ñ  ÉmÉbÉNÉoÉbÉN 2å¬ (X : 11Å`20 Z : 1Å`10)
-#------------------------------------------
-MODELSET
-	TYPE = 2
-	POS = 30.0 0.0 100.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 8
-END_MODELSET
-
-MODELSET
-	TYPE = 2
-	POS = 370.0 0.0 110.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 7
 END_MODELSET
 
 #------------------------------------------
@@ -148,39 +123,23 @@ END_MODELSET
 #------------------------------------------
 MODELSET
 	TYPE = 1
-	POS = -220.0 0.0 -340.0
+	POS = -330.0 0.0 -320.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
+	SCALE = 2.0 0.8 0.8
 	COLLISION = 1
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -100.0 0.0 -100.0
+	POS = -120.0 0.0 -200.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
+	SCALE = 0.8 0.8 2.0
 	COLLISION = 1
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -400.0 0.0 -70.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = -100.0 0.0 -180.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = -100.0 0.0 -260.0
+	POS = -240.0 0.0 -180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
@@ -191,62 +150,53 @@ END_MODELSET
 #------------------------------------------
 MODELSET
 	TYPE = 0
-	POS = -100.0 0.0 -220.0
+	POS = -180.0 0.0 -180.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.5 1.5 6.8
+	SCALE = 3.2 1.5 2.5
 	COLLISION = 1
 END_MODELSET
 
 #------------------------------------------
-# 3ñ  ÉmÉbÉNÉoÉbÉN 2å¬ (X : 1Å`10 Z : 11Å`20)
+# 4ñ  ï« 5å¬ (X : 11Å`20 Z : 11Å`20)
 #------------------------------------------
-MODELSET
-	TYPE = 2
-	POS = -30.0 0.0 -100.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 8
-END_MODELSET
-
-MODELSET
-	TYPE = 2
-	POS = -370.0 0.0 -110.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 7
-END_MODELSET
-
-#------------------------------------------
-# 4ñ  ï« 2å¬ (X : 11Å`20 Z : 11Å`20)
-#------------------------------------------
-
 MODELSET
 	TYPE = 1
-	POS = 200.0 0.0 -340.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 6.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = 240.0 0.0 -140.0
+	POS = 330.0 0.0 -320.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 2.0
 	COLLISION = 1
 END_MODELSET
 
-
-#------------------------------------------
-# 4ñ  ÉMÉA 1å¬ (X : 11Å`20 Z : 11Å`20)
-#------------------------------------------
+MODELSET
+	TYPE = 1
+	POS = 200.0 0.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 2.0
+	COLLISION = 1
+END_MODELSET
 
 MODELSET
-	TYPE = 2
-	POS = 75 0.0 -340.0
+	TYPE = 1
+	POS = 200.0 0.0 -160.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 1.0 0.8 1.0
-	COLLISION = 6
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 171.0 0.0 -190.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 142.0 0.0 -220.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
 END_MODELSET
 
 END_SCRIPT		# Ç±ÇÃçsÇÕê‚ëŒè¡Ç≥Ç»Ç¢Ç±Ç∆ÅI

@@ -57,6 +57,7 @@ private:
 	int						m_nTimeNum;			// 時間の表示数字数
 	int						m_nWaitTime;		// ゲーム終了時の待ち時間
 	int						m_nNumPlayer;		// 人数保管
+	int						m_nStageChange;		// ステージが切り替わる時間
 	bool					m_bStart;
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pColon;			// コロン

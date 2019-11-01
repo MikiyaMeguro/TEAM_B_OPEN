@@ -42,7 +42,7 @@ public:
 	static CSetObject *Create();
 	D3DXVECTOR3 GetPos(void);
 
-	static void LoadFile(void);
+	static void LoadFile(char *pFileName);
 
 	static char *ReadLine(FILE *pFile, char *pDst);	//1s“Ç‚İ‚İ
 	static char *GetLineTop(char *pStr);			//s‚Ìæ“ª‚ğæ“¾

@@ -16,7 +16,7 @@
 #define PLAYER_DEPTH	(15)		// プレイヤーの幅調整用
 #define PLAYER_HEIGHT	(50.0f)		// プレイヤーの背の高さ
 
-#define FILE_NAME0				("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
+#define FILE_NAME0				("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
 
 //--------------------------------------------
 //静的メンバ変数宣言
@@ -85,7 +85,7 @@ void CSetObject::Update(void)
 
 	if (pInput->GetTrigger(DIK_RCONTROL) == true)
 	{	//ファイルロード
-		LoadFile();
+		LoadFile(FILE_NAME0);
 	}
 }
 
@@ -106,7 +106,7 @@ void CSetObject::Draw(void)
 //=============================================================================
 // オブジェクトの配置情報を読み込み
 //=============================================================================
-void CSetObject::LoadFile(void)
+void CSetObject::LoadFile(char *pFileName)
 {
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
@@ -127,7 +127,7 @@ void CSetObject::LoadFile(void)
 	int			nCollisionType;
 
 	//ファイルを開く 読み込み
-	pFile = fopen(FILE_NAME0, "r");
+	pFile = fopen(pFileName, "r");
 	//NULLチェック
 	if (pFile != NULL)
 	{

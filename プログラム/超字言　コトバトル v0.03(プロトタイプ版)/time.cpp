@@ -72,6 +72,7 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nTimeCount = 0;
 	m_nTimeNum = 1;
 	m_nWaitTime = 0;
+	m_nStageChange = 0;
 	m_pColon = NULL;
 	m_bStart = false;
 }
@@ -331,10 +332,17 @@ void CTime::TimeManagement(void)
 	if (m_nTimeCount % 60 == 0)
 	{// 1ïbÇ≤Ç∆Ç…å∏éZ(êßå¿éûä‘)
 		m_nTime--;
+		m_nStageChange++;
 		int nNum = m_nTime - m_nTimeOld;
 		if (nNum < 0) { m_nTime -= 40; m_nTimeOld -= 100; }
 		if (m_nTime < 0) { m_nTime = 0; }
 		//m_nTimeNum = PowerCalculation(m_nTime, 0);
+	}
+
+	if ((m_nStageChange % 30) == 0)
+	{	// 30ïbÇ≤Ç∆Ç…ÉXÉeÅ[ÉWÇ™ïœÇÌÇÈ
+		int nStageNum = m_nStageChange % 30;
+		CManager::GetGame()->SetStage(nStageNum);
 	}
 }
 //=============================================================================

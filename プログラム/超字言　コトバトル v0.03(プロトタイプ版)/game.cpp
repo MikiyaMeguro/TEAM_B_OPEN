@@ -41,6 +41,14 @@
 
 #define CAMERA_DEFAULT_LENGTH (100.0f)
 #define CAMERA_ROTX (-0.05f)
+
+//--------------------------
+// 機械ステージ
+//--------------------------
+#define MACHINE_STAGE_0	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
+#define MACHINE_STAGE_1	("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
+#define MACHINE_STAGE_2	("data\\TEXT\\機械ステージ\\Machine_Stage_2.txt")
+
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
@@ -73,6 +81,11 @@ void CGame::Init(void)
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 	//CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_1P;//テスト
 	CameraSetting((int)NumPlayer);
+
+	m_pcStageName[0] = { MACHINE_STAGE_0};
+	m_pcStageName[1] = { MACHINE_STAGE_1 };
+	m_pcStageName[2] = { MACHINE_STAGE_2 };
+
 
 	//壁、床設定
 	//CScene3D* p3D = NULL;
@@ -548,7 +561,16 @@ void CGame::SetPointFrame(int nNumPlayer)
 	}
 }
 
-
+//=============================================================================
+// ステージ生成の処理
+//=============================================================================
+void CGame::SetStage(int nCntState)
+{
+	if (nCntState < MAX_STAGE)
+	{
+		CSetObject::LoadFile(m_pcStageName[nCntState]);
+	}
+}
 //=============================================================================
 // 文字管理の処理
 //=============================================================================

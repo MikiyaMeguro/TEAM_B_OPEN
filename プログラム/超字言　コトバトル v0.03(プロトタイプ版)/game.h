@@ -47,6 +47,7 @@ class CPoint;
 #define WORD_TUBE004_POS_4P		(D3DXVECTOR3(1220.0f, 590.0f, 0.0f))	// 4画面時(4P)の位置
 
 #define MAX_PLAYER (4)
+#define MAX_STAGE	(3)			// ステージの最大数
 
 //クラス（シーン2Dの派生クラス）
 class CGame
@@ -62,6 +63,7 @@ public:
 	static CGame *Create(void);
 
 	void WordCreate(void);	// 文字の生成の管理
+	void SetStage(int nCntState);	// ステージの生成
 
 	// 取得の関数
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
@@ -77,6 +79,8 @@ private:
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPoint *m_pPoint[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
+
+	char *m_pcStageName[MAX_STAGE];		// ステージの名前保管
 
 };
 #endif
