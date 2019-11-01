@@ -29,8 +29,8 @@ public:
 		MODE_WALL_SMALL = 0,// 小さい壁
 		MODE_WALL_BIG,	// 大きい壁
 		MODE_GEAR,		// 歯車
-		MODE_DUST,		// ゴミ
 		MODEL_BOX,		// 箱
+		MODE_DUST,		// ゴミ
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_CAR0,		// 車0
 		MODEL_CAR1,		// 車1

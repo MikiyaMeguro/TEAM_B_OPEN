@@ -17,8 +17,8 @@ NUM_MODEL = 25
 MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#0 è¨Ç≥Ç¢ï«  
 MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#1 ëÂÇ´Ç¢ï«
 MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 éïé‘
-MODEL_FILENAME = data/MODEL/box000.x"				#3 
-MODEL_FILENAME = data/MODEL/Dust.x"					#4 ÉSÉ~
+MODEL_FILENAME = data/MODEL/Dust.x"					#3 ÉSÉ~
+MODEL_FILENAME = data/MODEL/box000.x"				#4
 MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
 
 MODEL_FILENAME = data/MODEL/Car.x"					#6
