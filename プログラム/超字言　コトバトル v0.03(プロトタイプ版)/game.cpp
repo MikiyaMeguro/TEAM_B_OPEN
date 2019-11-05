@@ -618,10 +618,10 @@ void CGame::WordCreate(void)
 	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 30);
 	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 9);
 
-	// ナイフ
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 20);
+	// マイク
+	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 30);
 	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 27);
+	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 7);
 
 	// タイヤ
 	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 15);

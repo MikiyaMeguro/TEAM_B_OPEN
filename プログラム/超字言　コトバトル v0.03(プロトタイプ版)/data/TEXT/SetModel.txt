@@ -22,7 +22,7 @@ MODEL_FILENAME = data/MODEL/Dust.x"					#4 ゴミ
 MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
 
 MODEL_FILENAME = data/MODEL/Car.x"					#6 車
-MODEL_FILENAME = data/MODEL/Bed.x"					#7 ふとん
+MODEL_FILENAME = data/MODEL/Mic.x"					#7 まいく
 MODEL_FILENAME = data/MODEL/Desk.x"					#8 (机)
 MODEL_FILENAME = data/MODEL/Pulin.x"				#9 プリン
 MODEL_FILENAME = data/MODEL/Knife.x"				#10 ナイフ
