@@ -111,6 +111,7 @@ public:
 	float&		GetStep(void) { return m_fStep; };
 	float&		 GetMoveCoeffient(void) { return m_fMoveCoeffient; };
 	float&		GetSpinCoeffient(void) { return m_fSpinCoeffient; };
+	float&		GetMoveCofBlend(void) { return m_fCofMoveBlend; };
 
 	CHARACTOR_MOVE_TYPE GetMoveType(void) { return m_type; };
 
@@ -141,6 +142,7 @@ public:
 	CPU_TYPE m_Type;
 	D3DXVECTOR3 m_RespawnPos;	//出現位置
 
+	float m_fCofMoveBlend;	//スティック角に応じた移動係数
 };
 
 class C2DCharactor : public CCharaBase

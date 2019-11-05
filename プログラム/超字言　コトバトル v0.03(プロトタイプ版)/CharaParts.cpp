@@ -155,7 +155,6 @@ void CCharaParts::Draw(void)
 			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
 			/*テクスチャの設定*/
-			//pDevice->SetTexture(0, m_pTexture[nCntMat]);//テクスチャの設定(使わなければNULLを入れる)
 			pDevice->SetTexture(0, m_pTexture);//テクスチャの設定(使わなければNULLを入れる)
 
 			// モデル(パーツ)の描画

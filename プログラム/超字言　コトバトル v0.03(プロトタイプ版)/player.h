@@ -16,7 +16,7 @@
 
 
 #define PLAYER_MODELNUM (20)
-#define MOTION_BLENDTIME (10)
+#define MOTION_BLENDTIME (8)
 #define MAX_KEY (20)
 //class CScene3D;
 class CSceneX;
@@ -59,6 +59,15 @@ public:
 		int nFrame;							//フレーム数
 		D3DXVECTOR3 Pos[PLAYER_MODELNUM];	//位置
 		D3DXVECTOR3 Rot[PLAYER_MODELNUM];	//向き
+		void operator()(void)
+		{
+			nFrame = 0;
+			for (int nCntPlayer = 0; nCntPlayer < PLAYER_MODELNUM; nCntPlayer++)
+			{
+				Pos[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				Rot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+		}
 	}KeyProperty;
 
 	typedef struct
@@ -158,12 +167,9 @@ private:
 	MOTION m_motion;								//現在のモーション
 	MOTION m_OldMotion;								//一つ前のモーション
 	MOTION m_NextMotion;							//一つ後のモーション
-	KeyProperty* m_pKey, *m_pKeyNext;
 	MOTION_STATE m_Mstate;							//モーションの状態
 	int m_nCntFlame;								//フレーム用カウンタ
 	int m_nCntKey;									//キー用カウンタ
-	D3DXVECTOR3 m_aKeyPos[PLAYER_MODELNUM];		//キーの差分位置
-	D3DXVECTOR3 m_aKeyRot[PLAYER_MODELNUM];		//キーの差分角度
 	bool m_bPlayMotion;
 	int m_nCntBlendMotion;
 };
