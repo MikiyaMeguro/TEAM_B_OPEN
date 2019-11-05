@@ -13,6 +13,7 @@
 #include "load.h"
 #include "player.h"
 #include "game.h"
+#include "time.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -22,7 +23,7 @@
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
 #define GEAR_ROT_Y					(0.1f)			// ギアの回転量　ベース情報
 #define MODEL_MOVE_Y				(2.0f)			// モデル移動時の移動速度
-#define AFFECTED_LANDING			(10.0f)			// モデル着地時のノックバック影響量
+#define AFFECTED_LANDING			(15.0f)			// モデル着地時のノックバック影響量
 
 //*****************************************************************************
 // 静的メンバ変数
@@ -96,57 +97,10 @@ void CObject::Uninit(void)
 void CObject::Update(void)
 {
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
-	if (m_nRealTime == REALTIME_INITPOS)
-	{	// 移動フラグがfalse 動かない場合
-		D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
-		pos.y -= MODEL_MOVE_Y;						// 移動速度
+	ModelMove(Collsiontype, pos);	// モデルの移動
 
-		if (pos.y - CSceneX::GetVtxMin().y < 0)
-		{	// 地面に着いた場合
-			if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-				Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
-			{	// ベルトコンベアの場合
-				pos.y = pos.y - CSceneX::GetVtxMin().y - 1.9f;
-				CSceneX::SetPosition(pos);
-				m_nRealTime = REALTIME_NONE;
-			}
-			else if (Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
-				Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Collsiontype != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
-			{	// ベルトコンベア以外の場合
-				pos.y = pos.y - CSceneX::GetVtxMin().y;
-				CSceneX::SetPosition(pos);
-				m_nRealTime = REALTIME_NONE;
-			}
-		}
-		CSceneX::SetPosition(pos);
-	}
-	else if (m_nRealTime == REALTIME_NONE)
-	{
-		if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-		{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
-			D3DXVECTOR3 rot = CSceneX::GetRot();
-
-			// 強弱の種類によって回転量を変化
-			rot.y += GEAR_ROT_Y * ((int)Collsiontype - (int)COLLSIONTYPE_CONVEYOR_LEFT);
-
-			CSceneX::SetRot(rot);
-		}
-	}
-	else if (m_nRealTime == REALTIME_ENDPOS)
-	{	// 移動フラグがtrue 動く場合
-		D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
-		
-		pos.y -= MODEL_MOVE_Y;						// 移動速度
-
-		CSceneX::SetPosition(pos);
-
-		if (pos.y + CSceneX::GetVtxMax().y < 0)
-		{	// 地面より下の場合
-			Uninit();
-			return;
-		}
-	}
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "ModelPos : x", m_pos.x, "f", "   y", m_pos.y, "f", "  z", m_pos.z, "f");
 	if (CManager::GetInputKeyboard()->GetTrigger(DIK_RSHIFT))
@@ -233,4 +187,63 @@ void CObject::AffectedLanding(D3DXVECTOR3 *pMove, int nID)
 	float fPlayer = CGame::GetPlayer(nID)->GetRotation().y;
 	pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
 	pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
+}
+
+//=============================================================================
+// モデルの移動関係の処理
+//=============================================================================
+void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
+{
+	if (m_nRealTime == REALTIME_INITPOS)
+	{	// 移動フラグがfalse 動かない場合
+		pos.y -= MODEL_MOVE_Y;						// 移動速度
+
+		if (pos.y - CSceneX::GetVtxMin().y < 0)
+		{	// 地面に着いた場合
+			if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+				Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
+			{	// ベルトコンベアの場合
+				pos.y = pos.y - CSceneX::GetVtxMin().y - 1.9f;
+				CSceneX::SetPosition(pos);
+				m_nRealTime = REALTIME_NONE;
+			}
+			else if (Type != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
+				Type != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
+			{	// ベルトコンベア以外の場合
+				pos.y = pos.y - CSceneX::GetVtxMin().y;
+				CSceneX::SetPosition(pos);
+				m_nRealTime = REALTIME_NONE;
+			}
+		}
+		CSceneX::SetPosition(pos);
+	}
+	else if (m_nRealTime == REALTIME_NONE)
+	{	// 動かない場合
+		if (Type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || Type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || Type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+		{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
+			D3DXVECTOR3 rot = CSceneX::GetRot();
+
+			// 強弱の種類によって回転量を変化
+			rot.y += GEAR_ROT_Y * ((int)Type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
+
+			CSceneX::SetRot(rot);
+		}
+
+		if ((CTime::GetStageTime() % 30) == 0) { 
+			m_nRealTime = REALTIME_ENDPOS; }
+	}
+	else if (m_nRealTime == REALTIME_ENDPOS)
+	{	// 移動フラグがtrue 動く場合
+
+		pos.y -= MODEL_MOVE_Y;						// 移動速度
+
+		CSceneX::SetPosition(pos);
+
+		if (pos.y + CSceneX::GetVtxMax().y < 0)
+		{	// 地面より下の場合
+			Uninit();
+			return;
+		}
+	}
+
 }

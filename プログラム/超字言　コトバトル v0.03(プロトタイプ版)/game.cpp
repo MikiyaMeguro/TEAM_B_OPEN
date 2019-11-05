@@ -134,6 +134,8 @@ void CGame::Init(void)
 
 	CSetObject::Create();
 
+	SetStage(0);		// ステージ生成
+
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
 	{
 		CTime::Create((int)NumPlayer);
@@ -445,7 +447,7 @@ void CGame::PlayerSetting(int nNum)
 	else
 	{
 		// 人数分を生成
-		for (int nCntPlayer = 0; nCntPlayer < 3; nCntPlayer++)
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 		{
 			if (m_pPlayer[nCntPlayer] == NULL)
 			{
@@ -533,6 +535,16 @@ void CGame::TubeSetting(int nNum)
 		break;
 
 	default:
+		for (int nCntTube = 0; nCntTube < MAX_PLAYER; nCntTube++)
+		{
+			if (m_apTube[nCntTube] == NULL)
+			{
+				if (nCntTube == 0) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_1P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 1) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_2P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 2) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE003_POS_3P, WORD_TUBE002_SIZE, "TUBE", 3); }
+				if (nCntTube == 3) { m_apTube[nCntTube] = CTube::Create(WORD_TUBE004_POS_4P, WORD_TUBE002_SIZE, "TUBE", 3); }
+			}
+		}
 		break;
 	}
 }

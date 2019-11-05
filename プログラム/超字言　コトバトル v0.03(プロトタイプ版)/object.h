@@ -37,9 +37,9 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	void BeltConveyor(D3DXVECTOR3 *pMove);		// 移動床の処理
+	void BeltConveyor(D3DXVECTOR3 *pMove);					// 移動床の処理
 	void KnockBack(D3DXVECTOR3 *pMove, int nID);			// ノックバック
-	void AffectedLanding(D3DXVECTOR3 *pMove, int nID);	// モデルの着地時の影響
+	void AffectedLanding(D3DXVECTOR3 *pMove, int nID);		// モデルの着地時の影響
 
 	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL model);	// オブジェクトの生成
 	static HRESULT Load(void);
@@ -49,6 +49,8 @@ public:
 	REALTIME GetRealTimeType(void) { return m_nRealTime; }
 
 private:
+	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
+
 	bool m_bMoveFlag;		// 移動フラグ
 	REALTIME m_nRealTime;	// リアルタイムで移動するFlagの変数
 };
