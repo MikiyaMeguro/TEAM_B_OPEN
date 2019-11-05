@@ -102,7 +102,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 
 	ModelLoad(KUMA_POWER_LOADTEXT,TYPE_POWER);
 
-	SetNextMotion(MOTION_STEP);
+	SetNextMotion(MOTION_NEUTRAL);
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
@@ -277,6 +277,7 @@ void CPlayer::Update(void)
 	}
 
 	MotionUpdate();
+
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 
@@ -341,67 +342,126 @@ void CPlayer::Draw(void)
 //=============================================================================
 void CPlayer::MotionUpdate(void)
 {
-	int nFutureKey = (m_nCntKey + 1) % (m_propMotion[m_motion].nKeyNum);
+	KeyProperty pKey, pKeyNext;
 
-	m_pKey = &m_propMotion[m_motion].key[m_nCntKey];
-	m_pKeyNext = &m_propMotion[m_motion].key[nFutureKey];
-
+	float fFlameMotion;
+	int nFutureKey;
+	D3DXVECTOR3 aKeyPos[PLAYER_MODELNUM];
+	D3DXVECTOR3 aKeyRot[PLAYER_MODELNUM];
 	m_nCntFlame++;
-	for (int nCntModel = 0; nCntModel < PLAYER_MODELNUM; nCntModel++)
+
+	switch (m_Mstate)
 	{
-		if (m_pPlayerParts[nCntModel] != NULL)
+	case STATE_NORMAL:
+		nFutureKey = (m_nCntKey + 1) % (m_propMotion[m_motion].nKeyNum);
+		pKey = m_propMotion[m_motion].key[m_nCntKey];
+		pKeyNext = m_propMotion[m_motion].key[nFutureKey];
+
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			if (m_pPlayerParts[nCntParts] != NULL)
+			{
+				//現在の角度を取得
+				D3DXVECTOR3 rot = m_pPlayerParts[nCntParts]->GetRotation();
+
+				//現在のキーから次のキーへの再生フレーム数におけるモーションカウンターの相対値を算出
+				fFlameMotion = (float)(m_nCntFlame + 1) / ((float)pKey.nFrame);
+
+				//現在のキーから次のキーへの角度の差分を算出
+				aKeyRot[nCntParts].x = (pKeyNext.Rot[nCntParts].x - pKey.Rot[nCntParts].x);
+				aKeyRot[nCntParts].y = (pKeyNext.Rot[nCntParts].y - pKey.Rot[nCntParts].y);
+				aKeyRot[nCntParts].z = (pKeyNext.Rot[nCntParts].z - pKey.Rot[nCntParts].z);
+
+				//求めた差分を現在のキーに係数を掛けながら足す
+				rot = pKey.Rot[nCntParts] + (aKeyRot[nCntParts] * fFlameMotion);
+
+				if (nCntParts == 0)
+				{
+					rot.y += 3.14f;
+				}
+
+				CUtilityMath::RotateNormarizePI(rot.x);
+				CUtilityMath::RotateNormarizePI(rot.y);
+				CUtilityMath::RotateNormarizePI(rot.z);
+
+				m_pPlayerParts[nCntParts]->SetRotation(rot);
+			}
+		}
+
+		if (m_nCntFlame == m_propMotion[m_motion].key[m_nCntKey].nFrame)
+		{//既定のフレームが経過したら
+
+			m_nCntFlame = 0;
+			m_nCntKey++;	//キーを加算
+			if (m_nCntKey >= m_propMotion[m_motion].nKeyNum)
+			{//キーが既定の数値に達したら
+				m_nCntKey = 0;
+				if (m_propMotion[m_motion].nLoop == 0)
+				{
+					m_bPlayMotion = false;
+					if (m_pWordManager->GetBulletFlag())
+					{
+						SetNextMotion(MOTION_SETUP_NEUTRAL);
+					}
+					else
+					{
+						SetNextMotion(MOTION_NEUTRAL);
+					}
+				}
+			}
+		}
+		break;
+	case STATE_BLEND:
+		if (m_motion == MOTION_NONE)
 		{
 
-			D3DXVECTOR3 rot = m_pPlayerParts[nCntModel]->GetRotation();
-			float fFlameMotion = (float)(m_nCntFlame + 1) / (float)m_pKey->nFrame;
-			m_aKeyRot[nCntModel].x = (m_pKeyNext->Rot[nCntModel].x -
-				m_pKey->Rot[nCntModel].x) *
-				fFlameMotion;
-
-			m_aKeyRot[nCntModel].y = (m_pKeyNext->Rot[nCntModel].y -
-				m_pKey->Rot[nCntModel].y) *
-				fFlameMotion;
-
-			m_aKeyRot[nCntModel].z = (m_pKeyNext->Rot[nCntModel].z -
-				m_pKey->Rot[nCntModel].z) *
-				fFlameMotion;
-
-			rot = m_pKey->Rot[nCntModel] + m_aKeyRot[nCntModel];
-			if (nCntModel == 0)
-			{
-				rot.y += 3.14f;
-			}
-			CUtilityMath::RotateNormarizePI(rot.x);
-			CUtilityMath::RotateNormarizePI(rot.y);
-			CUtilityMath::RotateNormarizePI(rot.z);
-
-			m_pPlayerParts[nCntModel]->SetRotation(rot);
 		}
-	}
+		else
+		{
+			pKey = m_propMotion[m_OldMotion].key[m_nCntKey];
+		}
+		pKeyNext = m_propMotion[m_motion].key[0];
 
-	if (m_nCntFlame == m_propMotion[m_motion].key[m_nCntKey].nFrame)
-	{//既定のフレームが経過したら
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			if (m_pPlayerParts[nCntParts] != NULL)
+			{
+				//現在の角度を取得
+				D3DXVECTOR3 rot = m_pPlayerParts[nCntParts]->GetRotation();
 
-		m_nCntFlame = 0;
-		m_nCntKey++;	//キーを加算
-		if (m_nCntKey >= m_propMotion[m_motion].nKeyNum)
-		{//キーが既定の数値に達したら
+				//ブレンド係数を算出
+				fFlameMotion = (float)(m_nCntBlendMotion + 1) / MOTION_BLENDTIME;
+
+				//現在のキーから次のキーへの角度の差分を算出
+				aKeyRot[nCntParts].x = (pKeyNext.Rot[nCntParts].x - pKey.Rot[nCntParts].x);
+				aKeyRot[nCntParts].y = (pKeyNext.Rot[nCntParts].y - pKey.Rot[nCntParts].y);
+				aKeyRot[nCntParts].z = (pKeyNext.Rot[nCntParts].z - pKey.Rot[nCntParts].z);
+
+				//求めた差分を現在のキーに係数を掛けながら足す
+				rot = pKey.Rot[nCntParts] + (aKeyRot[nCntParts] * fFlameMotion);
+
+				if (nCntParts == 0)
+				{
+					rot.y += 3.14f;
+				}
+
+				CUtilityMath::RotateNormarizePI(rot.x);
+				CUtilityMath::RotateNormarizePI(rot.y);
+				CUtilityMath::RotateNormarizePI(rot.z);
+
+				m_pPlayerParts[nCntParts]->SetRotation(rot);
+			}
+		}
+
+		m_nCntBlendMotion++;
+		if (m_nCntBlendMotion >= MOTION_BLENDTIME)
+		{//既定のフレームが経過したら
+			m_nCntBlendMotion = 0;
 			m_nCntKey = 0;
-			if (m_propMotion[m_motion].nLoop == 0)
-			{
-				m_bPlayMotion = false;
-				if (m_pWordManager->GetBulletFlag())
-				{
-					SetNextMotion(MOTION_SETUP_NEUTRAL);
-				}
-				else
-				{
-					SetNextMotion(MOTION_NEUTRAL);
-				}
-			}
+			m_Mstate = STATE_NORMAL;
 		}
+		break;
 	}
-
 	CDebugProc::Print("cn","MOTION = ",(int)m_motion);
 }
 
@@ -414,15 +474,10 @@ void	CPlayer::SetNextMotion(MOTION motion)
 	{//現在入っているモーションと違うもの
 		m_OldMotion = m_motion;
 		m_motion = motion;
-		m_NextMotion = motion;
+		//m_NextMotion = motion;
 		m_Mstate = STATE_BLEND;
 		m_nCntBlendMotion = 0;
-		m_nCntKey = 0;
 		m_nCntFlame = 0;
-		for (int nCntModel = 0; nCntModel < PLAYER_MODELNUM; nCntModel++)
-		{
-			m_aKeyRot[nCntModel] = D3DXVECTOR3(0.0f,0.0f,0.0f);
-		}
 		if (m_propMotion[m_motion].nLoop == 0)
 		{
 			m_bPlayMotion = true;
