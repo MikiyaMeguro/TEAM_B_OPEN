@@ -179,7 +179,10 @@ void CPlayer::Update(void)
 		}
 
 		// モデルとの当たり判定
-		CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
+		if ((CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON)) == true)
+		{
+			CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
+		}
 		testpos = m_pCharactorMove->GetPosition();
 		testmove = m_pCharactorMove->GetMove();
 
@@ -306,6 +309,21 @@ void CPlayer::Update(void)
 //=============================================================================
 void CPlayer::Draw(void)
 {
+	// レンダラーを取得
+	CRenderer *pRenderer;
+	pRenderer = CManager::GetRenderer();
+
+	// デバイスを取得
+	LPDIRECT3DDEVICE9 pDevice = NULL;
+
+	if (pRenderer != NULL)
+	{
+		pDevice = pRenderer->GetDevice();
+	}
+
+	// ライトの無効化
+	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 		if (m_pPlayerParts[nCntParts] != NULL)
@@ -313,6 +331,10 @@ void CPlayer::Draw(void)
 			m_pPlayerParts[nCntParts]->Draw();
 		}
 	}
+
+	// ライトを元に戻る
+	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 }
 //=============================================================================
 // モーション更新処理
@@ -509,6 +531,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				if (m_bLand == true)
 				{// モデルに当たる
 					bHit = true;
+
 					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
 					{
 						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
@@ -525,6 +548,9 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
 					{
 						pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
+					}
+					else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
+					{
 					}
 					break;
 				}

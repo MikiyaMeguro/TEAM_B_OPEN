@@ -45,6 +45,8 @@ public:
 
 	static bool GetTimeFlag(void) { return m_bCountFlag; };
 	static void SetTimeFlag(bool bFlag) { m_bCountFlag = bFlag; };
+
+	static int GetStageTime(void) { return m_nStageChange; }	// ステージ切替時の時間取得
 private:
 	void DebugKey(void);
 	void TimeManagement(void);
@@ -54,11 +56,12 @@ private:
 	static int				m_nTimeNumCount;	// 時間の表示回数
 	static int				m_nTimeCount;		// 時間のカウンタ
 	static int				m_nTimeOld;
+	static int				m_nStageChange;		// ステージが切り替わる時間
 	int						m_nTimeNum;			// 時間の表示数字数
 	int						m_nWaitTime;		// ゲーム終了時の待ち時間
 	int						m_nNumPlayer;		// 人数保管
-	int						m_nStageChange;		// ステージが切り替わる時間
 	bool					m_bStart;
+	bool					m_bStageCreate;		// ステージ生成時の制限
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pColon;			// コロン
 

@@ -157,6 +157,9 @@ void CSceneX::Draw(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
+	// ライトの無効化
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+
 	//頂点法線の自動正規化
 	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
 
@@ -230,6 +233,10 @@ void CSceneX::Draw(void)
 
 	//頂点法線の自動正規化
 	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
+
+	// ライトを元に戻る
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 
 #endif
 }
@@ -324,8 +331,8 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 
 	if (m_CollisionType != COLLISIONTYPE_NONE)
 	{
-		if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
-			|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && pos->y <= m_pos.y + ScaleVtxMin.y
+		if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE &&pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
+			|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y &&pos->y <= m_pos.y + ScaleVtxMin.y
 			|| pos->y + radius.y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE && pos->y >= m_pos.y + ScaleVtxMin.y)
 		{// yの範囲の中
 			if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
@@ -353,7 +360,8 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 					bLand = true;
 				}
 			}
-			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x >= m_pos.x + ScaleVtxMin.x)
+			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x &&
+				pos->x + radius.x >= m_pos.x + ScaleVtxMin.x)
 			{// xの範囲の中
 				if (posOld->z + radius.z <= m_pos.z + ScaleVtxMin.z
 					&& pos->z + radius.z > m_pos.z + ScaleVtxMin.z)
