@@ -29,7 +29,7 @@
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
-CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];		//ロード情報格納用
+CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX][BODY_MAX];		//ロード情報格納用
 
 //=============================================================================
 // コンストラクタ&デストラクタ
@@ -41,13 +41,17 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
 	m_pPlayerNum = NULL;
-	m_nCntKey = 0;
-	m_nCntFlame = 0;
-	m_motion = MOTION_NONE;
-	m_OldMotion = MOTION_NONE;
-	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
-		m_pPlayerParts[nCntParts] = NULL;
+		m_nCntKey[nCntBody] = 0;
+		m_nCntFlame[nCntBody] = 0;
+		m_motion[nCntBody] = MOTION_NONE;
+		m_OldMotion[nCntBody] = MOTION_NONE;
+
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			m_pPlayerParts[nCntParts][nCntBody] = NULL;
+		}
 	}
 }
 CPlayer::~CPlayer()
@@ -109,19 +113,25 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	switch (PlayerType)
 	{
 	case TYPE_NORMAL:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType,LOWER_BODY);
 		break;
 	case TYPE_POWER:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType, LOWER_BODY);
 		break;
 	case TYPE_SPEED:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType, LOWER_BODY);
 		break;
 	case TYPE_REACH:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType, LOWER_BODY);
 		break;
 	}
 
+	//上半身と下半身を連結
+	if (m_pPlayerParts[0][0] != NULL &&
+		m_pPlayerParts[0][1] != NULL)
+	{//上半身の親モデルと下半身の親モデルの両方が存在していれば
+		m_pPlayerParts[0][UPPER_BODY]->SetParent(m_pPlayerParts[0][LOWER_BODY]->GetMatrix());	//上半身の親が下半身
+	}
 
 	SetMotion(MOTION_NEUTRAL);
 
@@ -156,12 +166,14 @@ void CPlayer::Uninit(void)
 	//キャラ情報クラス削除
 	ObjRelease(m_pCharactorMove);
 
-	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
-		ObjRelease(m_pPlayerParts[nCntParts]);
-		m_pPlayerParts[nCntParts] = NULL;
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			ObjRelease(m_pPlayerParts[nCntParts][nCntBody]);
+			m_pPlayerParts[nCntParts][nCntBody] = NULL;
+		}
 	}
-
 	// プレイヤー番号破棄
 	if (m_pPlayerNum != NULL)
 	{
@@ -217,29 +229,29 @@ void CPlayer::Update(void)
 	}
 
 	//セット
-		CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
-		D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
+	CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
+	D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
 
-		// 弾の生成
-		if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
-		{
-			if (m_pWordManager != NULL)
-			{//文字管理クラスに弾の生成を委託する
-				if (pCam != NULL)
-				{
-					BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
-				}
+	// 弾の生成
+	if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
+	{
+		if (m_pWordManager != NULL)
+		{//文字管理クラスに弾の生成を委託する
+			if (pCam != NULL)
+			{
+				BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+			}
 
-				CUtilityMath::RotateNormarizePI(BulletRot.x);
-				CUtilityMath::RotateNormarizePI(BulletRot.y);
+			CUtilityMath::RotateNormarizePI(BulletRot.x);
+			CUtilityMath::RotateNormarizePI(BulletRot.y);
 
-				m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
-				if (m_pWordManager->GetCntNum() == 0)
-				{
-					m_bSetupBullet = false;
-				}
+			m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
+			if (m_pWordManager->GetCntNum() == 0)
+			{
+				m_bSetupBullet = false;
 			}
 		}
+	}
 
 	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
 	{
@@ -283,11 +295,14 @@ void CPlayer::Update(void)
 	else
 	{
 		m_nCntTransTime = -1;
-		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 		{
-			if (m_pPlayerParts[nCntParts] != NULL)
+			for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 			{
-				m_pPlayerParts[nCntParts]->SetDrawFlag(true);
+				if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+				{
+					m_pPlayerParts[nCntParts][nCntBody]->SetDrawFlag(true);
+				}
 			}
 		}
 	}
@@ -298,26 +313,26 @@ void CPlayer::Update(void)
 	}
 
 	MotionUpdate();
-
-	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
-
-		if (m_pPlayerParts[nCntParts] != NULL)
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 		{
-			if (m_nCntTransTime % 2 == 0)
-			{//ダメージ時の点滅処理
-				m_pPlayerParts[nCntParts]->SetDrawFlag(!m_pPlayerParts[nCntParts]->GetDrawFlag());
-			}
+			if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+			{
+				if (m_nCntTransTime % 2 == 0)
+				{//ダメージ時の点滅処理
+					m_pPlayerParts[nCntParts][nCntBody]->SetDrawFlag(!m_pPlayerParts[nCntParts][nCntBody]->GetDrawFlag());
+				}
 
-			m_pPlayerParts[nCntParts]->Update();
+				m_pPlayerParts[nCntParts][nCntBody]->Update();
+			}
 		}
 	}
-
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
 	testmove = m_pCharactorMove->GetMove();
 
-	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x," ",testpos.y, " ", testpos.z);
+	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x, " ", testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
 	CDebugProc::Print("cn", "PLAYER.LockOn : ", m_pLockOnCharactor != NULL ? 1 : 0);
 	CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
@@ -345,15 +360,16 @@ void CPlayer::Draw(void)
 
 	// ライトの無効化
 	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-
-	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
-		if (m_pPlayerParts[nCntParts] != NULL)
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 		{
-			m_pPlayerParts[nCntParts]->Draw();
+			if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+			{
+				m_pPlayerParts[nCntParts][nCntBody]->Draw();
+			}
 		}
 	}
-
 	// ライトを元に戻る
 	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
@@ -369,24 +385,24 @@ void CPlayer::MotionUpdate(BODY body)
 	int nFutureKey;
 	D3DXVECTOR3 aKeyPos[PLAYER_MODELNUM];
 	D3DXVECTOR3 aKeyRot[PLAYER_MODELNUM];
-	m_nCntFlame++;
+	m_nCntFlame[body]++;
 
-	switch (m_Mstate)
+	switch (m_Mstate[body])
 	{
 	case STATE_NORMAL:
-		nFutureKey = (m_nCntKey + 1) % (m_propMotion[m_motion].nKeyNum);
-		pKey = m_propMotion[m_motion].key[m_nCntKey];
-		pKeyNext = m_propMotion[m_motion].key[nFutureKey];
+		nFutureKey = (m_nCntKey[body] + 1) % (m_propMotion[m_motion[body]][body].nKeyNum);
+		pKey = m_propMotion[m_motion[body]][body].key[m_nCntKey[body]];
+		pKeyNext = m_propMotion[m_motion[body]][body].key[nFutureKey];
 
 		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 		{
-			if (m_pPlayerParts[nCntParts] != NULL)
+			if (m_pPlayerParts[nCntParts][body] != NULL)
 			{
 				//現在の角度を取得
-				D3DXVECTOR3 rot = m_pPlayerParts[nCntParts]->GetRotation();
+				D3DXVECTOR3 rot = m_pPlayerParts[nCntParts][body]->GetRotation();
 
 				//現在のキーから次のキーへの再生フレーム数におけるモーションカウンターの相対値を算出
-				fFlameMotion = (float)(m_nCntFlame + 1) / ((float)pKey.nFrame);
+				fFlameMotion = (float)(m_nCntFlame[body] + 1) / ((float)pKey.nFrame);
 
 				//現在のキーから次のキーへの角度の差分を算出
 				aKeyRot[nCntParts].x = (pKeyNext.Rot[nCntParts].x - pKey.Rot[nCntParts].x);
@@ -406,19 +422,19 @@ void CPlayer::MotionUpdate(BODY body)
 				CUtilityMath::RotateNormarizePI(rot.y);
 				CUtilityMath::RotateNormarizePI(rot.z);
 
-				m_pPlayerParts[nCntParts]->SetRotation(rot);
+				m_pPlayerParts[nCntParts][body]->SetRotation(rot);
 			}
 		}
 
-		if (m_nCntFlame == m_propMotion[m_motion].key[m_nCntKey].nFrame)
+		if (m_nCntFlame[body] == m_propMotion[m_motion[body]][body].key[m_nCntKey[body]].nFrame)
 		{//既定のフレームが経過したら
 
-			m_nCntFlame = 0;
-			m_nCntKey++;	//キーを加算
-			if (m_nCntKey >= m_propMotion[m_motion].nKeyNum)
+			m_nCntFlame[body] = 0;
+			m_nCntKey[body]++;	//キーを加算
+			if (m_nCntKey[body] >= m_propMotion[m_motion[body]][body].nKeyNum)
 			{//キーが既定の数値に達したら
-				m_nCntKey = 0;
-				if (m_propMotion[m_motion].nLoop == 0)
+				m_nCntKey[body] = 0;
+				if (m_propMotion[m_motion[body]][body].nLoop == 0)
 				{
 					if (m_pWordManager->GetBulletFlag())
 					{
@@ -433,25 +449,25 @@ void CPlayer::MotionUpdate(BODY body)
 		}
 		break;
 	case STATE_BLEND:
-		if (m_motion == MOTION_NONE)
+		if (m_motion[body] == MOTION_NONE)
 		{
 			pKey();
 		}
 		else
 		{
-			pKey = m_propMotion[m_OldMotion].key[m_nCntKey];
+			pKey = m_propMotion[m_OldMotion[body]][body].key[m_nCntKey[body]];
 		}
-		pKeyNext = m_propMotion[m_motion].key[0];
+		pKeyNext = m_propMotion[m_motion[body]][body].key[0];
 
 		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 		{
-			if (m_pPlayerParts[nCntParts] != NULL)
+			if (m_pPlayerParts[nCntParts][body] != NULL)
 			{
 				//現在の角度を取得
-				D3DXVECTOR3 rot = m_pPlayerParts[nCntParts]->GetRotation();
+				D3DXVECTOR3 rot = m_pPlayerParts[nCntParts][body]->GetRotation();
 
 				//ブレンド係数を算出
-				fFlameMotion = (float)(m_nCntBlendMotion + 1) / MOTION_BLENDTIME;
+				fFlameMotion = (float)(m_nCntBlendMotion[body] + 1) / MOTION_BLENDTIME;
 
 				//現在のキーから次のキーへの角度の差分を算出
 				aKeyRot[nCntParts].x = (pKeyNext.Rot[nCntParts].x - pKey.Rot[nCntParts].x);
@@ -471,16 +487,16 @@ void CPlayer::MotionUpdate(BODY body)
 				CUtilityMath::RotateNormarizePI(rot.y);
 				CUtilityMath::RotateNormarizePI(rot.z);
 
-				m_pPlayerParts[nCntParts]->SetRotation(rot);
+				m_pPlayerParts[nCntParts][body]->SetRotation(rot);
 			}
 		}
 
-		m_nCntBlendMotion++;
-		if (m_nCntBlendMotion >= MOTION_BLENDTIME)
+		m_nCntBlendMotion[body]++;
+		if (m_nCntBlendMotion[body] >= MOTION_BLENDTIME)
 		{//既定のフレームが経過したら
-			m_nCntBlendMotion = 0;
-			m_nCntKey = 0;
-			m_Mstate = STATE_NORMAL;
+			m_nCntBlendMotion[body] = 0;
+			m_nCntKey[body] = 0;
+			m_Mstate[body] = STATE_NORMAL;
 		}
 		break;
 	}
@@ -492,19 +508,19 @@ void CPlayer::MotionUpdate(BODY body)
 //=============================================================================
 void	CPlayer::SetMotion(MOTION motion, BODY body,MOTION_STATE state)
 {
-	if (motion != m_motion)
+	if (motion != m_motion[body])
 	{//現在入っているモーションと違うものであれば
 		//一つ前のモーションを保存する
-		m_OldMotion = m_motion;
+		m_OldMotion[body] = m_motion[body];
 
 		//引数代入
-		m_motion = motion;
-		m_Mstate = state;
+		m_motion[body] = motion;
+		m_Mstate[body] = state;
 
 		//その他変数の初期化
-		m_nCntBlendMotion = 0;
-		m_nCntFlame = 0;
-		if (state != STATE_BLEND) { m_nCntKey = 0; }	//ブレンドする時は初期化しない
+		m_nCntBlendMotion[body] = 0;
+		m_nCntFlame[body] = 0;
+		if (state != STATE_BLEND) { m_nCntKey[body] = 0; }	//ブレンドする時は初期化しない
 	}
 }
 
@@ -710,7 +726,7 @@ int		CPlayer::GetNearPlayer(void)
 //=============================================================================
 // モデルロード処理
 //=============================================================================
-HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
+HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool bReLoad)
 {
 	FILE* pFile = NULL;		// ファイルポインタ
 	char ReadText[256];		// 読み込んだ文字列を入れておく
@@ -725,19 +741,17 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 	int nCntFileNameNum = 0;
 	int nPartsNum = 0;
 
-	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
-	{
-		ObjRelease(m_pPlayerParts[nCntParts]);
-		m_pPlayerParts[nCntParts] = NULL;
-	}
-
-
-	if (m_PlayerLoadState[type].bFlag == false ||
-		(m_PlayerLoadState[type].bFlag == true && bReLoad == true))
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			ObjRelease(m_pPlayerParts[nCntParts][body]);
+			m_pPlayerParts[nCntParts][body] = NULL;
+		}
+	if (m_PlayerLoadState[type][body].bFlag == false ||
+		(m_PlayerLoadState[type][body].bFlag == true && bReLoad == true))
 	{//	まだこの情報がロードされていないorされているが再度ロードしたければ
 		for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
 		{
-			m_PlayerLoadState[type].prop[nCntMotion]();
+			m_PlayerLoadState[type][body].prop[nCntMotion]();
 		}
 
 		//ファイルオープン
@@ -763,7 +777,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 					}
 					else if (strcmp(HeadText, "MODEL_FILENAME") == 0)
 					{
-						sscanf(ReadText, "%s %c %s", &DustBox, &DustBox, m_PlayerLoadState[type].info[nCntFileNameNum].FileName);
+						sscanf(ReadText, "%s %c %s", &DustBox, &DustBox, m_PlayerLoadState[type][body].info[nCntFileNameNum].FileName);
 						nCntFileNameNum++;
 					}
 					else if (strcmp(HeadText, "CHARACTERSET") == 0)
@@ -778,7 +792,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 							}
 							if (strcmp(HeadText, "NUM_PARTS") == 0)
 							{
-								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type].nPartsNum);
+								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type][body].nPartsNum);
 							}
 							else if (strcmp(HeadText, "PARTSSET") == 0)
 							{//PARTSSETを読みとったら
@@ -793,27 +807,27 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 									}
 									else if (strcmp(HeadText, "INDEX") == 0)
 									{
-										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type].info[nCntPartsSet].nIndex);
+										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type][body].info[nCntPartsSet].nIndex);
 									}
 									else if (strcmp(HeadText, "PARENT") == 0)
 									{
-										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type].info[nCntPartsSet].nParent);
+										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox, &m_PlayerLoadState[type][body].info[nCntPartsSet].nParent);
 									}
 									else if (strcmp(HeadText, "POS") == 0)
 									{
 										sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 											&DustBox,
-											&m_PlayerLoadState[type].info[nCntPartsSet].pos.x,
-											&m_PlayerLoadState[type].info[nCntPartsSet].pos.y,
-											&m_PlayerLoadState[type].info[nCntPartsSet].pos.z);
+											&m_PlayerLoadState[type][body].info[nCntPartsSet].pos.x,
+											&m_PlayerLoadState[type][body].info[nCntPartsSet].pos.y,
+											&m_PlayerLoadState[type][body].info[nCntPartsSet].pos.z);
 									}
 									else if (strcmp(HeadText, "ROT") == 0)
 									{
 										sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 											&DustBox,
-											&m_PlayerLoadState[type].info[nCntPartsSet].rot.x,
-											&m_PlayerLoadState[type].info[nCntPartsSet].rot.y,
-											&m_PlayerLoadState[type].info[nCntPartsSet].rot.z);
+											&m_PlayerLoadState[type][body].info[nCntPartsSet].rot.x,
+											&m_PlayerLoadState[type][body].info[nCntPartsSet].rot.y,
+											&m_PlayerLoadState[type][body].info[nCntPartsSet].rot.z);
 									}
 								}
 								nCntPartsSet++;
@@ -835,12 +849,12 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 							else if (strcmp(HeadText, "LOOP") == 0)
 							{//ループ
 								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
-									&m_PlayerLoadState[type].prop[nCntMotionType].nLoop);
+									&m_PlayerLoadState[type][body].prop[nCntMotionType].nLoop);
 							}
 							else if (strcmp(HeadText, "NUM_KEY") == 0)
 							{//キー数
 								sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
-									&m_PlayerLoadState[type].prop[nCntMotionType].nKeyNum);
+									&m_PlayerLoadState[type][body].prop[nCntMotionType].nKeyNum);
 							}
 							else if (strcmp(HeadText, "KEYSET") == 0)
 							{
@@ -855,7 +869,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 									else if (strcmp(HeadText, "FRAME") == 0)
 									{//補間フレーム
 										sscanf(ReadText, "%s %c %d", &DustBox, &DustBox,
-											&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].nFrame);
+											&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].nFrame);
 									}
 									else if (strcmp(HeadText, "KEY") == 0)
 									{//キー情報
@@ -872,17 +886,17 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 											{
 												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 													&DustBox,
-													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].x,
-													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].y,
-													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].z);
+													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].x,
+													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].y,
+													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].z);
 											}
 											else if (strcmp(HeadText, "ROT") == 0)
 											{
 												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 													&DustBox,
-													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].x,
-													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].y,
-													&m_PlayerLoadState[type].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].z);
+													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].x,
+													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].y,
+													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].z);
 											}
 
 										}
@@ -902,38 +916,37 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, bool bReLoad)
 
 		}
 		fclose(pFile);
-		m_PlayerLoadState[TYPE_POWER].bFlag = true;
+		m_PlayerLoadState[type][body].bFlag = true;
 	}
 
 	int nCntParts = 0;
-	for (nCntParts = 0; nCntParts < m_PlayerLoadState[type].nPartsNum; nCntParts++)
-	{
-		ObjCreate(m_pPlayerParts[nCntParts]);
-		if (m_pPlayerParts[nCntParts] != NULL)
+		for (nCntParts = 0; nCntParts < m_PlayerLoadState[type][body].nPartsNum; nCntParts++)
 		{
-			m_pPlayerParts[nCntParts]->Set(m_PlayerLoadState[type].info[nCntParts].FileName,
-				m_PlayerLoadState[type].info[nCntParts].pos,
-				m_PlayerLoadState[type].info[nCntParts].rot, NULL);
+			ObjCreate(m_pPlayerParts[nCntParts][body]);
+			if (m_pPlayerParts[nCntParts][body] != NULL)
+			{
+				m_pPlayerParts[nCntParts][body]->Set(m_PlayerLoadState[type][body].info[nCntParts].FileName,
+					m_PlayerLoadState[type][body].info[nCntParts].pos,
+					m_PlayerLoadState[type][body].info[nCntParts].rot, NULL);
+			}
 		}
-	}
-
 	//親マトリクスセット
-	for (int nCntParts = 0; nCntParts < m_PlayerLoadState[type].nPartsNum; nCntParts++)
+	for (int nCntParts = 0; nCntParts < m_PlayerLoadState[type][body].nPartsNum; nCntParts++)
 	{
-		int nNum = m_PlayerLoadState[type].info[nCntParts].nParent;
+		int nNum = m_PlayerLoadState[type][body].info[nCntParts].nParent;
 		if (nNum != -1)
 		{
-			m_pPlayerParts[nCntParts]->SetParent(m_pPlayerParts[nNum]->GetMatrix());
+			m_pPlayerParts[nCntParts][body]->SetParent(m_pPlayerParts[nNum][body]->GetMatrix());
 		}
 		else
 		{
-			m_pPlayerParts[nCntParts]->SetParent(m_pCharactorMove->GetMatrix());
+			m_pPlayerParts[nCntParts][body]->SetParent(m_pCharactorMove->GetMatrix());
 		}
 	}
 
 	for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
 	{
-		m_propMotion[nCntMotion] = m_PlayerLoadState[type].prop[nCntMotion];
+		m_propMotion[nCntMotion][body] = m_PlayerLoadState[type][body].prop[nCntMotion];
 	}
 	return S_OK;
 }

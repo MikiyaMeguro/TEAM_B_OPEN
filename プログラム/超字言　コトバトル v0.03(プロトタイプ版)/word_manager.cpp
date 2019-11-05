@@ -232,10 +232,12 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				}
 			}
 
-			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_SHOT);
+			//ブレンド無しで弾打ちモーションに移行
+			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
+
 			Reset();		// 設定を戻す
 			if (CGame::GetTube(m_nPlayerID) != NULL)
-			{
+			{//筒クラス内の文字情報を削除
 				CGame::GetTube(m_nPlayerID)->AllDelete();
 			}
 		}

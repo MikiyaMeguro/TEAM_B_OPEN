@@ -58,6 +58,7 @@ public:
 	{
 		LOWER_BODY = 0,		//下半身
 		UPPER_BODY,			//上半身
+		BODY_MAX,
 	}BODY;
 
 	typedef struct
@@ -122,7 +123,7 @@ public:
 
 	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID, PLAYER_TYPE PlayerType,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
-	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type,bool bReLoad = false);
+	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body,bool bReLoad = false);
 	void Unload(void);
 
 	HRESULT Init(void);
@@ -142,7 +143,7 @@ public:
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
 	void			SetMotion(MOTION motion, BODY body = BODY::LOWER_BODY, MOTION_STATE state = STATE_BLEND);
-	MOTION			GetMotion(void) { return m_motion; };
+	MOTION			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
 private:
 	bool			CollisionBullet(void);
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
@@ -150,13 +151,13 @@ private:
 	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新
 	int				GetNearPlayer(void);		//近いプレイヤーを取得
 
-	static PlayerLoadState m_PlayerLoadState[TYPE_MAX];	//パーツ情報
+	static PlayerLoadState m_PlayerLoadState[TYPE_MAX][BODY_MAX];	//パーツ情報
 
 	int m_nID;	//識別ID(0～3の間)
 	PLAYER_TYPE m_PlayerType;
 	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
 	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
-	CCharaParts* m_pPlayerParts[PLAYER_MODELNUM];	//キャラクターの構成パーツ
+	CCharaParts* m_pPlayerParts[PLAYER_MODELNUM][BODY_MAX];	//キャラクターの構成パーツ
 
 	bool m_bLand;					// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
@@ -169,12 +170,12 @@ private:
 	C3DCharactor* m_pLockOnCharactor;
 
 	/* Motion */
-	MotionProperty m_propMotion[MOTION_MAX];
-	MOTION m_motion;								//現在のモーション
-	MOTION m_OldMotion;								//一つ前のモーション
-	MOTION_STATE m_Mstate;							//モーションの状態
-	int m_nCntFlame;								//フレーム用カウンタ
-	int m_nCntKey;									//キー用カウンタ
-	int m_nCntBlendMotion;
+	MotionProperty m_propMotion[MOTION_MAX][BODY_MAX];
+	MOTION m_motion[BODY_MAX];											//現在のモーション
+	MOTION m_OldMotion[BODY_MAX];										//一つ前のモーション
+	MOTION_STATE m_Mstate[BODY_MAX];									//モーションの状態
+	int m_nCntFlame[BODY_MAX];											//フレーム用カウンタ
+	int m_nCntKey[BODY_MAX];											//キー用カウンタ
+	int m_nCntBlendMotion[BODY_MAX];
 };
 #endif // !_PLAYER_H_
