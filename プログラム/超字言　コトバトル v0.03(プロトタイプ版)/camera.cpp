@@ -14,7 +14,7 @@
 #define ANGLE_MOVE  (0.03f) //ƒJƒƒ‰Šp“x‚ÌˆÚ“®—Ê
 #define CAMERA_POSR_COEFFICIENT (0.50f);	//ƒJƒƒ‰’Ž‹“_‚ÌŒW”
 #define CAMERA_POSV_COEFFICIENT (0.18f);	//ƒJƒƒ‰Ž‹“_‚ÌŒW”
-#define CAMERA_ROT_COEFFICIENT (0.40f);		//ƒJƒƒ‰Šp“x‚ÌŒW”
+#define CAMERA_ROT_COEFFICIENT (0.20f);		//ƒJƒƒ‰Šp“x‚ÌŒW”
 
 #define CAMERA_POS_INTERVAL (20.0f)			//ƒJƒƒ‰‚Ì’Ž‹“_‚ÌˆÊ’u
 
@@ -100,6 +100,7 @@ void CCamera::Update(void)
 
 				CUtilityMath::RotateNormarizePI(m_rotDest.y);
 				m_rot.y += m_rotDest.y * CAMERA_ROT_COEFFICIENT;
+				CUtilityMath::RotateNormarizePI(m_rot.y);
 
 				m_pHomingChara->GetSpin().y = m_rot.y;
 

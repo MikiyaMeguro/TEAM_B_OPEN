@@ -17,13 +17,20 @@
 #include "debugProc.h"
 #include "bullet.h"
 #include "CameraManager.h"
-CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_LOCKON_LENGTH (300.0f)
+#define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
+
 #define KUMA_POWER_LOADTEXT "data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
+
+//=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
+CPlayer::PlayerLoadState CPlayer::m_PlayerLoadState[CPlayer::TYPE_MAX];		//ロード情報格納用
+
 //=============================================================================
 // コンストラクタ&デストラクタ
 //=============================================================================
@@ -38,8 +45,6 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_nCntFlame = 0;
 	m_motion = MOTION_NONE;
 	m_OldMotion = MOTION_NONE;
-	m_NextMotion = MOTION_NONE;
-	m_bPlayMotion = false;
 	for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 	{
 		m_pPlayerParts[nCntParts] = NULL;
@@ -69,14 +74,14 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 // 設定処理
 //=============================================================================
-void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID, D3DXVECTOR3 rot)
+void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID,PLAYER_TYPE PlayerType, D3DXVECTOR3 rot)
 {
 	//キャラ情報クラス生成
 	if (m_pCharactorMove == NULL)
 	{
 		if (ObjCreate(m_pCharactorMove))
 		{
-			m_pCharactorMove->Set(pos,rot,type,this);
+			m_pCharactorMove->Set(pos,rot, MoveType,this);
 		}
 	}
 
@@ -93,16 +98,32 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE type, int nPl
 	if (m_pPlayerNum == NULL)
 	{
 		int nID = m_nID;
-		if (type == CCharaBase::MOVETYPE_NPC_AI) { nID = MAX_PLAYER; }	// COM表示にする
+		if (MoveType == CCharaBase::MOVETYPE_NPC_AI) { nID = MAX_PLAYER; }	// COM表示にする
 		m_pPlayerNum = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, pos.y + 45.0f, pos.z), 7.0f, 3.0f, "プレイ人数");
 		m_pPlayerNum->SetTexture(D3DXVECTOR2(0.0f, nID * 0.2f), D3DXVECTOR2(1.0f, (nID * 0.2f) + 0.2f));
 		m_pPlayerNum->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
 
-	ModelLoad(KUMA_POWER_LOADTEXT,TYPE_POWER);
+	//キャラごとに読み込むファイルを分ける(ファイルができるまでは分けない)
+	switch (PlayerType)
+	{
+	case TYPE_NORMAL:
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		break;
+	case TYPE_POWER:
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		break;
+	case TYPE_SPEED:
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		break;
+	case TYPE_REACH:
+		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType);
+		break;
+	}
 
-	SetNextMotion(MOTION_NEUTRAL);
+
+	SetMotion(MOTION_NEUTRAL);
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
@@ -318,7 +339,7 @@ void CPlayer::Draw(void)
 //=============================================================================
 // モーション更新処理
 //=============================================================================
-void CPlayer::MotionUpdate(void)
+void CPlayer::MotionUpdate(BODY body)
 {
 	KeyProperty pKey, pKeyNext;
 
@@ -358,6 +379,7 @@ void CPlayer::MotionUpdate(void)
 					rot.y += 3.14f;
 				}
 
+				//角度の正規化
 				CUtilityMath::RotateNormarizePI(rot.x);
 				CUtilityMath::RotateNormarizePI(rot.y);
 				CUtilityMath::RotateNormarizePI(rot.z);
@@ -376,14 +398,13 @@ void CPlayer::MotionUpdate(void)
 				m_nCntKey = 0;
 				if (m_propMotion[m_motion].nLoop == 0)
 				{
-					m_bPlayMotion = false;
 					if (m_pWordManager->GetBulletFlag())
 					{
-						SetNextMotion(MOTION_SETUP_NEUTRAL);
+						SetMotion(MOTION_SETUP_NEUTRAL);
 					}
 					else
 					{
-						SetNextMotion(MOTION_NEUTRAL);
+						SetMotion(MOTION_NEUTRAL);
 					}
 				}
 			}
@@ -392,7 +413,7 @@ void CPlayer::MotionUpdate(void)
 	case STATE_BLEND:
 		if (m_motion == MOTION_NONE)
 		{
-
+			pKey();
 		}
 		else
 		{
@@ -423,6 +444,7 @@ void CPlayer::MotionUpdate(void)
 					rot.y += 3.14f;
 				}
 
+				//角度の正規化
 				CUtilityMath::RotateNormarizePI(rot.x);
 				CUtilityMath::RotateNormarizePI(rot.y);
 				CUtilityMath::RotateNormarizePI(rot.z);
@@ -446,20 +468,21 @@ void CPlayer::MotionUpdate(void)
 //=============================================================================
 // モーション設定処理
 //=============================================================================
-void	CPlayer::SetNextMotion(MOTION motion)
+void	CPlayer::SetMotion(MOTION motion, BODY body,MOTION_STATE state)
 {
-	if (motion != m_motion/* && m_bPlayMotion == false*/)
-	{//現在入っているモーションと違うもの
+	if (motion != m_motion)
+	{//現在入っているモーションと違うものであれば
+		//一つ前のモーションを保存する
 		m_OldMotion = m_motion;
+
+		//引数代入
 		m_motion = motion;
-		//m_NextMotion = motion;
-		m_Mstate = STATE_BLEND;
+		m_Mstate = state;
+
+		//その他変数の初期化
 		m_nCntBlendMotion = 0;
 		m_nCntFlame = 0;
-		if (m_propMotion[m_motion].nLoop == 0)
-		{
-			m_bPlayMotion = true;
-		}
+		if (state != STATE_BLEND) { m_nCntKey = 0; }	//ブレンドする時は初期化しない
 	}
 }
 

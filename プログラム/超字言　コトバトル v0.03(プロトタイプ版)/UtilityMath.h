@@ -70,7 +70,7 @@ public:
 			D3DXMatrixTranslation(&mtxTrans, POS.x, POS.y, POS.z);
 			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxTrans);
 		}
-	}MODEL_DRAW_STATE;
+	}MODEL_DRAW_STATE;	//ƒ‚ƒfƒ‹•`‰æ—p‚Ìî•ñŠi”[ƒNƒ‰ƒX
 
 	static float RotateNormarizePI(float& value);
 	static float Mapping(const float& value, const float& fromSource, const float& toSource, const float& fromTarget, const float& toTarget);

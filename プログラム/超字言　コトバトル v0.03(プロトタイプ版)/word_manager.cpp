@@ -219,7 +219,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
-					m_nCreateType = m_nCreateType + (int)CLoad::MODEL_CAR0;
+					m_nCreateType = m_nCreateType + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
 					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
 				}
 			}
@@ -232,7 +232,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				}
 			}
 
-			CGame::GetPlayer(nID)->SetNextMotion(CPlayer::MOTION_SHOT);
+			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_SHOT);
 			Reset();		// 設定を戻す
 			if (CGame::GetTube(m_nPlayerID) != NULL)
 			{

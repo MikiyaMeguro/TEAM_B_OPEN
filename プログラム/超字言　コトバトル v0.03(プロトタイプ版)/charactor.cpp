@@ -287,11 +287,11 @@ void C3DCharactor::CharaMove_Input(void)
 		//モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_SETUP_WALK);
 			}
 			else
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_WALK);
 			}
 		}
 	}
@@ -322,11 +322,11 @@ void C3DCharactor::CharaMove_Input(void)
 		//モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_SETUP_WALK);
 			}
 			else
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_WALK);
 			}
 		}
 	}
@@ -342,11 +342,11 @@ void C3DCharactor::CharaMove_Input(void)
 		//モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_SETUP_WALK);
 			}
 			else
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_WALK);
 			}
 		}
 	}
@@ -362,11 +362,11 @@ void C3DCharactor::CharaMove_Input(void)
 		//モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_SETUP_WALK);
 			}
 			else
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_WALK);
 			}
 		}
 	}
@@ -379,11 +379,11 @@ void C3DCharactor::CharaMove_Input(void)
 		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_SETUP_NEUTRAL);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_SETUP_NEUTRAL);
 			}
 			else
 			{
-				GetThisCharactor()->SetNextMotion(CPlayer::MOTION_NEUTRAL);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_NEUTRAL);
 			}
 		}
 	}
@@ -1201,7 +1201,7 @@ void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 	move.x += sinf(fRot) * GetStep();
 	move.z += cosf(fRot) * GetStep();
 
-	GetThisCharactor()->SetNextMotion(CPlayer::MOTION_STEP);
+	GetThisCharactor()->SetMotion(CPlayer::MOTION_STEP);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);
 }

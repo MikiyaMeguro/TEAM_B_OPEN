@@ -54,6 +54,12 @@ public:
 		STATE_BLEND,		//モーションブレンド状態
 	}MOTION_STATE;
 
+	typedef enum
+	{
+		LOWER_BODY = 0,		//下半身
+		UPPER_BODY,			//上半身
+	}BODY;
+
 	typedef struct
 	{
 		int nFrame;							//フレーム数
@@ -114,7 +120,7 @@ public:
 
 	static CPlayer* Create(void);
 
-	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE type, int nPlayerID,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
+	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID, PLAYER_TYPE PlayerType,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type,bool bReLoad = false);
 	void Unload(void);
@@ -135,13 +141,13 @@ public:
 	void			SetbSetupBullet(bool bBullet)	{ m_bSetupBullet = bBullet; };
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
-	void			SetNextMotion(MOTION motion);
+	void			SetMotion(MOTION motion, BODY body = BODY::LOWER_BODY, MOTION_STATE state = STATE_BLEND);
 	MOTION			GetMotion(void) { return m_motion; };
 private:
 	bool			CollisionBullet(void);
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
 	bool			CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
-	void			MotionUpdate(void);			//モーション更新
+	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新
 	int				GetNearPlayer(void);		//近いプレイヤーを取得
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX];	//パーツ情報
@@ -166,11 +172,9 @@ private:
 	MotionProperty m_propMotion[MOTION_MAX];
 	MOTION m_motion;								//現在のモーション
 	MOTION m_OldMotion;								//一つ前のモーション
-	MOTION m_NextMotion;							//一つ後のモーション
 	MOTION_STATE m_Mstate;							//モーションの状態
 	int m_nCntFlame;								//フレーム用カウンタ
 	int m_nCntKey;									//キー用カウンタ
-	bool m_bPlayMotion;
 	int m_nCntBlendMotion;
 };
 #endif // !_PLAYER_H_
