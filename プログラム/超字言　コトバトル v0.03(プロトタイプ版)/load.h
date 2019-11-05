@@ -52,6 +52,7 @@ public:
 		MODEL_CAMERA,	// ÉJÉÅÉâ
 		MODEL_TWIG,		// Ç±Ç¶Çæ
 		MODEL_STRAWBERRY,// ÉCÉ`ÉS
+		MODEL_EGG,		// ÇΩÇ‹Ç≤
 		MODEL_MAX,
 	} MODEL;
 
