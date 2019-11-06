@@ -251,8 +251,8 @@ void CPlayer::Update(void)
 				BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
 			}
 
-			CUtilityMath::RotateNormarizePI(BulletRot.x);
-			CUtilityMath::RotateNormarizePI(BulletRot.y);
+			CUtilityMath::RotateNormarizePI(&BulletRot.x);
+			CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
 			m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
 			if (m_pWordManager->GetCntNum() == 0)
@@ -429,9 +429,9 @@ void CPlayer::MotionUpdate(BODY body)
 				}
 
 				//Šp“x‚Ì³‹K‰»
-				CUtilityMath::RotateNormarizePI(rot.x);
-				CUtilityMath::RotateNormarizePI(rot.y);
-				CUtilityMath::RotateNormarizePI(rot.z);
+				CUtilityMath::RotateNormarizePI(&rot.x);
+				CUtilityMath::RotateNormarizePI(&rot.y);
+				CUtilityMath::RotateNormarizePI(&rot.z);
 
 				m_pPlayerParts[nCntParts][body]->SetRotation(rot);
 			}
@@ -495,9 +495,9 @@ void CPlayer::MotionUpdate(BODY body)
 				}
 
 				//Šp“x‚Ì³‹K‰»
-				CUtilityMath::RotateNormarizePI(rot.x);
-				CUtilityMath::RotateNormarizePI(rot.y);
-				CUtilityMath::RotateNormarizePI(rot.z);
+				CUtilityMath::RotateNormarizePI(&rot.x);
+				CUtilityMath::RotateNormarizePI(&rot.y);
+				CUtilityMath::RotateNormarizePI(&rot.z);
 
 				m_pPlayerParts[nCntParts][body]->SetRotation(rot);
 			}

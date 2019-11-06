@@ -98,40 +98,11 @@ void CCharaParts::Draw(void)
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
-	D3DXMATRIX mtxRot, mtxTrans;
 	D3DMATERIAL9 matDef;		//現在のマテリアル保存用
 	D3DXMATERIAL *pMat;			//マテリアルデータのポインタ
 
-								// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot,
-		m_Rot.y,
-		m_Rot.x,
-		m_Rot.z);
-
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxRot);
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTrans,
-		m_Pos.x,
-		m_Pos.y,
-		m_Pos.z);
-
-	D3DXMatrixMultiply(&m_mtxWorld,
-		&m_mtxWorld,
-		&mtxTrans);
-
-	if (m_pParent != NULL)
-	{
-		//親のマトリックスを掛け合わせる
-		D3DXMatrixMultiply(&m_mtxWorld,
-			&m_mtxWorld,
-			m_pParent);
-	}
+	//マトリックスの計算
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_Pos,m_Rot,m_pParent);
 
 	//ワールドマトリックスから座標を取り出して保管する
 	m_WorldPosition = D3DXVECTOR3(m_mtxWorld._41, m_mtxWorld._42, m_mtxWorld._43);

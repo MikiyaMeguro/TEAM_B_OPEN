@@ -19,60 +19,9 @@
 class CUtilityMath
 {
 public:
-	typedef struct
-	{
-		D3DXVECTOR3 POS;		//位置
-		D3DXVECTOR3 ROT;		//角度
-		D3DXVECTOR3 SCALE;		//大きさ
-		D3DXMATRIX  Matrix;		//マトリックス
-		void operator()(void)
-		{//初期化用オペレータ(引数なし)
-			D3DXMATRIX mtxRot, mtxTrans, mtxScale;
 
-			//初期化(中央に通常の大きさで描画できるようにする)
-			POS = D3DXVECTOR3(0.0f,0.0f,0.0f);
-			ROT = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-			SCALE = D3DXVECTOR3(1.0f, 1.0f, 1.0f);
-			D3DXMatrixIdentity(&Matrix);
-			// 回転を反映
-			D3DXMatrixRotationYawPitchRoll(&mtxRot, ROT.y, ROT.x, ROT.z);
-			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxRot);
-
-			//拡大縮小の反映
-			D3DXMatrixScaling(&mtxScale, SCALE.x, SCALE.y, SCALE.z);
-			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxScale);
-
-			// 移動を反映
-			D3DXMatrixTranslation(&mtxTrans, POS.x, POS.y, POS.z);
-			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxTrans);
-		}
-		void operator()(const D3DXVECTOR3 pos, const D3DXVECTOR3 rot, const D3DXVECTOR3 scale = D3DXVECTOR3(1.0f,1.0f,1.0f))
-		{//初期化用オペレータ(引数あり)
-			D3DXMATRIX mtxRot, mtxTrans, mtxScale;
-
-			//値を入れる
-			POS = pos;
-			ROT = rot;
-			SCALE = scale;
-
-			//マトリックスの初期化
-			D3DXMatrixIdentity(&Matrix);
-
-			// 回転を反映
-			D3DXMatrixRotationYawPitchRoll(&mtxRot, ROT.y, ROT.x, ROT.z);
-			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxRot);
-
-			//拡大縮小の反映
-			D3DXMatrixScaling(&mtxScale, SCALE.x, SCALE.y, SCALE.z);
-			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxScale);
-
-			// 移動を反映
-			D3DXMatrixTranslation(&mtxTrans, POS.x, POS.y, POS.z);
-			D3DXMatrixMultiply(&Matrix, &Matrix, &mtxTrans);
-		}
-	}MODEL_DRAW_STATE;	//モデル描画用の情報格納クラス
-
-	static float RotateNormarizePI(float& value);
+	static void CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f));
+	static void RotateNormarizePI(float* value);
 	static float Mapping(const float& value, const float& fromSource, const float& toSource, const float& fromTarget, const float& toTarget);
 	static D3DXVECTOR3 MoveCoeffient(D3DXVECTOR3& value,const float& coeffient);
 };
