@@ -184,43 +184,8 @@ void C3DCharactor::Update(void)
 		m_nCntStepCoolTime--;
 	}
 
-	D3DXMATRIX mtxRot, mtxTrans;				// 計算用マトリックス
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	// 移動を反映
-	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
-
-	//if (CCharaBase::GetMoveType() == CCharaBase::MOVETYPE_NPC_AI)
-	//{
-	//	//CPUが場外行かないように
-	//	if (m_bJyougai == false)
-	//	{
-	//		if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
-	//			FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
-	//		{//場外に移動しそうになった時
-
-	//			move.x = 0;
-	//			move.z = 0;
-	//			m_CpuThink = THINK_ROTATION;
-	//			m_nActionTimer = 2;
-	//			m_CpuRotation = CPU_ROTATION_BACK;
-	//		}
-	//	}
-	//	else
-	//	{
-	//		if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
-	//			FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
-	//		{//場内に移動した
-	//			m_bJyougai = true;
-	//		}
-	//	}
-	//}
+	//マトリックスの計算
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld,pos,rot);
 
 }
 
@@ -437,11 +402,11 @@ void C3DCharactor::CharaMove_Input(void)
 	spin.y = CameraRot.y - rot.y;
 
 	//回転制御
-	CUtilityMath::RotateNormarizePI(spin.y);
+	CUtilityMath::RotateNormarizePI(&spin.y);
 
 	rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateNormarizePI(rot.y);
+	CUtilityMath::RotateNormarizePI(&rot.y);
 
 	spin.y = 0.0f;
 
@@ -710,9 +675,9 @@ void C3DCharactor::DiffAngle(float fDiffAngle)
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 
 	// 差分
-	CUtilityMath::RotateNormarizePI(fDiffAngle);
+	CUtilityMath::RotateNormarizePI(&fDiffAngle);
 	rot.y += fDiffAngle * 0.1f;
-	CUtilityMath::RotateNormarizePI(rot.y);
+	CUtilityMath::RotateNormarizePI(&rot.y);
 }
 
 //=============================================================================
@@ -805,11 +770,11 @@ void C3DCharactor::CharaMove_CPU(void)
 
 
 	//回転制御
-	CUtilityMath::RotateNormarizePI(spin.y);
+	CUtilityMath::RotateNormarizePI(&spin.y);
 
 	rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateNormarizePI(rot.y);
+	CUtilityMath::RotateNormarizePI(&rot.y);
 
 	spin.y = 0.0f;
 
@@ -856,11 +821,11 @@ void C3DCharactor::Rotation_CPU(void)
 	spin.y = ChangeRot.y - rot.y;
 
 	//回転制御
-	CUtilityMath::RotateNormarizePI(spin.y);
+	CUtilityMath::RotateNormarizePI(&spin.y);
 
 	rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateNormarizePI(rot.y);
+	CUtilityMath::RotateNormarizePI(&rot.y);
 
 	spin.y = 0.0f;
 
@@ -957,7 +922,7 @@ void C3DCharactor::Homing_CPU(void)
 					// 差分
 					float fDiffAngle = fDestAngle - rot.y;
 
-					CUtilityMath::RotateNormarizePI(fDiffAngle);
+					CUtilityMath::RotateNormarizePI(&fDiffAngle);
 
 					DiffAngle(fDiffAngle);
 

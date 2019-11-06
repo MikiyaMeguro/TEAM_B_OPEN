@@ -141,7 +141,6 @@ void CSceneX::Draw(void)
 {
 #if 1
 
-	D3DXMATRIX mtxRot, mtxTrans, mtxScale,mtxParent;				// 計算用マトリックス
 	D3DMATERIAL9 matDef;						// 現在のマテリアル保存用
 	D3DXMATERIAL *pMat;					// マテリアルデータへのポインタ
 
@@ -163,29 +162,8 @@ void CSceneX::Draw(void)
 	//頂点法線の自動正規化
 	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
 
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	//拡大縮小の反映
-	D3DXMatrixScaling(&mtxScale, m_Scale.x, m_Scale.y, m_Scale.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScale);
-
-	// 移動を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
-
-
-	if (m_pParentMatrix != NULL)
-	{
-		//親のマトリックスを掛け合わせる
-		D3DXMatrixMultiply(&m_mtxWorld,
-			&m_mtxWorld,
-			m_pParentMatrix);
-	}
+	//マトリックス計算
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,m_rot,m_pParentMatrix,m_Scale);
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);

@@ -170,8 +170,6 @@ void CScene3D::Update(void)
 //=============================================================================
 void CScene3D::Draw(void)
 {
-	D3DXMATRIX mtxRot, mtxTrans;	// 計算用マトリックス
-
 	// デバイスを取得
 	CRenderer *pRenderer;
 	pRenderer = CManager::GetRenderer();
@@ -183,16 +181,8 @@ void CScene3D::Draw(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,m_rot);
 
-	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
