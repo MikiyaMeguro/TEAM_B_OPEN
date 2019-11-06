@@ -30,6 +30,7 @@
 #define NEAR_DISTANCE	(100)
 #define FIELD_OUTSIDE	(300)
 
+
 //=============================================================================
 // 設定処理
 //=============================================================================
@@ -290,12 +291,14 @@ void C3DCharactor::CharaMove_Input(void)
 	//モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK,CPlayer::UPPER_BODY);
 			}
 			else
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
 			}
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_RIGHT, CPlayer::LOWER_BODY);
+
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID))
@@ -327,12 +330,13 @@ void C3DCharactor::CharaMove_Input(void)
 		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
 			}
 			else
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
 			}
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_LEFT, CPlayer::LOWER_BODY);
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
@@ -348,12 +352,13 @@ void C3DCharactor::CharaMove_Input(void)
 		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
 			}
 			else
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
 			}
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
@@ -369,12 +374,13 @@ void C3DCharactor::CharaMove_Input(void)
 		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_SETUP_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
 			}
 			else
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
 			}
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 		}
 	}
 	else
@@ -385,14 +391,13 @@ void C3DCharactor::CharaMove_Input(void)
 		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_SETUP_NEUTRAL,CPlayer::LOWER_BODY);
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_NEUTRAL, CPlayer::UPPER_BODY);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_NEUTRAL,CPlayer::UPPER_BODY);
 			}
 			else
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_NEUTRAL, CPlayer::UPPER_BODY);
 			}
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
 	}
 
@@ -1209,8 +1214,8 @@ void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 	move.x += sinf(fRot) * GetStep();
 	move.z += cosf(fRot) * GetStep();
 
-	GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_STEP,CPlayer::LOWER_BODY);
-	GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_STEP, CPlayer::UPPER_BODY);
+	GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_STEP,CPlayer::LOWER_BODY,CPlayer::STATE_NORMAL);
+	GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_STEP, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);
 }
