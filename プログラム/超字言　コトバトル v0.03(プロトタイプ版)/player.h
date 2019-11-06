@@ -17,14 +17,20 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_MODELNUM (20)
-#define MOTION_BLENDTIME (8)
-#define MAX_KEY (20)
-
+#define PLAYER_MODELNUM (30)		//モデルの最大数
+#define MAX_KEY			(30)		//キーの最大数
+#define MAX_MOTION		(30)		//モーションの最大数
+#define MOTION_BLENDTIME (8)		//モーションブレンド時の補間秒数
+//=============================================================================
+// 前方宣言
+//=============================================================================
 //class CScene3D;
 class CSceneX;
 class CWordManager;
 
+//=============================================================================
+// クラスの定義
+//=============================================================================
 class CPlayer : public CScene
 {
 public:
@@ -91,6 +97,8 @@ public:
 		int nFrame;							//フレーム数
 		D3DXVECTOR3 Pos[PLAYER_MODELNUM];	//位置
 		D3DXVECTOR3 Rot[PLAYER_MODELNUM];	//向き
+
+		//初期化用
 		void operator()(void)
 		{
 			nFrame = 0;
@@ -140,26 +148,29 @@ public:
 	typedef struct
 	{
 		PartsLoadInfo info[PLAYER_MODELNUM];		//パーツ情報
-		MotionProperty prop[10];					//モーション情報
+		MotionProperty prop[MAX_MOTION];			//モーション情報
 		int nPartsNum;								//パーツ数
 		bool bLoad;									//ロードされたか
 	}PlayerLoadState;
 
+	//コンストラクタ&デストラクタ
 	CPlayer(int nPriority = 3);
 	~CPlayer();
 
+	//基本メンバ関数
 	static CPlayer* Create(void);
 
 	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID, PLAYER_TYPE PlayerType,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body,bool bReLoad = false);
-	void Unload(void);
 
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 
+
+	//各種変数取得&代入処理
 	CCharaBase*		GetCharaMover(void)				{ return m_pCharactorMove; };
 	D3DXVECTOR3		GetPosition(void)				{ return GetCharaMover()->GetPosition(); };
 	D3DXVECTOR3		GetRotation(void)				{ return GetCharaMover()->GetRotation(); };
@@ -167,14 +178,15 @@ public:
 	LPCSTR			GetCameraName(void)				{ return m_ChildCameraName; };
 	void			SetCameraName(LPCSTR name)		{ m_ChildCameraName = name; };
 	void			SetTransTime(int nTime)			{ m_nCntTransTime = nTime; };
-	CWordManager*   GetWordManager(void)			{ return m_pWordManager; }				// 言葉管理クラスの取得
+	CWordManager*   GetWordManager(void)			{ return m_pWordManager; }
 	void			SetbSetupBullet(bool bBullet)	{ m_bSetupBullet = bBullet; };
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
-	void			SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
+	//モーション
+	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
 private:
-	bool			CollisionBullet(void);
+	bool			CollisionBullet(void);			//弾との当たり判定
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
 	bool			CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新
@@ -184,28 +196,28 @@ private:
 
 	int m_nID;	//識別ID(0～3の間)
 	PLAYER_TYPE m_PlayerType;
-	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
+	LPCSTR m_ChildCameraName;								//このプレイヤに追従するカメラの名前
 	C3DCharactor* m_pCharactorMove;							//キャラクターの移動管理
 	CCharaParts* m_pPlayerParts[PLAYER_MODELNUM][BODY_MAX];	//キャラクターの構成パーツ
 
-	bool m_bLand;									// モデルに乗っているかどうか
-	D3DXVECTOR3 m_posOld;
-	int m_nCntTransTime;							//無敵時間
-	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号表示用ビルボード
-	CWordManager *m_pWordManager;					//文字管理クラスのポインタ
+	bool m_bLand;											// モデルに乗っているかどうか
+	D3DXVECTOR3 m_posOld;									//前フレームの座標
+	int m_nCntTransTime;									//無敵時間
+	CSceneBillBoard *m_pPlayerNum;							// プレイヤー番号表示用ビルボード
+	CWordManager *m_pWordManager;							//文字管理クラスのポインタ
 
-	bool m_bSetupBullet;							//弾が撃てる状態の判定用
+	bool m_bSetupBullet;									//弾が撃てる状態の判定用
 
-	C3DCharactor* m_pLockOnCharactor;				//ロックオンしているキャラクターの情報
+	C3DCharactor* m_pLockOnCharactor;						//ロックオンしているキャラクターの情報
 
 	/* Motion */
-	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];
-	int m_motion[BODY_MAX];											//現在のモーション
-	int m_OldMotion[BODY_MAX];										//一つ前のモーション
-	int m_Mstate[BODY_MAX];									//モーションの状態
+	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報
+	int m_motion[BODY_MAX];												//現在のモーション
+	int m_OldMotion[BODY_MAX];											//一つ前のモーション
+	int m_Mstate[BODY_MAX];												//モーションの状態
 	int m_nCntFlame[BODY_MAX];											//フレーム用カウンタ
 	int m_nCntKey[BODY_MAX];											//キー用カウンタ
-	int m_nCntBlendMotion[BODY_MAX];
+	int m_nCntBlendMotion[BODY_MAX];									//モーションブレンド用のカウンタ
 };
 
 #endif // !_PLAYER_H_

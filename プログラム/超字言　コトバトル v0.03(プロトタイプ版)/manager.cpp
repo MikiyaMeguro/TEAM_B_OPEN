@@ -404,13 +404,6 @@ void CManager::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-	//ランダムに
-	srand((unsigned int)time(NULL));
-
-
-	//bool bPause = CPause::GetPauseBool();
-
-
 	if (m_pRenderer != NULL)
 	{// レンダラー更新処理
 		m_pRenderer->Update();

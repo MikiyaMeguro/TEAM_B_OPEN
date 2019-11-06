@@ -46,14 +46,13 @@ CTitle::~CTitle()
 void CTitle::Init(void)
 {
 	//メンバ変数初期化
-	srand((unsigned int)time(0));				//ランダム関数を機能させる
 	m_bProductionSkip = false;					//演出スキップされていない
 	m_FlashSkip = false;						//フラッシュスキップされていない
 	m_ProductionState = PRODUCTIONSTATE_NONE;	//演出状態の初期化
 	m_FlashSate = FLASHSTATE_NONE;				//フラッシュ状態の初期化
 
 	/*火花*/
-	m_fChangeSparkMove = 3.5f;	
+	m_fChangeSparkMove = 3.5f;
 	m_fSparkX = 0.0f;
 
 	/*フラッシュ系*/
@@ -70,7 +69,7 @@ void CTitle::Init(void)
 	m_fTitleScal = 100;
 	/* シーン2Dの初期設定 */
 	InitpScene2D();
-	
+
 	/* シーン2Dの初期設定処理 */
 	SetScene2D();
 }
@@ -453,7 +452,7 @@ bool CTitle::TitleScaling(int Num)
 			m_fTitleScal = 200.0f;
 		}
 	}
-	
+
 	return bTitleScaling;
 }
 //=============================================================================
