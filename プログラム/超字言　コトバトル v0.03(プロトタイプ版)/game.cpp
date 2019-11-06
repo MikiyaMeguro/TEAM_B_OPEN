@@ -588,10 +588,10 @@ void CGame::SetStage(int nCntState)
 //=============================================================================
 void CGame::WordCreate(void)
 {
-	// ‚³‚¢‚Ó
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 10);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 27);
+	// ƒ‰ƒ“ƒX
+	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 38);
+	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 45);
+	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 12);
 
 	// ‚©‚é‚½
 	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
