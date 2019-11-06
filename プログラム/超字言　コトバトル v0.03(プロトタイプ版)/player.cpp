@@ -240,7 +240,9 @@ void CPlayer::Update(void)
 	//セット
 	CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 	D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
-
+	D3DXVECTOR3 BulletPos = m_pCharactorMove->GetPosition();
+	float fRotY;
+	D3DXVECTOR3 CamRot, LockOnPos,LockOnMove;
 	// 弾の生成
 	if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
 	{
@@ -248,7 +250,21 @@ void CPlayer::Update(void)
 		{//文字管理クラスに弾の生成を委託する
 			if (pCam != NULL)
 			{
-				BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+				CamRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+
+				BulletRot = CamRot;
+				if (m_pLockOnCharactor != NULL)
+				{
+					LockOnPos = m_pLockOnCharactor->GetPosition();
+					LockOnMove = m_pLockOnCharactor->GetMove();
+
+					fRotY = atan2f(powf((BulletPos.x - LockOnPos.x), 2.0f), powf((BulletPos.z - LockOnPos.z), 2.0f)) -
+						atan2f(powf((BulletPos.x - (LockOnPos.x - (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z - (LockOnMove.z * 5.0f))), 2.0f));
+					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
+					CUtilityMath::RotateNormarizePI(&fRotY);
+					BulletRot.y += fRotY;
+				}
+
 			}
 
 			CUtilityMath::RotateNormarizePI(&BulletRot.x);
@@ -512,7 +528,7 @@ void CPlayer::MotionUpdate(BODY body)
 		}
 		break;
 	}
-	CDebugProc::Print("cn","MOTION = ",(int)m_motion);
+	CDebugProc::Print("cn","MOTION = ",(int)m_motion[body]);
 }
 
 //=============================================================================
@@ -525,14 +541,29 @@ void	CPlayer::SetMotion(int motion, BODY body,MOTION_STATE state)
 		//一つ前のモーションを保存する
 		m_OldMotion[body] = m_motion[body];
 
+		//その他変数の初期化
+		m_nCntBlendMotion[body] = 0;
+		m_nCntFlame[body] = 0;
+		if (state != STATE_BLEND)
+		{
+			if (m_Mstate[body] == STATE_BLEND)
+			{//一つ前もブレンドなら
+				for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+				{
+					if (m_pPlayerParts[nCntParts][body] != NULL)
+					{
+						//ブレンド中に次のモーションに入った時
+						m_pPlayerParts[nCntParts][body]->SetRotation(m_propMotion[m_OldMotion[body]][body].key[0].Rot[nCntParts]);
+					}
+				}
+			}
+			m_nCntKey[body] = 0;
+		}	//ブレンドする時は初期化しない
+
 		//引数代入
 		m_motion[body] = motion;
 		m_Mstate[body] = state;
 
-		//その他変数の初期化
-		m_nCntBlendMotion[body] = 0;
-		m_nCntFlame[body] = 0;
-		if (state != STATE_BLEND) { m_nCntKey[body] = 0; }	//ブレンドする時は初期化しない
 	}
 }
 
