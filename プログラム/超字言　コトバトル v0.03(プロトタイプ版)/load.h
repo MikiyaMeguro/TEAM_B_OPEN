@@ -56,6 +56,7 @@ public:
 		MODEL_LANCE,	// ƒ‰ƒ“ƒX
 		MODEL_KADANN,	// ‚©‚¾‚ñ
 		MODEL_KATANA,	// “
+		MODEL_LOG	,	// ‚Ü‚é‚½
 		MODEL_MAX,
 	} MODEL;
 

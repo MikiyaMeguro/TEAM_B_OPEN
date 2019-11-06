@@ -595,10 +595,10 @@ void CGame::WordCreate(void)
 	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 15);
 	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 45);
 
-	// ‚©‚ß‚ç
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 33);
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 38);
+	// ‚Ü‚é‚½
+	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 30);
+	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 40);
+	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 15);
 
 	// ‚±‚¦‚¾
 	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 9);
