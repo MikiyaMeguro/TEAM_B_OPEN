@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 27
+NUM_MODEL = 28
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -22,7 +22,7 @@ MODEL_FILENAME = data/MODEL/Dust.x"					#4 ゴミ
 MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
 
 MODEL_FILENAME = data/MODEL/Car.x"					#6 車
-MODEL_FILENAME = data/MODEL/Bed.x"					#7 ふとん
+MODEL_FILENAME = data/MODEL/Mic.x"					#7 まいく
 MODEL_FILENAME = data/MODEL/Desk.x"					#8 (机)
 MODEL_FILENAME = data/MODEL/Pulin.x"				#9 プリン
 MODEL_FILENAME = data/MODEL/Knife.x"				#10 ナイフ
@@ -42,6 +42,7 @@ MODEL_FILENAME = data/MODEL/Camera.x"				#23 かめら
 MODEL_FILENAME = data/MODEL/Twig.x"					#24 こえだ
 MODEL_FILENAME = data/MODEL/Strawberry.x"			#25 イチゴ
 MODEL_FILENAME = data/MODEL/Egg.x"					#26 たまご
+MODEL_FILENAME = data/MODEL/Egg.x"					#27 ランス
 
 #------------------------------------------------------------
 #                      モデル配置情報

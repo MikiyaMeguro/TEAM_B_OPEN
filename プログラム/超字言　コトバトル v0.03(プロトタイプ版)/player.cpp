@@ -24,7 +24,11 @@
 #define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 
-#define KUMA_POWER_LOADTEXT "data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
+#define INU_BARANCE_LOADTEXT_LOWER "data/MOTION/motion_dog_down.txt"
+#define INU_BARANCE_LOADTEXT_UPPER "data/MOTION/motion_dog_up.txt"
+
+#define KUMA_POWER_LOADTEXT_LOWER "data/MOTION/motion_bea_down.txt"			//熊(パワー型)の下半身のロードテキスト
+#define KUMA_POWER_LOADTEXT_UPPER "data/MOTION/motion_bea_up.txt"			//熊(パワー型)の上半身のロードテキスト
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -45,8 +49,8 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	{
 		m_nCntKey[nCntBody] = 0;
 		m_nCntFlame[nCntBody] = 0;
-		m_motion[nCntBody] = MOTION_NONE;
-		m_OldMotion[nCntBody] = MOTION_NONE;
+		m_motion[nCntBody] =  0;
+		m_OldMotion[nCntBody] = 0;
 
 		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 		{
@@ -112,17 +116,21 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	//キャラごとに読み込むファイルを分ける(ファイルができるまでは分けない)
 	switch (PlayerType)
 	{
-	case TYPE_NORMAL:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType,LOWER_BODY);
+	case TYPE_BARANCE:
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	case TYPE_POWER:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	case TYPE_SPEED:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	case TYPE_REACH:
-		ModelLoad(KUMA_POWER_LOADTEXT, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	}
 
@@ -133,7 +141,8 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 		m_pPlayerParts[0][UPPER_BODY]->SetParent(m_pPlayerParts[0][LOWER_BODY]->GetMatrix());	//上半身の親が下半身
 	}
 
-	SetMotion(MOTION_NEUTRAL);
+	SetMotion(MOTION_LOWER_NEUTRAL,LOWER_BODY);
+	SetMotion(MOTION_UPPER_NEUTRAL, UPPER_BODY);
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
@@ -312,7 +321,9 @@ void CPlayer::Update(void)
 		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 45.0f, m_pCharactorMove->GetPosition().z));
 	}
 
-	MotionUpdate();
+	MotionUpdate(LOWER_BODY);
+	MotionUpdate(UPPER_BODY);
+
 	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
 		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
@@ -412,9 +423,9 @@ void CPlayer::MotionUpdate(BODY body)
 				//求めた差分を現在のキーに係数を掛けながら足す
 				rot = pKey.Rot[nCntParts] + (aKeyRot[nCntParts] * fFlameMotion);
 
-				if (nCntParts == 0)
+				if (nCntParts == 0 && body == LOWER_BODY)
 				{
-					rot.y += 3.14f;
+					rot.y = 3.14f;
 				}
 
 				//角度の正規化
@@ -438,18 +449,19 @@ void CPlayer::MotionUpdate(BODY body)
 				{
 					if (m_pWordManager->GetBulletFlag())
 					{
-						SetMotion(MOTION_SETUP_NEUTRAL);
+						SetMotion(MOTION_UPPER_SETUP_NEUTRAL, UPPER_BODY);
 					}
 					else
 					{
-						SetMotion(MOTION_NEUTRAL);
+						SetMotion(MOTION_UPPER_NEUTRAL, UPPER_BODY);
 					}
+						SetMotion(MOTION_LOWER_NEUTRAL, LOWER_BODY);
 				}
 			}
 		}
 		break;
 	case STATE_BLEND:
-		if (m_motion[body] == MOTION_NONE)
+		if (m_motion[body] == 0)
 		{
 			pKey();
 		}
@@ -477,9 +489,9 @@ void CPlayer::MotionUpdate(BODY body)
 				//求めた差分を現在のキーに係数を掛けながら足す
 				rot = pKey.Rot[nCntParts] + (aKeyRot[nCntParts] * fFlameMotion);
 
-				if (nCntParts == 0)
+				if (nCntParts == 0 && body == LOWER_BODY)
 				{
-					rot.y += 3.14f;
+					rot.y = 3.14f;
 				}
 
 				//角度の正規化
@@ -506,7 +518,7 @@ void CPlayer::MotionUpdate(BODY body)
 //=============================================================================
 // モーション設定処理
 //=============================================================================
-void	CPlayer::SetMotion(MOTION motion, BODY body,MOTION_STATE state)
+void	CPlayer::SetMotion(int motion, BODY body,MOTION_STATE state)
 {
 	if (motion != m_motion[body])
 	{//現在入っているモーションと違うものであれば
@@ -734,7 +746,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 	char DustBox[256];		// 使用しないものを入れておく
 
 	int nCntMotionSetType = 0;					// モーションセットの種類の数
-	int nCntMotionType = (int)MOTION_NEUTRAL;	// モーションの種類の数
+	int nCntMotionType = 1;						// モーションの種類の数
 	int nCntKeySet = 0;							// キーセット数
 	int nCntKey = 0;							// キー数
 	int nCntPartsSet = 0;						// パーツ数
@@ -746,10 +758,10 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 			ObjRelease(m_pPlayerParts[nCntParts][body]);
 			m_pPlayerParts[nCntParts][body] = NULL;
 		}
-	if (m_PlayerLoadState[type][body].bFlag == false ||
-		(m_PlayerLoadState[type][body].bFlag == true && bReLoad == true))
+	if (m_PlayerLoadState[type][body].bLoad == false ||
+		(m_PlayerLoadState[type][body].bLoad == true && bReLoad == true))
 	{//	まだこの情報がロードされていないorされているが再度ロードしたければ
-		for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
+		for (int nCntMotion = 0; nCntMotion < MOTION_UPPER_MAX; nCntMotion++)
 		{
 			m_PlayerLoadState[type][body].prop[nCntMotion]();
 		}
@@ -916,7 +928,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 
 		}
 		fclose(pFile);
-		m_PlayerLoadState[type][body].bFlag = true;
+		m_PlayerLoadState[type][body].bLoad = true;
 	}
 
 	int nCntParts = 0;
@@ -928,6 +940,22 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 				m_pPlayerParts[nCntParts][body]->Set(m_PlayerLoadState[type][body].info[nCntParts].FileName,
 					m_PlayerLoadState[type][body].info[nCntParts].pos,
 					m_PlayerLoadState[type][body].info[nCntParts].rot, NULL);
+
+				switch (type)
+				{
+				case TYPE_BARANCE:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				case TYPE_POWER:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				case TYPE_SPEED:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				case TYPE_REACH:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				}
 			}
 		}
 	//親マトリクスセット
@@ -944,7 +972,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 		}
 	}
 
-	for (int nCntMotion = 0; nCntMotion < MOTION_MAX; nCntMotion++)
+	for (int nCntMotion = 0; nCntMotion < (body == LOWER_BODY ? MOTION_LOWER_MAX : MOTION_UPPER_MAX); nCntMotion++)	//上下でモーション数が違うときの対策
 	{
 		m_propMotion[nCntMotion][body] = m_PlayerLoadState[type][body].prop[nCntMotion];
 	}

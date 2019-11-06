@@ -233,7 +233,8 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 			}
 
 			//ブレンド無しで弾打ちモーションに移行
-			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
+			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 
 			Reset();		// 設定を戻す
 			if (CGame::GetTube(m_nPlayerID) != NULL)

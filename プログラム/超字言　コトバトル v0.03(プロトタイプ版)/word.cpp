@@ -17,6 +17,8 @@
 #define AREA_CHASE		(40.0f)			// エリア
 #define AREA_COILLSION	(15.0f)			// コリジョンの範囲
 #define CHASE_MOVE		(1.0f)			// 追従時の速度
+
+#define UNITI_TIME		(40)			// 終了する時間
 //--------------------------------------------
 // コンストラクタ
 //--------------------------------------------
@@ -26,6 +28,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_bMoveFlag = false;
 	m_bScaleFlag = false;
 	m_nNumPlayerGet = 0;
+	m_nCntUninit = 0;
 }
 
 //--------------------------------------------
@@ -95,49 +98,76 @@ void CWord::Update(void)
 	CPlayer *pPlayer[MAX_PLAYER] = {};
 	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
 
-	for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
-	{
-		pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
-		PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
-	}
+	if (m_bFlagUninit == false)
+	{	// 拾うことが可能な文字の場合
+		for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
+		{
+			pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
+			PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
+		}
 
-	//pos = Move(pos);
+		for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
+		{
+			if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
+			{
 
-	for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
-	{
-		if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
-		{	// 3個取ったら取らない
+				Distance(pos, PlayerPos[nCntPlayer], nCntPlayer);
 
-			Distance(pos, PlayerPos[nCntPlayer], nCntPlayer);
+				// 当たり判定(円を使った判定)
+				Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
 
-			// 当たり判定(円を使った判定)
-			Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
-
-			if (m_bFlagUninit == true)
-			{	// 終了フラグが立った場合
-				pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
-				pPlayer[nCntPlayer]->SetbSetupBullet(true);
-				Uninit();
-				return;
+				if (m_bFlagUninit == true)
+				{	// 終了フラグが立った場合
+					pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
+					pPlayer[nCntPlayer]->SetbSetupBullet(true);
+					m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
+					move = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+					m_size = D3DXVECTOR3(6.0f, 6.0f, 0.0f);
+					break;
+				}
+			}
+			else
+			{	// 3個取ったら取らない
+				Distance(pos, D3DXVECTOR3(9999999990.0f, 0.0f, 9999999990.0f), nCntPlayer);
 			}
 		}
-		else
-		{
-			Distance(pos,D3DXVECTOR3(9999999990.0f, 0.0f, 9999999990.0f), nCntPlayer);
+
+		if (m_bFlagUninit == false)
+		{	// 終了フラグが立っている場合
+			int nNum = ComparisonDistance((int)NumPlayer);
+
+			// 文字がプレイヤーに集まる(範囲で判定を取る)
+			move = Approach(pos, PlayerPos[nNum], AREA_CHASE, m_fDistance[nNum]);
 		}
+
 	}
 
-	int nNum = ComparisonDistance((int)NumPlayer);
+	if (m_bFlagUninit == true)
+	{	// 取得後の演出の場合
+		if (pPlayer[m_nNumPlayerGet] == NULL)
+		{	
+			pPlayer[m_nNumPlayerGet] = CGame::GetPlayer(m_nNumPlayerGet);	// プレイヤーを取得
+			float fPlayer = pPlayer[m_nNumPlayerGet]->GetRotation().y;
+			
+			//pos = D3DXVECTOR3(sinf(fPlayer + (D3DX_PI)) + (pPlayer[m_nNumPlayerGet]->GetPosition().x + 10.0f), 40.0f, pPlayer[m_nNumPlayerGet]->GetPosition().z);
+			pos = D3DXVECTOR3(pPlayer[m_nNumPlayerGet]->GetPosition().x, 50.0f, pPlayer[m_nNumPlayerGet]->GetPosition().z);
+		}
 
-	// 文字がプレイヤーに集まる(範囲で判定を取る)
-	move = Approach(pos, PlayerPos[nNum], AREA_CHASE, m_fDistance[nNum]);
+		m_nCntUninit++;	// カウントの加算
 
+		if ((m_nCntUninit % UNITI_TIME) == 0)
+		{	// 時間になったら終了する
+			Uninit();
+			return;
+		}
+
+		//pos = Move(pos);
+	}
 	//ScaleSize();
 
 	// 位置更新
 	pos.x += move.x;
-	//if (m_bMoveFlag == false) { pos.y += move.y; }
-	//if (m_bMoveFlag == true) { pos.y -= move.y; }
+	//pos.y += move.y;
 	pos.z += move.z;
 
 	CSceneBillBoard::Update();

@@ -33,7 +33,7 @@ public:
 		MODE_DUST,		// ゴミ
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_CAR0,		// 車0
-		MODEL_CAR1,		// 車1
+		MODEL_MIC,		// マイク
 		MODEL_DESK,		// 机
 		MODEL_PULIN,	// プリン
 		MODE_KNIFE,		// ナイフ
@@ -53,6 +53,7 @@ public:
 		MODEL_TWIG,		// こえだ
 		MODEL_STRAWBERRY,// イチゴ
 		MODEL_EGG,		// たまご
+		MODEL_LANCE,	// ランス
 		MODEL_MAX,
 	} MODEL;
 

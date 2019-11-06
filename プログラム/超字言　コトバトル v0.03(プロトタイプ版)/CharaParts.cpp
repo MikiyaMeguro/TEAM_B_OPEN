@@ -44,8 +44,6 @@ void CCharaParts::Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMA
 		&m_nNumMat,
 		&m_pMesh);
 
-	//テクスチャクラスからテクスチャをもらう
-	m_pTexture = CTexture::GetTexture("KUMA_UV");
 }
 
 //=============================================================================
@@ -165,4 +163,15 @@ void CCharaParts::Draw(void)
 		pDevice->SetMaterial(&matDef);
 
 	}
+}
+
+//=============================================================================
+//	テクスチャ割り当て処理
+//=============================================================================
+void CCharaParts::BindTexture(LPCSTR Tag)
+{
+	//テクスチャクラスからテクスチャをもらう
+	m_pTexture = CTexture::GetTexture(Tag);
+
+
 }
