@@ -56,9 +56,6 @@ DATA = 00040 data/TEXTURE/PlayerNum.png ÉvÉåÉCêlêî
 DATA = 00041 data/TEXTURE/point.png POINT
 
 DATA = 00042 data/TEXTURE/kuma_uv.jpg KUMA_UV
+DATA = 00043 data/TEXTURE/dog_uv.jpg INU_UV
 
-DATA = 00006 data/TEXTURE/pause100.png  PAUSE_BG
-DATA = 00007 data/TEXTURE/Tutorial.jpg 	PAUSE_TUTORIAL
-DATA = 00008 data/TEXTURE/pause000.png  PAUSE_MENU_CONTINUE
-DATA = 00009 data/TEXTURE/pause001.png  PAUSE_MENU_QUIT
 END_LOAD

@@ -28,15 +28,25 @@ class CWordManager;
 class CPlayer : public CScene
 {
 public:
+	//キャラクタータイプ
 	typedef enum
 	{
-		TYPE_NORMAL = 0,			//ノーマル
+		TYPE_BARANCE = 0,			//ノーマル
 		TYPE_POWER,					//パワー
 		TYPE_SPEED,					//スピード
 		TYPE_REACH,					//リーチ
 		TYPE_MAX
-	}PLAYER_TYPE;	//プレイヤーの操作タイプ
+	}PLAYER_TYPE;
 
+	//体情報
+	typedef enum
+	{
+		LOWER_BODY = 0,		//下半身
+		UPPER_BODY,			//上半身
+		BODY_MAX,
+	}BODY;
+
+	//モーション列挙(上半身)
 	typedef enum
 	{
 		MOTION_UPPER_NONE = 0,				//モーション無し
@@ -52,6 +62,7 @@ public:
 		MOTION_UPPER_MAX
 	}MOTION_UPPER;
 
+	//モーション列挙(下半身)
 	typedef enum
 	{
 		MOTION_LOWER_NONE = 0,				//モーション無し
@@ -67,19 +78,14 @@ public:
 		MOTION_LOWER_MAX
 	}MOTION_LOWER;
 
+	//モーション遷移時の情報
 	typedef enum
 	{
-		STATE_NORMAL,		//モーション再生状態
-		STATE_BLEND,		//モーションブレンド状態
+		STATE_NORMAL,		//モーションを通常遷移させる
+		STATE_BLEND,		//モーションブレンドをかける
 	}MOTION_STATE;
 
-	typedef enum
-	{
-		LOWER_BODY = 0,		//下半身
-		UPPER_BODY,			//上半身
-		BODY_MAX,
-	}BODY;
-
+	//キーフレームごとの情報
 	typedef struct
 	{
 		int nFrame;							//フレーム数
@@ -96,6 +102,7 @@ public:
 		}
 	}KeyProperty;
 
+	//モーション情報(
 	typedef struct
 	{
 		int	  nLoop;								//ループするかどうか	:1ならループ
@@ -119,22 +126,25 @@ public:
 		}
 	}MotionProperty;
 
+	//キャラパーツの情報格納構造体
 	typedef struct
 	{
-		int nIndex;
-		int nParent;
-		D3DXVECTOR3 pos;
-		D3DXVECTOR3 rot;
-		char FileName[256];
+		int nIndex;				//パーツインデックス
+		int nParent;			//パーツの親番号
+		D3DXVECTOR3 pos;		//位置
+		D3DXVECTOR3 rot;		//角度
+		char FileName[256];		//ファイル名
 	}PartsLoadInfo;
 
+	//プレイヤーの情報格納構造体
 	typedef struct
 	{
-		PartsLoadInfo info[PLAYER_MODELNUM];
-		MotionProperty prop[MOTION_UPPER_MAX];
-		int nPartsNum;
-		bool bFlag;
+		PartsLoadInfo info[PLAYER_MODELNUM];		//パーツ情報
+		MotionProperty prop[10];					//モーション情報
+		int nPartsNum;								//パーツ数
+		bool bLoad;									//ロードされたか
 	}PlayerLoadState;
+
 	CPlayer(int nPriority = 3);
 	~CPlayer();
 
@@ -175,18 +185,18 @@ private:
 	int m_nID;	//識別ID(0～3の間)
 	PLAYER_TYPE m_PlayerType;
 	LPCSTR m_ChildCameraName;		//このプレイヤに追従するカメラの名前
-	C3DCharactor* m_pCharactorMove;			//キャラクターの移動管理
+	C3DCharactor* m_pCharactorMove;							//キャラクターの移動管理
 	CCharaParts* m_pPlayerParts[PLAYER_MODELNUM][BODY_MAX];	//キャラクターの構成パーツ
 
-	bool m_bLand;					// モデルに乗っているかどうか
+	bool m_bLand;									// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;
-	int m_nCntTransTime;			//無敵時間
-	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号
-	CWordManager *m_pWordManager;
+	int m_nCntTransTime;							//無敵時間
+	CSceneBillBoard *m_pPlayerNum;					// プレイヤー番号表示用ビルボード
+	CWordManager *m_pWordManager;					//文字管理クラスのポインタ
 
-	bool m_bSetupBullet;					//弾が撃てる状態の判定用
+	bool m_bSetupBullet;							//弾が撃てる状態の判定用
 
-	C3DCharactor* m_pLockOnCharactor;
+	C3DCharactor* m_pLockOnCharactor;				//ロックオンしているキャラクターの情報
 
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];

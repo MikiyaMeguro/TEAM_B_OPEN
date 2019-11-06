@@ -24,12 +24,12 @@
 #define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 
-#define KUMA_POWER_LOADTEXT			"data/MOTION/motion_bea.txt"			//熊(パワー型)のロードテキスト
+#define INU_BARANCE_LOADTEXT_LOWER "data/MOTION/motion_dog_down.txt"
+#define INU_BARANCE_LOADTEXT_UPPER "data/MOTION/motion_dog_up.txt"
 
 #define KUMA_POWER_LOADTEXT_LOWER "data/MOTION/motion_bea_down.txt"			//熊(パワー型)の下半身のロードテキスト
 #define KUMA_POWER_LOADTEXT_UPPER "data/MOTION/motion_bea_up.txt"			//熊(パワー型)の上半身のロードテキスト
 
-#define MOTION_NUM ((MOTION_LOWER::MOTION_LOWER_MAX > MOTION_UPPER::MOTION_UPPER_MAX) ? MOTION_LOWER::MOTION_LOWER_MAX : MOTION_UPPER::MOTION_UPPER_MAX)
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -116,21 +116,21 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	//キャラごとに読み込むファイルを分ける(ファイルができるまでは分けない)
 	switch (PlayerType)
 	{
-	case TYPE_NORMAL:
-		ModelLoad(KUMA_POWER_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
-		ModelLoad(KUMA_POWER_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+	case TYPE_BARANCE:
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	case TYPE_POWER:
-		ModelLoad(KUMA_POWER_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(KUMA_POWER_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	case TYPE_SPEED:
-		ModelLoad(KUMA_POWER_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(KUMA_POWER_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	case TYPE_REACH:
-		ModelLoad(KUMA_POWER_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(KUMA_POWER_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
 		break;
 	}
 
@@ -758,8 +758,8 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 			ObjRelease(m_pPlayerParts[nCntParts][body]);
 			m_pPlayerParts[nCntParts][body] = NULL;
 		}
-	if (m_PlayerLoadState[type][body].bFlag == false ||
-		(m_PlayerLoadState[type][body].bFlag == true && bReLoad == true))
+	if (m_PlayerLoadState[type][body].bLoad == false ||
+		(m_PlayerLoadState[type][body].bLoad == true && bReLoad == true))
 	{//	まだこの情報がロードされていないorされているが再度ロードしたければ
 		for (int nCntMotion = 0; nCntMotion < MOTION_UPPER_MAX; nCntMotion++)
 		{
@@ -928,7 +928,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 
 		}
 		fclose(pFile);
-		m_PlayerLoadState[type][body].bFlag = true;
+		m_PlayerLoadState[type][body].bLoad = true;
 	}
 
 	int nCntParts = 0;
@@ -940,6 +940,22 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 				m_pPlayerParts[nCntParts][body]->Set(m_PlayerLoadState[type][body].info[nCntParts].FileName,
 					m_PlayerLoadState[type][body].info[nCntParts].pos,
 					m_PlayerLoadState[type][body].info[nCntParts].rot, NULL);
+
+				switch (type)
+				{
+				case TYPE_BARANCE:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				case TYPE_POWER:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				case TYPE_SPEED:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				case TYPE_REACH:
+					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					break;
+				}
 			}
 		}
 	//親マトリクスセット
@@ -956,7 +972,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 		}
 	}
 
-	for (int nCntMotion = 0; nCntMotion < MOTION_UPPER_MAX; nCntMotion++)
+	for (int nCntMotion = 0; nCntMotion < (body == LOWER_BODY ? MOTION_LOWER_MAX : MOTION_UPPER_MAX); nCntMotion++)	//上下でモーション数が違うときの対策
 	{
 		m_propMotion[nCntMotion][body] = m_PlayerLoadState[type][body].prop[nCntMotion];
 	}

@@ -40,6 +40,8 @@ public:
 
 	void SetDrawFlag(bool bFlag) { m_bDrawFlag = bFlag; };
 	bool GetDrawFlag(void) { return m_bDrawFlag; };
+
+	void BindTexture(LPCSTR Tag);
 private:
 	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
