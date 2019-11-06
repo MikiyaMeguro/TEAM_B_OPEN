@@ -24,11 +24,11 @@
 #define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 
-#define INU_BARANCE_LOADTEXT_LOWER "data/MOTION/motion_dog_down.txt"
-#define INU_BARANCE_LOADTEXT_UPPER "data/MOTION/motion_dog_up.txt"
+#define INU_BARANCE_LOADTEXT_UPPER "data/MOTION/motion_dog_up.txt"			//犬(バランス型)の上半身のロードテキスト
+#define INU_BARANCE_LOADTEXT_LOWER "data/MOTION/motion_dog_down.txt"		//犬(バランス型)の下半身のロードテキスト
 
-#define KUMA_POWER_LOADTEXT_LOWER "data/MOTION/motion_bea_down.txt"			//熊(パワー型)の下半身のロードテキスト
 #define KUMA_POWER_LOADTEXT_UPPER "data/MOTION/motion_bea_up.txt"			//熊(パワー型)の上半身のロードテキスト
+#define KUMA_POWER_LOADTEXT_LOWER "data/MOTION/motion_bea_down.txt"			//熊(パワー型)の下半身のロードテキスト
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -558,7 +558,7 @@ bool CPlayer::CollisionBullet(void)
 		{// 死亡フラグが立っていないもの
 			if (pScene->GetObjType() == CScene::OBJTYPE_BULLET)
 			{// オブジェクトの種類を確かめる
-				CBulletBase *pBullet = ((CBulletBase*)pScene);		// CBulletBaseへキャスト(型の変更)
+				C3DBullet *pBullet = ((C3DBullet*)pScene);		// CBulletBaseへキャスト(型の変更)
 				BulletPos = pBullet->GetPosition();
 				BulletRot = pBullet->GetRotation();
 
@@ -571,7 +571,7 @@ bool CPlayer::CollisionBullet(void)
 				{//球の判定
 
 					/*得点加算 (当てたキャラのIDはpBulletのGetIDで取得できる)*/
-					if (pBullet->GetType() == CBulletBase::TYPE_MODEL)
+					if (pBullet->GetType() == C3DBullet::TYPE_MODEL)
 					{	// モデルの場合はポイント加算
 						CPoint *pPoint = NULL;
 						if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
@@ -895,7 +895,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 
 											}
 											else if (strcmp(HeadText, "POS") == 0)
-											{
+											{//座標
 												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 													&DustBox,
 													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].x,
@@ -903,7 +903,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Pos[nCntKey].z);
 											}
 											else if (strcmp(HeadText, "ROT") == 0)
-											{
+											{//角度
 												sscanf(ReadText, "%s %c %f %f %f", &DustBox,
 													&DustBox,
 													&m_PlayerLoadState[type][body].prop[nCntMotionType].key[nCntKeySet].Rot[nCntKey].x,
@@ -931,18 +931,20 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 		m_PlayerLoadState[type][body].bLoad = true;
 	}
 
+	//情報設定
 	int nCntParts = 0;
 		for (nCntParts = 0; nCntParts < m_PlayerLoadState[type][body].nPartsNum; nCntParts++)
 		{
-			ObjCreate(m_pPlayerParts[nCntParts][body]);
-			if (m_pPlayerParts[nCntParts][body] != NULL)
-			{
+
+			if (ObjCreate(m_pPlayerParts[nCntParts][body]))
+			{//生成されたら
+
 				m_pPlayerParts[nCntParts][body]->Set(m_PlayerLoadState[type][body].info[nCntParts].FileName,
 					m_PlayerLoadState[type][body].info[nCntParts].pos,
 					m_PlayerLoadState[type][body].info[nCntParts].rot, NULL);
 
 				switch (type)
-				{
+				{//タイプごとの処理
 				case TYPE_BARANCE:
 					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
 					break;
@@ -958,6 +960,7 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 				}
 			}
 		}
+
 	//親マトリクスセット
 	for (int nCntParts = 0; nCntParts < m_PlayerLoadState[type][body].nPartsNum; nCntParts++)
 	{
@@ -972,8 +975,9 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 		}
 	}
 
-	for (int nCntMotion = 0; nCntMotion < (body == LOWER_BODY ? MOTION_LOWER_MAX : MOTION_UPPER_MAX); nCntMotion++)	//上下でモーション数が違うときの対策
-	{
+	//モーション情報を読み込み変数からコピー
+	for (int nCntMotion = 0; nCntMotion < (body == LOWER_BODY ? MOTION_LOWER_MAX : MOTION_UPPER_MAX); nCntMotion++)
+	{//(body == LOWER_BODY ? MOTION_LOWER_MAX : MOTION_UPPER_MAX) : 上下のモーション数に応じてループ数を変える
 		m_propMotion[nCntMotion][body] = m_PlayerLoadState[type][body].prop[nCntMotion];
 	}
 	return S_OK;

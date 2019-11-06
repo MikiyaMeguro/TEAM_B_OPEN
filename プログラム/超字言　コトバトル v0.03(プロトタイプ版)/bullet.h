@@ -9,15 +9,24 @@
 #ifndef _BULLET_H_
 #define _BULLET_H_
 
-#define BULLET_PRIORITY (1)
-#define BULLET_COLLISION_SIZE (30.0f)
 #include "scene.h"
 #include "load.h"
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define BULLET_PRIORITY (1)
+#define BULLET_COLLISION_SIZE (30.0f)
+
+//=============================================================================
+// 前方宣言
+//=============================================================================
 class CSceneX;
 class CSceneBillBoard;
 
-//弾基本クラス
-class CBulletBase : public CScene
+//=============================================================================
+// クラスの定義
+//=============================================================================
+class C3DBullet : public CScene
 {
 public:
 	typedef enum
@@ -28,9 +37,9 @@ public:
 		TYPE_MAX
 	}BULLET_TYPE;
 
-	CBulletBase() {};
-	CBulletBase(int nPriority = BULLET_PRIORITY);
-	~CBulletBase();
+	C3DBullet() {};
+	C3DBullet(int nPriority = BULLET_PRIORITY);
+	~C3DBullet();
 
 
 	void Set(D3DXVECTOR3 pos,D3DXVECTOR3 rot,float fSpeed,int nLife, int nID);
@@ -60,7 +69,7 @@ private:
 };
 
 //モデル弾クラス
-class CModelBullet : public CBulletBase
+class CModelBullet : public C3DBullet
 {
 public:
 	CModelBullet();
@@ -81,7 +90,7 @@ private:
 };
 
 //文字弾クラス
-class CWordBullet : public CBulletBase
+class CWordBullet : public C3DBullet
 {
 public:
 	CWordBullet();

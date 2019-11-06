@@ -76,8 +76,7 @@ void CStageSelect::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
-	// ランダムな値を更新
-	srand((unsigned int)time(NULL));
+
 	//任意のキーENTER
 	if (CCommand::GetCommand("DECISION"))
 	{

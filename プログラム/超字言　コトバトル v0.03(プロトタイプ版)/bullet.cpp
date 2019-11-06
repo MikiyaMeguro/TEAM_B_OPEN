@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// 弾基本処理 (CBulletBase)[bullet.cpp]
+// 弾基本処理 (C3DBullet)[bullet.cpp]
 // Author : Kodama Yuto
 //
 //=============================================================================
@@ -13,11 +13,11 @@
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
-CBulletBase::CBulletBase(int nPriority) : CScene(nPriority)
+C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 {
 	m_Type = TYPE_NONE;
 }
-CBulletBase::~CBulletBase()
+C3DBullet::~C3DBullet()
 {
 
 }
@@ -25,7 +25,7 @@ CBulletBase::~CBulletBase()
 //=============================================================================
 // 設定処理(CBulletBase)
 //=============================================================================
-void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nID)
+void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nID)
 {
 	m_pos = pos;
 	m_rot = rot;
@@ -38,7 +38,7 @@ void CBulletBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife,
 //=============================================================================
 // 初期化処理(CBulletBase)
 //=============================================================================
-HRESULT CBulletBase::Init(void)
+HRESULT C3DBullet::Init(void)
 {
 
 	SetObjType(OBJTYPE_BULLET);
@@ -48,7 +48,7 @@ HRESULT CBulletBase::Init(void)
 //=============================================================================
 // 終了処理(CBulletBase)
 //=============================================================================
-void CBulletBase::Uninit(void)
+void C3DBullet::Uninit(void)
 {
 
 
@@ -58,7 +58,7 @@ void CBulletBase::Uninit(void)
 //=============================================================================
 // 更新処理(CBulletBase)
 //=============================================================================
-void CBulletBase::Update(void)
+void C3DBullet::Update(void)
 {
 	//マトリックスを使用して移動量を求める
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, m_fMove);
@@ -82,7 +82,7 @@ void CBulletBase::Update(void)
 //=============================================================================
 // 描画処理(CBulletBase)
 //=============================================================================
-void CBulletBase::Draw(void)
+void C3DBullet::Draw(void)
 {
 
 }
@@ -96,7 +96,7 @@ void CBulletBase::Draw(void)
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CModelBullet)
 //=============================================================================
-CModelBullet::CModelBullet(int nPriority) : CBulletBase(nPriority)
+CModelBullet::CModelBullet(int nPriority) : C3DBullet(nPriority)
 {
 
 }
@@ -125,7 +125,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, flo
 	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
 
 
-	CBulletBase::Set(pos,rot,fSpeed,nLife, nID);
+	C3DBullet::Set(pos,rot,fSpeed,nLife, nID);
 }
 
 //=============================================================================
@@ -133,7 +133,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, flo
 //=============================================================================
 HRESULT CModelBullet::Init(void)
 {
-	CBulletBase::Init();
+	C3DBullet::Init();
 
 	m_Type = TYPE_MODEL;
 	return S_OK;
@@ -150,7 +150,7 @@ void CModelBullet::Uninit(void)
 		m_pModel = NULL;
 	}
 
-	CBulletBase::Uninit();
+	C3DBullet::Uninit();
 }
 
 //=============================================================================
@@ -158,7 +158,7 @@ void CModelBullet::Uninit(void)
 //=============================================================================
 void CModelBullet::Update(void)
 {
-	CBulletBase::Update();
+	C3DBullet::Update();
 	m_pModel->SetPosition(GetPosition());
 	m_pModel->SetRot(GetRotation());
 	int& nLife = GetLife();
@@ -187,7 +187,7 @@ void CModelBullet::Draw(void)
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CWordBullet)
 //=============================================================================
-CWordBullet::CWordBullet(int nPriority) : CBulletBase(nPriority)
+CWordBullet::CWordBullet(int nPriority) : C3DBullet(nPriority)
 {
 	m_pWord = NULL;
 }
@@ -215,7 +215,7 @@ CWordBullet* CWordBullet::Create(void)
 //=============================================================================
 void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nWordNum, int nID)
 {
-	CBulletBase::Set(pos, rot,fSpeed,nLife,nID);
+	C3DBullet::Set(pos, rot,fSpeed,nLife,nID);
 	m_pWord = CSceneBillBoard::Create(pos,20.0f,20.0f,"WORD");
 	if (m_pWord != NULL) { m_pWord->SetTexture(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)),
 											   D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f))); };
@@ -226,7 +226,7 @@ void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife,
 //=============================================================================
 HRESULT CWordBullet::Init(void)
 {
-	CBulletBase::Init();
+	C3DBullet::Init();
 	m_Type = TYPE_WORD;
 
 	return S_OK;
@@ -243,7 +243,7 @@ void CWordBullet::Uninit(void)
 		m_pWord = NULL;
 	}
 
-	CBulletBase::Uninit();
+	C3DBullet::Uninit();
 
 }
 
@@ -252,7 +252,7 @@ void CWordBullet::Uninit(void)
 //=============================================================================
 void CWordBullet::Update(void)
 {
-	CBulletBase::Update();
+	C3DBullet::Update();
 
 	m_pWord->Setpos(GetPosition());
 	int& nLife = GetLife();
