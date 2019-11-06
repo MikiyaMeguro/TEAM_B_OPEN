@@ -14,10 +14,13 @@
 #include "sceneBillboard.h"
 #include "CharaParts.h"
 
-
+//=============================================================================
+// マクロ定義
+//=============================================================================
 #define PLAYER_MODELNUM (20)
 #define MOTION_BLENDTIME (8)
 #define MAX_KEY (20)
+
 //class CScene3D;
 class CSceneX;
 class CWordManager;
@@ -36,26 +39,11 @@ public:
 
 	typedef enum
 	{
-		MOTION_LOWER_NONE = 0,				//モーション無し
-		MOTION_LOWER_NEUTRAL,				//待機(弾無し)
-		MOTION_LOWER_WALK,					//歩行(弾無し)
-		MOTION_LOWER_SETUP_NEUTRAL,			//待機(弾有り)
-		MOTION_LOWER_SETUP_WALK,			//歩行(弾有り)
-		MOTION_LOWER_STEP,					//ステップ回避
-		MOTION_LOWER_SHOT,					//弾を打つ
-		MOTION_LOWER_DAMAGE,				//ダメージを受ける
-		MOTION_LOWER_WINNER,				//一位の時
-		MOTION_LOWER_LOSER,					//最下位の時
-		MOTION_LOWER_MAX
-	}MOTION_LOWER;
-
-	typedef enum
-	{
 		MOTION_UPPER_NONE = 0,				//モーション無し
 		MOTION_UPPER_NEUTRAL,				//待機(弾無し)
-		MOTION_UPPER_WALK_FRONT,			//正面移動
-		MOTION_UPPER_WALK_RIGHT,			//右移動
-		MOTION_UPPER_WALK_LEFT,				//左移動
+		MOTION_UPPER_WALK,					//歩行(弾無し)
+		MOTION_UPPER_SETUP_NEUTRAL,			//待機(弾有り)
+		MOTION_UPPER_SETUP_WALK,			//歩行(弾有り)
 		MOTION_UPPER_STEP,					//ステップ回避
 		MOTION_UPPER_SHOT,					//弾を打つ
 		MOTION_UPPER_DAMAGE,				//ダメージを受ける
@@ -63,6 +51,21 @@ public:
 		MOTION_UPPER_LOSER,					//最下位の時
 		MOTION_UPPER_MAX
 	}MOTION_UPPER;
+
+	typedef enum
+	{
+		MOTION_LOWER_NONE = 0,				//モーション無し
+		MOTION_LOWER_NEUTRAL,				//待機(弾無し)
+		MOTION_LOWER_WALK_FRONT,			//正面移動
+		MOTION_LOWER_WALK_RIGHT,			//右移動
+		MOTION_LOWER_WALK_LEFT,				//左移動
+		MOTION_LOWER_STEP,					//ステップ回避
+		MOTION_LOWER_SHOT,					//弾を打つ
+		MOTION_LOWER_DAMAGE,				//ダメージを受ける
+		MOTION_LOWER_WINNER,				//一位の時
+		MOTION_LOWER_LOSER,					//最下位の時
+		MOTION_LOWER_MAX
+	}MOTION_LOWER;
 
 	typedef enum
 	{
@@ -158,7 +161,7 @@ public:
 	void			SetbSetupBullet(bool bBullet)	{ m_bSetupBullet = bBullet; };
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 
-	void			SetMotion(int motion, BODY body = BODY::LOWER_BODY, MOTION_STATE state = STATE_BLEND);
+	void			SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
 private:
 	bool			CollisionBullet(void);
@@ -194,4 +197,5 @@ private:
 	int m_nCntKey[BODY_MAX];											//キー用カウンタ
 	int m_nCntBlendMotion[BODY_MAX];
 };
+
 #endif // !_PLAYER_H_

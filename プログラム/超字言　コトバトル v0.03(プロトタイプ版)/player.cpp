@@ -447,14 +447,15 @@ void CPlayer::MotionUpdate(BODY body)
 				m_nCntKey[body] = 0;
 				if (m_propMotion[m_motion[body]][body].nLoop == 0)
 				{
-					//if (m_pWordManager->GetBulletFlag())
-					//{
-					//	SetMotion(MOTION_SETUP_NEUTRAL,body);
-					//}
-					//else
-					//{
-					//	SetMotion(MOTION_NEUTRAL, body);
-					//}
+					if (m_pWordManager->GetBulletFlag())
+					{
+						SetMotion(MOTION_UPPER_SETUP_NEUTRAL, UPPER_BODY);
+					}
+					else
+					{
+						SetMotion(MOTION_UPPER_NEUTRAL, UPPER_BODY);
+					}
+						SetMotion(MOTION_LOWER_NEUTRAL, LOWER_BODY);
 				}
 			}
 		}
@@ -488,9 +489,9 @@ void CPlayer::MotionUpdate(BODY body)
 				//ãÅÇﬂÇΩç∑ï™Çåªç›ÇÃÉLÅ[Ç…åWêîÇä|ÇØÇ»Ç™ÇÁë´Ç∑
 				rot = pKey.Rot[nCntParts] + (aKeyRot[nCntParts] * fFlameMotion);
 
-				if (nCntParts == 0)
+				if (nCntParts == 0 && body == LOWER_BODY)
 				{
-					rot.y += 3.14f;
+					rot.y = 3.14f;
 				}
 
 				//äpìxÇÃê≥ãKâª
