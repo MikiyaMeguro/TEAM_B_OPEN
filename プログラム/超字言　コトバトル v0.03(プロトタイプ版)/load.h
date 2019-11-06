@@ -54,6 +54,7 @@ public:
 		MODEL_STRAWBERRY,// ƒCƒ`ƒS
 		MODEL_EGG,		// ‚½‚Ü‚²
 		MODEL_LANCE,	// ƒ‰ƒ“ƒX
+		MODEL_KADANN,	// ‚©‚¾‚ñ
 		MODEL_MAX,
 	} MODEL;
 
