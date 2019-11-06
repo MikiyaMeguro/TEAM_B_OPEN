@@ -44,7 +44,7 @@ MODEL_FILENAME = data/MODEL/Strawberry.x"			#25 ÉCÉ`ÉS
 MODEL_FILENAME = data/MODEL/Egg.x"					#26 ÇΩÇ‹Ç≤
 MODEL_FILENAME = data/MODEL/Lance.x"				#27 ÉâÉìÉX
 MODEL_FILENAME = data/MODEL/flowerbed.x"			#28 Ç©ÇæÇÒ
-MODEL_FILENAME = data/MODEL/flowerbed.x"			#29 ìÅ
+MODEL_FILENAME = data/MODEL/Katana.x"				#29 ìÅ
 MODEL_FILENAME = data/MODEL/log.x"					#30 Ç‹ÇÈÇΩ
 
 #------------------------------------------------------------
