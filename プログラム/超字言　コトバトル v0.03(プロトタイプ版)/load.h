@@ -55,6 +55,7 @@ public:
 		MODEL_EGG,		// ‚½‚Ü‚²
 		MODEL_LANCE,	// ƒ‰ƒ“ƒX
 		MODEL_KADANN,	// ‚©‚¾‚ñ
+		MODEL_KATANA,	// “
 		MODEL_MAX,
 	} MODEL;
 
