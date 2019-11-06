@@ -53,6 +53,7 @@ public:
 		MODEL_TWIG,		// ‚±‚¦‚¾
 		MODEL_STRAWBERRY,// ƒCƒ`ƒS
 		MODEL_EGG,		// ‚½‚Ü‚²
+		MODEL_LANCE,	// ƒ‰ƒ“ƒX
 		MODEL_MAX,
 	} MODEL;
 
