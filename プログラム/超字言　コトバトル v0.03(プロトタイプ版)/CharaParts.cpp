@@ -115,19 +115,22 @@ void CCharaParts::Draw(void)
 		// 現在のマテリアルを取得
 		pDevice->GetMaterial(&matDef);
 
-		// マテリアルデータへのポインタを取得
-		pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
-
-		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+		if (m_pBuffMat != NULL)
 		{
-			// マテリアルの設定
-			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
+			// マテリアルデータへのポインタを取得
+			pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
 
-			/*テクスチャの設定*/
-			pDevice->SetTexture(0, m_pTexture);//テクスチャの設定(使わなければNULLを入れる)
+			for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
+			{
+				// マテリアルの設定
+				pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
-			// モデル(パーツ)の描画
-			m_pMesh->DrawSubset(nCntMat);
+				/*テクスチャの設定*/
+				pDevice->SetTexture(0, m_pTexture);//テクスチャの設定(使わなければNULLを入れる)
+
+				// モデル(パーツ)の描画
+				m_pMesh->DrawSubset(nCntMat);
+			}
 		}
 
 		// マテリアルをデフォルトに戻す

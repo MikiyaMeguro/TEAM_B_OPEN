@@ -612,7 +612,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\cat_color.jpg";
+    "data\\TEXTURE\\cat_uv.jpg";
    }
   }
  }
