@@ -24,6 +24,7 @@
 #include "PlayerNumSelect.h"
 #include "object.h"
 #include "point.h"
+#include "SetWord.h"
 
 #include "PlayerNumSelect.h"
 
@@ -47,6 +48,10 @@
 #define MACHINE_STAGE_1	("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
 #define MACHINE_STAGE_2	("data\\TEXT\\機械ステージ\\Machine_Stage_2.txt")
 
+#define FILE_NAME0		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_0.txt")
+#define FILE_NAME1		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_1.txt")
+#define FILE_NAME2		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_2.txt")
+
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
@@ -54,6 +59,7 @@ CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
 CTube *CGame::m_apTube[MAX_PLAYER] = {};
 CMeshField *CGame::m_pMeshField = NULL;
 CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
+CSetWord *CGame::m_pWordCreate = NULL;
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -84,6 +90,11 @@ void CGame::Init(void)
 	m_pcStageName[1] = { MACHINE_STAGE_1 };
 	m_pcStageName[2] = { MACHINE_STAGE_2 };
 
+	m_pcStageNameWord[0] = { FILE_NAME0 };
+	m_pcStageNameWord[1] = { FILE_NAME1 };
+	m_pcStageNameWord[2] = { FILE_NAME2 };
+
+	CLoadText::LoadFile();		// 文字のリソース読み込み
 
 	//壁、床設定
 	//CScene3D* p3D = NULL;
@@ -108,9 +119,12 @@ void CGame::Init(void)
 
 	SetPointFrame((int)NumPlayer);	// ポイントの設定
 
-	WordCreate();				// 文字の生成
-
-	CLoadText::LoadFile();		// 文字のリソース読み込み
+	//WordCreate();				// 文字の生成
+	m_pWordCreate = NULL;
+	if (m_pWordCreate == NULL)
+	{
+		m_pWordCreate = CSetWord::Create();
+	}
 
 	// テストオブジェクト
 	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
@@ -180,6 +194,12 @@ void CGame::Uninit(void)
 			m_pPoint[nCntPoint]->Uninit();
 			m_pPoint[nCntPoint] = NULL;
 		}
+	}
+
+	if (m_pWordCreate != NULL)
+	{
+		m_pWordCreate->Uninit();
+		m_pWordCreate = NULL;
 	}
 
 	//不要なカメラを削除
@@ -576,6 +596,7 @@ void CGame::SetStage(int nCntState)
 	if (nCntState < MAX_STAGE)
 	{
 		CSetObject::LoadFile(m_pcStageName[nCntState]);
+		if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
 	}
 }
 //=============================================================================
