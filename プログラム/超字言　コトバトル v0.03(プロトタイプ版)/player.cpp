@@ -30,6 +30,12 @@
 #define KUMA_POWER_LOADTEXT_UPPER "data/MOTION/motion_bea_up.txt"			//熊(パワー型)の上半身のロードテキスト
 #define KUMA_POWER_LOADTEXT_LOWER "data/MOTION/motion_bea_down.txt"			//熊(パワー型)の下半身のロードテキスト
 
+#define NECO_SPEED_LOADTEXT_UPPER "data/MOTION/motion_cat_up.txt"			//猫(スピード型)の上半身のロードテキスト
+#define NECO_SPEED_LOADTEXT_LOWER "data/MOTION/motion_cat_down.txt"			//猫(スピード型)の下半身のロードテキスト
+
+#define USAGI_REACH_LOADTEXT_UPPER "data/MOTION/motion_rabbit_up.txt"			//猫(スピード型)の上半身のロードテキスト
+#define USAGI_REACH_LOADTEXT_LOWER "data/MOTION/motion_rabbit_down.txt"			//猫(スピード型)の下半身のロードテキスト
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -117,20 +123,20 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	switch (PlayerType)
 	{
 	case TYPE_BARANCE:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
 		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
 		break;
 	case TYPE_POWER:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(KUMA_POWER_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(KUMA_POWER_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
 		break;
 	case TYPE_SPEED:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(NECO_SPEED_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(NECO_SPEED_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
 		break;
 	case TYPE_REACH:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(USAGI_REACH_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(USAGI_REACH_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
 		break;
 	}
 
@@ -276,27 +282,49 @@ void CPlayer::Update(void)
 				m_bSetupBullet = false;
 			}
 		}
+
+		m_bAssist = true;
 	}
 
 	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
 	{
 		//テスト
 		int nPlayer = GetNearPlayer();
-		if (nPlayer != -1)
-		{
-			m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
 
-			if (pCam != NULL)
+		if (m_pLockOnCharactor == NULL)
+		{//まだロックオンしてなければ
+			if (m_bAssist == true)
 			{
-				pCam->SetLockOnChara(m_pLockOnCharactor);
+				if (nPlayer != -1)
+				{
+					m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+					if (pCam != NULL)
+					{
+						pCam->SetLockOnChara(m_pLockOnCharactor);
+					}
+				}
+				else
+				{
+					m_pLockOnCharactor = NULL;
+					if (pCam != NULL)
+					{
+						pCam->SetLockOnChara(NULL);
+					}
+					m_bAssist = false;
+				}
 			}
 		}
 		else
-		{
-			m_pLockOnCharactor = NULL;
-			if (pCam != NULL)
+		{//ロックオンしていれば
+			if (nPlayer == -1)
 			{
-				pCam->SetLockOnChara(NULL);
+				m_pLockOnCharactor = NULL;
+				if (pCam != NULL)
+				{
+					pCam->SetLockOnChara(NULL);
+				}
+				m_bAssist = false;
 			}
 		}
 	}
@@ -980,13 +1008,13 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
 					break;
 				case TYPE_POWER:
-					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					m_pPlayerParts[nCntParts][body]->BindTexture("KUMA_UV");
 					break;
 				case TYPE_SPEED:
-					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					m_pPlayerParts[nCntParts][body]->BindTexture("NECO_UV");
 					break;
 				case TYPE_REACH:
-					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					m_pPlayerParts[nCntParts][body]->BindTexture("USAGI_UV");
 					break;
 				}
 			}

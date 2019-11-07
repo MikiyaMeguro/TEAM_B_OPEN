@@ -6,10 +6,15 @@
 #include "game.h"
 #include "fade.h"
 #include "word.h"
+#include "word_manager.h"
+#include "time.h"
+#include <stdlib.h>		
+#include <time.h>		
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define FILE_NAME0				("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Stage_0.txt")
+#define POP_TIME				(60)		// 文字獲得時から出現までの時間
 
 //--------------------------------------------
 //静的メンバ変数宣言
@@ -21,7 +26,8 @@
 CSetWord::CSetWord() : CScene(3, CScene::OBJTYPE_SETOBJECT)
 {
 	m_pWordPos = NULL;
-	m_pWord = NULL;
+	m_AnswerNum = NULL;
+	m_nAnswerNumCount = 0;
 }
 
 //--------------------------------------------
@@ -55,8 +61,13 @@ CSetWord *CSetWord::Create()
 //=============================================================================
 HRESULT CSetWord::Init()
 {
+	srand((unsigned int)time(0));		// ランダムのやつ
+
 	//オブジェクト種類の設定
-	CScene::SetObjType(CScene::OBJTYPE_SETOBJECT);
+	CScene::SetObjType(CScene::OBJTYPE_NONE);
+	m_AnswerNum = CWordManager::GetAnswerNum();
+	m_nAnswer = CWordManager::GetAnswerDataNum();
+	m_nRandAnswerNum = rand() % m_nAnswer;
 
 	return S_OK;
 }
@@ -81,6 +92,10 @@ void CSetWord::Uninit(void)
 //=============================================================================
 void CSetWord::Update(void)
 {
+	WordUninit();	// 文字の終了フラグが立っている場合 終了処理へ
+
+	PopWord();		// 文字の出現
+		
 }
 
 //=============================================================================
@@ -88,14 +103,111 @@ void CSetWord::Update(void)
 //=============================================================================
 void CSetWord::Draw(void)
 {
-	//デバイスを取得
-	//CRenderer *pRenderer = CManager::GetRenderer();
-	//LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
-	//D3DXMATRIX mtxRot, mtxTrans;	//計算用マトリックス
-	//D3DXMATRIX mtxParent;
-
 }
 
+//=============================================================================
+//　位置の割り当て
+//=============================================================================
+void CSetWord::WordCreate(void)
+{
+	int nCntNum = 0;
+	int nRandNum = 0;
+	float fWord = 99.0f;
+	while (m_nNum != nCntNum)
+	{	// カウントが同じになった場合抜ける
+		
+		// randで位置決める
+		nRandNum = rand() % m_nNum;	// 行動パターンの数字を決める
+
+		// if文で使っているかを出す
+		if (m_pWordPos[nRandNum].bUse == false)
+		{
+			m_pWordPos[nRandNum].bUse = true;
+			if (m_nAnswerNumCount == 0) { fWord = m_AnswerNum[m_nRandAnswerNum].x; }
+			if (m_nAnswerNumCount == 1) { fWord = m_AnswerNum[m_nRandAnswerNum].y; }
+			if (m_nAnswerNumCount == 2) { fWord = m_AnswerNum[m_nRandAnswerNum].z; }
+
+			CWord::Create(m_pWordPos[nRandNum].pos, 12.0f, 12.0f, "WORD", (int)fWord, nRandNum);
+			// 使っている場合はカウントを回す
+			nCntNum++;
+			m_nAnswerNumCount++;
+
+			if (m_nAnswerNumCount % 3 == 0)
+			{
+				// randで位置決める
+				m_nRandAnswerNum = rand() % m_nAnswer;	// 行動パターンの数字を決める
+				m_nAnswerNumCount = 0;
+			}
+		}
+	}
+}
+
+//=============================================================================
+//　文字獲得後の終了処理
+//=============================================================================
+void CSetWord::WordUninit(void)
+{
+	CScene *pScene = NULL;
+	int nNum = m_nNum;
+
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(5);
+
+	while (pScene != NULL)
+	{// 優先順位が弾と同じオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+		if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_WORD)
+		{// 死亡フラグが立っていないもの
+			CWord *pWord = ((CWord*)pScene);		// CBulletBaseへキャスト(型の変更)
+			if (pWord->GetUninitFlag() == true)
+			{
+				nNum = pWord->GetNum();		// 番号を取得
+				m_pWordPos[nNum].bUse = false;
+				pWord->Uninit();
+				pWord = NULL;
+			}
+		}
+		pScene = pSceneNext;
+	}
+}
+
+//=============================================================================
+//　文字の出現処理
+//=============================================================================
+void CSetWord::PopWord(void)
+{
+	float fWord = 99.0f;
+
+	for (int nCntPos = 0; nCntPos < m_nNum; nCntPos++)
+	{
+		if (m_pWordPos[nCntPos].bUse == false)
+		{
+			m_pWordPos[nCntPos].nCntPop++;
+
+			if ((m_pWordPos[nCntPos].nCntPop % POP_TIME) == 0)
+			{
+				if (m_nAnswerNumCount == 0) { fWord = m_AnswerNum[m_nRandAnswerNum].x; }
+				if (m_nAnswerNumCount == 1) { fWord = m_AnswerNum[m_nRandAnswerNum].y; }
+				if (m_nAnswerNumCount == 2) { fWord = m_AnswerNum[m_nRandAnswerNum].z; }
+
+				CWord::Create(m_pWordPos[nCntPos].pos, 12.0f, 12.0f, "WORD", (int)fWord, nCntPos);
+				m_nAnswerNumCount++;
+				m_pWordPos[nCntPos].nCntPop = 0;
+				m_pWordPos[nCntPos].bUse = true;
+
+				if (m_nAnswerNumCount % 3 == 0)
+				{
+					// randで位置決める
+					m_nRandAnswerNum = rand() % m_nAnswer;	// 行動パターンの数字を決める
+					m_nAnswerNumCount = 0;
+				}
+			}
+
+
+		}
+	}
+}
 
 //=============================================================================
 // オブジェクトの配置情報を読み込み
@@ -115,20 +227,13 @@ void CSetWord::LoadFile(char *pFileName)
 	int nWord = 0;			//ポップで返された値を保持
 	int nNumModel = 0;		//モデルの数
 	int nType = 0;			//モデルの種類
-	int nNum = 0;
+	int nCntNum = 0;
 	D3DXVECTOR3 ModelPos;	//モデルの位置
 
 	if (m_pWordPos != NULL)
-	{
+	{	// 位置関係の構造体の開放
 		delete[] m_pWordPos;
 		m_pWordPos = NULL;
-	}
-
-	if (m_pWord != NULL)
-	{
-		m_pWord->Uninit();
-		delete[] m_pWord;
-		m_pWord = NULL;
 	}
 
 	//ファイルを開く 読み込み
@@ -143,24 +248,20 @@ void CSetWord::LoadFile(char *pFileName)
 			//文字列を取り出す
 			strcpy(aStr, pStrcur);
 
-			if (memcmp(pStrcur, "ANSWERNUM = ", strlen("ANSWERNUM = ")) == 0)
+			if (memcmp(pStrcur, "NUM_MODEL = ", strlen("NUM_MODEL = ")) == 0)
 			{
 				//頭出し
-				pStrcur += strlen("ANSWERNUM = ");
+				pStrcur += strlen("NUM_MODEL = ");
 				//文字列の先頭を設定
 				strcpy(aStr, pStrcur);
 				//文字列抜き出し
-				nNum = atoi(pStrcur);
+				m_nNum = atoi(pStrcur);
 				//文字列の先頭を設定
 				pStrcur = ReadLine(pFile, &aLine[0]);
-				if (m_pWord == NULL)
-				{
-					m_pWord = new CWord[nNum];
-				}
 
 				if (m_pWordPos == NULL)
 				{
-					m_pWordPos = new Word_Pos[nNum];
+					m_pWordPos = new Word_Pos[m_nNum];
 				}
 				//CWordManager::SetWordAnswerNum(nAnswerNum);
 			}
@@ -200,6 +301,15 @@ void CSetWord::LoadFile(char *pFileName)
 					ModelPos.z = (float)atof(pStrcur);
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
+
+					if (&m_pWordPos[nCntNum] != NULL)
+					{	// 設定
+						m_pWordPos[nCntNum].pos = ModelPos;
+						m_pWordPos[nCntNum].bUse = false;
+						m_pWordPos[nCntNum].nCntPop = 0;
+
+						nCntNum++;
+					}
 				}
 			}
 			//モデルを生成
@@ -218,6 +328,8 @@ void CSetWord::LoadFile(char *pFileName)
 
 	//ファイルを閉じる
 	fclose(pFile);
+
+	WordCreate();	// 文字の生成
 }
 
 

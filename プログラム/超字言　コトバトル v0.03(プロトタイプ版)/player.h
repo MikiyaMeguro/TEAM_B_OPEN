@@ -207,7 +207,7 @@ private:
 	CWordManager *m_pWordManager;							//文字管理クラスのポインタ
 
 	bool m_bSetupBullet;									//弾が撃てる状態の判定用
-
+	bool m_bAssist;										//エイムアシストのフラグ
 	C3DCharactor* m_pLockOnCharactor;						//ロックオンしているキャラクターの情報
 
 	/* Motion */

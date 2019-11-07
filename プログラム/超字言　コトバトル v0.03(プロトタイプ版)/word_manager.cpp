@@ -11,6 +11,7 @@
 #include "sceneX.h"
 #include "debugProc.h"
 #include "game.h"
+#include "SetWord.h"
 
 #include "bullet.h"
 #include "CameraManager.h"
@@ -49,7 +50,7 @@ CWordManager::~CWordManager() {}
 //=============================================================================
 void CWordManager::Init()
 {
-
+	
 }
 
 //=============================================================================

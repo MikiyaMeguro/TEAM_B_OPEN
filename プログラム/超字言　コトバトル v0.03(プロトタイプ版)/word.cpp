@@ -10,7 +10,7 @@
 #include "player.h"
 #include "InputKeyboard.h"
 #include "PlayerNumSelect.h"
-
+#include "time.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -29,6 +29,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_bScaleFlag = false;
 	m_nNumPlayerGet = 0;
 	m_nCntUninit = 0;
+	m_bFlag = false;
 }
 
 //--------------------------------------------
@@ -41,7 +42,7 @@ CWord::~CWord()
 //--------------------------------------------
 // 生成
 //--------------------------------------------
-CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord)
+CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int nNum)
 {
 	CWord *pWord = NULL;
 
@@ -59,12 +60,13 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 			pWord->m_sizeOld = D3DXVECTOR3(fHeight, fWidth, 0.0f);
 			pWord->m_nWordNum = nWord;
 			pWord->SetTexture(nWord, 10, 5, 1);
+			pWord->m_nNum = nNum;
+
 		}
 	}
 
 	return pWord;
 }
-
 //=============================================================================
 // 初期化処理
 //=============================================================================
@@ -88,6 +90,7 @@ void CWord::Uninit(void)
 //=============================================================================
 void CWord::Update(void)
 {
+	if (m_bFlagUninit == true) { return; }
 	// ローカル変数
 	//CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 	CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
@@ -98,7 +101,7 @@ void CWord::Update(void)
 	CPlayer *pPlayer[MAX_PLAYER] = {};
 	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
 
-	if (m_bFlagUninit == false)
+	if (m_bFlag == false)
 	{	// 拾うことが可能な文字の場合
 		for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
 		{
@@ -116,7 +119,7 @@ void CWord::Update(void)
 				// 当たり判定(円を使った判定)
 				Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
 
-				if (m_bFlagUninit == true)
+				if (m_bFlag == true)
 				{	// 終了フラグが立った場合
 					pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
 					pPlayer[nCntPlayer]->SetbSetupBullet(true);
@@ -132,7 +135,7 @@ void CWord::Update(void)
 			}
 		}
 
-		if (m_bFlagUninit == false)
+		if (m_bFlag == false)
 		{	// 終了フラグが立っている場合
 			int nNum = ComparisonDistance((int)NumPlayer);
 
@@ -142,7 +145,7 @@ void CWord::Update(void)
 
 	}
 
-	if (m_bFlagUninit == true)
+	if (m_bFlag == true)
 	{	// 取得後の演出の場合
 		if (pPlayer[m_nNumPlayerGet] == NULL)
 		{	
@@ -157,12 +160,20 @@ void CWord::Update(void)
 
 		if ((m_nCntUninit % UNITI_TIME) == 0)
 		{	// 時間になったら終了する
-			Uninit();
-			return;
+			//Uninit();
+			m_bFlagUninit = true;
+			//return;
 		}
 
 		//pos = Move(pos);
 	}
+
+	if ((CTime::GetStageTime() % 30) == 0)
+	{
+		m_bFlagUninit = true;
+	}
+
+
 	//ScaleSize();
 
 	// 位置更新
@@ -265,7 +276,7 @@ void CWord::Circle(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle)
 {
 	float fDistance = sqrtf((Pos.x - OtherPos.x)* (Pos.x - OtherPos.x) + (Pos.z - OtherPos.z)*(Pos.z - OtherPos.z));
 
-	if (fDistance < fAngle) { m_bFlagUninit = true; }
+	if (fDistance < fAngle) { m_bFlag = true; }
 }
 
 //=============================================================================

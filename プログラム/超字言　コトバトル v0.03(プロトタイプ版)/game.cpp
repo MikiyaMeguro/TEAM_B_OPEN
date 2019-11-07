@@ -24,6 +24,7 @@
 #include "PlayerNumSelect.h"
 #include "object.h"
 #include "point.h"
+#include "SetWord.h"
 
 #include "PlayerNumSelect.h"
 
@@ -34,20 +35,22 @@
 //============================================================================
 //	マクロ定義
 //============================================================================
-#define SIZE_X (SCREEN_WIDTH)
-#define SIZE_Y (SCREEN_HEIGHT)
-#define COLISIONSIZE (20.0f)
-#define TIME_INI		(60)
+#define CAMERA_LENGTH_1P_PLAY (100.0f)				//カメラの距離(1pプレイ用)
+#define CAMERA_LENGTH_2P_PLAY (120.0f)				//カメラの距離(2pプレイ用)
+#define CAMERA_LENGTH_3P4P_PLAY (140.0f)			//カメラの距離(3p4pプレイ用)
+#define CAMERA_LENGTH_TOPVIEW_PLAY (140.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
-#define CAMERA_DEFAULT_LENGTH (100.0f)
-#define CAMERA_ROTX (-0.05f)
-
+#define CAMERA_ROTX (-0.05f)		//カメラのデフォルト角度(X)
 //--------------------------
 // 機械ステージ
 //--------------------------
 #define MACHINE_STAGE_0	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
 #define MACHINE_STAGE_1	("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
 #define MACHINE_STAGE_2	("data\\TEXT\\機械ステージ\\Machine_Stage_2.txt")
+
+#define FILE_NAME0		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_0.txt")
+#define FILE_NAME1		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_1.txt")
+#define FILE_NAME2		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_2.txt")
 
 //============================================================================
 //静的メンバ変数宣言
@@ -56,6 +59,7 @@ CPlayer *CGame::m_pPlayer[MAX_PLAYER] = {};
 CTube *CGame::m_apTube[MAX_PLAYER] = {};
 CMeshField *CGame::m_pMeshField = NULL;
 CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
+CSetWord *CGame::m_pWordCreate = NULL;
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -86,6 +90,11 @@ void CGame::Init(void)
 	m_pcStageName[1] = { MACHINE_STAGE_1 };
 	m_pcStageName[2] = { MACHINE_STAGE_2 };
 
+	m_pcStageNameWord[0] = { FILE_NAME0 };
+	m_pcStageNameWord[1] = { FILE_NAME1 };
+	m_pcStageNameWord[2] = { FILE_NAME2 };
+
+	CLoadText::LoadFile();		// 文字のリソース読み込み
 
 	//壁、床設定
 	//CScene3D* p3D = NULL;
@@ -110,9 +119,12 @@ void CGame::Init(void)
 
 	SetPointFrame((int)NumPlayer);	// ポイントの設定
 
-	WordCreate();				// 文字の生成
-
-	CLoadText::LoadFile();		// 文字のリソース読み込み
+	//WordCreate();				// 文字の生成
+	m_pWordCreate = NULL;
+	if (m_pWordCreate == NULL)
+	{
+		m_pWordCreate = CSetWord::Create();
+	}
 
 	// テストオブジェクト
 	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
@@ -182,6 +194,12 @@ void CGame::Uninit(void)
 			m_pPoint[nCntPoint]->Uninit();
 			m_pPoint[nCntPoint] = NULL;
 		}
+	}
+
+	if (m_pWordCreate != NULL)
+	{
+		m_pWordCreate->Uninit();
+		m_pWordCreate = NULL;
 	}
 
 	//不要なカメラを削除
@@ -267,30 +285,30 @@ void CGame::CameraSetting(int nNumPlayer)
 		{
 		case CPlayerSelect::SELECTPLAYER_1P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), CAMERA_LENGTH_1P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			break;
 
 		case CPlayerSelect::SELECTPLAYER_2P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, 355);
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), CAMERA_LENGTH_2P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 0, 365, SCREEN_WIDTH, 355);
 			break;
 
 		case CPlayerSelect::SELECTPLAYER_3P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TPS,
@@ -300,37 +318,37 @@ void CGame::CameraSetting(int nNumPlayer)
 
 		case CPlayerSelect::SELECTPLAYER_4P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 
 		default:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CAMERA_DEFAULT_LENGTH);
+				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 		}
@@ -406,7 +424,7 @@ void CGame::PlayerSetting(int nNum)
 			}
 			else
 			{
-				m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1,(CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
@@ -416,11 +434,11 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 2)
 			{
-				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, CPlayer::TYPE_SPEED, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{
-				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 2, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
@@ -430,11 +448,11 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 3)
 			{
-				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, CPlayer::TYPE_REACH, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{
-				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 3, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
@@ -454,27 +472,27 @@ void CGame::PlayerSetting(int nNum)
 
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
 
 		if (m_pPlayer[1] != NULL)
 		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 		}
 
 		if (m_pPlayer[2] != NULL)
 		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
 		if (m_pPlayer[3] != NULL)
 		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}
@@ -578,6 +596,7 @@ void CGame::SetStage(int nCntState)
 	if (nCntState < MAX_STAGE)
 	{
 		CSetObject::LoadFile(m_pcStageName[nCntState]);
+		if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
 	}
 }
 //=============================================================================
