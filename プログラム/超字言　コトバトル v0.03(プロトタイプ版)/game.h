@@ -15,6 +15,7 @@
 class CPlayer;
 class CTube;
 class CPoint;
+class CSetWord;
 
 //=============================================================================
 // マクロ定義
@@ -70,6 +71,7 @@ public:
 	static CTube *GetTube(int nNum);		// 文字の可視化UIの取得
 	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 文字の可視化UIの取得
 	static CPoint *GetPoint(int nNum) { return m_pPoint[nNum]; }			// ポイントの取得
+	static CSetWord *GetWordCreate(void) { return m_pWordCreate; }			// 文字出現の取得
 private:
 	void CameraSetting(int nNum);		// 人数に応じたカメラ生成
 	void PlayerSetting(int nNum);		// 人数に応じたプレイヤー生成
@@ -79,8 +81,10 @@ private:
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPoint *m_pPoint[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-
+	
+	static CSetWord *m_pWordCreate;
 	char *m_pcStageName[MAX_STAGE];		// ステージの名前保管
+	char *m_pcStageNameWord[MAX_STAGE];		// ステージの名前保管
 
 };
 #endif

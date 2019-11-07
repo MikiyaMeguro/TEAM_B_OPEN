@@ -52,7 +52,8 @@ public:
 	int GetWordNum(int nNum) { return m_aWord[nNum].nNum; }
 	bool GetBulletFlag(void) { return m_bPress; }		// 弾が撃てるようになる条件
 	float *GetAnswerData(void) { return m_fAnswerData; }	// 2文字の時に組み合わせることが出来る文字データの取得
-
+	static D3DXVECTOR3 *GetAnswerNum(void) { return m_AnswerNum; }
+	static int GetAnswerDataNum(void) { return m_nAnswerDataNum; }
 	// デバック用
 	void CreateOblDebug(void);
 	void WordDebug(int nCntNum);
