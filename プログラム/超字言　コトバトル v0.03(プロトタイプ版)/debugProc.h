@@ -8,6 +8,7 @@
 #define _DEBUGPROC_H_
 
 #include "main.h"
+#include <string>
 
 //========================================
 // クラスの定義
@@ -30,7 +31,8 @@ public:
 
 private:
 	static LPD3DXFONT m_pFont;			// フォントへのポインタ
-	static char m_aStr[1024];			// 文字のデータの数
+
+	static std::string m_strDebug;		//デバック表示用文字列
 };
 
 #endif

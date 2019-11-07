@@ -30,6 +30,12 @@
 #define KUMA_POWER_LOADTEXT_UPPER "data/MOTION/motion_bea_up.txt"			//熊(パワー型)の上半身のロードテキスト
 #define KUMA_POWER_LOADTEXT_LOWER "data/MOTION/motion_bea_down.txt"			//熊(パワー型)の下半身のロードテキスト
 
+#define NECO_SPEED_LOADTEXT_UPPER "data/MOTION/motion_cat_up.txt"			//猫(スピード型)の上半身のロードテキスト
+#define NECO_SPEED_LOADTEXT_LOWER "data/MOTION/motion_cat_down.txt"			//猫(スピード型)の下半身のロードテキスト
+
+#define USAGI_REACH_LOADTEXT_UPPER "data/MOTION/motion_rabbit_up.txt"			//猫(スピード型)の上半身のロードテキスト
+#define USAGI_REACH_LOADTEXT_LOWER "data/MOTION/motion_rabbit_down.txt"			//猫(スピード型)の下半身のロードテキスト
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -117,20 +123,20 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	switch (PlayerType)
 	{
 	case TYPE_BARANCE:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
 		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType,LOWER_BODY);
 		break;
 	case TYPE_POWER:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(KUMA_POWER_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(KUMA_POWER_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
 		break;
 	case TYPE_SPEED:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(NECO_SPEED_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(NECO_SPEED_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
 		break;
 	case TYPE_REACH:
-		ModelLoad(INU_BARANCE_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
-		ModelLoad(INU_BARANCE_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(USAGI_REACH_LOADTEXT_UPPER, PlayerType, UPPER_BODY);
+		ModelLoad(USAGI_REACH_LOADTEXT_LOWER, PlayerType, LOWER_BODY);
 		break;
 	}
 
@@ -240,7 +246,9 @@ void CPlayer::Update(void)
 	//セット
 	CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 	D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
-
+	D3DXVECTOR3 BulletPos = m_pCharactorMove->GetPosition();
+	float fRotY;
+	D3DXVECTOR3 CamRot, LockOnPos,LockOnMove;
 	// 弾の生成
 	if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
 	{
@@ -248,7 +256,21 @@ void CPlayer::Update(void)
 		{//文字管理クラスに弾の生成を委託する
 			if (pCam != NULL)
 			{
-				BulletRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+				CamRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+
+				BulletRot = CamRot;
+				if (m_pLockOnCharactor != NULL)
+				{
+					LockOnPos = m_pLockOnCharactor->GetPosition();
+					LockOnMove = m_pLockOnCharactor->GetMove();
+
+					fRotY = atan2f(powf((BulletPos.x - LockOnPos.x), 2.0f), powf((BulletPos.z - LockOnPos.z), 2.0f)) -
+						atan2f(powf((BulletPos.x - (LockOnPos.x - (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z - (LockOnMove.z * 5.0f))), 2.0f));
+					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
+					CUtilityMath::RotateNormarizePI(&fRotY);
+					BulletRot.y += fRotY;
+				}
+
 			}
 
 			CUtilityMath::RotateNormarizePI(&BulletRot.x);
@@ -260,27 +282,49 @@ void CPlayer::Update(void)
 				m_bSetupBullet = false;
 			}
 		}
+
+		m_bAssist = true;
 	}
 
 	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
 	{
 		//テスト
 		int nPlayer = GetNearPlayer();
-		if (nPlayer != -1)
-		{
-			m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
 
-			if (pCam != NULL)
+		if (m_pLockOnCharactor == NULL)
+		{//まだロックオンしてなければ
+			if (m_bAssist == true)
 			{
-				pCam->SetLockOnChara(m_pLockOnCharactor);
+				if (nPlayer != -1)
+				{
+					m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+					if (pCam != NULL)
+					{
+						pCam->SetLockOnChara(m_pLockOnCharactor);
+					}
+				}
+				else
+				{
+					m_pLockOnCharactor = NULL;
+					if (pCam != NULL)
+					{
+						pCam->SetLockOnChara(NULL);
+					}
+					m_bAssist = false;
+				}
 			}
 		}
 		else
-		{
-			m_pLockOnCharactor = NULL;
-			if (pCam != NULL)
+		{//ロックオンしていれば
+			if (nPlayer == -1)
 			{
-				pCam->SetLockOnChara(NULL);
+				m_pLockOnCharactor = NULL;
+				if (pCam != NULL)
+				{
+					pCam->SetLockOnChara(NULL);
+				}
+				m_bAssist = false;
 			}
 		}
 	}
@@ -512,7 +556,7 @@ void CPlayer::MotionUpdate(BODY body)
 		}
 		break;
 	}
-	CDebugProc::Print("cn","MOTION = ",(int)m_motion);
+	CDebugProc::Print("cn","MOTION = ",(int)m_motion[body]);
 }
 
 //=============================================================================
@@ -525,14 +569,29 @@ void	CPlayer::SetMotion(int motion, BODY body,MOTION_STATE state)
 		//一つ前のモーションを保存する
 		m_OldMotion[body] = m_motion[body];
 
+		//その他変数の初期化
+		m_nCntBlendMotion[body] = 0;
+		m_nCntFlame[body] = 0;
+		if (state != STATE_BLEND)
+		{
+			if (m_Mstate[body] == STATE_BLEND)
+			{//一つ前もブレンドなら
+				for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+				{
+					if (m_pPlayerParts[nCntParts][body] != NULL)
+					{
+						//ブレンド中に次のモーションに入った時
+						m_pPlayerParts[nCntParts][body]->SetRotation(m_propMotion[m_OldMotion[body]][body].key[0].Rot[nCntParts]);
+					}
+				}
+			}
+			m_nCntKey[body] = 0;
+		}	//ブレンドする時は初期化しない
+
 		//引数代入
 		m_motion[body] = motion;
 		m_Mstate[body] = state;
 
-		//その他変数の初期化
-		m_nCntBlendMotion[body] = 0;
-		m_nCntFlame[body] = 0;
-		if (state != STATE_BLEND) { m_nCntKey[body] = 0; }	//ブレンドする時は初期化しない
 	}
 }
 
@@ -949,13 +1008,13 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
 					break;
 				case TYPE_POWER:
-					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					m_pPlayerParts[nCntParts][body]->BindTexture("KUMA_UV");
 					break;
 				case TYPE_SPEED:
-					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					m_pPlayerParts[nCntParts][body]->BindTexture("NECO_UV");
 					break;
 				case TYPE_REACH:
-					m_pPlayerParts[nCntParts][body]->BindTexture("INU_UV");
+					m_pPlayerParts[nCntParts][body]->BindTexture("USAGI_UV");
 					break;
 				}
 			}

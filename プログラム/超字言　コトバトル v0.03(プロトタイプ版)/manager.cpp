@@ -398,6 +398,8 @@ void CManager::Update(void)
 #ifdef _DEBUG
 	// デバック表示を消す
 	CDebugProc::ReleseStr();
+
+	CDebugProc::Print("cn","FADESTATE = ",(int)m_pFade->GetFade());
 #endif
 
 	// 入力情報を取得

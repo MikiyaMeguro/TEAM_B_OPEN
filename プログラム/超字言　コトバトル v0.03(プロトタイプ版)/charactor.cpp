@@ -16,6 +16,9 @@
 #include "point.h"
 #include "word.h"
 #include "tutorial.h"
+
+#include "waypoint.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -51,6 +54,12 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 	m_fSpinCoeffient = SPIN_DEFAULT_COEFFICIENT;
 	m_fCofMoveBlend = 1.0f;
 	m_nCntStepCoolTime = 0;
+
+	m_pWayPoint = NULL;
+	if (m_pWayPoint == NULL)
+	{
+		m_pWayPoint = CWaypoint::Create(m_pos, 10, 10, "NUMBER");
+	}
 
 	//コマンド定義
 	CCommand::RegistCommand("PLAYERMOVE_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_W);
@@ -92,6 +101,7 @@ HRESULT C3DCharactor::Init(void)
 	m_fCompareRange = 0;
 	m_bWordNear = false;
 	m_bJyougai = false;
+	m_bGoal = true;
 
 	nTestCnt = 0;
 
@@ -111,6 +121,12 @@ void C3DCharactor::Update(void)
 	D3DXVECTOR3& pos = CCharaBase::GetPosition();
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 	D3DXVECTOR3& move = CCharaBase::GetMove();
+
+	//経路情報
+	if (m_pWayPoint != NULL)
+	{
+		m_pWayPoint->InRange(pos);
+	}
 
 	switch (CCharaBase::GetMoveType())
 	{
@@ -502,6 +518,9 @@ void C3DCharactor::Think_CPU(void)
 		break;
 	}
 
+	m_CpuThink = THINK_WAYPOINTMOVE;
+	m_nActionTimer = 60;
+
 	//行動を決める条件文
 	if (m_bFront == true)
 	{	//壁に当たってる
@@ -544,7 +563,7 @@ void C3DCharactor::Think_CPU(void)
 		m_CpuMove = CPU_MOVE_FRONT;
 #endif
 	}
-#if 1
+#if 0
 
 	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
 	{	//弾を持っているとき
@@ -647,6 +666,9 @@ void C3DCharactor::Action_CPU(void)
 		break;
 	case  THINK_WATCH:	//敵を見る
 		Homing_CPU();
+		break;
+	case  THINK_WAYPOINTMOVE:	//ランダム経路
+		WayPointMove_CPU();
 		break;
 	default:
 		break;
@@ -1079,7 +1101,6 @@ void C3DCharactor::HaveBullet_CPU(void)
 		}
 	}
 
-
 	if (nCntNear > 0)
 	{//近くに敵がいる
 		m_CpuThink = THINK_HOMING;
@@ -1168,8 +1189,65 @@ void C3DCharactor::NearOrFur_CPU(void)
 			}
 		}
 	}
-
 }
+
+//=============================================================================
+//　マス目ランダム移動
+//=============================================================================
+void C3DCharactor::WayPointMove_CPU(void)
+{
+	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
+	if (m_MarkWayPoint.x + 10 > Pos.x && m_MarkWayPoint.x - 10 < Pos.x
+		&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z)
+	{
+		m_bGoal = true;
+	}
+
+	// 入力情報を取得
+	CInputKeyboard *pInputKeyboard;
+	pInputKeyboard = CManager::GetInputKeyboard();
+
+	if (pInputKeyboard->GetTrigger(DIK_X))
+	{
+		m_bGoal = true;
+	}
+
+	while (m_bGoal == true)
+	{
+		//位置情報を取得
+		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
+		//移動可能なマスは何マスあるか
+		int nCntWP = m_pWayPoint->CntWayPoint();
+		//ランダムで決める
+		int nRand = rand() % nCntWP;
+
+		if (m_pWayPointPos[nRand] != NULL)
+		{
+			m_MarkWayPoint = m_pWayPointPos[nRand];
+			m_bGoal = false;
+			break;
+		}
+	}
+
+	// 目的の角度
+	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
+	// 差分
+	float fDiffAngle = fDestAngle - rot.y;
+	DiffAngle(fDiffAngle);
+	//移動
+	move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+
+#ifdef _DEBUG
+	CDebugProc::Print("cfcfcf", "目標のマスの位置 : X ", m_MarkWayPoint.x, " Y ", m_MarkWayPoint.y, " Z ", m_MarkWayPoint.z);
+#endif
+}
+
 
 //=============================================================================
 // ステップ処理

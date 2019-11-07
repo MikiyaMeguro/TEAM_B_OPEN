@@ -12,7 +12,8 @@
 // 静的メンバ変数宣言
 //=============================================================================
 LPD3DXFONT CDebugProc::m_pFont = NULL;
-char CDebugProc::m_aStr[1024] = {};
+
+std::string CDebugProc::m_strDebug;		//宣言時にすでに初期化されているのでここで何かする必要はない
 
 //=============================================================================
 // デバック表示クラスのコンストラクタ
@@ -58,6 +59,10 @@ void CDebugProc::Init(void)
 void CDebugProc::Uninit(void)
 {
 #ifdef _DEBUG
+	//文字列の削除(初期化)
+	m_strDebug.clear();
+	m_strDebug.shrink_to_fit();
+
 	// デバッグ情報表示用フォントの破棄
 	if (m_pFont != NULL)
 	{
@@ -74,10 +79,6 @@ void CDebugProc::Print(char *fmt, ...)
 {
 #ifdef _DEBUG
 
-	int nNum = 0;
-	double fNum = 0.0f;
-	char cNum[1024];
-
 	// 任意個の引数を１個の変数に変換
 	va_list ap;
 
@@ -89,35 +90,26 @@ void CDebugProc::Print(char *fmt, ...)
 		switch (*fmt)
 		{
 		case 'c':	// char型
-			strcat(m_aStr, va_arg(ap, char*));	// リストの中のキャラ型を取り出して、m_aStrに入れる
+			m_strDebug += va_arg(ap, char*);		// リストの中のキャラ型を取り出して、m_strDebugに入れる
 			break;
 
 		case 'n':	// int型
-			nNum = va_arg(ap, int);		// リストの中のint型数字を引き出す
-
-			sprintf(cNum, "%d", nNum);	// %dに入るint型をcNumのキャラ型に入れる
-
-			strcat(m_aStr, cNum);		// 文字のデータにint型の数字を入れる
-
+			m_strDebug += std::to_string(va_arg(ap, int));//引き出した数字をstring型に変換して入れる
+			m_strDebug += " ";	//数値の間は1マス開ける
 			break;
 
 		case 'f':	// float型
-			fNum = va_arg(ap, double);		// リストの中のfloat型数字を引き出す
-
-			sprintf(cNum, "%.1f", fNum);	// %.1fに入るfloat型をcNumのキャラ型に入れる
-
-			strcat(m_aStr, cNum);			// 文字のデータにfloat型の数字を入れる
-
+			m_strDebug += std::_Floating_to_string("%.1f", va_arg(ap, double));//引き出した数字をstring型に変換して入れる
+			m_strDebug += " ";	//数値の間は1マス開ける
 			break;
 		}
 
 		fmt++;	// フォーマットの文字を１文字進める
 	}
 
+	m_strDebug += "\n";	//改行
 
-	strcat(m_aStr, "\n");
-
-	va_end(ap);
+	va_end(ap);	//終了処理
 #endif
 }
 
@@ -127,13 +119,10 @@ void CDebugProc::Print(char *fmt, ...)
 void CDebugProc::ReleseStr(void)
 {
 #ifdef _DEBUG
-	for (int nCntStr = 0; nCntStr < 1024; nCntStr++)
-	{
-		if (m_aStr[nCntStr] != NULL)
-		{
-			m_aStr[nCntStr] = NULL;
-		}
-	}
+	//文字列の削除(初期化)
+	m_strDebug.clear();
+	m_strDebug.shrink_to_fit();
+
 #endif
 }
 
@@ -145,8 +134,11 @@ void CDebugProc::Draw(void)
 #ifdef _DEBUG
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
+	//色指定
+	D3DXCOLOR col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
 	// テキスト描画
-	m_pFont->DrawText(NULL, m_aStr, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	m_pFont->DrawText(NULL, m_strDebug.c_str(), -1, &rect, DT_LEFT, col);
+
 #endif
 
 }

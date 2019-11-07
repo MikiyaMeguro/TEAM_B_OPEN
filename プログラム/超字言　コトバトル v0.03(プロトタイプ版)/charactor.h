@@ -21,6 +21,9 @@
 
 #include "scene.h"
 
+
+class CWaypoint;
+
 class CPlayer;
 
 class CCharaBase
@@ -54,6 +57,7 @@ public:
 		THINK_PATROL,			//巡回
 		THINK_HOMING,			//追いかける
 		THINK_WATCH,			//見る
+		THINK_WAYPOINTMOVE,		//経路情報
 		THINK_MAX
 	}CPU_THINK;
 
@@ -141,7 +145,7 @@ public:
 	CPU_NODE m_CpuNode;			//ノードの状態
 	CPU_TYPE m_Type;
 	D3DXVECTOR3 m_RespawnPos;	//出現位置
-
+	CWaypoint *m_pWayPoint;		//経路情報
 	float m_fCofMoveBlend;	//スティック角に応じた移動係数
 };
 
@@ -187,6 +191,7 @@ private:
 	void HaveBullet_CPU(void);	//弾をもっている
 	void NotBullet_CPU(void);	//弾をもっていない
 	void NearOrFur_CPU(void);	//近いか遠いか
+	void WayPointMove_CPU(void);	//経路情報移動
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
@@ -201,6 +206,9 @@ private:
 	bool m_bNear[4];			//近い敵のフラグ
 	bool m_bWordNear;
 	bool m_bJyougai;
+	D3DXVECTOR3 *m_pWayPointPos;	//経路情報の位置情報ポインタ
+	D3DXVECTOR3 m_MarkWayPoint;		//移動先の位置
+	bool m_bGoal;					//移動先到着フラグ
 
 	int nTestCnt = 0;
 public:
