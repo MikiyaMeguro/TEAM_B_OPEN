@@ -17,7 +17,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define BELTCONVEYER_MOVE			(0.7f)			// ベルトコンベアの速度
+#define BELTCONVEYER_MOVE			(0.2f)			// ベルトコンベアの速度
 #define KNOCKBACK_MOVE_SMALL		(4.0f)			// ノックバックの強度(小)
 #define KNOCKBACK_MOVE_DURING		(6.0f)			// ノックバックの強度(中)
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
@@ -229,7 +229,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 			CSceneX::SetRot(rot);
 		}
 
-		if ((CTime::GetStageTime() % 30) == 0) { 
+		if ((CTime::GetStageTime() % 30) == 0) {
 			m_nRealTime = REALTIME_ENDPOS; }
 	}
 	else if (m_nRealTime == REALTIME_ENDPOS)

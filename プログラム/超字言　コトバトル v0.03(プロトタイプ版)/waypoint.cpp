@@ -11,6 +11,9 @@
 #include "InputKeyboard.h"
 #include "PlayerNumSelect.h"
 #include "debugProc.h"
+
+#include "sceneX.h"
+#include "object.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -74,6 +77,7 @@ HRESULT CWaypoint::Init(D3DXVECTOR3 pos)
 		WayPoint[nCntWayPoint].bInPlayer = 0;
 		WayPoint[nCntWayPoint].nWayPointNum = 9;
 		WayPoint[nCntWayPoint].bInPlayer = false;
+		WayPoint[nCntWayPoint].bBlock = false;
 	}
 	//生成
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
@@ -120,7 +124,6 @@ void CWaypoint::Uninit(void)
 //=============================================================================
 void CWaypoint::Update(void)
 {
-	//CSceneBillBoard::Update();
 	int nNowNumber = 0;		//今いるマスの番号
 	int nAdjacent = 0;		//隣接しているマスは何マス分離れているか
 	bool bLand = false;		//誰かがマスに乗っている
@@ -252,6 +255,9 @@ void CWaypoint::Update(void)
 #endif
 		}
 	}
+
+	//ブロックに当たっている
+	CollisionObj();
 
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
@@ -397,4 +403,43 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 int CWaypoint::CntWayPoint(void)
 {
 	return nNumWayPoint;
+}
+
+//=============================================================================
+// オブジェクト判定処理
+//=============================================================================
+void CWaypoint::CollisionObj(void)
+{
+	CScene *pScene = NULL;
+
+	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
+	{
+		// 先頭のオブジェクトを取得
+		pScene = CScene::GetTop(SCENEX_PRIORITY);
+
+		while (pScene != NULL)
+		{// 優先順位が3のオブジェクトを1つ1つ確かめる
+		 // 処理の最中に消える可能性があるから先に記録しておく
+			CScene *pSceneNext = pScene->GetNext();
+			if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+			{// 死亡フラグが立っていないもの
+			 // オブジェクトの種類を確かめる
+				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+				{
+					bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(40, 0, 40));
+					CObject *pSceneObj = ((CObject*)pSceneX);
+
+					//オブジェクトに当たった
+					if (bLand == true)
+					{
+						WayPoint[nCntWayPoint].bBlock = true;
+						WayPoint[nCntWayPoint].nWayPointNum = 9;
+					}
+				}
+			}
+			// 次のシーンに進める
+			pScene = pSceneNext;
+		}
+	}
 }
