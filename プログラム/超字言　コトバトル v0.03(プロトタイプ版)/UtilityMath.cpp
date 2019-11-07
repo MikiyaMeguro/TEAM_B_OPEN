@@ -71,3 +71,15 @@ D3DXVECTOR3 CUtilityMath::MoveCoeffient(D3DXVECTOR3& value, const float& coeffie
 
 	return value;
 }
+
+//=============================================================================
+//	任意の桁数でfloatを切り上げる関数
+//=============================================================================
+float CUtilityMath::Round_n(float& fValue, const int nRound)
+{
+	fValue *= powf(10.0f,(float)(nRound - 1));	//四捨五入したい値を10の(n-1)乗倍する。
+	fValue = round(fValue);						//小数点以下を四捨五入する。
+	fValue /= pow(10.0f, (float)(nRound - 1));  //10の(n-1)乗で割る。
+
+	return fValue;
+}
