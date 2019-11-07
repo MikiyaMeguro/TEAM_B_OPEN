@@ -54,7 +54,16 @@ DATA = 00038 data/TEXTURE/CharacterIcon/コトモン_パワー_アイコン.png キャラ(パワ
 DATA = 00039 data/TEXTURE/CharacterIcon/コトモン_リーチ_アイコン.png キャラ(リーチ)
 DATA = 00040 data/TEXTURE/PlayerNum.png プレイ人数
 DATA = 00041 data/TEXTURE/point.png POINT
-
+DATA = 00042 data/TEXTURE/kuma_uv.jpg KUMA_UV
+DATA = 00043 data/TEXTURE/MENU_UI/Menu014.png MODESELEXT_MENU
+DATA = 00044 data/TEXTURE/UI/operation.png UI_OPERATION
+DATA = 00045 data/TEXTURE/UI/Select.png UI_SELECT
+DATA = 00046 data/TEXTURE/MENU_UI/Menu015.png PLAYERNUMSELECT_MENU
+DATA = 00047 data/TEXTURE/PlayerSelect/Band.png PLAUERNUMSEL_BAND
+DATA = 00048 data/TEXTURE/PlayerSelect/BG.png PLAUERNUMSEL_BG
+DATA = 00049 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
+DATA = 00050 data/TEXTURE/CharactorSelect/CharaSel.png CHARACTORSEL_CHARA
+DATA = 00051 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
 
 DATA = 00006 data/TEXTURE/pause100.png  PAUSE_BG
 DATA = 00007 data/TEXTURE/Tutorial.jpg 	PAUSE_TUTORIAL

@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 12
+NUM_MODEL = 16
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -24,13 +24,17 @@ MODEL_FILENAME = data/MODEL/Palette.x"				#6 絵具
 MODEL_FILENAME = data/MODEL/Wheel.x"				#7 タイヤ
 MODEL_FILENAME = data/MODEL/Taico.x"				#8 太鼓
 MODEL_FILENAME = data/MODEL/coin.x"					#9 コイン
-MODEL_FILENAME = data/MODEL/box000.x"				#10
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#11
+MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#10 小さい壁  
+MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#11 大きい壁
+MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#12 歯車
+MODEL_FILENAME = data/MODEL/Dust.x"					#13 ゴミ
+MODEL_FILENAME = data/MODEL/box000.x"				#14
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#15
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
 MODELSET
-	TYPE = 10
+	TYPE = 11
 	POS = 0.0 0.0 180.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.5 0.8 0.8
@@ -38,15 +42,15 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 10
+	TYPE = 11
 	POS = 0.0 0.0 -180.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.5 0.8 .8
+	SCALE = 3.5 0.8 0.8
 	COLLISION = 1
 END_MODELSET
 
 MODELSET
-	TYPE = 10
+	TYPE = 11
 	POS = 180.0 0.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
@@ -54,7 +58,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 10
+	TYPE = 11
 	POS = -180.0 0.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.5
@@ -66,7 +70,7 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 10
+	TYPE = 11
 	POS = 150.0 0.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
@@ -74,7 +78,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 10
+	TYPE = 11
 	POS = -150.0 0.0 400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
@@ -83,16 +87,16 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 10
-	POS = 150.0 0.0 -360.0
+	TYPE = 11
+	POS = 150.0 0.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
 END_MODELSET
 
 MODELSET
-	TYPE = 10
-	POS = -150.0 0.0 -360.0
+	TYPE = 11
+	POS = -150.0 0.0 -400.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
@@ -101,35 +105,46 @@ END_MODELSET
 
 
 MODELSET
-	TYPE = 10
-	POS = 360.0 0.0 150.0
+	TYPE = 12
+	POS = 0.0 0.0 0.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 6
+END_MODELSET
+
+
+MODELSET
+	TYPE = 12
+	POS = -150.0 0.0 -250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 7
 END_MODELSET
 
 MODELSET
-	TYPE = 10
-	POS = 360.0 0.0 -150.0
+	TYPE = 12
+	POS = 150.0 0.0 -250.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 8
 END_MODELSET
 
 MODELSET
-	TYPE = 10
-	POS = -400.0 0.0 150.0
+	TYPE = 12
+	POS = -150.0 0.0 250.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 8
 END_MODELSET
 
 MODELSET
-	TYPE = 10
-	POS = -400.0 0.0 -150.0
+	TYPE = 12
+	POS = 150.0 0.0 250.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 7
 END_MODELSET
+
+
 
 END_SCRIPT		# この行は絶対消さないこと！
