@@ -391,6 +391,38 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 	return bLand;	// ブロックに乗っているかどうかを返す
 }
 
+
+//=============================================================================
+// ブロックとの当たり判定処理 (範囲内かどうか)
+//=============================================================================
+bool CSceneX::CollisionIN(D3DXVECTOR3 pos,D3DXVECTOR3 radius)
+{
+	bool bHit = false;	// ヒット判定のフラグ
+	D3DXVECTOR3 ScaleVtxMax;
+	D3DXVECTOR3 ScaleVtxMin;
+
+	// 拡大を反映
+	ScaleVtxMax.x = m_VtxMax.x;
+	ScaleVtxMax.y = m_VtxMax.y;
+	ScaleVtxMax.z = m_VtxMax.z;
+	ScaleVtxMin.x = m_VtxMin.x;
+	ScaleVtxMin.y = m_VtxMin.y;
+	ScaleVtxMin.z = m_VtxMin.z;
+
+	if (m_CollisionType != COLLISIONTYPE_NONE)
+	{
+		if (pos.z <= m_pos.z + ScaleVtxMax.z + radius.z && pos.z >= m_pos.z + ScaleVtxMin.z - radius.z)
+		{// zの範囲の中
+			if (pos.x <= m_pos.x + ScaleVtxMax.x + radius.x && pos.x >= m_pos.x + ScaleVtxMin.x - radius.x)
+			{
+				bHit = true;
+			}
+		}
+	}
+
+	return bHit;
+}
+
 //=============================================================================
 // 位置の取得
 //=============================================================================

@@ -63,6 +63,9 @@ public:
 	void SetVtx(void);																// 頂点座標の設定
 	bool Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 
+	bool CollisionIN(D3DXVECTOR3 pos,D3DXVECTOR3 radius);		// 当たり判定 (範囲内かどうか)
+
+
 	void BindModel(LPD3DXBUFFER pBuffMat, DWORD nNumMat, LPD3DXMESH pMesh);	// モデルを割り当てる
 	void BindTex(LPDIRECT3DTEXTURE9	*m_pTexture);	// テクスチャマテリアルを割り当てる
 
