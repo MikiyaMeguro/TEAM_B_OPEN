@@ -414,7 +414,7 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 2)
 			{
-				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, CPlayer::TYPE_SPEED, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{
@@ -428,7 +428,7 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 3)
 			{
-				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, CPlayer::TYPE_REACH, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{

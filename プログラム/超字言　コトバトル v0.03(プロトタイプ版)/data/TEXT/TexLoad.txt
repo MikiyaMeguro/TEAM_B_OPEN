@@ -57,5 +57,7 @@ DATA = 00041 data/TEXTURE/point.png POINT
 
 DATA = 00042 data/TEXTURE/kuma_uv.jpg KUMA_UV
 DATA = 00043 data/TEXTURE/dog_uv.jpg INU_UV
+DATA = 00044 data/TEXTURE/cat_uv.jpg NECO_UV
+DATA = 00045 data/TEXTURE/rabbit_uv.jpg USAGI_UV
 
 END_LOAD
