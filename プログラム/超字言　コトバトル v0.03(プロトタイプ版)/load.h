@@ -62,6 +62,11 @@ public:
 		MODEL_MAKURA,	// ‚Ü‚­‚ç
 		MODEL_KUNAI,	// ‚­‚È‚¢
 		MODEL_FISH,		// ‚³‚©‚È
+		MODEL_VOLCANO,	// ‚©‚´‚ñ
+		MODEL_NAZCA,	// ‚È‚·‚©
+		MODEL_TANK,		// ‚½‚ñ‚­
+		MODEL_YAGURA,	// ‚â‚®‚ç
+		MODEL_CHAIR,	// ‚´‚¢‚·
 		MODEL_MAX,
 	} MODEL;
 

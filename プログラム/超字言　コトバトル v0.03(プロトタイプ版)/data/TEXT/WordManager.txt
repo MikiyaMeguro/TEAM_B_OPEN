@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 30			# モデル数
+	ANSWERNUM = 35			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名 
@@ -41,6 +41,11 @@ SCRIPT			# この行は絶対消さないこと！
 	# 27 : まくら
 	# 28 : くない
 	# 29 : さかな
+	# 30 : かざん
+	# 31 : なすか
+	# 32 : たんく
+	# 33 : やぐら
+	# 34 : ざいす
 
 #------------------------------------------------------------
 #                      文字の情報
@@ -193,6 +198,31 @@ END_MODELSET
 MODELSET
 	TYPE = 29					# さかな
 	ANSWER = 10.0 5.0 20.0
+END_MODELSET
+
+MODELSET
+	TYPE = 30					# かざん
+	ANSWER = 5.0 9.0 45.0
+END_MODELSET
+
+MODELSET
+	TYPE = 31					# なすか
+	ANSWER = 20.0 12.0 5.0
+END_MODELSET
+
+MODELSET
+	TYPE = 32					# たんく
+	ANSWER = 15.0 45.0 7.0
+END_MODELSET
+
+MODELSET
+	TYPE = 33					# やぐら
+	ANSWER = 35.0 7.0 38.0
+END_MODELSET
+
+MODELSET
+	TYPE = 34					# ざいす
+	ANSWER = 9.0 1.0 12.0
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
