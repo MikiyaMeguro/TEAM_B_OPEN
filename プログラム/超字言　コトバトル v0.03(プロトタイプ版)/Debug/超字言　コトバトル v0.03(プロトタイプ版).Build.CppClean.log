@@ -1,6 +1,6 @@
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\vc140.pdb
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\vc140.idb
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\playernumselect.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\point.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\renderer.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\result.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\scene.obj
@@ -20,9 +20,7 @@ c:\users\game113\documents\github\team_b_open\プログラム\超字言　コト
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\tutorial.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\word.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\word_manager.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\camera.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\cameramanager.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\charactor.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\charaparts.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\charaselect.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\command.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\debugproc.obj
@@ -33,27 +31,31 @@ c:\users\game113\documents\github\team_b_open\プログラム\超字言　コト
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\inputxpad.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\light.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\load.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\loadtext.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\main.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\manager.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\mask.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\number.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\player.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\bullet.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\charaparts.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\loadtext.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\meshfield.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\number.obj
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\object.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\point.obj
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\超字言　コトバトル v0.03(プロトタイプ版).ilk
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\超字言　コトバトル v0.03(プロトタイプ版).exe
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\player.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\playernumselect.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\bullet.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\camera.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\cameramanager.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\charactor.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\utilitymath.obj
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\player.obj.enc
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\超字言　コトバトル v0.03(プロトタイプ版).pdb
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\cl.command.1.tlog
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\cl.read.1.tlog
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\cl.write.1.tlog
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link-cvtres.read.1.tlog
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link-cvtres.write.1.tlog
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link-rc.read.1.tlog
-c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link-rc.write.1.tlog
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.4720-cvtres.read.1.tlog
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.4720-cvtres.write.1.tlog
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.4720-rc.read.1.tlog
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.4720-rc.write.1.tlog
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.4720.read.1.tlog
+c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.4720.write.1.tlog
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.command.1.tlog
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.read.1.tlog
 c:\users\game113\documents\github\team_b_open\プログラム\超字言　コトバトル v0.03(プロトタイプ版)\debug\超字言　コトバト.67994015.tlog\link.write.1.tlog

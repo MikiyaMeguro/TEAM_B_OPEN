@@ -276,27 +276,49 @@ void CPlayer::Update(void)
 				m_bSetupBullet = false;
 			}
 		}
+
+		m_bAssist = true;
 	}
 
 	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
 	{
 		//テスト
 		int nPlayer = GetNearPlayer();
-		if (nPlayer != -1)
-		{
-			m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
 
-			if (pCam != NULL)
+		if (m_pLockOnCharactor == NULL)
+		{//まだロックオンしてなければ
+			if (m_bAssist == true)
 			{
-				pCam->SetLockOnChara(m_pLockOnCharactor);
+				if (nPlayer != -1)
+				{
+					m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+					if (pCam != NULL)
+					{
+						pCam->SetLockOnChara(m_pLockOnCharactor);
+					}
+				}
+				else
+				{
+					m_pLockOnCharactor = NULL;
+					if (pCam != NULL)
+					{
+						pCam->SetLockOnChara(NULL);
+					}
+					m_bAssist = false;
+				}
 			}
 		}
 		else
-		{
-			m_pLockOnCharactor = NULL;
-			if (pCam != NULL)
+		{//ロックオンしていれば
+			if (nPlayer == -1)
 			{
-				pCam->SetLockOnChara(NULL);
+				m_pLockOnCharactor = NULL;
+				if (pCam != NULL)
+				{
+					pCam->SetLockOnChara(NULL);
+				}
+				m_bAssist = false;
 			}
 		}
 	}
