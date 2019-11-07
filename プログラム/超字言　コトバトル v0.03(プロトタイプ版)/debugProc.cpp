@@ -12,7 +12,7 @@
 // 静的メンバ変数宣言
 //=============================================================================
 LPD3DXFONT CDebugProc::m_pFont = NULL;
-char CDebugProc::m_aStr[1024] = {};
+char CDebugProc::m_aStr[MAX_CHARDATA] = {};
 
 //=============================================================================
 // デバック表示クラスのコンストラクタ
@@ -127,7 +127,7 @@ void CDebugProc::Print(char *fmt, ...)
 void CDebugProc::ReleseStr(void)
 {
 #ifdef _DEBUG
-	for (int nCntStr = 0; nCntStr < 1024; nCntStr++)
+	for (int nCntStr = 0; nCntStr < MAX_CHARDATA; nCntStr++)
 	{
 		if (m_aStr[nCntStr] != NULL)
 		{
@@ -145,8 +145,10 @@ void CDebugProc::Draw(void)
 #ifdef _DEBUG
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
+	//
+	D3DXCOLOR col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
 	// テキスト描画
-	m_pFont->DrawText(NULL, m_aStr, -1, &rect, DT_LEFT, D3DCOLOR_ARGB(0xff, 0xff, 0xff, 0xff));
+	m_pFont->DrawText(NULL, m_aStr, -1, &rect, DT_LEFT, col);
 #endif
 
 }
