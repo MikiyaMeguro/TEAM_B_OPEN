@@ -229,8 +229,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 			CSceneX::SetRot(rot);
 		}
 
-		if ((CTime::GetStageTime() % 30) == 0) { 
-			m_nRealTime = REALTIME_ENDPOS; }
+		if ((CTime::GetStageTime() % 30) == 0) { m_nRealTime = REALTIME_ENDPOS; }
 	}
 	else if (m_nRealTime == REALTIME_ENDPOS)
 	{	// ˆÚ“®ƒtƒ‰ƒO‚ªtrue “®‚­ê‡
