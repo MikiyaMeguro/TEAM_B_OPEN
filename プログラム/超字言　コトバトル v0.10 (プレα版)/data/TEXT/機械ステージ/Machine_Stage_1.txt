@@ -14,10 +14,11 @@ NUM_MODEL = 22
 #------------------------------------------------------------
 #    ÉÇÉfÉãÇÃéÌóﬁ (ì«Ç›çûÇ›çœÇ›)
 #------------------------------------------------------------
-	#0 è¨Ç≥Ç¢ï«  
-	#1 ëÂÇ´Ç¢ï«
-	#2 éïé‘
-	#3 ÉxÉãÉgÉRÉìÉxÉA
+	# 0 : è¨Ç≥Ç¢ï«  
+	# 1 : ëÂÇ´Ç¢ï«
+	# 2 : éïé‘
+	# 3 :ÉxÉãÉgÉRÉìÉxÉA
+	# 4 : ï∂éöìyë‰
 
 #------------------------------------------------------------
 #    ìñÇΩÇËîªíËÇÃéÌóﬁ 
@@ -247,6 +248,178 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.8 1.0
 	COLLISION = 6
+END_MODELSET
+
+#------------------------------------------
+#  X : 1Å`10 / Z : 1Å`10 ï∂éöÇÃìyë‰ 5å¬
+#------------------------------------------
+MODELSET
+	TYPE = 4
+	POS = -310.0 200.0 280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -250.0 200.0 280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -310.0 200.0 240.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -220.0 200.0 40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -40.0 200.0 220.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+#------------------------------------------
+#  X : 11Å`20 / Z : 1Å`10 ï∂éöÇÃìyë‰ 5å¬
+#------------------------------------------
+MODELSET
+	TYPE = 4
+	POS = 310.0 200.0 280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 250.0 200.0 280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 310.0 200.0 240.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 220.0 200.0 40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 40.0 200.0 220.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+#------------------------------------------
+#  X : 1Å`10 / Z : 11Å`20 ï∂éöÇÃìyë‰ 5å¬
+#------------------------------------------
+MODELSET
+	TYPE = 4
+	POS = -310.0 200.0 -280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -250.0 200.0 -280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -310.0 200.0 -240.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -220.0 200.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -40.0 200.0 -220.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+#------------------------------------------
+#  X : 11Å`20 / Z : 11Å`20 ï∂éöÇÃìyë‰ 5å¬
+#------------------------------------------
+MODELSET
+	TYPE = 4
+	POS = 310.0 200.0 -280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 250.0 200.0 -280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 310.0 200.0 -240.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 220.0 200.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 40.0 200.0 -220.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
 END_MODELSET
 
 END_SCRIPT		# Ç±ÇÃçsÇÕê‚ëŒè¡Ç≥Ç»Ç¢Ç±Ç∆ÅI

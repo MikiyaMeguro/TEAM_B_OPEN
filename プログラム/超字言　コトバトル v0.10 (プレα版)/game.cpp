@@ -255,10 +255,7 @@ void CGame::Update(void)
 	}
 
 #ifdef _DEBUG
-	if (pInputKeyboard->GetTrigger(DIK_LCONTROL))
-	{
-		WordCreate();		// •¶š‚Ì¶¬
-	}
+	
 #endif
 }
 

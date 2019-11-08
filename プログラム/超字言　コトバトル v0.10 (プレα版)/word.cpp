@@ -17,9 +17,10 @@
 #define AREA_CHASE		(40.0f)			// エリア
 #define AREA_COILLSION	(15.0f)			// コリジョンの範囲
 #define CHASE_MOVE		(2.0f)			// 追従時の速度
-#define END_POS_Y		(20.0f)			// 文字の出現した時の最終位置
-#define FLOATING_MOVE	(0.2f)			// 浮遊速度
-#define POP_POS_Y		(END_POS_Y + 20.0f)	// 出現後の浮遊時の最大位置
+#define END_POS_Y		(15.0f)			// 文字の出現した時の最終位置
+#define FLOATING_MOVE	(0.5f)			// 浮遊速度
+#define POP_POS_Y		(END_POS_Y + 10.0f)	// 出現後の浮遊時の最大位置
+#define POP_POS_Y_SMALL		(END_POS_Y - 5.0f)	// 出現後の浮遊時の最少位置
 
 #define UNITI_TIME		(40)			// 終了する時間
 //--------------------------------------------
@@ -211,20 +212,20 @@ void CWord::Draw(void)
 //=============================================================================
 D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 {
-	if (m_bMoveFlag == false)
+	if (m_bMoveFlag == true)
 	{
 		pos.y += FLOATING_MOVE;
 		if (pos.y > POP_POS_Y)
 		{	// 位置が指定した場所より大きい場合
-			m_bMoveFlag = true;
+			m_bMoveFlag = false;
 		}
 	}
-	else if (m_bMoveFlag == true)
+	else if (m_bMoveFlag == false)
 	{
 		pos.y -= FLOATING_MOVE;
-		if (pos.y < END_POS_Y)
+		if (pos.y < POP_POS_Y_SMALL)
 		{	// 位置が指定した場所より小さい場合
-			m_bMoveFlag = false;
+			m_bMoveFlag = true;
 		}
 	}
 

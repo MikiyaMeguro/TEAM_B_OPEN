@@ -30,6 +30,7 @@ public:
 		MODE_WALL_BIG,	// 大きい壁
 		MODE_GEAR,		// 歯車
 		MODEL_BOX,		// 箱
+		MODEL_DODAI,	// 土台
 		MODE_DUST,		// ゴミ
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
 		MODEL_CAR0,		// 車0
