@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 41
+NUM_MODEL = 42
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -18,44 +18,45 @@ MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#0 小さい壁
 MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#1 大きい壁
 MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 歯車
 MODEL_FILENAME = data/MODEL/box000.x"				#3 
-MODEL_FILENAME = data/MODEL/Dust.x"					#4 ゴミ
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#5
+MODEL_FILENAME = data/MODEL/StageOBJ/Stylbe.x"		#4 土台 
+MODEL_FILENAME = data/MODEL/Dust.x"					#5 ゴミ
+MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#6
 
-MODEL_FILENAME = data/MODEL/Car.x"					#6 車
-MODEL_FILENAME = data/MODEL/Mic.x"					#7 まいく
-MODEL_FILENAME = data/MODEL/Desk.x"					#8 (机)
-MODEL_FILENAME = data/MODEL/Pulin.x"				#9 プリン
-MODEL_FILENAME = data/MODEL/Knife.x"				#10 ナイフ
-MODEL_FILENAME = data/MODEL/apple.x"				#11 リンゴ
-MODEL_FILENAME = data/MODEL/Palette.x"				#12 絵具
-MODEL_FILENAME = data/MODEL/Wheel.x"				#13 タイヤ
-MODEL_FILENAME = data/MODEL/Taico.x"				#14 太鼓
-MODEL_FILENAME = data/MODEL/coin.x"					#15 コイン
-MODEL_FILENAME = data/MODEL/Suika.x"				#16 すいか
-MODEL_FILENAME = data/MODEL/Tarai.x"				#17 たらい
-MODEL_FILENAME = data/MODEL/pot.x"					#18 やかん
-MODEL_FILENAME = data/MODEL/Ikari.x"				#19 いかり
-MODEL_FILENAME = data/MODEL/Ikada.x"				#20 いかだ
-MODEL_FILENAME = data/MODEL/saihu.x"				#21 財布
-MODEL_FILENAME = data/MODEL/Karuta.x"				#22 かるた
-MODEL_FILENAME = data/MODEL/Camera.x"				#23 かめら
-MODEL_FILENAME = data/MODEL/Twig.x"					#24 こえだ
-MODEL_FILENAME = data/MODEL/Strawberry.x"			#25 イチゴ
-MODEL_FILENAME = data/MODEL/Egg.x"					#26 たまご
-MODEL_FILENAME = data/MODEL/Lance.x"				#27 ランス
-MODEL_FILENAME = data/MODEL/flowerbed.x"			#28 かだん
-MODEL_FILENAME = data/MODEL/Katana.x"				#29 刀
-MODEL_FILENAME = data/MODEL/log.x"					#30 まるた
-MODEL_FILENAME = data/MODEL/Ice.x"					#31 つらら
-MODEL_FILENAME = data/MODEL/Dango.x"				#32 だんご
-MODEL_FILENAME = data/MODEL/Makura.x"				#33 まくら
-MODEL_FILENAME = data/MODEL/Kunai.x"				#34 くない
-MODEL_FILENAME = data/MODEL/Fish.x"					#35 さかな
-MODEL_FILENAME = data/MODEL/Volcano.x"				#36 かざん
-MODEL_FILENAME = data/MODEL/Nazca.x"				#37 なすか
-MODEL_FILENAME = data/MODEL/Tank.x"					#38 たんく
-MODEL_FILENAME = data/MODEL/Yagura.x"				#39 やぐら
-MODEL_FILENAME = data/MODEL/Chair.x"				#40 ざいす
+MODEL_FILENAME = data/MODEL/Car.x"					#7 車
+MODEL_FILENAME = data/MODEL/Mic.x"					#8 まいく
+MODEL_FILENAME = data/MODEL/Desk.x"					#9 (机)
+MODEL_FILENAME = data/MODEL/Pulin.x"				#10 プリン
+MODEL_FILENAME = data/MODEL/Knife.x"				#11 ナイフ
+MODEL_FILENAME = data/MODEL/apple.x"				#12 リンゴ
+MODEL_FILENAME = data/MODEL/Palette.x"				#13 絵具
+MODEL_FILENAME = data/MODEL/Wheel.x"				#14 タイヤ
+MODEL_FILENAME = data/MODEL/Taico.x"				#15 太鼓
+MODEL_FILENAME = data/MODEL/coin.x"					#16 コイン
+MODEL_FILENAME = data/MODEL/Suika.x"				#17 すいか
+MODEL_FILENAME = data/MODEL/Tarai.x"				#18 たらい
+MODEL_FILENAME = data/MODEL/pot.x"					#19 やかん
+MODEL_FILENAME = data/MODEL/Ikari.x"				#20 いかり
+MODEL_FILENAME = data/MODEL/Ikada.x"				#21 いかだ
+MODEL_FILENAME = data/MODEL/saihu.x"				#22 財布
+MODEL_FILENAME = data/MODEL/Karuta.x"				#23 かるた
+MODEL_FILENAME = data/MODEL/Camera.x"				#24 かめら
+MODEL_FILENAME = data/MODEL/Twig.x"					#25 こえだ
+MODEL_FILENAME = data/MODEL/Strawberry.x"			#26 イチゴ
+MODEL_FILENAME = data/MODEL/Egg.x"					#27 たまご
+MODEL_FILENAME = data/MODEL/Lance.x"				#28 ランス
+MODEL_FILENAME = data/MODEL/flowerbed.x"			#29 かだん
+MODEL_FILENAME = data/MODEL/Katana.x"				#30 刀
+MODEL_FILENAME = data/MODEL/log.x"					#31 まるた
+MODEL_FILENAME = data/MODEL/Ice.x"					#32 つらら
+MODEL_FILENAME = data/MODEL/Dango.x"				#33 だんご
+MODEL_FILENAME = data/MODEL/Makura.x"				#34 まくら
+MODEL_FILENAME = data/MODEL/Kunai.x"				#35 くない
+MODEL_FILENAME = data/MODEL/Fish.x"					#36 さかな
+MODEL_FILENAME = data/MODEL/Volcano.x"				#37 かざん
+MODEL_FILENAME = data/MODEL/Nazca.x"				#38 なすか
+MODEL_FILENAME = data/MODEL/Tank.x"					#39 たんく
+MODEL_FILENAME = data/MODEL/Yagura.x"				#40 やぐら
+MODEL_FILENAME = data/MODEL/Chair.x"				#41 ざいす
 
 #------------------------------------------------------------
 #                      モデル配置情報

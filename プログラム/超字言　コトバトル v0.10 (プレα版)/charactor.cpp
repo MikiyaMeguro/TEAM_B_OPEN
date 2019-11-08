@@ -203,6 +203,9 @@ void C3DCharactor::Update(void)
 	//マトリックスの計算
 	CUtilityMath::CalWorldMatrix(&m_mtxWorld,pos,rot);
 
+	//カメラの参照位置制御
+	m_CameraPosR = GetPosition() + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
+
 }
 
 //=============================================================================
@@ -487,8 +490,6 @@ void C3DCharactor::CharaMove_Input(void)
 		CameraRot,
 		pCamera->GetLength());
 
-	//カメラの参照位置制御
-	m_CameraPosR = pos + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
 }
 //=============================================================================
 // CPUの思考処理
@@ -601,8 +602,6 @@ void C3DCharactor::Think_CPU(void)
 	//	m_CpuRotation = CPU_ROTATION_BACK;
 	//	nTestCnt = 0;
 	//}
-	//カメラの参照位置制御
-	m_CameraPosR = GetPosition() + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
 
 }
 
