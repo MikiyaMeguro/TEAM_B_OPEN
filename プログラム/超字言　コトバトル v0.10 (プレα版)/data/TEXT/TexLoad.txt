@@ -69,6 +69,8 @@ DATA = 00051 data/TEXTURE/PlayerSelect/BG.png PLAUERNUMSEL_BG
 DATA = 00052 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
 DATA = 00053 data/TEXTURE/CharactorSelect/CharaSel.png CHARACTORSEL_CHARA
 DATA = 00054 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
+DATA = 00055 data/TEXTURE/Gimmick/beltconveyer.png ベルトコンベア_アイコン
+
 
 
 END_LOAD
