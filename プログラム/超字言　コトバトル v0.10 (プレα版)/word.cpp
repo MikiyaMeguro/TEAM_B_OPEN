@@ -209,7 +209,20 @@ void CWord::Update(void)
 //=============================================================================
 void CWord::Draw(void)
 {
+	// デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
+	// αブレンディングを加算合成に設定
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
 	CSceneBillBoard::Draw();
+
+	// αブレンディングを元に戻す
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=============================================================================

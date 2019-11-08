@@ -26,6 +26,12 @@
 #define MODEL_MOVE_Y				(2.0f)			// モデル移動時の移動速度
 #define AFFECTED_LANDING			(15.0f)			// モデル着地時のノックバック影響量
 
+#define ANIM_TIME					(5)				// アニメーション時間
+#define ANIM_FRAME					(10)			// フレーム数
+#define ICON_SIZE_X					(80.0f)
+#define ICON_SIZE_Y					(40.0f)
+#define VIBRATION					(2.0f)
+#define VIBRATION_MOVE				(4.0f)
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
@@ -38,6 +44,10 @@ CObject::CObject()
 	m_bMoveFlag = false;		// 移動フラグ
 	m_bCreateFlag = false;
 	m_pIcon = NULL;				// ベルトコンベアのアイコン
+	m_nCntAnim = 0;
+	m_nCntPattan = 0;
+	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fMove = 0.0f;
 }
 
 //=============================================================================
@@ -83,6 +93,7 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 	SetObjType(CScene::OBJTYPE_SCENEX);
 
 	CSceneX::Init(pos);
+	m_posOld = pos;
 	return S_OK;
 }
 
@@ -108,6 +119,8 @@ void CObject::Update(void)
 	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
 	ModelMove(Collsiontype, pos);	// モデルの移動
+	
+	if (m_pIcon != NULL) { AnimationIcon(); }
 
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "ModelPos : x", m_pos.x, "f", "   y", m_pos.y, "f", "  z", m_pos.z, "f");
@@ -216,32 +229,29 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 				Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 			{	// ベルトコンベアの場合
 				pos.y = pos.y - CSceneX::GetVtxMin().y - 1.9f;
+				pos.x = m_posOld.x;
+				pos.z = m_posOld.z;
 				CSceneX::SetPosition(pos);
 				m_nRealTime = REALTIME_NONE;
 
-				if (m_pIcon == NULL)
-				{
-					if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT /*|| Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT*/)
-					{
-						if (pos.z < 0)
-						{
-							m_pIcon = CScene3D::Create(D3DXVECTOR3(pos.x, 10.0f, pos.z), "ベルトコンベア_アイコン");
-							m_pIcon->SetSize(50.0f, 40.0f);
-							m_pIcon->SetAnimation(0, 0.1f, 1.0f);
-							m_pIcon->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
-						}
-					}
-				}
+				IconCreate(Type, pos);	// アイコンの生成
 			}
 			else if (Type != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
 				Type != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 			{	// ベルトコンベア以外の場合
 				pos.y = pos.y - CSceneX::GetVtxMin().y;
+				pos.x = m_posOld.x;
+				pos.z = m_posOld.z;
+
 				CSceneX::SetPosition(pos);
 				m_nRealTime = REALTIME_NONE;
 				if (m_bCreateFlag == false) { m_bCreateFlag = true; }
 			}
 		}
+
+		// 振動の処理
+		Vibration(&pos);
+
 		CSceneX::SetPosition(pos);
 	}
 	else if (m_nRealTime == REALTIME_NONE)
@@ -266,6 +276,9 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	{	// 移動フラグがtrue 動く場合
 		pos.y -= MODEL_MOVE_Y;						// 移動速度
 
+		// 振動の処理
+		Vibration(&pos);
+
 		CSceneX::SetPosition(pos);
 
 		if (pos.y + CSceneX::GetVtxMax().y < 0)
@@ -275,4 +288,58 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 		}
 	}
 
+}
+
+//=============================================================================
+// アイコンのアニメーションの処理
+//=============================================================================
+void CObject::AnimationIcon(void)
+{
+	m_nCntAnim++;
+	if ((m_nCntAnim % ANIM_TIME) == 0)
+	{
+		m_nCntPattan++;
+		m_pIcon->SetAnimation(m_nCntPattan, 0.1f, 1.0f);
+	}
+}
+
+//=============================================================================
+// アイコンの生成処理
+//=============================================================================
+void CObject::IconCreate(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
+{
+	if (m_pIcon == NULL)
+	{
+		float fRot = 0.0f;		// 角度保管
+		m_pIcon = CScene3D::Create(D3DXVECTOR3(pos.x, 1.0f, pos.z), "ベルトコンベア_アイコン");
+		m_pIcon->SetSize(ICON_SIZE_X, ICON_SIZE_Y);
+		m_pIcon->SetAnimation(0, 0.1f, 1.0f);
+
+		if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT) { fRot = D3DX_PI * -0.5f; }
+		else if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT) { fRot = D3DX_PI * 0.5f; }
+		else if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT) { fRot = 0.0f; }
+		else if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_BACK) { fRot = -D3DX_PI; }
+		m_pIcon->SetRot(D3DXVECTOR3(0.0f, fRot, 0.0f));
+	}
+}
+
+//=============================================================================
+// 振動の処理
+//=============================================================================
+void CObject::Vibration(D3DXVECTOR3 *Pos)
+{
+	// 移動時に左右に動く
+	if (m_bMoveFlag == false)
+	{
+		m_fMove += VIBRATION_MOVE;
+		if (m_fMove > VIBRATION) { m_bMoveFlag = true; }
+	}
+	else if (m_bMoveFlag == true)
+	{
+		m_fMove -= VIBRATION_MOVE;
+		if (m_fMove < -VIBRATION) { m_bMoveFlag = false; }
+	}
+
+	Pos->x += m_fMove;
+	Pos->z += m_fMove;
 }
