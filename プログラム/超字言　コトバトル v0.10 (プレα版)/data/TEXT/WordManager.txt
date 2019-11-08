@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 35			# モデル数
+	ANSWERNUM = 44			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名 
@@ -46,7 +46,15 @@ SCRIPT			# この行は絶対消さないこと！
 	# 32 : たんく
 	# 33 : やぐら
 	# 34 : ざいす
-
+	# 35 : こんが
+	# 36 : ダイス
+	# 37 : たから
+	# 38 : がらす
+	# 39 : たんか
+	# 40 : リング
+	# 41 : くさや
+	# 42 : さざえ
+	# 43 : タイル
 #------------------------------------------------------------
 #                      文字の情報
 #------------------------------------------------------------
@@ -223,6 +231,51 @@ END_MODELSET
 MODELSET
 	TYPE = 34					# ざいす
 	ANSWER = 10.0 1.0 12.0
+END_MODELSET
+
+MODELSET
+	TYPE = 35					# こんが
+	ANSWER = 9.0 45.0 5.0
+END_MODELSET
+
+MODELSET
+	TYPE = 36					# だいす
+	ANSWER = 15.0 1.0 12.0
+END_MODELSET
+
+MODELSET
+	TYPE = 37					# たから
+	ANSWER = 15.0 5.0 38.0
+END_MODELSET
+
+MODELSET
+	TYPE = 38					# ガラス
+	ANSWER = 5.0 38.0 12.0
+END_MODELSET
+
+MODELSET
+	TYPE = 39					# たんか
+	ANSWER = 15.0 45.0 5.0
+END_MODELSET
+
+MODELSET
+	TYPE = 40					# リング
+	ANSWER = 39.0 45.0 7.0
+END_MODELSET
+
+MODELSET
+	TYPE = 41					# くさや
+	ANSWER = 7.0 10.0 35.0
+END_MODELSET
+
+MODELSET
+	TYPE = 42					# さざえ
+	ANSWER = 10.0 10.0 3.0
+END_MODELSET
+
+MODELSET
+	TYPE = 43					# タイル
+	ANSWER = 15.0 1.0 40.0
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！

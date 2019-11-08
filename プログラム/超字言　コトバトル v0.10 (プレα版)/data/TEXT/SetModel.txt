@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 42
+NUM_MODEL = 51
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -57,6 +57,15 @@ MODEL_FILENAME = data/MODEL/Nazca.x"				#38 なすか
 MODEL_FILENAME = data/MODEL/Tank.x"					#39 たんく
 MODEL_FILENAME = data/MODEL/Yagura.x"				#40 やぐら
 MODEL_FILENAME = data/MODEL/Chair.x"				#41 ざいす
+MODEL_FILENAME = data/MODEL/conga.x"				#42 こんが
+MODEL_FILENAME = data/MODEL/Dice.x"					#43 だいす
+MODEL_FILENAME = data/MODEL/TreasureChest.x"		#44 たから
+MODEL_FILENAME = data/MODEL/Grass.x"				#45 ガラス
+MODEL_FILENAME = data/MODEL/stretcher.x"			#46 たんか
+MODEL_FILENAME = data/MODEL/Ring.x"					#47 リング
+MODEL_FILENAME = data/MODEL/kusaya.x"				#48 くさや
+MODEL_FILENAME = data/MODEL/sazae.x"				#49 さざえ
+MODEL_FILENAME = data/MODEL/Tile.x"					#50 タイル
 
 #------------------------------------------------------------
 #                      モデル配置情報

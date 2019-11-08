@@ -68,7 +68,16 @@ public:
 		MODEL_TANK,		// たんく
 		MODEL_YAGURA,	// やぐら
 		MODEL_CHAIR,	// ざいす
-		MODEL_MAX,
+		MODEL_CONGA,	// こんが
+		MODEL_DICE,		// だいす
+		MODEL_TREASURECHEST,	// たから
+		MODEL_GRASS,	// ガラス
+		MODEL_STRETCHER,	// たんか
+		MODEL_RING,	// リング
+		MODEL_KUSAYA,	// くさや
+		MODEL_SAZAE,	// サザエ
+		MODEL_TILE,	// タイル
+		MODEL_MAX
 	} MODEL;
 
 	CLoad();		// コンストラクタ
