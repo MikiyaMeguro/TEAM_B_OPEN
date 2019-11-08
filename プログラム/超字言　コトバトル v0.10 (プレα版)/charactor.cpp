@@ -181,8 +181,11 @@ void C3DCharactor::Update(void)
 	//—‰º‚“x
 	if (pos.y <= -100.0f)
 	{
+		//İ’è
 		pos = m_RespawnPos;
+		GetThisCharactor()->SetOldPosition(m_RespawnPos);
 		move.y = 0.0f;
+		GetThisCharactor()->SetTransTime(60);
 
 		CPoint *pPoint = NULL;
 		if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(GetThisCharactor()->GetID()); }
