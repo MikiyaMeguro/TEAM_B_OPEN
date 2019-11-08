@@ -1,7 +1,7 @@
 //=============================================================================
 //
-// ポーズ処理 [pause.h]
-// Author : Mikiya Meguro
+// プレイヤー人数選択画面処理 [PlayerNumSelect.h]
+// Author : Mikiya Meguro/Akane Gokan
 //
 //=============================================================================
 #ifndef _PLAYERSELECT_H_
@@ -19,8 +19,9 @@ class CScene2D;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_PLAYER_SELECTMENU		(4)	//ランキングの数
-#define MAX_CAUTIONMENU				(2)	//ランキングの数
+#define MAX_PLAYER_SELECTMENU		(4)	//プレイヤー人数の最大値
+#define MAX_CAUTIONMENU				(2)	//警告の選択しの最大数
+#define MAX_PLAYERNUMSEL_BG			(7)	//BGの最大ポリゴン（演出用）
 
 //*********************************************************************
 //ゲームクラスの定義
@@ -28,16 +29,18 @@ class CScene2D;
 class CPlayerSelect : public CScene //派生クラス
 {
 public:
+	/* プレイヤー人数の種類 */
 	typedef enum
 	{
 		SELECTPLAYER_NONE = 0,
-		SELECTPLAYER_1P,			//続行状態
-		SELECTPLAYER_2P,			//リトライ状態
-		SELECTPLAYER_3P,			//終了
-		SELECTPLAYER_4P,			//終了
+		SELECTPLAYER_1P,			//プレイ人数：1人
+		SELECTPLAYER_2P,			//プレイ人数：2人
+		SELECTPLAYER_3P,			//プレイ人数：3人
+		SELECTPLAYER_4P,			//プレイ人数：4人
 		SELECTPLAYER_MAX			//状態の総数
-	}SELECTPLAYER;				//列挙型
+	}SELECTPLAYER;
 
+	/* 選択肢の状態 */
 	typedef enum
 	{
 		SELECTTYPE_NONE = 0,	//選ばれていない状態
@@ -45,6 +48,7 @@ public:
 		SELECTTYPE_MAX			//状態の総数
 	}SELECT;
 
+	/* メニューの列挙型 */
 	typedef struct
 	{
 		SELECT		select;		//セレクト
@@ -60,40 +64,77 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 
-	static SELECTPLAYER *GetModeSelectMode(void);
-	static HRESULT Load(void);
-	static void UnLoad(void);
-	static bool GetModeSelectBool(void);
-	static void SetModeSelectBool(bool ModeSelectBool);
-	void Caution2DUninit(void);
-	//メンバ変数
+	static SELECTPLAYER *GetModeSelectMode(void) { return &m_SelectMode; }						//選択したモードの取得
+	static HRESULT Load(void) { return S_OK; }													//読み込み
+	static void UnLoad(void);																	//破棄
+	static bool GetModeSelectBool(void) { return m_bModeSelect; }								//モードが選ばれたかの取得
+	static void SetModeSelectBool(bool ModeSelectBool) { m_bModeSelect = ModeSelectBool; }		//モードが選ばれたかの設定
+	void Caution2DUninit(void);																	//警告の終了処理
+
 private:
-	D3DXVECTOR3					m_InitPos;
-	float						m_fWidth, m_fHeight;	// 幅高さ
-	D3DXVECTOR3					m_TexMove;
+
+	/* 背景の種類 */
+	typedef enum
+	{
+		PLNUMSELECTBGTYPE_BG = 0,
+		PLNUMSELECTBGTYPE_BAND_L,
+		PLNUMSELECTBGTYPE_BAND_R,
+		PLNUMSELECTBGTYPE_FRAME,
+		PLNUMSELECTBGTYPE_MENU
+
+	}PLNUMSELECTBGTYPE;
+
+	/* アニメーションの割り方種類 */
+	typedef enum
+	{
+		ANIMTYPE_NONE = 0,
+		ANIMTYPE_X,
+		ANIMTYPE_Y,
+		ANIMTYPE_MAX
+
+	}ANIMTYPE;
+
+	HRESULT InitPointer(void);													//各種ポインタの初期化
+	void InitProductionPos(void);												//演出ポリゴンの初期設定
+	void ScrollMenu(PLNUMSELECTBGTYPE type, float fScroolSpeed);				//スクロール
+	void PlayerSelectMove(PLNUMSELECTBGTYPE type, int MenuNum);					//ポリゴン移動演出
+	void SetPlayerSelNumMenuPos(int MenuNum);									//選択肢の基本位置
+	void SetSelectAnimation(PLNUMSELECTBGTYPE type, ANIMTYPE AnimType, 
+		int MenuNum, int MaxAnimPatternX, int MaxAnimPatternY, int AnimSpeed);	//アニメーション
+
+	D3DXVECTOR3					m_InitPos;										//人数選択の初期位置
+	D3DXVECTOR3					m_ChoicePos[MAX_CAUTIONMENU];					//警告の初期位置
+	float						m_fWidth, m_fHeight;							// 幅高さ
+	D3DXVECTOR3					m_TexMove;										//テクスチャの移動量
 
 
-	static LPDIRECT3DTEXTURE9	m_pTexture[MAX_PLAYER_SELECTMENU];	// テクスチャポインタ
-	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;							// 頂点バッファへのポインタ
-	static LPDIRECT3DTEXTURE9	m_pTextureBG;						// テクスチャポインタ
-	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuffBG;						// 頂点バッファへのポインタ
-	CScene2D					*m_apPolygonBG;						// メニューのポリゴン
+	static LPDIRECT3DTEXTURE9	m_pTexture[MAX_PLAYER_SELECTMENU];				// テクスチャポインタ
+	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;										// 頂点バッファへのポインタ
+	static LPDIRECT3DTEXTURE9	m_pTextureBG;									// テクスチャポインタ
+	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuffBG;									// 頂点バッファへのポインタ
+	CScene2D					*m_apPolygonBG[MAX_PLAYERNUMSEL_BG];			// メニューのポリゴン
 
-	SELECTMENU					m_aModeSelectMenu[MAX_PLAYER_SELECTMENU];	// ポーズメニュー
-	D3DXVECTOR3					m_Pos[MAX_PLAYER_SELECTMENU];				// 位置
-	static SELECTPLAYER			m_SelectMode;								// 選択してるモード
-	int							m_nSelect;									// 選択している番号
-	CScene2D					*m_apPolygon[MAX_PLAYER_SELECTMENU];		// メニューのポリゴン
-	static	bool				m_bModeSelect;								// ポーズの状態
-	bool						m_bCaution;									// 決定の警告
-	bool						m_bCreate2D;								// 2Dを作ったかどうか
+	SELECTMENU					m_aModeSelectMenu[MAX_PLAYER_SELECTMENU];		// ポーズメニュー
+	D3DXVECTOR3					m_Pos[MAX_PLAYER_SELECTMENU];					// 位置
+	static SELECTPLAYER			m_SelectMode;									// 選択してるモード
+	int							m_nSelect;										// 選択している番号
+	CScene2D					*m_apPolygon[MAX_PLAYER_SELECTMENU];			// メニューのポリゴン
+	static	bool				m_bModeSelect;									// ポーズの状態
+	bool						m_bCaution;										// 決定の警告
+	bool						m_bCreate2D;									// 2Dを作ったかどうか
 
-	CScene2D					*m_pCaution2D;								// 警告のポリゴン
-	CScene2D					*m_pCaution2DBG;							// 警告のポリゴンBG
-	CScene2D					*m_pMenuLogo;						// メニューのポリゴン
-	CScene2D					*m_pSelect2D[MAX_CAUTIONMENU];				// メニューのポリゴン
-	int							m_nSelectCaution;							// 選択している番号
-	SELECTMENU					m_SelectCaution[MAX_CAUTIONMENU];							// メニュー
+	CScene2D					*m_pCaution2D;									// 警告のポリゴン
+	CScene2D					*m_pCaution2DBG;								// 警告のポリゴンBG
+	CScene2D					*m_pSelect2D[MAX_CAUTIONMENU];					// メニューのポリゴン
+	int							m_nSelectCaution;								// 選択している番号
+	SELECTMENU					m_SelectCaution[MAX_CAUTIONMENU];				// メニュー
+
+	/* 演出面変数 */
+	int m_nCntScrool;		//スクロールのカウンター
+	int m_nCntAnim;			//アニメーションのカウンター
+	int m_nPatturnAnim;		//アニメーションのパターン
+	float m_fChangeMode;	//選択中モードアイコンの移動制御カウンター
+	float m_fMoveMode;		//選択中モードアイコンの移動量を計る
 };
 
 #endif
