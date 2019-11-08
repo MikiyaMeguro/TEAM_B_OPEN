@@ -230,7 +230,7 @@ void CSelectMenu::Update(void)
 		}
 
 		//エンターキー
-		if (pInput->GetTrigger(DIK_RETURN) == true)
+		if (CCommand::GetCommand("DECISION"))
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
 			if (m_nSelect == 0)
@@ -434,7 +434,7 @@ void CSelectMenu::SelectModeExplanation(int MenuSelect)
 			m_apPolygonBG[6]->SetPos(D3DXVECTOR3(m_InitPos.x, MENU_INIT_POS, m_InitPos.z), 0.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			SelectMove(POLYGONTYPE_BG, 6);		//移動演出処理
 			m_apPolygonBG[7]->SetPos(D3DXVECTOR3(m_InitPos.x + 350.0f, MENU_INIT_POS, m_InitPos.z), 0.0f, -NOSELECT_MENU_SIZE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
-			
+
 			/* 選択中UI */
 			m_apPolygonBG[9]->SetPos(m_apPolygon[1]->GetPosition(), 0.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -455,7 +455,7 @@ void CSelectMenu::SelectModeExplanation(int MenuSelect)
 			m_apPolygonBG[6]->SetPos(D3DXVECTOR3(m_InitPos.x, MENU_INIT_POS, m_InitPos.z), 0.0f, -NOSELECT_MENU_SIZE, D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 			m_apPolygonBG[7]->SetPos(D3DXVECTOR3(m_InitPos.x + 350.0f, MENU_INIT_POS, m_InitPos.z), 0.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			SelectMove(POLYGONTYPE_BG,7);		//移動演出処理
-			
+
 			/* 選択中UI */
 			m_apPolygonBG[9]->SetPos(m_apPolygon[2]->GetPosition(), 0.0f, 0.0f, D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
@@ -545,7 +545,7 @@ void CSelectMenu::SelectMove(POLYGONTYPE type, int MenuNum)
 
 		m_apPolygon[MenuNum]->SetPos(SelectPos,0.0f,0.0f,D3DXCOLOR(1.0f,1.0f,1.0f,1.0f));
 		break;
-		
+
 	case POLYGONTYPE_BG:
 		SelectPos = m_apPolygonBG[MenuNum]->GetPosition();
 
@@ -584,7 +584,7 @@ void CSelectMenu::SetSelectAnimation(POLYGONTYPE type, ANIMTYPE AnimType, int Me
 				m_nPatturnAnim2 = 0;
 			}
 			m_apPolygon[MenuNum]->SetTex(D3DXVECTOR2(0.0f + ((1.0f/ MaxAnimPatternX)*m_nPatturnAnim2),0.0f + (1.0f / MaxAnimPatternY)),
-										 D3DXVECTOR2(((1.0f / MaxAnimPatternX)*m_nPatturnAnim2) + ((1.0f / MaxAnimPatternX)*m_nPatturnAnim2), 
+										 D3DXVECTOR2(((1.0f / MaxAnimPatternX)*m_nPatturnAnim2) + ((1.0f / MaxAnimPatternX)*m_nPatturnAnim2),
 													(1.0f / MaxAnimPatternY) + (1.0f / MaxAnimPatternY)));
 		}
 		else if (AnimType == ANIMTYPE_Y)

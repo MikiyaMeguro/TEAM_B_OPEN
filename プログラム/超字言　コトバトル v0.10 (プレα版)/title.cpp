@@ -110,7 +110,7 @@ void CTitle::Update(void)
 		SparkProduction();	//火花移動処理
 		if (m_FlashSkip == true)
 		{// フラッシュ演出スキップ済み
-			if (CCommand::GetCommand("ENTER"))
+			if (CCommand::GetCommand("DECISION"))
 			{//エンター押下
 				m_bPressMode = true;
 				pFade->SetFade(pManager->MODE_SELECT, pFade->FADE_OUT);
@@ -122,7 +122,7 @@ void CTitle::Update(void)
 	{//演出未スキップ
 		if (m_FlashSkip == false)
 		{// フラッシュ演出未スキップ
-			if (CCommand::GetCommand("ENTER"))
+			if (CCommand::GetCommand("DECISION"))
 			{//エンター押下
 				m_ProductionState = PRODUCTIONSTATE_FLASH;	//フラッシュを開始
 				m_bProductionSkip = true;
@@ -133,7 +133,7 @@ void CTitle::Update(void)
 	{//演出スキップ済み
 		if (m_FlashSkip == false)
 		{// フラッシュ演出未スキップ
-			if (CCommand::GetCommand("ENTER"))
+			if (CCommand::GetCommand("DECISION"))
 			{//エンター押下
 				m_FlashSate = FLASHSTATE_FINISH;
 			}

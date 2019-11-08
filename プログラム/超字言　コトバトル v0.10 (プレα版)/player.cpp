@@ -265,8 +265,7 @@ void CPlayer::Update(void)
 					LockOnMove = m_pLockOnCharactor->GetMove();
 
 					fRotY = atan2f(powf((BulletPos.x - LockOnPos.x), 2.0f), powf((BulletPos.z - LockOnPos.z), 2.0f)) -
-						atan2f(powf((BulletPos.x - (LockOnPos.x - (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z - (LockOnMove.z * 5.0f))), 2.0f));
-					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
+						atan2f(powf((BulletPos.x - (LockOnPos.x - (LockOnMove.x * 10.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z - (LockOnMove.z * 10.0f))), 2.0f));					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
 					CUtilityMath::RotateNormarizePI(&fRotY);
 					BulletRot.y += fRotY;
 				}

@@ -69,7 +69,7 @@ void CSelect::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	//”CˆÓ‚ÌƒL[ENTER
-	if (CCommand::GetCommand("ENTER"))
+	if (CCommand::GetCommand("DECISION"))
 	{
 //		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}
