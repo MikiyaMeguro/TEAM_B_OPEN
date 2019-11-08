@@ -30,6 +30,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_nNumPlayerGet = 0;
 	m_nCntUninit = 0;
 	m_bFlag = false;
+	m_bPopFlag = false;
 }
 
 //--------------------------------------------

@@ -1,0 +1,72 @@
+//====================================================================================
+//
+//	テクスチャロード用テキスト[TexLoad.txt]
+//	Author : Kodama Yuto(児玉 優斗)
+//	Editor : 						←最後に編集した人の名前を書く
+//
+//	書き方→ DATA = (ID) (アドレス(.exeから見た相対アドレス)) (タグ)
+//				 ↑↑　↑									↑
+//					半角スペースを必ず空ける!!
+//
+//		IDの五桁目(10000～)はモデルに貼るテクスチャに使うので使わないこと
+//
+//====================================================================================
+START_LOAD
+DATA = 00000 data/TEXTURE/SampleTex000.png  BLOCK
+DATA = 00001 data/TEXTURE/field000.jpg  FIELD
+DATA = 00002 data/TEXTURE/Wall0001.png  WALL
+DATA = 00003 data/TEXTURE/Marker000.png MARKER
+DATA = 00004 data/TEXTURE/player000.png PLAYER
+DATA = 00005 data/TEXTURE/number.png NUMBER
+DATA = 00006 data/TEXTURE/50音一覧.png WORD
+DATA = 00007 data/TEXTURE/Tube.png TUBE
+DATA = 00008 data/TEXTURE/time.png TIME
+DATA = 00009 data/TEXTURE/colon.png COLON
+DATA = 00010 data/TEXTURE/bg_fream.png BG_FREAME
+DATA = 00011 data/TEXTURE/MENU_UI/Menu000.png MENU_NUMPLAYER
+DATA = 00012 data/TEXTURE/MENU_UI/Menu001.png MENU_TITLE
+DATA = 00013 data/TEXTURE/MENU_UI/Menu002.png MENU_1P
+DATA = 00014 data/TEXTURE/MENU_UI/Menu003.png MENU_2P
+DATA = 00015 data/TEXTURE/MENU_UI/Menu004.png MENU_3P
+DATA = 00016 data/TEXTURE/MENU_UI/Menu005.png MENU_4P
+DATA = 00017 data/TEXTURE/MENU_UI/Menu006.png MENU_START
+DATA = 00018 data/TEXTURE/MENU_UI/Menu007.png MENU_RETRY
+DATA = 00019 data/TEXTURE/MENU_UI/Menu008.png MENU_STAGE
+DATA = 00020 data/TEXTURE/MENU_UI/Menu009.png MENU_CHARA
+DATA = 00021 data/TEXTURE/MENU_UI/Menu010.png MENU_CONTINUE
+DATA = 00022 data/TEXTURE/MENU_UI/Menu011.png MENU_YES
+DATA = 00023 data/TEXTURE/MENU_UI/Menu012.png MENU_NO
+DATA = 00024 data/TEXTURE/MENU_UI/Menu013.png MENU_MOZI
+DATA = 00025 data/TEXTURE/TITLE/TitleBg_Human.png TITLE_HUMAN
+DATA = 00026 data/TEXTURE/TITLE/TitleRogo_kotomon.png TITLE_KOTOMON
+DATA = 00027 data/TEXTURE/TITLE/TitleRogo_Main.png TITLE_ROGO_M
+DATA = 00028 data/TEXTURE/TITLE/TitleRogo_sub.png TITLE_ROGO_S
+DATA = 00029 data/TEXTURE/TITLE/TitleBg_Hibana.png TITLE_HIBANA
+DATA = 00030 data/TEXTURE/UI/PRESS_ANY_BUTTON.png PRESS
+DATA = 00031 data/TEXTURE/ModeSelect/Frame.png FRAME
+DATA = 00032 data/TEXTURE/ModeSelect/SelectMode_UI.png SELECTMODE_UI
+DATA = 00033 data/TEXTURE/ModeSelect/BG.png SELECTMODE_BG
+DATA = 00034 data/TEXTURE/ModeSelect/SelectMode_Explanation.png SELECTMODE_EXPLANATION
+DATA = 00035 data/TEXTURE/ModeSelect/Titleback_anim.png TITLEBACK_A
+DATA = 00036 data/TEXTURE/CharacterIcon/コトモン_スピード_アイコン.png キャラ(スピード)
+DATA = 00037 data/TEXTURE/CharacterIcon/コトモン_バランス_アイコン.png キャラ(バランス)
+DATA = 00038 data/TEXTURE/CharacterIcon/コトモン_パワー_アイコン.png キャラ(パワー)
+DATA = 00039 data/TEXTURE/CharacterIcon/コトモン_リーチ_アイコン.png キャラ(リーチ)
+DATA = 00040 data/TEXTURE/PlayerNum.png プレイ人数
+DATA = 00041 data/TEXTURE/point.png POINT
+DATA = 00042 data/TEXTURE/kuma_uv.jpg KUMA_UV
+DATA = 00043 data/TEXTURE/MENU_UI/Menu014.png MODESELEXT_MENU
+DATA = 00044 data/TEXTURE/UI/operation.png UI_OPERATION
+DATA = 00045 data/TEXTURE/UI/Select.png UI_SELECT
+DATA = 00046 data/TEXTURE/MENU_UI/Menu015.png PLAYERNUMSELECT_MENU
+DATA = 00047 data/TEXTURE/PlayerSelect/Band.png PLAUERNUMSEL_BAND
+DATA = 00048 data/TEXTURE/PlayerSelect/BG.png PLAUERNUMSEL_BG
+DATA = 00049 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
+DATA = 00050 data/TEXTURE/CharactorSelect/CharaSel.png CHARACTORSEL_CHARA
+DATA = 00051 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
+
+DATA = 00006 data/TEXTURE/pause100.png  PAUSE_BG
+DATA = 00007 data/TEXTURE/Tutorial.jpg 	PAUSE_TUTORIAL
+DATA = 00008 data/TEXTURE/pause000.png  PAUSE_MENU_CONTINUE
+DATA = 00009 data/TEXTURE/pause001.png  PAUSE_MENU_QUIT
+END_LOAD

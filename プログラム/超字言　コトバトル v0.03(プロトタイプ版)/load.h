@@ -57,6 +57,16 @@ public:
 		MODEL_KADANN,	// Ç©ÇæÇÒ
 		MODEL_KATANA,	// ìÅ
 		MODEL_LOG	,	// Ç‹ÇÈÇΩ
+		MODEL_ICE,		// Ç¬ÇÁÇÁ
+		MODEL_DANGO,	// ÇæÇÒÇ≤
+		MODEL_MAKURA,	// Ç‹Ç≠ÇÁ
+		MODEL_KUNAI,	// Ç≠Ç»Ç¢
+		MODEL_FISH,		// Ç≥Ç©Ç»
+		MODEL_VOLCANO,	// Ç©Ç¥ÇÒ
+		MODEL_NAZCA,	// Ç»Ç∑Ç©
+		MODEL_TANK,		// ÇΩÇÒÇ≠
+		MODEL_YAGURA,	// Ç‚ÇÆÇÁ
+		MODEL_CHAIR,	// Ç¥Ç¢Ç∑
 		MODEL_MAX,
 	} MODEL;
 

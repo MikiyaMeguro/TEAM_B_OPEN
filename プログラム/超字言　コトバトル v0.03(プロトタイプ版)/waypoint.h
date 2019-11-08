@@ -26,6 +26,7 @@ public:
 		D3DXVECTOR3 WayPointPos;
 		int	nWayPointNum;
 		bool bInPlayer;
+		bool bBlock;
 	}WAYPOINT;
 
 	CWaypoint();
@@ -36,8 +37,9 @@ public:
 	void Draw(void);
 	static CWaypoint *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag);
 	void InRange(D3DXVECTOR3 pos);
-	D3DXVECTOR3 &ReturnPointMove(void);
-	int CntWayPoint(void);
+	D3DXVECTOR3 &ReturnPointMove(void);	//移動可能なマスの位置情報
+	int CntWayPoint(void);		//移動可能マスが何マスあるか
+	void CollisionObj(void);	//オブジェクトと当たっているか
 
 	// 関数
 private:

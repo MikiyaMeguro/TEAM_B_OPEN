@@ -43,7 +43,8 @@ private:
 	bool m_bFlagUninit;		// 終了するためのフラグ
 	bool m_bMoveFlag;		// 上下移動のフラグ
 	bool m_bScaleFlag;		// 拡大縮小するフラグ
-	bool m_bFlag;
+	bool m_bFlag;			// 獲得できるかできないか
+	bool m_bPopFlag;		// 出現時のフラグ
 	int m_nWordNum;			// 文字の番号
 	int m_nNumPlayerGet;	// 取得された時のプレイヤーの番号
 	float m_fDistance[MAX_PLAYER];	// プレイヤーとの距離
