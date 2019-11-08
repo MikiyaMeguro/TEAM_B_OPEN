@@ -202,7 +202,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 30					# Ç©Ç¥ÇÒ
-	ANSWER = 5.0 9.0 45.0
+	ANSWER = 5.0 10.0 45.0
 END_MODELSET
 
 MODELSET
@@ -222,7 +222,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 34					# Ç¥Ç¢Ç∑
-	ANSWER = 9.0 1.0 12.0
+	ANSWER = 10.0 1.0 12.0
 END_MODELSET
 
 END_SCRIPT		# Ç±ÇÃçsÇÕê‚ëŒè¡Ç≥Ç»Ç¢Ç±Ç∆ÅI
