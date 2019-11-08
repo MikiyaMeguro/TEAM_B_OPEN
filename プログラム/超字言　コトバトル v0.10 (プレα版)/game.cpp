@@ -593,7 +593,7 @@ void CGame::SetStage(int nCntState)
 	if (nCntState < MAX_STAGE)
 	{
 		CSetObject::LoadFile(m_pcStageName[nCntState]);
-		if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
+		if (m_pWordCreate != NULL && CObject::GetCreateFlag() == false) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
 	}
 }
 //=============================================================================

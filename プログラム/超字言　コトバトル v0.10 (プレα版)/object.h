@@ -49,8 +49,10 @@ public:
 
 	// 設定 取得の関数
 	REALTIME GetRealTimeType(void) { return m_nRealTime; }
+	static bool GetCreateFlag(void) { return m_bCreateFlag; }
 
 private:
+	static bool m_bCreateFlag;		// 生成するフラグ
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
 
 	bool m_bMoveFlag;		// 移動フラグ

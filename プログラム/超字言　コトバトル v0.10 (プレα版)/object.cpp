@@ -29,13 +29,14 @@
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
-
+bool CObject::m_bCreateFlag = false;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
 CObject::CObject()
 {
 	m_bMoveFlag = false;		// 移動フラグ
+	m_bCreateFlag = false;
 	m_pIcon = NULL;				// ベルトコンベアのアイコン
 }
 
@@ -220,8 +221,6 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 
 				if (m_pIcon == NULL)
 				{
-					
-					
 					if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT /*|| Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT*/)
 					{
 						if (pos.z < 0)
@@ -240,6 +239,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 				pos.y = pos.y - CSceneX::GetVtxMin().y;
 				CSceneX::SetPosition(pos);
 				m_nRealTime = REALTIME_NONE;
+				if (m_bCreateFlag == false) { m_bCreateFlag = true; }
 			}
 		}
 		CSceneX::SetPosition(pos);
@@ -256,11 +256,14 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 			CSceneX::SetRot(rot);
 		}
 
-		if ((CTime::GetStageTime() % 30) == 0) { m_nRealTime = REALTIME_ENDPOS; }
+		if ((CTime::GetStageTime() % 30) == 0)
+		{ 
+			m_nRealTime = REALTIME_ENDPOS;
+			if (m_bCreateFlag == true) { m_bCreateFlag = false; }
+		}
 	}
 	else if (m_nRealTime == REALTIME_ENDPOS)
 	{	// 移動フラグがtrue 動く場合
-
 		pos.y -= MODEL_MOVE_Y;						// 移動速度
 
 		CSceneX::SetPosition(pos);
