@@ -132,6 +132,10 @@ public:
 	{// ==
 		return (this->X == vec.X && this->Y == vec.Y && this->Z == vec.Z) ? true : false;
 	}
+	bool operator != (const VECTOR_3D& vec)
+	{// !=
+		return (this->X != vec.X && this->Y != vec.Y && this->Z != vec.Z) ? true : false;
+	}
 	bool operator > (const VECTOR_3D& vec)
 	{// >
 		return (this->X > vec.X && this->Y > vec.Y && this->Z > vec.Z) ? true : false;

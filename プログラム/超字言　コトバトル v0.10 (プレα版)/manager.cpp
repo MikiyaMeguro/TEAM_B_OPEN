@@ -176,11 +176,14 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, bool bWindow)
 	// モード切替
 	//SetMode(m_mode);
 
+	//ゲームスタート
 	CCommand::RegistCommand("ENTER", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_RETURN);
 	CCommand::RegistCommand("ENTER", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_START);
 
+	//決定
 	CCommand::RegistCommand("DECISION", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_RETURN);
 	CCommand::RegistCommand("DECISION", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_A);
+	CCommand::RegistCommand("DECISION", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_RIGHT_SHOULDER);
 
 	CCommand::RegistCommand("RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_RIGHT);
 	CCommand::RegistCommand("RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_D);

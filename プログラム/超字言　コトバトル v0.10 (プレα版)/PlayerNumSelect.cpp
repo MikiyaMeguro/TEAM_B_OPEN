@@ -237,7 +237,7 @@ void CPlayerSelect::Update(void)
 		}
 
 		//エンターキー
-		if (CCommand::GetCommand("ENTER")== true && m_bCaution == false)
+		if (CCommand::GetCommand("DECISION")== true && m_bCaution == false)
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
 			if (m_nSelect == 0)
@@ -265,7 +265,7 @@ void CPlayerSelect::Update(void)
 		}
 
 		//最終警告	2Dが作成されたら
-		if (CCommand::GetCommand("ENTER") && m_bCreate2D == true)
+		if (CCommand::GetCommand("DECISION") && m_bCreate2D == true)
 		{
 			switch (m_SelectMode)
 			{
@@ -296,7 +296,7 @@ void CPlayerSelect::Update(void)
 		{
 			//2Dを破棄
 			Caution2DUninit();
-			
+
 			m_nSelectCaution = 1;
 			m_SelectCaution[0].select = SELECTTYPE_NONE;
 			m_SelectCaution[1].select = SELECTTYPE_SELECT;
