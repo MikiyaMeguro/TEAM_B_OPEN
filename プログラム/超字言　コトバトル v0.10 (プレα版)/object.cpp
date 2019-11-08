@@ -14,6 +14,7 @@
 #include "player.h"
 #include "game.h"
 #include "time.h"
+#include "scene3D.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -35,6 +36,7 @@
 CObject::CObject()
 {
 	m_bMoveFlag = false;		// 移動フラグ
+	m_pIcon = NULL;				// ベルトコンベアのアイコン
 }
 
 //=============================================================================
@@ -88,6 +90,11 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CObject::Uninit(void)
 {
+	if (m_pIcon != NULL)
+	{	// アイコンの破棄
+		m_pIcon->Uninit();
+		m_pIcon = NULL;
+	}
 	CSceneX::Uninit();
 }
 
@@ -115,6 +122,10 @@ void CObject::Update(void)
 //=============================================================================
 void CObject::Draw(void)
 {
+	if (m_pIcon != NULL)
+	{
+		m_pIcon->Draw();
+	}
 	CSceneX::Draw();
 }
 
@@ -206,6 +217,22 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 				pos.y = pos.y - CSceneX::GetVtxMin().y - 1.9f;
 				CSceneX::SetPosition(pos);
 				m_nRealTime = REALTIME_NONE;
+
+				if (m_pIcon == NULL)
+				{
+					
+					
+					if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT /*|| Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT*/)
+					{
+						if (pos.z < 0)
+						{
+							m_pIcon = CScene3D::Create(D3DXVECTOR3(pos.x, 10.0f, pos.z), "ベルトコンベア_アイコン");
+							m_pIcon->SetSize(50.0f, 40.0f);
+							m_pIcon->SetAnimation(0, 0.1f, 1.0f);
+							m_pIcon->SetRot(D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f));
+						}
+					}
+				}
 			}
 			else if (Type != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
 				Type != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
