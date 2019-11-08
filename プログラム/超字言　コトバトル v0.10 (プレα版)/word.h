@@ -48,6 +48,8 @@ private:
 	int m_nWordNum;			// 文字の番号
 	int m_nNumPlayerGet;	// 取得された時のプレイヤーの番号
 	float m_fDistance[MAX_PLAYER];	// プレイヤーとの距離
+	float m_fMoveY;			// 移動距離
+
 
 	int		   m_nNum;
 	int		   m_nCntUninit;	// 終了するまでのカウント

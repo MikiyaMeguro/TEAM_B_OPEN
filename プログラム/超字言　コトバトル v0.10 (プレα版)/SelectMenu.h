@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // セレクトメニュー処理 [SelectMenu.h]
-// Author : Mikiya Meguro
+// Author : Mikiya Meguro/Akane Gokan
 //
 //=============================================================================
 #ifndef _SELECTMENU_H_
@@ -20,7 +20,7 @@ class CScene2D;
 // マクロ定義
 //*****************************************************************************
 #define MAX_SELECTMENU			(4)							//最大ポリゴン数数
-#define MAX_SELETMODE_BG		(6)							//BGの最大ポリゴン
+#define MAX_SELETMODE_BG		(10)						//BGの最大ポリゴン
 #define BAND_SIZE				(0.5f)						//帯のサイズ
 //*********************************************************************
 //ゲームクラスの定義
@@ -69,11 +69,12 @@ public:
 	virtual void Update(void);
 	virtual void Draw(void);
 
-	static SELECT_MENU *GetModeSelectMode(void);
-	static HRESULT Load(void);
+	static SELECT_MENU *GetModeSelectMode(void) {	return &m_SelectMode;	}
+	static HRESULT Load(void) { return S_OK; }
 	static void UnLoad(void);
-	static bool GetModeSelectBool(void);
-	static void SetModeSelectBool(bool ModeSelectBool);
+	static bool GetModeSelectBool(void) { return m_bModeSelect; }
+	static void SetModeSelectBool(bool ModeSelectBool) { m_bModeSelect = ModeSelectBool; }
+
 	void MenuDecide(SELECT_MENU MenuSelect);
 
 	//メンバ変数
@@ -89,9 +90,29 @@ private:
 
 	}SELECTMODEBGTYPE;
 
+	/* ポリゴンの種類 */
+	typedef enum
+	{
+		POLYGONTYPE_NONE = 0,
+		POLYGONTYPE_MENU,
+		POLYGONTYPE_BG
+	}POLYGONTYPE;
+
+	/* アニメーションの割り方種類 */
+	typedef enum
+	{
+		ANIMTYPE_NONE=0,
+		ANIMTYPE_X,
+		ANIMTYPE_Y,
+		ANIMTYPE_MAX
+
+	}ANIMTYPE;
 	void ScrollMenu(SELECTMODEBGTYPE type, float fScroolSpeed);
 	void SelectModeExplanation(int MenuSelect);
 	void SelectAnimation(int MenuSelect);
+	void SelectMove(POLYGONTYPE type,int MenuNum);
+	void SetSelectAnimation(POLYGONTYPE type, ANIMTYPE AnimType,int MenuNum, int MaxAnimPatternX, int MaxAnimPatternY,int AnimSpeed);
+	void InitTutorialPolygon(void);
 
 	D3DXVECTOR3					m_InitPos;
 	float						m_fWidth, m_fHeight;	// 幅高さ
@@ -114,9 +135,13 @@ private:
 	int							m_nMaxMenu;							// メニュー最大数
 
 	/* 演出面変数 */
-	int m_nCntScrool;	//スクロールカウンター
-	int m_nCntAnim;		//アニメカウンター
-	int m_nPatturnAnim;	//アニメパターン
+	int m_nCntScrool;		//スクロールカウンター
+	int m_nCntAnim;			//アニメカウンター
+	int m_nPatturnAnim;		//アニメパターン
+	int m_nCntAnim2;			//アニメカウンター
+	int m_nPatturnAnim2;		//アニメパターン
+	float m_fChangeMode;	//選択中モードアイコンの移動制御カウンター
+	float m_fMoveMode;		//選択中モードアイコンの移動量を計る
 };
 
 #endif
