@@ -36,7 +36,7 @@ public:
 	bool GetUninitFlag(void) { return m_bFlagUninit; }
 private:
 	D3DXVECTOR3 Move(D3DXVECTOR3 pos);
-	void ScaleSize(void);
+	void SizeScale(D3DXVECTOR3 *size, float fMove, D3DXVECTOR2 MaxSize);		// 拡大縮小
 
 	D3DXVECTOR3 m_size;		// サイズ
 	D3DXVECTOR3 m_sizeOld;	// サイズ(過去)

@@ -20,11 +20,22 @@
 class CWordManager
 {
 public:
+	typedef enum
+	{
+		TYPE_SPPED = 0,			// スピード
+		TYPE_BOUNCING,			// 跳ね返る
+		TYPE_PENETRATING,		// 貫通
+		TYPE_KNOCKBACK_SMALL,	// ノックバック小
+		TYPE_KNOCKBACK_BIG,		// ノックバック大
+		TYPE_MAX
+	}TYPE;
+
 	typedef struct
 	{
 		int nNum;
 		char *cWord;
 		bool bClearFlag;
+
 	}TYPE_WORD;
 
 	// 基本関数
@@ -42,7 +53,7 @@ public:
 	void SetWord(int nType);
 	void BulletCreate(int nID,D3DXVECTOR3 BulletMuzzle,D3DXVECTOR3 BulletRot);	//BulletMuzzle = 弾が出る位置	BulletRot = 弾が出る角度
 	void SetID(int nID) { m_nPlayerID = nID; }
-	static void SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum);	// ファイルからリソースの読み込み
+	static void SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, TYPE type);	// ファイルからリソースの読み込み
 	static void SetWordAnswerNum(int nAnswerNum);
 	int SearchWord(void);							// 文字の組み合わせが合うかどうか
 
@@ -64,6 +75,9 @@ private:
 	TYPE_WORD m_aWord[MAX_WORD];
 	static int m_nAnswerDataNum;
 	static D3DXVECTOR3 *m_AnswerNum;
+	static D3DXVECTOR3 *m_Scale;
+	static TYPE *m_type;
+
 	int m_nCreateType;
 	int m_nCntNum;
 	int m_nCntaAnswer;

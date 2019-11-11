@@ -20,6 +20,8 @@
 //=============================================================================
 D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(99.0f, 99.0f, 99.0f);
 int CWordManager::m_nAnswerDataNum = 0;
+D3DXVECTOR3 *CWordManager::m_Scale = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+CWordManager::TYPE *CWordManager::m_type = {};
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -39,6 +41,8 @@ CWordManager::CWordManager()
 	m_bSearch = false;		// サーチを開始する時のフラグ
 
 	m_fAnswerData = NULL;
+	m_Scale = NULL;
+	m_type = NULL;
 }
 //=============================================================================
 // デストラクタ
@@ -68,6 +72,18 @@ void CWordManager::Uninit(void)
 	{
 		delete[] m_fAnswerData;
 		m_fAnswerData = NULL;
+	}
+
+	if (m_Scale != NULL)
+	{
+		delete[] m_Scale;
+		m_Scale = NULL;
+	}
+
+	if (m_type != NULL)
+	{
+		delete[] m_type;
+		m_type = NULL;
 	}
 }
 
@@ -269,9 +285,11 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 //=============================================================================
 // Textから読み込み 答えの割り当て
 //=============================================================================
-void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum)
+void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, TYPE type)
 {
 	m_AnswerNum[nNumModel] = AnswerNum;
+	m_Scale[nNumModel] = scale;
+	m_type[nNumModel] = type;
 }
 
 //=============================================================================
@@ -281,6 +299,9 @@ void CWordManager::SetWordAnswerNum(int nAnswerNum)
 {
 	m_nAnswerDataNum = nAnswerNum;
 	m_AnswerNum = new D3DXVECTOR3[m_nAnswerDataNum];
+	m_Scale = new D3DXVECTOR3[m_nAnswerDataNum];
+	m_type = new TYPE[m_nAnswerDataNum];
+
 }
 
 //=============================================================================

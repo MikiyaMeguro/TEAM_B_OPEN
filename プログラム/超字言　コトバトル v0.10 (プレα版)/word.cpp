@@ -104,10 +104,7 @@ void CWord::Update(void)
 	if (m_bPopFlag == false)
 	{	// 出現時の場合
 		move.y += 1.0f;
-		m_size.x += 1.0f;
-		m_size.y += 1.0f;
-		if (m_size.x > MAX_SIZE.x) { m_size.x = MAX_SIZE.x; }
-		if (m_size.y > MAX_SIZE.y) { m_size.y = MAX_SIZE.y; }
+		SizeScale(&m_size, 1.0f, MAX_SIZE);
 		if (pos.y >= END_POS_Y) { m_bPopFlag = true; }
 	}
 	else if (m_bPopFlag == true)
@@ -144,7 +141,7 @@ void CWord::Update(void)
 						pPlayer[nCntPlayer]->SetbSetupBullet(true);
 						m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
 						move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-						m_size = D3DXVECTOR3(6.0f, 6.0f, 0.0f);
+						m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 						break;
 					}
 				}
@@ -167,13 +164,16 @@ void CWord::Update(void)
 
 		if (m_bFlag == true)
 		{	// 取得後の演出の場合
+			m_fMoveY += 1.0f;
+			SizeScale(&m_size, 0.5f, D3DXVECTOR2(6.0f, 6.0f));
+
 			if (pPlayer[m_nNumPlayerGet] == NULL)
 			{
 				pPlayer[m_nNumPlayerGet] = CGame::GetPlayer(m_nNumPlayerGet);	// プレイヤーを取得
 				float fPlayer = pPlayer[m_nNumPlayerGet]->GetRotation().y;
 
 				//pos = D3DXVECTOR3(sinf(fPlayer + (D3DX_PI)) + (pPlayer[m_nNumPlayerGet]->GetPosition().x + 10.0f), 40.0f, pPlayer[m_nNumPlayerGet]->GetPosition().z);
-				pos = D3DXVECTOR3(pPlayer[m_nNumPlayerGet]->GetPosition().x, 50.0f, pPlayer[m_nNumPlayerGet]->GetPosition().z);
+				pos = D3DXVECTOR3(pPlayer[m_nNumPlayerGet]->GetPosition().x, 50.0f + m_fMoveY, pPlayer[m_nNumPlayerGet]->GetPosition().z);
 			}
 
 			m_nCntUninit++;	// カウントの加算
@@ -253,25 +253,20 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 //=============================================================================
 // 拡大縮小の処理
 //=============================================================================
-void CWord::ScaleSize(void)
+void CWord::SizeScale(D3DXVECTOR3 *size, float fMove, D3DXVECTOR2 MaxSize)
 {
-	if (m_bScaleFlag == false)
-	{	// 拡大する
-		m_size.x += 0.2f;
-		m_size.y += 0.2f;
-		if (m_size.x > 15.0f && m_size.y > 15.0f)
-		{	// 縮小するフラグへ
-			m_bScaleFlag = true;
-		}
+	size->x += fMove;
+	size->y += fMove;
+
+	if (fMove >= 0)
+	{	// 0以上の場合
+		if (size->x > MaxSize.x) { size->x = MaxSize.x; }
+		if (size->y > MaxSize.y) { size->y = MaxSize.y; }
 	}
-	else if (m_bScaleFlag == true)
-	{	// 縮小する
-		m_size.x -= 0.2f;
-		m_size.y -= 0.2f;
-		if (m_size.x < m_sizeOld.x && m_size.y < m_sizeOld.y)
-		{	// 拡大するフラグへ
-			m_bScaleFlag = false;
-		}
+	else if (fMove < 0)
+	{	// 0以下の場合
+		if (size->x < MaxSize.x) { size->x = MaxSize.x; }
+		if (size->y < MaxSize.y) { size->y = MaxSize.y; }
 	}
 }
 
