@@ -23,6 +23,7 @@
 //=============================================================================
 #define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
+#define LOCKON_FUTURE_ROTATE (20.0f)								//ロックオンの弾角度決定時に敵の移動速度に掛ける定数
 
 #define INU_BARANCE_LOADTEXT_UPPER "data/MOTION/motion_dog_up.txt"			//犬(バランス型)の上半身のロードテキスト
 #define INU_BARANCE_LOADTEXT_LOWER "data/MOTION/motion_dog_down.txt"		//犬(バランス型)の下半身のロードテキスト
@@ -51,6 +52,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
 	m_pPlayerNum = NULL;
+	m_bAssist = true;
 	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
 		m_nCntKey[nCntBody] = 0;
@@ -267,23 +269,50 @@ void CPlayer::Update(void)
 							LockOnPos = m_pLockOnCharactor->GetPosition();
 							LockOnMove = m_pLockOnCharactor->GetMove();
 
-
-							fRotY = atan2f(((LockOnPos.x- (LockOnMove.x * 10.0f)) - BulletPos.x),
-											((LockOnPos.z - (LockOnMove.z * 10.0f)) - BulletPos.z));
+							//普通の計算
+							fRotY = atan2f(((LockOnPos.x + (LockOnMove.x * LOCKON_FUTURE_ROTATE)) - BulletPos.x),
+								((LockOnPos.z + (LockOnMove.z * LOCKON_FUTURE_ROTATE)) - BulletPos.z)) -
+								atan2f(((LockOnPos.x) - BulletPos.x),
+								((LockOnPos.z) - BulletPos.z));
 							CUtilityMath::RotateNormarizePI(&fRotY);
 
-							//fRotX = atan2f((BulletPos.y - LockOnPos.y), (BulletPos.z - LockOnPos.z) -
-							//	atan2f((BulletPos.y - (LockOnPos.y - (LockOnMove.y * 10.0f))), (BulletPos.z - (LockOnPos.z - (LockOnMove.z * 10.0f))));					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
+							//fRotX = atan2f((LockOnPos.y - BulletPos.y),
+							//	(LockOnPos.z - BulletPos.z));
 							//CUtilityMath::RotateNormarizePI(&fRotX);
 
-							BulletRot.y = fRotY;
-							//BulletRot.y = -fRotX;
+							BulletRot.y += fRotY;
+
+							//クォータニオンを使った計算
+
+							//D3DXQUATERNION BaseQuat,AddQuat;
+							//D3DXQuaternionIdentity(&BaseQuat);
+							//D3DXQuaternionRotationYawPitchRoll(&BaseQuat,BulletRot.y,BulletRot.x,BulletRot.z);	//今の角度をクォータニオンに変換
+
+							////
+							//D3DXQuaternionIdentity(&AddQuat);
+
+							//fRotY = atan2f(((LockOnPos.x + (LockOnMove.x * LOCKON_FUTURE_ROTATE)) - BulletPos.x),
+							//				((LockOnPos.z + (LockOnMove.z * LOCKON_FUTURE_ROTATE)) - BulletPos.z)) -
+							//	    atan2f(((LockOnPos.x) - BulletPos.x),
+							//		((LockOnPos.z) - BulletPos.z));
+							//CUtilityMath::RotateNormarizePI(&fRotY);
+
+							//fRotX = atan2f((LockOnPos.y - BulletPos.y),
+							//	(LockOnPos.z - BulletPos.z));
+							//CUtilityMath::RotateNormarizePI(&fRotX);
+
+							//D3DXQuaternionRotationYawPitchRoll(&AddQuat, fRotY, fRotX, 0.0f);	//足したい角度をクォータニオンに変換
+
+							//D3DXQuaternionMultiply(&BaseQuat,&BaseQuat,&AddQuat);
+
+
 						}
 
 					}
 
-					CUtilityMath::RotateNormarizePI(&BulletRot.x);
-					CUtilityMath::RotateNormarizePI(&BulletRot.y);
+
+					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
+					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
 					m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
 					if (m_pWordManager->GetCntNum() == 0)
@@ -291,7 +320,11 @@ void CPlayer::Update(void)
 						m_bSetupBullet = false;
 					}
 				}
-
+				m_pLockOnCharactor = NULL;
+				if (pCam != NULL)
+				{
+					pCam->SetLockOnChara(NULL);
+				}
 				m_bAssist = true;
 			}
 

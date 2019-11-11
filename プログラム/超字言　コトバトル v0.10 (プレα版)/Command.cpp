@@ -45,12 +45,16 @@ void CCommand::RegistCommand(LPCSTR CommandName, INPUT_TYPE InputType, INPUT_STA
 	}
 	else
 	{//コマンド名が既に定義されている場合
-	 //キー情報設定
-		One_KeyType.type  = InputType;
-		One_KeyType.state = InputState;
-		One_KeyType.nKey  = nKey;
+		auto vec = std::find(result->vec_KeyType.begin(),result->vec_KeyType.end(),nKey);
+		if (vec == result->vec_KeyType.end())
+		{
+			//キー情報設定
+			One_KeyType.type = InputType;
+			One_KeyType.state = InputState;
+			One_KeyType.nKey = nKey;
 
-		(*result).vec_KeyType.emplace_back(One_KeyType);
+			(*result).vec_KeyType.emplace_back(One_KeyType);
+		}
 	}
 }
 

@@ -174,7 +174,7 @@ void CFade::Update(void)
 			if (m_colorFade.a >= 1.0f)
 			{
 				m_colorFade.a = 1.0f;
-				m_fade = FADE_IN;	// フェードイン状態に	
+				m_fade = FADE_IN;	// フェードイン状態に
 
 				// モードの設定
 				CManager::SetMode(m_modeNext);
@@ -236,5 +236,5 @@ void CFade::SetFade(CManager::MODE modeNext, FADE fade)
 			m_colorFade = D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.8f);
 		}
 	}
-	
+
 }

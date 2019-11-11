@@ -183,6 +183,7 @@ public:
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//’e‚ªŒ‚‚Ä‚éó‘Ô‚Ì”»’è—p
 	void			SetOldPosition(D3DXVECTOR3 pos) { m_posOld = pos; }
 	D3DXVECTOR3		GetOldPosition(void)			{ return m_posOld; };
+	C3DCharactor*   GetLockOnCharactor(void)		{return m_pLockOnCharactor;};
 	//ƒ‚[ƒVƒ‡ƒ“
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
