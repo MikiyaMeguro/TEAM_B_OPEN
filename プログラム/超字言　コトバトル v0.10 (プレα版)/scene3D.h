@@ -28,8 +28,7 @@ public:
 	CScene3D(int nPriority = 3, OBJTYPE objType = OBJTYPE_SCENE3D);											// コンストラクタ
 	~CScene3D();										// デストラクタ
 
-	HRESULT Init(void) { return S_OK; };
-	HRESULT Init(D3DXVECTOR3 pos);				// 3Dオブジェクト初期化処理
+	HRESULT Init(void);							// 3Dオブジェクト初期化処理
 	void Uninit(void);							// 3Dオブジェクト終了処理
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
@@ -43,23 +42,32 @@ public:
 	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
 	void BindTexture(LPCSTR TexTag);
 	void SetSize(float fHeight,float fWidth);
+	void SetSizeY(float fHeight, float fWidth);
 	void SetRot(D3DXVECTOR3 rot);
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 	void SetColor(D3DXCOLOR col);
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
+	void SetTexUV(D3DXVECTOR2 TexUV) { m_TexUV = TexUV; }
+
+
+	D3DXVECTOR3 GetPos(void) { return m_pos; }
+	D3DXVECTOR3 GetRot(void) { return m_rot; }
+	float GetSizeY(void) { return m_size.y; }
+	float GetSizeX(void) { return m_size.x; }
+
+
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
 	D3DXMATRIX				m_mtxWorld;					// ワールドマトリックス
-	D3DXVECTOR3				m_Nor;					// 法線
-	D3DXVECTOR3				m_aVec[NUM_VTX];					// ベクトル
+	D3DXVECTOR3				m_Nor;						// 法線
+	D3DXVECTOR3				m_aVec[NUM_VTX];			// ベクトル
 	D3DXVECTOR3				m_pos;						// ポリゴンの位置
-	D3DXVECTOR3				m_aPos[NUM_VTX];					// 頂点の位置
+	D3DXVECTOR3				m_aPos[NUM_VTX];			// 頂点の位置
 	D3DXVECTOR3				m_rot;						// 上方向ベクトル
 	D3DXCOLOR               m_col;
-	float					m_fSize;					// 大きさ
-	float					m_fHeight;
-	float					m_fWidth;
+	D3DXVECTOR3				m_size;						// 大きさ
+	D3DXVECTOR2				m_TexUV;
 };
 
 #endif
