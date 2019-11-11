@@ -21,7 +21,7 @@
 D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(99.0f, 99.0f, 99.0f);
 int CWordManager::m_nAnswerDataNum = 0;
 D3DXVECTOR3 *CWordManager::m_Scale = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-CWordManager::TYPE *CWordManager::m_type = {};
+int *CWordManager::m_type = 0;
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -241,9 +241,11 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
+					int nType = m_nCreateType;
 					m_nCreateType = m_nCreateType + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_NORMAL,nID);
-					pModel->SetModelScale(D3DXVECTOR3(1.0f,1.0f,1.0f));	//大きさの設定
+					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType] ,nID);
+					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID);
+					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
@@ -287,7 +289,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 //=============================================================================
 // Textから読み込み 答えの割り当て
 //=============================================================================
-void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, TYPE type)
+void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, int type)
 {
 	m_AnswerNum[nNumModel] = AnswerNum;
 	m_Scale[nNumModel] = scale;
@@ -302,8 +304,7 @@ void CWordManager::SetWordAnswerNum(int nAnswerNum)
 	m_nAnswerDataNum = nAnswerNum;
 	m_AnswerNum = new D3DXVECTOR3[m_nAnswerDataNum];
 	m_Scale = new D3DXVECTOR3[m_nAnswerDataNum];
-	m_type = new TYPE[m_nAnswerDataNum];
-
+	m_type = new int[m_nAnswerDataNum];
 }
 
 //=============================================================================

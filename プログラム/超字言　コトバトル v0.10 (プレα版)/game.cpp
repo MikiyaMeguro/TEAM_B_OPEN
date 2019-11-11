@@ -98,8 +98,6 @@ void CGame::Init(void)
 	m_pcStageNameWord[1] = { FILE_NAME1 };
 	m_pcStageNameWord[2] = { FILE_NAME2 };
 
-	CLoadText::LoadFile();		// 文字のリソース読み込み
-
 	//壁、床設定
 	//CScene3D* p3D = NULL;
 	//p3D = CScene3D::Create(D3DXVECTOR3(0.0f, -50.0f, 0.0f), "BLOCK");
@@ -131,6 +129,8 @@ void CGame::Init(void)
 
 	// プレイヤーの生成
 	PlayerSetting((int)NumPlayer);
+
+	CLoadText::LoadFile();		// 文字のリソース読み込み
 
 	// 文字の可視化UI(2D)の生成
 	TubeSetting((int)NumPlayer);

@@ -192,10 +192,10 @@ void CLoadText::LoadFile(void)
 					pStrcur = ReadLine(pFile, &aLine[0]);
 				}
 				//COLLISIONを読み込み
-				if (memcmp(pStrcur, "COLLISION = ", strlen("COLLISION = ")) == 0)
+				if (memcmp(pStrcur, "BULLETTYPE = ", strlen("BULLETTYPE = ")) == 0)
 				{
 					//頭出し
-					pStrcur += strlen("COLLISION = ");
+					pStrcur += strlen("BULLETTYPE = ");
 					//文字列の先頭を設定
 					strcpy(aStr, pStrcur);
 
@@ -242,7 +242,7 @@ void CLoadText::LoadFile(void)
 				//CSetObject::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 				//	, (CSetObject::MODELTYPE)nType, CSetObject::MOVETYPE_NONE, 1);
 				//CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType);
-				CWordManager::SetWordLoad(nType, AnswerNum);
+				CWordManager::SetWordLoad(nType, AnswerNum, ModelScale, nCollisionType);
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)
