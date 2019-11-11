@@ -94,6 +94,7 @@ public:
 	void Update(void);
 	void Draw(void);
 
+	void SetModelScale(const D3DXVECTOR3& scale);
 private:
 	CSceneX* m_pModel;
 	BULLET_PROPERTY m_Prop;
