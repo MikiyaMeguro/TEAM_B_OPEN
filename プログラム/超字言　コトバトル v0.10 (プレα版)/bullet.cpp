@@ -78,7 +78,7 @@ void C3DBullet::Update(void)
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
 
-																//メッシュフィールドとの当たり判定
+	//メッシュフィールドとの当たり判定
 	CMeshField *pMesh = CGame::GetMeshField();
 
 	float fHeight = pMesh->GetHeight(m_pos + move);
@@ -88,10 +88,6 @@ void C3DBullet::Update(void)
 	}
 
 	m_pos += move;
-
-
-	//床との判定
-
 }
 
 //=============================================================================
@@ -202,8 +198,11 @@ void CModelBullet::Uninit(void)
 void CModelBullet::Update(void)
 {
 	C3DBullet::Update();
-	m_pModel->SetPosition(GetPosition());
-	m_pModel->SetRot(GetRotation());
+	if (m_pModel != NULL)
+	{
+		m_pModel->SetPosition(GetPosition());
+		m_pModel->SetRot(GetRotation());
+	}
 	int& nLife = GetLife();
 	nLife--;
 
@@ -227,6 +226,17 @@ void CModelBullet::Update(void)
 void CModelBullet::Draw(void)
 {
 
+}
+
+//=============================================================================
+// モデルの大きさ設定処理(CModelBullet)
+//=============================================================================
+void  CModelBullet::SetModelScale(const D3DXVECTOR3& scale)
+{
+	if (m_pModel != NULL)
+	{
+		m_pModel->SetScale(scale);
+	}
 }
 
 //=============================================================================
