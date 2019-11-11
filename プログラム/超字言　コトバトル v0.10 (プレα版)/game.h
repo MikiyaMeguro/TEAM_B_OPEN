@@ -23,29 +23,30 @@ class CSetWord;
 //********************************
 // 1画面時の筒の位置
 //********************************
-#define WORD_TUBE001_POS_1P		(D3DXVECTOR3(50.0f, 590.0f, 0.0f))		// 2画面時(1P)の位置
+#define WORD_TUBE001_POS_1P		(D3DXVECTOR3(130.0f, 590.0f, 0.0f))		// 2画面時(1P)の位置
+#define WORD_SIZE_001			(D3DXVECTOR2(150.0f, 160.0f))			// 2画面時のサイズ
 
 //********************************
 // 2画面時の筒の位置
 //********************************
-#define WORD_TUBE002_POS_1P		(D3DXVECTOR3(50.0f, 240.0f, 0.0f))		// 2画面時(1P)の位置
-#define WORD_TUBE002_POS_2P		(D3DXVECTOR3(50.0f, 590.0f, 0.0f))		// 2画面時(2P)の位置
-#define WORD_TUBE002_SIZE		(D3DXVECTOR2(60.0f, 160.0f))			// 2画面時のサイズ
+#define WORD_TUBE002_POS_1P		(D3DXVECTOR3(80.0f, 268.0f, 0.0f))		// 2画面時(1P)の位置
+#define WORD_TUBE002_POS_2P		(D3DXVECTOR3(80.0f, 633.0f, 0.0f))		// 2画面時(2P)の位置
+#define WORD_SIZE_002			(D3DXVECTOR2(100.0f, 120.0f))			// 2画面時のサイズ
 
 //********************************
 // 3画面時の筒の位置
 //********************************
-#define WORD_TUBE003_POS_1P		(D3DXVECTOR3(50.0f, 240.0f, 0.0f))		// 3画面時(1P)の位置
-#define WORD_TUBE003_POS_2P		(D3DXVECTOR3(1220.0f, 240.0f, 0.0f))	// 3画面時(2P)の位置
-#define WORD_TUBE003_POS_3P		(D3DXVECTOR3(50.0f, 590.0f, 0.0f))		// 3画面時(3P)の位置
+#define WORD_TUBE003_POS_1P		(D3DXVECTOR3(80.0f, 268.0f, 0.0f))		// 3画面時(1P)の位置
+#define WORD_TUBE003_POS_2P		(D3DXVECTOR3(730.0f, 268.0f, 0.0f))		// 3画面時(2P)の位置
+#define WORD_TUBE003_POS_3P		(D3DXVECTOR3(80.0f, 633.0f, 0.0f))		// 3画面時(3P)の位置
 
 //********************************
 // 4画面時の筒の位置
 //********************************
-#define WORD_TUBE004_POS_1P		(D3DXVECTOR3(50.0f, 240.0f, 0.0f))		// 4画面時(1P)の位置
-#define WORD_TUBE004_POS_2P		(D3DXVECTOR3(1220.0f, 240.0f, 0.0f))	// 4画面時(2P)の位置
-#define WORD_TUBE004_POS_3P		(D3DXVECTOR3(50.0f, 590.0f, 0.0f))		// 4画面時(3P)の位置
-#define WORD_TUBE004_POS_4P		(D3DXVECTOR3(1220.0f, 590.0f, 0.0f))	// 4画面時(4P)の位置
+#define WORD_TUBE004_POS_1P		(D3DXVECTOR3(80.0f, 268.0f, 0.0f))		// 4画面時(1P)の位置
+#define WORD_TUBE004_POS_2P		(D3DXVECTOR3(730.0f, 268.0f, 0.0f))		// 4画面時(2P)の位置
+#define WORD_TUBE004_POS_3P		(D3DXVECTOR3(80.0f, 633.0f, 0.0f))		// 4画面時(3P)の位置
+#define WORD_TUBE004_POS_4P		(D3DXVECTOR3(730.0f, 633.0f, 0.0f))		// 4画面時(4P)の位置
 
 #define MAX_PLAYER (4)
 #define MAX_STAGE	(3)			// ステージの最大数
