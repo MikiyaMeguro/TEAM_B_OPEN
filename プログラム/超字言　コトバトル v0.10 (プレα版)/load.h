@@ -88,6 +88,7 @@ public:
 		MODEL_MEKABU,	// ‚ß‚©‚Ô
 		MODEL_MEDIC,	// ‚­‚·‚è
 		MODEL_KAIGA,	// ‚©‚¢‚ª
+		MODEL_PROPELLER,	// ƒvƒƒyƒ‰
 		MODEL_MAX
 	} MODEL;
 
