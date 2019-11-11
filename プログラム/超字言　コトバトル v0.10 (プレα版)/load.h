@@ -77,16 +77,17 @@ public:
 		MODEL_KUSAYA,	// くさや
 		MODEL_SAZAE,	// サザエ
 		MODEL_TILE,	// タイル
-		MODEL_Rice,	// ライス
-		MODEL_Comic,	// マンガ
-		MODEL_Fuigo,	// ふいご
-		MODEL_Namako,	// ナマコ
-		MODEL_Zugai,	// ずがい
-		MODEL_Seaweed,	// コンブ
-		MODEL_Laitc,	// らいち
-		MODEL_Mekabu,	// めかぶ
-		MODEL_Medic,	// くすり
-		MODEL_Kaiga,	// かいが
+		MODEL_RICE,	// ライス
+		MODEL_COMIC,	// マンガ
+		MODEL_FUIGO,	// ふいご
+		MODEL_NAMAKO,	// ナマコ
+		MODEL_ZUGAI,	// ずがい
+		MODEL_SEAWEED,	// コンブ
+		MODEL_LAITC,	// らいち
+		MODEL_MASK,		// マスク
+		MODEL_MEKABU,	// めかぶ
+		MODEL_MEDIC,	// くすり
+		MODEL_KAIGA,	// かいが
 		MODEL_MAX
 	} MODEL;
 

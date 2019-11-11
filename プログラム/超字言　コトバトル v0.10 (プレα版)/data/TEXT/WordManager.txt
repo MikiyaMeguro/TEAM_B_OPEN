@@ -61,8 +61,8 @@ SCRIPT			# この行は絶対消さないこと！
 	# 47 : なまこ
 	# 48 : ずがい
 	# 49 : コンブ
-	# 50 : かめん
-	# 51 : らいち
+	# 50 : らいち
+	# 51 : かめん
 	# 52 : めかぶ
 	# 53 : くすり
 	# 54 : かいが
@@ -422,17 +422,17 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 50					# かめん
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 5.0 33.0 45.0
-END_MODELSET
-
-MODELSET
-	TYPE = 51					# らいち
+	TYPE = 50					# らいち
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 38.0 1.0 16.0
+END_MODELSET
+
+MODELSET
+	TYPE = 51					# かめん
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 5.0 33.0 45.0
 END_MODELSET
 
 MODELSET

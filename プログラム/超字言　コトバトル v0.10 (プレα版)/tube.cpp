@@ -165,6 +165,10 @@ void CTube::SetWordNum(int nWordNum, int nNum)
 			}
 		}
 	}
+	else if (nNum < 2)
+	{
+		SetAnswer(nWordNum);
+	}
 }
 
 //=============================================================================

@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 61
+NUM_MODEL = 62
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -73,9 +73,10 @@ MODEL_FILENAME = data/MODEL/Namako.x"				#54 なまこ
 MODEL_FILENAME = data/MODEL/Zugai.x"				#55 ずがい
 MODEL_FILENAME = data/MODEL/Seaweed.x"				#56 こんぶ
 MODEL_FILENAME = data/MODEL/Laitc.x"				#57 らいち
-MODEL_FILENAME = data/MODEL/Mekabu.x"				#58 めかぶ
-MODEL_FILENAME = data/MODEL/Medic.x"				#59 くすり
-MODEL_FILENAME = data/MODEL/Kaiga.x"				#60 かいが
+MODEL_FILENAME = data/MODEL/Mask.x"					#58 かめん
+MODEL_FILENAME = data/MODEL/Mekabu.x"				#59 めかぶ
+MODEL_FILENAME = data/MODEL/Medic.x"				#60 くすり
+MODEL_FILENAME = data/MODEL/Kaiga.x"				#61 かいが
 
 #------------------------------------------------------------
 #                      モデル配置情報
