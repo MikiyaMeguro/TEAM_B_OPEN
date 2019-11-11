@@ -199,6 +199,10 @@ void CTube::SetAnswer(int nAnswer)
 		m_pAnswerModel->SetWidthHeight(AnswerSize.x, AnswerSize.y);	// サイズ設定
 		m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
 	}
+	else if (m_pAnswerModel != NULL)
+	{
+		//m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
+	}
 }
 //=============================================================================
 // 全ての文字を削除
@@ -228,13 +232,29 @@ void CTube::Delete(int nID)
 		{
 			int nNum = CGame::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// 数字を取得
 			m_apWord[nCntWord]->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
+
+			if (m_pAnswerModel != NULL)
+			{
+				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
+			}
 		}
+		
+
 		else if (m_apWord[nCntWord] != NULL && m_apWord[nCntWord + 1] == NULL)
 		{
 			if (m_apWord[nCntWord] != NULL)
 			{
 				m_apWord[nCntWord]->Uninit();
 				m_apWord[nCntWord] = NULL;
+			}
+		}
+
+		if (m_apWord[0] == NULL)
+		{
+			if (m_pAnswerModel != NULL)
+			{
+				m_pAnswerModel->Uninit();
+				m_pAnswerModel = NULL;
 			}
 		}
 	}
