@@ -47,6 +47,10 @@ public:
 		INPUT_TYPE type;		//入力タイプ
 		INPUT_STATE state;		//入力の属性
 		int nKey;				//キー番号
+		bool operator ==(const int& nKEY)
+		{
+			return (nKey == nKEY);
+		}
 	}KeyType;			//キーの情報
 
 	struct CommandState

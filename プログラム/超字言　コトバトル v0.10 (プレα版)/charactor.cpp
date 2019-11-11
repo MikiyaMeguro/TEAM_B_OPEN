@@ -82,6 +82,9 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 	CCommand::RegistCommand("CAMERAMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_UP);
 	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_DOWN);
 	CCommand::RegistCommand("CAMERAMOVE_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_RIGHTSTICK_DOWN);
+
+	CCommand::RegistCommand("TEST_FLY_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_Y);
+	CCommand::RegistCommand("TEST_FLY_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_X);
 }
 
 //=============================================================================
@@ -388,6 +391,16 @@ void C3DCharactor::CharaMove_Input(void)
 		}
 	}
 
+	//飛行(TEST)
+	//if (CCommand::GetCommand("TEST_FLY_UP", nID))
+	//{
+	//	pos.y -= speed;
+	//}
+	//else if (CCommand::GetCommand("TEST_FLY_DOWN", nID))
+	//{
+	//	pos.y += speed;
+	//}
+
 	//ステップ移動の設定
 	if (CCommand::GetCommand("PLAYERMOVE_STEP", nID))
 	{
@@ -397,12 +410,14 @@ void C3DCharactor::CharaMove_Input(void)
 			float fStepRot = 0.0f;
 			if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.0f; }
 			if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 1.0f; }
-			if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID)) {
+			if (CCommand::GetCommand("PLAYERMOVE_LEFT", nID))
+			{
 				fStepRot = D3DX_PI * -0.5f;
 				if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * -0.25f; }
 				if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * -0.75f; }
 			}
-			if (CCommand::GetCommand("PLAYERMOVE_RIGHT", nID)) {
+			if (CCommand::GetCommand("PLAYERMOVE_RIGHT", nID))
+			{
 				fStepRot = D3DX_PI * 0.5f;
 				if (CCommand::GetCommand("PLAYERMOVE_UP", nID)) { fStepRot = D3DX_PI * 0.25f; }
 				if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID)) { fStepRot = D3DX_PI * 0.75f; }
@@ -433,66 +448,68 @@ void C3DCharactor::CharaMove_Input(void)
 	spin.y = 0.0f;
 
 	//カメラ位置制御
-	float fCameraCoefficient = 1.0f;
-	//視点移動
-	//Y
-	if (CManager::GetXInput(nID) != NULL)
-	{
-		if (CManager::GetXInput(nID)->GetConnect() == true)
+	if (GetThisCharactor()->GetLockOnCharactor() == NULL)
+	{//ロックオンしていなければ
+		float fCameraCoefficient = 1.0f;
+		//視点移動
+		//Y
+		if (CManager::GetXInput(nID) != NULL)
 		{
-			fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false,false,nID));
+			if (CManager::GetXInput(nID)->GetConnect() == true)
+			{
+				fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false, false, nID));
+			}
 		}
-	}
-	//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
-	if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//時計回り
-	{
-		CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
-	}
-	if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//反時計回り
-	{
-		CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
-	}
+		//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
+		if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//時計回り
+		{
+			CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
+		}
+		if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//反時計回り
+		{
+			CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
+		}
 
-	//X
-	if (CManager::GetXInput(nID) != NULL)
-	{
-		if (CManager::GetXInput(nID)->GetConnect() == true)
+		//X
+		if (CManager::GetXInput(nID) != NULL)
 		{
-			fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false, true, nID));
+			if (CManager::GetXInput(nID)->GetConnect() == true)
+			{
+				fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false, true, nID));
+			}
 		}
-	}
 
-	//fCoefficient = CCommand::GetXPadStickRotation(false, true, nID);
-	if (CCommand::GetCommand("CAMERAMOVE_UP", nID))
-	{
-		if (CameraRot.x < D3DX_PI * 0.2f)
+		//fCoefficient = CCommand::GetXPadStickRotation(false, true, nID);
+		if (CCommand::GetCommand("CAMERAMOVE_UP", nID))
 		{
-			CameraRot.x += CAMERA_MOVE_SPEED * fCameraCoefficient;
+			if (CameraRot.x < D3DX_PI * 0.2f)
+			{
+				CameraRot.x += CAMERA_MOVE_SPEED * fCameraCoefficient;
+			}
+			else
+			{
+				CameraRot.x = D3DX_PI * 0.2f;
+			}
 		}
-		else
+		if (CCommand::GetCommand("CAMERAMOVE_DOWN", nID))
 		{
-			CameraRot.x = D3DX_PI * 0.2f;
+			if (CameraRot.x > D3DX_PI * -0.2f)
+			{
+				CameraRot.x -= CAMERA_MOVE_SPEED * fCameraCoefficient;
+			}
+			else
+			{
+				CameraRot.x = -D3DX_PI * 0.2f;
+			}
 		}
-	}
-	if (CCommand::GetCommand("CAMERAMOVE_DOWN", nID))
-	{
-		if (CameraRot.x > D3DX_PI * -0.2f)
-		{
-			CameraRot.x -= CAMERA_MOVE_SPEED * fCameraCoefficient;
-		}
-		else
-		{
-			CameraRot.x = -D3DX_PI * 0.2f;
-		}
-	}
 
-	//カメラ設定
-	pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
-		pCamera->GetType(),
-		pCamera->GetPosR(),
-		CameraRot,
-		pCamera->GetLength());
-
+		//カメラ設定
+		pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
+			pCamera->GetType(),
+			pCamera->GetPosR(),
+			CameraRot,
+			pCamera->GetLength());
+	}
 }
 //=============================================================================
 // CPUの思考処理
