@@ -333,7 +333,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game105\\Desktop\\MODEL\\UV\\Makura.jpg";
+    "data\\TEXTURE\\UV\\Makura.jpg";
    }
   }
  }

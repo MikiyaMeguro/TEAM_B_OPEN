@@ -109,7 +109,12 @@ void CWordManager::Update(void)
 					}
 				}
 
-				if (m_nCntaAnswer == MAX_WORD) { m_nCreateType = nCntAnswer; return; }
+				if (m_nCntaAnswer == MAX_WORD) 
+				{ 
+					m_nCreateType = nCntAnswer; 
+					if (CGame::GetTube(m_nPlayerID) != NULL) { CGame::GetTube(m_nPlayerID)->SetAnswer(m_nCreateType); }
+					return; 
+				}
 				else { m_nCntaAnswer = 0; }
 			}
 		}

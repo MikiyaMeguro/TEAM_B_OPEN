@@ -35,10 +35,13 @@ public:
 
 	//ê›íËÇÃä÷êî
 	void SetWordNum(int nWordNum, int nNum);
+	void SetAnswer(int nAnswer);
 	void AllDelete(void);
 	void Delete(int nID);
 private:
 	CScene2D *m_apWord[MAX_WORD];
+	CScene2D *m_pAnswerModel;
+	int		  m_nAnswer;
 };
 
 #endif
