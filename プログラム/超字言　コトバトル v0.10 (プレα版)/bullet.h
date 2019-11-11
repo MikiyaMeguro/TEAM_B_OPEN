@@ -41,7 +41,6 @@ public:
 	C3DBullet(int nPriority = BULLET_PRIORITY);
 	~C3DBullet();
 
-
 	void Set(D3DXVECTOR3 pos,D3DXVECTOR3 rot,float fSpeed,int nLife, int nID);
 
 	virtual HRESULT Init(void);
@@ -54,10 +53,11 @@ public:
 	float& GetMove(void) { return m_fMove; };
 	int& GetLife(void) { return m_nLife; };
 	int GetID(void) { return m_nID; };
-
+	float& GetKnockBackPower(void) { return m_fKnockBack; };
 	BULLET_TYPE GetType(void) { return m_Type; };
 protected:
 	BULLET_TYPE m_Type;
+	float m_fKnockBack;	//ノックバックする値
 private:
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_rot;				//角度
@@ -72,21 +72,32 @@ private:
 class CModelBullet : public C3DBullet
 {
 public:
+	typedef enum
+	{
+		TYPE_NORMAL = 0,		//通常(ノックバック小)
+		TYPE_KNOCKBACK,			//ノックバック大
+		TYPE_HIGHSPEED,			//速度早い
+		TYPE_STINGER,			//オブジェクト貫通
+		TYPE_REFLECT,			//反射
+	}BULLET_PROPERTY;
+
 	CModelBullet();
 	CModelBullet(int nPriority = BULLET_PRIORITY);
 
 	~CModelBullet();
 	static CModelBullet* Create(void);
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, float fSpeed, int nLife,int nID);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID);
 
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
 
+	void SetModelScale(const D3DXVECTOR3& scale);
 private:
 	CSceneX* m_pModel;
+	BULLET_PROPERTY m_Prop;
 };
 
 //文字弾クラス

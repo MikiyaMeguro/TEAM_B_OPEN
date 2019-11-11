@@ -196,6 +196,7 @@
     <ClInclude Include="tube.h" />
     <ClInclude Include="tutorial.h" />
     <ClInclude Include="UtilityMath.h" />
+    <ClInclude Include="wall.h" />
     <ClInclude Include="waypoint.h" />
     <ClInclude Include="word.h" />
     <ClInclude Include="word_manager.h" />
@@ -245,6 +246,7 @@
     <ClCompile Include="tube.cpp" />
     <ClCompile Include="tutorial.cpp" />
     <ClCompile Include="UtilityMath.cpp" />
+    <ClCompile Include="wall.cpp" />
     <ClCompile Include="waypoint.cpp" />
     <ClCompile Include="word.cpp" />
     <ClCompile Include="word_manager.cpp" />

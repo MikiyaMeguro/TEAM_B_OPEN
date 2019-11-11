@@ -21,17 +21,10 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_pTexture = NULL;						// テクスチャへのポインタ
 	m_pVtxBuff = NULL;						// 頂点バッファへのポインタ
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 位置
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 向き
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-
-	for (int nCntNor = 0; nCntNor < NUM_VTX; nCntNor++)
-	{
-		m_aVec[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-		m_aPos[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-	}
-	m_Nor = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-
-	m_fSize = 0.0f;							// 大きさ
+	m_TexUV = D3DXVECTOR2(1.0f, 1.0f);
 }
 
 //=============================================================================
@@ -55,90 +48,56 @@ CScene3D *CScene3D::Create(D3DXVECTOR3 pos, LPCSTR Tag)
 
 		if (pScene3D != NULL)
 		{
-			pScene3D->Init(pos);
+			pScene3D->Init();
+			pScene3D->SetPos(pos);
 			pScene3D->BindTexture(Tag);
 		}
 	}
-
 	return pScene3D;
 }
 
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CScene3D::Init(D3DXVECTOR3 pos)
+HRESULT CScene3D::Init(void)
 {
-	// ポリゴンの情報を設定
-	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-
-	for (int nCntNor = 0; nCntNor < NUM_VTX; nCntNor++)
-	{
-		m_aVec[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-		m_aPos[nCntNor] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);	// 法線
-	}
-
-	m_Nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-
-	// ポリゴンの位置を設定
-	m_pos = pos;
-
-	// レンダラーを取得
-	CRenderer *pRenderer;
-	pRenderer = CManager::GetRenderer();
-
-	LPDIRECT3DDEVICE9 pDevice = NULL;
-
-	if (pRenderer != NULL)
-	{
-		pDevice = pRenderer->GetDevice();
-	}
+	//	デバイスの取得
+	CRenderer *pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9	pDevice = pRenderer->GetDevice();
 
 	// 頂点バッファを生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		NULL);
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4
+		, D3DUSAGE_WRITEONLY
+		, FVF_VERTEX_3D
+		, D3DPOOL_MANAGED
+		, &m_pVtxBuff
+		, NULL);
 
 	// 頂点情報の設定
 	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
-
-	// 頂点バッファをロックし、頂点データへのポインタを取得
+						// 頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(-50, 0.0f, 50);
-	pVtx[1].pos = D3DXVECTOR3(50, 0.0f, 50);
-	pVtx[2].pos = D3DXVECTOR3(-50, 0.0f, -50);
-	pVtx[3].pos = D3DXVECTOR3(50, 0.0f, -50);
+	// 頂点情報を設定
+	pVtx[0].pos = D3DXVECTOR3(-m_size.x, m_size.y, m_size.z);
+	pVtx[1].pos = D3DXVECTOR3(m_size.x, m_size.y, m_size.z);
+	pVtx[2].pos = D3DXVECTOR3(-m_size.x, -m_size.y, -m_size.z);
+	pVtx[3].pos = D3DXVECTOR3(m_size.x, -m_size.y, -m_size.z);
 
-	pVtx[0].nor = m_Nor;
-	pVtx[1].nor = m_Nor;
-	pVtx[2].nor = m_Nor;
-	pVtx[3].nor = m_Nor;
+	//頂点カラー
+	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 
-	// 頂点カラーの設定
-	pVtx[0].col = m_col;
-	pVtx[1].col = m_col;
-	pVtx[2].col = m_col;
-	pVtx[3].col = m_col;
-
-	// テクスチャ座標の設定
+	//	テクスチャ座標
 	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
-	pVtx[1].tex = D3DXVECTOR2(1.0f, 0.0f);
-	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
-	pVtx[3].tex = D3DXVECTOR2(1.0f, 1.0f);
-
-	for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
-	{
-		m_aPos[nCntPos] = pVtx[nCntPos].pos;
-	}
+	pVtx[1].tex = D3DXVECTOR2(m_TexUV.x, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, m_TexUV.y);
+	pVtx[3].tex = D3DXVECTOR2(m_TexUV.x, m_TexUV.y);
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
-
 	return S_OK;
 }
 
@@ -183,7 +142,8 @@ void CScene3D::Draw(void)
 
 	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,m_rot);
 
-
+	// ライト影響受けない
+	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 
@@ -198,38 +158,11 @@ void CScene3D::Draw(void)
 
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+
+	// ライト影響受けないk
+	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 }
-
-//=============================================================================
-// 法線を取得
-//=============================================================================
-D3DXVECTOR3 CScene3D::GetNor(int nIdx)
-{
-	D3DXVECTOR3 vecA[2];
-	return m_Nor;
-}
-
-//=============================================================================
-// 法線を設定
-//=============================================================================
-void CScene3D::SetNor(D3DXVECTOR3 nor)
-{
-	m_Nor = nor;
-	// 頂点情報の設定
-	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
-
-	// 頂点バッファをロックし、頂点データへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-
-	pVtx[0].nor = m_Nor;
-	pVtx[1].nor = m_Nor;
-	pVtx[2].nor = m_Nor;
-	pVtx[3].nor = m_Nor;
-
-	// 頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
-}
-
 //=============================================================================
 // 高さを取得
 //============================================================================
@@ -256,8 +189,8 @@ void CScene3D::BindTexture(LPCSTR TexTag)
 void CScene3D::SetSize(float fHeight,float fWidth)
 {
 	//取得したサイズを代入
-	m_fHeight = fHeight;
-	m_fWidth = fWidth;
+	m_size.y = fHeight;
+	m_size.x = fWidth;
 
 	// 頂点情報の設定
 	VERTEX_3D *pVtx;
@@ -265,10 +198,40 @@ void CScene3D::SetSize(float fHeight,float fWidth)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	// 頂点座標の設定
-	pVtx[0].pos = D3DXVECTOR3(-m_fWidth, 0.0f, m_fHeight);
-	pVtx[1].pos = D3DXVECTOR3(m_fWidth, 0.0f, m_fHeight);
-	pVtx[2].pos = D3DXVECTOR3(-m_fWidth, 0.0f, -m_fHeight);
-	pVtx[3].pos = D3DXVECTOR3(m_fWidth, 0.0f, -m_fHeight);
+	pVtx[0].pos = D3DXVECTOR3(-m_size.x, 0.0f, m_size.y);
+	pVtx[1].pos = D3DXVECTOR3(m_size.x, 0.0f, m_size.y);
+	pVtx[2].pos = D3DXVECTOR3(-m_size.x, 0.0f, -m_size.y);
+	pVtx[3].pos = D3DXVECTOR3(m_size.x, 0.0f, -m_size.y);
+
+	for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
+	{
+		m_aPos[nCntPos] = pVtx[nCntPos].pos;
+	}
+
+	// 頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+}
+
+//=============================================================================
+// サイズの設定
+//=============================================================================
+void CScene3D::SetSizeY(float fHeight, float fWidth)
+{
+	//取得したサイズを代入
+	m_size.y = fHeight;
+	m_size.x = fWidth;
+
+	// 頂点情報の設定
+	VERTEX_3D *pVtx;
+	// 頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 頂点座標の設定
+	pVtx[0].pos = D3DXVECTOR3(-m_size.x, m_size.y, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(m_size.x, m_size.y, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(-m_size.x, -m_size.y, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(m_size.x, -m_size.y, 0.0f);
 
 	for (int nCntPos = 0; nCntPos < NUM_VTX; nCntPos++)
 	{
