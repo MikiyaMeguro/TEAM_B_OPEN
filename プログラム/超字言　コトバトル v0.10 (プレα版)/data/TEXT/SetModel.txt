@@ -20,7 +20,7 @@ MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 Ž•ŽÔ
 MODEL_FILENAME = data/MODEL/box000.x"				#3 
 MODEL_FILENAME = data/MODEL/StageOBJ/Stylbe.x"		#4 “y‘ä 
 MODEL_FILENAME = data/MODEL/Dust.x"					#5 ƒSƒ~
-MODEL_FILENAME = data/MODEL/SampleModel_Player.x"	#6
+MODEL_FILENAME = data/MODEL/StageOBJ/arm.x"			#6
 
 MODEL_FILENAME = data/MODEL/Car.x"					#7 ŽÔ
 MODEL_FILENAME = data/MODEL/Mic.x"					#8 ‚Ü‚¢‚­
