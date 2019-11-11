@@ -102,7 +102,8 @@ HRESULT C3DCharactor::Init(void)
 	m_bWordNear = false;
 	m_bJyougai = false;
 	m_bGoal = true;
-
+	m_MarkWardPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_MarkWayPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	nTestCnt = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
@@ -522,7 +523,7 @@ void C3DCharactor::Think_CPU(void)
 		break;
 	}
 
-	m_CpuThink = THINK_WAYPOINTMOVE;
+	m_CpuThink = THINK_PICKUP;
 	m_nActionTimer = 60;
 
 	//行動を決める条件文
@@ -670,7 +671,10 @@ void C3DCharactor::Action_CPU(void)
 		Homing_CPU();
 		break;
 	case  THINK_WAYPOINTMOVE:	//ランダム経路
-		WayPointMove_CPU();
+		//WayPointMove_CPU();
+		break;
+	case  THINK_WAYPOINTROUTE:	//ランダム経路
+		WayPointRoute_CPU();
 		break;
 	default:
 		break;
@@ -966,7 +970,7 @@ void C3DCharactor::Homing_CPU(void)
 				}
 				else if(fCircle > 100 * 2000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 				{// 距離外で弾を持っている時
-					m_CpuThink = THINK_MOVE;
+					m_CpuThink = THINK_WAYPOINTMOVE;
 					m_CpuMove = CPU_MOVE_FRONT;
 					m_nActionTimer = 10;
 				}
@@ -1001,7 +1005,7 @@ void C3DCharactor::PickUP_CPU(void)
 
 	CScene *pScene = NULL;
 	m_fCompareRange = 1000000;	//初期の距離から近いものを選ぶ
-	D3DXVECTOR3 MOKUHYO;	//一番近い目標位置
+	//D3DXVECTOR3 MOKUHYO;	//一番近い目標位置
 	bool bWord = false;		//文字を見つけた
 	bool bTango = false;	//単語が完成する可能性がある
 	int nCntNearWord = 0;		//近くに何個文字があるか
@@ -1038,7 +1042,7 @@ void C3DCharactor::PickUP_CPU(void)
 						if (fAnswerNum[nCntAnswer] == fNum)
 						{	// 合っていた場合 位置を取得しbreakする
 							m_fCompareRange = fCircle;
-							MOKUHYO = pWord->GetPos();
+							m_MarkWardPos = pWord->GetPos();
 							bWord = true;
 							bTango = true;
 							break;
@@ -1052,7 +1056,7 @@ void C3DCharactor::PickUP_CPU(void)
 					{//単語が完成しないときは適当に拾う
 						//一番近い距離を記憶
 						m_fCompareRange = fCircle;
-						MOKUHYO = pWord->GetPos();
+						m_MarkWardPos = pWord->GetPos();
 						bWord = true;
 					}
 				}
@@ -1065,20 +1069,22 @@ void C3DCharactor::PickUP_CPU(void)
 	//ワードが範囲内にある時移動する
 	if (bWord == true)
 	{
-		// 目的の角度
-		float fDestAngle = atan2f((MOKUHYO.x - sinf(rot.y)) - Pos.x, (MOKUHYO.z - cosf(rot.y)) - Pos.z);
-		// 差分
-		float fDiffAngle = fDestAngle - rot.y;
-		DiffAngle(fDiffAngle);
-		//移動
-		move.x += sinf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
-		move.z += cosf(atan2f(MOKUHYO.x - Pos.x, MOKUHYO.z - Pos.z)) * speed;
+		//// 目的の角度
+		//float fDestAngle = atan2f((m_MarkWardPos.x - sinf(rot.y)) - Pos.x, (m_MarkWardPos.z - cosf(rot.y)) - Pos.z);
+		//// 差分
+		//float fDiffAngle = fDestAngle - rot.y;
+		//DiffAngle(fDiffAngle);
+		////移動
+		//move.x += sinf(atan2f(m_MarkWardPos.x - Pos.x, m_MarkWardPos.z - Pos.z)) * speed;
+		//move.z += cosf(atan2f(m_MarkWardPos.x - Pos.x, m_MarkWardPos.z - Pos.z)) * speed;
+
+		WayPointRoute_CPU();
 	}
 
 	if (nCntNearWord == 0)
 	{//近くに文字が一つもない
 		m_bWordNear = true;
-		m_CpuThink = THINK_MOVE;
+		m_CpuThink = THINK_WAYPOINTMOVE;
 		m_CpuMove = CPU_MOVE_FRONT;
 		m_nActionTimer = 30;
 		m_bWordNear = false;
@@ -1106,11 +1112,11 @@ void C3DCharactor::HaveBullet_CPU(void)
 	if (nCntNear > 0)
 	{//近くに敵がいる
 		m_CpuThink = THINK_HOMING;
-		m_nActionTimer = 5;
+		m_nActionTimer = 20;
 	}
 	else
 	{//近くに敵がいない
-		m_CpuThink = THINK_MOVE;
+		m_CpuThink = THINK_WAYPOINTMOVE;
 		m_CpuMove = CPU_MOVE_FRONT;
 		m_nActionTimer = 30;
 	}
@@ -1141,7 +1147,7 @@ void C3DCharactor::NotBullet_CPU(void)
 	}
 	else
 	{
-		m_CpuThink = THINK_MOVE;
+		m_CpuThink = THINK_WAYPOINTMOVE;
 		m_CpuMove = CPU_MOVE_FRONT;
 		m_nActionTimer = 30;
 	}
@@ -1248,6 +1254,48 @@ void C3DCharactor::WayPointMove_CPU(void)
 #ifdef _DEBUG
 	CDebugProc::Print("cfcfcf", "目標のマスの位置 : X ", m_MarkWayPoint.x, " Y ", m_MarkWayPoint.y, " Z ", m_MarkWayPoint.z);
 #endif
+}
+
+//=============================================================================
+//最短ルート処理
+//=============================================================================
+void C3DCharactor::WayPointRoute_CPU(void)
+{
+	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
+	D3DXVECTOR3 MarkPos;	//一番近い目標位置
+
+
+	//位置情報を取得
+	m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
+	//移動可能なマスは何マスあるか
+	int nCntWP = m_pWayPoint->CntWayPoint();
+
+	for (int nCnt = 0; nCnt < nCntWP; nCnt++)
+	{
+		// 距離を測る 一番近い文字とウェイポイントを比べてどのポイントに行くか決める
+		float fCircle = ((m_MarkWardPos.x - m_pWayPointPos[nCnt].x) * (m_MarkWardPos.x - m_pWayPointPos[nCnt].x)) + ((Pos.z - m_pWayPointPos[nCnt].z) * (Pos.z - m_pWayPointPos[nCnt].z));
+
+		if (fCircle < 1000)
+		{
+			MarkPos = m_pWayPointPos[nCnt];
+
+			// 目的の角度
+			float fDestAngle = atan2f((MarkPos.x - sinf(rot.y)) - Pos.x, (MarkPos.z - cosf(rot.y)) - Pos.z);
+			// 差分
+			float fDiffAngle = fDestAngle - rot.y;
+			DiffAngle(fDiffAngle);
+			//移動
+			move.x += sinf(atan2f(MarkPos.x - Pos.x, MarkPos.z - Pos.z)) * speed;
+			move.z += cosf(atan2f(MarkPos.x - Pos.x, MarkPos.z - Pos.z)) * speed;
+		}
+	}
+
+
 }
 
 

@@ -16,11 +16,12 @@
 //*****************************************************************************
 #define AREA_CHASE		(40.0f)			// エリア
 #define AREA_COILLSION	(15.0f)			// コリジョンの範囲
-#define CHASE_MOVE		(2.0f)			// 追従時の速度
+#define CHASE_MOVE		(4.0f)			// 追従時の速度
 #define END_POS_Y		(15.0f)			// 文字の出現した時の最終位置
 #define FLOATING_MOVE	(0.5f)			// 浮遊速度
 #define POP_POS_Y		(END_POS_Y + 10.0f)	// 出現後の浮遊時の最大位置
 #define POP_POS_Y_SMALL		(END_POS_Y - 5.0f)	// 出現後の浮遊時の最少位置
+#define MAX_SIZE		(D3DXVECTOR2(12.0f, 12.0f))	// サイズの最大値
 
 #define UNITI_TIME		(40)			// 終了する時間
 //--------------------------------------------
@@ -103,6 +104,10 @@ void CWord::Update(void)
 	if (m_bPopFlag == false)
 	{	// 出現時の場合
 		move.y += 1.0f;
+		m_size.x += 1.0f;
+		m_size.y += 1.0f;
+		if (m_size.x > MAX_SIZE.x) { m_size.x = MAX_SIZE.x; }
+		if (m_size.y > MAX_SIZE.y) { m_size.y = MAX_SIZE.y; }
 		if (pos.y >= END_POS_Y) { m_bPopFlag = true; }
 	}
 	else if (m_bPopFlag == true)
@@ -204,7 +209,20 @@ void CWord::Update(void)
 //=============================================================================
 void CWord::Draw(void)
 {
+	// デバイス取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
+	// αブレンディングを加算合成に設定
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
 	CSceneBillBoard::Draw();
+
+	// αブレンディングを元に戻す
+	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=============================================================================

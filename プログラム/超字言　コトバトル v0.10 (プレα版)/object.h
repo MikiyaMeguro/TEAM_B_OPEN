@@ -15,6 +15,8 @@
 //========================================
 // クラスの定義
 //========================================
+class CScene3D;
+
 //=====================
 // オブジェクトクラス
 //=====================
@@ -47,12 +49,22 @@ public:
 
 	// 設定 取得の関数
 	REALTIME GetRealTimeType(void) { return m_nRealTime; }
+	static bool GetCreateFlag(void) { return m_bCreateFlag; }
 
 private:
+	static bool m_bCreateFlag;		// 生成するフラグ
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
+	void AnimationIcon(void);		// アイコンのアニメーション
+	void IconCreate(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);	// アイコンの生成
+	void Vibration(D3DXVECTOR3 *Pos);			// 振動
 
 	bool m_bMoveFlag;		// 移動フラグ
 	REALTIME m_nRealTime;	// リアルタイムで移動するFlagの変数
+	D3DXVECTOR3 m_posOld;		// 位置保管
+	CScene3D *m_pIcon;
+	float m_fMove;
+	int m_nCntAnim;
+	int m_nCntPattan;
 };
 
 #endif
