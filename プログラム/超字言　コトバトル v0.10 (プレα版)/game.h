@@ -16,6 +16,7 @@ class CPlayer;
 class CTube;
 class CPoint;
 class CSetWord;
+class CWall;
 
 //=============================================================================
 // マクロ定義
@@ -82,7 +83,8 @@ private:
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPoint *m_pPoint[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-	
+	static CWall *m_pWall;
+
 	static CSetWord *m_pWordCreate;
 	char *m_pcStageName[MAX_STAGE];		// ステージの名前保管
 	char *m_pcStageNameWord[MAX_STAGE];		// ステージの名前保管

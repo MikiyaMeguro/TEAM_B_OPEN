@@ -226,7 +226,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (pModel != NULL)
 				{
 					m_nCreateType = m_nCreateType + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, 5.0f, 100, nID);
+					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_NORMAL,nID);
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
@@ -234,7 +234,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				CModelBullet* pModel = CModelBullet::Create();
 				if (pModel != NULL)
 				{
-					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, 5.0f, 100, nID);
+					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 				}
 			}
 
