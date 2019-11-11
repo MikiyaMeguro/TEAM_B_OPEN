@@ -685,7 +685,7 @@ bool CPlayer::CollisionBullet(void)
 					}
 
 					//‚«”ò‚Î‚µ
-					DamageReaction(10.0f,BulletRot);
+					DamageReaction(pBullet->GetKnockBackPower(),BulletRot);
 
 					//’eíœ
 					pBullet->Uninit();

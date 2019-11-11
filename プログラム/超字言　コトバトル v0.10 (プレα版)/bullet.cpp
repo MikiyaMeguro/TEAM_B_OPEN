@@ -16,6 +16,7 @@
 C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 {
 	m_Type = TYPE_NONE;
+	m_fKnockBack = 0.0f;
 }
 C3DBullet::~C3DBullet()
 {
@@ -33,6 +34,8 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 	m_nLife = nLife;
 
 	m_nID = (nID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+
+	m_fKnockBack = 7.0f;
 }
 
 //=============================================================================
@@ -120,12 +123,40 @@ CModelBullet* CModelBullet::Create(void)
 //=============================================================================
 // 設定処理(CModelBullet)
 //=============================================================================
-void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, float fSpeed, int nLife, int nID)
+void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID)
 {
 	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
+	m_Prop = type;
 
+	float fSpeed;
+	switch (m_Prop)
+	{
+	case TYPE_HIGHSPEED:
+		fSpeed = 8.0f;
+		m_fKnockBack = 6.0f;
+		break;
+	case TYPE_STINGER:
+		fSpeed = 6.0f;
+		m_fKnockBack = 9.0f;
+		break;
+	case TYPE_KNOCKBACK:
+		fSpeed = 3.0f;
+		m_fKnockBack = 20.0f;
+		break;
+	case TYPE_REFLECT:
+		m_fKnockBack = 8.0f;
+		break;
+	default:
+		fSpeed = 5.0f;
+		m_fKnockBack = 6.0f;
+		break;
+	}
 
-	C3DBullet::Set(pos,rot,fSpeed,nLife, nID);
+	C3DBullet::Set(pos,
+		rot,
+		fSpeed,
+		100,
+		nID);
 }
 
 //=============================================================================
@@ -163,6 +194,14 @@ void CModelBullet::Update(void)
 	m_pModel->SetRot(GetRotation());
 	int& nLife = GetLife();
 	nLife--;
+
+	if (m_Prop != TYPE_STINGER)
+	{//貫通タイプでなければ当たり判定をチェックする
+
+	 //反射タイプなら当たった後に角度をY軸で反転させる
+	}
+
+
 	if (nLife < 0)
 	{
 		Uninit();
