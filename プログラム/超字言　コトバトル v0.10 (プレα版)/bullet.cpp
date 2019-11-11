@@ -10,6 +10,7 @@
 #include "load.h"
 #include "sceneBillboard.h"
 #include "sceneX.h"
+#include "game.h"
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
@@ -76,7 +77,18 @@ void C3DBullet::Update(void)
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
+
+																//メッシュフィールドとの当たり判定
+	CMeshField *pMesh = CGame::GetMeshField();
+
+	float fHeight = pMesh->GetHeight(m_pos + move);
+	if (m_pos.y < fHeight)
+	{
+		move.y = 0.0f;
+	}
+
 	m_pos += move;
+
 
 	//床との判定
 
