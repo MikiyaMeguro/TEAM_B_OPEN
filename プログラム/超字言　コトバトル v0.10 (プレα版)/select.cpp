@@ -45,7 +45,7 @@ CSelect::~CSelect()
 //=============================================================================
 void CSelect::Init(void)
 {
-	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 200, 300, CSelectMenu::MENU_TYPE_TUTORIAL);
+	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 250, 350, CSelectMenu::MENU_TYPE_TUTORIAL);
 }
 
 //=============================================================================
@@ -69,7 +69,7 @@ void CSelect::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	//”CˆÓ‚ÌƒL[ENTER
-	if (CCommand::GetCommand("ENTER"))
+	if (CCommand::GetCommand("DECISION"))
 	{
 //		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}

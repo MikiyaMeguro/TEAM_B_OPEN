@@ -241,99 +241,112 @@ void CPlayer::Update(void)
 		//前にObjectがあるかどうか
 		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
-	}
 
-	//セット
-	CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
-	D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
-	D3DXVECTOR3 BulletPos = m_pCharactorMove->GetPosition();
-	float fRotY;
-	D3DXVECTOR3 CamRot, LockOnPos,LockOnMove;
-	// 弾の生成
-	if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
-	{
-		if (m_pWordManager != NULL)
-		{//文字管理クラスに弾の生成を委託する
-			if (pCam != NULL)
+
+		//弾打ち(プレイヤー)
+		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT)
+		{
+			//セット
+			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
+			D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
+			D3DXVECTOR3 BulletPos = m_pCharactorMove->GetPosition();
+			float fRotY,fRotX;
+			D3DXVECTOR3 CamRot, LockOnPos, LockOnMove;
+			// 弾の生成
+			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
 			{
-				CamRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
-
-				BulletRot = CamRot;
-				if (m_pLockOnCharactor != NULL)
-				{
-					LockOnPos = m_pLockOnCharactor->GetPosition();
-					LockOnMove = m_pLockOnCharactor->GetMove();
-
-					fRotY = atan2f(powf((BulletPos.x - LockOnPos.x), 2.0f), powf((BulletPos.z - LockOnPos.z), 2.0f)) -
-						atan2f(powf((BulletPos.x - (LockOnPos.x - (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z - (LockOnMove.z * 5.0f))), 2.0f));
-					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
-					CUtilityMath::RotateNormarizePI(&fRotY);
-					BulletRot.y += fRotY;
-				}
-
-			}
-
-			CUtilityMath::RotateNormarizePI(&BulletRot.x);
-			CUtilityMath::RotateNormarizePI(&BulletRot.y);
-
-			m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
-			if (m_pWordManager->GetCntNum() == 0)
-			{
-				m_bSetupBullet = false;
-			}
-		}
-
-		m_bAssist = true;
-	}
-
-	if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
-	{
-		//テスト
-		int nPlayer = GetNearPlayer();
-
-		if (m_pLockOnCharactor == NULL)
-		{//まだロックオンしてなければ
-			if (m_bAssist == true)
-			{
-				if (nPlayer != -1)
-				{
-					m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
-
+				if (m_pWordManager != NULL)
+				{//文字管理クラスに弾の生成を委託する
 					if (pCam != NULL)
 					{
-						pCam->SetLockOnChara(m_pLockOnCharactor);
+						CamRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+
+						BulletRot = CamRot;
+						if (m_pLockOnCharactor != NULL)
+						{
+							LockOnPos = m_pLockOnCharactor->GetPosition();
+							LockOnMove = m_pLockOnCharactor->GetMove();
+
+
+							fRotY = atan2f(((LockOnPos.x- (LockOnMove.x * 10.0f)) - BulletPos.x),
+											((LockOnPos.z - (LockOnMove.z * 10.0f)) - BulletPos.z));
+							CUtilityMath::RotateNormarizePI(&fRotY);
+
+							//fRotX = atan2f((BulletPos.y - LockOnPos.y), (BulletPos.z - LockOnPos.z) -
+							//	atan2f((BulletPos.y - (LockOnPos.y - (LockOnMove.y * 10.0f))), (BulletPos.z - (LockOnPos.z - (LockOnMove.z * 10.0f))));					//fRotY = atan2f(powf((BulletPos.x - (LockOnPos.x + (LockOnMove.x * 5.0f))), 2.0f), powf((BulletPos.z - (LockOnPos.z + (LockOnMove.z * 5.0f))), 2.0f));
+							//CUtilityMath::RotateNormarizePI(&fRotX);
+
+							BulletRot.y = fRotY;
+							//BulletRot.y = -fRotX;
+						}
+
+					}
+
+					CUtilityMath::RotateNormarizePI(&BulletRot.x);
+					CUtilityMath::RotateNormarizePI(&BulletRot.y);
+
+					m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
+					if (m_pWordManager->GetCntNum() == 0)
+					{
+						m_bSetupBullet = false;
+					}
+				}
+
+				m_bAssist = true;
+			}
+
+			if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
+			{
+				//テスト
+				int nPlayer = GetNearPlayer();
+
+				if (m_pLockOnCharactor == NULL)
+				{//まだロックオンしてなければ
+					if (m_bAssist == true)
+					{
+						if (nPlayer != -1)
+						{
+							m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+							if (pCam != NULL)
+							{
+								pCam->SetLockOnChara(m_pLockOnCharactor);
+							}
+						}
+						else
+						{
+							m_pLockOnCharactor = NULL;
+							if (pCam != NULL)
+							{
+								pCam->SetLockOnChara(NULL);
+							}
+							m_bAssist = false;
+						}
 					}
 				}
 				else
-				{
-					m_pLockOnCharactor = NULL;
-					if (pCam != NULL)
+				{//ロックオンしていれば
+					if (nPlayer == -1)
 					{
-						pCam->SetLockOnChara(NULL);
+						m_pLockOnCharactor = NULL;
+						if (pCam != NULL)
+						{
+							pCam->SetLockOnChara(NULL);
+						}
+						m_bAssist = false;
 					}
-					m_bAssist = false;
 				}
 			}
-		}
-		else
-		{//ロックオンしていれば
-			if (nPlayer == -1)
+			else
 			{
 				m_pLockOnCharactor = NULL;
 				if (pCam != NULL)
 				{
 					pCam->SetLockOnChara(NULL);
 				}
-				m_bAssist = false;
 			}
-		}
-	}
-	else
-	{
-		m_pLockOnCharactor = NULL;
-		if (pCam != NULL)
-		{
-			pCam->SetLockOnChara(NULL);
+			CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
+
 		}
 	}
 
@@ -390,7 +403,6 @@ void CPlayer::Update(void)
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x, " ", testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
 	CDebugProc::Print("cn", "PLAYER.LockOn : ", m_pLockOnCharactor != NULL ? 1 : 0);
-	CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
 
 
 #endif

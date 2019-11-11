@@ -255,10 +255,7 @@ void CGame::Update(void)
 	}
 
 #ifdef _DEBUG
-	if (pInputKeyboard->GetTrigger(DIK_LCONTROL))
-	{
-		WordCreate();		// ï∂éöÇÃê∂ê¨
-	}
+	
 #endif
 }
 
@@ -596,7 +593,7 @@ void CGame::SetStage(int nCntState)
 	if (nCntState < MAX_STAGE)
 	{
 		CSetObject::LoadFile(m_pcStageName[nCntState]);
-		if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
+		if (m_pWordCreate != NULL && CObject::GetCreateFlag() == false) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
 	}
 }
 //=============================================================================

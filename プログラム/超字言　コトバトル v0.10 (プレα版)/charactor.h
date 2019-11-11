@@ -197,7 +197,7 @@ private:
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
-	D3DXVECTOR3 m_CameraPosR;
+	D3DXVECTOR3 m_CameraPosR;	//カメラの注視点決定に使う変数
 	D3DXMATRIX m_mtxWorld;		//ワールドマトリックス
 	//CPUで使うメンバ変数
 	int m_nThinkTimer;			//考える時間
