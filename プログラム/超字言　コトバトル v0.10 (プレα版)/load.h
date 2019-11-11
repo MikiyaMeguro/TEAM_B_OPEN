@@ -77,6 +77,16 @@ public:
 		MODEL_KUSAYA,	// くさや
 		MODEL_SAZAE,	// サザエ
 		MODEL_TILE,	// タイル
+		MODEL_Rice,	// ライス
+		MODEL_Comic,	// マンガ
+		MODEL_Fuigo,	// ふいご
+		MODEL_Namako,	// ナマコ
+		MODEL_Zugai,	// ずがい
+		MODEL_Seaweed,	// コンブ
+		MODEL_Laitc,	// らいち
+		MODEL_Mekabu,	// めかぶ
+		MODEL_Medic,	// くすり
+		MODEL_Kaiga,	// かいが
 		MODEL_MAX
 	} MODEL;
 

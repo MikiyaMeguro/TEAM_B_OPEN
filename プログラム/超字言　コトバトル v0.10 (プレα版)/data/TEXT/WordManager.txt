@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 44			# モデル数
+	ANSWERNUM = 55			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名 
@@ -55,6 +55,18 @@ SCRIPT			# この行は絶対消さないこと！
 	# 41 : くさや
 	# 42 : さざえ
 	# 43 : タイル
+	# 44 : ライス
+	# 45 : まんが
+	# 46 : ふいご
+	# 47 : なまこ
+	# 48 : ずがい
+	# 49 : コンブ
+	# 50 : かめん
+	# 51 : らいち
+	# 52 : めかぶ
+	# 53 : くすり
+	# 54 : かいが
+
 #------------------------------------------------------------
 #                      文字の情報
 #------------------------------------------------------------
@@ -365,5 +377,84 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 1.0 40.0
 END_MODELSET
+
+
+MODELSET
+	TYPE = 44					# ライス
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 1				# 弾の種類
+	ANSWER = 38.0 1.0 12.0
+END_MODELSET
+
+MODELSET
+	TYPE = 45					# マンガ
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 1				# 弾の種類
+	ANSWER = 30.0 45.0 5.0
+END_MODELSET
+
+MODELSET
+	TYPE = 46					# ふいご
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 27.0 1.0 9.0
+END_MODELSET
+
+MODELSET
+	TYPE = 47					# なまこ
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 4				# 弾の種類
+	ANSWER = 20.0 30.0 9.0
+END_MODELSET
+
+MODELSET
+	TYPE = 48					# ずがい
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 12.0 5.0 1.0
+END_MODELSET
+
+MODELSET
+	TYPE = 49					# コンブ
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 4				# 弾の種類
+	ANSWER = 9.0 45.0 27.0
+END_MODELSET
+
+MODELSET
+	TYPE = 50					# かめん
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 5.0 33.0 45.0
+END_MODELSET
+
+MODELSET
+	TYPE = 51					# らいち
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 38.0 1.0 16.0
+END_MODELSET
+
+MODELSET
+	TYPE = 52					# めかぶ
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 4				# 弾の種類
+	ANSWER = 33.0 5.0 27.0
+END_MODELSET
+
+MODELSET
+	TYPE = 53					# くすり
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 7.0 12.0 39.0
+END_MODELSET
+
+MODELSET
+	TYPE = 54					# かいが
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 5.0 1.0 5.0
+END_MODELSET
+
 
 END_SCRIPT		# この行は絶対消さないこと！

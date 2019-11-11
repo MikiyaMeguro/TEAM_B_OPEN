@@ -154,6 +154,17 @@ void CTube::SetWordNum(int nWordNum, int nNum)
 		m_apWord[nNum]->SetWidthHeight(size.x, size.y);	// ƒTƒCƒYÝ’è
 		m_apWord[nNum]->SetTex(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f)));
 	}
+
+	if (nNum == 2)
+	{
+		for (int nCntNum = 0; nCntNum < MAX_WORD; nCntNum++)
+		{
+			if (m_apWord[nCntNum] != NULL)
+			{
+				m_apWord[nCntNum]->SetCol(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
+			}
+		}
+	}
 }
 
 //=============================================================================
