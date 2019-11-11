@@ -32,6 +32,8 @@
 #include "charactor.h"
 #include "SetObject.h"
 #include "loadText.h"
+#include "wall.h"
+
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -60,6 +62,8 @@ CTube *CGame::m_apTube[MAX_PLAYER] = {};
 CMeshField *CGame::m_pMeshField = NULL;
 CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
 CSetWord *CGame::m_pWordCreate = NULL;
+CWall *CGame::m_pWall = {};
+
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -109,6 +113,20 @@ void CGame::Init(void)
 	if (m_pMeshField == NULL)
 	{
 		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
+	if (m_pWall == NULL)
+	{
+		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+
+		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+
+		m_pWall->Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+
+		m_pWall->Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
 	}
 
 	// プレイヤーの生成
@@ -255,7 +273,7 @@ void CGame::Update(void)
 	}
 
 #ifdef _DEBUG
-	
+
 #endif
 }
 
