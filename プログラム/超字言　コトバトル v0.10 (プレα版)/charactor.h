@@ -58,6 +58,7 @@ public:
 		THINK_HOMING,			//追いかける
 		THINK_WATCH,			//見る
 		THINK_WAYPOINTMOVE,		//経路情報
+		THINK_WAYPOINTROUTE,	//最短の道探し
 		THINK_MAX
 	}CPU_THINK;
 
@@ -192,6 +193,7 @@ private:
 	void NotBullet_CPU(void);	//弾をもっていない
 	void NearOrFur_CPU(void);	//近いか遠いか
 	void WayPointMove_CPU(void);	//経路情報移動
+	void WayPointRoute_CPU(void);	//最短ルート移動
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
@@ -209,6 +211,8 @@ private:
 	D3DXVECTOR3 *m_pWayPointPos;	//経路情報の位置情報ポインタ
 	D3DXVECTOR3 m_MarkWayPoint;		//移動先の位置
 	bool m_bGoal;					//移動先到着フラグ
+
+	D3DXVECTOR3 m_MarkWardPos;		//移動先の位置
 
 	int nTestCnt = 0;
 public:
