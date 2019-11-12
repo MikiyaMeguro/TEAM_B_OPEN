@@ -27,6 +27,7 @@ public:
 	{
 		REALTIME_NONE = 0,	// 何もなし
 		REALTIME_INITPOS,	// 最初の位置から出現
+		REALTIME_NOTMOVE,	// 指定時間まで動かない
 		REALTIME_ENDPOS,	// 最後の位置に向けて移動
 		REALTIME_MAX	// 総数
 	}REALTIME;
@@ -43,7 +44,7 @@ public:
 	void KnockBack(D3DXVECTOR3 *pMove, int nID);			// ノックバック
 	void AffectedLanding(D3DXVECTOR3 *pMove, int nID);		// モデルの着地時の影響
 
-	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL model);	// オブジェクトの生成
+	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL mode , CObject::REALTIME realtime);	// オブジェクトの生成
 	static HRESULT Load(void);
 	static void UnLoad(void);
 
@@ -52,6 +53,8 @@ public:
 	static bool GetCreateFlag(void) { return m_bCreateFlag; }
 
 private:
+	void Rot(CSceneX::COLLISIONTYPE type);
+
 	static bool m_bCreateFlag;		// 生成するフラグ
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
 	void AnimationIcon(void);		// アイコンのアニメーション

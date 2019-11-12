@@ -21,6 +21,12 @@ NUM_MODEL = 22
 	# 4 : 文字土台
 
 #------------------------------------------------------------
+#    配置の種類 (読み込み済み)
+#------------------------------------------------------------
+	# 0 : ただの配置物
+	# 1 : 何かしらの動きがある物
+
+#------------------------------------------------------------
 #    当たり判定の種類 
 #------------------------------------------------------------
 	# 0 : 当たり判定無し
@@ -47,6 +53,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 6.0 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -55,6 +62,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 2.0
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 
@@ -68,6 +76,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.8 1.0
 	COLLISION = 6
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -80,6 +89,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -88,6 +98,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -96,6 +107,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.0
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -104,6 +116,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -112,6 +125,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -123,6 +137,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.5 1.5 6.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -134,6 +149,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 8
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -142,6 +158,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 7
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -153,6 +170,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -161,6 +179,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -169,6 +188,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 3.0
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -177,6 +197,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -185,6 +206,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -207,6 +229,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 8
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -215,6 +238,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 0.8
 	COLLISION = 7
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -227,6 +251,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 6.0 0.8 0.8
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -235,6 +260,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.8 0.8 2.0
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 
@@ -248,6 +274,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.8 1.0
 	COLLISION = 6
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -259,6 +286,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -267,6 +295,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -275,6 +304,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -283,6 +313,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -291,6 +322,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -302,6 +334,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -310,6 +343,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -318,6 +352,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -326,6 +361,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -334,6 +370,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -345,6 +382,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -353,6 +391,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -361,6 +400,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -369,6 +409,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -377,6 +418,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -388,6 +430,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -396,6 +439,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -404,6 +448,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -412,6 +457,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
@@ -420,6 +466,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！

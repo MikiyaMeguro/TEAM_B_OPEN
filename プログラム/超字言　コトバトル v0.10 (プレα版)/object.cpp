@@ -60,7 +60,7 @@ CObject::~CObject()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model)
+CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::REALTIME realtime)
 {
 	CObject *pObject = NULL;
 
@@ -77,7 +77,7 @@ CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CS
 			pObject->Init(pos);			// 初期化
 			pObject->SetRot(rot);		// 向きの設定
 			pObject->SetCollsionType(type);	// コリジョンのタイプ設定
-			pObject->m_nRealTime = REALTIME_INITPOS;
+			pObject->m_nRealTime = realtime;
 		}
 	}
 
@@ -116,6 +116,9 @@ void CObject::Uninit(void)
 void CObject::Update(void)
 {
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+
+	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// 何もない場合は何も通さない
+
 	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
 	ModelMove(Collsiontype, pos);	// モデルの移動
@@ -232,7 +235,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 				pos.x = m_posOld.x;
 				pos.z = m_posOld.z;
 				CSceneX::SetPosition(pos);
-				m_nRealTime = REALTIME_NONE;
+				m_nRealTime = REALTIME_NOTMOVE;
 
 				IconCreate(Type, pos);	// アイコンの生成
 			}
@@ -244,7 +247,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 				pos.z = m_posOld.z;
 
 				CSceneX::SetPosition(pos);
-				m_nRealTime = REALTIME_NONE;
+				m_nRealTime = REALTIME_NOTMOVE;
 				if (m_bCreateFlag == false) { m_bCreateFlag = true; }
 			}
 		}
@@ -254,17 +257,9 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 
 		CSceneX::SetPosition(pos);
 	}
-	else if (m_nRealTime == REALTIME_NONE)
+	else if (m_nRealTime == REALTIME_NOTMOVE)
 	{	// 動かない場合
-		if (Type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || Type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || Type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-		{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
-			D3DXVECTOR3 rot = CSceneX::GetRot();
-
-			// 強弱の種類によって回転量を変化
-			rot.y += GEAR_ROT_Y * ((int)Type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
-
-			CSceneX::SetRot(rot);
-		}
+		Rot(Type);
 
 		if ((CTime::GetStageTime() % 30) == 0)
 		{ 
@@ -342,4 +337,20 @@ void CObject::Vibration(D3DXVECTOR3 *Pos)
 
 	Pos->x += m_fMove;
 	Pos->z += m_fMove;
+}
+
+//=============================================================================
+// 回転の処理
+//=============================================================================
+void CObject::Rot(CSceneX::COLLISIONTYPE type)
+{
+	if (type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+	{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
+		D3DXVECTOR3 rot = CSceneX::GetRot();
+
+		// 強弱の種類によって回転量を変化
+		rot.y += GEAR_ROT_Y * ((int)type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
+
+		CSceneX::SetRot(rot);
+	}
 }
