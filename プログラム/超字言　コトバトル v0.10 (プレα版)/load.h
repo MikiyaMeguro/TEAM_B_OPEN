@@ -104,6 +104,7 @@ public:
 		MODEL_INK,		// ƒCƒ“ƒN
 		MODEL_Zail,		// ‚´‚¢‚é
 		MODEL_Inari,	// ‚¢‚È‚è
+		MODE_gakuhu,	// Šy•ˆ
 		MODEL_MAX
 	} MODEL;
 
