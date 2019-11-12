@@ -43,7 +43,7 @@ public:
 	void SetWord(int nType);
 	void BulletCreate(int nID,D3DXVECTOR3 BulletMuzzle,D3DXVECTOR3 BulletRot);	//BulletMuzzle = 弾が出る位置	BulletRot = 弾が出る角度
 	void SetID(int nID) { m_nPlayerID = nID; }
-	static void SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, int type);	// ファイルからリソースの読み込み
+	static void SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, D3DXVECTOR3 rot, int type, int Model);	// ファイルからリソースの読み込み
 	static void SetWordAnswerNum(int nAnswerNum);
 	int SearchWord(void);							// 文字の組み合わせが合うかどうか
 
@@ -66,7 +66,9 @@ private:
 	static int m_nAnswerDataNum;
 	static D3DXVECTOR3 *m_AnswerNum;
 	static D3DXVECTOR3 *m_Scale;
+	static D3DXVECTOR3 *m_rot;
 	static int *m_type;
+	static int *m_nAnswerTypeModel;
 
 	int m_nCreateType;
 	int m_nCntNum;

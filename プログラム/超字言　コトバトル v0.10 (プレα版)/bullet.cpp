@@ -240,6 +240,17 @@ void  CModelBullet::SetModelScale(const D3DXVECTOR3& scale)
 }
 
 //=============================================================================
+// ÉÇÉfÉãÇÃå¸Ç´ê›íËèàóù(CModelBullet)
+//=============================================================================
+void  CModelBullet::SetModelRot(const D3DXVECTOR3& rot)
+{
+	if (m_pModel != NULL)
+	{
+		m_pModel->SetRot(rot);
+	}
+}
+
+//=============================================================================
 //
 // ï∂éöíeèàóù (CWordBullet)[bullet.cpp]
 // Author : Kodama Yuto
