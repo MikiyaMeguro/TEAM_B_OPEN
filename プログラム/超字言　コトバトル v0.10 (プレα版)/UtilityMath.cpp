@@ -79,7 +79,7 @@ float CUtilityMath::Mapping(const float& value, const float& fromSource, const f
 //	移動力に係数を掛ける関数
 //=============================================================================
 D3DXVECTOR3 CUtilityMath::MoveCoeffient(D3DXVECTOR3& value, const float& coeffient)
-{
+{//D3DXVECTOR3
 	value.x += (0.0f - value.x) * coeffient;
 	value.y += (0.0f - value.y) * coeffient;
 	value.z += (0.0f - value.z) * coeffient;
@@ -99,7 +99,7 @@ float CUtilityMath::Round_n(float& fValue, const int nRound)
 	return fValue;
 }
 //=============================================================================
-//	クォータニオンをオイラー角(３次元ベクトル)に変換する関数
+//	クォータニオンをオイラー角(３次元ベクトル)に変換する関数(作成途中)
 //=============================================================================
 D3DXVECTOR3 CUtilityMath::EulerToQuaternion(const D3DXQUATERNION& quat)
 {

@@ -146,14 +146,8 @@ void CCamera::Update(void)
 
 
 	//äpìxYÇÃï‚ê≥
-	if (m_rot.y < -D3DX_PI)
-	{
-		m_rot.y += D3DX_PI * 2.0f;
-	}
-	if (m_rot.y > D3DX_PI)
-	{
-		m_rot.y -= D3DX_PI * 2.0f;
-	}
+	CUtilityMath::RotateNormarizePI(&m_rot.y);
+
 
 }
 
