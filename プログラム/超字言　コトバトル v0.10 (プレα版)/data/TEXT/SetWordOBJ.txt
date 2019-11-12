@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 55					# 読み込んだモデルの最大番号をいれてください
+NUM_MODEL = 62					# 読み込んだモデルの最大番号をいれてください
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -69,6 +69,14 @@ MODEL_FILENAME = data/MODEL/Mask.x"					#52 かめん
 MODEL_FILENAME = data/MODEL/Mekabu.x"				#53 めかぶ
 MODEL_FILENAME = data/MODEL/Medic.x"				#54 くすり
 MODEL_FILENAME = data/MODEL/Kaiga.x"				#55 かいが
+
+MODEL_FILENAME = data/MODEL/Ikura.x"				#56 いくら
+MODEL_FILENAME = data/MODEL/Menko.x"				#57 めんこ
+MODEL_FILENAME = data/MODEL/Mace.x"					#58 めいす
+MODEL_FILENAME = data/MODEL/Sarai.x"				#59 さらい
+MODEL_FILENAME = data/MODEL/Ink.x"					#60 いんく
+MODEL_FILENAME = data/MODEL/Zail.x"					#61 ざいる
+MODEL_FILENAME = data/MODEL/Inari.x"				#62 いなり
 
 
 END_SCRIPT		# この行は絶対消さないこと！
