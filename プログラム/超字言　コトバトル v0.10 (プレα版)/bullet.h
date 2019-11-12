@@ -51,17 +51,23 @@ public:
 	D3DXVECTOR3& GetPosition(void) { return m_pos;};
 	D3DXVECTOR3& GetRotation(void) { return m_rot;};
 	float& GetMove(void) { return m_fMove; };
+	D3DXVECTOR3 GetMoveResult(void) { return m_MoveResult; };
 	int& GetLife(void) { return m_nLife; };
 	int GetID(void) { return m_nID; };
 	float& GetKnockBackPower(void) { return m_fKnockBack; };
 	BULLET_TYPE GetType(void) { return m_Type; };
 protected:
+	bool CollisionObject(void);
+
 	BULLET_TYPE m_Type;
 	float m_fKnockBack;	//ノックバックする値
+	float m_fCollisionRadius;
 private:
 	D3DXVECTOR3 m_pos;				//位置
+	D3DXVECTOR3 m_posOld;			//一つ前の位置
 	D3DXVECTOR3 m_rot;				//角度
 	float m_fMove;				//移動量
+	D3DXVECTOR3 m_MoveResult;	//計算後の移動差分
 
 	int m_nLife;	//体力
 	int m_nID;	//誰が打ったか
@@ -96,6 +102,7 @@ public:
 
 	void SetModelScale(const D3DXVECTOR3& scale);
 private:
+	void Reflect(void);
 	CSceneX* m_pModel;
 	BULLET_PROPERTY m_Prop;
 };

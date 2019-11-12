@@ -174,8 +174,8 @@ void CGame::Init(void)
 	else if (NumPlayer != CPlayerSelect::SELECTPLAYER_2P) { CTime::Create((int)NumPlayer); }
 
 	//デバック用
-	CTime::SetTimeFlag(false);
-	CCommand::RegistCommand("(DEBUG)TIMECOUNT_STOP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_TRIGGER,DIK_M);
+	//CTime::SetTimeFlag(false);
+	CCommand::RegistCommand("TIMECOUNT_STOP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_TRIGGER,DIK_M);
 }
 //=============================================================================
 // 終了処理
@@ -267,9 +267,9 @@ void CGame::Update(void)
 	}
 
 	//時間停止(デバック用)
-	if (CCommand::GetCommand("(DEBUG)TIMECOUNT_STOP"))
+	if (CCommand::GetCommand("TIMECOUNT_STOP"))
 	{
-		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));
+		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
 	}
 
 #ifdef _DEBUG
@@ -326,8 +326,8 @@ void CGame::CameraSetting(int nNumPlayer)
 				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
-			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(-2.0f, D3DX_PI * -0.5f, 0.0f), 650.0f);
+			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_SPECTOR,
+				D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(-1.75f, D3DX_PI * -0.5f, 0.0f), 750.0f);
 			pCameraManager->SetCameraViewPort("TOPVIEW_CAMERA", 645, 365, 635, 355);
 			break;
 

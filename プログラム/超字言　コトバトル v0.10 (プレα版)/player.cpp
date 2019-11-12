@@ -436,8 +436,6 @@ void CPlayer::Update(void)
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x, " ", testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
 	CDebugProc::Print("cn", "PLAYER.LockOn : ", m_pLockOnCharactor != NULL ? 1 : 0);
-
-
 #endif
 }
 
@@ -731,45 +729,45 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 
 		if (pScene->GetDeath() == false)
 		{// 死亡フラグが立っていないもの
-		if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
-		{// オブジェクトの種類を確かめる
-			CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-			if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
-			{
-				m_bLand = pSceneX->Collision(pos, posOld, move, radius);
-				CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-				if (m_bLand == true)
-				{// モデルに当たる
-					bHit = true;
-
-					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
-					{
-						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
-						{	// ベルトコンベアの判定
-							pSceneObj->BeltConveyor(move);
-						}
-						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
-							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-						{	// ノックバックの判定
-							pSceneObj->KnockBack(move, m_nID);
-						}
-					}
-					else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
-					{
-						pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
-					}
-					else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
-					{
-					}
-					break;
-				}
-				else
+			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+			{// オブジェクトの種類を確かめる
+				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
-					bHit = false;
+					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+					if (m_bLand == true)
+					{// モデルに当たる
+						bHit = true;
+
+						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
+						{
+							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+							{	// ベルトコンベアの判定
+								pSceneObj->BeltConveyor(move);
+							}
+							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
+								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+							{	// ノックバックの判定
+								pSceneObj->KnockBack(move, m_nID);
+							}
+						}
+						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
+						{
+							pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
+						}
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
+						{
+						}
+						break;
+					}
+					else
+					{
+						bHit = false;
+					}
 				}
 			}
-		}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
