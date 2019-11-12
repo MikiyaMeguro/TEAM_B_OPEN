@@ -207,7 +207,7 @@ void CModelBullet::Update(void)
 	nLife--;
 
 	if (m_Prop != TYPE_STINGER)
-	{//貫通タイプでなければ当たり判定をチェックする
+	{//貫通タイプでなければオブジェクトとの当たり判定をチェックする
 
 	 //反射タイプなら当たった後に角度をY軸で反転させる
 	}

@@ -42,7 +42,7 @@ void CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, cons
 //	Šp“x•â³ŠÖ”
 //=============================================================================
 void CUtilityMath::RotateNormarizePI(float* value)
-{
+{//float
 	if (*value > D3DX_PI)
 	{
 		*value -= D3DX_PI * 2.0f;
@@ -51,6 +51,13 @@ void CUtilityMath::RotateNormarizePI(float* value)
 	{
 		*value += D3DX_PI * 2.0f;
 	}
+}
+void CUtilityMath::RotateNormarizePI(D3DXVECTOR3* RotateValue)
+{//D3DXVECTOR3(float‚R‰ñ)
+
+	RotateNormarizePI(&RotateValue->x);
+	RotateNormarizePI(&RotateValue->y);
+	RotateNormarizePI(&RotateValue->z);
 }
 
 //=============================================================================

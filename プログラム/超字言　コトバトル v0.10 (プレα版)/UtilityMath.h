@@ -161,7 +161,10 @@ class CUtilityMath
 {
 public:
 	static void CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f));
+
 	static void RotateNormarizePI(float* value);
+	static void RotateNormarizePI(D3DXVECTOR3* RotateValue);
+
 	static float Mapping(const float& value, const float& fromSource, const float& toSource, const float& fromTarget, const float& toTarget, bool bClamp = false);
 	static D3DXVECTOR3 MoveCoeffient(D3DXVECTOR3& value,const float& coeffient);
 	static float Round_n(float& fValue,const int nRound);
