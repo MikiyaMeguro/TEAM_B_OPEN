@@ -11,7 +11,7 @@
 #include "debugProc.h"
 #include "manager.h"
 #include "word_manager.h"
-
+#include "bullet.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -145,7 +145,6 @@ void CLoadText::LoadFile(void)
 					nWord = PopString(pStrcur, &aStr[0]);
 					//文字列変換
 					ModelRot.x = (float)atof(pStrcur);
-
 					//文字数分進める
 					pStrcur += nWord;
 					//文字数を返してもらう
@@ -161,6 +160,9 @@ void CLoadText::LoadFile(void)
 					ModelRot.z = (float)atof(pStrcur);
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
+
+					//角度を-π～πに補正する
+					CUtilityMath::RotateNormarizePI(ModelRot);
 				}
 				//SCALEを読み込み
 				if (memcmp(pStrcur, "SCALE = ", strlen("SCALE = ")) == 0)
@@ -172,22 +174,23 @@ void CLoadText::LoadFile(void)
 
 					//文字数を返してもらう
 					nWord = PopString(pStrcur, &aStr[0]);
+
 					//文字列変換
-					ModelScale.x = (float)atof(pStrcur);
+					ModelScale.x = fabsf((float)atof(pStrcur)); //マイナスが入らないように絶対値を使う
 
 					//文字数分進める
 					pStrcur += nWord;
 					//文字数を返してもらう
 					nWord = PopString(pStrcur, &aStr[0]);
 					//文字列変換
-					ModelScale.y = (float)atof(pStrcur);
+					ModelScale.y = fabsf((float)atof(pStrcur));//マイナスが入らないように絶対値を使う
 
 					//文字数分進める
 					pStrcur += nWord;
 					//文字数を返してもらう
 					nWord = PopString(pStrcur, &aStr[0]);
 					//文字列変換
-					ModelScale.z = (float)atof(pStrcur);
+					ModelScale.z = fabsf((float)atof(pStrcur));//マイナスが入らないように絶対値を使う
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
 				}
@@ -205,6 +208,12 @@ void CLoadText::LoadFile(void)
 					nCollisionType = (int)atoi(pStrcur);
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
+
+					if (nCollisionType >= (int)CModelBullet::TYPE_MAX||
+						nCollisionType < 0)
+					{//弾タイプに変な数値が入っていた場合はノーマル弾に変える(エラー防止)
+						nCollisionType = (int)CModelBullet::TYPE_NORMAL;
+					}
 				}
 				//答えの数字
 				if (memcmp(pStrcur, "ANSWER = ", strlen("ANSWER = ")) == 0)
