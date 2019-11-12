@@ -15,6 +15,7 @@
 // マクロ定義
 //*****************************************************************************
 #define MODEL_FILE_NAME				("data\\TEXT\\SetModel.txt")
+#define WORDMODEL_FILE_NAME			("data\\TEXT\\SetWordOBJ.txt")
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -98,7 +99,8 @@ HRESULT CLoad::LoadModel(void)
 	}
 
 	//ファイル読み込み
-	LoadFile();
+	LoadFile(MODEL_FILE_NAME);
+	LoadFile(WORDMODEL_FILE_NAME);
 
 	int nModelData = (sizeof m_apModelName);
 	int nModelSize = (sizeof m_apModelName[0]);
@@ -250,7 +252,7 @@ LPDIRECT3DTEXTURE9 *CLoad::GetTexture(MODEL Model)
 //=============================================================================
 // オブジェクトの配置情報を読み込み
 //=============================================================================
-void CLoad::LoadFile(void)
+void CLoad::LoadFile(char *pFileName)
 {
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
@@ -269,7 +271,7 @@ void CLoad::LoadFile(void)
 	D3DXVECTOR3 ModelPos;	//モデルの位置
 	D3DXVECTOR3 ModelRot;
 	//ファイルを開く 読み込み
-	pFile = fopen(MODEL_FILE_NAME, "r");
+	pFile = fopen(pFileName, "r");
 	//NULLチェック
 	if (pFile != NULL)
 	{
@@ -296,7 +298,7 @@ void CLoad::LoadFile(void)
 				strcpy(aStr, pStrcur);
 				//文字列抜き出し
 				nNumModel = atoi(pStrcur);
-				m_nMaxModel = nNumModel;
+				m_nMaxModel += nNumModel;
 
 				// 動的に確保
 				//m_apModelName[0] = "test";
@@ -304,7 +306,6 @@ void CLoad::LoadFile(void)
 				//m_apModelName[0] = "TEST0";
 				//m_apModelName2 = new char[10];
 				//m_apModelName2[0] = new char[10][50];
-
 			}
 
 			if (memcmp(pStrcur, "MODEL_FILENAME = ", strlen("MODEL_FILENAME = ")) == 0)

@@ -742,7 +742,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				{// ƒ‚ƒfƒ‹‚É“–‚½‚é
 					bHit = true;
 
-					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NONE)
+					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NOTMOVE)
 					{
 						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
 							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
