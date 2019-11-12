@@ -948,14 +948,7 @@ void C3DCharactor::Homing_CPU(void)
 
 					DiffAngle(fDiffAngle);
 
-					if (fDestAngle > D3DX_PI)
-					{
-						fDestAngle -= D3DX_PI * 2.0f;
-					}
-					if (fDestAngle < -D3DX_PI)
-					{
-						fDestAngle += D3DX_PI * 2.0f;
-					}
+					CUtilityMath::RotateNormarizePI(&fDestAngle);
 				}
 				else if(fCircle < 100 * 2000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 				{// ‹——£“à‚É“ü‚è’e‚ðŽ‚Á‚Ä‚¢‚éŽž
@@ -971,14 +964,7 @@ void C3DCharactor::Homing_CPU(void)
 
 					DiffAngle(fDiffAngle);
 
-					if (fDestAngle > D3DX_PI)
-					{
-						fDestAngle -= D3DX_PI * 2.0f;
-					}
-					if (fDestAngle < -D3DX_PI)
-					{
-						fDestAngle += D3DX_PI * 2.0f;
-					}
+					CUtilityMath::RotateNormarizePI(&fDestAngle);
 					//Ž‹–ì“à‚É“ü‚Á‚½‚çŒ‚‚Â
 					if (fDestAngle - 0.05f < rot.y && fDestAngle + 0.05f > rot.y)
 					{

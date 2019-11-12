@@ -29,6 +29,7 @@
 #include "Command.h"
 #include "CameraManager.h"
 
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -603,17 +604,17 @@ void CManager::SetMode(MODE mode)
 			m_pSelect = NULL;
 
 			//リザルトのBGMを止める
-			//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_SELECT);
 		}
 		break;
 	case CManager::MODE_TUTORIAL:
-		//
 		if (m_pTutorial != NULL)
 		{
-			//
 			m_pTutorial->Uninit();
 			delete m_pTutorial;
 			m_pTutorial = NULL;
+			//ゲームのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_TUTORIAL);
 		}
 		break;
 	case CManager::MODE_CHARASELECT:
@@ -626,6 +627,8 @@ void CManager::SetMode(MODE mode)
 			delete m_pCharaSelect;
 			//NULLにする
 			m_pCharaSelect = NULL;
+			//ゲームのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_CHARACTERSELECT);
 		}
 		break;
 	case CManager::MODE_STAGESELECT:
@@ -638,6 +641,8 @@ void CManager::SetMode(MODE mode)
 			delete m_pStageSelect;
 			//NULLにする
 			m_pStageSelect = NULL;
+			//ゲームのBGMを止める
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_STAGESELECT);
 		}
 		break;
 	case CManager::MODE_GAME:
@@ -652,7 +657,7 @@ void CManager::SetMode(MODE mode)
 			m_pGame = NULL;
 
 			//ゲームのBGMを止める
-		//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_VOICE);
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_GAME000);
 		}
 		break;
 
@@ -670,7 +675,7 @@ void CManager::SetMode(MODE mode)
 			m_pResult = NULL;
 
 			//リザルトのBGMを止める
-		//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
+			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RANKING);
 		}
 		break;
 	}
@@ -681,18 +686,13 @@ void CManager::SetMode(MODE mode)
 	case CManager::MODE_TITLE:
 		//タイトルの初期化
 		if (m_pTitle == NULL)
-		{
-			//キーボードのメモリを動的確保
+		{//キーボードのメモリを動的確保
 			m_pTitle = new CTitle;
-
 			if (m_pTitle != NULL)
-			{
-				//タイトルのBGMを再生
+			{//タイトルのBGMを再生
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TITLE);
-
 				// 初期化処理
 				m_pTitle->Init();
-
 			}
 			else
 			{
@@ -708,14 +708,11 @@ void CManager::SetMode(MODE mode)
 	case CManager::MODE_CHARASELECT:
 		//キャラセレクトモード初期化
 		if (m_pCharaSelect == NULL)
-		{
-			//キャラセレクトモードメモリを動的確保
+		{//キャラセレクトモードメモリを動的確保
 			m_pCharaSelect = new CCharaSelect;
 			if (m_pCharaSelect != NULL)
-			{
-				//リザルトのBGMを再生
-				//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
-
+			{//キャラセレクトのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_CHARACTERSELECT);
 				// 初期化処理
 				m_pCharaSelect->Init();
 			}
@@ -732,14 +729,11 @@ void CManager::SetMode(MODE mode)
 	case CManager::MODE_STAGESELECT:
 		//ステージセレクトモードの初期化
 		if (m_pStageSelect == NULL)
-		{
-			//ステージセレクトモードのメモリを動的確保
+		{//ステージセレクトモードのメモリを動的確保
 			m_pStageSelect = new CStageSelect;
 			if (m_pStageSelect != NULL)
-			{
-				//ステージセレクトモードのBGMを再生
-				//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
-
+			{//ステージセレクトモードのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_STAGESELECT);
 				// 初期化処理
 				m_pStageSelect->Init();
 			}
@@ -756,13 +750,11 @@ void CManager::SetMode(MODE mode)
 	case CManager::MODE_GAME:
 		//ゲームの初期化
 		if (m_pGame == NULL)
-		{
-			//ゲームのメモリを動的確保
+		{//ゲームのメモリを動的確保
 			m_pGame = new CGame;
-
 			if (m_pGame != NULL)
 			{
-			//	m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_SE_NOISE);
+				m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_BGM_GAME000);
 				// 初期化処理
 				m_pGame->Init();
 			}
@@ -780,15 +772,12 @@ void CManager::SetMode(MODE mode)
 	case CManager::MODE_RESULT:
 		//リザルトの初期化
 		if (m_pResult == NULL)
-		{
-			//リザルトのメモリを動的確保
+		{//リザルトのメモリを動的確保
 			m_pResult = new CResult;
-
 			if (m_pResult != NULL)
 			{
 				//リザルトのBGMを再生
-			//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
-
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RANKING);
 				// 初期化処理
 				m_pResult->Init();
 			}
@@ -804,14 +793,13 @@ void CManager::SetMode(MODE mode)
 		break;
 
 		case CManager::MODE_TUTORIAL:
-			//
 			if (m_pTutorial == NULL)
 			{
-				//
 				m_pTutorial = new CTutorial;
-
 				if (m_pTutorial != NULL)
-				{	//
+				{
+					//リザルトのBGMを再生
+					m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TUTORIAL);
 					m_pTutorial->Init();
 				}
 				else
@@ -832,10 +820,8 @@ void CManager::SetMode(MODE mode)
 				m_pSelect = new CSelect;
 
 				if (m_pSelect != NULL)
-				{
-					//リザルトのBGMを再生
-					//	m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RESULT);
-
+				{//リザルトのBGMを再生
+					m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_SELECT);
 					// 初期化処理
 					m_pSelect->Init();
 				}

@@ -160,8 +160,7 @@ void CCharaSelect::Update(void)
 		pos += m_move;
 
 		/* 慣性 */
-		m_move.x += (0.0f - m_move.x) * 0.3f;
-		m_move.y += (0.0f - m_move.y) * 0.3f;
+		m_move = CUtilityMath::MoveCoeffient(m_move,0.3f);
 
 		/* 移動を反映 */
 		m_apCursor2D->SetPosition(pos);
@@ -258,7 +257,7 @@ void CCharaSelect::ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed)
 	m_nCntScrool++;
 	if (m_apScene2D[type] != NULL)
 	{
-		m_apScene2D[type]->SetTex(D3DXVECTOR2(0.0f, 0.0f + (m_nCntScrool*fScroolSpeed)), 
+		m_apScene2D[type]->SetTex(D3DXVECTOR2(0.0f, 0.0f + (m_nCntScrool*fScroolSpeed)),
 									D3DXVECTOR2(1.0f, 1.0f + (m_nCntScrool*fScroolSpeed)));
 	}
 }
@@ -282,7 +281,7 @@ void CCharaSelect::SelectProduction(int SelNum)
 		/* 選択肢のテクスチャ座標の変更 */
 		m_apSelect2D[SelNum]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*SelNum), 0.5f+ TEX_CORRECTION),
 									D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*SelNum) - TEX_CORRECTION, 1.0f));
-		
+
 		if (m_fFlashAlpha[SelNum] <= 0.0f)
 		{//透明度が下がり切った
 			m_apScene2D[SelNum + 3]->SetbDraw(false);							//マスクを描画しない状況に
