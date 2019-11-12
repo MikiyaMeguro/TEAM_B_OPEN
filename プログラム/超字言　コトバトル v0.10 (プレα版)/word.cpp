@@ -24,6 +24,7 @@
 #define MAX_SIZE		(D3DXVECTOR2(12.0f, 12.0f))	// サイズの最大値
 
 #define UNITI_TIME		(40)			// 終了する時間
+#define α_COL_TIME		(15)			// 透明度変化時の時間
 //--------------------------------------------
 // コンストラクタ
 //--------------------------------------------
@@ -37,6 +38,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_bFlag = false;
 	m_bPopFlag = false;
 	m_fMoveY = 0.0f;
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //--------------------------------------------
@@ -164,7 +166,7 @@ void CWord::Update(void)
 
 		if (m_bFlag == true)
 		{	// 取得後の演出の場合
-			m_fMoveY += 1.0f;
+			m_fMoveY += 0.2f;
 			SizeScale(&m_size, 0.5f, D3DXVECTOR2(6.0f, 6.0f));
 
 			if (pPlayer[m_nNumPlayerGet] == NULL)
@@ -177,6 +179,12 @@ void CWord::Update(void)
 			}
 
 			m_nCntUninit++;	// カウントの加算
+
+			// 透明度の変化
+			if (m_nCntUninit > α_COL_TIME)
+			{
+				m_col.a -= 0.01f;
+			}
 
 			if ((m_nCntUninit % UNITI_TIME) == 0)
 			{	// 時間になったら終了する
@@ -192,9 +200,6 @@ void CWord::Update(void)
 		}
 	}
 
-
-	//ScaleSize();
-
 	// 位置更新
 	pos.x += move.x;
 	pos.y += move.y;
@@ -202,6 +207,7 @@ void CWord::Update(void)
 
 	CSceneBillBoard::Update();
 	CSceneBillBoard::SetBillboard(pos, m_size.x, m_size.y);
+	CSceneBillBoard::SetCol(m_col);
 }
 
 //=============================================================================
