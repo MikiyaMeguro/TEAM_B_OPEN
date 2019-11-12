@@ -53,6 +53,7 @@ public:
 	static bool GetCreateFlag(void) { return m_bCreateFlag; }
 
 private:
+	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMove);
 	void Rot(CSceneX::COLLISIONTYPE type);
 
 	static bool m_bCreateFlag;		// ê∂ê¨Ç∑ÇÈÉtÉâÉO
