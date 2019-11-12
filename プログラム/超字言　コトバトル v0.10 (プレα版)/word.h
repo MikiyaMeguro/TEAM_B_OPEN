@@ -40,6 +40,7 @@ private:
 
 	D3DXVECTOR3 m_size;		// サイズ
 	D3DXVECTOR3 m_sizeOld;	// サイズ(過去)
+	D3DXCOLOR m_col;		// 色
 	bool m_bFlagUninit;		// 終了するためのフラグ
 	bool m_bMoveFlag;		// 上下移動のフラグ
 	bool m_bScaleFlag;		// 拡大縮小するフラグ
