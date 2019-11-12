@@ -247,7 +247,18 @@ void  CModelBullet::SetModelScale(const D3DXVECTOR3& scale)
 //=============================================================================
 void  CModelBullet::SetModelRot(const D3DXVECTOR3& rot)
 {
-	D3DXVECTOR3& rot = GetRotation();
+	if (m_pModel != NULL)
+	{
+		m_pModel->SetRot(rot);
+	}
+}
+
+//=============================================================================
+// ”½ŽËˆ—(CModelBullet)
+//=============================================================================
+void CModelBullet::Reflect(void)
+{
+	//D3DXVECTOR3& rot = GetRotation();
 
 	////Œ»Ý‚ÌŠp“x‚É‰ž‚¶‚Äˆ—‚ð•Ï‚¦‚é
 	//if (rot.y >= 0.0f)
@@ -289,11 +300,8 @@ void  CModelBullet::SetModelRot(const D3DXVECTOR3& rot)
 	//	}
 	//}
 
-	CUtilityMath::RotateNormarizePI(&rot.y);
-	//if (m_pModel != NULL)
-	//{
-	//	m_pModel->SetRot(rot);
-	//}
+	//CUtilityMath::RotateNormarizePI(&rot.y);
+
 }
 
 //=============================================================================

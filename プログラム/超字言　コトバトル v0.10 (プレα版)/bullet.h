@@ -98,6 +98,7 @@ public:
 	void SetModelRot(const D3DXVECTOR3& rot);
 
 private:
+	void Reflect(void);
 	CSceneX* m_pModel;
 	BULLET_PROPERTY m_Prop;
 	D3DXVECTOR3 m_modelRotateOffSet;
