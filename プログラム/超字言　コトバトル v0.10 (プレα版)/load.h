@@ -26,6 +26,9 @@ class CLoad
 public:
 	typedef enum // cppのやつと数と並びを揃える
 	{
+		//--------------------------------------
+		// 文字モデル
+		//--------------------------------------
 		MODE_WALL_SMALL = 0,// 小さい壁
 		MODE_WALL_BIG,	// 大きい壁
 		MODE_GEAR,		// 歯車
@@ -33,6 +36,11 @@ public:
 		MODEL_DODAI,	// 土台
 		MODE_DUST,		// ゴミ
 		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
+		MODEL_PROPELLER,	// プロペラ
+
+		//--------------------------------------
+		// 文字モデル
+		//--------------------------------------
 		MODEL_CAR0,		// 車0
 		MODEL_MIC,		// マイク
 		MODEL_DESK,		// 机
@@ -88,7 +96,6 @@ public:
 		MODEL_MEKABU,	// めかぶ
 		MODEL_MEDIC,	// くすり
 		MODEL_KAIGA,	// かいが
-		MODEL_PROPELLER,	// プロペラ
 		MODEL_MAX
 	} MODEL;
 
@@ -104,7 +111,7 @@ public:
 	static void TextureSetting(int nModel);
 	static LPDIRECT3DTEXTURE9 *GetTexture(MODEL Model);
 
-	static void LoadFile(void);
+	static void LoadFile(char *pFileName);
 	static char *ReadLine(FILE *pFile, char *pDst);	//1行読み込み
 	static char *GetLineTop(char *pStr);			//行の先頭を取得
 	static int  PopString(char *pStr, char *pDest);	//行の最後を切り捨て
