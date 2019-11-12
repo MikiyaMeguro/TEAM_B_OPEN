@@ -23,7 +23,7 @@
 #define KNOCKBACK_MOVE_DURING		(6.0f)			// ノックバックの強度(中)
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
 #define GEAR_ROT_Y					(0.1f)			// ギアの回転量　ベース情報
-#define MODEL_MOVE_Y				(2.0f)			// モデル移動時の移動速度
+#define MODEL_MOVE_Y				(-2.0f)			// モデル移動時の移動速度
 #define AFFECTED_LANDING			(15.0f)			// モデル着地時のノックバック影響量
 
 #define ANIM_TIME					(5)				// アニメーション時間
@@ -60,7 +60,7 @@ CObject::~CObject()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model)
+CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::REALTIME realtime)
 {
 	CObject *pObject = NULL;
 
@@ -77,7 +77,7 @@ CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CS
 			pObject->Init(pos);			// 初期化
 			pObject->SetRot(rot);		// 向きの設定
 			pObject->SetCollsionType(type);	// コリジョンのタイプ設定
-			pObject->m_nRealTime = REALTIME_INITPOS;
+			pObject->m_nRealTime = realtime;
 		}
 	}
 
@@ -116,6 +116,9 @@ void CObject::Uninit(void)
 void CObject::Update(void)
 {
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+
+	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// 何もない場合は何も通さない
+
 	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
 	ModelMove(Collsiontype, pos);	// モデルの移動
@@ -221,50 +224,20 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 {
 	if (m_nRealTime == REALTIME_INITPOS)
 	{	// 移動フラグがfalse 動かない場合
-		pos.y -= MODEL_MOVE_Y;						// 移動速度
+		float fMove = 0;
 
-		if (pos.y - CSceneX::GetVtxMin().y < 0)
-		{	// 地面に着いた場合
-			if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-				Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
-			{	// ベルトコンベアの場合
-				pos.y = pos.y - CSceneX::GetVtxMin().y - 1.9f;
-				pos.x = m_posOld.x;
-				pos.z = m_posOld.z;
-				CSceneX::SetPosition(pos);
-				m_nRealTime = REALTIME_NONE;
-
-				IconCreate(Type, pos);	// アイコンの生成
-			}
-			else if (Type != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
-				Type != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
-			{	// ベルトコンベア以外の場合
-				pos.y = pos.y - CSceneX::GetVtxMin().y;
-				pos.x = m_posOld.x;
-				pos.z = m_posOld.z;
-
-				CSceneX::SetPosition(pos);
-				m_nRealTime = REALTIME_NONE;
-				if (m_bCreateFlag == false) { m_bCreateFlag = true; }
-			}
-		}
+		if (CSceneX::GetModelType() == CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y * -1; } // 土台の場合
+		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }
+		ModelMove(Type, &pos, fMove);
 
 		// 振動の処理
 		Vibration(&pos);
 
 		CSceneX::SetPosition(pos);
 	}
-	else if (m_nRealTime == REALTIME_NONE)
+	else if (m_nRealTime == REALTIME_NOTMOVE)
 	{	// 動かない場合
-		if (Type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || Type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || Type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-		{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
-			D3DXVECTOR3 rot = CSceneX::GetRot();
-
-			// 強弱の種類によって回転量を変化
-			rot.y += GEAR_ROT_Y * ((int)Type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
-
-			CSceneX::SetRot(rot);
-		}
+		Rot(Type);
 
 		if ((CTime::GetStageTime() % 30) == 0)
 		{ 
@@ -274,7 +247,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	}
 	else if (m_nRealTime == REALTIME_ENDPOS)
 	{	// 移動フラグがtrue 動く場合
-		pos.y -= MODEL_MOVE_Y;						// 移動速度
+		pos.y += MODEL_MOVE_Y;						// 移動速度
 
 		// 振動の処理
 		Vibration(&pos);
@@ -342,4 +315,70 @@ void CObject::Vibration(D3DXVECTOR3 *Pos)
 
 	Pos->x += m_fMove;
 	Pos->z += m_fMove;
+}
+
+//=============================================================================
+// 回転の処理
+//=============================================================================
+void CObject::Rot(CSceneX::COLLISIONTYPE type)
+{
+	if (type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+	{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
+		D3DXVECTOR3 rot = CSceneX::GetRot();
+
+		// 強弱の種類によって回転量を変化
+		rot.y += GEAR_ROT_Y * ((int)type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
+
+		CSceneX::SetRot(rot);
+	}
+}
+
+//=============================================================================
+// モデル移動の処理
+//=============================================================================
+void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMove)
+{
+	pos->y += fMove;						// 移動速度
+
+	if (fMove < 0)
+	{
+		if (pos->y - CSceneX::GetVtxMin().y < 0)
+		{	// 地面に着いた場合
+			if (Type == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+				Type == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT || Type == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
+			{	// ベルトコンベアの場合
+				pos->y = pos->y - CSceneX::GetVtxMin().y - 1.9f;
+				pos->x = m_posOld.x;
+				pos->z = m_posOld.z;
+				CSceneX::SetPosition(*pos);
+				m_nRealTime = REALTIME_NOTMOVE;
+
+				IconCreate(Type, *pos);	// アイコンの生成
+			}
+			else if (Type != CSceneX::COLLSIONTYPE_CONVEYOR_FRONT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_BACK &&
+				Type != CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT && Type != CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
+			{	// ベルトコンベア以外の場合
+				pos->y = pos->y - CSceneX::GetVtxMin().y;
+				pos->x = m_posOld.x;
+				pos->z = m_posOld.z;
+
+				CSceneX::SetPosition(*pos);
+				m_nRealTime = REALTIME_NOTMOVE;
+			}
+		}
+	}
+	else if (fMove >= 0)
+	{
+		if (pos->y > 0)
+		{
+			pos->y = pos->y - CSceneX::GetVtxMin().y;
+			pos->x = m_posOld.x;
+			pos->z = m_posOld.z;
+
+			CSceneX::SetPosition(*pos);
+			m_nRealTime = REALTIME_NOTMOVE;
+			if (m_bCreateFlag == false) { m_bCreateFlag = true; }
+		}
+	}
+
 }

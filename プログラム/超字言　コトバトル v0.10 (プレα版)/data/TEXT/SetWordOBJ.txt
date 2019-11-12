@@ -1,0 +1,74 @@
+#============================================================
+#
+# [モデル配置ツール]スクリプトファイル [data\TEXT\SetWordOBJ.txt]
+#  Author : MIKIYA MEGURO
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------
+#         モデル数 ※プログラム内でも変更してください
+#------------------------------------------------------------
+NUM_MODEL = 55					# 読み込んだモデルの最大番号をいれてください
+
+#------------------------------------------------------------
+#    モデルファイル名  ※プログラム内でも変更してください
+#------------------------------------------------------------
+MODEL_FILENAME = data/MODEL/Car.x"					#0 車
+MODEL_FILENAME = data/MODEL/Mic.x"					#1 まいく
+MODEL_FILENAME = data/MODEL/Desk.x"					#2 (机)
+MODEL_FILENAME = data/MODEL/Pulin.x"				#3 プリン
+MODEL_FILENAME = data/MODEL/Knife.x"				#4 ナイフ
+MODEL_FILENAME = data/MODEL/apple.x"				#5 リンゴ
+MODEL_FILENAME = data/MODEL/Palette.x"				#6 絵具
+MODEL_FILENAME = data/MODEL/Wheel.x"				#7 タイヤ
+MODEL_FILENAME = data/MODEL/Taico.x"				#8 太鼓
+MODEL_FILENAME = data/MODEL/coin.x"					#9 コイン
+MODEL_FILENAME = data/MODEL/Suika.x"				#10 すいか
+MODEL_FILENAME = data/MODEL/Tarai.x"				#12 たらい
+MODEL_FILENAME = data/MODEL/pot.x"					#13 やかん
+MODEL_FILENAME = data/MODEL/Ikari.x"				#14 いかり
+MODEL_FILENAME = data/MODEL/Ikada.x"				#15 いかだ
+MODEL_FILENAME = data/MODEL/saihu.x"				#16 財布
+MODEL_FILENAME = data/MODEL/Karuta.x"				#17 かるた
+MODEL_FILENAME = data/MODEL/Camera.x"				#18 かめら
+MODEL_FILENAME = data/MODEL/Twig.x"					#19 こえだ
+MODEL_FILENAME = data/MODEL/Strawberry.x"			#20 イチゴ
+MODEL_FILENAME = data/MODEL/Egg.x"					#21たまご
+MODEL_FILENAME = data/MODEL/Lance.x"				#22 ランス
+MODEL_FILENAME = data/MODEL/flowerbed.x"			#23 かだん
+MODEL_FILENAME = data/MODEL/Katana.x"				#24 刀
+MODEL_FILENAME = data/MODEL/log.x"					#25 まるた
+MODEL_FILENAME = data/MODEL/Ice.x"					#26 つらら
+MODEL_FILENAME = data/MODEL/Dango.x"				#27 だんご
+MODEL_FILENAME = data/MODEL/Makura.x"				#28 まくら
+MODEL_FILENAME = data/MODEL/Kunai.x"				#29 くない
+MODEL_FILENAME = data/MODEL/Fish.x"					#30 さかな
+MODEL_FILENAME = data/MODEL/Volcano.x"				#31 かざん
+MODEL_FILENAME = data/MODEL/Nazca.x"				#32 なすか
+MODEL_FILENAME = data/MODEL/Tank.x"					#33 たんく
+MODEL_FILENAME = data/MODEL/Yagura.x"				#34 やぐら
+MODEL_FILENAME = data/MODEL/Chair.x"				#35 ざいす
+MODEL_FILENAME = data/MODEL/conga.x"				#36 こんが
+MODEL_FILENAME = data/MODEL/Dice.x"					#37 だいす
+MODEL_FILENAME = data/MODEL/TreasureChest.x"		#38 たから
+MODEL_FILENAME = data/MODEL/Grass.x"				#39 ガラス
+MODEL_FILENAME = data/MODEL/stretcher.x"			#40 たんか
+MODEL_FILENAME = data/MODEL/Ring.x"					#41 リング
+MODEL_FILENAME = data/MODEL/kusaya.x"				#42 くさや
+MODEL_FILENAME = data/MODEL/sazae.x"				#43 さざえ
+MODEL_FILENAME = data/MODEL/Tile.x"					#44 タイル
+MODEL_FILENAME = data/MODEL/Rice.x"					#45 ライス
+MODEL_FILENAME = data/MODEL/Comic.x"				#46 マンガ
+MODEL_FILENAME = data/MODEL/Fuigo.x"				#47 ふいご
+MODEL_FILENAME = data/MODEL/Namako.x"				#48 なまこ
+MODEL_FILENAME = data/MODEL/Zugai.x"				#49 ずがい
+MODEL_FILENAME = data/MODEL/Seaweed.x"				#50 こんぶ
+MODEL_FILENAME = data/MODEL/Laitc.x"				#51 らいち
+MODEL_FILENAME = data/MODEL/Mask.x"					#52 かめん
+MODEL_FILENAME = data/MODEL/Mekabu.x"				#53 めかぶ
+MODEL_FILENAME = data/MODEL/Medic.x"				#54 くすり
+MODEL_FILENAME = data/MODEL/Kaiga.x"				#55 かいが
+
+
+END_SCRIPT		# この行は絶対消さないこと！
