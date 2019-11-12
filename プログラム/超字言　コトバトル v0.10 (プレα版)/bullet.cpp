@@ -12,7 +12,7 @@
 #include "sceneX.h"
 #include "game.h"
 //=============================================================================
-// コンストラクタ＆デストラクタ	(C3DBullet)
+// コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
 C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 {
@@ -25,7 +25,7 @@ C3DBullet::~C3DBullet()
 }
 
 //=============================================================================
-// 設定処理(C3DBullet)
+// 設定処理(CBulletBase)
 //=============================================================================
 void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nID)
 {
@@ -36,12 +36,11 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 
 	m_nID = (nID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
 
-	//m_fKnockBack = 7.0f;
-	m_fCollisionRadius = 10.0f;	//判定サイズを設定
+	m_fKnockBack = 7.0f;
 }
 
 //=============================================================================
-// 初期化処理(C3DBullet)
+// 初期化処理(CBulletBase)
 //=============================================================================
 HRESULT C3DBullet::Init(void)
 {
@@ -51,7 +50,7 @@ HRESULT C3DBullet::Init(void)
 }
 
 //=============================================================================
-// 終了処理(C3DBullet)
+// 終了処理(CBulletBase)
 //=============================================================================
 void C3DBullet::Uninit(void)
 {
@@ -61,11 +60,10 @@ void C3DBullet::Uninit(void)
 }
 
 //=============================================================================
-// 更新処理(C3DBullet)
+// 更新処理(CBulletBase)
 //=============================================================================
 void C3DBullet::Update(void)
 {
-	m_posOld = m_pos;
 	//マトリックスを使用して移動量を求める
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, m_fMove);
 
@@ -78,62 +76,26 @@ void C3DBullet::Update(void)
 	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &Mtxrot);
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
-	//メッシュフィールド(床)との当たり判定
+
+
+	//メッシュフィールドとの当たり判定
 	CMeshField *pMesh = CGame::GetMeshField();
 
 	float fHeight = pMesh->GetHeight(m_pos + move);
-	if ((m_pos.y - m_fCollisionRadius) < fHeight)
+	if (m_pos.y < fHeight)
 	{
 		move.y = 0.0f;
 	}
 
-	m_MoveResult = move;
 	m_pos += move;
 }
 
 //=============================================================================
-// 描画処理(C3DBullet)
+// 描画処理(CBulletBase)
 //=============================================================================
 void C3DBullet::Draw(void)
 {
 
-}
-
-//=============================================================================
-// 画面内オブジェクトとの判定処理(C3DBullet)
-//=============================================================================
-bool C3DBullet::CollisionObject(void)
-{
-	CScene *pScene = NULL;
-
-	// 先頭のオブジェクトを取得
-	pScene = CScene::GetTop(SCENEX_PRIORITY);
-
-	while (pScene != NULL)
-	{// 優先順位が3のオブジェクトを1つ1つ確かめる
-	 // 処理の最中に消える可能性があるから先に記録しておく
-		CScene *pSceneNext = pScene->GetNext();
-
-		if (pScene->GetDeath() == false)
-		{// 死亡フラグが立っていないもの
-			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
-			{// オブジェクトの種類を確かめる
-				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
-				{
-					if (pSceneX->Collision(&m_pos, &m_posOld, &m_MoveResult, D3DXVECTOR3(m_fCollisionRadius, m_fCollisionRadius, m_fCollisionRadius)))
-					{
-						return true;
-					}
-				}
-			}
-		}
-
-		// 次のシーンに進める
-		pScene = pSceneNext;
-	}
-
-	return false;
 }
 
 //=============================================================================
@@ -190,7 +152,6 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		m_fKnockBack = 20.0f;
 		break;
 	case TYPE_REFLECT:
-		fSpeed = 5.0f;
 		m_fKnockBack = 8.0f;
 		break;
 	default:
@@ -250,18 +211,8 @@ void CModelBullet::Update(void)
 
 	if (m_Prop != TYPE_STINGER)
 	{//貫通タイプでなければオブジェクトとの当たり判定をチェックする
-		if (C3DBullet::CollisionObject())
-		{//当たっていたら
-			//反射タイプなら当たった後に角度をY軸で反転させる
-			if (m_Prop == TYPE_REFLECT)
-			{
-				Reflect();
-			}
-			else
-			{
-				Uninit();
-			}
-		}
+
+	 //反射タイプなら当たった後に角度をY軸で反転させる
 	}
 
 
@@ -292,9 +243,9 @@ void  CModelBullet::SetModelScale(const D3DXVECTOR3& scale)
 }
 
 //=============================================================================
-// 反射処理(CModelBullet)
+// モデルの向き設定処理(CModelBullet)
 //=============================================================================
-void CModelBullet::Reflect(void)
+void  CModelBullet::SetModelRot(const D3DXVECTOR3& rot)
 {
 	D3DXVECTOR3& rot = GetRotation();
 
@@ -339,7 +290,12 @@ void CModelBullet::Reflect(void)
 	//}
 
 	CUtilityMath::RotateNormarizePI(&rot.y);
+	//if (m_pModel != NULL)
+	//{
+	//	m_pModel->SetRot(rot);
+	//}
 }
+
 //=============================================================================
 //
 // 文字弾処理 (CWordBullet)[bullet.cpp]

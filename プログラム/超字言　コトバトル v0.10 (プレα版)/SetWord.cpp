@@ -7,6 +7,7 @@
 #include "fade.h"
 #include "word.h"
 #include "word_manager.h"
+#include "sceneBillboard.h"
 #include "time.h"
 #include <stdlib.h>		
 #include <time.h>		
@@ -263,6 +264,7 @@ void CSetWord::LoadFile(char *pFileName)
 				{
 					m_pWordPos = new Word_Pos[m_nNum];
 				}
+
 				//CWordManager::SetWordAnswerNum(nAnswerNum);
 			}
 
@@ -270,7 +272,7 @@ void CSetWord::LoadFile(char *pFileName)
 			if (memcmp(pStrcur, "MODELSET", strlen("MODELSET")) == 0)
 			{
 				//“ªo‚µ
-				pStrcur += strlen("MODELSET");
+				pStrcur += strlen("MODESET");
 				//•¶š—ñ‚Ìæ“ª‚ğİ’è
 				pStrcur = ReadLine(pFile, &aLine[0]);
 				//ˆÊ’u
