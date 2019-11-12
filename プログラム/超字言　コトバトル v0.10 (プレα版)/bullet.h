@@ -93,7 +93,7 @@ public:
 	~CModelBullet();
 	static CModelBullet* Create(void);
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID);
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID,D3DXVECTOR3 RotateOffset = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -105,6 +105,7 @@ private:
 	void Reflect(void);
 	CSceneX* m_pModel;
 	BULLET_PROPERTY m_Prop;
+	D3DXVECTOR3 m_modelRotateOffSet;
 };
 
 //•¶Žš’eƒNƒ‰ƒX

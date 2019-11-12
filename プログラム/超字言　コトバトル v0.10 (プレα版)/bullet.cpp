@@ -169,7 +169,7 @@ CModelBullet* CModelBullet::Create(void)
 //=============================================================================
 // 設定処理(CModelBullet)
 //=============================================================================
-void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID)
+void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID, D3DXVECTOR3 RotateOffset)
 {
 	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
 	m_Prop = type;
@@ -198,7 +198,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		m_fKnockBack = 6.0f;
 		break;
 	}
-
+	m_modelRotateOffSet = RotateOffset;
 	C3DBullet::Set(pos,
 		rot,
 		fSpeed,
@@ -240,7 +240,10 @@ void CModelBullet::Update(void)
 	if (m_pModel != NULL)
 	{
 		m_pModel->SetPosition(GetPosition());
-		m_pModel->SetRot(GetRotation());
+
+		D3DXVECTOR3 Rotate = m_modelRotateOffSet + GetRotation();
+		CUtilityMath::RotateNormarizePI(&Rotate);
+		m_pModel->SetRot(Rotate);
 	}
 	int& nLife = GetLife();
 	nLife--;
@@ -295,45 +298,45 @@ void CModelBullet::Reflect(void)
 {
 	D3DXVECTOR3& rot = GetRotation();
 
-	//現在の角度に応じて処理を変える
-	if (rot.y >= 0.0f)
-	{
-		if (rot.y <= D3DX_PI * 0.25f)
-		{//パターン①(0.0f~D3DX_PI * 0.25f)
-			rot.y += D3DX_PI * -0.5f;
-		}
-		else if (rot.y <= D3DX_PI * 0.5f)
-		{//パターン②(D3DX_PI * 0.25f~D3DX_PI * 0.50f)
-			rot.y += -D3DX_PI;
-		}
-		else if (rot.y <= D3DX_PI * 0.75f)
-		{//パターン③(D3DX_PI * 0.50f~D3DX_PI * 0.75f)
-			rot.y += D3DX_PI * -0.5f;
-		}
-		else
-		{//パターン④(D3DX_PI * 0.75f~D3DX_PI)
-			rot.y += -D3DX_PI;
-		}
-	}
-	else
-	{
-		if (rot.y >= -D3DX_PI * 0.25f)
-		{//パターン⑤(-D3DX_PI * 0.25f~ 0.0f)
-			rot.y += D3DX_PI * 0.5f;
-		}
-		else if (rot.y >= -D3DX_PI * 0.5f)
-		{//パターン⑥(-D3DX_PI * 0.50f~ -D3DX_PI * 0.25f)
-			rot.y += D3DX_PI;
-		}
-		else if (rot.y >= -D3DX_PI * 0.75f)
-		{//パターン⑦(-D3DX_PI * 0.75f~ -D3DX_PI * 0.50f)
-			rot.y += D3DX_PI * 0.5f;
-		}
-		else
-		{//パターン⑧(-D3DX_PI * 1.0f~ -D3DX_PI * 0.75f)
-			rot.y += D3DX_PI;
-		}
-	}
+	////現在の角度に応じて処理を変える
+	//if (rot.y >= 0.0f)
+	//{
+	//	if (rot.y <= D3DX_PI * 0.25f)
+	//	{//パターン①(0.0f~D3DX_PI * 0.25f)
+	//		rot.y += D3DX_PI * -0.5f;
+	//	}
+	//	else if (rot.y <= D3DX_PI * 0.5f)
+	//	{//パターン②(D3DX_PI * 0.25f~D3DX_PI * 0.50f)
+	//		rot.y += -D3DX_PI;
+	//	}
+	//	else if (rot.y <= D3DX_PI * 0.75f)
+	//	{//パターン③(D3DX_PI * 0.50f~D3DX_PI * 0.75f)
+	//		rot.y += D3DX_PI * -0.5f;
+	//	}
+	//	else
+	//	{//パターン④(D3DX_PI * 0.75f~D3DX_PI)
+	//		rot.y += -D3DX_PI;
+	//	}
+	//}
+	//else
+	//{
+	//	if (rot.y >= -D3DX_PI * 0.25f)
+	//	{//パターン⑤(-D3DX_PI * 0.25f~ 0.0f)
+	//		rot.y += D3DX_PI * 0.5f;
+	//	}
+	//	else if (rot.y >= -D3DX_PI * 0.5f)
+	//	{//パターン⑥(-D3DX_PI * 0.50f~ -D3DX_PI * 0.25f)
+	//		rot.y += D3DX_PI;
+	//	}
+	//	else if (rot.y >= -D3DX_PI * 0.75f)
+	//	{//パターン⑦(-D3DX_PI * 0.75f~ -D3DX_PI * 0.50f)
+	//		rot.y += D3DX_PI * 0.5f;
+	//	}
+	//	else
+	//	{//パターン⑧(-D3DX_PI * 1.0f~ -D3DX_PI * 0.75f)
+	//		rot.y += D3DX_PI;
+	//	}
+	//}
 
 	CUtilityMath::RotateNormarizePI(&rot.y);
 }
