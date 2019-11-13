@@ -25,6 +25,7 @@
 #define TIME_POS_1P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 70.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
 #define TIME_POS_3P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 140.0f, 440.0f, 0.0f))	// 制限時間の位置(3Pだけの場合)
+#define TIME_POS_4P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 380.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define WAIT_TIME_END		(180)							// 待ち時間
 //=============================================================================
 //	静的メンバ変数
@@ -55,6 +56,7 @@ CTime *CTime::Create(int nNumPlayer)
 			if (nNumPlayer == 2 && m_nTimeNumCount == 0) { pTime->m_pos = TIME_POS_1P; }
 			else if (nNumPlayer == 2 && m_nTimeNumCount == 1) { pTime->m_pos = TIME_POS_2P; }
 			if (nNumPlayer == 3) { pTime->m_pos = TIME_POS_3P; }
+			if (nNumPlayer == 4) { pTime->m_pos = TIME_POS_4P; }
 			pTime->m_nNumPlayer = nNumPlayer;
 
 			//初期化処理
@@ -110,6 +112,12 @@ HRESULT CTime::Init(void)
 	if (m_nNumPlayer == 3)
 	{
 		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 100.0f, 420.0f, 0.0f), "BG_FREAME", 5);
+		pBg->SetWidthHeight(80.0f, 60.0f);
+		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	if (m_nNumPlayer == 4)
+	{
+		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 370.0f, 0.0f), "BG_FREAME", 5);
 		pBg->SetWidthHeight(80.0f, 60.0f);
 		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
@@ -174,6 +182,20 @@ HRESULT CTime::Init(void)
 
 		// Timeのロゴ
 		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 100.0f, 405.0f, 0.0f), "TIME", 5);
+		pLogo->SetWidthHeight(40.0f, 20.0f);
+		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+	}
+	if (m_nNumPlayer == 4)
+	{
+		if (m_pColon == NULL)
+		{
+			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 380.0f, 0.0f), "COLON", 5);
+			m_pColon->SetWidthHeight(15.0f, 20.0f);
+			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+
+		// Timeのロゴ
+		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 350.0f, 0.0f), "TIME", 5);
 		pLogo->SetWidthHeight(40.0f, 20.0f);
 		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	}

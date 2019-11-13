@@ -69,7 +69,7 @@ HRESULT CSetWord::Init()
 	m_AnswerNum = CWordManager::GetAnswerNum();
 	m_nAnswer = CWordManager::GetAnswerDataNum();
 	m_nRandAnswerNum = rand() % m_nAnswer;
-
+	m_bCreate = false;
 	return S_OK;
 }
 
@@ -96,7 +96,6 @@ void CSetWord::Update(void)
 	WordUninit();	// 文字の終了フラグが立っている場合 終了処理へ
 
 	PopWord();		// 文字の出現
-		
 }
 
 //=============================================================================
@@ -331,7 +330,7 @@ void CSetWord::LoadFile(char *pFileName)
 	//ファイルを閉じる
 	fclose(pFile);
 
-	WordCreate();	// 文字の生成
+	//WordCreate();	// 文字の生成
 }
 
 

@@ -226,8 +226,9 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	{	// ˆÚ“®ƒtƒ‰ƒO‚ªfalse “®‚©‚È‚¢ê‡
 		float fMove = 0;
 
+		// ‚»‚ê‚¼‚êˆÚ“®’l‚ðŒˆ‚ß‚é
 		if (CSceneX::GetModelType() == CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
-		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }
+		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }	// “y‘äˆÈŠO
 
 		// U“®‚Ìˆ—
 		Vibration(&pos);
@@ -239,10 +240,9 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	{	// “®‚©‚È‚¢ê‡
 		Rot(Type);
 
-		if ((CTime::GetStageTime() % 30) == 0)
+		if (((CTime::GetStageTime() % 30) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{ 
 			m_nRealTime = REALTIME_ENDPOS;
-			if (m_bCreateFlag == true) { m_bCreateFlag = false; }
 		}
 	}
 	else if (m_nRealTime == REALTIME_ENDPOS)
@@ -256,6 +256,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 
 		if (pos.y + CSceneX::GetVtxMax().y < 0)
 		{	// ’n–Ê‚æ‚è‰º‚Ìê‡
+			if (m_bCreateFlag == true) { m_bCreateFlag = false; }
 			Uninit();
 			return;
 		}
@@ -377,7 +378,8 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMo
 
 			CSceneX::SetPosition(*pos);
 			m_nRealTime = REALTIME_NOTMOVE;
-			if (m_bCreateFlag == false) { m_bCreateFlag = true; }
+			if (m_bCreateFlag == false) { m_bCreateFlag = true;
+			CManager::GetGame()->SetCreateWord();}
 		}
 	}
 

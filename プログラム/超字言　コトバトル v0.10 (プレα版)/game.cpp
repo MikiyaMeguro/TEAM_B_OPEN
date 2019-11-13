@@ -85,6 +85,7 @@ CGame::~CGame()
 //=============================================================================
 void CGame::Init(void)
 {
+	m_nChangeNum = 0;
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
@@ -143,6 +144,7 @@ void CGame::Init(void)
 	if (m_pWordCreate == NULL)
 	{
 		m_pWordCreate = CSetWord::Create();
+		//*SetCreateWord();
 		//m_pWordCreate->LoadFile(m_pcStageNameWord[0]);
 	}
 
@@ -166,7 +168,7 @@ void CGame::Init(void)
 
 	CSetObject::Create();
 
-	SetStage(0);		// ステージ生成
+	SetStage(m_nChangeNum);		// ステージ生成
 
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
 	{
@@ -613,8 +615,16 @@ void CGame::SetStage(int nCntState)
 	if (nCntState < MAX_STAGE)
 	{
 		CSetObject::LoadFile(m_pcStageName[nCntState]);
-		if (m_pWordCreate != NULL && CObject::GetCreateFlag() == false) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
+		m_nChangeNum = nCntState;
 	}
+}
+
+//=============================================================================
+// ステージ生成の処理
+//=============================================================================
+void CGame::SetCreateWord(void)
+{
+	if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[m_nChangeNum]); }
 }
 //=============================================================================
 // 文字管理の処理

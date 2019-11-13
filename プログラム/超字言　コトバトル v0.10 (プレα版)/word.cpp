@@ -209,9 +209,10 @@ void CWord::Update(void)
 			}
 		}
 
-		if ((CTime::GetStageTime() % 30) == 0)
+		if (((CTime::GetStageTime() % 30) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
-			m_bFlagUninit = true;
+			Uninit();
+			return;
 		}
 	}
 
