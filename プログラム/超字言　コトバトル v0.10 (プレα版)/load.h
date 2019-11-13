@@ -96,6 +96,15 @@ public:
 		MODEL_MEKABU,	// ‚ß‚©‚Ô
 		MODEL_MEDIC,	// ‚­‚·‚è
 		MODEL_KAIGA,	// ‚©‚¢‚ª
+
+		MODEL_ikura,	// ‚¢‚­‚ç
+		MODEL_menko,	// ‚ß‚ñ‚±
+		MODEL_Mace,		// ‚ß‚¢‚·
+		MODEL_Sarai,	// ‚³‚ç‚¢
+		MODEL_INK,		// ƒCƒ“ƒN
+		MODEL_Zail,		// ‚´‚¢‚é
+		MODEL_Inari,	// ‚¢‚È‚è
+		MODE_gakuhu,	// Šy•ˆ
 		MODEL_MAX
 	} MODEL;
 

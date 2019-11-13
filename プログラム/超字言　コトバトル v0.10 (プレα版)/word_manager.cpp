@@ -261,6 +261,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
 					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType] ,nID);
 					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID);
+					pModel->SetModelRot(m_rot[nType]);
 					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
 				}
 			}

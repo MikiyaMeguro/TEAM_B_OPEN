@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 56			# モデル数
+	ANSWERNUM = 64			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名 
@@ -66,7 +66,16 @@ SCRIPT			# この行は絶対消さないこと！
 	# 52 : めかぶ
 	# 53 : くすり
 	# 54 : かいが
-	# 56 : マスク = 51番の仮面と同じ
+	# 55 : マスク = 51番の仮面と同じ
+	
+	# 56 : いくら
+	# 57 : めんこ
+	# 58 : めいす
+	# 59 : さらい
+	# 60 : いんく
+	# 61 : ざいる
+	# 62 : いなり
+	# 63 : がくふ
 
 #------------------------------------------------------------
 #                      文字の情報
@@ -573,6 +582,79 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 30.0 12.0 7.0
 	ANSWERMODEL = 51			# 答えのモデル
+END_MODELSET
+
+
+MODELSET
+	TYPE = 56					# いくら
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 4				# 弾の種類
+	ANSWER = 1.0 7.0 38.0
+	ANSWERMODEL = 56			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 57					# めんこ
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 33.0 45.0 9.0
+	ANSWERMODEL = 57			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 58					# めいす
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 1				# 弾の種類
+	ANSWER = 33.0 1.0 12.0
+	ANSWERMODEL = 58			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 59					# さらい
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 10.0 38.0 1.0
+	ANSWERMODEL = 59			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 60					# いんく
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 1.0 45.0 7.0
+	ANSWERMODEL = 60			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 61					# ざいる
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 10.0 1.0 40.0
+	ANSWERMODEL = 61			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 62					# いなり
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 1.0 20.0 39.0
+	ANSWERMODEL = 62			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 63					# がくふ
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 5.0 7.0 27.0
+	ANSWERMODEL = 63			# 答えのモデル
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
