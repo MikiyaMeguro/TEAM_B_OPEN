@@ -50,6 +50,7 @@ private:
 	int m_nNumPlayerGet;	// 取得された時のプレイヤーの番号
 	float m_fDistance[MAX_PLAYER];	// プレイヤーとの距離
 	float m_fMoveY;			// 移動距離
+	float m_colA;			// 透明度
 
 	int		   m_nNum;
 	int		   m_nCntUninit;	// 終了するまでのカウント

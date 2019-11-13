@@ -25,7 +25,7 @@
 
 #define UNITI_TIME		(40)			// 終了する時間
 #define α_COL_TIME		(15)			// 透明度変化時の時間
-#define ANIM_FRAME		(10)				// アニメーションカウンター
+#define ANIM_FRAME		(7)				// アニメーションカウンター
 #define PATTERN_NUM		(10)			// パターン数
 //--------------------------------------------
 // コンストラクタ
@@ -44,6 +44,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_pBillBoard = NULL;
 	m_nAnim = 0;
 	m_nPatten = 0;
+	m_colA = 0.4f;
 }
 
 //--------------------------------------------
@@ -88,11 +89,12 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 	CSceneBillBoard::Init(pos);
 	CSceneBillBoard::SetObjType(CScene::OBJTYPE_WORD);
 
-	/*if (m_pBillBoard == NULL)
+	if (m_pBillBoard == NULL)
 	{
-		m_pBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 10.0f, 30.0f, "文字エフェクト");
+		m_pBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 20.0f, 30.0f, "文字エフェクト");
+		if (m_pBillBoard != NULL) { m_pBillBoard->SetTexture(5, 10, 1, 1); }
 		m_pBillBoard->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
-	}*/
+	}
 
 	return S_OK;
 }
@@ -213,13 +215,6 @@ void CWord::Update(void)
 		}
 	}
 
-	/*if ((m_nAnim % ANIM_FRAME) == 0)
-	{
-		m_nPatten++;
-		if (m_pBillBoard != NULL) { m_pBillBoard->SetTexture(m_nPatten, 10, 1, 1); }
-	}
-	m_nAnim++;*/
-
 	// 位置更新
 	pos.x += move.x;
 	pos.y += move.y;
@@ -251,19 +246,29 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 	if (m_bMoveFlag == true)
 	{
 		pos.y += FLOATING_MOVE;
+		m_colA += 0.01f;
+		if (m_colA > 1.0f) { 
+			m_colA = 1.0f; }
 		if (pos.y > POP_POS_Y)
 		{	// 位置が指定した場所より大きい場合
 			m_bMoveFlag = false;
+			//m_colA = 1.0f;
 		}
 	}
 	else if (m_bMoveFlag == false)
 	{
 		pos.y -= FLOATING_MOVE;
+		m_colA -= 0.01f;
+		if (m_colA < 0.38f) { 
+			m_colA = 0.38f; }
 		if (pos.y < POP_POS_Y_SMALL)
 		{	// 位置が指定した場所より小さい場合
 			m_bMoveFlag = true;
+			//m_colA = 0.2f;
 		}
 	}
+
+	if (m_pBillBoard != NULL) { m_pBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, m_colA)); }
 
 	return pos;
 }
