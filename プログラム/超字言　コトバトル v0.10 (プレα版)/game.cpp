@@ -143,7 +143,7 @@ void CGame::Init(void)
 	if (m_pWordCreate == NULL)
 	{
 		m_pWordCreate = CSetWord::Create();
-		m_pWordCreate->LoadFile(m_pcStageNameWord[0]);
+		//m_pWordCreate->LoadFile(m_pcStageNameWord[0]);
 	}
 
 	// テストオブジェクト
@@ -613,7 +613,7 @@ void CGame::SetStage(int nCntState)
 	if (nCntState < MAX_STAGE)
 	{
 		CSetObject::LoadFile(m_pcStageName[nCntState]);
-		if (m_pWordCreate != NULL && CObject::GetCreateFlag() == true) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
+		if (m_pWordCreate != NULL && CObject::GetCreateFlag() == false) { m_pWordCreate->LoadFile(m_pcStageNameWord[nCntState]); }
 	}
 }
 //=============================================================================
