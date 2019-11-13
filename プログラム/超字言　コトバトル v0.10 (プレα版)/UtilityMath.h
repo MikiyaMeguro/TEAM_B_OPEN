@@ -169,5 +169,8 @@ public:
 	static D3DXVECTOR3 MoveCoeffient(D3DXVECTOR3& value,const float& coeffient);
 	static float Round_n(float& fValue,const int nRound);
 	static D3DXVECTOR3 EulerToQuaternion(const D3DXQUATERNION& quat);
+
+private:
+	CUtilityMath();
 };
 #endif // !_UTILITY_MATH_H_
