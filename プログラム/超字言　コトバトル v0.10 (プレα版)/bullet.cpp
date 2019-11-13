@@ -18,6 +18,7 @@ C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 {
 	m_Type = TYPE_NONE;
 	m_fKnockBack = 0.0f;
+	m_MoveResult = D3DXVECTOR3(0.0f,0.0f,0.0f);
 }
 C3DBullet::~C3DBullet()
 {
@@ -36,6 +37,7 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 
 	m_nID = (nID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
 
+	m_fCollisionRadius = 10.0f;
 	m_fKnockBack = 7.0f;
 }
 
@@ -64,6 +66,8 @@ void C3DBullet::Uninit(void)
 //=============================================================================
 void C3DBullet::Update(void)
 {
+	m_posOld = m_pos;
+
 	//マトリックスを使用して移動量を求める
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, m_fMove);
 
@@ -86,7 +90,7 @@ void C3DBullet::Update(void)
 	{
 		move.y = 0.0f;
 	}
-
+	m_MoveResult = move;		//求めた差分を格納
 	m_pos += move;
 }
 
@@ -96,6 +100,79 @@ void C3DBullet::Update(void)
 void C3DBullet::Draw(void)
 {
 
+}
+
+//=============================================================================
+// オブジェクトとの当たり判定処理(CBulletBase)
+//=============================================================================
+bool C3DBullet::CollisionObject(CManager::DIRECTION* dir)
+{
+	CScene* pScene = NULL;
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(SCENEX_PRIORITY);
+	while (pScene != NULL)
+	{// 優先順位が3のオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+
+		if (pScene->GetDeath() == false)
+		{// 死亡フラグが立っていないもの
+			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+			{// オブジェクトの種類を確かめる
+				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+				if (pSceneX->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
+				{
+					D3DXVECTOR3 vtxMin = pSceneX->GetVtxMin();
+					D3DXVECTOR3 vtxMax = pSceneX->GetVtxMax();
+					D3DXVECTOR3 OBJpos = pSceneX->GetPosition();
+
+					if (m_pos.y <= OBJpos.y + vtxMax.y &&m_pos.y + m_fCollisionRadius >= OBJpos.y + vtxMax.y ||
+						m_pos.y + m_fCollisionRadius >= OBJpos.y + vtxMin.y &&m_pos.y <= OBJpos.y + vtxMin.y ||
+						m_pos.y + m_fCollisionRadius <= OBJpos.y + vtxMax.y  && m_pos.y >= OBJpos.y + vtxMin.y)
+					{//ｙが範囲内なら
+						if (m_pos.z - m_fCollisionRadius <= OBJpos.z + vtxMax.z &&
+							m_pos.z + m_fCollisionRadius >= OBJpos.z + vtxMin.z)
+						{// zの範囲の中
+							if (m_posOld.x + m_fCollisionRadius <= OBJpos.x + vtxMin.x
+								&& m_pos.x + m_fCollisionRadius > OBJpos.x + vtxMin.x)
+							{// X座標の中に左から入った
+								*dir = CManager::DIR_LEFT_WEST;
+								return true;
+							}
+							else if (m_posOld.x - m_fCollisionRadius >= OBJpos.x + vtxMax.x
+								   && m_pos.x - m_fCollisionRadius < OBJpos.x + vtxMax.x)
+							{// X座標の中に右から入った
+								*dir = CManager::DIR_RIGHT_EAST;
+								return true;
+							}
+						}
+
+						if (m_pos.x - m_fCollisionRadius <= OBJpos.x + vtxMax.x &&
+							m_pos.x + m_fCollisionRadius >= OBJpos.x + vtxMin.x)
+						{// xの範囲の中
+							if (m_posOld.z + m_fCollisionRadius <= OBJpos.z + vtxMin.z
+								&& m_pos.z + m_fCollisionRadius > OBJpos.z + vtxMin.z)
+							{// Z座標の中に手前から入った
+								*dir = CManager::DIR_DOWN_SOUTH;
+								return true;
+							}
+							else if (m_posOld.z - m_fCollisionRadius >= OBJpos.z + vtxMax.z
+								&& m_pos.z - m_fCollisionRadius < OBJpos.z + vtxMax.z)
+							{// Z座標の中に後ろから入った
+								*dir = CManager::DIR_UP_NORTH;
+								return true;
+							}
+						}
+
+					}
+				}
+			}
+		}
+
+		pScene = pSceneNext;	//記録した情報を探索するためにポインタをわたす
+	}
+
+	return false;
 }
 
 //=============================================================================
@@ -256,51 +333,23 @@ void  CModelBullet::SetModelRot(const D3DXVECTOR3& rot)
 //=============================================================================
 // 反射処理(CModelBullet)
 //=============================================================================
-void CModelBullet::Reflect(void)
+void CModelBullet::Reflect(CManager::DIRECTION dir)
 {
-	//D3DXVECTOR3& rot = GetRotation();
+	D3DXVECTOR3& rot = GetRotation();
 
-	////現在の角度に応じて処理を変える
-	//if (rot.y >= 0.0f)
-	//{
-	//	if (rot.y <= D3DX_PI * 0.25f)
-	//	{//パターン①(0.0f~D3DX_PI * 0.25f)
-	//		rot.y += D3DX_PI * -0.5f;
-	//	}
-	//	else if (rot.y <= D3DX_PI * 0.5f)
-	//	{//パターン②(D3DX_PI * 0.25f~D3DX_PI * 0.50f)
-	//		rot.y += -D3DX_PI;
-	//	}
-	//	else if (rot.y <= D3DX_PI * 0.75f)
-	//	{//パターン③(D3DX_PI * 0.50f~D3DX_PI * 0.75f)
-	//		rot.y += D3DX_PI * -0.5f;
-	//	}
-	//	else
-	//	{//パターン④(D3DX_PI * 0.75f~D3DX_PI)
-	//		rot.y += -D3DX_PI;
-	//	}
-	//}
-	//else
-	//{
-	//	if (rot.y >= -D3DX_PI * 0.25f)
-	//	{//パターン⑤(-D3DX_PI * 0.25f~ 0.0f)
-	//		rot.y += D3DX_PI * 0.5f;
-	//	}
-	//	else if (rot.y >= -D3DX_PI * 0.5f)
-	//	{//パターン⑥(-D3DX_PI * 0.50f~ -D3DX_PI * 0.25f)
-	//		rot.y += D3DX_PI;
-	//	}
-	//	else if (rot.y >= -D3DX_PI * 0.75f)
-	//	{//パターン⑦(-D3DX_PI * 0.75f~ -D3DX_PI * 0.50f)
-	//		rot.y += D3DX_PI * 0.5f;
-	//	}
-	//	else
-	//	{//パターン⑧(-D3DX_PI * 1.0f~ -D3DX_PI * 0.75f)
-	//		rot.y += D3DX_PI;
-	//	}
-	//}
+	switch (dir)
+	{
+	case CManager::DIR_LEFT_WEST:
+		break;
+	case CManager::DIR_RIGHT_EAST:
+		break;
+	case CManager::DIR_DOWN_SOUTH:
+		break;
+	case CManager::DIR_UP_NORTH:
+		break;
+	}
 
-	//CUtilityMath::RotateNormarizePI(&rot.y);
+	CUtilityMath::RotateNormarizePI(&rot.y);
 
 }
 
