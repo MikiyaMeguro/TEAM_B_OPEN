@@ -8,6 +8,7 @@
 #define _CHARASELECT_H_
 
 #include "scene.h"
+#include "PlayerNumSelect.h"
 
 //=============================================================================
 // 前方宣言
@@ -18,7 +19,7 @@ class CScene2D;
 // マクロ定義
 //*****************************************************************************
 #define MAX_CHARASELECT			(4)
-#define MAX_CHARASELTEX			(7)
+#define MAX_CHARASELTEX			(11)
 
 class CCharaSelect
 {
@@ -54,6 +55,7 @@ private:
 		CHARACTORTYPE_POWOR,
 		CHARACTORTYPE_SPEED,
 		CHARACTORTYPE_REACH,
+		CHARACTORTYPE_NONE,
 		CHARACTORTYPE_MAX
 	}CHARACTORTYPE;
 
@@ -66,28 +68,49 @@ private:
 		SELECTSTATE_NOSELECT
 	}SELECT_STATE;
 
-	void Initpointer(void);											//ポインタの初期化
-	void ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed);	//テクスチャスクロール処理
-	void SelectProduction(int SelNum);
-	void InitCharaSelectPoly(void);
-	bool collision(CHARACTORTYPE type);
-	D3DXVECTOR3 MoveRestriction(D3DXVECTOR3 pos);
+	/* 確定の演出 */
+	typedef enum
+	{
+		CONFPRODUCTION_NONE = 0,	//何もしない
+		CONFPRODUCTION_MOVE_START,	//移動開始
+		CONFPRODUCTION_MOVE,		//移動
+		CONFPRODUCTION_MOVE_END,	//移動終了
+		CONFPRODUCTION_MAX
 
-	//void SelectState(void);
-	static CScene2D *m_apScene2D[MAX_CHARASELTEX];
-	static CScene2D *m_apSelect2D[MAX_CHARASELECT];
-	static CScene2D *m_apCursor2D;
-	static CScene2D *m_apBadge2D;
+	}CONFPRODUCTION_STATE;
 
-	D3DXVECTOR3 m_move;
-	bool m_bPCColl[MAX_CHARASELECT];
-	bool m_bPCSelMove;
+	void Initpointer(void);																//ポインタの初期化
+	void ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed);						//テクスチャスクロール処理
+	void SelectProduction(SELECT_STATE &Sel, SELECT_STATE &Selold, CHARACTORTYPE type);	//演出処理
+	void InitCharaSelectPoly(void);														//ポインタの初期化
+	bool collision(int operation,CHARACTORTYPE type);									//あたり判定
+	D3DXVECTOR3 MoveRestriction(D3DXVECTOR3 pos);										//移動制限
+	void SetCommand(void);																//コマンド設定
+	void CharaSelTex(SELECT_STATE Sel, CHARACTORTYPE &type, CHARACTORTYPE &typeOld);	//テクスチャ座標管理
+	bool ConfirmationSelect(void);														//プレイヤーが全員選択したか確認する												
+	bool collisionConf(int operation);													//確定ポリとあたり判定
+	bool ProductionConf(void);															//確定ポリの演出
+
+	static CScene2D *m_apScene2D[MAX_CHARASELTEX];	//背景系のポインタ
+	static CScene2D *m_apSelect2D[MAX_CHARASELECT];	//選択肢
+	static CScene2D *m_apCursor2D[MAX_CHARASELECT];	//カーソル
+	static CScene2D *m_apBadge2D[MAX_CHARASELECT];	//バッジ
+	static CScene2D *m_apConfirm2D;					//確定
+	CHARACTORTYPE m_CharaType[MAX_CHARASELECT];		//選ばれたキャラの種類
+	CHARACTORTYPE m_CharaTypeOld[MAX_CHARASELECT];	//前回選ばれたキャラの種類
+	D3DXVECTOR3 m_move[MAX_CHARASELECT];			//移動量
+	bool m_bPCSelMove[MAX_CHARASELECT];				//選ばれていない時のみ移動できる
+	int m_OperationNum;								//現在操作しているプレイヤー番号
 
 	/* 演出系変数 */
-	int m_nCntScrool;
-	float m_fFlashAlpha[MAX_CHARASELECT];
-	SELECT_STATE m_SelectState[MAX_CHARASELECT];
-	SELECT_STATE m_SelectStateold[MAX_CHARASELECT];
+	int m_nCntScrool;								//スクロールのカウンター
+	float m_fFlashAlpha;							//演出の透明値管理
+	bool m_bConfProFinish, m_bConfProStart,m_bConf;	//演出が終わったか
+	float m_moveConfPro;							//確定ポリの移動
+	SELECT_STATE m_SelectState[MAX_CHARASELECT];	//演出の状態
+	SELECT_STATE m_SelectStateold[MAX_CHARASELECT];	//前回の演出状態を記録
+	CPlayerSelect::SELECTPLAYER *m_PlayerNum;		//プレイヤーの人数
+	CONFPRODUCTION_STATE m_CnfProState;				//確定の演出状態
 
 };
 #endif
