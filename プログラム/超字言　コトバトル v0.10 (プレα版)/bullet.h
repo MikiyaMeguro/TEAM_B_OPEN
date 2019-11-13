@@ -11,6 +11,7 @@
 
 #include "scene.h"
 #include "load.h"
+#include "manager.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -55,13 +56,19 @@ public:
 	int GetID(void) { return m_nID; };
 	float& GetKnockBackPower(void) { return m_fKnockBack; };
 	BULLET_TYPE GetType(void) { return m_Type; };
+	bool CollisionObject(CManager::DIRECTION* dir);
 protected:
 	BULLET_TYPE m_Type;
+	float m_fCollisionRadius;
 	float m_fKnockBack;	//ノックバックする値
 private:
 	D3DXVECTOR3 m_pos;				//位置
+	D3DXVECTOR3 m_posOld;			//前回の位置
 	D3DXVECTOR3 m_rot;				//角度
-	float m_fMove;				//移動量
+
+	float m_fMove;					//移動量
+	D3DXVECTOR3 m_MoveResult;		//前回との移動差分
+
 
 	int m_nLife;	//体力
 	int m_nID;	//誰が打ったか
@@ -98,7 +105,7 @@ public:
 	void SetModelRot(const D3DXVECTOR3& rot);
 
 private:
-	void Reflect(void);
+	void Reflect(CManager::DIRECTION dir);
 	CSceneX* m_pModel;
 	BULLET_PROPERTY m_Prop;
 	D3DXVECTOR3 m_modelRotateOffSet;

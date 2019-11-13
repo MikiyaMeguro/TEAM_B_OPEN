@@ -66,6 +66,13 @@ class CCameraManager;
 class CManager
 {
 public:
+	typedef enum
+	{
+		DIR_RIGHT_EAST,
+		DIR_LEFT_WEST,
+		DIR_DOWN_SOUTH,
+		DIR_UP_NORTH,
+	}DIRECTION;
 
 	typedef enum
 	{//ÉÇÅ[ÉhÇÃç\ë¢ëÃ
