@@ -592,7 +592,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 1.0 7.0 38.0
-	ANSWERMODEL = 56			# 答えのモデル
+	ANSWERMODEL = 55			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -601,7 +601,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 33.0 45.0 9.0
-	ANSWERMODEL = 57			# 答えのモデル
+	ANSWERMODEL = 56			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -610,7 +610,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 33.0 1.0 12.0
-	ANSWERMODEL = 58			# 答えのモデル
+	ANSWERMODEL = 57			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -619,7 +619,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 38.0 1.0
-	ANSWERMODEL = 59			# 答えのモデル
+	ANSWERMODEL = 58			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -628,7 +628,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 45.0 7.0
-	ANSWERMODEL = 60			# 答えのモデル
+	ANSWERMODEL = 59			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -637,7 +637,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 1.0 40.0
-	ANSWERMODEL = 61			# 答えのモデル
+	ANSWERMODEL = 60			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -646,7 +646,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 20.0 39.0
-	ANSWERMODEL = 62			# 答えのモデル
+	ANSWERMODEL = 61			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -655,7 +655,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 7.0 27.0
-	ANSWERMODEL = 63			# 答えのモデル
+	ANSWERMODEL = 62			# 答えのモデル
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
