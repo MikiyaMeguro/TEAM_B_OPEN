@@ -28,7 +28,7 @@
 #define SIZE_001	(D3DXVECTOR2(30.0f, 40.0f))
 
 #define POS_ANSWER_001	(D3DXVECTOR3(WORD_POS.x - 50.0f, WORD_POS.y + 44.0f, 0.0f))		// 答えの位置
-#define SIZE_ANSWER_001	(D3DXVECTOR2(70.0f, 80.0f))		// 答えの位置
+#define SIZE_ANSWER_001	(D3DXVECTOR2(60.0f, 70.0f))		// 答えの位置
 
 #define POS_ANSWER_002	(D3DXVECTOR3(WORD_POS.x - 32.0f, WORD_POS.y + 32.0f, 0.0f))		// 答えの位置
 #define SIZE_ANSWER_002	(D3DXVECTOR2(47.0f, 60.0f))		// 答えの位置
@@ -201,7 +201,15 @@ void CTube::SetAnswer(int nAnswer)
 	}
 	else if (m_pAnswerModel != NULL)
 	{
-		//m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
+		if (NOT_NUM == nAnswer)
+		{
+			m_pAnswerModel->BindTexture("ゴミ_モデル");
+			m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+		}
+		else if(NOT_NUM != nAnswer)
+		{
+			m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
+		}
 	}
 }
 //=============================================================================
