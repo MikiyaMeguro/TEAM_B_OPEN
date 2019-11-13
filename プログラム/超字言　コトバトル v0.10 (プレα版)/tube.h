@@ -39,9 +39,15 @@ public:
 	void AllDelete(void);
 	void Delete(int nID);
 private:
+	void Collect(void);		//•¶š‚ğW‚ß‚ÄTex‚ğ¶¬
+	D3DXVECTOR3 Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos);
+
+
 	CScene2D *m_apWord[MAX_WORD];
 	CScene2D *m_pAnswerModel;
 	int		  m_nAnswer;
+
+	bool	 m_bModelTexFlag;
 };
 
 #endif

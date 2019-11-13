@@ -33,7 +33,7 @@
 #define POS_ANSWER_002	(D3DXVECTOR3(WORD_POS.x - 32.0f, WORD_POS.y + 32.0f, 0.0f))		// 答えの位置
 #define SIZE_ANSWER_002	(D3DXVECTOR2(47.0f, 60.0f))		// 答えの位置
 
-
+#define MOVE			(3.0f)
 //=============================================================================
 // シーンクラスのコンストラクタ
 //=============================================================================
@@ -46,6 +46,7 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	}
 	m_pAnswerModel = NULL;
 	m_nAnswer = 0;
+	m_bModelTexFlag = false;
 }
 
 //=============================================================================
@@ -84,7 +85,6 @@ CTube::~CTube()
 HRESULT CTube::Init(D3DXVECTOR3 pos)
 {
 	CScene2D::Init(pos);
-
 
 	return S_OK;
 }
@@ -157,13 +157,14 @@ void CTube::SetWordNum(int nWordNum, int nNum)
 
 	if (nNum == 2)
 	{
-		for (int nCntNum = 0; nCntNum < MAX_WORD; nCntNum++)
+		m_bModelTexFlag = true;
+		/*for (int nCntNum = 0; nCntNum < MAX_WORD; nCntNum++)
 		{
 			if (m_apWord[nCntNum] != NULL)
 			{
 				m_apWord[nCntNum]->SetCol(D3DXCOLOR(0.7f, 0.7f, 0.7f, 1.0f));
 			}
-		}
+		}*/
 	}
 	else if (nNum < 2)
 	{
@@ -266,4 +267,32 @@ void CTube::Delete(int nID)
 			}
 		}
 	}
+}
+
+//=============================================================================
+// 文字をある位置に集めてTexを生成
+//=============================================================================
+void CTube::Collect(void)
+{
+	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	{
+		if (m_apWord[nCntWord] != NULL)
+		{
+			//Approach(m_apWord[nCntWord]->GetPosition, );
+		}
+	}
+}
+
+//=============================================================================
+// プレイヤーに集まるの処理
+//=============================================================================
+D3DXVECTOR3 CTube::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos)
+{
+	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	// プレイヤーに近づける
+	move.x = sinf(atan2f(OtherPos.x - Pos.x, OtherPos.z - Pos.z)) * MOVE;
+	move.z = cosf(atan2f(OtherPos.x - Pos.x, OtherPos.z - Pos.z)) * MOVE;
+
+	return move;
 }

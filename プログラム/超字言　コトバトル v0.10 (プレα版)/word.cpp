@@ -248,8 +248,7 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 	{
 		pos.y += FLOATING_MOVE;
 		m_colA += 0.01f;
-		if (m_colA > 1.0f) { 
-			m_colA = 1.0f; }
+		if (m_colA > 1.0f) { m_colA = 1.0f; }
 		if (pos.y > POP_POS_Y)
 		{	// 位置が指定した場所より大きい場合
 			m_bMoveFlag = false;
@@ -260,8 +259,7 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 	{
 		pos.y -= FLOATING_MOVE;
 		m_colA -= 0.01f;
-		if (m_colA < 0.38f) { 
-			m_colA = 0.38f; }
+		if (m_colA < 0.38f) { m_colA = 0.38f; }
 		if (pos.y < POP_POS_Y_SMALL)
 		{	// 位置が指定した場所より小さい場合
 			m_bMoveFlag = true;
