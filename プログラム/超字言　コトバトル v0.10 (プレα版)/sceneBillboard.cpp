@@ -152,6 +152,17 @@ void CSceneBillBoard::Draw(void)
 	//計算用マトリックス
 	D3DXMATRIX  mtxView, mtxTrans;
 
+	if (CScene::OBJTYPE_WORD_EFFECT == CScene::GetObjType())
+	{
+		// αブレンディングを加算合成に設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+
+		//Zバッファの設定
+		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
+		pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	}
 
 	//レンダーステートの設定を元に戻す
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -192,6 +203,18 @@ void CSceneBillBoard::Draw(void)
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
 		0,	//開始する頂点のインデックス
 		2); //描画するプリミティブ数
+
+	if (CScene::OBJTYPE_WORD_EFFECT == CScene::GetObjType())
+	{
+		// αブレンディングを元に戻す
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+		//Zバッファをデフォルトの設定に戻す
+		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
+		pDevice->SetRenderState(D3DRS_ZFUNC, D3DCMP_LESSEQUAL);
+	}
 
 	//元に戻す
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);

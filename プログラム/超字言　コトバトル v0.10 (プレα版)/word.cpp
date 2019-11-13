@@ -25,6 +25,8 @@
 
 #define UNITI_TIME		(40)			// 終了する時間
 #define α_COL_TIME		(15)			// 透明度変化時の時間
+#define ANIM_FRAME		(10)				// アニメーションカウンター
+#define PATTERN_NUM		(10)			// パターン数
 //--------------------------------------------
 // コンストラクタ
 //--------------------------------------------
@@ -39,6 +41,9 @@ CWord::CWord() : CSceneBillBoard()
 	m_bPopFlag = false;
 	m_fMoveY = 0.0f;
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_pBillBoard = NULL;
+	m_nAnim = 0;
+	m_nPatten = 0;
 }
 
 //--------------------------------------------
@@ -70,7 +75,6 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 			pWord->m_nWordNum = nWord;
 			pWord->SetTexture(nWord, 10, 5, 1);
 			pWord->m_nNum = nNum;
-
 		}
 	}
 
@@ -83,6 +87,13 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 {
 	CSceneBillBoard::Init(pos);
 	CSceneBillBoard::SetObjType(CScene::OBJTYPE_WORD);
+
+	/*if (m_pBillBoard == NULL)
+	{
+		m_pBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 10.0f, 30.0f, "文字エフェクト");
+		m_pBillBoard->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
+	}*/
+
 	return S_OK;
 }
 
@@ -91,6 +102,7 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CWord::Uninit(void)
 {
+	if (m_pBillBoard != NULL) { m_pBillBoard->Uninit(); m_pBillBoard = NULL; }
 	CSceneBillBoard::Uninit();
 }
 
@@ -139,6 +151,7 @@ void CWord::Update(void)
 
 					if (m_bFlag == true)
 					{	// 終了フラグが立った場合
+						if (m_pBillBoard != NULL) { m_pBillBoard->Uninit(); m_pBillBoard = NULL; }
 						pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
 						pPlayer[nCntPlayer]->SetbSetupBullet(true);
 						m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
@@ -200,6 +213,13 @@ void CWord::Update(void)
 		}
 	}
 
+	/*if ((m_nAnim % ANIM_FRAME) == 0)
+	{
+		m_nPatten++;
+		if (m_pBillBoard != NULL) { m_pBillBoard->SetTexture(m_nPatten, 10, 1, 1); }
+	}
+	m_nAnim++;*/
+
 	// 位置更新
 	pos.x += move.x;
 	pos.y += move.y;
@@ -218,17 +238,9 @@ void CWord::Draw(void)
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	// αブレンディングを加算合成に設定
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
-
+	if (m_pBillBoard != NULL) { m_pBillBoard->Draw(); }
+	
 	CSceneBillBoard::Draw();
-
-	// αブレンディングを元に戻す
-	//pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	//pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	//pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 }
 
 //=============================================================================

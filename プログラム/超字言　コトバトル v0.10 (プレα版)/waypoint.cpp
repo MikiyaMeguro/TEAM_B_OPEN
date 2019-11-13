@@ -127,7 +127,7 @@ void CWaypoint::Update(void)
 	int nNowNumber = 0;		//今いるマスの番号
 	int nAdjacent = 0;		//隣接しているマスは何マス分離れているか
 	bool bLand = false;		//誰かがマスに乗っている
-	nNum2Cnt = 0;
+	int nNum2Cnt = 0;
 
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
 	{

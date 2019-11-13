@@ -51,9 +51,12 @@ private:
 	float m_fDistance[MAX_PLAYER];	// プレイヤーとの距離
 	float m_fMoveY;			// 移動距離
 
-
 	int		   m_nNum;
 	int		   m_nCntUninit;	// 終了するまでのカウント
+
+	CSceneBillBoard *m_pBillBoard;
+	int		m_nAnim;
+	int		m_nPatten;
 };
 
 #endif
