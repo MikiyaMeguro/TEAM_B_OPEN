@@ -228,11 +228,11 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 
 		if (CSceneX::GetModelType() == CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y * -1; } // ìyë‰ÇÃèÍçá
 		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }
-		ModelMove(Type, &pos, fMove);
 
 		// êUìÆÇÃèàóù
 		Vibration(&pos);
 
+		ModelMove(Type, &pos, fMove);
 		CSceneX::SetPosition(pos);
 	}
 	else if (m_nRealTime == REALTIME_NOTMOVE)
