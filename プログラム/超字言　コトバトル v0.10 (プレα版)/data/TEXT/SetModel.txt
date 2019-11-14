@@ -22,8 +22,8 @@ MODEL_FILENAME = data/MODEL/StageOBJ/Stylbe.x"		#4 土台
 MODEL_FILENAME = data/MODEL/Dust.x"					#5 ゴミ
 MODEL_FILENAME = data/MODEL/StageOBJ/arm.x"			#6プロペラarm
 MODEL_FILENAME = data/MODEL/StageOBJ/propeller.x"	#7プロペラ
-MODEL_FILENAME = data/MODEL/StageOBJ/propeller.x"	#8 X移動
-MODEL_FILENAME = data/MODEL/StageOBJ/propeller.x"	#9 Z移動
+MODEL_FILENAME = data/MODEL/StageOBJ/drone.x"		#8 X移動
+MODEL_FILENAME = data/MODEL/StageOBJ/drone.x"		#9 Z移動
 MODEL_FILENAME = data/MODEL/StageOBJ/froor.x"		#10 床背景
 
 
