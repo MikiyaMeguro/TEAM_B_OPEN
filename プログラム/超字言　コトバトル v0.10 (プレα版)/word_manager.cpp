@@ -150,7 +150,7 @@ void CWordManager::Update(void)
 				else { m_nCntaAnswer = 0; }
 			}
 
-			if (m_nCreateType > m_nAnswerDataNum) { if (CGame::GetTube(m_nPlayerID) != NULL) { 
+			if (m_nCreateType > m_nAnswerDataNum) { if (CGame::GetTube(m_nPlayerID) != NULL) {
 				CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM); } }
 		}
 
@@ -301,6 +301,9 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 
 				Delete();		// 文字を一部削除
 
+								//ブレンド無しで弾打ちモーションに移行
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 			}
 		}
 	}
