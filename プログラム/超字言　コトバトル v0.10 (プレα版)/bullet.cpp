@@ -11,6 +11,8 @@
 #include "sceneBillboard.h"
 #include "sceneX.h"
 #include "game.h"
+
+#include "debugProc.h"
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
@@ -92,6 +94,8 @@ void C3DBullet::Update(void)
 	}
 	m_MoveResult = move;		//求めた差分を格納
 	m_pos += move;
+
+	CDebugProc::Print("cf","BULLET_ROT_Y",m_rot.y);
 }
 
 //=============================================================================
@@ -106,7 +110,7 @@ void C3DBullet::Draw(void)
 // オブジェクトとの当たり判定処理(CBulletBase)
 //=============================================================================
 bool C3DBullet::CollisionObject(CManager::DIRECTION* dir)
-{
+{//引数あり
 	CScene* pScene = NULL;
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(SCENEX_PRIORITY);
@@ -174,7 +178,11 @@ bool C3DBullet::CollisionObject(CManager::DIRECTION* dir)
 
 	return false;
 }
-
+bool C3DBullet::SimpleCollision(void)
+{//引数なし(引数を返さずに有のほうを使う)
+	CManager::DIRECTION dir;
+	return CollisionObject(&dir);
+}
 //=============================================================================
 //
 // モデル弾処理 (CModelBullet)[bullet.cpp]
@@ -186,7 +194,7 @@ bool C3DBullet::CollisionObject(CManager::DIRECTION* dir)
 //=============================================================================
 CModelBullet::CModelBullet(int nPriority) : C3DBullet(nPriority)
 {
-
+	m_pModel = NULL;
 }
 CModelBullet::~CModelBullet()
 {
@@ -213,7 +221,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
 	m_Prop = type;
 
-	float fSpeed;
+	float fSpeed = 3.0f;
 	switch (m_Prop)
 	{
 	case TYPE_HIGHSPEED:
@@ -274,6 +282,9 @@ void CModelBullet::Uninit(void)
 //=============================================================================
 void CModelBullet::Update(void)
 {
+	int& nLife = GetLife();
+	nLife--;
+
 	C3DBullet::Update();
 	if (m_pModel != NULL)
 	{
@@ -283,19 +294,29 @@ void CModelBullet::Update(void)
 		CUtilityMath::RotateNormarizePI(&Rotate);
 		m_pModel->SetRot(Rotate);
 	}
-	int& nLife = GetLife();
-	nLife--;
-
 	if (m_Prop != TYPE_STINGER)
 	{//貫通タイプでなければオブジェクトとの当たり判定をチェックする
-
-	 //反射タイプなら当たった後に角度をY軸で反転させる
+		CManager::DIRECTION dir;
+		if (CollisionObject(&dir))
+		{//当たっていれば
+			//反射タイプなら当たった後に角度をY軸で回転させる
+			if (m_Prop == TYPE_REFLECT)
+			{
+				Reflect(dir);
+			}
+			else
+			{
+				Uninit();
+				return;
+			}
+		}
 	}
 
 
 	if (nLife < 0)
 	{
 		Uninit();
+		return;
 	}
 
 }
@@ -339,17 +360,27 @@ void CModelBullet::Reflect(CManager::DIRECTION dir)
 
 	switch (dir)
 	{
-	case CManager::DIR_LEFT_WEST:
+	case CManager::DIR_RIGHT_EAST:	//東(+X方向)
+		rot.y *= -1.0f;
 		break;
-	case CManager::DIR_RIGHT_EAST:
+	case CManager::DIR_LEFT_WEST:	//西(-X方向)
+		rot.y *= -1.0f;
 		break;
-	case CManager::DIR_DOWN_SOUTH:
+	case CManager::DIR_DOWN_SOUTH:  //南(-Z方向)
+		rot.y += D3DX_PI;
+		rot.y *= -1.0f;
 		break;
-	case CManager::DIR_UP_NORTH:
+	case CManager::DIR_UP_NORTH:	//北(+Z方向)
+		rot.y += D3DX_PI;
+		rot.y *= -1.0f;
+		break;
+	default:
+		return;	//万が一それ以外の値が入っていたときは処理から抜ける
 		break;
 	}
-
 	CUtilityMath::RotateNormarizePI(&rot.y);
+
+	SetModelRot(rot);
 
 }
 
@@ -391,6 +422,7 @@ CWordBullet* CWordBullet::Create(void)
 void CWordBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, int nWordNum, int nID)
 {
 	C3DBullet::Set(pos, rot,fSpeed,nLife,nID);
+
 	m_pWord = CSceneBillBoard::Create(pos,20.0f,20.0f,"WORD");
 	if (m_pWord != NULL) { m_pWord->SetTexture(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)),
 											   D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f))); };
@@ -427,14 +459,23 @@ void CWordBullet::Uninit(void)
 //=============================================================================
 void CWordBullet::Update(void)
 {
-	C3DBullet::Update();
-
-	m_pWord->Setpos(GetPosition());
 	int& nLife = GetLife();
 	nLife--;
+	C3DBullet::Update();
+	if (m_pWord != NULL)
+	{
+		m_pWord->Setpos(GetPosition());
+	}
+
+	if (SimpleCollision())
+	{//当たっていれば
+		Uninit();
+		return;
+	}
 	if (nLife < 0)
 	{
 		Uninit();
+		return;
 	}
 }
 
