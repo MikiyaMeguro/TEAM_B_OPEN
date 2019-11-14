@@ -55,6 +55,8 @@ public:
 	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 
+	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else { return m_fHeight; } };
+
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ

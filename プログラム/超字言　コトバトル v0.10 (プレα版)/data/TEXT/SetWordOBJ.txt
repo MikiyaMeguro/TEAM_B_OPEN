@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 63					# 読み込んだモデルの最大番号をいれてください
+NUM_MODEL = 70					# 読み込んだモデルの最大番号をいれてください
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -78,6 +78,13 @@ MODEL_FILENAME = data/MODEL/Ink.x"					#60 いんく
 MODEL_FILENAME = data/MODEL/Zail.x"					#61 ざいる
 MODEL_FILENAME = data/MODEL/Inari.x"				#62 いなり
 MODEL_FILENAME = data/MODEL/Gakuhu.x"				#63 がくふ
+MODEL_FILENAME = data/MODEL/Taits.x"				#64 たいつ
+MODEL_FILENAME = data/MODEL/Frog.x"					#65 カエル
+MODEL_FILENAME = data/MODEL/Plug.x"					#66 プラグ
+MODEL_FILENAME = data/MODEL/Sign.x"					#67 サイン
+MODEL_FILENAME = data/MODEL/Cannabis.x"				#68 大麻
+MODEL_FILENAME = data/MODEL/Sakura.x"				#69 桜
+MODEL_FILENAME = data/MODEL/GunPowder.x"			#70 かやく
 
 
 END_SCRIPT		# この行は絶対消さないこと！
