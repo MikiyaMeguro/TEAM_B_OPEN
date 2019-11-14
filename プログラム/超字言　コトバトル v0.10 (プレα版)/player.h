@@ -184,9 +184,11 @@ public:
 	void			SetOldPosition(D3DXVECTOR3 pos) { m_posOld = pos; }
 	D3DXVECTOR3		GetOldPosition(void)			{ return m_posOld; };
 	C3DCharactor*   GetLockOnCharactor(void)		{return m_pLockOnCharactor;};
+	D3DXVECTOR3     GetBulletMuzzle(void);
 	//モーション
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
+
 private:
 	bool			CollisionBullet(void);			//弾との当たり判定
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き

@@ -314,7 +314,7 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
-					m_pWordManager->BulletCreate(m_nID, m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f, 10.0f, 0.0f), BulletRot);
+					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;
@@ -1085,4 +1085,21 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 	return S_OK;
 }
 
-
+//=============================================================================
+// ƒ‚ƒfƒ‹ƒ[ƒhˆ—
+//=============================================================================
+D3DXVECTOR3     CPlayer::GetBulletMuzzle(void)
+{
+	if (m_pPlayerParts[8][UPPER_BODY] != NULL)
+	{
+		return m_pPlayerParts[8][UPPER_BODY]->GetWorldPosition();
+	}
+	else
+	{
+		if (m_pCharactorMove != NULL)
+		{
+			return m_pCharactorMove->GetPosition() + D3DXVECTOR3(0.0f,10.0f,0.0f);
+		}
+	}
+	return D3DXVECTOR3(0.0f,0.0f,0.0f);
+}
