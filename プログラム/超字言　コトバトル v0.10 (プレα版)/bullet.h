@@ -57,6 +57,7 @@ public:
 	float& GetKnockBackPower(void) { return m_fKnockBack; };
 	BULLET_TYPE GetType(void) { return m_Type; };
 	bool CollisionObject(CManager::DIRECTION* dir);
+	bool SimpleCollision(void);// { CManager::DIRECTION dir; return C3DBullet::CollisionObject(&dir); }
 protected:
 	BULLET_TYPE m_Type;
 	float m_fCollisionRadius;

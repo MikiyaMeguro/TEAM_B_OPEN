@@ -104,7 +104,14 @@ public:
 		MODEL_INK,		// インク
 		MODEL_Zail,		// ざいる
 		MODEL_Inari,	// いなり
-		MODE_gakuhu,	// 楽譜
+		MODEL_gakuhu,	// 楽譜
+		MODEL_Taits,		// タイツ
+		MODEL_FROG,		// カエル
+		MODEL_PLUG,		// ぷらぐ
+		MODEL_SING,		// サイン
+		MODEL_Cannabis,	// 大麻
+		MODEL_SAKURA,	// 桜
+		MODEL_GunPowder,	// 火薬
 		MODEL_MAX
 	} MODEL;
 
