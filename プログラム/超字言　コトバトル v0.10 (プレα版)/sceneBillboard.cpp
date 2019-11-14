@@ -150,7 +150,7 @@ void CSceneBillBoard::Draw(void)
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 	//計算用マトリックス
-	D3DXMATRIX  mtxView, mtxTrans;
+	D3DXMATRIX  mtxView;
 
 	if (CScene::OBJTYPE_WORD_EFFECT == CScene::GetObjType())
 	{
@@ -169,27 +169,18 @@ void CSceneBillBoard::Draw(void)
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtrxWorld);
-	D3DXMatrixIdentity(&mtxView);
-	D3DXMatrixIdentity(&mtxTrans);
 
 	//ビューマトリックスを取得
 	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
 
-	//逆行列を設定
-	m_mtrxWorld._11 = mtxView._11;
-	m_mtrxWorld._12 = mtxView._21;
-	m_mtrxWorld._13 = mtxView._31;
-	m_mtrxWorld._21 = mtxView._12;
-	m_mtrxWorld._22 = mtxView._22;
-	m_mtrxWorld._23 = mtxView._32;
-	m_mtrxWorld._31 = mtxView._13;
-	m_mtrxWorld._32 = mtxView._23;
-	m_mtrxWorld._33 = mtxView._33;
+	//マトリックスの設定
+	CUtilityMath::CalWorldMatrix(&m_mtrxWorld,
+		m_pos,
+		D3DXVECTOR3(0.0f,0.0f,0.0f),
+		NULL,
+		D3DXVECTOR3(1.0f,1.0f,1.0f),
+		&mtxView);
 
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-
-	D3DXMatrixMultiply(&m_mtrxWorld, &m_mtrxWorld, &mtxTrans);
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtrxWorld);
 	//頂点バッファをデータストリームに設定
