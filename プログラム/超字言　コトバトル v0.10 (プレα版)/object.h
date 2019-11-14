@@ -58,6 +58,8 @@ private:
 
 	static bool m_bCreateFlag;		// 生成するフラグ
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
+	void BGModelMove( D3DXVECTOR3 pos);
+
 	void AnimationIcon(void);		// アイコンのアニメーション
 	void IconCreate(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);	// アイコンの生成
 	void Vibration(D3DXVECTOR3 *Pos);			// 振動
@@ -69,6 +71,10 @@ private:
 	float m_fMove;
 	int m_nCntAnim;
 	int m_nCntPattan;
+	D3DXVECTOR3 m_move;
+	D3DXVECTOR3 m_InitPos;
+	int m_MoveState;
+
 };
 
 #endif
