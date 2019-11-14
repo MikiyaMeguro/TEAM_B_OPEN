@@ -251,7 +251,7 @@ void CPlayer::Update(void)
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 			D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
-			D3DXVECTOR3 BulletPos = m_pCharactorMove->GetPosition();
+			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
 			float fRotY,fRotX;
 			D3DXVECTOR3 CamRot, LockOnPos, LockOnMove;
 			// 弾の生成
@@ -281,6 +281,7 @@ void CPlayer::Update(void)
 							//CUtilityMath::RotateNormarizePI(&fRotX);
 
 							BulletRot.y += fRotY;
+							CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
 							//クォータニオンを使った計算
 

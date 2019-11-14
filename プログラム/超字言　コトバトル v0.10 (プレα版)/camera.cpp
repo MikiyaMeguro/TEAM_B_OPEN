@@ -126,12 +126,12 @@ void CCamera::Update(void)
 				m_posRdest = m_pHomingChara->GetCameraPosR();
 				m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
 			}
-		}
-
-			m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
+			m_posVdest = m_pHomingChara->GetCameraPosR() - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
 				sinf(m_rot.x) * m_fLength,
 				cosf(m_rot.y) * m_fLength);
 			m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
+		}
+
 
 		break;
 	case TYPE_SPECTOR:
