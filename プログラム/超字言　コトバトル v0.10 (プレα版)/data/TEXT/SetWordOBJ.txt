@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 70					# 読み込んだモデルの最大番号をいれてください
+NUM_MODEL = 68					# 読み込んだモデルの最大番号をいれてください
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -53,38 +53,36 @@ MODEL_FILENAME = data/MODEL/conga.x"				#36 こんが
 MODEL_FILENAME = data/MODEL/Dice.x"					#37 だいす
 MODEL_FILENAME = data/MODEL/TreasureChest.x"		#38 たから
 MODEL_FILENAME = data/MODEL/Grass.x"				#39 ガラス
-MODEL_FILENAME = data/MODEL/stretcher.x"			#40 たんか
-MODEL_FILENAME = data/MODEL/Ring.x"					#41 リング
-MODEL_FILENAME = data/MODEL/kusaya.x"				#42 くさや
-MODEL_FILENAME = data/MODEL/sazae.x"				#43 さざえ
-MODEL_FILENAME = data/MODEL/Tile.x"					#44 タイル
-MODEL_FILENAME = data/MODEL/Rice.x"					#45 ライス
-MODEL_FILENAME = data/MODEL/Comic.x"				#46 マンガ
-MODEL_FILENAME = data/MODEL/Fuigo.x"				#47 ふいご
-MODEL_FILENAME = data/MODEL/Namako.x"				#48 なまこ
-MODEL_FILENAME = data/MODEL/Zugai.x"				#49 ずがい
-MODEL_FILENAME = data/MODEL/Seaweed.x"				#50 こんぶ
-MODEL_FILENAME = data/MODEL/Laitc.x"				#51 らいち
-MODEL_FILENAME = data/MODEL/Mask.x"					#52 かめん
-MODEL_FILENAME = data/MODEL/Mekabu.x"				#53 めかぶ
-MODEL_FILENAME = data/MODEL/Medic.x"				#54 くすり
-MODEL_FILENAME = data/MODEL/Kaiga.x"				#55 かいが
+MODEL_FILENAME = data/MODEL/Ring.x"					#40 リング
+MODEL_FILENAME = data/MODEL/kusaya.x"				#41 くさや
+MODEL_FILENAME = data/MODEL/sazae.x"				#42 さざえ
+MODEL_FILENAME = data/MODEL/Tile.x"					#43 タイル
+MODEL_FILENAME = data/MODEL/Rice.x"					#44 ライス
+MODEL_FILENAME = data/MODEL/Comic.x"				#45 マンガ
+MODEL_FILENAME = data/MODEL/Fuigo.x"				#46 ふいご
+MODEL_FILENAME = data/MODEL/Namako.x"				#47 なまこ
+MODEL_FILENAME = data/MODEL/Seaweed.x"				#48 こんぶ
+MODEL_FILENAME = data/MODEL/Laitc.x"				#49 らいち
+MODEL_FILENAME = data/MODEL/Mask.x"					#50 かめん
+MODEL_FILENAME = data/MODEL/Mekabu.x"				#51 めかぶ
+MODEL_FILENAME = data/MODEL/Medic.x"				#52 くすり
+MODEL_FILENAME = data/MODEL/Kaiga.x"				#53 かいが
 
-MODEL_FILENAME = data/MODEL/Ikura.x"				#56 いくら
-MODEL_FILENAME = data/MODEL/Menko.x"				#57 めんこ
-MODEL_FILENAME = data/MODEL/Mace.x"					#58 めいす
-MODEL_FILENAME = data/MODEL/Sarai.x"				#59 さらい
-MODEL_FILENAME = data/MODEL/Ink.x"					#60 いんく
-MODEL_FILENAME = data/MODEL/Zail.x"					#61 ざいる
-MODEL_FILENAME = data/MODEL/Inari.x"				#62 いなり
-MODEL_FILENAME = data/MODEL/Gakuhu.x"				#63 がくふ
-MODEL_FILENAME = data/MODEL/Taits.x"				#64 たいつ
-MODEL_FILENAME = data/MODEL/Frog.x"					#65 カエル
-MODEL_FILENAME = data/MODEL/Plug.x"					#66 プラグ
-MODEL_FILENAME = data/MODEL/Sign.x"					#67 サイン
-MODEL_FILENAME = data/MODEL/Cannabis.x"				#68 大麻
-MODEL_FILENAME = data/MODEL/Sakura.x"				#69 桜
-MODEL_FILENAME = data/MODEL/GunPowder.x"			#70 かやく
+MODEL_FILENAME = data/MODEL/Ikura.x"				#54 いくら
+MODEL_FILENAME = data/MODEL/Menko.x"				#55 めんこ
+MODEL_FILENAME = data/MODEL/Mace.x"					#56 めいす
+MODEL_FILENAME = data/MODEL/Sarai.x"				#57 さらい
+MODEL_FILENAME = data/MODEL/Ink.x"					#58 いんく
+MODEL_FILENAME = data/MODEL/Zail.x"					#59 ざいる
+MODEL_FILENAME = data/MODEL/Inari.x"				#60 いなり
+MODEL_FILENAME = data/MODEL/Gakuhu.x"				#61 がくふ
+MODEL_FILENAME = data/MODEL/Taits.x"				#62 たいつ
+MODEL_FILENAME = data/MODEL/Frog.x"					#63 カエル
+MODEL_FILENAME = data/MODEL/Plug.x"					#64 プラグ
+MODEL_FILENAME = data/MODEL/Sign.x"					#65 サイン
+MODEL_FILENAME = data/MODEL/Cannabis.x"				#66 大麻
+MODEL_FILENAME = data/MODEL/Sakura.x"				#67 桜
+MODEL_FILENAME = data/MODEL/GunPowder.x"			#68 かやく
 
 
 END_SCRIPT		# この行は絶対消さないこと！

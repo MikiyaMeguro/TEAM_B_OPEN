@@ -80,7 +80,6 @@ public:
 		MODEL_DICE,		// だいす
 		MODEL_TREASURECHEST,	// たから
 		MODEL_GRASS,	// ガラス
-		MODEL_STRETCHER,	// たんか
 		MODEL_RING,	// リング
 		MODEL_KUSAYA,	// くさや
 		MODEL_SAZAE,	// サザエ
@@ -89,7 +88,6 @@ public:
 		MODEL_COMIC,	// マンガ
 		MODEL_FUIGO,	// ふいご
 		MODEL_NAMAKO,	// ナマコ
-		MODEL_ZUGAI,	// ずがい
 		MODEL_SEAWEED,	// コンブ
 		MODEL_LAITC,	// らいち
 		MODEL_MASK,		// マスク
