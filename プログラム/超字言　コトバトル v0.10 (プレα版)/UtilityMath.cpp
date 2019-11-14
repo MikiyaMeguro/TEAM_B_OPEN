@@ -11,16 +11,38 @@
 //	ワールドマトリックス計算関数
 //=============================================================================
 void CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
-	const D3DXMATRIX* parent,const D3DXVECTOR3& scale)
+	const D3DXMATRIX* parent,const D3DXVECTOR3& scale, D3DXMATRIX* pViewMtx)
 {
-	D3DXMATRIX mtxRot, mtxTrans, mtxScale, mtxParent;				// 計算用マトリックス
+	D3DXMATRIX mtxRot, mtxTrans, mtxScale,mtxInv, mtxParent;				// 計算用マトリックス
 
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(pOut);
 
 	// 回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
-	D3DXMatrixMultiply(pOut, pOut, &mtxRot);
+	if (pViewMtx != NULL)	//pViewMtxがNULLかどうかでビルボードかを判別する
+	{//	ビルボードなら
+		D3DXMatrixIdentity(&mtxInv);
+		//逆行列を設定
+		mtxInv._11 = pViewMtx->_11;
+		mtxInv._12 = pViewMtx->_21;
+		mtxInv._13 = pViewMtx->_31;
+		mtxInv._21 = pViewMtx->_12;
+		mtxInv._22 = pViewMtx->_22;
+		mtxInv._23 = pViewMtx->_32;
+		mtxInv._31 = pViewMtx->_13;
+		mtxInv._32 = pViewMtx->_23;
+		mtxInv._33 = pViewMtx->_33;
+
+		//出来た行列に回転を反映してワールドマトリックスに入れる
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+		D3DXMatrixMultiply(pOut, &mtxInv, &mtxRot);
+	}
+	else
+	{//ビルボードでないなら
+		//普通に回転を反映
+		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
+		D3DXMatrixMultiply(pOut, pOut, &mtxRot);
+	}
 
 	//拡大縮小の反映
 	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);

@@ -160,7 +160,8 @@ public:
 class CUtilityMath
 {
 public:
-	static void CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f));
+	//ワールドマトリックス計算クラス
+	static void CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f),D3DXMATRIX* pViewMtx = NULL);
 
 	static void RotateNormarizePI(float* value);
 	static void RotateNormarizePI(D3DXVECTOR3* RotateValue);
