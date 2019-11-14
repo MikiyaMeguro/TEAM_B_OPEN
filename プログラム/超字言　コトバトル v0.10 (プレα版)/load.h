@@ -27,16 +27,19 @@ public:
 	typedef enum // cppのやつと数と並びを揃える
 	{
 		//--------------------------------------
-		// 文字モデル
+		// 背景モデル
 		//--------------------------------------
 		MODE_WALL_SMALL = 0,// 小さい壁
-		MODE_WALL_BIG,	// 大きい壁
-		MODE_GEAR,		// 歯車
-		MODEL_BOX,		// 箱
-		MODEL_DODAI,	// 土台
-		MODE_DUST,		// ゴミ
-		MODEL_SAMPLE_PLAYER,	//プレイヤー(Sample)
+		MODE_WALL_BIG,		// 大きい壁
+		MODE_GEAR,			// 歯車
+		MODEL_BOX,			// 箱
+		MODEL_DODAI,		// 土台
+		MODE_DUST,			// ゴミ
+		MODEL_SAMPLE_PLAYER,// プレイヤー(Sample)
 		MODEL_PROPELLER,	// プロペラ
+		MODEL_DRAWN_X,		// ドローンX
+		MODEL_DRAWN_Z,		// ドローンZ
+		MODEL_BGFROOR,		// 床
 
 		//--------------------------------------
 		// 文字モデル
@@ -104,14 +107,7 @@ public:
 		MODEL_INK,		// インク
 		MODEL_Zail,		// ざいる
 		MODEL_Inari,	// いなり
-		MODEL_gakuhu,	// 楽譜
-		MODEL_Taits,		// タイツ
-		MODEL_FROG,		// カエル
-		MODEL_PLUG,		// ぷらぐ
-		MODEL_SING,		// サイン
-		MODEL_Cannabis,	// 大麻
-		MODEL_SAKURA,	// 桜
-		MODEL_GunPowder,	// 火薬
+		MODE_gakuhu,	// 楽譜
 		MODEL_MAX
 	} MODEL;
 

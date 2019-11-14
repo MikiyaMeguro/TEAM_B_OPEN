@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 71			# モデル数
+	ANSWERNUM = 64			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名 
@@ -76,13 +76,7 @@ SCRIPT			# この行は絶対消さないこと！
 	# 61 : ざいる
 	# 62 : いなり
 	# 63 : がくふ
-	# 64 : たいつ
-	# 65 : カエル
-	# 66 : プラグ
-	# 67 : サイン
-	# 68 : 大麻
-	# 69 : さくら
-	# 70 : 火薬
+
 #------------------------------------------------------------
 #                      文字の情報
 #------------------------------------------------------------
@@ -662,70 +656,6 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 7.0 27.0
 	ANSWERMODEL = 62			# 答えのモデル
-END_MODELSET
-
-
-MODELSET
-	TYPE = 64					# たいつ
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 15.0 1.0 17.0
-	ANSWERMODEL = 63			# 答えのモデル
-END_MODELSET
-
-MODELSET
-	TYPE = 65					# カエル
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 4				# 弾の種類
-	ANSWER = 5.0 3.0 40.0
-	ANSWERMODEL = 64			# 答えのモデル
-END_MODELSET
-
-MODELSET
-	TYPE = 66					# プラグ
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 27.0 38.0 7.0
-	ANSWERMODEL = 65			# 答えのモデル
-END_MODELSET
-
-MODELSET
-	TYPE = 67					# サイン
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 10.0 1.0 45.0
-	ANSWERMODEL = 66			# 答えのモデル
-END_MODELSET
-
-MODELSET
-	TYPE = 68					# 大麻
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 15.0 1.0 30.0
-	ANSWERMODEL = 67			# 答えのモデル
-END_MODELSET
-
-MODELSET
-	TYPE = 69					# さくら
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 10.0 7.0 38.0
-	ANSWERMODEL = 68			# 答えのモデル
-END_MODELSET
-
-MODELSET
-	TYPE = 70					# かやく
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 5.0 35.0 7.0
-	ANSWERMODEL = 69			# 答えのモデル
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
