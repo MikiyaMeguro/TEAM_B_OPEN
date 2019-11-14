@@ -28,6 +28,20 @@ public:
 		SOUND_LABEL_BGM_GAME001,		// ゲーム[天候ステージ]
 		SOUND_LABEL_BGM_GAME002,		// ゲーム[地形ステージ]
 		SOUND_LABEL_BGM_RANKING,		// ランキング
+
+		SOUND_LABEL_SE_BULLET000,		// 弾との衝突音[ノックバック大]
+		SOUND_LABEL_SE_BULLET001,		// 弾との衝突音[スピード]
+		SOUND_LABEL_SE_BULLET002,		// 弾との衝突音[跳ね返る]
+		SOUND_LABEL_SE_BULLET003,		// 弾との衝突音[貫通]
+
+		SOUND_LABEL_SE_GETTEXT000,		// 文字取得音[1文字目取得]
+		SOUND_LABEL_SE_GETTEXT001,		// 文字取得音[2文字目取得]
+		SOUND_LABEL_SE_GETTEXT002,		// 文字取得音[3文字目取得]
+
+		SOUND_LABEL_SE_STEP,			// ステップ
+		SOUND_LABEL_SE_PAUSEOPEN,		// ポーズ音押した際の音
+		SOUND_LABEL_SE_PAUSECLOSE,		// ポーズ終えた際の音
+
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
 	// パラメータ構造体定義
@@ -65,6 +79,20 @@ protected:
 		{ "data/BGM/GAME000.wav", -1 },			// ゲーム[天候ステージ]
 		{ "data/BGM/GAME000.wav", -1 },			// ゲーム[地形ステージ]
 		{ "data/BGM/RANKING.wav", -1 },			// ランキング
+
+		{ "data/SE/bullet000.wav", 0 },			// 弾との衝突音[ノックバック大]
+		{ "data/SE/bullet001.wav", 0 },			// 弾との衝突音[スピード]
+		{ "data/SE/bullet002.wav", 0 },			// 弾との衝突音[跳ね返る]
+		{ "data/SE/bullet003.wav", 0 },			// 弾との衝突音[貫通]
+
+		{ "data/SE/gettext000.wav", 0 },		// 文字取得音[1文字目取得]
+		{ "data/SE/gettext001.wav", 0 },		// 文字取得音[2文字目取得]
+		{ "data/SE/gettext002.wav", 0 },		// 文字取得音[3文字目取得]
+
+		{ "data/SE/step.wav", 0 },				// ステップ
+		{ "data/SE/pause_open.wav", 0 },		// ポーズ音押した際の音
+		{ "data/SE/pause_close.wav", 0 },		// ポーズ終えた際の音
+
 
 	};
 };

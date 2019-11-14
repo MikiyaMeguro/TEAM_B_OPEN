@@ -15,6 +15,8 @@
 
 #include "bullet.h"
 #include "CameraManager.h"
+
+#include "sound.h"
 //=============================================================================
 // 静的メンバ変数
 //=============================================================================
@@ -24,6 +26,7 @@ D3DXVECTOR3 *CWordManager::m_Scale = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 D3DXVECTOR3 *CWordManager::m_rot = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 int *CWordManager::m_type = 0;
 int *CWordManager::m_nAnswerTypeModel = 0;
+
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -249,6 +252,9 @@ void CWordManager::Delete(void)
 //=============================================================================
 void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot)
 {
+
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 
 	if (CGame::GetPlayer(nID) != NULL)
@@ -266,6 +272,23 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
 					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
 					m_nCreateType = NOT_NUM;
+
+					if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
+					{
+						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+					}
+					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
+					{
+						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
+					}
+					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
+					{
+						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
+					}
+					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
+					{
+						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
+					}
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
@@ -301,9 +324,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 
 				Delete();		// 文字を一部削除
 
-								//ブレンド無しで弾打ちモーションに移行
-				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
-				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 			}
 		}
 	}
