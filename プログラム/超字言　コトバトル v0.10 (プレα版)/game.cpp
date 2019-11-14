@@ -64,6 +64,7 @@ CMeshField *CGame::m_pMeshField = NULL;
 CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
 CSetWord *CGame::m_pWordCreate = NULL;
 CWall *CGame::m_pWall = {};
+CPlayer::PLAYER_TYPE CGame::m_type[MAX_PLAYER] = {};
 
 //=============================================================================
 //	コンストラクタ
@@ -430,7 +431,7 @@ void CGame::PlayerSetting(int nNum)
 //#if 0
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, CPlayer::TYPE_POWER);
+			m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0]);
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
@@ -439,7 +440,7 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 1)
 			{
-				m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, CPlayer::TYPE_BARANCE, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, 0.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{
@@ -453,7 +454,7 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 2)
 			{
-				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, CPlayer::TYPE_SPEED, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{
@@ -467,7 +468,7 @@ void CGame::PlayerSetting(int nNum)
 		{
 			if (nNum > 3)
 			{
-				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, CPlayer::TYPE_REACH, D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, 0.0f, -100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			}
 			else
 			{

@@ -76,6 +76,8 @@ public:
 	static CPoint *GetPoint(int nNum) { return m_pPoint[nNum]; }			// ポイントの取得
 	static CSetWord *GetWordCreate(void) { return m_pWordCreate; }			// 文字出現の取得
 	int GetChangeNum(void) { return m_nChangeNum; }
+	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
+
 private:
 	void CameraSetting(int nNum);		// 人数に応じたカメラ生成
 	void PlayerSetting(int nNum);		// 人数に応じたプレイヤー生成
@@ -88,9 +90,9 @@ private:
 	static CWall *m_pWall;
 
 	static CSetWord *m_pWordCreate;
+	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	char *m_pcStageName[MAX_STAGE];		// ステージの名前保管
 	char *m_pcStageNameWord[MAX_STAGE];		// ステージの名前保管
 	int m_nChangeNum;
-
 };
 #endif
