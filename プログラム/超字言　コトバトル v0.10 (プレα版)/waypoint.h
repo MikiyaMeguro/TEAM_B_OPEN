@@ -79,7 +79,8 @@ private:
 	int m_nTargetNum[8];				// 行動先の番号
 	int m_nNumWayPoint;					// 行動可能な数
 
-	int m_nNumNowPoint;					// 現在のマス番号
+	int m_nNumNowPoint;				// 現在のマス番号
+	D3DXVECTOR3 m_PlayerPos;		// プレイヤーの位置記憶
 
 	FROMHIT m_FromHit;
 

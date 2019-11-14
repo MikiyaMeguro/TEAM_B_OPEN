@@ -105,6 +105,7 @@ HRESULT C3DCharactor::Init(void)
 	m_bWordNear = false;
 	m_bJyougai = false;
 	m_bGoal = true;
+	m_bSearch = false;
 	m_bBlock = false;
 	m_bNearWard = false;
 	m_MarkWardPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -140,8 +141,8 @@ void C3DCharactor::Update(void)
 	case CCharaBase::MOVETYPE_PLAYER_INPUT:
 		if (m_pWayPoint == NULL)
 		{
-			m_nTargetWP = 1;
-			m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
+		//	m_nTargetWP = 1;
+		//	m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
 		}
 		CharaMove_Input();
 		break;
@@ -579,26 +580,6 @@ void C3DCharactor::Think_CPU(void)
 		//	m_Type = CPU_TYPE_ESCAPE;
 		//	m_CpuThink = THINK_PICKUP;
 		//	m_nActionTimer = 60;
-#if 1
-		if (m_pWayPoint == NULL)
-		{
-			m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
-		}
-
-		if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
-		{	//弾を持っているとき
-			m_Type = CPU_TYPE_NONE;
-			m_CpuThink = THINK_HAVEBULLET;
-			m_nActionTimer = 30;
-		}
-		else
-		{	//弾を持っていないとき
-			m_CpuThink = THINK_NOTBULLET;
-			m_nActionTimer = 30;
-		}
-#endif
-
-
 		break;
 	case 2:
 		m_Type = CPU_TYPE_HOMING;
@@ -609,6 +590,26 @@ void C3DCharactor::Think_CPU(void)
 	default:
 		break;
 	}
+
+#if 1
+	if (m_pWayPoint == NULL)
+	{
+		m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
+	}
+
+	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
+	{	//弾を持っているとき
+		m_Type = CPU_TYPE_NONE;
+		m_CpuThink = THINK_HAVEBULLET;
+		m_nActionTimer = 30;
+	}
+	else
+	{	//弾を持っていないとき
+		m_CpuThink = THINK_NOTBULLET;
+		m_nActionTimer = 30;
+	}
+#endif
+
 
 #if 0
 	if (m_pWayPoint == NULL)
@@ -1010,7 +1011,7 @@ void C3DCharactor::Homing_CPU(void)
 			fDestAngle += D3DX_PI * 2.0f;
 		}
 		//視野内に入ったら撃つ
-		if (fDestAngle - 0.15f < rot.y && fDestAngle + 0.15f > rot.y)
+		if (fDestAngle - 0.11f < rot.y && fDestAngle + 0.11f > rot.y)
 		{
 			m_CpuThink = THINK_ATTACK;
 		}
@@ -1052,8 +1053,6 @@ void C3DCharactor::Homing_CPU(void)
 		move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 		move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 	}
-
-
 }
 
 //=============================================================================
@@ -1134,6 +1133,7 @@ void C3DCharactor::PickUP_CPU(void)
 				if (fCircle < 50000 && bTango == false)
 				{//範囲内に文字があった
 					nCntNearWord++;		//加算
+					//if(m_fCompareRange < fCircle)
 					{//単語が完成しないときは適当に拾う
 					 //一番近い距離を記憶
 						m_fCompareRange = fCircle;
@@ -1220,7 +1220,7 @@ void C3DCharactor::NotBullet_CPU(void)
 	{
 		//m_CpuThink = THINK_ESCAPE;
 		m_CpuThink = THINK_PICKUP;
-		m_nActionTimer = 20;
+		m_nActionTimer = 30;
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -1350,10 +1350,11 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	int nRandPos = 0;
 
 
-	if (m_MarkWayPoint.x + 100 > Pos.x && m_MarkWayPoint.x - 100 < Pos.x
-		&& m_MarkWayPoint.z + 100 > Pos.z && m_MarkWayPoint.z - 100 < Pos.z)
+	if (m_MarkWayPoint.x + 60 > Pos.x && m_MarkWayPoint.x - 60 < Pos.x
+		&& m_MarkWayPoint.z + 60 > Pos.z && m_MarkWayPoint.z - 60 < Pos.z)
 	{
 		m_bGoal = true;
+		m_bSearch = false;
 		// 距離を測る 一番近い文字と自分の距離
 		float fCircleWard = ((Pos.x - m_MarkWardPos.x) * (Pos.x - m_MarkWardPos.x)) + ((Pos.z - m_MarkWardPos.z) * (Pos.z - m_MarkWardPos.z));
 		if (fCircleWard < 1000 && m_bBlock == false)
@@ -1368,15 +1369,14 @@ void C3DCharactor::WayPointRoute_CPU(void)
 		m_bNearWard = false;
 	}
 
-	if (m_MarkWayPoint.x + 20 > Pos.x && m_MarkWayPoint.x - 20 < Pos.x
-		&& m_MarkWayPoint.z + 20 > Pos.z && m_MarkWayPoint.z - 20 < Pos.z
+	if (m_MarkWayPoint.x + 10 > Pos.x && m_MarkWayPoint.x - 10 < Pos.x
+		&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z
 		&& m_bBlock == true)
 	{
 		m_bBlock = false;
 	}
 
-
-	if (m_bGoal == true && m_bNearWard == false)
+	if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
 	{
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
@@ -1403,41 +1403,39 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	nNowWp = m_pWayPoint->GetNowWP();
 
 	//移動処理
-	if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
-	{//自分がブロックマスにいるかの判定
-		//m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNowWp);
-		//m_bBlock = true;
-
-		//位置情報を取得
-		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
-		//移動可能なマスは何マスあるか
-		int nCntWP = m_pWayPoint->CntWayPoint();
-		//ランダムで決める
-		int nRand = rand() % nCntWP;
-		nRandPos = nRand;
-		if (m_pWayPointPos[nRand] != NULL)
-		{
-			m_MarkWayPoint = m_pWayPointPos[nRand];
-			m_bGoal = false;
+	if (m_bSearch == false)
+	{
+		if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
+		{//自分がブロックマスにいるかの判定
+			m_CpuThink = THINK_WAYPOINTMOVE;
+			m_nActionTimer = 60;
 		}
-
-	}
-	else if (m_pWayPoint->GetWPbBlock(nNextPoint) == true && m_bNearWard == false)
-	{//目標マスがブロック　近くに文字がない
-		m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
-		m_bBlock = true;
-	}
-	else if (m_pWayPoint->GetWPbBlock(nNextPoint) == false && m_bNearWard == false)
-	{//目標マスがブロックではない　近くに文字がない
-		m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
-	}
-	else if (m_bNearWard == false && m_bBlock == false)
-	{//近くに文字がない　ブロックマスではない
-		m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
-	}
-	else if (m_bNearWard == true || m_bBlock == false)
-	{//近くに文字がある　ブロックマスではない
-		m_MarkWayPoint = m_MarkWardPos;
+		if (m_pWayPoint->GetWPbBlock(nNextPoint) == true && m_bNearWard == false)
+		{//目標マスがブロック　近くに文字がない
+			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
+			m_bBlock = true;
+			m_bSearch = true;
+		}
+		else if (m_pWayPoint->GetWPbBlock(nNextPoint) == false && m_bNearWard == false)
+		{//目標マスがブロックではない　近くに文字がない
+			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
+			m_bSearch = true;
+		}
+		else if (m_bNearWard == false && m_bBlock == false)
+		{//近くに文字がない　ブロックマスではない
+			m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
+			m_bSearch = true;
+		}
+		else if (m_bNearWard == true || m_bBlock == false)
+		{//近くに文字がある　ブロックマスではない
+			m_MarkWayPoint = m_MarkWardPos;
+			m_bSearch = true;
+		}
+		else
+		{
+			WayPointMove_CPU();
+			//m_bSearch = true;
+		}
 	}
 
 	// 目的の角度
