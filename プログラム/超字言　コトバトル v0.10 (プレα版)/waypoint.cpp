@@ -526,6 +526,11 @@ D3DXVECTOR3 CWaypoint::GetNextWayPoint(int nWayPoint)
 			nParallel += 1;
 			m_FromHit = FROMHIT_RIGHT;
 		}
+		else if (m_nNumNowPoint - nWayPoint == 0)
+		{//今いるマスがブロック
+			nParallel += 0;
+			m_FromHit = FROMHIT_IN;
+		}
 	}
 
 	while (bEndRoute == false)
@@ -659,6 +664,12 @@ D3DXVECTOR3 CWaypoint::GetNextWayPoint(int nWayPoint)
 				bEndRoute = true;
 			}
 
+			break;
+		case FROMHIT_IN:
+
+
+
+			bEndRoute = true;
 			break;
 		default:
 			bEndRoute = true;

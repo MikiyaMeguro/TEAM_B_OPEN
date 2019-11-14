@@ -38,6 +38,7 @@ public:
 		FROMHIT_BACK,	//‰œ‚©‚ç
 		FROMHIT_RIGHT,	//‰E‚©‚ç
 		FROMHIT_LEFT,	//¶‚©‚ç
+		FROMHIT_IN,		//Ž©•ª‚ª“–‚½‚Á‚Ä‚é
 		FROMHIT_MAX
 	}FROMHIT;		//‚Ç‚±‚©‚ç“–‚½‚Á‚½‚©
 

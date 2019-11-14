@@ -140,6 +140,7 @@ void C3DCharactor::Update(void)
 	case CCharaBase::MOVETYPE_PLAYER_INPUT:
 		if (m_pWayPoint == NULL)
 		{
+			m_nTargetWP = 1;
 			m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
 		}
 		CharaMove_Input();
@@ -596,6 +597,8 @@ void C3DCharactor::Think_CPU(void)
 			m_nActionTimer = 30;
 		}
 #endif
+
+
 		break;
 	case 2:
 		m_Type = CPU_TYPE_HOMING;
@@ -607,87 +610,24 @@ void C3DCharactor::Think_CPU(void)
 		break;
 	}
 
-
-	//行動を決める条件文
-	if (m_bFront == true)
-	{	//壁に当たってる
-		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 1;
-		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
-		m_bFront = false;
-	}
-	else
+#if 0
+	if (m_pWayPoint == NULL)
 	{
-#if 0
-		switch (m_Type)
-		{
-		case CPU_TYPE_ESCAPE:
-			//m_CpuThink = THINK_ESCAPE;
-			//m_nActionTimer = 30;
-			m_CpuThink = THINK_PICKUP;
-			m_nActionTimer = 30;
-			break;
-		case CPU_TYPE_HOMING:
-			m_CpuThink = THINK_WATCH;
-			m_nActionTimer = 30;
-			break;
-		case CPU_TYPE_PATROL:
-			m_CpuThink = THINK_MOVE;
-			m_CpuMove = CPU_MOVE_PATROL;
-			m_nActionTimer = 240;
-			break;
-		default:
-			break;
-		}
-
-		m_CpuThink = THINK_MOVE;
-		/*
-		敵が前にいる時はBACK
-		敵が弾を持ってるときは下がりながら左右移動
-		敵が見えないときはできるだけ前進
-		弾を持っているときは前進していく
-		*/
-		m_CpuMove = CPU_MOVE_FRONT;
-#endif
+		m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
 	}
-#if 0
 
 	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
 	{	//弾を持っているとき
 		m_Type = CPU_TYPE_NONE;
 		m_CpuThink = THINK_HAVEBULLET;
-		m_nActionTimer = 10;
+		m_nActionTimer = 30;
 	}
 	else
 	{	//弾を持っていないとき
 		m_CpuThink = THINK_NOTBULLET;
-		m_nActionTimer = 10;
+		m_nActionTimer = 30;
 	}
-
-	//同じ行動を3回とらない
-	//if (m_OldCpuThink == m_CpuThink)
-	//{
-	//	m_nSameCnt++;
-	//	if (m_nSameCnt == 3)
-	//	{
-	//		m_nSameCnt = 0;
-	//		m_nActionTimer = 0;
-	//	}
-	//}
-	//else
-	//{
-	//	m_nSameCnt = 0;
-	//}
 #endif
-
-	//nTestCnt++;
-	//if (nTestCnt > 60)
-	//{
-	//	m_CpuThink = THINK_ROTATION;
-	//	m_nActionTimer = 2;
-	//	m_CpuRotation = CPU_ROTATION_BACK;
-	//	nTestCnt = 0;
-	//}
 
 }
 
@@ -1407,6 +1347,8 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	D3DXVECTOR3 MarkPos;	//一番近い目標位置
 	float	fMinCircle = 100000;
 	int nNumWP = 0;
+	int nRandPos = 0;
+
 
 	if (m_MarkWayPoint.x + 100 > Pos.x && m_MarkWayPoint.x - 100 < Pos.x
 		&& m_MarkWayPoint.z + 100 > Pos.z && m_MarkWayPoint.z - 100 < Pos.z)
@@ -1453,18 +1395,32 @@ void C3DCharactor::WayPointRoute_CPU(void)
 			}
 		}
 	}
-
-
 	//目標のマスの番号を渡す
 	m_pWayPoint->ReturnPointMove();
 	int nNextPoint = 0;
-
 	nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
+	int nNowWp = 0;
+	nNowWp = m_pWayPoint->GetNowWP();
 
 	//移動処理
-	if (m_pWayPoint->GetWPbBlock(m_pWayPoint->GetNowWP()) == true)
+	if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
 	{//自分がブロックマスにいるかの判定
-		m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(m_pWayPoint->GetNowWP());
+		//m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNowWp);
+		//m_bBlock = true;
+
+		//位置情報を取得
+		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
+		//移動可能なマスは何マスあるか
+		int nCntWP = m_pWayPoint->CntWayPoint();
+		//ランダムで決める
+		int nRand = rand() % nCntWP;
+		nRandPos = nRand;
+		if (m_pWayPointPos[nRand] != NULL)
+		{
+			m_MarkWayPoint = m_pWayPointPos[nRand];
+			m_bGoal = false;
+		}
+
 	}
 	else if (m_pWayPoint->GetWPbBlock(nNextPoint) == true && m_bNearWard == false)
 	{//目標マスがブロック　近くに文字がない
