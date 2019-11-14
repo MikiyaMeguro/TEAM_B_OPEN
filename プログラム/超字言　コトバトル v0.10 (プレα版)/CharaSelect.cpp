@@ -18,10 +18,11 @@
 #define SIZE_Y (SCREEN_HEIGHT/2)								//縦幅
 #define DEFAULT_SIZE (150.0f)									//ポリゴンサイズの基本の大きさ
 #define DEFAULT_POS	(D3DXVECTOR3(0.0f,0.0f,0.0f))				//ポリゴンの初期位置
-#define CHARASELCHOICE_POS	(D3DXVECTOR3(250.0f,180.0f,0.0f))	//選択肢ポリゴンの位置
-#define CURSOL_INITPOS (D3DXVECTOR3(250.0f,550.0f,0.0f))		//カーソルの初期位置
-#define CHARASELCHOICE_INTERVAL (260.0f)						//選択肢ポリゴン同士の感覚
-#define TEX_CORRECTION (0.0001f)								//テクスチャ座標の補正
+#define CHARASELCHOICE_POS	(D3DXVECTOR3(211.0f,180.0f,0.0f))	//選択肢ポリゴンの位置
+#define CURSOL_INITPOS (D3DXVECTOR3(250.0f,545.0f,0.0f))		//カーソルの初期位置
+#define CHARASELCHOICE_INTERVAL (260.0f)						//選択肢ポリゴン同士の間隔
+#define CHARASELICON_INTERVAL (215.0f)							//選択肢アイコン同士の間隔
+#define TEX_CORRECTION (0.001f)								//テクスチャ座標の補正
 #define CURSOR_MOVE (3.0f)										//カーソルの移動速度
 #define CURSOR_SIZE (0.3f)										//カーソルのサイズ
 
@@ -30,8 +31,8 @@
 //============================================================================
 CScene2D *CCharaSelect::m_apScene2D[MAX_CHARASELTEX] = {};
 CScene2D *CCharaSelect::m_apSelect2D[MAX_CHARASELECT] = {};
-CScene2D *CCharaSelect::m_apCursor2D[MAX_CHARASELECT] = {};
-CScene2D *CCharaSelect::m_apBadge2D[MAX_CHARASELECT] = {};
+CScene2D *CCharaSelect::m_apCursor2D[MAX_PLAYER] = {};
+CScene2D *CCharaSelect::m_apBadge2D[MAX_PLAYER] = {};
 CScene2D *CCharaSelect::m_apConfirm2D = NULL;
 
 //=============================================================================
@@ -53,7 +54,7 @@ CCharaSelect::CCharaSelect()
 	m_bConfProStart = false;
 	m_bCnfFlash = false;
 
-	for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		m_move[nCnt] = DEFAULT_POS;
 		m_SelectState[nCnt] = SELECTSTATE_NOSELECT;
@@ -61,6 +62,7 @@ CCharaSelect::CCharaSelect()
 		m_bPCSelMove[nCnt] = false;
 		m_CharaType[nCnt] = CPlayer::TYPE_MAX;
 		m_CharaTypeOld[nCnt] = CPlayer::TYPE_MAX;
+		m_CharaTypeFinal[nCnt] = CPlayer::TYPE_MAX;
 	}
 }
 
@@ -107,7 +109,7 @@ void CCharaSelect::Update(void)
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
 	D3DXVECTOR3 pos[MAX_CHARASELECT];
-	for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		if (m_apCursor2D[nCnt] != NULL)
 		{
@@ -141,10 +143,18 @@ void CCharaSelect::Update(void)
 				if (CCommand::GetCommand("ENTER") == true)
 				{
 					m_bCnfFlash = true;
-					CGame::SetCharaSelect(0, m_CharaType[0]);
-					CGame::SetCharaSelect(1, m_CharaType[1]);
-					CGame::SetCharaSelect(2, m_CharaType[2]);
-					CGame::SetCharaSelect(3, m_CharaType[3]);
+					for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
+					{//ランダムを選択した人がいる
+						m_CharaTypeFinal[nCnt] = m_CharaType[nCnt];
+						if (m_CharaTypeFinal[nCnt] == CPlayer::TYPE_MAX)
+						{//ランダムだった場合
+							m_CharaTypeFinal[nCnt] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
+						}
+					}
+					for (int nCnt = 0; nCnt < *m_PlayerNum; nCnt++)
+					{//プレイヤー人数分キャラの種類を渡す
+						CGame::SetCharaSelect(nCnt, m_CharaTypeFinal[nCnt]);
+					}
 					pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
 
 				}
@@ -232,7 +242,9 @@ void CCharaSelect::Update(void)
 
 		/* 選んだキャラクターを保存 */
 		if (collision(m_OperationNum, CPlayer::TYPE_BARANCE) == true)
-		{
+		{//バランス
+			m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.0f, 0.5f), D3DXVECTOR2(0.2f, 1.0f));
+			m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
@@ -244,7 +256,9 @@ void CCharaSelect::Update(void)
 			}
 		}
 		else if (collision(m_OperationNum, CPlayer::TYPE_POWER) == true)
-		{
+		{//パワー
+			m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.2f, 0.5f), D3DXVECTOR2(0.4f, 1.0f));
+			m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
@@ -256,7 +270,10 @@ void CCharaSelect::Update(void)
 			}
 		}
 		else if (collision(m_OperationNum, CPlayer::TYPE_SPEED) == true)
-		{
+		{//スピード
+			m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.4f, 0.5f), D3DXVECTOR2(0.6f, 1.0f));
+			m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
@@ -268,7 +285,10 @@ void CCharaSelect::Update(void)
 			}
 		}
 		else if (collision(m_OperationNum, CPlayer::TYPE_REACH) == true)
-		{
+		{//リーチ
+			m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.6f, 0.5f), D3DXVECTOR2(0.8f, 1.0f));
+			m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
@@ -278,6 +298,25 @@ void CCharaSelect::Update(void)
 					m_bPCSelMove[m_OperationNum] = true;
 				}
 			}
+		}
+		else if (collision(m_OperationNum, CPlayer::TYPE_MAX) == true)
+		{//ランダム
+			m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.8f, 0.5f), D3DXVECTOR2(1.0f, 1.0f));
+			m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+
+			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+			{//エンター押下
+				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
+				{//セレクト状態じゃない（無限フラッシュ防止）
+					m_CharaType[m_OperationNum] = CPlayer::TYPE_MAX;
+					m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
+					m_bPCSelMove[m_OperationNum] = true;
+				}
+			}
+		}
+		else
+		{//どの選択肢とも当たっていない場合
+			m_apScene2D[m_OperationNum + 11]->SetbDraw(false);
 		}
 		/* 選択取り消し */
 		if (CCommand::GetCommand("DELETE") == true)
@@ -418,14 +457,14 @@ void CCharaSelect::InitCharaSelectPoly(void)
 	for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
 	{
 		/* 生成と座標とテクスチャ */
-		m_apSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(CHARASELCHOICE_POS.x + (CHARASELCHOICE_INTERVAL*nCnt),
+		m_apSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(CHARASELCHOICE_POS.x + (CHARASELICON_INTERVAL*nCnt),
 			CHARASELCHOICE_POS.y,
 			CHARASELCHOICE_POS.z), "CHARACTORSEL_CHARA");
 		/* テクスチャ座標設定 */
 		m_apSelect2D[nCnt]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*nCnt), 0.0f),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*nCnt) - TEX_CORRECTION, 0.499f));
+			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*nCnt) - TEX_CORRECTION, 0.5f));
 		/* サイズ設定 */
-		m_apSelect2D[nCnt]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.0f);
+		m_apSelect2D[nCnt]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.5f);
 	}
 
 	/* 演出 */
@@ -441,25 +480,36 @@ void CCharaSelect::InitCharaSelectPoly(void)
 	m_apScene2D[2] = CScene2D::Create(D3DXVECTOR3(1230.0f, SIZE_Y, 0.0f), "CHARACTORSEL_BAND", 4);
 	m_apScene2D[2]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*3.5f);
 
-	for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		//プレイヤーウィンド
 		/* 生成と座標とテクスチャ */
 		m_apScene2D[nCnt + 3] = CScene2D::Create(D3DXVECTOR3(CURSOL_INITPOS.x + (CHARASELCHOICE_INTERVAL*nCnt),
-			550.0f,
-			CURSOL_INITPOS.z), "PLAYER_UIWINDOW");
+			CURSOL_INITPOS.y,
+			CURSOL_INITPOS.z), "PLAYER_UIWINDOW",2);
 		/* サイズ設定 */
-		m_apScene2D[nCnt + 3]->SetWidthHeight(DEFAULT_SIZE*1.2f, DEFAULT_SIZE*1.5f);
+		m_apScene2D[nCnt + 3]->SetWidthHeight(DEFAULT_SIZE*1.2f, DEFAULT_SIZE*1.6f);
 		m_apScene2D[nCnt + 3]->SetTex(D3DXVECTOR2(0.0f, 0.8f), D3DXVECTOR2(0.2f, 1.0f));//初期設定は全部COM、下のSWICHで再設定
 
-		// 選択肢のマスク
+		// プレイヤーウィンドマスク
 		/* 生成と座標とテクスチャ */
 		m_apScene2D[nCnt + 7] = CScene2D::Create(D3DXVECTOR3(CURSOL_INITPOS.x + (CHARASELCHOICE_INTERVAL*nCnt),
 			CURSOL_INITPOS.y,
 			CURSOL_INITPOS.z), " ");
 		/* サイズ設定 */
-		m_apScene2D[nCnt + 7]->SetWidthHeight(DEFAULT_SIZE*1.2f, DEFAULT_SIZE*1.5f);
+		m_apScene2D[nCnt + 7]->SetWidthHeight(DEFAULT_SIZE*1.2f, DEFAULT_SIZE*1.6f);
 		m_apScene2D[nCnt + 7]->SetbDraw(false);
+
+		//プレイヤーウィンドウに表示するキャラクター
+		/* 生成と座標とテクスチャ */
+		m_apScene2D[nCnt + 11] = CScene2D::Create(D3DXVECTOR3(CURSOL_INITPOS.x + (CHARASELCHOICE_INTERVAL*nCnt),
+			CURSOL_INITPOS.y+20.0f,
+			CURSOL_INITPOS.z), "CHARACTORSEL_CHARA",2);
+		/* サイズ設定 */
+		m_apScene2D[nCnt + 11]->SetWidthHeight(DEFAULT_SIZE*1.1f, DEFAULT_SIZE*1.2f);
+		m_apScene2D[nCnt + 11]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*nCnt), 0.5f),
+			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*nCnt) - TEX_CORRECTION, 1.0f));
+		m_apScene2D[nCnt + 11]->SetbDraw(false);
 
 		//バッジ
 		m_apBadge2D[nCnt] = CScene2D::Create(D3DXVECTOR3(CURSOL_INITPOS.x + (CHARASELCHOICE_INTERVAL*nCnt),
@@ -532,10 +582,10 @@ bool CCharaSelect::collision(int operation, CPlayer::PLAYER_TYPE type)
 	bool bColl = false;
 
 	/* あたり判定 */
-	if (m_apBadge2D[operation]->GetPosition().x - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apSelect2D[type]->GetPosition().x + (DEFAULT_SIZE*1.0f) &&
-		m_apBadge2D[operation]->GetPosition().x + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apSelect2D[type]->GetPosition().x - (DEFAULT_SIZE*1.0f) &&
-		m_apBadge2D[operation]->GetPosition().y + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apSelect2D[type]->GetPosition().y - (DEFAULT_SIZE*1.0f) &&
-		m_apBadge2D[operation]->GetPosition().y - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apSelect2D[type]->GetPosition().y + (DEFAULT_SIZE*1.0f))
+	if (m_apBadge2D[operation]->GetPosition().x - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apSelect2D[type]->GetPosition().x + (DEFAULT_SIZE*0.8f) &&
+		m_apBadge2D[operation]->GetPosition().x + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apSelect2D[type]->GetPosition().x - (DEFAULT_SIZE*0.8f) &&
+		m_apBadge2D[operation]->GetPosition().y + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apSelect2D[type]->GetPosition().y - (DEFAULT_SIZE*0.8f) &&
+		m_apBadge2D[operation]->GetPosition().y - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apSelect2D[type]->GetPosition().y + (DEFAULT_SIZE*0.8f))
 	{
 		bColl = true;
 	}
@@ -571,49 +621,20 @@ void CCharaSelect::SetCommand(void)
 //=============================================================================
 void CCharaSelect::CharaSelTex(SELECT_STATE Sel, CPlayer::PLAYER_TYPE &type, CPlayer::PLAYER_TYPE &typeOld)
 {
-	switch (type)
+	switch (Sel)
 	{/* 選ばれた時のテクスチャ座標 */
-	case CPlayer::TYPE_BARANCE:	//バランス
-		m_apSelect2D[0]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE) - TEX_CORRECTION, 1.0f));
-		break;
-
-	case CPlayer::TYPE_POWER:	//パワー
-		m_apSelect2D[1]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER) - TEX_CORRECTION, 1.0f));
-		break;
-		
-	case CPlayer::TYPE_SPEED:	//スピード
-		m_apSelect2D[2]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED) - TEX_CORRECTION, 1.0f));
-		break;
-
-	case CPlayer::TYPE_REACH:	//リーチ
-		m_apSelect2D[3]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 1.0f));
-		break;
-
-	case CPlayer::TYPE_MAX:
-		/* 選ばれていない状態は前回のタイプから見てテクスチャ座標を変更する */
-		switch (typeOld)
-		{
-		case CPlayer::TYPE_BARANCE:	//バランス
-			m_apSelect2D[0]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE) - TEX_CORRECTION, 0.499f));
-			break;
-		case CPlayer::TYPE_POWER:	//パワー
-			m_apSelect2D[1]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER) - TEX_CORRECTION, 0.499f));
-			break;
-		case CPlayer::TYPE_SPEED:	//スピード
-			m_apSelect2D[2]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED), 0.499f));
-			break;
-		case CPlayer::TYPE_REACH:	//リーチ
-			m_apSelect2D[3]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 0.499f));
-			break;
+	case SELECTSTATE_SELECT:	//選ばれている
+		m_apScene2D[m_OperationNum + 3]->SetTex(D3DXVECTOR2(0.2f + (1.0f / 5)*(int)type, 0.0f + (1.0f / 5)*(int)type),
+			D3DXVECTOR2(0.4f + (1.0f / 5)*(int)type, 0.2f + (1.0f / 5)*(int)type));
+		if (type == CPlayer::TYPE_MAX)
+		{//ランダムの場合
+			m_apScene2D[m_OperationNum + 3]->SetTex(D3DXVECTOR2(0.0f, 0.0f + (1.0f / 5)*m_OperationNum),
+				D3DXVECTOR2(0.2f, 0.2f + (1.0f / 5)*m_OperationNum));
 		}
+		break;
+	case SELECTSTATE_NOSELECT:
+		m_apScene2D[m_OperationNum + 3]->SetTex(D3DXVECTOR2(0.0f , 0.0f + (1.0f / 5)*m_OperationNum),
+			D3DXVECTOR2(0.2f, 0.2f + (1.0f / 5)*m_OperationNum));
 		break;
 	}
 

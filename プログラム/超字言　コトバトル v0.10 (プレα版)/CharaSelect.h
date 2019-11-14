@@ -20,8 +20,9 @@ class CPlayer;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_CHARASELECT			(4)
-#define MAX_CHARASELTEX			(11)
+#define MAX_PLAYER				(4)
+#define MAX_CHARASELECT			(5)
+#define MAX_CHARASELTEX			(15)
 
 class CCharaSelect
 {
@@ -39,27 +40,20 @@ private:
 	/* ポリゴンの種類 */
 	typedef enum
 	{
-		CHARASEL_POLYGONTYPE_BG = 0,	//背景
-		CHARASEL_POLYGONTYPE_BAND_L,	//帯：左
-		CHARASEL_POLYGONTYPE_BAND_R,	//帯：右
-		CHARASEL_POLYGONTYPE_MASK1,		//マスク左上
-		CHARASEL_POLYGONTYPE_MASK2,		//マスク右上
-		CHARASEL_POLYGONTYPE_MASK3,		//マスク左下
-		CHARASEL_POLYGONTYPE_MASK4,		//マスク右下
-		CHARASEL_POLYGONTYPE_MAX		//最大数
+		CHARASEL_POLYGONTYPE_BG = 0,		//背景
+		CHARASEL_POLYGONTYPE_BAND_L,		//帯：左
+		CHARASEL_POLYGONTYPE_BAND_R,		//帯：右
+		CHARASEL_POLYGONTYPE_MASK1,			//マスクPL_1
+		CHARASEL_POLYGONTYPE_MASK2,			//マスクPL_2
+		CHARASEL_POLYGONTYPE_MASK3,			//マスクPL_3
+		CHARASEL_POLYGONTYPE_MASK4,			//マスクPL_4
+		CHARASEL_POLYGONTYPE_PLUI_CHARA1,	//選択キャラを各プレイヤーのウィンドウに表示:PL_1
+		CHARASEL_POLYGONTYPE_PLUI_CHARA2,	//選択キャラを各プレイヤーのウィンドウに表示:PL_2
+		CHARASEL_POLYGONTYPE_PLUI_CHARA3,	//選択キャラを各プレイヤーのウィンドウに表示:PL_3
+		CHARASEL_POLYGONTYPE_PLUI_CHARA4,	//選択キャラを各プレイヤーのウィンドウに表示:PL_4
+		CHARASEL_POLYGONTYPE_MAX			//最大数
 
 	}CHARASEL_POLYGONTYPE;
-
-	///* キャラクターの種類 */
-	//typedef enum
-	//{
-	//	CPlayer::PLAYER_TYPE_BALANCE = 0,
-	//	CPlayer::PLAYER_TYPE_POWOR,
-	//	CPlayer::PLAYER_TYPE_SPEED,
-	//	CPlayer::PLAYER_TYPE_REACH,
-	//	CPlayer::PLAYER_TYPE_NONE,
-	//	CPlayer::PLAYER_TYPE_MAX
-	//}CPlayer::PLAYER_TYPE;
 
 	/* 選ばれてるかの状態 */
 	typedef enum
@@ -93,16 +87,17 @@ private:
 	bool collisionConf(int operation);													//確定ポリとあたり判定
 	bool ProductionConf(void);															//確定ポリの演出
 	void FlashConf(void);																//確定ポリの点滅
-	static CScene2D *m_apScene2D[MAX_CHARASELTEX];	//背景系のポインタ
-	static CScene2D *m_apSelect2D[MAX_CHARASELECT];	//選択肢
-	static CScene2D *m_apCursor2D[MAX_CHARASELECT];	//カーソル
-	static CScene2D *m_apBadge2D[MAX_CHARASELECT];	//バッジ
-	static CScene2D *m_apConfirm2D;					//確定
-	CPlayer::PLAYER_TYPE m_CharaType[MAX_CHARASELECT];		//選ばれたキャラの種類
-	CPlayer::PLAYER_TYPE m_CharaTypeOld[MAX_CHARASELECT];	//前回選ばれたキャラの種類
-	D3DXVECTOR3 m_move[MAX_CHARASELECT];			//移動量
-	bool m_bPCSelMove[MAX_CHARASELECT];				//選ばれていない時のみ移動できる
-	int m_OperationNum;								//現在操作しているプレイヤー番号
+	static CScene2D *m_apScene2D[MAX_CHARASELTEX];		//背景系のポインタ
+	static CScene2D *m_apSelect2D[MAX_CHARASELECT];		//選択肢
+	static CScene2D *m_apCursor2D[MAX_PLAYER];			//カーソル
+	static CScene2D *m_apBadge2D[MAX_PLAYER];			//バッジ
+	static CScene2D *m_apConfirm2D;						//確定
+	CPlayer::PLAYER_TYPE m_CharaType[MAX_PLAYER];		//選ばれたキャラの種類
+	CPlayer::PLAYER_TYPE m_CharaTypeOld[MAX_PLAYER];	//前回選ばれたキャラの種類
+	CPlayer::PLAYER_TYPE m_CharaTypeFinal[MAX_PLAYER];	//最終的に選ばれたキャラの種類
+	D3DXVECTOR3 m_move[MAX_PLAYER];						//移動量
+	bool m_bPCSelMove[MAX_PLAYER];						//選ばれていない時のみ移動できる
+	int m_OperationNum;									//現在操作しているプレイヤー番号
 
 	/* 演出系変数 */
 	int m_nCntScrool, m_CntFlash, m_CntFadeF;		//スクロールのカウンター/確定時のフラッシュ/遷移までの秒数カウンター
@@ -110,8 +105,8 @@ private:
 	bool m_bConfProFinish, m_bConfProStart,m_bConf;	//演出が終わったか
 	bool m_bCnfFlash;								//確認ポリのフラシュ開始
 	float m_moveConfPro;							//確定ポリの移動
-	SELECT_STATE m_SelectState[MAX_CHARASELECT];	//演出の状態
-	SELECT_STATE m_SelectStateold[MAX_CHARASELECT];	//前回の演出状態を記録
+	SELECT_STATE m_SelectState[MAX_PLAYER];			//演出の状態
+	SELECT_STATE m_SelectStateold[MAX_PLAYER];		//前回の演出状態を記録
 	CPlayerSelect::SELECTPLAYER *m_PlayerNum;		//プレイヤーの人数
 	CONFPRODUCTION_STATE m_CnfProState;				//確定の演出状態
 
