@@ -10,7 +10,7 @@
 #include "fade.h"
 #include "input.h"
 #include "InputKeyboard.h"
-
+#include"game.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -22,7 +22,7 @@
 #define CURSOL_INITPOS (D3DXVECTOR3(250.0f,550.0f,0.0f))		//カーソルの初期位置
 #define CHARASELCHOICE_INTERVAL (260.0f)						//選択肢ポリゴン同士の感覚
 #define TEX_CORRECTION (0.0001f)								//テクスチャ座標の補正
-#define CURSOR_MOVE (2.0f)										//カーソルの移動速度
+#define CURSOR_MOVE (3.0f)										//カーソルの移動速度
 #define CURSOR_SIZE (0.3f)										//カーソルのサイズ
 
 //============================================================================
@@ -43,12 +43,15 @@ CCharaSelect::CCharaSelect()
 	m_OperationNum = 0;
 	/* 演出系変数初期化 */
 	m_nCntScrool = 0;
+	m_CntFlash = 0;
+	m_CntFadeF = 0;
 	m_fFlashAlpha = 1.0f;
+	m_moveConfPro = 0.0f;
 	m_CnfProState = CONFPRODUCTION_NONE;
 	m_bConfProFinish = false;
 	m_bConf = false;
 	m_bConfProStart = false;
-	m_moveConfPro = 0.0f;
+	m_bCnfFlash = false;
 
 	for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
 	{
@@ -56,8 +59,8 @@ CCharaSelect::CCharaSelect()
 		m_SelectState[nCnt] = SELECTSTATE_NOSELECT;
 		m_SelectStateold[nCnt] = SELECTSTATE_NOSELECT;
 		m_bPCSelMove[nCnt] = false;
-		m_CharaType[nCnt] = CHARACTORTYPE_NONE;
-		m_CharaTypeOld[nCnt] = CHARACTORTYPE_NONE;
+		m_CharaType[nCnt] = CPlayer::TYPE_MAX;
+		m_CharaTypeOld[nCnt] = CPlayer::TYPE_MAX;
 	}
 }
 
@@ -115,45 +118,49 @@ void CCharaSelect::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
+	//モード遷移
+	if (ConfirmationSelect() == true)
+	{//全員選択した
+		if (m_bConfProStart == false)
+		{
+			m_CnfProState = CONFPRODUCTION_MOVE_START;
+			m_bConfProStart = true;
+		}
+		if (m_bConfProStart == true)
+		{
+			m_bConfProFinish = ProductionConf();
+		}
+		if (m_bConfProFinish == true)
+		{//演出が終了した
+			m_bConf = true;	//選択操作可能にする
+		}
+		if (m_bConf == true)
+		{//選択確定が可能になったら
+			if (collisionConf(m_OperationNum) == true)
+			{//ポリゴンの範囲内
+				if (CCommand::GetCommand("ENTER") == true)
+				{
+					m_bCnfFlash = true;
+					CGame::SetCharaSelect(0, m_CharaType[0]);
+					CGame::SetCharaSelect(1, m_CharaType[1]);
+					CGame::SetCharaSelect(2, m_CharaType[2]);
+					CGame::SetCharaSelect(3, m_CharaType[3]);
+					pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
 
-	if (pFade->GetFade() == CFade::FADE_NONE)
-	{
-		//モード遷移
-		if (ConfirmationSelect() == true)
-		{//全員選択した
-			if (m_bConfProStart == false)
-			{
-				m_CnfProState = CONFPRODUCTION_MOVE_START;
-				m_bConfProStart = true;
-			}
-			if (m_bConfProStart == true)
-			{
-				m_bConfProFinish = ProductionConf();
-			}
-			if (m_bConfProFinish == true)
-			{//演出が終了した
-				m_bConf = true;	//選択操作可能にする
-			}
-			if (m_bConf == true)
-			{//選択確定が可能になったら
-				if (collisionConf(m_OperationNum) == true)
-				{//ポリゴンの範囲内
-					if (CCommand::GetCommand("ENTER") == true)
-					{
-						pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
-
-					}
 				}
 			}
 		}
-		else
-		{//全員選択していない
-			m_apConfirm2D->SetbDraw(false);
-			m_bConfProFinish = false;
-			m_bConf = false;
-			m_bConfProStart = false;
-		}
-
+	}
+	else
+	{//全員選択していない
+		m_apConfirm2D->SetbDraw(false);
+		m_bConfProFinish = false;
+		m_bConf = false;
+		m_bConfProStart = false;
+	}
+	//フェード処理終了後/開始前のみ動く処理
+	if (pFade->GetFade() == CFade::FADE_NONE)
+	{
 		/* カーソル移動処理  */
 		if (CCommand::GetCommand("RIGHT_R") == true)
 		{//左押下
@@ -224,49 +231,49 @@ void CCharaSelect::Update(void)
 		}
 
 		/* 選んだキャラクターを保存 */
-		if (collision(m_OperationNum, CHARACTORTYPE_BALANCE) == true)
+		if (collision(m_OperationNum, CPlayer::TYPE_BARANCE) == true)
 		{
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
-					m_CharaType[m_OperationNum] = CHARACTORTYPE_BALANCE;
+					m_CharaType[m_OperationNum] = CPlayer::TYPE_BARANCE;
 					m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
 					m_bPCSelMove[m_OperationNum] = true;
 				}
 			}
 		}
-		else if (collision(m_OperationNum, CHARACTORTYPE_POWOR) == true)
+		else if (collision(m_OperationNum, CPlayer::TYPE_POWER) == true)
 		{
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
-					m_CharaType[m_OperationNum] = CHARACTORTYPE_POWOR;
+					m_CharaType[m_OperationNum] = CPlayer::TYPE_POWER;
 					m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
 					m_bPCSelMove[m_OperationNum] = true;
 				}
 			}
 		}
-		else if (collision(m_OperationNum, CHARACTORTYPE_SPEED) == true)
+		else if (collision(m_OperationNum, CPlayer::TYPE_SPEED) == true)
 		{
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
-					m_CharaType[m_OperationNum] = CHARACTORTYPE_SPEED;
+					m_CharaType[m_OperationNum] = CPlayer::TYPE_SPEED;
 					m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
 					m_bPCSelMove[m_OperationNum] = true;
 				}
 			}
 		}
-		else if (collision(m_OperationNum, CHARACTORTYPE_REACH) == true)
+		else if (collision(m_OperationNum, CPlayer::TYPE_REACH) == true)
 		{
 			if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 			{//エンター押下
 				if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
-					m_CharaType[m_OperationNum] = CHARACTORTYPE_REACH;
+					m_CharaType[m_OperationNum] = CPlayer::TYPE_REACH;
 					m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
 					m_bPCSelMove[m_OperationNum] = true;
 				}
@@ -277,7 +284,7 @@ void CCharaSelect::Update(void)
 		{
 			if (collision(m_OperationNum, m_CharaType[m_OperationNum]) == true)
 			{
-				m_CharaType[m_OperationNum] = CHARACTORTYPE_NONE;
+				m_CharaType[m_OperationNum] = CPlayer::TYPE_MAX;
 				m_SelectState[m_OperationNum] = SELECTSTATE_NOSELECT;
 				m_bPCSelMove[m_OperationNum] = false;
 			}
@@ -290,6 +297,8 @@ void CCharaSelect::Update(void)
 	/* 選択時演出関数 */
 	SelectProduction(m_SelectState[m_OperationNum], m_SelectStateold[m_OperationNum], m_CharaType[m_OperationNum]);
 
+	/* 確定ポリのフラッシュ演出 */
+	if (m_bCnfFlash == true) { FlashConf(); }
 #ifdef _DEBUG
 	CDebugProc::Print("c", "キャラセレクト");
 	if (pInputKeyboard->GetTrigger(DIK_1) == true)
@@ -355,7 +364,7 @@ void CCharaSelect::ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed)
 //=============================================================================
 // 選択演出処理
 //=============================================================================
-void CCharaSelect::SelectProduction(SELECT_STATE &Sel, SELECT_STATE &Selold,CHARACTORTYPE type)
+void CCharaSelect::SelectProduction(SELECT_STATE &Sel, SELECT_STATE &Selold,CPlayer::PLAYER_TYPE type)
 {
 	switch (Sel)
 	{
@@ -518,7 +527,7 @@ D3DXVECTOR3 CCharaSelect::MoveRestriction(D3DXVECTOR3 pos)
 //=============================================================================
 // あたり判定
 //=============================================================================
-bool CCharaSelect::collision(int operation, CHARACTORTYPE type)
+bool CCharaSelect::collision(int operation, CPlayer::PLAYER_TYPE type)
 {
 	bool bColl = false;
 
@@ -560,49 +569,49 @@ void CCharaSelect::SetCommand(void)
 //=============================================================================
 // テクスチャ座標管理
 //=============================================================================
-void CCharaSelect::CharaSelTex(SELECT_STATE Sel, CHARACTORTYPE &type, CHARACTORTYPE &typeOld)
+void CCharaSelect::CharaSelTex(SELECT_STATE Sel, CPlayer::PLAYER_TYPE &type, CPlayer::PLAYER_TYPE &typeOld)
 {
 	switch (type)
 	{/* 選ばれた時のテクスチャ座標 */
-	case CHARACTORTYPE_BALANCE:	//バランス
-		m_apSelect2D[0]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_BALANCE), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_BALANCE) - TEX_CORRECTION, 1.0f));
+	case CPlayer::TYPE_BARANCE:	//バランス
+		m_apSelect2D[0]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE), 0.5f + TEX_CORRECTION),
+			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE) - TEX_CORRECTION, 1.0f));
 		break;
 
-	case CHARACTORTYPE_POWOR:	//パワー
-		m_apSelect2D[1]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_POWOR), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_POWOR) - TEX_CORRECTION, 1.0f));
+	case CPlayer::TYPE_POWER:	//パワー
+		m_apSelect2D[1]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER), 0.5f + TEX_CORRECTION),
+			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER) - TEX_CORRECTION, 1.0f));
 		break;
 		
-	case CHARACTORTYPE_SPEED:	//スピード
-		m_apSelect2D[2]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_SPEED), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_SPEED) - TEX_CORRECTION, 1.0f));
+	case CPlayer::TYPE_SPEED:	//スピード
+		m_apSelect2D[2]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED), 0.5f + TEX_CORRECTION),
+			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED) - TEX_CORRECTION, 1.0f));
 		break;
 
-	case CHARACTORTYPE_REACH:	//リーチ
-		m_apSelect2D[3]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_REACH), 0.5f + TEX_CORRECTION),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_REACH), 1.0f));
+	case CPlayer::TYPE_REACH:	//リーチ
+		m_apSelect2D[3]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 0.5f + TEX_CORRECTION),
+			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 1.0f));
 		break;
 
-	case CHARACTORTYPE_NONE:
+	case CPlayer::TYPE_MAX:
 		/* 選ばれていない状態は前回のタイプから見てテクスチャ座標を変更する */
 		switch (typeOld)
 		{
-		case CHARACTORTYPE_BALANCE:	//バランス
-			m_apSelect2D[0]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_BALANCE), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_BALANCE) - TEX_CORRECTION, 0.499f));
+		case CPlayer::TYPE_BARANCE:	//バランス
+			m_apSelect2D[0]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE), 0.0f),
+				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_BARANCE) - TEX_CORRECTION, 0.499f));
 			break;
-		case CHARACTORTYPE_POWOR:	//パワー
-			m_apSelect2D[1]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_POWOR), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_POWOR) - TEX_CORRECTION, 0.499f));
+		case CPlayer::TYPE_POWER:	//パワー
+			m_apSelect2D[1]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER), 0.0f),
+				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_POWER) - TEX_CORRECTION, 0.499f));
 			break;
-		case CHARACTORTYPE_SPEED:	//スピード
-			m_apSelect2D[2]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_SPEED), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_SPEED), 0.499f));
+		case CPlayer::TYPE_SPEED:	//スピード
+			m_apSelect2D[2]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED), 0.0f),
+				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_SPEED), 0.499f));
 			break;
-		case CHARACTORTYPE_REACH:	//リーチ
-			m_apSelect2D[3]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_REACH), 0.0f),
-				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CHARACTORTYPE_REACH), 0.499f));
+		case CPlayer::TYPE_REACH:	//リーチ
+			m_apSelect2D[3]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 0.0f),
+				D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT) * CPlayer::TYPE_REACH), 0.499f));
 			break;
 		}
 		break;
@@ -689,4 +698,21 @@ bool CCharaSelect::ProductionConf(void)
 		break;
 	}
 	return bFinish;
+}
+//=============================================================================
+// 確定ポリの点滅処理
+//=============================================================================
+void CCharaSelect::FlashConf(void)
+{
+	m_CntFlash++;
+	if (m_CntFlash >= 3)
+	{
+		m_apConfirm2D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.3f));
+		m_CntFlash = 0;
+	}
+	else
+	{
+		m_apConfirm2D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+	}
 }
