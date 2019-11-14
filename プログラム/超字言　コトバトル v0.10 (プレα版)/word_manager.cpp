@@ -31,12 +31,12 @@ CWordManager::CWordManager()
 {
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{	// 管理の中身を初期化
-		m_aWord[nCntWord].nNum = 99;
+		m_aWord[nCntWord].nNum = NOT_NUM;
 		m_aWord[nCntWord].cWord = "NULL";
 		m_aWord[nCntWord].bClearFlag = false;
 	}
 	m_nCntNum = 0;			// 回数のカウント
-	m_nCreateType = 0;		// 生成するタイプ
+	m_nCreateType = NOT_NUM;// 生成するタイプ
 	m_nCntaAnswer = 0;		// 正解との比較して合っている数
 	m_nPlayerID = 0;		// プレイヤーが何番かの保存
 	m_bPress = false;		// 指定した文字以上をいれないフラグ
@@ -149,6 +149,9 @@ void CWordManager::Update(void)
 				}
 				else { m_nCntaAnswer = 0; }
 			}
+
+			if (m_nCreateType > m_nAnswerDataNum) { if (CGame::GetTube(m_nPlayerID) != NULL) { 
+				CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM); } }
 		}
 
 		//テスト
@@ -201,7 +204,7 @@ void CWordManager::Reset(void)
 {
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{
-		m_aWord[nCntWord].nNum = 99;
+		m_aWord[nCntWord].nNum = NOT_NUM;
 		m_aWord[nCntWord].cWord = "NULL";
 	}
 
@@ -221,17 +224,17 @@ void CWordManager::Reset(void)
 void CWordManager::Delete(void)
 {
 	//if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
+	if (m_nCntNum > 0)
 	{
 		if (m_nCntNum < 3)
 		{	// 3つ以下の場合
-			if (m_nCntNum > 0)
 			{
 				m_nCntNum--;
 				if (CGame::GetTube(m_nPlayerID) != NULL)
 				{	// 文字保管がNULLじゃない場合
 					CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
 				}
-				m_aWord[0].nNum = 99;	// 空の状態に
+				m_aWord[0].nNum = NOT_NUM;	// 空の状態に
 				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
 				{
 					m_aWord[nCntWord].nNum = m_aWord[nCntWord + 1].nNum;
@@ -262,6 +265,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType] ,nID);
 					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
 					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					m_nCreateType = NOT_NUM;
 				}
 			}
 			else if (m_nCntaAnswer < MAX_WORD)
@@ -891,7 +895,7 @@ void CWordManager::WordDebug(int nCntNum)
 	{	// ん
 		m_aWord[nCntNum].cWord = "ん";
 	}
-	else if (m_aWord[nCntNum].nNum == 99)
+	else if (m_aWord[nCntNum].nNum == NOT_NUM)
 	{	// 空の状態
 		m_aWord[nCntNum].cWord = "NULL";
 	}

@@ -71,6 +71,9 @@ DATA = 00053 data/TEXTURE/CharactorSelect/CharaSel.png CHARACTORSEL_CHARA
 DATA = 00054 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
 DATA = 00055 data/TEXTURE/Gimmick/beltconveyer.png ベルトコンベア_アイコン
 DATA = 00056 data/TEXTURE/Gimmick/Word_POP.png 文字エフェクト
+DATA = 00057 data/TEXTURE/ModelTex/gomi.png ゴミ_モデル
+DATA = 00058 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
+DATA = 00059 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
 
 
 

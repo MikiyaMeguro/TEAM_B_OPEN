@@ -13,7 +13,7 @@
 // マクロ定義
 //===================================================================
 #define MAX_WORD	(3)			// 文字数
-#define MAX_ANSWER	(10)			// 答えの数
+#define NOT_NUM		(99)		// ゴミを示す数字
 //===================================================================
 // クラスの定義
 //===================================================================
@@ -77,7 +77,12 @@ private:
 	float *m_fAnswerData;
 	bool m_bPress;
 	bool m_bSearch;					// サーチのフラグ
-	bool m_bAnswer[MAX_ANSWER];
+	bool m_bAnswer[MAX_WORD];
+
+	/* デバック用*/
+	void DebugWordCreate(void);
+	int nDebugNUm;
+	int nDebugCnt;
 };
 
 #endif

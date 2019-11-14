@@ -39,9 +39,17 @@ public:
 	void AllDelete(void);
 	void Delete(int nID);
 private:
+	void Collect(void);		//•¶š‚ğW‚ß‚ÄTex‚ğ¶¬
+	void Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum);
+
+	D3DXVECTOR3 m_AnswerPos;
 	CScene2D *m_apWord[MAX_WORD];
 	CScene2D *m_pAnswerModel;
 	int		  m_nAnswer;
+
+	bool	 m_bModelTexFlag;
+	int m_nAnswerModelNum;	// “š‚¦‚Ì”Ô†
+
 };
 
 #endif

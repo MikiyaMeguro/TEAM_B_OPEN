@@ -135,7 +135,7 @@ void CDebugProc::Draw(void)
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 	//色指定
-	D3DXCOLOR col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
+	D3DXCOLOR col = D3DXCOLOR(1.0f,1.0f,1.0f,0.0f);
 	// テキスト描画
 	m_pFont->DrawText(NULL, m_strDebug.c_str(), -1, &rect, DT_LEFT, col);
 

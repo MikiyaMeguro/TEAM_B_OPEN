@@ -67,6 +67,7 @@ public:
 
 	void WordCreate(void);	// 文字の生成の管理
 	void SetStage(int nCntState);	// ステージの生成
+	void SetCreateWord(void);
 
 	// 取得の関数
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
@@ -74,6 +75,7 @@ public:
 	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 文字の可視化UIの取得
 	static CPoint *GetPoint(int nNum) { return m_pPoint[nNum]; }			// ポイントの取得
 	static CSetWord *GetWordCreate(void) { return m_pWordCreate; }			// 文字出現の取得
+	int GetChangeNum(void) { return m_nChangeNum; }
 private:
 	void CameraSetting(int nNum);		// 人数に応じたカメラ生成
 	void PlayerSetting(int nNum);		// 人数に応じたプレイヤー生成
@@ -88,6 +90,7 @@ private:
 	static CSetWord *m_pWordCreate;
 	char *m_pcStageName[MAX_STAGE];		// ステージの名前保管
 	char *m_pcStageNameWord[MAX_STAGE];		// ステージの名前保管
+	int m_nChangeNum;
 
 };
 #endif

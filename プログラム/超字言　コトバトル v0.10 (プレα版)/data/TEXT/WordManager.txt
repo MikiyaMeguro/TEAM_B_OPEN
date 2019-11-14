@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 64			# モデル数
+	ANSWERNUM = 71			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名 
@@ -76,7 +76,13 @@ SCRIPT			# この行は絶対消さないこと！
 	# 61 : ざいる
 	# 62 : いなり
 	# 63 : がくふ
-
+	# 64 : たいつ
+	# 65 : カエル
+	# 66 : プラグ
+	# 67 : サイン
+	# 68 : 大麻
+	# 69 : さくら
+	# 70 : 火薬
 #------------------------------------------------------------
 #                      文字の情報
 #------------------------------------------------------------
@@ -92,7 +98,7 @@ END_MODELSET
 MODELSET
 	TYPE = 1					# まいく
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.5 1.5 1.5			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 30.0 1.0 7.0
 	ANSWERMODEL = 1				# 答えのモデル
@@ -100,7 +106,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 2					# 机
-	ROT = 0.0 0.0 0.0			# 向き 
+	ROT = 0.0 3.14 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 17.0 7.0 3.0
@@ -110,7 +116,7 @@ END_MODELSET
 MODELSET
 	TYPE = 3					# プリン
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.5 1.5 1.5			# スケール
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 27.0 39.0 45.0
 	ANSWERMODEL = 3				# 答えのモデル
@@ -118,6 +124,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4					# ナイフ
+	ROT = 0.0 3.14 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 20.0 1.0 27.0
@@ -136,7 +143,7 @@ END_MODELSET
 MODELSET
 	TYPE = 6					# 絵具
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 3.0 24.0 7.0
 	ANSWERMODEL = 6				# 答えのモデル
@@ -154,7 +161,7 @@ END_MODELSET
 MODELSET
 	TYPE = 8					# 太鼓
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.8 0.8 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 1.0 9.0
 	ANSWERMODEL = 8				# 答えのモデル
@@ -163,7 +170,7 @@ END_MODELSET
 MODELSET
 	TYPE = 9					# コイン
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.1 1.1 1.1			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 9.0 1.0 45.0
 	ANSWERMODEL = 9				# 答えのモデル
@@ -172,7 +179,7 @@ END_MODELSET
 MODELSET
 	TYPE = 10					# すいか
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.8 0.8 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 12.0 1.0 5.0
 	ANSWERMODEL = 10			# 答えのモデル
@@ -181,7 +188,7 @@ END_MODELSET
 MODELSET
 	TYPE = 11					# たらい
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.8 0.8 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 38.0 1.0
 	ANSWERMODEL = 11			# 答えのモデル
@@ -190,7 +197,7 @@ END_MODELSET
 MODELSET
 	TYPE = 12					# やかん
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.7 0.7 0.7			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 35.0 5.0 45.0
 	ANSWERMODEL = 12			# 答えのモデル
@@ -225,7 +232,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 16					# かるた
-	ROT = 0.0 0.0 0.0			# 向き 
+	ROT = 1.57 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 40.0 15.0
@@ -244,7 +251,7 @@ END_MODELSET
 MODELSET
 	TYPE = 18					# こえだ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 2.0 2.0 2.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 9.0 3.0 15.0
 	ANSWERMODEL = 18			# 答えのモデル
@@ -253,7 +260,7 @@ END_MODELSET
 MODELSET
 	TYPE = 19					# いちご
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 16.0 9.0
 	ANSWERMODEL = 19			# 答えのモデル
@@ -262,7 +269,7 @@ END_MODELSET
 MODELSET
 	TYPE = 20					# たまご
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.1 1.1 1.1			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 15.0 30.0 9.0
 	ANSWERMODEL = 20			# 答えのモデル
@@ -271,7 +278,7 @@ END_MODELSET
 MODELSET
 	TYPE = 21					# ランス
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.5 1.5 1.0			# スケール
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 38.0 45.0 12.0
 	ANSWERMODEL = 21			# 答えのモデル
@@ -280,7 +287,7 @@ END_MODELSET
 MODELSET
 	TYPE = 22					# かだん
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.5 0.5 0.5			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 5.0 15.0 45.0
 	ANSWERMODEL = 22			# 答えのモデル
@@ -289,7 +296,7 @@ END_MODELSET
 MODELSET
 	TYPE = 23					# かたな
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.9 0.9 0.9			# スケール
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 5.0 15.0 20.0
 	ANSWERMODEL = 23			# 答えのモデル
@@ -298,7 +305,7 @@ END_MODELSET
 MODELSET
 	TYPE = 24					# まるた
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.6 0.6 0.6			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 30.0 40.0 15.0
 	ANSWERMODEL = 24			# 答えのモデル
@@ -306,7 +313,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 25					# つらら
-	ROT = 0.0 0.0 0.0			# 向き 
+	ROT = 0.0 0.0 -1.57			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 17.0 38.0 38.0
@@ -333,7 +340,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 28					# くない
-	ROT = 0.0 0.0 0.0			# 向き 
+	ROT = 0.0 3.14 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 7.0 20.0 1.0
@@ -352,7 +359,7 @@ END_MODELSET
 MODELSET
 	TYPE = 30					# かざん
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.2 0.2 0.2			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 5.0 10.0 45.0
 	ANSWERMODEL = 30			# 答えのモデル
@@ -361,7 +368,7 @@ END_MODELSET
 MODELSET
 	TYPE = 31					# なすか
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.7 0.7 0.7			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 20.0 12.0 5.0
 	ANSWERMODEL = 31			# 答えのモデル
@@ -370,7 +377,7 @@ END_MODELSET
 MODELSET
 	TYPE = 32					# たんく
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.3 1.3 1.3			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 45.0 7.0
 	ANSWERMODEL = 32			# 答えのモデル
@@ -379,7 +386,7 @@ END_MODELSET
 MODELSET
 	TYPE = 33					# やぐら
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.8 0.8 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 35.0 7.0 38.0
 	ANSWERMODEL = 33			# 答えのモデル
@@ -397,7 +404,7 @@ END_MODELSET
 MODELSET
 	TYPE = 35					# こんが
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.8 1.0 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 9.0 45.0 5.0
 	ANSWERMODEL = 35			# 答えのモデル
@@ -415,7 +422,7 @@ END_MODELSET
 MODELSET
 	TYPE = 37					# たから
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.7 0.7 0.7			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 5.0 38.0
 	ANSWERMODEL = 37			# 答えのモデル
@@ -442,7 +449,7 @@ END_MODELSET
 MODELSET
 	TYPE = 40					# リング
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 39.0 45.0 7.0
 	ANSWERMODEL = 40			# 答えのモデル
@@ -460,7 +467,7 @@ END_MODELSET
 MODELSET
 	TYPE = 42					# さざえ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.8 0.8 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 10.0 10.0 3.0
 	ANSWERMODEL = 42			# 答えのモデル
@@ -497,7 +504,7 @@ END_MODELSET
 MODELSET
 	TYPE = 46					# ふいご
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 27.0 1.0 9.0
 	ANSWERMODEL = 46			# 答えのモデル
@@ -506,7 +513,7 @@ END_MODELSET
 MODELSET
 	TYPE = 47					# なまこ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.4 1.4 1.4			# スケール
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 20.0 30.0 9.0
 	ANSWERMODEL = 47			# 答えのモデル
@@ -524,7 +531,7 @@ END_MODELSET
 MODELSET
 	TYPE = 49					# コンブ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.3 1.3 1.3			# スケール
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 9.0 45.0 27.0
 	ANSWERMODEL = 49			# 答えのモデル
@@ -533,7 +540,7 @@ END_MODELSET
 MODELSET
 	TYPE = 50					# らいち
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.5 1.5 1.5			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 38.0 1.0 16.0
 	ANSWERMODEL = 50			# 答えのモデル
@@ -541,8 +548,8 @@ END_MODELSET
 
 MODELSET
 	TYPE = 51					# かめん
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	ROT = 0.0 1.57 0.0			# 向き 
+	SCALE = 1.4 1.4 1.4			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 33.0 45.0
 	ANSWERMODEL = 51			# 答えのモデル
@@ -551,7 +558,7 @@ END_MODELSET
 MODELSET
 	TYPE = 52					# めかぶ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.3 1.3 1.3			# スケール
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 33.0 5.0 27.0
 	ANSWERMODEL = 52			# 答えのモデル
@@ -559,8 +566,8 @@ END_MODELSET
 
 MODELSET
 	TYPE = 53					# くすり
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	ROT = 0.0 1.57 0.0			# 向き 
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 7.0 12.0 39.0
 	ANSWERMODEL = 53			# 答えのモデル
@@ -577,8 +584,8 @@ END_MODELSET
 
 MODELSET
 	TYPE = 55					# マスク
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	ROT = 0.0 1.57 0.0			# 向き 
+	SCALE = 1.4 1.4 1.4			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 30.0 12.0 7.0
 	ANSWERMODEL = 51			# 答えのモデル
@@ -591,7 +598,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 1.0 7.0 38.0
-	ANSWERMODEL = 56			# 答えのモデル
+	ANSWERMODEL = 55			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -600,16 +607,16 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 33.0 45.0 9.0
-	ANSWERMODEL = 57			# 答えのモデル
+	ANSWERMODEL = 56			# 答えのモデル
 END_MODELSET
 
 MODELSET
 	TYPE = 58					# めいす
-	ROT = 0.0 0.0 0.0			# 向き 
+	ROT = 0.0 0.0 1.57			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 33.0 1.0 12.0
-	ANSWERMODEL = 58			# 答えのモデル
+	ANSWERMODEL = 57			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -618,7 +625,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 38.0 1.0
-	ANSWERMODEL = 59			# 答えのモデル
+	ANSWERMODEL = 58			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -627,7 +634,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 45.0 7.0
-	ANSWERMODEL = 60			# 答えのモデル
+	ANSWERMODEL = 59			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -636,7 +643,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 1.0 40.0
-	ANSWERMODEL = 61			# 答えのモデル
+	ANSWERMODEL = 60			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -645,7 +652,7 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 20.0 39.0
-	ANSWERMODEL = 62			# 答えのモデル
+	ANSWERMODEL = 61			# 答えのモデル
 END_MODELSET
 
 MODELSET
@@ -654,7 +661,71 @@ MODELSET
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 7.0 27.0
+	ANSWERMODEL = 62			# 答えのモデル
+END_MODELSET
+
+
+MODELSET
+	TYPE = 64					# たいつ
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 15.0 1.0 17.0
 	ANSWERMODEL = 63			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 65					# カエル
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 4				# 弾の種類
+	ANSWER = 5.0 3.0 40.0
+	ANSWERMODEL = 64			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 66					# プラグ
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 27.0 38.0 7.0
+	ANSWERMODEL = 65			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 67					# サイン
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 10.0 1.0 45.0
+	ANSWERMODEL = 66			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 68					# 大麻
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 15.0 1.0 30.0
+	ANSWERMODEL = 67			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 69					# さくら
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 10.0 7.0 38.0
+	ANSWERMODEL = 68			# 答えのモデル
+END_MODELSET
+
+MODELSET
+	TYPE = 70					# かやく
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 5.0 35.0 7.0
+	ANSWERMODEL = 69			# 答えのモデル
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！

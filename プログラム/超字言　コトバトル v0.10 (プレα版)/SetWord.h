@@ -68,6 +68,7 @@ public:
 	int m_nNum;
 	int m_nRandAnswerNum;			// 答えをランダムに
 	int m_nAnswerNumCount;			// カウント
+	bool m_bCreate;
 };
 
 #endif
