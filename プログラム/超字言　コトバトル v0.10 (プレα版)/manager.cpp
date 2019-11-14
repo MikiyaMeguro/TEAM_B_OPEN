@@ -748,6 +748,7 @@ void CManager::SetMode(MODE mode)
 		}
 		break;
 	case CManager::MODE_GAME:
+		m_pSound[0]->SetVolume(CSound::SOUND_LABEL_BGM_GAME000, 0.2f);
 		//ゲームの初期化
 		if (m_pGame == NULL)
 		{//ゲームのメモリを動的確保

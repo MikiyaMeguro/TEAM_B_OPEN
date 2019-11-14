@@ -275,18 +275,22 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 
 					if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
 					{
+						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
 						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
 					}
 					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
 					{
+						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
 						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
 					}
 					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
 					{
+						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
 						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
 					}
 					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
 					{
+						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
 						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
 					}
 				}
