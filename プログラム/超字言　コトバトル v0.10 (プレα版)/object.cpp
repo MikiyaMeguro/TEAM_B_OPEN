@@ -15,6 +15,7 @@
 #include "game.h"
 #include "time.h"
 #include "scene3D.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -48,6 +49,10 @@ CObject::CObject()
 	m_nCntPattan = 0;
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fMove = 0.0f;
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_InitPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_MoveState = 0;
+
 }
 
 //=============================================================================
@@ -94,6 +99,15 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 
 	CSceneX::Init(pos);
 	m_posOld = pos;
+	m_InitPos = pos;
+	if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_X)
+	{//ドローンX移動
+		m_MoveState = 1;
+	}
+	else if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_Z)
+	{//ドローンZ移動
+		m_MoveState = 1;
+	}
 	return S_OK;
 }
 
@@ -116,13 +130,15 @@ void CObject::Uninit(void)
 void CObject::Update(void)
 {
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
+
+	BGModelMove(pos);				// 背景モデルの移動
 
 	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// 何もない場合は何も通さない
 
-	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
 	ModelMove(Collsiontype, pos);	// モデルの移動
-	
+
 	if (m_pIcon != NULL) { AnimationIcon(); }
 
 #ifdef _DEBUG
@@ -167,6 +183,62 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove)
 	else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
 	{	// 左移動
 		pMove->x += BELTCONVEYER_MOVE;
+	}
+}
+//=============================================================================
+// 背景モデルの挙動処理
+//=============================================================================
+void CObject::BGModelMove(D3DXVECTOR3 pos)
+{
+	if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_X)
+	{//　X座標の移動をするドローン
+		if (m_InitPos.x + 200 <= pos.x)
+		{//	初期位置から+250以上離れた場合
+			m_MoveState = 2;
+		}
+		else if (m_InitPos.x - 200 >= pos.x)
+		{//	初期位置から-250以上離れた場合
+			m_MoveState = 1;
+		}
+		switch (m_MoveState)
+		{//	動きのステータス
+		case 0:
+			m_move.x = 0.0f;
+			break;
+		case 1:
+			m_move.x = 1.0f;
+			break;
+		case 2:
+			m_move.x = -1.0f;
+			break;
+		}
+		pos += m_move;				//	動きの加算
+		CSceneX::SetPosition(pos);	//	位置の設定
+	}
+	else if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_Z)
+	{//　X座標の移動をするドローン
+		if (m_InitPos.z + 200 <= pos.z)
+		{//	初期位置から+250以上離れた場合
+			m_MoveState = 2;
+		}
+		else if (m_InitPos.z - 200 >= pos.z)
+		{//	初期位置から-250以上離れた場合
+			m_MoveState = 1;
+		}
+		switch (m_MoveState)
+		{//	動きのステータス
+		case 0:
+			m_move.z = 0.0f;
+			break;
+		case 1:
+			m_move.z = 1.0f;
+			break;
+		case 2:
+			m_move.z = -1.0f;
+			break;
+		}
+		pos += m_move;				//	動きの加算
+		CSceneX::SetPosition(pos);	//	位置の設定
 	}
 }
 
@@ -241,7 +313,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 		Rot(Type);
 
 		if (((CTime::GetStageTime() % 30) == 0) && CManager::GetGame()->GetChangeNum() < 2)
-		{ 
+		{
 			m_nRealTime = REALTIME_ENDPOS;
 		}
 	}
@@ -261,7 +333,6 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 			return;
 		}
 	}
-
 }
 
 //=============================================================================

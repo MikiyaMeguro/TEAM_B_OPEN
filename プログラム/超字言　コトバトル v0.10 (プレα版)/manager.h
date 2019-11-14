@@ -111,6 +111,7 @@ public:
 	static CResult *GetResult(void) { return m_pResult; }
 	static CInputXPad *GetXInput(int nID) { return m_pXInput[nID]; }
 	static CSound *GetSound(int nNum);
+	static CSound *GetSound(void) { return m_pSound[0]; }			// ƒTƒEƒ“ƒhæ“¾
 
 	static CCameraManager* GetCameraManager(void) { return m_pCameraManager; };
 private:

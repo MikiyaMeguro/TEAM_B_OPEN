@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 8
+NUM_MODEL = 11
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -17,126 +17,14 @@ NUM_MODEL = 8
 MODEL_FILENAME = data/MODEL/StageOBJ/SmallBlock.x"	#0 小さい壁  
 MODEL_FILENAME = data/MODEL/StageOBJ/BigBlock.x"	#1 大きい壁
 MODEL_FILENAME = data/MODEL/StageOBJ/Giar.x"		#2 歯車
-MODEL_FILENAME = data/MODEL/box000.x"				#3 
+MODEL_FILENAME = data/MODEL/box000.x"				#3 箱
 MODEL_FILENAME = data/MODEL/StageOBJ/Stylbe.x"		#4 土台 
 MODEL_FILENAME = data/MODEL/Dust.x"					#5 ゴミ
-MODEL_FILENAME = data/MODEL/StageOBJ/arm.x"			#6
-MODEL_FILENAME = data/MODEL/StageOBJ/propeller.x"	#7
-
-#------------------------------------------------------------
-#                      モデル配置情報
-#------------------------------------------------------------
-MODELSET
-	TYPE = 1
-	POS = 0.0 400.0 180.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.5 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = 0.0 400.0 -180.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.5 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = 180.0 400.0 0.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.5
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = -180.0 400.0 0.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.5
-	COLLISION = 1
-END_MODELSET
-
-
-
-
-
-MODELSET
-	TYPE = 1
-	POS = 150.0 400.0 400.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = -150.0 400.0 400.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-
-MODELSET
-	TYPE = 1
-	POS = 150.0 400.0 -400.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-MODELSET
-	TYPE = 1
-	POS = -150.0 400.0 -400.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
-	COLLISION = 1
-END_MODELSET
-
-
-
-MODELSET
-	TYPE = 2
-	POS = 0.0 400.0 0.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 6
-END_MODELSET
-
-
-MODELSET
-	TYPE = 2
-	POS = -150.0 400.0 -250.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 7
-END_MODELSET
-
-MODELSET
-	TYPE = 2
-	POS = 150.0 400.0 -250.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 8
-END_MODELSET
-
-MODELSET
-	TYPE = 2
-	POS = -150.0 400.0 250.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 8
-END_MODELSET
-
-MODELSET
-	TYPE = 2
-	POS = 150.0 400.0 250.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 0.8
-	COLLISION = 7
-END_MODELSET
+MODEL_FILENAME = data/MODEL/StageOBJ/arm.x"			#6プロペラarm
+MODEL_FILENAME = data/MODEL/StageOBJ/propeller.x"	#7プロペラ
+MODEL_FILENAME = data/MODEL/StageOBJ/drone.x"		#8 X移動
+MODEL_FILENAME = data/MODEL/StageOBJ/drone.x"		#9 Z移動
+MODEL_FILENAME = data/MODEL/StageOBJ/froor.x"		#10 床背景
 
 
 
