@@ -198,9 +198,9 @@ void CTube::SetAnswer(int nAnswer)
 		}
 
 		//	文字で作れるモデルをまとめた画像に変える
-		m_pAnswerModel = CScene2D::Create(m_AnswerPos, "WORD", 3);
+		m_pAnswerModel = CScene2D::Create(m_AnswerPos, "モデル_TEX", 3);
 		m_pAnswerModel->SetWidthHeight(AnswerSize.x, AnswerSize.y);	// サイズ設定
-		m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
+		m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 10) * 0.1f), 0.0f + ((nAnswer % 10) * 0.1f)), D3DXVECTOR2(0.1f + ((nAnswer / 10) * 0.1f), 0.2f + ((nAnswer % 10) * 0.1f)));
 	}
 }
 //=============================================================================
