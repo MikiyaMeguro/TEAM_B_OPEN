@@ -31,7 +31,7 @@
 #define SIZE_ANSWER_001	(D3DXVECTOR2(60.0f, 70.0f))		// 答えの位置
 
 #define POS_ANSWER_002	(D3DXVECTOR3(WORD_POS.x - 32.0f, WORD_POS.y + 32.0f, 0.0f))		// 答えの位置
-#define SIZE_ANSWER_002	(D3DXVECTOR2(47.0f, 60.0f))		// 答えの位置
+#define SIZE_ANSWER_002	(D3DXVECTOR2(38.0f, 50.0f))		// 答えの位置
 
 #define MOVE			(3.0f)
 #define AREA			(2.0f * 2.0f)
@@ -49,6 +49,7 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	m_pAnswerModel = NULL;
 	m_nAnswer = 0;
 	m_bModelTexFlag = false;
+	m_nAnswerModelNum = 7;
 }
 
 //=============================================================================
@@ -282,12 +283,12 @@ void CTube::Collect(void)
 
 		if (m_pAnswerModel != NULL)
 		{
-			if (NOT_NUM == m_nAnswerModelNum)
-			{	// ゴミモデルのtexを出す
-				m_pAnswerModel->BindTexture("ゴミ_モデル");
-				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
-			}
-			else if (NOT_NUM != m_nAnswerModelNum)
+			//if (NOT_NUM == m_nAnswerModelNum)
+			//{	// ゴミモデルのtexを出す
+			//	m_pAnswerModel->BindTexture("ゴミ_モデル");
+			//	m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+			//}
+			//else if (NOT_NUM != m_nAnswerModelNum)
 			{	// 正解のモデルを出す
 				m_pAnswerModel->BindTexture("モデル_TEX");
 				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
