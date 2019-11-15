@@ -108,19 +108,8 @@ HRESULT CTexture::Load(void) {
 //==================================================================
 void CTexture::Unload(void)
 {
-	if (m_TexData.size() > 0)
-	{
-		for (auto itr = m_TexData.begin(); itr != m_TexData.end(); ++itr)	//前置インクリメントの方が後置インクリメントより高速らしいのでこちらを採用
-		{
-			//テクスチャの解放
-			if (itr->pTexture != NULL)
-			{
-				itr->pTexture->Release();
-				itr->pTexture = NULL;
-			}
-			itr->nID = 0;
-		}
-	}
+	//テクスチャ解放
+	ReleaseAll();
 
 	m_TexData.clear();
 	m_TexData.shrink_to_fit();
@@ -158,6 +147,24 @@ LPDIRECT3DTEXTURE9 CTexture::GetTexture(const LPCSTR Tag) {		//タグ
 		}
 	}
 	return NULL;
+}
+//==================================================================
+// 作られたテクスチャの全解放
+//==================================================================
+void CTexture::ReleaseAll(void)
+{
+	if (m_TexData.size() > 0)
+	{//テクスチャ数が0以上なら
+		for (auto itr = m_TexData.begin(); itr != m_TexData.end(); ++itr)
+		{//前置インクリメントの方が後置インクリメントより高速らしいのでこちらを採用
+			//テクスチャの解放
+			if (itr->pTexture != NULL)
+			{
+				itr->pTexture->Release();
+				itr->pTexture = NULL;
+			}
+		}
+	}
 }
 
 //==================================================================

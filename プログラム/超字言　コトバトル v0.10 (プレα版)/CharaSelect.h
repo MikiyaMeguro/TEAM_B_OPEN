@@ -75,18 +75,18 @@ private:
 
 	}CONFPRODUCTION_STATE;
 
-	void Initpointer(void);																//ポインタの初期化
-	void ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed);						//テクスチャスクロール処理
-	void SelectProduction(SELECT_STATE &Sel, SELECT_STATE &Selold, CPlayer::PLAYER_TYPE type);	//演出処理
-	void InitCharaSelectPoly(void);														//ポインタの初期化
-	bool collision(int operation,CPlayer::PLAYER_TYPE type);									//あたり判定
-	D3DXVECTOR3 MoveRestriction(D3DXVECTOR3 pos);										//移動制限
-	void SetCommand(void);																//コマンド設定
-	void CharaSelTex(SELECT_STATE Sel, CPlayer::PLAYER_TYPE &type, CPlayer::PLAYER_TYPE &typeOld);	//テクスチャ座標管理
-	bool ConfirmationSelect(void);														//プレイヤーが全員選択したか確認する												
-	bool collisionConf(int operation);													//確定ポリとあたり判定
-	bool ProductionConf(void);															//確定ポリの演出
-	void FlashConf(void);																//確定ポリの点滅
+	void Initpointer(void);																			//ポインタの初期化
+	void ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed);									//テクスチャスクロール処理
+	void SelectProduction(int nNum,SELECT_STATE &Sel, SELECT_STATE &Selold, CPlayer::PLAYER_TYPE type);		//演出処理
+	void InitCharaSelectPoly(void);																	//ポインタの初期化
+	bool collision(int operation,CPlayer::PLAYER_TYPE type);										//あたり判定
+	D3DXVECTOR3 MoveRestriction(D3DXVECTOR3 pos);													//移動制限
+	void SetCommand(void);																			//コマンド設定
+	void CharaSelTex(int nNum, SELECT_STATE Sel, CPlayer::PLAYER_TYPE &type, CPlayer::PLAYER_TYPE &typeOld);	//テクスチャ座標管理
+	bool ConfirmationSelect(void);																	//プレイヤーが全員選択したか確認する												
+	bool collisionConf(int operation);																//確定ポリとあたり判定
+	bool ProductionConf(void);																		//確定ポリの演出
+	void FlashConf(void);																			//確定ポリの点滅
 	static CScene2D *m_apScene2D[MAX_CHARASELTEX];		//背景系のポインタ
 	static CScene2D *m_apSelect2D[MAX_CHARASELECT];		//選択肢
 	static CScene2D *m_apCursor2D[MAX_PLAYER];			//カーソル
@@ -109,6 +109,6 @@ private:
 	SELECT_STATE m_SelectStateold[MAX_PLAYER];		//前回の演出状態を記録
 	CPlayerSelect::SELECTPLAYER *m_PlayerNum;		//プレイヤーの人数
 	CONFPRODUCTION_STATE m_CnfProState;				//確定の演出状態
-
+	float m_fCofMoveBlend;							//スティック角に応じた移動係数
 };
 #endif
