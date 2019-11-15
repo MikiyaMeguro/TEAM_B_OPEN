@@ -469,10 +469,10 @@ void CCharaSelect::InitCharaSelectPoly(void)
 		/* 生成と座標とテクスチャ */
 		m_apSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(CHARASELCHOICE_POS.x + (CHARASELICON_INTERVAL*nCnt),
 			CHARASELCHOICE_POS.y,
-			CHARASELCHOICE_POS.z), "CHARACTORSEL_CHARA");
-		/* テクスチャ座標設定 */
-		m_apSelect2D[nCnt]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*nCnt), 0.0f),
-			D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*nCnt) - TEX_CORRECTION, 0.5f));
+			CHARASELCHOICE_POS.z), "PLAYERSELECT_BACK");
+		///* テクスチャ座標設定 */
+		//m_apSelect2D[nCnt]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*nCnt), 0.0f),
+		//	D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*nCnt) - TEX_CORRECTION, 0.5f));
 		/* サイズ設定 */
 		m_apSelect2D[nCnt]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.5f);
 	}
