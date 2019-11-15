@@ -682,6 +682,9 @@ void CManager::SetMode(MODE mode)
 	}
 	m_mode = mode;
 
+	//使われていたテクスチャを解放
+	CTexture::ReleaseAll();
+
 	switch (mode)
 	{
 	case CManager::MODE_TITLE:
@@ -837,4 +840,5 @@ void CManager::SetMode(MODE mode)
 			}
 			break;
 	}
+
 }

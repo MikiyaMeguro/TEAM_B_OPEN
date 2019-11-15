@@ -41,9 +41,6 @@ public:
 		}
 	};
 
-	//コンストラクタ&デストラクタ
-	CTexture() {};
-	~CTexture() {};
 
 	//読み込み&削除
 	static HRESULT Load(void);
@@ -53,6 +50,8 @@ public:
 	static LPDIRECT3DTEXTURE9 GetTexture(const int nID);
 	static LPDIRECT3DTEXTURE9 GetTexture(const LPCSTR Tag);
 
+	//作られているテクスチャを全開放
+	static void ReleaseAll(void);
 	//使わなくなったテクスチャの解放
 	static void Release(const int nID);
 	static void Release(const LPCSTR Tag);
@@ -60,6 +59,9 @@ public:
 	//テクスチャ数
 	static int GetTexNum(bool bCreate);
 private:
+	//コンストラクタ&デストラクタ
+	CTexture() {};
+	~CTexture() {};
 
 	//内部でのテクスチャ生成関数
 	static void Create(LPCSTR address, LPDIRECT3DTEXTURE9 &pTexture);
