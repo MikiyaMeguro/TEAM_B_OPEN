@@ -12,6 +12,7 @@
 #include "debugProc.h"
 #include "game.h"
 #include "SetWord.h"
+#include "point.h"
 
 #include "bullet.h"
 #include "CameraManager.h"
@@ -26,6 +27,7 @@ D3DXVECTOR3 *CWordManager::m_Scale = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 D3DXVECTOR3 *CWordManager::m_rot = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 int *CWordManager::m_type = 0;
 int *CWordManager::m_nAnswerTypeModel = 0;
+int *CWordManager::m_nPoint = 0;
 
 //=============================================================================
 // コンストラクタ
@@ -44,12 +46,15 @@ CWordManager::CWordManager()
 	m_nPlayerID = 0;		// プレイヤーが何番かの保存
 	m_bPress = false;		// 指定した文字以上をいれないフラグ
 	m_bSearch = false;		// サーチを開始する時のフラグ
+	m_bFlag = false;
+	m_bAnswerCheck = false;
 
 	m_fAnswerData = NULL;
 	m_Scale = NULL;
 	m_type = NULL;
 	m_nAnswerTypeModel = NULL;
 	m_rot = NULL;
+	m_nPoint = NULL;
 }
 //=============================================================================
 // デストラクタ
@@ -104,6 +109,12 @@ void CWordManager::Uninit(void)
 		delete[] m_nAnswerTypeModel;
 		m_nAnswerTypeModel = NULL;
 	}
+
+	if (m_nPoint != NULL)
+	{
+		delete[] m_nPoint;
+		m_nPoint = NULL;
+	}
 }
 
 //=============================================================================
@@ -122,7 +133,7 @@ void CWordManager::Update(void)
 		m_bPress = true;
 	}
 
-	if (m_bPress == true)
+	if (m_bPress == true && m_bAnswerCheck == false)
 	{
 		if (m_nCntaAnswer == 0)
 		{
@@ -135,26 +146,37 @@ void CWordManager::Update(void)
 					else if (m_AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
 				}
 
-				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; }
+				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; m_bFlag = false;}
 				else if (m_nCntaAnswer < MAX_WORD)
 				{
 					for (int nCount = 0; nCount < MAX_WORD; nCount++)
 					{
 						m_bAnswer[nCount] = false;
+						m_bFlag = true;
 					}
 				}
 
 				if (m_nCntaAnswer == MAX_WORD)
 				{
 					m_nCreateType = nCntAnswer;
-					if (CGame::GetTube(m_nPlayerID) != NULL) { CGame::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType]); }
+					if (CGame::GetTube(m_nPlayerID) != NULL) 
+					{
+						CGame::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType]);
+						CGame::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
+					}
 					return;
 				}
 				else { m_nCntaAnswer = 0; }
 			}
 
-			if (m_nCreateType > m_nAnswerDataNum) { if (CGame::GetTube(m_nPlayerID) != NULL) {
-				CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM); } }
+			//if (m_nCreateType > m_nAnswerDataNum )
+			//{
+			//	if (CGame::GetTube(m_nPlayerID) != NULL)
+			//	{
+			//		CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM);
+			//		//CGame::GetTube(m_nPlayerID)->SetPoint(-3, m_nPlayerID);
+			//	}
+			//}
 		}
 
 		//テスト
@@ -162,6 +184,18 @@ void CWordManager::Update(void)
 		//{	// 弾の生成
 		//	BulletCreate(0);
 		//}
+
+		m_bAnswerCheck = true;
+	}
+
+	if (m_bFlag == true)
+	{
+		if (CGame::GetTube(m_nPlayerID) != NULL)
+		{
+			m_bFlag = false;
+			CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM);
+			CGame::GetTube(m_nPlayerID)->SetPoint(3, m_nPlayerID, true);
+		}
 	}
 
 	if (m_nCntNum != 2 && m_bSearch == true)
@@ -219,6 +253,7 @@ void CWordManager::Reset(void)
 	m_nCntaAnswer = 0;
 	m_nCntNum = 0;
 	m_bPress = false;
+	m_bAnswerCheck = false;
 }
 
 //=============================================================================
@@ -336,13 +371,14 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 //=============================================================================
 // Textから読み込み 答えの割り当て
 //=============================================================================
-void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, D3DXVECTOR3 rot, int type, int Model)
+void CWordManager::SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, D3DXVECTOR3 rot, int type, int Model, int nPoint)
 {
 	m_AnswerNum[nNumModel] = AnswerNum;
 	m_Scale[nNumModel] = scale;
 	m_type[nNumModel] = type;
 	m_nAnswerTypeModel[nNumModel] = Model;
 	m_rot[nNumModel] = rot;
+	m_nPoint[nNumModel] = nPoint;
 }
 
 //=============================================================================
@@ -356,6 +392,7 @@ void CWordManager::SetWordAnswerNum(int nAnswerNum)
 	m_rot = new D3DXVECTOR3[m_nAnswerDataNum];
 	m_type = new int[m_nAnswerDataNum];
 	m_nAnswerTypeModel = new int[m_nAnswerDataNum];
+	m_nPoint = new int[nAnswerNum];
 }
 
 //=============================================================================

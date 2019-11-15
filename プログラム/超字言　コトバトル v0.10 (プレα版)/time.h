@@ -35,7 +35,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	void TexTime(int nTexData);
+	void TexTime(int nTexData, int nTimeOne);
 
 	//============================
 	// 設定　取得　の関数
@@ -57,6 +57,7 @@ private:
 	static int				m_nTimeCount;		// 時間のカウンタ
 	static int				m_nTimeOld;
 	static int				m_nStageChange;		// ステージが切り替わる時間
+	static int				m_nTimeOne;
 	int						m_nTimeNum;			// 時間の表示数字数
 	int						m_nWaitTime;		// ゲーム終了時の待ち時間
 	int						m_nNumPlayer;		// 人数保管

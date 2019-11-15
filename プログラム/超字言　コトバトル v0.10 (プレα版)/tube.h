@@ -35,6 +35,7 @@ public:
 
 	//İ’è‚ÌŠÖ”
 	void SetWordNum(int nWordNum, int nNum);
+	void SetPoint(int nPoint, int nNum, bool bPoint);
 	void SetAnswer(int nAnswer);
 	void AllDelete(void);
 	void Delete(int nID);

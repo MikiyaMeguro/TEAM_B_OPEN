@@ -12,6 +12,7 @@
 #include "scene2D.h"
 #include "game.h"
 #include "PlayerNumSelect.h"
+#include "point.h"
 //=============================================================================
 // マクロ関数
 //=============================================================================
@@ -49,7 +50,6 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	m_pAnswerModel = NULL;
 	m_nAnswer = 0;
 	m_bModelTexFlag = false;
-	m_nAnswerModelNum = 7;
 }
 
 //=============================================================================
@@ -283,12 +283,12 @@ void CTube::Collect(void)
 
 		if (m_pAnswerModel != NULL)
 		{
-			//if (NOT_NUM == m_nAnswerModelNum)
-			//{	// ゴミモデルのtexを出す
-			//	m_pAnswerModel->BindTexture("ゴミ_モデル");
-			//	m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
-			//}
-			//else if (NOT_NUM != m_nAnswerModelNum)
+			if (NOT_NUM == m_nAnswerModelNum)
+			{	// ゴミモデルのtexを出す
+				m_pAnswerModel->BindTexture("ゴミ_モデル");
+				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+			}
+			else if (NOT_NUM != m_nAnswerModelNum)
 			{	// 正解のモデルを出す
 				m_pAnswerModel->BindTexture("モデル_TEX");
 				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
@@ -330,5 +330,21 @@ void CTube::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum)
 			}
 		}
 
+	}
+}
+
+//=============================================================================
+// ポイントの処理
+//=============================================================================
+void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
+{
+	CPoint *pPoint = NULL;
+	if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(nNum); }
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */ }
+
+	if (pPoint != NULL)
+	{
+		if (bPoint == false) { pPoint->AddPoint(nPoint); }
+		else if (bPoint == true) { pPoint->SubtractionPoint(nPoint); }
 	}
 }

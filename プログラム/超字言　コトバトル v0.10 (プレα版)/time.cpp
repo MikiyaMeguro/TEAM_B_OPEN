@@ -20,7 +20,7 @@
 #define TIMER_SPACE			(30.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
 #define GAME_TIME			(130)							// ゲーム開始時の時間
-#define GAME_TIME_MAX		(960)							// ゲームの時間最大数
+#define GAME_TIME_MAX		(9)							// ゲームの時間最大数
 #define POWER_X				(10)
 #define TIME_POS_1P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 70.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
@@ -36,6 +36,7 @@ int						CTime::m_nTimeCount = 0;
 bool					CTime::m_bCountFlag = true;			//時間をカウントするか
 int						CTime::m_nTimeOld = 0;
 int						CTime::m_nStageChange = 1;
+int						CTime::m_nTimeOne = 3;
 //=============================================================================
 // 生成処理
 //=============================================================================
@@ -73,7 +74,7 @@ CTime *CTime::Create(int nNumPlayer)
 CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType)
 {
 	m_nTimeCount = 0;
-	m_nTimeNum = 1;
+	m_nTimeNum = 3;
 	m_nWaitTime = 0;
 	m_pColon = NULL;
 	m_bStart = false;
@@ -92,9 +93,10 @@ CTime::~CTime() {}
 HRESULT CTime::Init(void)
 {
 	int nTexData = 0;
-	m_nTime = GAME_TIME;
+	m_nTime = 0;
 	m_nTimeOld = GAME_TIME - 30;
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
+	m_nTimeOne = 3;
 
 	// 後ろの背景
 	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
@@ -137,7 +139,7 @@ HRESULT CTime::Init(void)
 			}
 		}
 		// 数字のテクスチャ設定
-		TexTime(nTexData);
+		TexTime(nTexData, m_nTimeOne);
 	}
 
 	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
@@ -254,9 +256,9 @@ void CTime::Update(void)
 
 		int nTexData = 0;
 		// 数字のテクスチャ設定
-		TexTime(nTexData);
+		TexTime(nTexData, m_nTimeOne);
 
-		if (m_nTime == 0 && GameMode == CManager::MODE_GAME)
+		if (m_nTime == 0 && m_nTimeOne == 0 && GameMode == CManager::MODE_GAME)
 		{	// ゲーム終了
 			m_nWaitTime++;	// 待ち時間の加算
 			if ((m_nWaitTime % WAIT_TIME_END) == 0)
@@ -272,7 +274,7 @@ void CTime::Update(void)
 //=============================================================================
 void CTime::Draw(void)
 {
-	for (int nCntTime = 0; nCntTime < m_nTimeNum; nCntTime++)
+	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
 	{
 		if (m_apNumber[nCntTime] != NULL)
 		{
@@ -289,20 +291,27 @@ void CTime::Draw(void)
 //=============================================================================
 // タイマーのTexture管理
 //=============================================================================
-void CTime::TexTime(int nTexData)
+void CTime::TexTime(int nTexData, int nTimeOne)
 {
 	nTexData = m_nTime;
 
-	for (int nCntTime = 0; nCntTime < m_nTimeNum; nCntTime++)
+	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
 	{// テクスチャに反映
 
 		if (m_apNumber[nCntTime] != NULL)
 		{
-			m_apNumber[nCntTime]->SetNumber(nTexData);
-
-			nTexData /= 10;
+			if (nCntTime < 2)
+			{
+				m_apNumber[nCntTime]->SetNumber(nTexData);
+				nTexData /= 10;
+			}
+			else if (nCntTime == 2)
+			{
+				m_apNumber[nCntTime]->SetNumber(nTimeOne);
+				nTexData /= 10;
+			}
 			// 色の設定
-			if (m_nTime <= 10)
+			if (m_nTime <= 10 && m_nTimeOne == 0)
 			{ // 10秒以下 色を赤に
 				m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 				if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)); }
@@ -322,11 +331,10 @@ void CTime::AddTime(int nTime)
 {
 	if (m_nTime > 0)
 	{
-		m_nTime += nTime;
-		m_nTimeOld += nTime;
+		m_nTimeOne += nTime;
 	}
 
-	if (GAME_TIME_MAX < m_nTime) { m_nTime = GAME_TIME_MAX; }
+	if (GAME_TIME_MAX < m_nTimeOne) { m_nTimeOne = GAME_TIME_MAX; }
 }
 //=============================================================================
 // べき乗の計算
@@ -353,10 +361,12 @@ int CTime::PowerCalculation(int nData, int nOperation)
 //=============================================================================
 void CTime::TimeManagement(void)
 {
-	if ((m_nStageChange % 30) == 0 && m_bStageCreate == false)
+	if (m_nTime == 0 && m_nTimeOne == 0) {m_nTime = 0; return; }
+
+	if ((m_nStageChange % 60) == 0 && m_bStageCreate == false)
 	{	// 30秒ごとにステージが変わる
 		m_bStageCreate = true;
-		int nStageNum = (m_nStageChange / 30);
+		int nStageNum = (m_nStageChange / 60);
 		CManager::GetGame()->SetStage(nStageNum);
 	}
 
@@ -365,9 +375,8 @@ void CTime::TimeManagement(void)
 		m_nTime--;
 		m_nStageChange++;
 		m_bStageCreate = false;
-		int nNum = m_nTime - m_nTimeOld;
-		if (nNum < 0) { m_nTime -= 40; m_nTimeOld -= 100; }
-		if (m_nTime < 0) { m_nTime = 0; }
+
+		if (m_nTime < 0) { m_nTime = 59; m_nTimeOne -= 1; }
 		//m_nTimeNum = PowerCalculation(m_nTime, 0);
 	}
 }
@@ -379,10 +388,11 @@ void CTime::DebugKey(void)
 	// デバック用
 	if (CManager::GetInputKeyboard()->GetTrigger(DIK_NUMPAD0))
 	{	// 制限時間加算
-		AddTime(100);
+		AddTime(1);
 	}
 	if (CManager::GetInputKeyboard()->GetTrigger(DIK_NUMPAD9))
 	{	// リザルト画面へ
 		m_nTime = 0;
+		m_nTimeOne = 0;
 	}
 }
