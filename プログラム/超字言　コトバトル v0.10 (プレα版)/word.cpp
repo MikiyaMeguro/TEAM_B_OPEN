@@ -50,6 +50,14 @@ CWord::CWord() : CSceneBillBoard()
 	m_nAnim = 0;
 	m_nPatten = 0;
 	m_colA = 0.4f;
+
+	// 3•¶šŒó•â‚Ì•Ï”
+	m_SearchCol = NULL;
+	if (m_SearchCol == NULL) 
+	{
+		/*int nNum = *CPlayerSelect::GetModeSelectMode();
+		m_SearchCol = new D3DXCOLOR*/
+	}
 }
 
 //--------------------------------------------
