@@ -354,4 +354,20 @@ HRESULT CSound::ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, D
 
 	return S_OK;
 }
+//=============================================================================
+// 音量の取得
+//=============================================================================
+float CSound::GetVolume(SOUND_LABEL label)
+{
+	float fVolume;
+	m_apSourceVoice[label]->GetVolume(&fVolume);	// 指定したサウンドの音量の取得
+	return fVolume;
+}
 
+//=============================================================================
+// 音量の設定
+//=============================================================================
+void CSound::SetVolume(SOUND_LABEL label, float fVolume)
+{
+	m_apSourceVoice[label]->SetVolume(fVolume);		// 指定したサウンドの音量の設定
+}

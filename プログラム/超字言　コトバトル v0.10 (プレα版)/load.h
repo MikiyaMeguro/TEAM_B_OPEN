@@ -83,7 +83,6 @@ public:
 		MODEL_DICE,		// だいす
 		MODEL_TREASURECHEST,	// たから
 		MODEL_GRASS,	// ガラス
-		MODEL_STRETCHER,	// たんか
 		MODEL_RING,	// リング
 		MODEL_KUSAYA,	// くさや
 		MODEL_SAZAE,	// サザエ
@@ -92,14 +91,12 @@ public:
 		MODEL_COMIC,	// マンガ
 		MODEL_FUIGO,	// ふいご
 		MODEL_NAMAKO,	// ナマコ
-		MODEL_ZUGAI,	// ずがい
 		MODEL_SEAWEED,	// コンブ
 		MODEL_LAITC,	// らいち
 		MODEL_MASK,		// マスク
 		MODEL_MEKABU,	// めかぶ
 		MODEL_MEDIC,	// くすり
 		MODEL_KAIGA,	// かいが
-
 		MODEL_ikura,	// いくら
 		MODEL_menko,	// めんこ
 		MODEL_Mace,		// めいす
@@ -108,6 +105,21 @@ public:
 		MODEL_Zail,		// ざいる
 		MODEL_Inari,	// いなり
 		MODE_gakuhu,	// 楽譜
+		MODEL_TAITU,	// タイツ
+		MODEL_FLAG,		// カエル
+		MODEL_PLUG,		// プラグ
+		MODEL_SING,		// サイン
+		MODEL_TAIMA,	// 大麻
+		MODEL_SAKURA,	// サクラ
+		MODEL_KAYAKU,	// 火薬
+
+		MODEL_IRUI,		// いるい : いふく
+		MODEL_KOTATU,	// こたつ
+		MODEL_KUKUI,	// くくい
+		MODEL_TAKOSU,	// タコス
+		MODEL_SARADA,	// サラダ
+		MODEL_MENMA,	// メンマ
+		MODEL_TARAKO,	// たらこ
 		MODEL_MAX
 	} MODEL;
 

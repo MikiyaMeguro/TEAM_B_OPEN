@@ -209,7 +209,7 @@ void CWord::Update(void)
 			}
 		}
 
-		if (((CTime::GetStageTime() % 30) == 0) && CManager::GetGame()->GetChangeNum() < 2)
+		if (((CTime::GetStageTime() % 60) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
 			Uninit();
 			return;

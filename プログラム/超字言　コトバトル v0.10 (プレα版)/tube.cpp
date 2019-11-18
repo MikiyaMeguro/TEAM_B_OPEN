@@ -12,6 +12,7 @@
 #include "scene2D.h"
 #include "game.h"
 #include "PlayerNumSelect.h"
+#include "point.h"
 //=============================================================================
 // マクロ関数
 //=============================================================================
@@ -31,7 +32,7 @@
 #define SIZE_ANSWER_001	(D3DXVECTOR2(60.0f, 70.0f))		// 答えの位置
 
 #define POS_ANSWER_002	(D3DXVECTOR3(WORD_POS.x - 32.0f, WORD_POS.y + 32.0f, 0.0f))		// 答えの位置
-#define SIZE_ANSWER_002	(D3DXVECTOR2(47.0f, 60.0f))		// 答えの位置
+#define SIZE_ANSWER_002	(D3DXVECTOR2(38.0f, 50.0f))		// 答えの位置
 
 #define MOVE			(3.0f)
 #define AREA			(2.0f * 2.0f)
@@ -289,8 +290,9 @@ void CTube::Collect(void)
 			}
 			else if (NOT_NUM != m_nAnswerModelNum)
 			{	// 正解のモデルを出す
-				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 5) * 0.1f), 0.0f + ((m_nAnswerModelNum % 5) * 0.2f)),
-					D3DXVECTOR2(0.1f + ((m_nAnswerModelNum / 5) * 0.1f), 0.2f + ((m_nAnswerModelNum % 5) * 0.2f)));
+				m_pAnswerModel->BindTexture("モデル_TEX");
+				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
+					D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
 			}
 			m_pAnswerModel->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
@@ -328,5 +330,21 @@ void CTube::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum)
 			}
 		}
 
+	}
+}
+
+//=============================================================================
+// ポイントの処理
+//=============================================================================
+void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
+{
+	CPoint *pPoint = NULL;
+	if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(nNum); }
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */ }
+
+	if (pPoint != NULL)
+	{
+		if (bPoint == false) { pPoint->AddPoint(nPoint); }
+		else if (bPoint == true) { pPoint->SubtractionPoint(nPoint); }
 	}
 }

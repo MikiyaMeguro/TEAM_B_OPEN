@@ -74,6 +74,8 @@ DATA = 00056 data/TEXTURE/Gimmick/Word_POP.png 文字エフェクト
 DATA = 00057 data/TEXTURE/ModelTex/gomi.png ゴミ_モデル
 DATA = 00058 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
 DATA = 00059 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
+DATA = 00059 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
+DATA = 000 data/TEXTURE/ModelTex/ModelTex.png モデル_TEX
 
 
 

@@ -61,6 +61,7 @@ void CLoadText::LoadFile(void)
 	int			nCollisionType;
 	int			nAnswerNum;
 	int			nAnswerModel;
+	int			nPoint;
 
 	//ファイルを開く 読み込み
 	pFile = fopen(FILE_NAME, "r");
@@ -256,6 +257,17 @@ void CLoadText::LoadFile(void)
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
 				}
+				if (memcmp(pStrcur, "POINT = ", strlen("POINT = ")) == 0)
+				{
+					//頭出し
+					pStrcur += strlen("POINT = ");
+					//文字列の先頭を設定
+					strcpy(aStr, pStrcur);
+					//文字列抜き出し
+					nPoint = atoi(pStrcur);
+					//文字列の先頭を設定
+					pStrcur = ReadLine(pFile, &aLine[0]);
+				}
 			}
 			//モデルを生成
 			if (memcmp(pStrcur, "END_MODELSET", strlen("END_MODELSET")) == 0)
@@ -263,7 +275,7 @@ void CLoadText::LoadFile(void)
 				//CSetObject::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 				//	, (CSetObject::MODELTYPE)nType, CSetObject::MOVETYPE_NONE, 1);
 				//CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType);
-				CWordManager::SetWordLoad(nType, AnswerNum, ModelScale, ModelRot, nCollisionType, nAnswerModel);
+				CWordManager::SetWordLoad(nType, AnswerNum, ModelScale, ModelRot, nCollisionType, nAnswerModel, nPoint);
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)

@@ -61,6 +61,9 @@ public:
 	HRESULT CheckChunk(HANDLE hFile, DWORD format, DWORD *pChunkSize, DWORD *pChunkDataPosition);
 	HRESULT ReadChunkData(HANDLE hFile, void *pBuffer, DWORD dwBuffersize, DWORD dwBufferoffset);
 
+	float GetVolume(SOUND_LABEL label);						// 音量の取得
+	void SetVolume(SOUND_LABEL label, float fVolume);		// 音量の設定
+
 protected:
 	IXAudio2				*m_pXAudio2 = NULL;								// XAudio2オブジェクトへのポインタ
 	IXAudio2MasteringVoice	*m_pMasteringVoice = NULL;						// マスターボイスへのポインタ
