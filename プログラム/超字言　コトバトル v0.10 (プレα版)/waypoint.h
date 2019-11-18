@@ -13,7 +13,7 @@
 #define MAX_WAYPOINT	(SPLIT_WAYPOINT * SPLIT_WAYPOINT)	// ウェイポイントの最大数
 #define SPLIT_WAYPOINT		(20)	// ウェイポイントの縦横分割数
 #define WAYPOINT_HIT		(20)	// ウェイポイントの範囲
-#define WAYPOINT_POS_WIDE	(40)	// ウェイポイントの範囲
+#define WAYPOINT_POS_WIDE	(40)	// ウェイポイントの横幅
 
 //*********************************************************************
 //ビルボードクラスの定義

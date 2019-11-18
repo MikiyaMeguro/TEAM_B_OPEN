@@ -84,7 +84,7 @@ HRESULT CWaypoint::Init(/*D3DXVECTOR3 pos*/)
 	//生成
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
 	{
-		SetPos = D3DXVECTOR3(-380.0f + InitPos.x, InitPos.y + InitPos.y, -380.0f + InitPos.z);
+		SetPos = D3DXVECTOR3(-390.0f + InitPos.x, InitPos.y + InitPos.y, -390.0f + InitPos.z);
 
 		WayPoint[nCntWayPoint].WayPointPos = SetPos;
 		//WayPoint[nCntWayPoint].pWayPoint = CSceneBillBoard::Create(SetPos, 0, 0, "NUMBER");
@@ -438,7 +438,7 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
 	{
-		if (WayPoint[nCntWayPoint].bAdjacent == true)
+		if (WayPoint[nCntWayPoint].bAdjacent == true && WayPoint[nCntWayPoint].bBlock == false)
 		{	//周囲のマスの位置情報と番号を記憶
 			m_pWayPointPos[m_nNumWayPoint] = WayPoint[nCntWayPoint].WayPointPos;
 			m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
