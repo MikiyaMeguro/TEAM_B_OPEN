@@ -113,6 +113,7 @@ void CCharaSelect::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	CInputXPad *pInputX[MAX_PLAYER];
+	bool bInputPad = false;
 	for (int nCntXinput = 0; nCntXinput < MAX_PLAYER; nCntXinput++)
 	{
 		pInputX[nCntXinput] = CManager::GetXInput(nCntXinput);
@@ -129,6 +130,7 @@ void CCharaSelect::Update(void)
 	{
 		if (pInputX[nCntXinput]->GetConnect() != NULL)
 		{
+			bInputPad = true;
 			if (ConfirmationSelect() == true)
 			{//全員選択した
 				if (m_bConfProStart == false)
@@ -342,6 +344,219 @@ void CCharaSelect::Update(void)
 		}
 	}
 
+	if (bInputPad == false)
+	{
+		if (ConfirmationSelect() == true)
+		{//全員選択した
+			if (m_bConfProStart == false)
+			{//演出が始まっていなかったら始める
+				m_CnfProState = CONFPRODUCTION_MOVE_START;
+				m_bConfProStart = true;
+			}
+			if (m_bConfProStart == true)
+			{//演出が始まったら
+				m_bConfProFinish = ProductionConf();
+			}
+			if (m_bConfProFinish == true)
+			{//演出が終了した
+				m_bConf = true;	//選択操作可能にする
+			}
+			if (m_bConf == true)
+			{//選択確定が可能になったら
+				if (collisionConf(m_OperationNum) == true)
+				{//ポリゴンの範囲内
+					if (CCommand::GetCommand("DECISION") == true)
+					{
+						m_bCnfFlash = true;
+						for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
+						{//ランダムを選択した人がいる
+							m_CharaTypeFinal[nCnt] = m_CharaType[nCnt];
+							if (m_CharaTypeFinal[nCnt] == CPlayer::TYPE_MAX)
+							{//ランダムだった場合
+								m_CharaTypeFinal[nCnt] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
+							}
+						}
+						for (int nCnt = 0; nCnt < *m_PlayerNum; nCnt++)
+						{//プレイヤー人数分キャラの種類を渡す
+							CGame::SetCharaSelect(nCnt, m_CharaTypeFinal[nCnt]);
+						}
+						pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
+
+					}
+				}
+			}
+		}
+		else
+		{//全員選択していない
+			m_apConfirm2D->SetbDraw(false);
+			m_bConfProFinish = false;
+			m_bConf = false;
+			m_bConfProStart = false;
+		}
+		//フェード処理終了後/開始前のみ動く処理
+		if (pFade->GetFade() == CFade::FADE_NONE)
+		{
+			/* カーソル移動処理  */
+			if (CCommand::GetCommand("RIGHT_R") == true)
+			{//左押下
+				if (CCommand::GetCommand("UP_R") == true)
+				{//上押下
+					m_move[m_OperationNum].x += sinf(D3DX_PI * 0.75f)*CURSOR_MOVE;
+					m_move[m_OperationNum].y += cosf(D3DX_PI * 0.75f)*CURSOR_MOVE;
+				}
+				else if (CCommand::GetCommand("DOWN_R") == true)
+				{//下押下
+					m_move[m_OperationNum].x += sinf(D3DX_PI * 0.25f)*CURSOR_MOVE;
+					m_move[m_OperationNum].y += cosf(D3DX_PI * 0.25f)*CURSOR_MOVE;
+				}
+				else
+				{
+					m_move[m_OperationNum].x += sinf(D3DX_PI * 0.5f)*CURSOR_MOVE;
+					m_move[m_OperationNum].y += cosf(D3DX_PI * 0.5f)*CURSOR_MOVE;
+				}
+			}
+			else if (CCommand::GetCommand("LEFT_R") == true)
+			{//左押下
+				if (CCommand::GetCommand("UP_R") == true)
+				{//上押下
+					m_move[m_OperationNum].x += sinf(-D3DX_PI * 0.75f)*CURSOR_MOVE;
+					m_move[m_OperationNum].y += cosf(-D3DX_PI * 0.75f)*CURSOR_MOVE;
+				}
+				else if (CCommand::GetCommand("DOWN_R") == true)
+				{//下押下
+					m_move[m_OperationNum].x += sinf(-D3DX_PI * 0.25f)*CURSOR_MOVE;
+					m_move[m_OperationNum].y += cosf(-D3DX_PI * 0.25f)*CURSOR_MOVE;
+				}
+				else
+				{
+					m_move[m_OperationNum].x += sinf(-D3DX_PI * 0.5f)*CURSOR_MOVE;
+					m_move[m_OperationNum].y += cosf(-D3DX_PI * 0.5f)*CURSOR_MOVE;
+				}
+			}
+			else if (CCommand::GetCommand("UP_R") == true)
+			{//上押下
+				m_move[m_OperationNum].x += sinf(D3DX_PI)*CURSOR_MOVE;
+				m_move[m_OperationNum].y += cosf(D3DX_PI)*CURSOR_MOVE;
+			}
+			else if (CCommand::GetCommand("DOWN_R") == true)
+			{//下押下
+				m_move[m_OperationNum].x -= sinf(D3DX_PI)*CURSOR_MOVE;
+				m_move[m_OperationNum].y -= cosf(D3DX_PI)*CURSOR_MOVE;
+			}
+
+			/* 移動範囲制限 */
+			pos[m_OperationNum] = MoveRestriction(pos[m_OperationNum]);
+
+			/* 慣性 */
+			m_move[m_OperationNum].x += (0.0f - m_move[m_OperationNum].x) * 0.3f;
+			m_move[m_OperationNum].y += (0.0f - m_move[m_OperationNum].y) * 0.3f;
+
+			/* 移動 */
+			pos[m_OperationNum] += m_move[m_OperationNum];
+
+			/* 移動を反映 */
+			m_apCursor2D[m_OperationNum]->SetPosition(pos[m_OperationNum]);
+
+			/* 未選択時のみカーソルに追従 */
+			if (m_bPCSelMove[m_OperationNum] == false)
+			{
+				m_apBadge2D[m_OperationNum]->SetPosition(D3DXVECTOR3(m_apCursor2D[m_OperationNum]->GetPosition().x,
+					m_apCursor2D[m_OperationNum]->GetPosition().y - 50.0f,
+					m_apCursor2D[m_OperationNum]->GetPosition().z));
+			}
+
+			/* 選んだキャラクターを保存 */
+			if (collision(m_OperationNum, CPlayer::TYPE_BARANCE) == true)
+			{//バランス
+				m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.0f, 0.5f), D3DXVECTOR2(0.2f, 1.0f));
+				m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+				if (CCommand::GetCommand("DECISION") == true)
+				{//エンター押下
+					if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
+					{//セレクト状態じゃない（無限フラッシュ防止）
+						m_CharaType[m_OperationNum] = CPlayer::TYPE_BARANCE;
+						m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
+						m_bPCSelMove[m_OperationNum] = true;
+					}
+				}
+			}
+			else if (collision(m_OperationNum, CPlayer::TYPE_POWER) == true)
+			{//パワー
+				m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.2f, 0.5f), D3DXVECTOR2(0.4f, 1.0f));
+				m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+				if (CCommand::GetCommand("DECISION") == true)
+				{//エンター押下
+					if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
+					{//セレクト状態じゃない（無限フラッシュ防止）
+						m_CharaType[m_OperationNum] = CPlayer::TYPE_POWER;
+						m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
+						m_bPCSelMove[m_OperationNum] = true;
+					}
+				}
+			}
+			else if (collision(m_OperationNum, CPlayer::TYPE_SPEED) == true)
+			{//スピード
+				m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.4f, 0.5f), D3DXVECTOR2(0.6f, 1.0f));
+				m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+
+				if (CCommand::GetCommand("DECISION") == true)
+				{//エンター押下
+					if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
+					{//セレクト状態じゃない（無限フラッシュ防止）
+						m_CharaType[m_OperationNum] = CPlayer::TYPE_SPEED;
+						m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
+						m_bPCSelMove[m_OperationNum] = true;
+					}
+				}
+			}
+			else if (collision(m_OperationNum, CPlayer::TYPE_REACH) == true)
+			{//リーチ
+				m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.6f, 0.5f), D3DXVECTOR2(0.8f, 1.0f));
+				m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+
+				if (CCommand::GetCommand("DECISION") == true)
+				{//エンター押下
+					if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
+					{//セレクト状態じゃない（無限フラッシュ防止）
+						m_CharaType[m_OperationNum] = CPlayer::TYPE_REACH;
+						m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
+						m_bPCSelMove[m_OperationNum] = true;
+					}
+				}
+			}
+			else if (collision(m_OperationNum, CPlayer::TYPE_MAX) == true)
+			{//ランダム
+				m_apScene2D[m_OperationNum + 11]->SetTex(D3DXVECTOR2(0.8f, 0.5f), D3DXVECTOR2(1.0f, 1.0f));
+				m_apScene2D[m_OperationNum + 11]->SetbDraw(true);
+
+				if (CCommand::GetCommand("DECISION") == true)
+				{//エンター押下
+					if (m_SelectState[m_OperationNum] != SELECTSTATE_SELECT)
+					{//セレクト状態じゃない（無限フラッシュ防止）
+						m_CharaType[m_OperationNum] = CPlayer::TYPE_MAX;
+						m_SelectState[m_OperationNum] = SELECTSTATE_FLASH;
+						m_bPCSelMove[m_OperationNum] = true;
+					}
+				}
+			}
+			else
+			{//どの選択肢とも当たっていない場合
+				m_apScene2D[m_OperationNum + 11]->SetbDraw(false);
+			}
+			/* 選択取り消し */
+			if (CCommand::GetCommand("DELETE") == true)
+			{
+				if (collision(m_OperationNum, m_CharaType[m_OperationNum]) == true)
+				{
+					m_CharaType[m_OperationNum] = CPlayer::TYPE_MAX;
+					m_SelectState[m_OperationNum] = SELECTSTATE_NOSELECT;
+					m_bPCSelMove[m_OperationNum] = false;
+				}
+			}
+		}
+	}
+	/* 選択時演出関数 */
+	SelectProduction(m_OperationNum, m_SelectState[m_OperationNum], m_SelectStateold[m_OperationNum], m_CharaType[m_OperationNum]);
 	/* 帯のテクスチャスクロール */
 	ScrollMenu(CHARASEL_POLYGONTYPE_BAND_R, 0.005f);
 	ScrollMenu(CHARASEL_POLYGONTYPE_BAND_L, -0.005f);
