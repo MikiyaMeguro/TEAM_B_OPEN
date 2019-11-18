@@ -90,6 +90,7 @@ HRESULT CTube::Init(D3DXVECTOR3 pos)
 	CScene2D::Init(pos);
 
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+
 	if (NumPlayer == 1) { m_AnswerPos = POS_ANSWER_001; }
 	else if (NumPlayer != 1) { m_AnswerPos = POS_ANSWER_002; }
 	

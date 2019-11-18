@@ -577,10 +577,24 @@ void C3DCharactor::Think_CPU(void)
 	switch (GetThisCharactor()->GetID())
 	{
 	case 1:
-		//	m_Type = CPU_TYPE_ESCAPE;
-		//	m_CpuThink = THINK_PICKUP;
-		//	m_nActionTimer = 60;
-		break;
+#if 1
+		if (m_pWayPoint == NULL)
+		{
+			m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
+		}
+
+		if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
+		{	//弾を持っているとき
+			m_Type = CPU_TYPE_NONE;
+			m_CpuThink = THINK_HAVEBULLET;
+			m_nActionTimer = 30;
+		}
+		else
+		{	//弾を持っていないとき
+			m_CpuThink = THINK_NOTBULLET;
+			m_nActionTimer = 30;
+		}
+#endif		break;
 	case 2:
 		m_Type = CPU_TYPE_HOMING;
 		break;
@@ -591,24 +605,7 @@ void C3DCharactor::Think_CPU(void)
 		break;
 	}
 
-#if 1
-	if (m_pWayPoint == NULL)
-	{
-		m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
-	}
 
-	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
-	{	//弾を持っているとき
-		m_Type = CPU_TYPE_NONE;
-		m_CpuThink = THINK_HAVEBULLET;
-		m_nActionTimer = 30;
-	}
-	else
-	{	//弾を持っていないとき
-		m_CpuThink = THINK_NOTBULLET;
-		m_nActionTimer = 30;
-	}
-#endif
 
 
 #if 0
@@ -1346,34 +1343,43 @@ void C3DCharactor::WayPointRoute_CPU(void)
 
 	D3DXVECTOR3 MarkPos;	//一番近い目標位置
 	float	fMinCircle = 100000;
-	int nNumWP = 0;
 	int nRandPos = 0;
 
 
-	if (m_MarkWayPoint.x + 60 > Pos.x && m_MarkWayPoint.x - 60 < Pos.x
-		&& m_MarkWayPoint.z + 60 > Pos.z && m_MarkWayPoint.z - 60 < Pos.z)
-	{
-		m_bGoal = true;
-		m_bSearch = false;
-		// 距離を測る 一番近い文字と自分の距離
-		float fCircleWard = ((Pos.x - m_MarkWardPos.x) * (Pos.x - m_MarkWardPos.x)) + ((Pos.z - m_MarkWardPos.z) * (Pos.z - m_MarkWardPos.z));
-		if (fCircleWard < 1000 && m_bBlock == false)
-		{
-			m_bNearWard = true;
-		}
-	}
+	//if (m_MarkWayPoint.x + 80 > Pos.x && m_MarkWayPoint.x - 80 < Pos.x
+	//	&& m_MarkWayPoint.z + 80 > Pos.z && m_MarkWayPoint.z - 80 < Pos.z)
+	//{
+	//	m_bGoal = true;
+	//	m_bSearch = false;
+	//	// 距離を測る 一番近い文字と自分の距離
+	//	float fCircleWard = ((Pos.x - m_MarkWardPos.x) * (Pos.x - m_MarkWardPos.x)) + ((Pos.z - m_MarkWardPos.z) * (Pos.z - m_MarkWardPos.z));
+	//	if (fCircleWard < 1000 && m_bBlock == false)
+	//	{
+	//		m_bNearWard = true;
+	//	}
+	//}
 
-	if (m_MarkWardPos.x + 10 > Pos.x && m_MarkWardPos.x - 10 < Pos.x
-		&& m_MarkWardPos.z + 10 > Pos.z && m_MarkWardPos.z - 10 < Pos.z)
-	{	//文字を拾った
-		m_bNearWard = false;
-	}
 
+	//	// 距離を測る 一番近い文字と自分の距離
+	//float fCircleWard = ((Pos.x - m_MarkWardPos.x) * (Pos.x - m_MarkWardPos.x)) + ((Pos.z - m_MarkWardPos.z) * (Pos.z - m_MarkWardPos.z));
+	//if (fCircleWard < 1000 && m_bBlock == false)
+	//{
+	//	m_bNearWard = true;
+	//}
+
+
+	////目標文字の近く
+	//if (m_MarkWardPos.x + 10 > Pos.x && m_MarkWardPos.x - 10 < Pos.x
+	//	&& m_MarkWardPos.z + 10 > Pos.z && m_MarkWardPos.z - 10 < Pos.z)
+	//{	//文字を拾った
+	//	m_bNearWard = false;
+	//}
+	//目標座標
 	if (m_MarkWayPoint.x + 10 > Pos.x && m_MarkWayPoint.x - 10 < Pos.x
-		&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z
-		&& m_bBlock == true)
+		&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z)
 	{
-		m_bBlock = false;
+		m_bSearch = false;
+		m_bGoal = true;
 	}
 
 	if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
@@ -1390,52 +1396,59 @@ void C3DCharactor::WayPointRoute_CPU(void)
 			if (fCircle < fMinCircle)
 			{
 				fMinCircle = fCircle;
-				nNumWP = nCnt;
+				//目標のマス番号を記憶
 				m_nTargetWP = nCnt;
+				m_bSearch = true;
 			}
 		}
 	}
-	//目標のマスの番号を渡す
-	m_pWayPoint->ReturnPointMove();
-	int nNextPoint = 0;
-	nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
-	int nNowWp = 0;
-	nNowWp = m_pWayPoint->GetNowWP();
 
 	//移動処理
-	if (m_bSearch == false)
+	if (m_bGoal == true)
 	{
-		if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
-		{//自分がブロックマスにいるかの判定
-			m_CpuThink = THINK_WAYPOINTMOVE;
-			m_nActionTimer = 60;
-		}
+		//目標のマスの番号を渡す
+		m_pWayPoint->ReturnPointMove();
+		int nNextPoint = 0;
+		nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
+		int nNowWp = 0;
+		nNowWp = m_pWayPoint->GetNowWP();
+
+		//目標についていたら
+		//if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
+		//{//自分がブロックマスにいるかの判定
+		//	m_CpuThink = THINK_WAYPOINTMOVE;
+		//	m_nActionTimer = 60;
+		//	m_bGoal = false;
+		//}
 		if (m_pWayPoint->GetWPbBlock(nNextPoint) == true && m_bNearWard == false)
 		{//目標マスがブロック　近くに文字がない
 			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
-			m_bBlock = true;
+			//m_bBlock = true;
 			m_bSearch = true;
+			m_bGoal = false;
 		}
 		else if (m_pWayPoint->GetWPbBlock(nNextPoint) == false && m_bNearWard == false)
 		{//目標マスがブロックではない　近くに文字がない
 			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
 			m_bSearch = true;
+			m_bGoal = false;
 		}
-		else if (m_bNearWard == false && m_bBlock == false)
-		{//近くに文字がない　ブロックマスではない
-			m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
-			m_bSearch = true;
-		}
-		else if (m_bNearWard == true || m_bBlock == false)
-		{//近くに文字がある　ブロックマスではない
-			m_MarkWayPoint = m_MarkWardPos;
-			m_bSearch = true;
-		}
-		else
-		{
-			WayPointMove_CPU();
-			//m_bSearch = true;
-		}
+		//else if (m_bNearWard == false && m_bBlock == false)
+		//{//近くに文字がない　ブロックマスではない
+		//	m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
+		//	//m_bSearch = true;
+		//	m_bGoal = false;
+		//}
+		//else if (m_bNearWard == true || m_bBlock == false)
+		//{//近くに文字がある　ブロックマスではない
+		//	m_MarkWayPoint = m_MarkWardPos;
+		//	//m_bSearch = true;
+		//	m_bGoal = false;
+		//}
+		//else
+		//{
+		//	WayPointMove_CPU();
+		//}
 	}
 
 	// 目的の角度
