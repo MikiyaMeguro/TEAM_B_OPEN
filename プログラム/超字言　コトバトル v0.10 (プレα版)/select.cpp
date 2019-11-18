@@ -62,19 +62,6 @@ void CSelect::Uninit(void)
 //=============================================================================
 void CSelect::Update(void)
 {
-	CManager *pManager = NULL;
-	CFade *pFade = pManager->GetFade();
-
-	// 入力情報を取得
-	CInputKeyboard *pInputKeyboard;
-	pInputKeyboard = CManager::GetInputKeyboard();
-	//任意のキーENTER
-	if (CCommand::GetCommand("DECISION"))
-	{
-//		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
-	}
-
-
 #ifdef _DEBUG
 	CDebugProc::Print("c", "セレクト");
 #endif

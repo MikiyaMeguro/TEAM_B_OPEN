@@ -61,20 +61,21 @@ DATA = 00044 data/TEXTURE/cat_uv.jpg NECO_UV
 DATA = 00045 data/TEXTURE/rabbit_uv.jpg USAGI_UV
 
 DATA = 00046 data/TEXTURE/MENU_UI/Menu014.png MODESELEXT_MENU
-DATA = 00047 data/TEXTURE/UI/operation.png UI_OPERATION
-DATA = 00048 data/TEXTURE/UI/Select.png UI_SELECT
-DATA = 00049 data/TEXTURE/MENU_UI/Menu015.png PLAYERNUMSELECT_MENU
-DATA = 00050 data/TEXTURE/PlayerSelect/Band.png PLAUERNUMSEL_BAND
-DATA = 00051 data/TEXTURE/PlayerSelect/BG.png PLAUERNUMSEL_BG
-DATA = 00052 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
-DATA = 00053 data/TEXTURE/CharactorSelect/CharaSelect.png CHARACTORSEL_CHARA
-DATA = 00054 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
-DATA = 00055 data/TEXTURE/Gimmick/beltconveyer.png ベルトコンベア_アイコン
-DATA = 00056 data/TEXTURE/Gimmick/Word_POP.png 文字エフェクト
-DATA = 00057 data/TEXTURE/ModelTex/gomi.png ゴミ_モデル
-DATA = 00058 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
-DATA = 00059 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
-DATA = 00059 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
+DATA = 00047 data/TEXTURE/UI/operation.png UI_OPERATION1
+DATA = 00048 data/TEXTURE/UI/operation2.png UI_OPERATION2
+DATA = 00049 data/TEXTURE/UI/Select.png UI_SELECT
+DATA = 00050 data/TEXTURE/MENU_UI/Menu015.png PLAYERNUMSELECT_MENU
+DATA = 00051 data/TEXTURE/PlayerSelect/Band.png PLAUERNUMSEL_BAND
+DATA = 00052 data/TEXTURE/PlayerSelect/BG.png PLAUERNUMSEL_BG
+DATA = 00053 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
+DATA = 00054 data/TEXTURE/CharactorSelect/CharaSelect.png CHARACTORSEL_CHARA
+DATA = 00055 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
+DATA = 00056 data/TEXTURE/Gimmick/beltconveyer.png ベルトコンベア_アイコン
+DATA = 00057 data/TEXTURE/Gimmick/Word_POP.png 文字エフェクト
+DATA = 00058 data/TEXTURE/ModelTex/gomi.png ゴミ_モデル
+DATA = 00059 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
+DATA = 00060 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
+DATA = 00061 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
 DATA = 000 data/TEXTURE/ModelTex/ModelTex.png モデル_TEX
 
 
