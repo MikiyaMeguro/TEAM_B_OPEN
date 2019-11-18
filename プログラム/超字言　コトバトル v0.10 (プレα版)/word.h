@@ -58,6 +58,10 @@ private:
 	CSceneBillBoard *m_pBillBoard;
 	int		m_nAnim;
 	int		m_nPatten;
+
+	// 3•¶Žš–Ú‚ÌŒó•âŽž
+	D3DXCOLOR m_SearchCol;
+	bool m_bSearchFlag;		// ’T‚·Žž‚Ìƒtƒ‰ƒO
 };
 
 #endif
