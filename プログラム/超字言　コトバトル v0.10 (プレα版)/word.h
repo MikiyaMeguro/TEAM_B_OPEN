@@ -37,6 +37,7 @@ public:
 private:
 	D3DXVECTOR3 Move(D3DXVECTOR3 pos);
 	void SizeScale(D3DXVECTOR3 *size, float fMove, D3DXVECTOR2 MaxSize);		// 拡大縮小
+	//void SetSearchCol()
 
 	D3DXVECTOR3 m_size;		// サイズ
 	D3DXVECTOR3 m_sizeOld;	// サイズ(過去)
@@ -58,6 +59,10 @@ private:
 	CSceneBillBoard *m_pBillBoard;
 	int		m_nAnim;
 	int		m_nPatten;
+
+	// 3文字目の候補時
+	D3DXCOLOR *m_SearchCol;
+	bool m_bSearchFlag;		// 探す時のフラグ
 };
 
 #endif
