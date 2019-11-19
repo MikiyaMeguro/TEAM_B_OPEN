@@ -370,8 +370,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 			&& pos->z - radius.z <= m_pos.z + ScaleVtxMax.z - SCENEX_SIZE && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z + SCENEX_SIZE)
 		{// 障害物の内側に乗った
 			if (bHit == false) { bLand = true; }	// ベルトコンベアの場合
-			if (posOld->y >= m_pos.y + ScaleVtxMax.y && pos->y <= m_pos.y + ScaleVtxMax.y
-				|| pos->y <= m_pos.y + ScaleVtxMax.y && posOld->y >= m_pos.y + ScaleVtxMax.y)
+			if (posOld->y >= m_pos.y + ScaleVtxMax.y && m_pos.y + ScaleVtxMax.y >= pos->y)
 			{// 上からブロックに当たったとき
 				bLand = true;  // 乗った判定を返す
 				pos->y = m_pos.y + ScaleVtxMax.y;

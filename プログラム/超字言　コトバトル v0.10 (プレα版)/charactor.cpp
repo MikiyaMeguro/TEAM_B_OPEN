@@ -9,13 +9,14 @@
 
 #include "CameraManager.h"
 #include "player.h"
+#include "tutorial.h"
 #include "game.h"
+#include "result.h"
 #include "debugProc.h"
 #include "meshField.h"
 #include "word_manager.h"
 #include "point.h"
 #include "word.h"
-#include "tutorial.h"
 
 #include "waypoint.h"
 
@@ -141,8 +142,8 @@ void C3DCharactor::Update(void)
 	case CCharaBase::MOVETYPE_PLAYER_INPUT:
 		if (m_pWayPoint == NULL)
 		{
-		//	m_nTargetWP = 1;
-		//	m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
+			//	m_nTargetWP = 1;
+			//	m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
 		}
 		CharaMove_Input();
 		break;
@@ -182,13 +183,23 @@ void C3DCharactor::Update(void)
 		break;
 	}
 	//メッシュフィールドとの当たり判定
-	CMeshField *pMesh = CGame::GetMeshField();
+	CMeshField *pMesh = NULL;
+
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		pMesh = CGame::GetMeshField();
+	}
+	else if (CManager::GetMode() == CManager::MODE_RESULT)
+	{
+		pMesh = CResult::GetMeshField();
+	}
 
 	float fHeight = pMesh->GetHeight(pos);
 	if (pos.y < fHeight)
 	{
 		pos.y = fHeight;
 	}
+
 	//重力
 	move.y = -3.0f;
 	//落下高度

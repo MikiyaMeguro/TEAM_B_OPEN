@@ -477,7 +477,7 @@ void CWordBullet::Update(void)
 	{
 
 		CExplosion3D* p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 20.0f, 60); }
+		if (p3D != NULL) { p3D->Set(GetPosition(), 20.0f,100.0f, 30); }
 		Uninit();
 		return;
 	}

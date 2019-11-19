@@ -40,7 +40,9 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	void BeltConveyor(D3DXVECTOR3 *pMove);					// 移動床の処理
+	static bool GetSwitch(void) { return m_bSwitch; }
+	void SwitchBeltConveyor(bool bSwitch);					// スイッチの処理
+	void BeltConveyor(D3DXVECTOR3 *pMove,bool bSwitch);			// 移動床の処理
 	void KnockBack(D3DXVECTOR3 *pMove, int nID);			// ノックバック
 	void AffectedLanding(D3DXVECTOR3 *pMove, int nID);		// モデルの着地時の影響
 
@@ -56,17 +58,17 @@ private:
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMove);
 	void Rot(CSceneX::COLLISIONTYPE type);
 
-	static bool m_bCreateFlag;		// 生成するフラグ
+	static bool m_bCreateFlag;					// 生成するフラグ
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
 	void BGModelMove( D3DXVECTOR3 pos);
 
-	void AnimationIcon(void);		// アイコンのアニメーション
+	void AnimationIcon(void);					// アイコンのアニメーション
 	void IconCreate(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);	// アイコンの生成
 	void Vibration(D3DXVECTOR3 *Pos);			// 振動
 
-	bool m_bMoveFlag;		// 移動フラグ
-	REALTIME m_nRealTime;	// リアルタイムで移動するFlagの変数
-	D3DXVECTOR3 m_posOld;		// 位置保管
+	bool m_bMoveFlag;				// 移動フラグ
+	REALTIME m_nRealTime;			// リアルタイムで移動するFlagの変数
+	D3DXVECTOR3 m_posOld;			// 位置保管
 	CScene3D *m_pIcon;
 	float m_fMove;
 	int m_nCntAnim;
@@ -74,6 +76,10 @@ private:
 	D3DXVECTOR3 m_move;
 	D3DXVECTOR3 m_InitPos;
 	int m_MoveState;
+	int m_nCounter;
+
+	//	SWITCH
+	static bool m_bSwitch;				//	スイッチ
 
 };
 
