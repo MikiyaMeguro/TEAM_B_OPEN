@@ -20,7 +20,7 @@ public:
 
 	static CExplosion3D* Create(void);
 
-	void Set(D3DXVECTOR3 pos,float fStartSize,float fDestSize,int nLife);
+	void Set(D3DXVECTOR3 pos,float fStartSize,float fDestSize,int nLife,float fAnimSpeed = 0.01f);
 
 	HRESULT Init(void);
 	void Uninit(void);

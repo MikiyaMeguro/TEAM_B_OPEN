@@ -69,6 +69,15 @@ void CCamera::Init(void)
 	m_posRdest = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	//ビューポート初期値設定
+	m_ViewPort.X = 0;
+	m_ViewPort.Y = 0;
+	m_ViewPort.Width = SCREEN_WIDTH;
+	m_ViewPort.Height = SCREEN_HEIGHT;
+	m_ViewPort.MinZ = 0.0f;
+	m_ViewPort.MaxZ = 1.0f;
+
 	m_fLength = 0.0f;
 }
 

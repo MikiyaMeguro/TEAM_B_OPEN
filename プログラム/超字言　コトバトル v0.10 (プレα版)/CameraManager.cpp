@@ -76,7 +76,8 @@ bool CCameraManager::SetCamera(LPCSTR Tag)
 				m_SetCamera = result->CameraTag;
 
 				// バックバッファ＆Ｚバッファのクリア
-				pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(100, 149, 237, 0), 1.0f, 0);
+				//pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(100, 149, 237, 0), 1.0f, 0);
+				pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
 
 				return true;
 			}
