@@ -181,6 +181,11 @@ void C3DCharactor::Update(void)
 		}
 
 		break;
+	case CCharaBase::MOVETYPE_RANKING_CHARA:
+		pos += move;
+		//速度に係数を掛ける
+		CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
+		break;
 	}
 	//メッシュフィールドとの当たり判定
 	CMeshField *pMesh = NULL;

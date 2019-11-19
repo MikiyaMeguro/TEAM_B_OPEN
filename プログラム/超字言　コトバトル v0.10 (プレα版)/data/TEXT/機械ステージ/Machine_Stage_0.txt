@@ -1,7 +1,7 @@
 #============================================================
 #
 # [モデル配置ツール]スクリプトファイル 
-#  Author : MIKIYA MEGURO
+#  Author : Daisuke Ozaki
 #
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
@@ -16,7 +16,7 @@ SCRIPT			# この行は絶対消さないこと！
 	# 0 : 小さい壁  
 	# 1 : 大きい壁
 	# 2 : 歯車
-	# 3 :ベルトコンベア
+	# 3 : ベルトコンベア
 	# 4 : 文字土台
 	# 6 : プロペラの土台
 	# 7 : プロペラ
@@ -56,7 +56,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 100.0 1.0 100.0
 	COLLISION = 0
-	GIMMICK = 0				# 配置の種類を決める
+	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
 #------------------------------------------
@@ -64,33 +64,40 @@ END_MODELSET
 #------------------------------------------
 MODELSET
 	TYPE = 8
-	POS = 0.0 100.0 0.0
+	POS = 0.0 100.0 -340.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.7 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0				# 配置の種類を決める
+	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 9
-	POS = 100.0 100.0 0.0
+	POS = 0.0 100.0 340.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.7 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0				# 配置の種類を決める
+	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
 
 MODELSET
 	TYPE = 9
-	POS = 200.0 100.0 300.0
+	POS = 340.0 100.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.7 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0				# 配置の種類を決める
+	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
-
+MODELSET
+	TYPE = 9
+	POS = -340.0 100.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.7 0.7 0.7
+	COLLISION = 1
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
 
 #------------------------------------------
 # プロペラ
@@ -168,65 +175,134 @@ MODELSET
 	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
-#------------------------------------------
-# 中央の壁 5個
-#------------------------------------------
+#-------------------------------------------------------
+#  						四角ブロック
+#-------------------------------------------------------
 
 MODELSET
 	TYPE = 1
-	POS = 0.0 0.0 180.0
+	POS = 0.0 0.0 0.0			# 中央ブロック(大)
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.5 0.8 0.8
+	SCALE = 1.0 1.0 1.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 0.0 0.0 -180.0
+	POS = -300.0 0.0 170.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.5 0.8 0.8
+	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 180.0 0.0 0.0
+	POS = 300.0 0.0 170.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.5
+	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -180.0 0.0 0.0
+	POS = -300.0 0.0 -170.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.5
-	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-
-#------------------------------------------
-# ステージ端の壁 (奥と手前) 4個
-#------------------------------------------
-
-MODELSET
-	TYPE = 1
-	POS = 150.0 0.0 400.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
+	SCALE = 0.8 0.8 0.8
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -150.0 0.0 400.0
+	POS = 300.0 0.0 -170.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 170.0 0.0 300.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -170.0 0.0 300.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 170.0 0.0 -300.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -170.0 0.0 -300.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.8 0.8 0.8
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+---------------------#横長ブロック-----------------------
+
+MODELSET
+	TYPE = 1
+	POS = 320.0 0.0 -380.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -320.0 0.0 -380.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -320.0 0.0 380.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 320.0 0.0 380.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 320.0 0.0 380.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -234,152 +310,167 @@ END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = 150.0 0.0 -400.0
+	POS = 0.0 0.0 200.0			# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
+	SCALE = 4.0 1.0 0.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -150.0 0.0 -400.0
+	POS = 0.0 0.0 -200.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.8 0.8
-	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-
-#------------------------------------------
-# ステージ端の壁 (右 と 左) 4個
-#------------------------------------------
-
-MODELSET
-	TYPE = 1
-	POS = 400.0 0.0 150.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
+	SCALE = 4.0 1.0 0.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -400.0 0.0 150.0
+	POS = 200.0 0.0 0.0			# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
-	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-
-MODELSET
-	TYPE = 1
-	POS = 400.0 0.0 -150.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
+	SCALE = 0.5 1.0 4.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
 	TYPE = 1
-	POS = -400.0 0.0 -150.0
+	POS = -200.0 0.0 0.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.8 3.0
+	SCALE = 0.5 1.0 4.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
-#------------------------------------------
-# ステージ端のベルトコンベア (奥 と 手間) 4個
-#------------------------------------------
+#--------------------------#縦長--------------------------
 
 MODELSET
-	TYPE = 3
-	POS = 150.0 0.0 368.0
+	TYPE = 1
+	POS = 380.0 0.0 290.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.1 0.8
-	COLLISION = 3
+	SCALE = 1.0 1.0 4.0
+	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
-	TYPE = 3
-	POS = -150.0 0.0 368.0
+	TYPE = 1
+	POS = -380.0 0.0 290.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.1 0.8
-	COLLISION = 5
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-
-MODELSET
-	TYPE = 3
-	POS = 150.0 0.0 -368.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.1 0.8
-	COLLISION = 3
+	SCALE = 1.0 1.0 4.0
+	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
-	TYPE = 3
-	POS = -150.0 0.0 -368.0
+	TYPE = 1
+	POS = 380.0 0.0 -290.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 0.1 0.8
-	COLLISION = 5
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-#------------------------------------------
-# ステージ端のベルトコンベア (右 と 左) 4個
-#------------------------------------------
-
-MODELSET
-	TYPE = 3
-	POS = 368.0 0.0 150.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.1 3.0
-	COLLISION = 4
+	SCALE = 1.0 1.0 4.0
+	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
-	TYPE = 3
-	POS = 368.0 0.0 -150.0
+	TYPE = 1
+	POS = -380.0 0.0 -290.0		# 大ブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.1 3.0
-	COLLISION = 2
+	SCALE = 1.0 1.0 4.0
+	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+
+
+#=========================================================
+#====================ハーフブロック=======================
+#=========================================================
 
 MODELSET
-	TYPE = 3
-	POS = -368.0 0.0 150.0
+	TYPE = 0
+	POS = 40.0 0.0 0.0			# ハーフブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.1 3.0
-	COLLISION = 4
+	SCALE = 2.0 1.5 1.0
+	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET
-	TYPE = 3
-	POS = -368.0 0.0 -150.0
+	TYPE = 0
+	POS = -40.0 0.0 0.0			# ハーフブロック
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.8 0.1 3.0
-	COLLISION = 2
+	SCALE = 2.0 1.5 1.0
+	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
-#------------------------------------------
-#  X : 1～10 / Z : 1～10 文字の土台 5個
-#------------------------------------------
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 40.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.4 1.5 7.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 -40.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.4 1.5 7.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+=========================================
+=		ノックバック
+=========================================
+
+MODELSET
+	TYPE = 2
+	POS = -220.0 0.0 -380.0		# ノックバック大
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.7 1.0 1.7
+	COLLISION = 8
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 220.0 0.0 380.0		# ノックバック大
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.7 1.0 1.7
+	COLLISION = 8
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = 380.0 0.0 -190.0		# ノックバック大
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.7 1.0 1.7
+	COLLISION = 8
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 2
+	POS = -380.0 0.0 190.0		# ノックバック大
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.7 1.0 1.7
+	COLLISION = 8
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+#==========================================================
+# 			文字の配置
+#==========================================================
+
 MODELSET
 	TYPE = 4
-	POS = -310.0 -20.0 280.0
+	POS = 200.0 -20.0 100.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -388,7 +479,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -250.0 -20.0 280.0
+	POS = 200.0 -20.0 -100.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -397,7 +488,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -310.0 -20.0 240.0
+	POS = -200.0 -20.0 100.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -406,7 +497,18 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -220.0 -20.0 40.0
+	POS = -200.0 -20.0 -100.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+
+MODELSET
+	TYPE = 4
+	POS = 100.0 -20.0 200.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -415,19 +517,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -40.0 -20.0 220.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-#------------------------------------------
-#  X : 11～20 / Z : 1～10 文字の土台 5個
-#------------------------------------------
-MODELSET
-	TYPE = 4
-	POS = 310.0 -20.0 280.0
+	POS = 100.0 -20.0 -200.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -436,7 +526,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = 250.0 -20.0 280.0
+	POS = -100.0 -20.0 200.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -445,7 +535,14 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = 310.0 -20.0 240.0
+	POS = -100.0 -20.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSETMODELSET
+	TYPE = 4
+	POS = 200.0 -20.0 100.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -454,7 +551,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = 220.0 -20.0 40.0
+	POS = 200.0 -20.0 -100.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -463,19 +560,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = 40.0 -20.0 220.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-#------------------------------------------
-#  X : 1～10 / Z : 11～20 文字の土台 5個
-#------------------------------------------
-MODELSET
-	TYPE = 4
-	POS = -310.0 -20.0 -280.0
+	POS = -200.0 -20.0 100.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -484,7 +569,17 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -250.0 -20.0 -280.0
+	POS = -200.0 -20.0 -100.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 4
+	POS = -320.0 -20.0 -320.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -493,7 +588,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -310.0 -20.0 -240.0
+	POS = -320.0 -20.0 320.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -502,7 +597,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -220.0 -20.0 -40.0
+	POS = 320.0 -20.0 -320.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0
@@ -511,55 +606,7 @@ END_MODELSET
 
 MODELSET
 	TYPE = 4
-	POS = -40.0 -20.0 -220.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-#------------------------------------------
-#  X : 11～20 / Z : 11～20 文字の土台 5個
-#------------------------------------------
-MODELSET
-	TYPE = 4
-	POS = 310.0 -20.0 -280.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-MODELSET
-	TYPE = 4
-	POS = 250.0 -20.0 -280.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-MODELSET
-	TYPE = 4
-	POS = 310.0 -20.0 -240.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-MODELSET
-	TYPE = 4
-	POS = 220.0 -20.0 -40.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 3.0 3.0
-	COLLISION = 0
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-MODELSET
-	TYPE = 4
-	POS = 40.0 -20.0 -220.0
+	POS = 320.0 -20.0 320.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.0 3.0 3.0
 	COLLISION = 0

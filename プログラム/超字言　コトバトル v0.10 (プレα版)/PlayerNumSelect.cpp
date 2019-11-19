@@ -312,7 +312,7 @@ void CPlayerSelect::Update(void)
 			if (m_bCreate2D == false)
 			{
 				//警告を生成
-				m_pCaution2DBG = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), "PLAUERNUMSEL_BG");
+				m_pCaution2DBG = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), "PLAYERNUMSEL_BG");
 				m_pCaution2DBG->SetWidthHeight(CAUTIONBG_WIDTH, CAUTIONBG_HEIGHT);
 				m_pCaution2DBG->SetbDraw(true);
 
@@ -514,11 +514,11 @@ void CPlayerSelect::InitProductionPos(void)
 	m_apPolygonBG[0]->SetWidthHeight(PLNUMMENU_BG*6.0f, PLNUMMENU_BG * 3.5f);
 
 	//モード名帯（左）
-	m_apPolygonBG[1] = CScene2D::Create(D3DXVECTOR3(50.0f, SCREEN_HEIGHT / 2, m_InitPos.z), "PLAUERNUMSEL_BAND");
+	m_apPolygonBG[1] = CScene2D::Create(D3DXVECTOR3(50.0f, SCREEN_HEIGHT / 2, m_InitPos.z), "PLAYERNUMSEL_BAND");
 	m_apPolygonBG[1]->SetWidthHeight(PLNUMMENU_BG*BAND_SIZE, PLNUMMENU_BG * 3.5f);
 
 	//モード名帯（右）
-	m_apPolygonBG[2] = CScene2D::Create(D3DXVECTOR3(1230.0f, SCREEN_HEIGHT / 2, m_InitPos.z), "PLAUERNUMSEL_BAND");
+	m_apPolygonBG[2] = CScene2D::Create(D3DXVECTOR3(1230.0f, SCREEN_HEIGHT / 2, m_InitPos.z), "PLAYERNUMSEL_BAND");
 	m_apPolygonBG[2]->SetWidthHeight(PLNUMMENU_BG*BAND_SIZE, PLNUMMENU_BG * 3.5f);
 
 	//UI_スティック

@@ -117,7 +117,6 @@ HRESULT CSelectMenu::Init()
 		}
 
 		/* ƒƒjƒ…[ƒ|ƒŠƒSƒ“‚Ìİ’è */
-		m_InitPos.y = MENU_INITPOS;
 
 		for (int nCnt = 0; nCnt < m_nMaxMenu; nCnt++)
 		{
