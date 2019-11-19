@@ -272,7 +272,7 @@ void CCharaSelect::InitCharaSelectPoly(void)
 
 	/* 演出 */
 	// 背景
-	m_apScene2D[0] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SIZE_Y, 0), "PLAUERNUMSEL_BG", 1);
+	m_apScene2D[0] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SIZE_Y, 0), "PLAYERNUMSEL_BG", 1);
 	m_apScene2D[0]->SetWidthHeight(DEFAULT_SIZE*6.0f, DEFAULT_SIZE*3.5f);
 
 	//モード名帯（左）
@@ -317,7 +317,7 @@ void CCharaSelect::InitCharaSelectPoly(void)
 		//バッジ
 		m_apBadge2D[nCnt] = CScene2D::Create(D3DXVECTOR3(CURSOL_INITPOS.x + (CHARASELCHOICE_INTERVAL*nCnt),
 			CURSOL_INITPOS.y,
-			CURSOL_INITPOS.z), "CHARASEL_BADGE", 4);
+			CURSOL_INITPOS.z), "CHARASEL_BADGE");
 		m_apBadge2D[nCnt]->SetWidthHeight(DEFAULT_SIZE*CURSOR_SIZE, DEFAULT_SIZE*CURSOR_SIZE);
 
 		//カーソル
