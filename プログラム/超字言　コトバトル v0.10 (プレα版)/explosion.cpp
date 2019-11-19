@@ -40,12 +40,12 @@ CExplosion3D* CExplosion3D::Create(void)
 //=============================================================================
 // 設定処理
 //=============================================================================
-void CExplosion3D::Set(D3DXVECTOR3 pos, float fSize, int nLife)
+void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife)
 {
-	CMeshSphere::Set(pos, "EXPLOSION", 20, 20, D3DXVECTOR3(fSize, fSize, fSize));
+	CMeshSphere::Set(pos, "EXPLOSION", 20, 20, D3DXVECTOR3(fStartSize, fStartSize, fStartSize));
 
-	m_fOrgSize = fSize;
-	m_fSize = fSize;
+	m_fDestSize = fDestSize;
+	m_fSize = fStartSize;
 	m_nLife = nLife;
 }
 
@@ -72,11 +72,23 @@ void CExplosion3D::Uninit(void)
 //=============================================================================
 void CExplosion3D::Update(void)
 {
-	m_fSize = m_fOrgSize + ((sinf(((float)m_nCount+1) / m_nLife)) * 100.0f);
+	//サイズ更新
+	D3DXVECTOR3 Size = D3DXVECTOR3(m_fSize, m_fSize, m_fSize);
+	D3DXVECTOR3 SizeDest = D3DXVECTOR3(m_fDestSize, m_fDestSize, m_fDestSize);
 
-	GetScale() = D3DXVECTOR3(m_fSize,m_fSize,m_fSize);
+	D3DXVec3Lerp(&Size,&Size,&SizeDest,((float)(m_nCount + 1) / (float)m_nLife));
+
+	GetScale() = Size;
+
+	m_fSize = Size.x;	//どれも同じなので適当な数値を入れる
+
+	//親クラスのUpdate
 	CMeshSphere::Update();
 
+	//装飾
+
+
+	//消滅判定
 	if (m_nCount > m_nLife)
 	{
 		Uninit();
