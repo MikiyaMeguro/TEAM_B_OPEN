@@ -200,8 +200,10 @@ void CPlayer::Uninit(void)
 
 
 	// 文字管理クラスの削除
-	ObjRelease(m_pWordManager);
-
+	if (m_pWordManager != NULL)
+	{
+		ObjRelease(m_pWordManager);
+	}
 	//プレイヤー自体の削除
 	Release();
 }
@@ -215,7 +217,7 @@ void CPlayer::Update(void)
 	D3DXVECTOR3 testmove;
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
-	if (m_pCharactorMove != NULL)
+	if (m_pCharactorMove != NULL && CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
@@ -381,6 +383,18 @@ void CPlayer::Update(void)
 			}
 			CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
 
+		}
+	}
+	else
+	{
+		// 前のフレームの位置代入
+		m_posOld = m_pCharactorMove->GetPosition();
+		//移動、回転の更新
+		m_pCharactorMove->Update();
+		// モデルとの当たり判定
+	//	if ((CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON)) == true)
+		{
+			CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
 		}
 	}
 
@@ -550,7 +564,8 @@ void CPlayer::MotionUpdate(BODY body)
 					{
 						SetMotion(MOTION_UPPER_NEUTRAL, UPPER_BODY);
 					}
-						SetMotion(MOTION_LOWER_NEUTRAL, LOWER_BODY);
+
+					SetMotion(MOTION_LOWER_NEUTRAL, LOWER_BODY);
 				}
 			}
 		}

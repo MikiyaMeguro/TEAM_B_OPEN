@@ -72,7 +72,7 @@ public:
 	// 取得の関数
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
 	static CTube *GetTube(int nNum);		// 文字の可視化UIの取得
-	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 文字の可視化UIの取得
+	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 地面の取得
 	static CPoint *GetPoint(int nNum) { return m_pPoint[nNum]; }			// ポイントの取得
 	static CSetWord *GetWordCreate(void) { return m_pWordCreate; }			// 文字出現の取得
 	int GetChangeNum(void) { return m_nChangeNum; }
