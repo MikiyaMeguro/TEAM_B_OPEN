@@ -135,10 +135,12 @@ void CCamera::Update(void)
 
 		break;
 	case TYPE_SPECTOR:
-		m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
-			sinf(m_rot.x) * m_fLength,
-			cosf(m_rot.y) * m_fLength);
-		m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
+
+
+		//m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
+		//	sinf(m_rot.x) * m_fLength,
+		//	cosf(m_rot.y) * m_fLength);
+		//m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 
 		break;
 	}
