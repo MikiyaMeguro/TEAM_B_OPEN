@@ -29,7 +29,7 @@ public:
 		REALTIME_INITPOS,	// 最初の位置から出現
 		REALTIME_NOTMOVE,	// 指定時間まで動かない
 		REALTIME_ENDPOS,	// 最後の位置に向けて移動
-		REALTIME_MAX	// 総数
+		REALTIME_MAX		// 総数
 	}REALTIME;
 
 	CObject();					// コンストラクタ

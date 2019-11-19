@@ -28,6 +28,17 @@
 #define ANIM_FRAME		(7)				// アニメーションカウンター
 #define PATTERN_NUM		(10)			// パターン数
 #define COL_DEFAULT		(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))
+#define STAGE_REST_TIME	(60)			// ステージ切り替え時の文字リセット
+
+//--------------------------------
+// 点滅関係
+//--------------------------------
+#define TIME_FRAME		(60)
+#define FLASHING_SMALL	(0.05f)			// 点滅(小さい)
+#define FLASHING_MAX	(0.2f)			// 点滅(大きい)
+#define FLASHING_TIME_SMALL	(TIME_FRAME * 23)		// 点滅する始める時間
+#define FLASHING_TIME_MAX	(TIME_FRAME * 28)		// 点滅が激しく時間
+#define REST_TIME		(TIME_FRAME * 30)			// 点滅後に終了する時間
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
@@ -44,12 +55,15 @@ CWord::CWord() : CSceneBillBoard()
 	m_nCntUninit = 0;
 	m_bFlag = false;
 	m_bPopFlag = false;
+	m_bFlashingFlag = false;
+	m_bRestFlag = false;
 	m_fMoveY = 0.0f;
 	m_col = COL_DEFAULT;
 	m_pBillBoard = NULL;
 	m_nAnim = 0;
 	m_nPatten = 0;
 	m_colA = 0.4f;
+	m_nCntFlashing = 0;
 
 	// 3文字候補時の変数
 	m_bSearchFlag = false;
@@ -75,7 +89,7 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 	if (pWord == NULL)
 	{
 		pWord = new CWord;
-
+		
 		if (pWord != NULL)
 		{
 			pWord->Init(pos);
@@ -114,7 +128,7 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 
 	if (m_pBillBoard == NULL)
 	{
-		m_pBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 20.0f, 30.0f, "文字エフェクト");
+		m_pBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 17.0f, 30.0f, "文字エフェクト");
 		if (m_pBillBoard != NULL) { m_pBillBoard->SetTexture(5, 10, 1, 1); }
 		m_pBillBoard->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
 	}
@@ -140,6 +154,9 @@ void CWord::Update(void)
 	D3DXVECTOR3 pos = CSceneBillBoard::GetPos();	//位置の取得
 	D3DXVECTOR3 PosOld = pos;						// 位置を保存
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);// 移動
+
+	if (m_bFlag == false) { FlashingCol(); }		// 点滅の処理
+	if (m_bRestFlag == true) { m_bFlagUninit = true; return; }
 
 	if (m_bPopFlag == false)
 	{	// 出現時の場合
@@ -183,6 +200,7 @@ void CWord::Update(void)
 						m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
 						move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 						m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+						m_col = COL_DEFAULT;
 						break;
 					}
 				}
@@ -227,13 +245,11 @@ void CWord::Update(void)
 
 			if ((m_nCntUninit % UNITI_TIME) == 0)
 			{	// 時間になったら終了する
-				//Uninit();
 				m_bFlagUninit = true;
-				//return;
 			}
 		}
 
-		if (((CTime::GetStageTime() % 60) == 0) && CManager::GetGame()->GetChangeNum() < 2)
+		if (((CTime::GetStageTime() % STAGE_REST_TIME) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
 			Uninit();
 			return;
@@ -294,7 +310,13 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 		}
 	}
 
-	if (m_pBillBoard != NULL) { m_pBillBoard->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA)); }
+	if (m_pBillBoard != NULL)
+	{ 
+		m_pBillBoard->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA)); 
+		if (m_SearchCol[m_nCntSearch] == COL_DEFAULT) { m_pBillBoard->SetBillboard(m_pBillBoard->GetPos(), 30.0f, 17.0f); }
+		else if (m_SearchCol[m_nCntSearch] != COL_DEFAULT) { m_pBillBoard->SetBillboard(m_pBillBoard->GetPos(), 70.0f, 17.0f); }
+	}
+
 
 	return pos;
 }
@@ -383,7 +405,11 @@ void CWord::SetSearchCol(D3DXCOLOR col)
 	//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;//テスト
 	for (int nCntCol = 0; nCntCol < nNumSearch + 1; nCntCol++)
 	{
-		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == COL_DEFAULT)
+		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == col)
+		{
+			break;
+		}
+		else if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == COL_DEFAULT)
 		{
 			m_SearchCol[nCntCol] = col;		// 色の代入
 			m_nNumSearch++;
@@ -426,4 +452,32 @@ void CWord::UninitSearchCol(D3DXCOLOR col)
 		}
 	}
 
+}
+
+//=============================================================================
+//	点滅の処理
+//=============================================================================
+void CWord::FlashingCol(void)
+{
+	float fColA = 0.0f;
+	if (m_nCntFlashing > FLASHING_TIME_MAX) { fColA = FLASHING_MAX; }
+	else if (m_nCntFlashing > FLASHING_TIME_SMALL) { fColA = FLASHING_SMALL; }
+
+	if (m_bFlashingFlag == false)
+	{	// 不透明から透明
+		m_col.a -= fColA;
+		if (m_col.a < 0.4f) { m_col.a = 0.4f; m_bFlashingFlag = true; }
+	}
+	else if (m_bFlashingFlag == true)
+	{	// 不透明から透明
+		m_col.a += fColA;
+		if (m_col.a > 1.0f) { m_col.a = 1.0f; m_bFlashingFlag = false; }
+	}
+
+	m_nCntFlashing++;
+
+	if ((m_nCntFlashing % REST_TIME) == 0)
+	{
+		m_bRestFlag = true;
+	}
 }
