@@ -361,7 +361,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	{	// “®‚©‚È‚¢ê‡
 		Rot(Type);
 
-		if (((CTime::GetStageTime() % 30) == 0) && CManager::GetGame()->GetChangeNum() < 2)
+		if (((CTime::GetStageTime() % 60) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
 			m_nRealTime = REALTIME_ENDPOS;
 		}

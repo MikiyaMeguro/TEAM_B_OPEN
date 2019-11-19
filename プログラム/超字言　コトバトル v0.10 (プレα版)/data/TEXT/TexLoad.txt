@@ -65,8 +65,8 @@ DATA = 00047 data/TEXTURE/UI/operation.png UI_OPERATION1
 DATA = 00048 data/TEXTURE/UI/operation2.png UI_OPERATION2
 DATA = 00049 data/TEXTURE/UI/Select.png UI_SELECT
 DATA = 00050 data/TEXTURE/MENU_UI/Menu015.png PLAYERNUMSELECT_MENU
-DATA = 00051 data/TEXTURE/PlayerSelect/Band.png PLAUERNUMSEL_BAND
-DATA = 00052 data/TEXTURE/PlayerSelect/BG.png PLAUERNUMSEL_BG
+DATA = 00051 data/TEXTURE/PlayerSelect/Band.png PLAYERNUMSEL_BAND
+DATA = 00052 data/TEXTURE/PlayerSelect/BG.png PLAYERNUMSEL_BG
 DATA = 00053 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
 DATA = 00054 data/TEXTURE/CharactorSelect/CharaSelect.png CHARACTORSEL_CHARA
 DATA = 00055 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
@@ -76,6 +76,9 @@ DATA = 00058 data/TEXTURE/ModelTex/gomi.png ƒSƒ~_ƒ‚ƒfƒ‹
 DATA = 00059 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
 DATA = 00060 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
 DATA = 00061 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
+DATA = 00062 data/TEXTURE/StageSelect/Band.png STAGESEL_BAND
+DATA = 00062 data/TEXTURE/StageSelect/StageIcon.png STAGESEL_ICON
+
 DATA = 000 data/TEXTURE/ModelTex/ModelTex.png ƒ‚ƒfƒ‹_TEX
 
 
