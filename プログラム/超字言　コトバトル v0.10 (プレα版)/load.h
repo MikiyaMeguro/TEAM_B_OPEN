@@ -40,6 +40,7 @@ public:
 		MODEL_DRAWN_X,		// ドローンX
 		MODEL_DRAWN_Z,		// ドローンZ
 		MODEL_BGFROOR,		// 床
+		MODEL_SWITCH,		// スイッチ
 
 		//--------------------------------------
 		// 文字モデル
