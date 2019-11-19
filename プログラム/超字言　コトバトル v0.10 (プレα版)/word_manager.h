@@ -62,6 +62,9 @@ public:
 	void WordDebug(int nCntNum);
 
 private:
+	void SearchAssist(int nCntData);
+	void UninitAssist(void);
+
 	TYPE_WORD m_aWord[MAX_WORD];
 	static int m_nAnswerDataNum;
 	static D3DXVECTOR3 *m_AnswerNum;

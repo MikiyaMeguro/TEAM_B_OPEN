@@ -42,6 +42,10 @@ public:
 		SOUND_LABEL_SE_PAUSEOPEN,		// ポーズ音押した際の音
 		SOUND_LABEL_SE_PAUSECLOSE,		// ポーズ終えた際の音
 
+		SOUND_LABEL_SE_SWITCHON,		// スイッチ押した音ON
+		SOUND_LABEL_SE_SWITCHOFF,		// スイッチ押した音OFF
+
+
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
 	// パラメータ構造体定義
@@ -95,6 +99,9 @@ protected:
 		{ "data/SE/step.wav", 0 },				// ステップ
 		{ "data/SE/pause_open.wav", 0 },		// ポーズ音押した際の音
 		{ "data/SE/pause_close.wav", 0 },		// ポーズ終えた際の音
+
+		{ "data/SE/switchon.wav", 0 },		// スイッチ押した音ON
+		{ "data/SE/switchoff.wav", 0 },		// スイッチ押した音OFF
 
 
 	};

@@ -522,7 +522,7 @@ void CPlayerSelect::InitProductionPos(void)
 	m_apPolygonBG[2]->SetWidthHeight(PLNUMMENU_BG*BAND_SIZE, PLNUMMENU_BG * 3.5f);
 
 	//UI_スティック
-	m_apPolygonBG[3] = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y - 300.0f, m_InitPos.z), "UI_OPERATION", 4);
+	m_apPolygonBG[3] = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y - 300.0f, m_InitPos.z), "UI_OPERATION1", 4);
 	m_apPolygonBG[3]->SetWidthHeight(PLNUMMENU_BG*0.5f, PLNUMMENU_BG * 0.5f);
 	m_apPolygonBG[3]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.25f, 1.0f));
 
@@ -606,7 +606,7 @@ void CPlayerSelect::SetPlayerSelNumMenuPos(int MenuNum)
 		m_apPolygonBG[4]->SetWidthHeight(m_fWidth*1.5f, m_fHeight * 1.5f);
 		m_apPolygonBG[3]->SetPos(D3DXVECTOR3(m_InitPos.x, m_InitPos.y-200.0f, m_InitPos.z), 0.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_apPolygonBG[3]->SetWidthHeight(PLNUMMENU_BG*0.5f, PLNUMMENU_BG * 0.5f);
-
+		m_apPolygonBG[3]->BindTexture("UI_OPERATION2");
 		switch (MenuNum)
 		{//人数選択
 		case 0:	//一人
@@ -656,6 +656,7 @@ void CPlayerSelect::SetPlayerSelNumMenuPos(int MenuNum)
 		m_apPolygonBG[4]->SetWidthHeight(200.0f, 120.0f);
 		m_apPolygonBG[3]->SetPos(D3DXVECTOR3(m_InitPos.x, m_InitPos.y+350.0f, m_InitPos.z), 0.0f, 0.0f, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_apPolygonBG[3]->SetWidthHeight(PLNUMMENU_BG*0.8f, PLNUMMENU_BG * 0.8f);
+		m_apPolygonBG[3]->BindTexture("UI_OPERATION1");
 
 		switch (MenuNum)
 		{

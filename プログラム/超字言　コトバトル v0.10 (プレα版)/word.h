@@ -29,6 +29,9 @@ public:
 	void Circle(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle);				// ‰~‚ğì‚é
 	void Distance(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNumPlayer);							// ‹——£‚¾‚¯‚ğ‘ª‚é
 	int ComparisonDistance(int nNumPlayer);		// ‹——£‚Ì”äŠr
+	void SetSearchCol(D3DXCOLOR col);											// 3•¶š–ÚŒó•â‚ÌFİ’è
+	void UninitSearchCol(D3DXCOLOR col);										// 3•¶š–ÚŒó•â‚ªÁ‚¦‚½ê‡
+
 
 	// æ“¾ ‚à‚µ‚­‚Í İ’è‚ÌŠÖ”
 	int GetWordNum(void) { return m_nWordNum; }	// •¶š”Ô†‚ğæ“¾
@@ -60,8 +63,10 @@ private:
 	int		m_nPatten;
 
 	// 3•¶š–Ú‚ÌŒó•â
-	D3DXCOLOR m_SearchCol;
+	D3DXCOLOR *m_SearchCol;
 	bool m_bSearchFlag;		// ’T‚·‚Ìƒtƒ‰ƒO
+	int m_nCntSearch;
+	int m_nNumSearch;
 };
 
 #endif

@@ -130,7 +130,7 @@ HRESULT CSelectMenu::Init()
 			if (m_apPolygon[nCnt] == NULL)
 			{
 				m_apPolygon[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z), "MODESELEXT_MENU");
-				m_apPolygon[nCnt]->SetTex(D3DXVECTOR2(0.0f + (0.333f*nCnt), 0.0f), D3DXVECTOR2(0.333f + (0.333f*nCnt), 1.0f));
+				m_apPolygon[nCnt]->SetTex(D3DXVECTOR2(0.0f + (0.333f*nCnt), 0.0f), D3DXVECTOR2(0.333f + (0.333f*nCnt), 0.5f));
 				m_apPolygon[nCnt]->SetWidthHeight(m_fWidth * MODESELECT_WIDTH, m_fHeight * MODESELECT_HEIGHT);
 				m_apPolygon[nCnt]->SetbDraw(true);
 			}
@@ -693,7 +693,7 @@ void CSelectMenu::InitTutorialPolygon(void)
 	m_apPolygonBG[7]->SetAnimation(0, 0.5f, 0.333f);
 
 	//UI_スティック
-	m_apPolygonBG[8] = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y - 250.0f, m_InitPos.z), "UI_OPERATION", 2);
+	m_apPolygonBG[8] = CScene2D::Create(D3DXVECTOR3(m_InitPos.x, m_InitPos.y - 250.0f, m_InitPos.z), "UI_OPERATION1", 2);
 	m_apPolygonBG[8]->SetWidthHeight(MENU_BG*0.7f, MENU_BG * 0.7f);
 	m_apPolygonBG[8]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.25f, 1.0f));
 

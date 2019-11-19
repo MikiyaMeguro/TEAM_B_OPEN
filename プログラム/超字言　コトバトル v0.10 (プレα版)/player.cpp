@@ -399,7 +399,14 @@ void CPlayer::Update(void)
 	}
 
 	//文字管理クラスの更新
-	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
+	if (m_pWordManager != NULL)
+	{
+		if (m_pCharactorMove != NULL && m_pCharactorMove->GetMoveType() == CCharaBase::MOVETYPE_PLAYER_INPUT)
+		{
+			m_pWordManager->SearchWord();
+		}
+		m_pWordManager->Update();
+	}
 
 	//無敵時間のカウントダウン
 	if (m_nCntTransTime > 0)
@@ -751,6 +758,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
 					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+
 					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
 					if (m_bLand == true)
 					{// モデルに当たる
@@ -761,12 +769,16 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
 								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
 							{	// ベルトコンベアの判定
-								pSceneObj->BeltConveyor(move);
+								pSceneObj->BeltConveyor(move, pSceneObj->GetSwitch());
 							}
 							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
 								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
 							{	// ノックバックの判定
 								pSceneObj->KnockBack(move, m_nID);
+							}
+							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_SWITCH)
+							{//	スイッチ
+								pSceneObj->SwitchBeltConveyor(m_bLand);
 							}
 						}
 						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)

@@ -178,6 +178,7 @@ void CSetWord::WordUninit(void)
 void CSetWord::PopWord(void)
 {
 	float fWord = 99.0f;
+	int nCount = 0;
 
 	for (int nCntPos = 0; nCntPos < m_nNum; nCntPos++)
 	{
@@ -195,6 +196,8 @@ void CSetWord::PopWord(void)
 				m_nAnswerNumCount++;
 				m_pWordPos[nCntPos].nCntPop = 0;
 				m_pWordPos[nCntPos].bUse = true;
+				nCount++;
+				m_bCreate = true;
 
 				if (m_nAnswerNumCount % 3 == 0)
 				{
@@ -203,10 +206,10 @@ void CSetWord::PopWord(void)
 					m_nAnswerNumCount = 0;
 				}
 			}
-
-
 		}
 	}
+	
+	//if (nCount == m_nNum) { m_bCreate = true; }
 }
 
 //=============================================================================
@@ -214,6 +217,7 @@ void CSetWord::PopWord(void)
 //=============================================================================
 void CSetWord::LoadFile(char *pFileName)
 {
+	m_bCreate = false;
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();

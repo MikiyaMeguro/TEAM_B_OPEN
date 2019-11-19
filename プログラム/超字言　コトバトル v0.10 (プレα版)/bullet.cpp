@@ -13,6 +13,7 @@
 #include "game.h"
 
 #include "debugProc.h"
+#include "explosion.h"
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
@@ -474,6 +475,9 @@ void CWordBullet::Update(void)
 	}
 	if (nLife < 0)
 	{
+
+		CExplosion3D* p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 20.0f,100.0f, 30); }
 		Uninit();
 		return;
 	}

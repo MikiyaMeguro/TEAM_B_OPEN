@@ -13,11 +13,22 @@
 #include "game.h"
 #include "SetWord.h"
 #include "point.h"
+#include "word.h"
+#include "PlayerNumSelect.h"
 
 #include "bullet.h"
 #include "CameraManager.h"
 
 #include "sound.h"
+//=============================================================================
+// マクロ定義
+//=============================================================================
+#define COL_1P	(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f))		// 1Pカラー (赤)
+#define COL_2P	(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f))		// 2Pカラー (青)
+#define COL_3P	(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f))		// 3Pカラー	(緑)
+#define COL_4P	(D3DXCOLOR(0.7f, 0.7f, 0.0f, 1.0f))		// 4Pカラー	(オレンジ)
+#define COL_CPU	(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f))		// CPUカラー(クレー)
+
 //=============================================================================
 // 静的メンバ変数
 //=============================================================================
@@ -201,12 +212,20 @@ void CWordManager::Update(void)
 	if (m_nCntNum != 2 && m_bSearch == true)
 	{ // 持っている文字が2文字以外ならサーチのフラグを変更
 		m_bSearch = false;
+		UninitAssist();
 		if (m_fAnswerData != NULL)
 		{
 			delete[] m_fAnswerData;
 			m_fAnswerData = NULL;
 		}
 		//*m_fAnswerData = 99.0f;		// 空の番号をいれる
+	}
+
+	if (CGame::GetWordCreate()->GetCreateFlag() == true)
+	{
+		m_bSearch = false;
+		SearchWord();
+		CGame::GetWordCreate()->SetCreateFlagr(false);
 	}
 
 #ifdef _DEBUG
@@ -400,7 +419,7 @@ void CWordManager::SetWordAnswerNum(int nAnswerNum)
 //=============================================================================
 int CWordManager::SearchWord(void)
 {
-	if (m_nCntNum == 2 /*&& m_bSearch == false*/)
+	if (m_nCntNum == 2 && m_bSearch == false)
 	{	// 拾った文字が２文字の場合
 		int nData = 0;
 		if (m_fAnswerData == NULL)
@@ -439,11 +458,114 @@ int CWordManager::SearchWord(void)
 			}
 		}
 
+		// 3文字目候補のアシスト
+		SearchAssist(nData);
+
 		m_bSearch = true;		// Flagをtureに
 		return nData;			// 答えの出た回数
 	}
 
 	return 0;
+}
+
+//=============================================================================
+// 文字探しアシストの処理
+//=============================================================================
+void CWordManager::SearchAssist(int nCntData)
+{
+	if (nCntData == 0) { return; }
+	int nNum = 0;
+	int nCount = 0;
+	int nData = 0;
+	int nPlayerNum = *CPlayerSelect::GetModeSelectMode();
+	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	// 色の振り分け
+	if (m_nPlayerID <= nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
+	{
+		if (m_nPlayerID == 0) { col = COL_1P; }
+		if (m_nPlayerID == 1) { col = COL_2P; }
+		if (m_nPlayerID == 2) { col = COL_3P; }
+		if (m_nPlayerID == 3) { col = COL_4P; }
+	}
+	else if (m_nPlayerID > nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
+	{
+		col = COL_CPU;
+	}
+
+	CScene *pScene = NULL;
+
+	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
+	
+	while (nCount < nNum)
+	{
+		// 先頭のオブジェクトを取得
+		pScene = CScene::GetTop(5);
+
+		while (pScene != NULL)
+		{// 優先順位が弾と同じオブジェクトを1つ1つ確かめる
+		 // 処理の最中に消える可能性があるから先に記録しておく
+			CScene *pSceneNext = pScene->GetNext();
+			if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_WORD)
+			{// 死亡フラグが立っていないもの
+				CWord *pWord = ((CWord*)pScene);		// CBulletBaseへキャスト(型の変更)
+				for (int nCntWord = 0; nCntWord < nCntData; nCntWord++)
+				{
+					if (pWord->GetWordNum() == m_fAnswerData[nCntWord])
+					{
+						pWord->SetSearchCol(col);
+					}
+				}
+				nCount++;
+			}
+			pScene = pSceneNext;
+		}
+	}
+}
+
+//=============================================================================
+// 3文字目候補のアシストカラーをデフォルトに変更
+//=============================================================================
+void CWordManager::UninitAssist(void)
+{
+	int nNum = 0;
+	int nCount = 0;
+	int nPlayerNum = *CPlayerSelect::GetModeSelectMode();
+	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	// 色の振り分け
+	if (m_nPlayerID <= nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
+	{
+		if (m_nPlayerID == 0) { col = COL_1P; }
+		if (m_nPlayerID == 1) { col = COL_2P; }
+		if (m_nPlayerID == 2) { col = COL_3P; }
+		if (m_nPlayerID == 3) { col = COL_4P; }
+	}
+	else if (m_nPlayerID > nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
+	{
+		col = COL_CPU;
+	}
+
+	CScene *pScene = NULL;
+
+	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
+
+	while (nCount < nNum)
+	{
+		// 先頭のオブジェクトを取得
+		pScene = CScene::GetTop(5);
+
+		while (pScene != NULL)
+		{// 優先順位が弾と同じオブジェクトを1つ1つ確かめる
+		 // 処理の最中に消える可能性があるから先に記録しておく
+			CScene *pSceneNext = pScene->GetNext();
+			if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_WORD)
+			{// 死亡フラグが立っていないもの
+				CWord *pWord = ((CWord*)pScene);		// CBulletBaseへキャスト(型の変更)
+				pWord->UninitSearchCol(col);
+				nCount++;
+			}
+			pScene = pSceneNext;
+		}
+	}
 }
 
 
