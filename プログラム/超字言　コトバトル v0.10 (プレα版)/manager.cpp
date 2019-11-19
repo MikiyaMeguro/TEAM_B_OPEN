@@ -50,7 +50,7 @@ CResult *CManager::m_pResult = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CInputXPad *CManager::m_pXInput[MAX_PLAYER] = {};
-CManager::MODE CManager::m_mode = CManager::MODE_TITLE;	//ゲーム起動時のモード
+CManager::MODE CManager::m_mode = CManager::MODE_SELECT;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
 //=============================================================================
@@ -340,9 +340,7 @@ void CManager::Uninit(void)
 		if (m_pResult != NULL)
 		{
 			m_pResult->Uninit();
-			delete m_pResult;
 			m_pResult = NULL;
-
 			//タイトルのBGMを止める
 		//	m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RESULT);
 		}
@@ -525,6 +523,17 @@ void CManager::Draw(void)
 	{// レンダラー描画処理
 		m_pRenderer->Draw();
 	}
+
+	switch (m_mode)
+	{
+		//リザルトモードの更新処理
+	case CManager::MODE_RESULT:
+		if (m_pResult != NULL)
+		{
+			m_pResult->Draw();
+		}
+		break;
+	}
 }
 
 //=============================================================================
@@ -668,13 +677,9 @@ void CManager::SetMode(MODE mode)
 		{
 			// 終了処理
 			m_pResult->Uninit();
-
-			//メモリの開放
-			delete m_pResult;
-
 			//NULLにする
 			m_pResult = NULL;
-
+			CScene::ReleseAll();
 			//リザルトのBGMを止める
 			m_pSound[0]->StopSound(CSound::SOUND_LABEL_BGM_RANKING);
 		}

@@ -19,7 +19,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define BELTCONVEYER_MOVE			(0.2f)			// ベルトコンベアの速度
+#define BELTCONVEYER_MOVE			(0.5f)			// ベルトコンベアの速度
 #define KNOCKBACK_MOVE_SMALL		(4.0f)			// ノックバックの強度(小)
 #define KNOCKBACK_MOVE_DURING		(6.0f)			// ノックバックの強度(中)
 #define KNOCKBACK_MOVE_BIG			(9.0f)			// ノックバックの強度(大)
@@ -37,6 +37,8 @@
 // 静的メンバ変数
 //*****************************************************************************
 bool CObject::m_bCreateFlag = false;
+bool  CObject::m_bSwitch = false;
+
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -52,7 +54,8 @@ CObject::CObject()
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_InitPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_MoveState = 0;
-
+	m_bSwitch = false;
+	m_nCounter = 0;
 }
 
 //=============================================================================
@@ -132,6 +135,7 @@ void CObject::Update(void)
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
 	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
+
 	BGModelMove(pos);				// 背景モデルの移動
 
 	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// 何もない場合は何も通さない
@@ -140,6 +144,7 @@ void CObject::Update(void)
 	ModelMove(Collsiontype, pos);	// モデルの移動
 
 	if (m_pIcon != NULL) { AnimationIcon(); }
+
 
 #ifdef _DEBUG
 	//CDebugProc::Print("cfccfccfc", "ModelPos : x", m_pos.x, "f", "   y", m_pos.y, "f", "  z", m_pos.z, "f");
@@ -161,28 +166,72 @@ void CObject::Draw(void)
 	}
 	CSceneX::Draw();
 }
+//=============================================================================
+// /スイッチの処理
+//=============================================================================
+void CObject::SwitchBeltConveyor(bool bSwitch)
+{
+	CSound *pSound = CManager::GetSound();		//	音の取得
+	D3DXVECTOR3 pos = CSceneX::GetPosition();
+
+	if (bSwitch == true)
+	{//	SwitchON
+		m_nCounter++;
+		if (m_nCounter > 50)
+		{
+			m_bSwitch = m_bSwitch ? false : true;
+			if (m_bSwitch == true)
+			{//	SwitchON
+				pSound->SetVolume(CSound::SOUND_LABEL_SE_SWITCHON, 3.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SWITCHON);
+			}
+			else if (m_bSwitch == false)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_SE_SWITCHOFF, 3.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SWITCHOFF);
+			}
+			m_nCounter = 0;
+		}
+		pos = D3DXVECTOR3(0.0f, -20.0, 0.0f);
+		if (m_bSwitch ==false )
+		{//	SwitchOFF
+			m_nCounter++;
+			pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+		}
+	}
+	SetPosition(pos);
+}
 
 //=============================================================================
 // ベルトコンベアの処理
 //=============================================================================
-void CObject::BeltConveyor(D3DXVECTOR3 *pMove)
+void CObject::BeltConveyor(D3DXVECTOR3 *pMove, bool bSwitch)
 {
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
-	if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT)
-	{	// 前進する
-		pMove->z += BELTCONVEYER_MOVE;
-	}
-	else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_BACK)
-	{	// 後退する
-		pMove->z += -BELTCONVEYER_MOVE;
-	}
-	else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
-	{	// 右移動
-		pMove->x += -BELTCONVEYER_MOVE;
-	}
-	else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
-	{	// 左移動
-		pMove->x += BELTCONVEYER_MOVE;
+
+	switch (bSwitch)
+	{
+	case false:
+		break;
+	case true:
+		if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT)
+		{	// 前進する
+			pMove->z += BELTCONVEYER_MOVE;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_BACK)
+		{	// 後退する
+			pMove->z += -BELTCONVEYER_MOVE;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+		{	// 右移動
+			pMove->x += -BELTCONVEYER_MOVE;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT)
+		{	// 左移動
+			pMove->x += BELTCONVEYER_MOVE;
+		}
+		break;
 	}
 }
 //=============================================================================
@@ -341,11 +390,15 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 void CObject::AnimationIcon(void)
 {
 	m_nCntAnim++;
-	if ((m_nCntAnim % ANIM_TIME) == 0)
-	{
-		m_nCntPattan++;
-		m_pIcon->SetAnimation(m_nCntPattan, 0.1f, 1.0f);
+	 if(m_bSwitch == true)
+	{//	SwitchがONだった場合
+		if ((m_nCntAnim % ANIM_TIME) == 0)
+		{
+			m_nCntPattan++;
+			m_pIcon->SetAnimation(m_nCntPattan, 0.1f, 1.0f);
+		}
 	}
+
 }
 
 //=============================================================================

@@ -200,8 +200,10 @@ void CPlayer::Uninit(void)
 
 
 	// 文字管理クラスの削除
-	ObjRelease(m_pWordManager);
-
+	if (m_pWordManager != NULL)
+	{
+		ObjRelease(m_pWordManager);
+	}
 	//プレイヤー自体の削除
 	Release();
 }
@@ -215,7 +217,7 @@ void CPlayer::Update(void)
 	D3DXVECTOR3 testmove;
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
-	if (m_pCharactorMove != NULL)
+	if (m_pCharactorMove != NULL && CManager::GetMode() == CManager::MODE_GAME)
 	{
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
@@ -383,15 +385,27 @@ void CPlayer::Update(void)
 
 		}
 	}
+	else
+	{
+		// 前のフレームの位置代入
+		m_posOld = m_pCharactorMove->GetPosition();
+		//移動、回転の更新
+		m_pCharactorMove->Update();
+		// モデルとの当たり判定
+	//	if ((CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON)) == true)
+		{
+			CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
+		}
+	}
 
 	//文字管理クラスの更新
-	if (m_pWordManager != NULL) 
+	if (m_pWordManager != NULL)
 	{
 		if (m_pCharactorMove != NULL && m_pCharactorMove->GetMoveType() == CCharaBase::MOVETYPE_PLAYER_INPUT)
 		{
 			m_pWordManager->SearchWord();
 		}
-		m_pWordManager->Update(); 
+		m_pWordManager->Update();
 	}
 
 	//無敵時間のカウントダウン
@@ -550,7 +564,8 @@ void CPlayer::MotionUpdate(BODY body)
 					{
 						SetMotion(MOTION_UPPER_NEUTRAL, UPPER_BODY);
 					}
-						SetMotion(MOTION_LOWER_NEUTRAL, LOWER_BODY);
+
+					SetMotion(MOTION_LOWER_NEUTRAL, LOWER_BODY);
 				}
 			}
 		}
@@ -743,6 +758,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
 					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+
 					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
 					if (m_bLand == true)
 					{// モデルに当たる
@@ -753,12 +769,16 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
 								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
 							{	// ベルトコンベアの判定
-								pSceneObj->BeltConveyor(move);
+								pSceneObj->BeltConveyor(move, pSceneObj->GetSwitch());
 							}
 							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
 								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
 							{	// ノックバックの判定
 								pSceneObj->KnockBack(move, m_nID);
+							}
+							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_SWITCH)
+							{//	スイッチ
+								pSceneObj->SwitchBeltConveyor(m_bLand);
 							}
 						}
 						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
