@@ -27,7 +27,7 @@
 #define α_COL_TIME		(15)			// 透明度変化時の時間
 #define ANIM_FRAME		(7)				// アニメーションカウンター
 #define PATTERN_NUM		(10)			// パターン数
-
+#define COL_DEFAULT		(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f))
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
@@ -45,19 +45,17 @@ CWord::CWord() : CSceneBillBoard()
 	m_bFlag = false;
 	m_bPopFlag = false;
 	m_fMoveY = 0.0f;
-	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_col = COL_DEFAULT;
 	m_pBillBoard = NULL;
 	m_nAnim = 0;
 	m_nPatten = 0;
 	m_colA = 0.4f;
 
 	// 3文字候補時の変数
+	m_bSearchFlag = false;
+	m_nCntSearch = 0;
+	m_nNumSearch = 0;
 	m_SearchCol = NULL;
-	if (m_SearchCol == NULL) 
-	{
-		/*int nNum = *CPlayerSelect::GetModeSelectMode();
-		m_SearchCol = new D3DXCOLOR*/
-	}
 }
 
 //--------------------------------------------
@@ -99,6 +97,18 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 //=============================================================================
 HRESULT CWord::Init(D3DXVECTOR3 pos)
 {
+	if (m_SearchCol == NULL)
+	{
+		int nNumSearch = *CPlayerSelect::GetModeSelectMode();
+		//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;
+		m_SearchCol = new D3DXCOLOR[nNumSearch + 1];
+
+		for (int nCntCol = 0; nCntCol < nNumSearch + 1; nCntCol++)
+		{
+			if (&m_SearchCol[nCntCol] != NULL) { m_SearchCol[nCntCol] = COL_DEFAULT; }
+		}
+	}
+
 	CSceneBillBoard::Init(pos);
 	CSceneBillBoard::SetObjType(CScene::OBJTYPE_WORD);
 
@@ -118,6 +128,7 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 void CWord::Uninit(void)
 {
 	if (m_pBillBoard != NULL) { m_pBillBoard->Uninit(); m_pBillBoard = NULL; }
+	if (&m_SearchCol != NULL) { delete[] m_SearchCol; m_SearchCol = NULL; }
 	CSceneBillBoard::Uninit();
 }
 
@@ -276,11 +287,14 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 		if (pos.y < POP_POS_Y_SMALL)
 		{	// 位置が指定した場所より小さい場合
 			m_bMoveFlag = true;
+			m_nCntSearch++;
+			if (m_nCntSearch >= m_nNumSearch) { 
+				m_nCntSearch = 0; }
 			//m_colA = 0.2f;
 		}
 	}
 
-	if (m_pBillBoard != NULL) { m_pBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, m_colA)); }
+	if (m_pBillBoard != NULL) { m_pBillBoard->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA)); }
 
 	return pos;
 }
@@ -358,4 +372,58 @@ D3DXVECTOR3 CWord::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle,
 	}
 
 	return move;
+}
+
+//=============================================================================
+// 3文字目に候補の色設定処理
+//=============================================================================
+void CWord::SetSearchCol(D3DXCOLOR col)
+{
+	int nNumSearch = *CPlayerSelect::GetModeSelectMode();
+	//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;//テスト
+	for (int nCntCol = 0; nCntCol < nNumSearch + 1; nCntCol++)
+	{
+		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == COL_DEFAULT)
+		{
+			m_SearchCol[nCntCol] = col;		// 色の代入
+			m_nNumSearch++;
+			break;
+		}
+	}
+}
+
+//=============================================================================
+// 3文字目候補が無くなった場合
+//=============================================================================
+void CWord::UninitSearchCol(D3DXCOLOR col)
+{
+	int nNumSearch = *CPlayerSelect::GetModeSelectMode();
+	//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;//テスト
+
+	int nNum = 0;
+	for (int nCntCol = 0; nCntCol < m_nNumSearch; nCntCol++)
+	{
+		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == col)
+		{	// 色をデフォルトに戻す
+			m_SearchCol[nCntCol] = COL_DEFAULT;
+			nNum--;
+		}
+	}
+
+	m_nNumSearch += nNum;		// 数を減らす
+	if (m_nNumSearch < 0) { m_nNumSearch = 0; }
+
+	for (int nCntCol = 0; nCntCol < nNumSearch; nCntCol++)
+	{
+		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == COL_DEFAULT)
+		{
+			if (&m_SearchCol[nCntCol + 1] != NULL)
+			{	// 色の入れ替え
+				m_SearchCol[nCntCol] = m_SearchCol[nCntCol + 1];
+				m_SearchCol[nCntCol + 1] = COL_DEFAULT;
+			}
+			else if (m_SearchCol[nCntCol + 1] == NULL) { m_SearchCol[nCntCol] = COL_DEFAULT; }	// 色をデフォルトに
+		}
+	}
+
 }

@@ -45,6 +45,9 @@ public:
 	// 取得 設定 の関数
 	//*******************************
 	void SetAnswer(int nNumAnswer) { m_nAnswer = nNumAnswer;}
+	int GetPopNum(void) { return m_nNum; }						// 生成する数
+	void SetCreateFlagr(bool bFlag) { m_bCreate = bFlag; }
+	bool GetCreateFlag(void) { return m_bCreate; }
 
 private:
 	//メンバ変数
@@ -65,8 +68,8 @@ public:
 	Word_Pos *m_pWordPos;
 	D3DXVECTOR3 *m_AnswerNum;		// 答えのデータ数値
 	int m_nAnswer;					// 答えの総数
-	int m_nNum;
 	int m_nRandAnswerNum;			// 答えをランダムに
+	int m_nNum;
 	int m_nAnswerNumCount;			// カウント
 	bool m_bCreate;
 };

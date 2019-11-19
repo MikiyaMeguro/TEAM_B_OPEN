@@ -173,6 +173,7 @@ void CTube::SetWordNum(int nWordNum, int nNum)
 	else if (nNum < 2)
 	{
 		SetAnswer(nWordNum);
+		if (nNum == 1) {}
 	}
 }
 
@@ -349,3 +350,4 @@ void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
 		else if (bPoint == true) { pPoint->SubtractionPoint(nPoint); }
 	}
 }
+

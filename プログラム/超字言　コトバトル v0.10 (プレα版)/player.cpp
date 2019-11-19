@@ -385,7 +385,14 @@ void CPlayer::Update(void)
 	}
 
 	//文字管理クラスの更新
-	if (m_pWordManager != NULL) { m_pWordManager->Update(); }
+	if (m_pWordManager != NULL) 
+	{
+		if (m_pCharactorMove != NULL && m_pCharactorMove->GetMoveType() == CCharaBase::MOVETYPE_PLAYER_INPUT)
+		{
+			m_pWordManager->SearchWord();
+		}
+		m_pWordManager->Update(); 
+	}
 
 	//無敵時間のカウントダウン
 	if (m_nCntTransTime > 0)
