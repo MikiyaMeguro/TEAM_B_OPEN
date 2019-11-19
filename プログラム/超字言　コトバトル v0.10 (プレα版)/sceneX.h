@@ -35,6 +35,8 @@ public:
 		COLLSIONTYPE_KNOCKBACK_SMALL,	// 当たり判定(ノックバック 小)
 		COLLSIONTYPE_KNOCKBACK_DURING,	// 当たり判定(ノックバック 中)
 		COLLSIONTYPE_KNOCKBACK_BIG,		// 当たり判定(ノックバック 大)
+		COLLSIONTYPE_SWITCH,			// 当たり判定(スイッチ)
+
 	}COLLISIONTYPE;
 
 	CSceneX(int nPriority = SCENEX_PRIORITY, OBJTYPE objType = OBJTYPE_SCENEX);					// コンストラクタ

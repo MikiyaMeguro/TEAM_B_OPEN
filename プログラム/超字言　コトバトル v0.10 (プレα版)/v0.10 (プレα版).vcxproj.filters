@@ -145,6 +145,12 @@
     <ClCompile Include="wall.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="meshSphere.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="explosion.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -289,6 +295,12 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="wall.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="explosion.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="meshSphere.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

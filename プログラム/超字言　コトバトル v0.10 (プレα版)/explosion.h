@@ -20,7 +20,7 @@ public:
 
 	static CExplosion3D* Create(void);
 
-	void Set(D3DXVECTOR3 pos,float fSize,int nLife);
+	void Set(D3DXVECTOR3 pos,float fStartSize,float fDestSize,int nLife);
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -30,7 +30,7 @@ public:
 	bool Collision(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);
 private:
 	float m_fSize;
-	float m_fOrgSize;
+	float m_fDestSize;
 	int m_nLife;
 };
 
