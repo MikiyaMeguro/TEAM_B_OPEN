@@ -43,7 +43,7 @@ CMeshSphere* CMeshSphere::Create(void)
 //=============================================================================
 // 設定処理
 //=============================================================================
-void CMeshSphere::Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeight, D3DXVECTOR3 Size,D3DXVECTOR3 rot)
+void CMeshSphere::Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeight, D3DXVECTOR3 Size, D3DXCOLOR Col,D3DXVECTOR3 rot)
 {
 	//デバイスを取得
 	CRenderer* pRenderer = CManager::GetRenderer();
@@ -53,6 +53,8 @@ void CMeshSphere::Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeig
 	m_pos = pos;
 	m_rot = rot;
 	m_Size = Size;
+	m_Color = Col;
+
 	m_nMeshWidth = nMeshWidth;
 	m_nMeshHeight = nMeshHeight;
 
@@ -97,6 +99,10 @@ HRESULT CMeshSphere::Init(void)
 	m_nMeshWidth = 2;
 	m_nMeshHeight = 2;
 	m_nVtxNum = 2;
+
+	m_AnimTexUV = D3DXVECTOR2(0.0f,0.0f);
+	m_nCntTexAnim = 2;
+	m_nCount = 0;
 	return S_OK;
 }
 
@@ -133,7 +139,29 @@ void CMeshSphere::Uninit(void)
 //=============================================================================
 void CMeshSphere::Update(void)
 {
+	m_nCount++;
 
+	if (m_nCount % m_nCntTexAnim == 0)
+	{
+		// 頂点情報の設定
+		VERTEX_3D *pVtx;	// 頂点情報へのポインタ
+							// 頂点バッファをロックし、頂点データへのポインタを取得
+		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		for (int nCntVtxY = 0; nCntVtxY <= m_nMeshHeight; nCntVtxY++)
+		{
+			for (int nCntVtxX = 0; nCntVtxX < m_nMeshWidth; nCntVtxX++)
+			{
+				int nNum = (m_nMeshWidth * nCntVtxY) + nCntVtxX;
+				pVtx[nNum].tex += m_AnimTexUV;
+
+			}
+		}
+
+		// 頂点バッファをアンロックする
+		m_pVtxBuff->Unlock();
+
+	}
 }
 
 //=============================================================================
@@ -188,7 +216,6 @@ void CMeshSphere::Draw(void)
 //=============================================================================
 void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 {
-
 	//既に作られていたらいったん削除
 	if (m_pVtxBuff != NULL)
 	{
@@ -222,12 +249,13 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 				cosf(fTheta),
 				sinf(fTheta) * cosf(fPhi));
 
-			pVtx[nNum].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
-			pVtx[nNum].col = D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f);
-
 			pVtx[nNum].tex =
-				D3DXVECTOR2(0.0f + (nCntVtxX * (1.0f / m_nMeshWidth + 1)),
-					0.0f + (nCntVtxY * (1.0f / m_nMeshHeight + 1)));
+				D3DXVECTOR2((nCntVtxX * (1.0f / (float)m_nMeshWidth)),
+					(nCntVtxY * (1.0f / (float)m_nMeshHeight)));
+
+			pVtx[nNum].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+			pVtx[nNum].col = m_Color;
+
 		}
 	}
 
@@ -296,12 +324,12 @@ void CMeshSphere::UpdateNormal(void)
 	//ポリゴンの法線設定
 	D3DXVECTOR3 VecA, VecB;
 
-	for (int nCntDepth = 0; nCntDepth <= m_nMeshHeight; nCntDepth++)
+	for (int nCntHeight = 0; nCntHeight <= m_nMeshHeight; nCntHeight++)
 	{
 		//頂点バッファをロックし、頂点データへのポインタを取得
 		for (int nCntWidth = 0; nCntWidth < m_nMeshWidth; nCntWidth++)
 		{
-			int nNum = (m_nMeshWidth * nCntDepth) + nCntWidth;
+			int nNum = (m_nMeshWidth * nCntHeight) + nCntWidth;
 
 			VecA = pVtx[nNum + (m_nMeshWidth + 2)].pos - pVtx[nNum].pos;
 			VecB = pVtx[nNum + (m_nMeshWidth + 1)].pos - pVtx[nNum].pos;
@@ -326,38 +354,38 @@ void CMeshSphere::UpdateNormal(void)
 	D3DXVECTOR3 VecC;
 	//頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-	for (int nCntDepth = 0; nCntDepth <= m_nMeshHeight; nCntDepth++)
+	for (int nCntHeight = 0; nCntHeight <= m_nMeshHeight; nCntHeight++)
 	{
 		//頂点バッファをロックし、頂点データへのポインタを取得
 		for (int nCntWidth = 0; nCntWidth < m_nMeshWidth; nCntWidth++)
 		{
 			if (nCntWidth == 0)
 			{
-				if (nCntDepth == 0)
+				if (nCntHeight == 0)
 				{
 					VecC = (m_VecNor[0] + m_VecNor[1]) / 2;
 					D3DXVec3Normalize(&pVtx[0].nor, &VecC);
 				}
-				else if (nCntDepth == m_nMeshHeight)
+				else if (nCntHeight == m_nMeshHeight)
 				{
 					VecC = m_VecNor[((m_nMeshWidth) * 2) * (m_nMeshHeight - 1)];
 					D3DXVec3Normalize(&pVtx[(m_nMeshWidth + 1) * m_nMeshHeight].nor, &VecC);
 				}
 				else
 				{
-					int nA = (m_nMeshWidth * 2) * (nCntDepth - 1);
+					int nA = (m_nMeshWidth * 2) * (nCntHeight - 1);
 					VecC = (m_VecNor[nA] + m_VecNor[nA + (m_nMeshWidth * 2)] + m_VecNor[nA + (m_nMeshWidth * 2) + 1]) / 3;
-					D3DXVec3Normalize(&pVtx[(m_nMeshWidth + 1) * nCntDepth].nor, &VecC);
+					D3DXVec3Normalize(&pVtx[(m_nMeshWidth + 1) * nCntHeight].nor, &VecC);
 				}
 			}
 			else if (nCntWidth == m_nMeshWidth)
 			{
-				if (nCntDepth == 0)
+				if (nCntHeight == 0)
 				{
 					VecC = m_VecNor[(m_nMeshWidth * 2) - 1];
 					D3DXVec3Normalize(&pVtx[m_nMeshWidth].nor, &VecC);
 				}
-				else if (nCntDepth == m_nMeshHeight)
+				else if (nCntHeight == m_nMeshHeight)
 				{
 					VecC = (m_VecNor[(m_nMeshWidth * m_nMeshHeight * 2) - 2] + m_VecNor[(m_nMeshWidth * m_nMeshHeight * 2) - 1]) / 2;
 					D3DXVec3Normalize(&pVtx[((m_nMeshHeight + 1) * (m_nMeshWidth + 1)) - 1].nor, &VecC);
@@ -366,20 +394,20 @@ void CMeshSphere::UpdateNormal(void)
 				else
 				{
 					int nB = m_nMeshWidth * 2;
-					VecC = (m_VecNor[(nB * nCntDepth) - 2] + m_VecNor[(nB * nCntDepth) - 1] + m_VecNor[(nB * (nCntDepth + 1)) - 1]) / 3;
-					D3DXVec3Normalize(&pVtx[((m_nMeshWidth + 1) * (nCntDepth + 1)) - 1].nor, &VecC);
+					VecC = (m_VecNor[(nB * nCntHeight) - 2] + m_VecNor[(nB * nCntHeight) - 1] + m_VecNor[(nB * (nCntHeight + 1)) - 1]) / 3;
+					D3DXVec3Normalize(&pVtx[((m_nMeshWidth + 1) * (nCntHeight + 1)) - 1].nor, &VecC);
 				}
 			}
 			else
 			{
-				if (nCntDepth == 0)
+				if (nCntHeight == 0)
 				{
 					int nC = (nCntWidth * 2) - 1;
 					VecC = (m_VecNor[nC] + m_VecNor[nC + 1] + m_VecNor[nC + 2]) / 3;
 					D3DXVec3Normalize(&pVtx[nCntWidth].nor, &VecC);
 
 				}
-				else if (nCntDepth == m_nMeshHeight)
+				else if (nCntHeight == m_nMeshHeight)
 				{
 					int nD = ((m_nMeshWidth * 2) * (m_nMeshHeight - 1)) + ((nCntWidth - 1) * 2);
 					VecC = (m_VecNor[nD] + m_VecNor[nD + 1] + m_VecNor[nD + 2]) / 3;
@@ -387,11 +415,11 @@ void CMeshSphere::UpdateNormal(void)
 				}
 				else
 				{
-					int nE = ((nCntWidth - 1) * 2) + ((m_nMeshWidth * 2) * (nCntDepth - 1));
+					int nE = ((nCntWidth - 1) * 2) + ((m_nMeshWidth * 2) * (nCntHeight - 1));
 					int nF = nE + ((m_nMeshWidth) * 2) + 1;
 					VecC = (m_VecNor[nE] + m_VecNor[nE + 1] + m_VecNor[nE + 2] +
 						m_VecNor[nF] + m_VecNor[nF + 1] + m_VecNor[nF + 2]) / 6;
-					D3DXVec3Normalize(&pVtx[nCntWidth + ((m_nMeshWidth + 1) * nCntDepth)].nor, &VecC);
+					D3DXVec3Normalize(&pVtx[nCntWidth + ((m_nMeshWidth + 1) * nCntHeight)].nor, &VecC);
 
 				}
 			}

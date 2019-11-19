@@ -27,7 +27,7 @@ CExplosion3D* CExplosion3D::Create(void)
 {
 	CExplosion3D* pExplosion = NULL;
 
-	pExplosion = new CExplosion3D(1, OBJTYPE_PARTICLE);
+	pExplosion = new CExplosion3D(4, OBJTYPE_PARTICLE);
 
 	if (pExplosion != NULL)
 	{
@@ -40,10 +40,13 @@ CExplosion3D* CExplosion3D::Create(void)
 //=============================================================================
 // 設定処理
 //=============================================================================
-void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife)
+void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife, float fAnimSpeed)
 {
-	CMeshSphere::Set(pos, "EXPLOSION", 20, 20, D3DXVECTOR3(fStartSize, fStartSize, fStartSize));
+	CMeshSphere::Set(pos, "EXPLOSION", 120, 120,
+		D3DXVECTOR3(fStartSize, fStartSize, fStartSize),D3DXCOLOR(1.0f,0.75f,0.1f,0.5f));
 
+	CMeshSphere::SetTexAnim(D3DXVECTOR2(fAnimSpeed,-fAnimSpeed));
+	CMeshSphere::SetCntAnimTime(1);
 	m_fDestSize = fDestSize;
 	m_fSize = fStartSize;
 	m_nLife = nLife;
@@ -106,6 +109,7 @@ void CExplosion3D::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
 	pDevice->SetRenderState(D3DRS_LIGHTING,FALSE);
+
 	// αブレンディングを加算合成に設定
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
@@ -117,6 +121,7 @@ void CExplosion3D::Draw(void)
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
 }

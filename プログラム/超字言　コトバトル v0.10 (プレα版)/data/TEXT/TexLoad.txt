@@ -77,7 +77,6 @@ DATA = 00059 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
 DATA = 00060 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
 DATA = 00061 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
 DATA = 000 data/TEXTURE/ModelTex/ModelTex.png ƒ‚ƒfƒ‹_TEX
-
-
+DATA = 00063 data/TEXTURE/ExplosionTex001.png EXPLOSION
 
 END_LOAD

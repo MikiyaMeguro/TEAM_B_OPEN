@@ -445,6 +445,16 @@ HRESULT CWordBullet::Init(void)
 //=============================================================================
 void CWordBullet::Uninit(void)
 {
+
+	CExplosion3D* p3D = CExplosion3D::Create();
+	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60,0.01f); }
+	p3D = CExplosion3D::Create();
+	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60,-0.005f); }
+	p3D = CExplosion3D::Create();
+	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60, 0.02f); }
+	p3D = CExplosion3D::Create();
+	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60, -0.015f); }
+
 	if (m_pWord != NULL)
 	{
 		m_pWord->Uninit();
@@ -475,9 +485,6 @@ void CWordBullet::Update(void)
 	}
 	if (nLife < 0)
 	{
-
-		CExplosion3D* p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 20.0f,100.0f, 30); }
 		Uninit();
 		return;
 	}

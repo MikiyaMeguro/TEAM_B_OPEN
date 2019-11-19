@@ -25,7 +25,7 @@ public:
 	static CMeshSphere* Create(void);
 
 	void Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeight, D3DXVECTOR3 Size,
-		D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
+		D3DXCOLOR Col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -34,6 +34,10 @@ public:
 
 	D3DXVECTOR3& GetPosition(void) { return m_pos; };
 	D3DXVECTOR3& GetScale(void) { return m_Size; };
+
+
+	void SetTexAnim(D3DXVECTOR2 Anim) { m_AnimTexUV = Anim; };
+	void SetCntAnimTime(int nTime) { m_nCntTexAnim = nTime; };
 private:
 	void CreateVertex(LPDIRECT3DDEVICE9 pDev);
 	void CreateIndex(LPDIRECT3DDEVICE9 pDev);
@@ -46,7 +50,7 @@ private:
 	D3DXMATRIX				m_mtxWorld;							// ワールドマトリックス
 	D3DXVECTOR3				m_pos;								// ポリゴンの位置
 	D3DXVECTOR3				m_rot;								// ポリゴンの向き
-
+	D3DXCOLOR				m_Color;							// カラー
 	D3DXVECTOR3*			m_VecNor;								// 法線(頂点数分自動生成)
 
 	int						m_nVtxNum;							// 頂点数
@@ -56,6 +60,9 @@ private:
 	int						m_nMeshWidth;						// メッシュの分割数(X軸)
 	int						m_nMeshHeight;						// メッシュの分割数(Y軸)
 	D3DXVECTOR3				m_Size;								// サイズ
+
+	D3DXVECTOR2				m_AnimTexUV;					//テクスチャアニメーション用
+	int						m_nCntTexAnim;					//テクスチャ座標更新までの待機時間
 };
 
 #endif // !_MESH_SPHERE_H_
