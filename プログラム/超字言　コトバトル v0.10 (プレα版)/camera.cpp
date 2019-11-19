@@ -52,6 +52,8 @@ void CCamera::Set(CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLen
 		m_posV = pos - D3DXVECTOR3(sinf(rot.y) * fLength, sinf(rot.x) * fLength, cosf(rot.y) * fLength);
 		break;
 	case CCamera::TYPE_SPECTOR:
+		m_posV = pos;
+		m_posR = pos;
 		break;
 	}
 }
