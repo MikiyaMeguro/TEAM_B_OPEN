@@ -376,9 +376,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 				pos->y = m_pos.y + ScaleVtxMax.y;
 				move->y = 0.0f;  // ˆÚ“®—Ê‚ð‚È‚­‚·
 			}
-
-			if ( pos->y + radius.y >= m_pos.y + ScaleVtxMin.y
-				|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y && posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y)
+			else if (posOld->y + radius.y <= m_pos.y + ScaleVtxMin.y && pos->y + radius.y >= m_pos.y + ScaleVtxMin.y)
 			{// ‰º‚©‚çƒuƒƒbƒN‚É“–‚½‚Á‚½‚Æ‚«
 				pos->y = posOld->y;
 				move->y = 0.0f;  // ˆÚ“®—Ê‚ð‚È‚­‚·

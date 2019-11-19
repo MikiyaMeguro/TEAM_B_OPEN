@@ -33,6 +33,7 @@ public:
 	{
 		MOVETYPE_PLAYER_INPUT,		//プレイヤーの操作
 		MOVETYPE_NPC_AI,			//NPCのAIの操作
+		MOVETYPE_RANKING_CHARA,		//ランキングのキャラ
 		MOVETYPE_MAX
 	}CHARACTOR_MOVE_TYPE;
 

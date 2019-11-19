@@ -384,6 +384,17 @@ void CPlayer::Update(void)
 			CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
 
 		}
+
+		//文字管理クラスの更新
+		if (m_pWordManager != NULL)
+		{
+			if (m_pCharactorMove != NULL && m_pCharactorMove->GetMoveType() == CCharaBase::MOVETYPE_PLAYER_INPUT)
+			{
+				m_pWordManager->SearchWord();
+			}
+			m_pWordManager->Update();
+		}
+
 	}
 	else
 	{
@@ -396,16 +407,6 @@ void CPlayer::Update(void)
 		{
 			CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON);
 		}
-	}
-
-	//文字管理クラスの更新
-	if (m_pWordManager != NULL)
-	{
-		if (m_pCharactorMove != NULL && m_pCharactorMove->GetMoveType() == CCharaBase::MOVETYPE_PLAYER_INPUT)
-		{
-			m_pWordManager->SearchWord();
-		}
-		m_pWordManager->Update();
 	}
 
 	//無敵時間のカウントダウン
