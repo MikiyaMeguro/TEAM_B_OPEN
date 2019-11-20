@@ -116,6 +116,8 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 	{//ドローンZ移動
 		m_MoveState = 1;
 	}
+	//	初期の大きさの保存
+	m_InitScale = CSceneX::GetScale();
 	return S_OK;
 }
 
@@ -292,6 +294,55 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			break;
 		}
 		pos += m_move;				//	動きの加算
+		CSceneX::SetPosition(pos);	//	位置の設定
+	}
+
+	if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL00)
+	{
+		D3DXVECTOR3 scale = CSceneX::GetScale();
+		m_nCounter++;
+		if (m_nCounter > 0 && m_nCounter < 360)
+		{
+			pos.y = 1000.0f;
+			scale.x = 0.0f;
+			scale.z = 0.0f;
+		}
+		else if (m_nCounter > 360 && m_nCounter < 360*2)
+		{
+			pos.y = 0.0f;
+			scale.x = m_InitScale.x;
+			scale.z = m_InitScale.z;
+		}
+		else  if (m_nCounter > 360*2)
+		{
+			m_nCounter = 0;
+		}
+		CSceneX::SetScale(scale);	//	大きさの設定
+		CSceneX::SetPosition(pos);	//	位置の設定
+	}
+	else if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL01)
+	{
+		D3DXVECTOR3 pos = CSceneX::GetPosition();
+		D3DXVECTOR3 scale = CSceneX::GetScale();
+		m_nCounter++;
+		if (m_nCounter > 0 && m_nCounter < 360)
+		{
+			pos.y = 0.0f;
+			scale.x = m_InitScale.x;
+			scale.z = m_InitScale.z;
+		}
+		else if (m_nCounter > 360 && m_nCounter < 360*2)
+		{
+			pos.y = 1000.0f;
+			scale.x = 0.0f;
+			scale.z = 0.0f;
+		}
+		else  if (m_nCounter >  360 * 2)
+		{
+			m_nCounter = 0;
+		}
+
+		CSceneX::SetScale(scale);	//	大きさの設定
 		CSceneX::SetPosition(pos);	//	位置の設定
 	}
 }
