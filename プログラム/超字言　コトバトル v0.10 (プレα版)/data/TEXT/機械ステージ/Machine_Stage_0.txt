@@ -42,6 +42,8 @@ SCRIPT			# この行は絶対消さないこと！
 	# 6 : ノックバック ( 威力-> 小 )
 	# 7 : ノックバック ( 威力-> 中 )
 	# 8 : ノックバック ( 威力-> 大 )
+	# 9 : ボタン	   ( スイッチ )
+	
 
 #------------------------------------------------------------
 #                      モデル配置情報
@@ -117,7 +119,7 @@ MODELSET
 	POS = 0.0 80.0 1000.0
 	ROT = 0.0 -1.57 0.0
 	SCALE = 6.0 4.0 6.0
-	COLLISION = 7
+	COLLISION = 0
 	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
@@ -135,7 +137,7 @@ MODELSET
 	POS = 0.0 80.0 -1000.0
 	ROT = 0.0 -1.57 0.0
 	SCALE = 6.0 4.0 6.0
-	COLLISION = 7
+	COLLISION = 0
 	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
@@ -153,7 +155,7 @@ MODELSET
 	POS = 1000.0 80.0 0.0
 	ROT = 0.0 -1.57 0.0
 	SCALE = 6.0 4.0 6.0
-	COLLISION = 7
+	COLLISION = 0
 	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
@@ -171,7 +173,7 @@ MODELSET
 	POS = -1000.0 80.0 0.0
 	ROT = 0.0 -1.57 0.0
 	SCALE = 6.0 4.0 6.0
-	COLLISION = 7
+	COLLISION = 0
 	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 

@@ -17,6 +17,7 @@ class CTube;
 class CPoint;
 class CSetWord;
 class CWall;
+class CStageSelect;
 
 //=============================================================================
 // マクロ定義
@@ -51,6 +52,7 @@ class CWall;
 
 #define MAX_PLAYER (4)
 #define MAX_STAGE	(3)			// ステージの最大数
+#define MAX_STAGECOUNT	(3)		// 各ステージの数
 
 //クラス（シーン2Dの派生クラス）
 class CGame
@@ -66,7 +68,7 @@ public:
 	static CGame *Create(void);
 
 	void WordCreate(void);	// 文字の生成の管理
-	void SetStage(int nCntState);	// ステージの生成
+	void SetStage(int nNumState,int nCntState);	// ステージの生成
 	void SetCreateWord(void);
 
 	// 取得の関数
@@ -77,6 +79,7 @@ public:
 	static CSetWord *GetWordCreate(void) { return m_pWordCreate; }			// 文字出現の取得
 	int GetChangeNum(void) { return m_nChangeNum; }
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
+	static int GetNumStage(void) { return m_nNumStage; }
 
 private:
 	void CameraSetting(int nNum);		// 人数に応じたカメラ生成
@@ -91,8 +94,9 @@ private:
 
 	static CSetWord *m_pWordCreate;
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
-	char *m_pcStageName[MAX_STAGE];		// ステージの名前保管
-	char *m_pcStageNameWord[MAX_STAGE];		// ステージの名前保管
+	char *m_pcStageName[MAX_STAGE][MAX_STAGECOUNT];		// ステージの名前保管
+	char *m_pcStageNameWord[MAX_STAGE][MAX_STAGECOUNT];	// ステージの名前保管
 	int m_nChangeNum;
+	static int m_nNumStage;
 };
 #endif

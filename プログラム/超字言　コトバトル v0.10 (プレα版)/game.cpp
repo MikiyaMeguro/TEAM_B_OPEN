@@ -25,6 +25,7 @@
 #include "object.h"
 #include "point.h"
 #include "SetWord.h"
+#include"StageSelect.h"
 
 #include "PlayerNumSelect.h"
 
@@ -49,13 +50,22 @@
 //--------------------------
 // 機械ステージ
 //--------------------------
-#define MACHINE_STAGE_0	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
-#define MACHINE_STAGE_1	("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
-#define MACHINE_STAGE_2	("data\\TEXT\\機械ステージ\\Machine_Stage_2.txt")
+#define MACHINE_STAGE_00	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
+#define MACHINE_STAGE_01	("data\\TEXT\\機械ステージ\\Machine_Stage_1.txt")
+#define MACHINE_STAGE_02	("data\\TEXT\\機械ステージ\\Machine_Stage_2.txt")
+#define FILE_NAME00		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_0.txt")
+#define FILE_NAME01		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_1.txt")
+#define FILE_NAME02		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_2.txt")
 
-#define FILE_NAME0		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_0.txt")
-#define FILE_NAME1		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_1.txt")
-#define FILE_NAME2		("data\\TEXT\\機械ステージ\\文字出現位置\\Machine_Word_2.txt")
+//--------------------------
+// 天候ステージ
+//--------------------------
+#define MACHINE_STAGE_10	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")
+#define MACHINE_STAGE_11	("data\\TEXT\\天候ステージ\\Machine_Stage_1.txt")
+#define MACHINE_STAGE_12	("data\\TEXT\\天候ステージ\\Machine_Stage_2.txt")
+#define FILE_NAME10		("data\\TEXT\\天候ステージ\\文字出現位置\\Machine_Word_0.txt")
+#define FILE_NAME11		("data\\TEXT\\天候ステージ\\文字出現位置\\Machine_Word_1.txt")
+#define FILE_NAME12		("data\\TEXT\\天候ステージ\\文字出現位置\\Machine_Word_2.txt")
 
 //============================================================================
 //静的メンバ変数宣言
@@ -67,6 +77,7 @@ CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
 CSetWord *CGame::m_pWordCreate = NULL;
 CWall *CGame::m_pWall = {};
 CPlayer::PLAYER_TYPE CGame::m_type[MAX_PLAYER] = {};
+int CGame::m_nNumStage = NULL;
 
 //=============================================================================
 //	コンストラクタ
@@ -89,28 +100,34 @@ CGame::~CGame()
 void CGame::Init(void)
 {
 	m_nChangeNum = 0;
+	m_nNumStage = 0;
+	m_nNumStage = CStageSelect::GetStageState();
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
-	//CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_2P;//テスト
 	CameraSetting((int)NumPlayer);
 
-	m_pcStageName[0] = { MACHINE_STAGE_0};
-	m_pcStageName[1] = { MACHINE_STAGE_1 };
-	m_pcStageName[2] = { MACHINE_STAGE_2 };
-
-	m_pcStageNameWord[0] = { FILE_NAME0 };
-	m_pcStageNameWord[1] = { FILE_NAME1 };
-	m_pcStageNameWord[2] = { FILE_NAME2 };
-
-	//壁、床設定
-	//CScene3D* p3D = NULL;
-	//p3D = CScene3D::Create(D3DXVECTOR3(0.0f, -50.0f, 0.0f), "BLOCK");
-	//p3D->SetSize(1000.0f,1000.0f);
-	//p3D = CScene3D::Create(D3DXVECTOR3(0.0f, 300.0f, 0.0f), "BLOCK");
-	//p3D->SetRot(D3DXVECTOR3(D3DX_PI,0.0f,0.0f));
-	//p3D->SetSize(1000.0f, 1000.0f);
-
+	switch (m_nNumStage)
+	{
+	case 0:
+		//	機械
+		m_pcStageName[0][0] = { MACHINE_STAGE_00 };
+		m_pcStageName[0][1] = { MACHINE_STAGE_01 };
+		m_pcStageName[0][2] = { MACHINE_STAGE_02 };
+		m_pcStageNameWord[0][0] = { FILE_NAME00 };
+		m_pcStageNameWord[0][1] = { FILE_NAME01 };
+		m_pcStageNameWord[0][2] = { FILE_NAME02 };
+		break;
+	case 1:
+		//	天候
+		m_pcStageName[1][0] = { MACHINE_STAGE_10 };
+		m_pcStageName[1][1] = { MACHINE_STAGE_11 };
+		m_pcStageName[1][2] = { MACHINE_STAGE_12 };
+		m_pcStageNameWord[1][0] = { FILE_NAME10 };
+		m_pcStageNameWord[1][1] = { FILE_NAME11 };
+		m_pcStageNameWord[1][2] = { FILE_NAME12 };
+		break;
+	}
 	//メッシュフィールド生成
 	m_pMeshField = NULL;
 	if (m_pMeshField == NULL)
@@ -121,16 +138,14 @@ void CGame::Init(void)
 	{
 		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
-
 		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
-
 		m_pWall->Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
-
 		m_pWall->Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
 	}
+
 
 	// プレイヤーの生成
 	PlayerSetting((int)NumPlayer);
@@ -147,31 +162,10 @@ void CGame::Init(void)
 	if (m_pWordCreate == NULL)
 	{
 		m_pWordCreate = CSetWord::Create();
-		//*SetCreateWord();
-		//m_pWordCreate->LoadFile(m_pcStageNameWord[0]);
 	}
 
-	// テストオブジェクト
-	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
-	//CSceneX::Create(D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(4.0f, 0.5f, 1.0f), CLoad::MODEL_BOX, 1);
-	//CSceneX::Create(D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
-	//CSceneX::Create(D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 4.5f), CLoad::MODEL_BOX, 1);
-
-	// ベルトコンベアのモデル
-	//CObject::Create(D3DXVECTOR3(0.0f, -19.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(2.0f, 0.5f, 6.0f), (CSceneX::COLLISIONTYPE)2, CLoad::MODEL_BOX);
-	//CObject::Create(D3DXVECTOR3(-80.0f, -19.0f, 150.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(6.0f, 0.5f, 2.0f), (CSceneX::COLLISIONTYPE)3, CLoad::MODEL_BOX);
-	//CObject::Create(D3DXVECTOR3(-240.0f, -19.0f, 30.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(2.0f, 0.5f, 15.0f), (CSceneX::COLLISIONTYPE)4, CLoad::MODEL_BOX);
-	//CObject::Create(D3DXVECTOR3(-180.0f, -19.0f, -290.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(8.0f, 0.5f, 2.0f), (CSceneX::COLLISIONTYPE)5, CLoad::MODEL_BOX);
-
-	// ノックバックするモデル
-	//CObject::Create(D3DXVECTOR3(130.0f, -10.0f, -100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 1.0f), (CSceneX::COLLISIONTYPE)6, CLoad::MODEL_BOX);
-	//CObject::Create(D3DXVECTOR3(100.0f, -10.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 1.0f), (CSceneX::COLLISIONTYPE)7, CLoad::MODEL_BOX);
-	//CObject::Create(D3DXVECTOR3(150.0f, -10.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(1.0f, 0.5f, 1.0f), (CSceneX::COLLISIONTYPE)8, CLoad::MODEL_BOX);
-
-
 	CSetObject::Create();
-
-	SetStage(m_nChangeNum);		// ステージ生成
+	SetStage(m_nNumStage,m_nChangeNum);		// ステージ生成
 
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
 	{
@@ -248,16 +242,13 @@ void CGame::Update(void)
 {
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
-
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	CDebugProc::Print("c", "ゲームモード");
-
 	//任意のキーENTER
 	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	{
-
 		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
 		{
 			CResult::SetRanking(nCntPlayer, m_type[nCntPlayer], m_pPoint[nCntPlayer]->GetPoint());
@@ -270,7 +261,6 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 	}
-
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");
@@ -622,11 +612,11 @@ void CGame::SetPointFrame(int nNumPlayer)
 //=============================================================================
 // ステージ生成の処理
 //=============================================================================
-void CGame::SetStage(int nCntState)
+void CGame::SetStage(int nNumState,int nCntState)
 {
 	if (nCntState < MAX_STAGE)
 	{
-		CSetObject::LoadFile(m_pcStageName[nCntState]);
+		CSetObject::LoadFile(m_pcStageName[nNumState][nCntState]);
 		m_nChangeNum = nCntState;
 	}
 }
@@ -636,7 +626,7 @@ void CGame::SetStage(int nCntState)
 //=============================================================================
 void CGame::SetCreateWord(void)
 {
-	if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[m_nChangeNum]); }
+	if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[m_nNumStage][m_nChangeNum]); }
 }
 //=============================================================================
 // 文字管理の処理

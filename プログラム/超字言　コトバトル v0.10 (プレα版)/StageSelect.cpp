@@ -34,6 +34,7 @@
 //============================================================================
 CScene2D *CStageSelect::m_apScene2D[MAX_STAGESELECT_TEX] = {};
 CScene2D *CStageSelect::m_apSelect2D[MAX_STAGESELECT] = {};
+int CStageSelect::m_nSelect = NULL;
 
 //=============================================================================
 //	コンストラクタ

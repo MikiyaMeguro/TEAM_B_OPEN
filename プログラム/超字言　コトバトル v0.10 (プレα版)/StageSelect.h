@@ -31,6 +31,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CStageSelect *Create(void);
+	static int GetStageState(void) { return m_nSelect; }
 
 private:
 	/* ポリゴンの種類 */
@@ -55,10 +56,11 @@ private:
 	void ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed);	//テクスチャスクロール処理
 	void SelectState(SELECTSTATE state);						//選択状態の管理
 
+
 	/* 変数 */
 	static CScene2D *m_apScene2D[MAX_STAGESELECT_TEX];
 	static CScene2D *m_apSelect2D[MAX_STAGESELECT];
-	int	m_nSelect;										// 選択している番号
+	static int	m_nSelect;										// 選択している番号
 	SELECTSTATE m_state;								//選択されている番号の状態
 
 	/* 演出系変数 */

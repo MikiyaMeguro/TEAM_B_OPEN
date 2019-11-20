@@ -21,10 +21,10 @@
 //============================================================================
 //	マクロ定義
 //============================================================================
-#define POS_1ST (D3DXVECTOR3(20.0f,100.0f,0.0f))
-#define POS_2ND (D3DXVECTOR3(50.0f,100.0f,0.0f))
-#define POS_3RD (D3DXVECTOR3(-10.0f,100.0f,0.0f))
-#define POS_4TH (D3DXVECTOR3(-60.0f,100.0f,0.0f))
+#define POS_1ST (D3DXVECTOR3(20.0f,30.0f,0.0f))
+#define POS_2ND (D3DXVECTOR3(50.0f,20.0f,0.0f))
+#define POS_3RD (D3DXVECTOR3(-10.0f,20.0f,0.0f))
+#define POS_4TH (D3DXVECTOR3(-40.0f,0.0f,0.0f))
 
 #define NUMBERPOS_1ST (D3DXVECTOR3(150.0f,100.0f,0.0f))
 #define NUMBERPOS_2ND (D3DXVECTOR3(150.0f,200.0f,0.0f))
@@ -61,6 +61,51 @@ CResult::~CResult()
 //=============================================================================
 HRESULT CResult::Init(void)
 {
+
+
+#if 1
+	m_ResultChara[0].nPoint = 1;
+	m_ResultChara[1].nPoint = 2;
+	m_ResultChara[2].nPoint = 3;
+	m_ResultChara[3].nPoint = 4;
+
+#endif
+	//順位決め
+	int nCntWinScore = 0;
+
+	//ソート処理 大きい順
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+		{
+			if (nCnt != nCntPlayer && m_ResultChara[nCntPlayer].nPoint >= m_ResultChara[nCnt].nPoint)
+			{//他と比べて自分が大きい時勝利カウントを増やす
+				nCntWinScore++;
+			}
+		}
+		//何回勝ったかで順位決め
+		switch (nCntWinScore)
+		{
+		case 0:
+			m_ResultChara[nCntPlayer].nNumRank = 4;
+			break;
+		case 1:
+			m_ResultChara[nCntPlayer].nNumRank = 3;
+			break;
+		case 2:
+			m_ResultChara[nCntPlayer].nNumRank = 2;
+			break;
+		case 3:
+			m_ResultChara[nCntPlayer].nNumRank = 1;
+			break;
+		default:
+			break;
+		}
+		//勝利数を初期化
+		nCntWinScore = 0;
+	}
+
+
 #if 1
 	//メッシュフィールド生成
 	m_pMeshField = NULL;
@@ -77,26 +122,27 @@ HRESULT CResult::Init(void)
 		}
 	}
 
-	CSceneX::Create(D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.7f, 0.7f, 0.5f), CLoad::MODEL_BOX, 1);
-	CSceneX::Create(D3DXVECTOR3(50.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.7f, 0.5f, 0.5f), CLoad::MODEL_BOX, 1);
-	CSceneX::Create(D3DXVECTOR3(-10.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(0.7f, 0.3f, 0.5f), CLoad::MODEL_BOX, 1);
+	//表彰台生成
+	CSceneX::Create(D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM1, 1);
+	CSceneX::Create(D3DXVECTOR3(50.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM2, 1);
+	CSceneX::Create(D3DXVECTOR3(-10.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM3, 1);
 
 	D3DXVECTOR3 RankPos;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-	{
-		switch (nCntPlayer)
+	{	//初期位置設定
+		switch (m_ResultChara[nCntPlayer].nNumRank)
 		{
-		case 0:
+		case 1:
 			RankPos = POS_1ST;
 			break;
-		case 1:
+		case 2:
 			RankPos = POS_2ND;
 			break;
-		case 2:
+		case 3:
 			RankPos = POS_3RD;
 			break;
-		case 3:
+		case 4:
 			RankPos = POS_4TH;
 			break;
 		}
@@ -111,7 +157,7 @@ HRESULT CResult::Init(void)
 
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-	{
+	{	//初期位置設定
 		switch (nCntPlayer)
 		{
 		case 0:
@@ -144,21 +190,27 @@ HRESULT CResult::Init(void)
 			}
 		}
 	}
+
 	//数字のテクスチャ設定
-	//TexTime(nTexData, m_nTimeOne);
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		TexPoint(nCntPlayer, m_ResultChara[nCntPlayer].nPoint);
+	}
 
 #endif
+	//カメラの設定
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
-	pCameraManager->CreateCamera("RESULT_CAMERA",CCamera::TYPE_SPECTOR,D3DXVECTOR3(0.0f, 60.0f, 135.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 135.0f);
+	pCameraManager->CreateCamera("RESULT_CAMERA",CCamera::TYPE_SPECTOR,D3DXVECTOR3(20.0f, 40.0f, 110.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 135.0f);
 	pCameraManager->SetCameraViewPort("RESULT_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	CCamera *pCamera = pCameraManager->GetCamera("RESULT_CAMERA");
 	if (pCamera != NULL)
 	{
-		pCamera->SetPosR(D3DXVECTOR3(0.0f, 45.0f, 0.0f));
+		pCamera->SetPosR(D3DXVECTOR3(20.0f, 40.0f, 0.0f));
 	}
 
-	m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
+	//メニューを生成
+	//m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 
 	return S_OK;
 }
@@ -168,7 +220,7 @@ HRESULT CResult::Init(void)
 //=============================================================================
 void CResult::Uninit(void)
 {
-	//メッシュフィールドの破棄
+	//メニューの破棄
 	if (m_pSeletMenu != NULL)
 	{
 		m_pSeletMenu->Uninit();
@@ -182,6 +234,7 @@ void CResult::Uninit(void)
 		m_pMeshField = NULL;
 	}
 
+	//ナンバーの破棄
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		for (int nCntTime = 0; nCntTime < MAX_POINT; nCntTime++)
@@ -221,7 +274,11 @@ void CResult::Update(void)
 	//任意のキーENTER
 	if (CCommand::GetCommand("DECISION"))
 	{
-	//	pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
+		if (m_bMenu == false)
+		{
+			m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
+			m_bMenu = true;
+		}
 	}
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");
@@ -253,4 +310,29 @@ void CResult::SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, int nPoint)
 {
 	m_ResultChara[nNumPlayer].type = type;
 	m_ResultChara[nNumPlayer].nPoint = nPoint;
+}
+
+//=============================================================================
+// テクスチャを設定
+//=============================================================================
+void CResult::TexPoint(int nPlayer, int nPoint)
+{
+
+	for (int nCntTime = 0; nCntTime < MAX_POINT; nCntTime++)
+	{// テクスチャに反映
+
+		if (m_apNumber[nPlayer][nCntTime] != NULL)
+		{
+			if (nCntTime < 2)
+			{
+				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint);
+				nPoint /= 10;
+			}
+			else if (nCntTime == 2)
+			{
+				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint);
+				nPoint /= 10;
+			}
+		}
+	}
 }
