@@ -367,7 +367,7 @@ void CTime::TimeManagement(void)
 	{	// 30秒ごとにステージが変わる
 		m_bStageCreate = true;
 		int nStageNum = (m_nStageChange / 60);
-		CManager::GetGame()->SetStage(nStageNum);
+		CManager::GetGame()->SetStage(CGame::GetNumStage(),nStageNum);
 	}
 
 	if (m_nTimeCount % 60 == 0)
