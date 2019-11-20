@@ -56,6 +56,8 @@ CObject::CObject()
 	m_MoveState = 0;
 	m_bSwitch = false;
 	m_nCounter = 0;
+	m_nTypeGimmick = GIMMICK_NONE;
+
 }
 
 //=============================================================================
@@ -68,7 +70,7 @@ CObject::~CObject()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::REALTIME realtime)
+CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::GIMMICKTYPE realtime)
 {
 	CObject *pObject = NULL;
 
@@ -82,10 +84,10 @@ CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CS
 			pObject->SetModelType(model);
 			pObject->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));		// モデルの割り当て
 			pObject->SetScale(Scale);	// スケールの設定
+			pObject->m_nTypeGimmick = realtime;
 			pObject->Init(pos);			// 初期化
 			pObject->SetRot(rot);		// 向きの設定
 			pObject->SetCollsionType(type);	// コリジョンのタイプ設定
-			pObject->m_nRealTime = realtime;
 		}
 	}
 
@@ -99,6 +101,9 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 {
 	// オブジェクトの種類の設定
 	SetObjType(CScene::OBJTYPE_SCENEX);
+
+	if (m_nTypeGimmick == GIMMICK_MOYE_Y) { m_nRealTime = REALTIME_INITPOS; }
+	else if (m_nTypeGimmick == GIMMICK_NONE) { m_nRealTime = REALTIME_NONE; }
 
 	CSceneX::Init(pos);
 	m_posOld = pos;
