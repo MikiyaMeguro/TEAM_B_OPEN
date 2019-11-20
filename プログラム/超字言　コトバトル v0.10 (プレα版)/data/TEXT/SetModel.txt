@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 12
+NUM_MODEL = 15
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -26,6 +26,9 @@ MODEL_FILENAME = data/MODEL/StageOBJ/drone.x"		#8 X移動
 MODEL_FILENAME = data/MODEL/StageOBJ/drone.x"		#9 Z移動
 MODEL_FILENAME = data/MODEL/StageOBJ/froor.x"		#10 床背景
 MODEL_FILENAME = data/MODEL/StageOBJ/Switch.x"		#11 スイッチ
+MODEL_FILENAME = data/MODEL/ResultOBJ/1.x"			#12 表彰台1
+MODEL_FILENAME = data/MODEL/ResultOBJ/2.x"			#13 表彰台2
+MODEL_FILENAME = data/MODEL/ResultOBJ/3.x"			#14 表彰台3
 
 
 END_SCRIPT		# この行は絶対消さないこと！
