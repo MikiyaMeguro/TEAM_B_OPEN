@@ -143,7 +143,7 @@ void CObject::Update(void)
 
 	BGModelMove(pos);				// ”wŒiƒ‚ƒfƒ‹‚ÌˆÚ“®
 
-	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// ‰½‚à‚È‚¢ê‡‚Í‰½‚à’Ê‚³‚È‚¢
+	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(CSceneX::GetModelType()); return; }		// ‰½‚à‚È‚¢ê‡‚Í‰½‚à’Ê‚³‚È‚¢
 
 
 	ModelMove(Collsiontype, pos);	// ƒ‚ƒfƒ‹‚ÌˆÚ“®
@@ -364,7 +364,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	}
 	else if (m_nRealTime == REALTIME_NOTMOVE)
 	{	// “®‚©‚È‚¢ê‡
-		Rot(Type);
+		Rot(CSceneX::GetModelType());
 
 		if (((CTime::GetStageTime() % 60) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
@@ -450,15 +450,34 @@ void CObject::Vibration(D3DXVECTOR3 *Pos)
 //=============================================================================
 // ‰ñ“]‚Ìˆ—
 //=============================================================================
-void CObject::Rot(CSceneX::COLLISIONTYPE type)
+void CObject::Rot(CLoad::MODEL mode)
 {
-	if (type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+
+	if (mode == CLoad::MODE_GEAR || mode == CLoad::MODEL_PROPELLER)
 	{	// ƒRƒŠƒWƒ‡ƒ“ƒ^ƒCƒv‚ªƒmƒbƒNƒoƒb”»’è‚ðŽ‚Â‚È‚çŒü‚«‚Ì‰ñ“]‚ð‚³‚¹‚é
 		D3DXVECTOR3 rot = CSceneX::GetRot();
 
-		// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
-		rot.y += GEAR_ROT_Y * ((int)type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
-
+		if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL)
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 0.2f;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING)
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 0.5;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 1.0f;
+		}
+		else
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 1.5f;
+		}
 		CSceneX::SetRot(rot);
 	}
 }
