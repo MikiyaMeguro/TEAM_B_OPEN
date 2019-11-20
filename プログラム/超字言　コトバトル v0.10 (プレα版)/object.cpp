@@ -56,6 +56,8 @@ CObject::CObject()
 	m_MoveState = 0;
 	m_bSwitch = false;
 	m_nCounter = 0;
+	m_nTypeGimmick = GIMMICK_NONE;
+
 }
 
 //=============================================================================
@@ -68,7 +70,7 @@ CObject::~CObject()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::REALTIME realtime)
+CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::GIMMICKTYPE realtime)
 {
 	CObject *pObject = NULL;
 
@@ -82,10 +84,10 @@ CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CS
 			pObject->SetModelType(model);
 			pObject->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));		// モデルの割り当て
 			pObject->SetScale(Scale);	// スケールの設定
+			pObject->m_nTypeGimmick = realtime;
 			pObject->Init(pos);			// 初期化
 			pObject->SetRot(rot);		// 向きの設定
 			pObject->SetCollsionType(type);	// コリジョンのタイプ設定
-			pObject->m_nRealTime = realtime;
 		}
 	}
 
@@ -99,6 +101,9 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 {
 	// オブジェクトの種類の設定
 	SetObjType(CScene::OBJTYPE_SCENEX);
+
+	if (m_nTypeGimmick == GIMMICK_MOYE_Y) { m_nRealTime = REALTIME_INITPOS; }
+	else if (m_nTypeGimmick == GIMMICK_NONE) { m_nRealTime = REALTIME_NONE; }
 
 	CSceneX::Init(pos);
 	m_posOld = pos;
@@ -138,7 +143,7 @@ void CObject::Update(void)
 
 	BGModelMove(pos);				// 背景モデルの移動
 
-	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// 何もない場合は何も通さない
+	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(CSceneX::GetModelType()); return; }		// 何もない場合は何も通さない
 
 
 	ModelMove(Collsiontype, pos);	// モデルの移動
@@ -177,7 +182,7 @@ void CObject::SwitchBeltConveyor(bool bSwitch)
 	if (bSwitch == true)
 	{//	SwitchON
 		m_nCounter++;
-		if (m_nCounter > 70)
+		if (m_nCounter > 120)
 		{
 			m_bSwitch = m_bSwitch ? false : true;
 			if (m_bSwitch == true)
@@ -359,7 +364,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	}
 	else if (m_nRealTime == REALTIME_NOTMOVE)
 	{	// 動かない場合
-		Rot(Type);
+		Rot(CSceneX::GetModelType());
 
 		if (((CTime::GetStageTime() % 60) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
@@ -445,15 +450,34 @@ void CObject::Vibration(D3DXVECTOR3 *Pos)
 //=============================================================================
 // 回転の処理
 //=============================================================================
-void CObject::Rot(CSceneX::COLLISIONTYPE type)
+void CObject::Rot(CLoad::MODEL mode)
 {
-	if (type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+
+	if (mode == CLoad::MODE_GEAR || mode == CLoad::MODEL_PROPELLER)
 	{	// コリジョンタイプがノックバッ判定を持つなら向きの回転をさせる
 		D3DXVECTOR3 rot = CSceneX::GetRot();
 
-		// 強弱の種類によって回転量を変化
-		rot.y += GEAR_ROT_Y * ((int)type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
-
+		if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL)
+		{
+			// 強弱の種類によって回転量を変化
+			rot.y += GEAR_ROT_Y * 0.2f;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING)
+		{
+			// 強弱の種類によって回転量を変化
+			rot.y += GEAR_ROT_Y * 0.5;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+		{
+			// 強弱の種類によって回転量を変化
+			rot.y += GEAR_ROT_Y * 1.0f;
+		}
+		else
+		{
+			// 強弱の種類によって回転量を変化
+			rot.y += GEAR_ROT_Y * 1.5f;
+		}
 		CSceneX::SetRot(rot);
 	}
 }
