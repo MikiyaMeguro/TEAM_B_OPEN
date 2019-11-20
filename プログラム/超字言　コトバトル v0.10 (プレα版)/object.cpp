@@ -177,7 +177,7 @@ void CObject::SwitchBeltConveyor(bool bSwitch)
 	if (bSwitch == true)
 	{//	SwitchON
 		m_nCounter++;
-		if (m_nCounter > 70)
+		if (m_nCounter > 120)
 		{
 			m_bSwitch = m_bSwitch ? false : true;
 			if (m_bSwitch == true)
