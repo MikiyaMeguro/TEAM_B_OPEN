@@ -58,6 +58,8 @@ public:
 	BULLET_TYPE GetType(void) { return m_Type; };
 	bool CollisionObject(CManager::DIRECTION* dir);
 	bool SimpleCollision(void);// { CManager::DIRECTION dir; return C3DBullet::CollisionObject(&dir); }
+
+	void Homing(D3DXVECTOR3 HomingPos);
 protected:
 	BULLET_TYPE m_Type;
 	float m_fCollisionRadius;
@@ -66,7 +68,7 @@ private:
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_posOld;			//前回の位置
 	D3DXVECTOR3 m_rot;				//角度
-
+	D3DXMATRIX m_mtxRotate;			//回転マトリックス
 	float m_fMove;					//移動量
 	D3DXVECTOR3 m_MoveResult;		//前回との移動差分
 
@@ -87,6 +89,8 @@ public:
 		TYPE_HIGHSPEED,			//速度早い
 		TYPE_STINGER,			//オブジェクト貫通
 		TYPE_REFLECT,			//反射
+		TYPE_MISSILE,
+		TYPE_BOMB,
 	}BULLET_PROPERTY;
 
 	CModelBullet();
@@ -95,7 +99,8 @@ public:
 	~CModelBullet();
 	static CModelBullet* Create(void);
 
-	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID,D3DXVECTOR3 RotateOffset = D3DXVECTOR3(0.0f,0.0f,0.0f));
+	void Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BULLET_PROPERTY type,int nID,
+		D3DXVECTOR3 RotateOffset = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -105,11 +110,16 @@ public:
 	void SetModelScale(const D3DXVECTOR3& scale);
 	void SetModelRot(const D3DXVECTOR3& rot);
 
+	void SetHomingChara(C3DCharactor* pChara) { m_pHomingChara = pChara; };
+
 private:
+
 	void Reflect(CManager::DIRECTION dir);
 	CSceneX* m_pModel;
 	BULLET_PROPERTY m_Prop;
 	D3DXVECTOR3 m_modelRotateOffSet;
+
+	C3DCharactor* m_pHomingChara;
 };
 
 //文字弾クラス
