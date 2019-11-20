@@ -41,7 +41,9 @@ public:
 		MODEL_DRAWN_Z,		// ドローンZ
 		MODEL_BGFROOR,		// 床
 		MODEL_SWITCH,		// スイッチ
-
+		MODEL_PODIUM1,		// 表彰台1
+		MODEL_PODIUM2,		// 表彰台2
+		MODEL_PODIUM3,		// 表彰台3
 		//--------------------------------------
 		// 文字モデル
 		//--------------------------------------
