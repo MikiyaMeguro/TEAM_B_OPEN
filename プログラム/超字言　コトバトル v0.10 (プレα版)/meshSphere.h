@@ -42,8 +42,6 @@ private:
 	void CreateVertex(LPDIRECT3DDEVICE9 pDev);
 	void CreateIndex(LPDIRECT3DDEVICE9 pDev);
 
-	void UpdateNormal(void);
-
 	LPDIRECT3DTEXTURE9		m_pTexture;							// テクスチャへのポインタ
 	LPDIRECT3DINDEXBUFFER9	m_pIdxBuff;							// インデックスバッファへのポインタ
 	LPDIRECT3DVERTEXBUFFER9	m_pVtxBuff;							// 頂点バッファへのポインタ
@@ -51,7 +49,6 @@ private:
 	D3DXVECTOR3				m_pos;								// ポリゴンの位置
 	D3DXVECTOR3				m_rot;								// ポリゴンの向き
 	D3DXCOLOR				m_Color;							// カラー
-	D3DXVECTOR3*			m_VecNor;								// 法線(頂点数分自動生成)
 
 	int						m_nVtxNum;							// 頂点数
 	int						m_nIdxNum;							// インデックス数
@@ -63,6 +60,7 @@ private:
 
 	D3DXVECTOR2				m_AnimTexUV;					//テクスチャアニメーション用
 	int						m_nCntTexAnim;					//テクスチャ座標更新までの待機時間
+
 };
 
 #endif // !_MESH_SPHERE_H_
