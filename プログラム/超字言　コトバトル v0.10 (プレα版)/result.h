@@ -45,6 +45,7 @@ public:
 	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 地面の取得
 	static void SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, int nPoint);
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
+	void TexPoint(int nPlayer, int nPoint);
 
 private:
 	static CPlayer *m_pPlayer[MAX_PLAYER];
@@ -54,7 +55,8 @@ private:
 	static CMeshField *m_pMeshField;
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];	// ナンバーへのポインタ
-
+	bool m_bMenu;
+	int nCounterMenu;
 
 };
 #endif

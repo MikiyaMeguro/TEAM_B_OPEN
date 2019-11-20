@@ -81,5 +81,11 @@ DATA = 00062 data/TEXTURE/StageSelect/StageIcon.png STAGESEL_ICON
 
 DATA = 000 data/TEXTURE/ModelTex/ModelTex.png ƒ‚ƒfƒ‹_TEX
 DATA = 00063 data/TEXTURE/ExplosionTex001.png EXPLOSION
+DATA = 00064 data/TEXTURE/UI/Countdown01.png COUNTDOWN0
+DATA = 00065 data/TEXTURE/UI/Countdown02.png COUNTDOWN1
+DATA = 00066 data/TEXTURE/UI/Countdown03.png COUNTDOWN2
+DATA = 00067 data/TEXTURE/UI/Countdown00.png COUNTDOWN3
+DATA = 00068 data/TEXTURE/Line.png LINE
+
 
 END_LOAD

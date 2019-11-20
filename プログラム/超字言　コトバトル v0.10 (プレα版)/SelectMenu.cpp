@@ -58,6 +58,7 @@ CSelectMenu::CSelectMenu(int nPriority) : CScene(7)
 
 	m_fSpace = 0;
 	m_fInitYpos = 0;
+	m_bCanFade = false;
 
 	/* 演出面変数の初期化 */
 	m_nCntScrool = 0;
@@ -131,6 +132,7 @@ HRESULT CSelectMenu::Init()
 				m_apPolygon[nCnt] = CScene2D::Create(D3DXVECTOR3(m_Pos[nCnt].x, m_Pos[nCnt].y, m_Pos[nCnt].z), "MODESELEXT_MENU");
 				m_apPolygon[nCnt]->SetTex(D3DXVECTOR2(0.0f + (0.333f*nCnt), 0.0f), D3DXVECTOR2(0.333f + (0.333f*nCnt), 0.5f));
 				m_apPolygon[nCnt]->SetWidthHeight(m_fWidth * MODESELECT_WIDTH, m_fHeight * MODESELECT_HEIGHT);
+				m_apPolygon[nCnt]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f));
 				m_apPolygon[nCnt]->SetbDraw(true);
 			}
 		}
@@ -229,7 +231,7 @@ void CSelectMenu::Update(void)
 		}
 
 		//エンターキー
-		if (CCommand::GetCommand("DECISION"))
+		if (CCommand::GetCommand("DECISION") == true)
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
 			if (m_nSelect == 0)
@@ -358,7 +360,6 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 			break;
 		}
 		break;
-
 	case MENU_TYPE_PAUSE:
 		switch (MenuSelect)
 		{
