@@ -24,7 +24,14 @@ class CObject : public CSceneX
 {
 public:
 	typedef enum
-	{
+	{	// ギミックの種類
+		GIMMICK_NONE = 0,
+		GIMMICK_MOYE_Y,
+		GIMMICK_MAX
+	}GIMMICKTYPE;
+
+	typedef enum
+	{	// ステージ変化時の変数
 		REALTIME_NONE = 0,	// 何もなし
 		REALTIME_INITPOS,	// 最初の位置から出現
 		REALTIME_NOTMOVE,	// 指定時間まで動かない
@@ -46,7 +53,7 @@ public:
 	void KnockBack(D3DXVECTOR3 *pMove, int nID);			// ノックバック
 	void AffectedLanding(D3DXVECTOR3 *pMove, int nID);		// モデルの着地時の影響
 
-	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL mode , CObject::REALTIME realtime);	// オブジェクトの生成
+	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL mode , CObject::GIMMICKTYPE realtime);	// オブジェクトの生成
 	static HRESULT Load(void);
 	static void UnLoad(void);
 
@@ -77,6 +84,8 @@ private:
 	D3DXVECTOR3 m_InitPos;
 	int m_MoveState;
 	int m_nCounter;
+	GIMMICKTYPE m_nTypeGimmick;
+
 
 	//	SWITCH
 	static bool m_bSwitch;				//	スイッチ
