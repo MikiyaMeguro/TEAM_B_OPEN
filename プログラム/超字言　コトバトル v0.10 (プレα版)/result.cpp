@@ -46,6 +46,9 @@ CMeshField *CResult::m_pMeshField = NULL;
 //=============================================================================
 CResult::CResult()
 {
+	m_pSeletMenu = NULL;
+	m_bMenu = false;
+	nCounterMenu = 0;
 }
 
 //=============================================================================
@@ -210,6 +213,7 @@ HRESULT CResult::Init(void)
 	}
 
 	//メニューを生成
+	//m_pSeletMenu = NULL;
 	//m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 
 	return S_OK;
@@ -271,12 +275,23 @@ void CResult::Update(void)
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
 
+	if (m_bMenu == true)
+	{
+		nCounterMenu++;
+		if (nCounterMenu > 30)
+		{
+			m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
+			m_bMenu = false;
+			nCounterMenu = 0;
+		}
+
+	}
+
 	//任意のキーENTER
 	if (CCommand::GetCommand("DECISION"))
 	{
 		if (m_bMenu == false)
 		{
-			m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 			m_bMenu = true;
 		}
 	}
