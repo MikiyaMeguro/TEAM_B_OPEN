@@ -20,6 +20,7 @@ class CScene2D;
 // マクロ定義
 //*****************************************************************************
 #define TIME_MAX			(3)		// タイマーの桁数
+#define PLAYER_MAX			(4)		// プレイヤー最大数
 
 //*****************************************************************************
 // クラス定義
@@ -67,6 +68,18 @@ private:
 	CScene2D				*m_pColon;			// コロン
 
 	static bool m_bCountFlag;			//時間をカウントするか
+
+
+
+	//カウントダウン用
+	float						m_fWidth, m_fHeight;			// 幅 高さ
+	CScene2D					*m_pScene2D[PLAYER_MAX];		// 2Dポリゴンへのポインタ
+	int							m_nColorFlash;					// 点滅カウント
+	D3DXCOLOR					m_Col;							// 色
+	bool						m_bCntDown;						// 押されたかどうか状態
+	int							m_nType;						// 現在のタイプ
+	float						m_fScale;						// 拡大縮小量
+	int							m_ScaleCounter;					// 拡大縮小のカウンター
 
 };
 #endif

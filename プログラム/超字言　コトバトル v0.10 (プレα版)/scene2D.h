@@ -54,6 +54,7 @@ public:
 	void SetBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff) { m_pVtxBuff = pVtxBuff; }
 	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
+	void SetScale(float fScale);
 
 	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else { return m_fHeight; } };
 
