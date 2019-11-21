@@ -180,6 +180,12 @@ void CRenderer::Draw(void)
 		{
 			switch (CManager::GetMode())
 			{
+			case CManager::MODE_STAGESELECT:
+				if (pCameraManager->SetCamera("STAGESELECT_CAMERA"))
+				{
+					CScene::DrawAll();
+				}
+				break;
 			case CManager::MODE_GAME:
 				if (pCameraManager->SetCamera("1P_CAMERA"))
 				{

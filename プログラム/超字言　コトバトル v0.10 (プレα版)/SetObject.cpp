@@ -441,3 +441,26 @@ int CSetObject::PopString(char * pStr, char * pDest)
 	//文字列の数を返す
 	return nWord;
 }
+
+//=============================================================================
+//　オブジェクトの消去（ステージセレクト用）
+//=============================================================================
+void CSetObject::UnLoadObj(void)
+{
+	CScene *pScene = NULL;
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(3);
+
+	while(pScene!=NULL)
+	{
+		CScene *pSceneNext = pScene->GetNext();
+		if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+		{// 死亡フラグが立っていないもの
+			CObject *pWord = ((CObject*)pScene);		// CBulletBaseへキャスト(型の変更)
+				pWord->Uninit();
+				pWord = NULL;
+		}
+		pScene = pSceneNext;
+	};
+
+}
