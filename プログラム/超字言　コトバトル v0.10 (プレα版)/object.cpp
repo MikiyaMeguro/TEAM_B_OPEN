@@ -15,6 +15,8 @@
 #include "game.h"
 #include "time.h"
 #include "scene3D.h"
+#include "effect.h"
+#include "word.h"
 
 //=============================================================================
 // マクロ定義
@@ -33,6 +35,7 @@
 #define ICON_SIZE_Y					(40.0f)
 #define VIBRATION					(2.0f)
 #define VIBRATION_MOVE				(4.0f)
+
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
@@ -73,7 +76,6 @@ CObject::~CObject()
 CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::GIMMICKTYPE realtime)
 {
 	CObject *pObject = NULL;
-
 	if (pObject == NULL)
 	{
 		// オブジェクトクラスの生成
@@ -90,7 +92,6 @@ CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CS
 			pObject->SetCollsionType(type);	// コリジョンのタイプ設定
 		}
 	}
-
 	return pObject;
 }
 
@@ -142,7 +143,6 @@ void CObject::Update(void)
 	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
 	D3DXVECTOR3 pos = CSceneX::GetPosition();	// 位置取得
 
-
 	BGModelMove(pos);				// 背景モデルの移動
 
 	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(CSceneX::GetModelType()); return; }		// 何もない場合は何も通さない
@@ -173,6 +173,7 @@ void CObject::Draw(void)
 	}
 	CSceneX::Draw();
 }
+
 //=============================================================================
 // /スイッチの処理
 //=============================================================================
@@ -241,13 +242,36 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove, bool bSwitch)
 		break;
 	}
 }
+
 //=============================================================================
 // 背景モデルの挙動処理
 //=============================================================================
 void CObject::BGModelMove(D3DXVECTOR3 pos)
 {
+	D3DXVECTOR3 scale = CSceneX::GetScale();
 	if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_X)
 	{//　X座標の移動をするドローン
+		m_nCounter++;
+		int nAnswer = rand() % 48;
+		//	使っていない文字の例外処理
+		if (nAnswer == 0 || nAnswer == 2 || nAnswer == 4 || nAnswer == 6 || nAnswer == 8 || nAnswer == 11) { nAnswer = 1; }
+		else if (nAnswer == 13 || nAnswer == 14 || nAnswer == 16 || nAnswer == 17 || nAnswer == 18 || nAnswer == 21) { nAnswer = 7; }
+		else if (nAnswer == 22 || nAnswer == 23 || nAnswer == 25 || nAnswer == 26 || nAnswer == 28 || nAnswer == 29) { nAnswer = 15; }
+		else if (nAnswer == 31 || nAnswer == 32 || nAnswer == 33 || nAnswer == 34 || nAnswer == 36 || nAnswer == 37) { nAnswer = 30; }
+		else if (nAnswer == 38 || nAnswer == 39 || nAnswer == 43 || nAnswer == 44 || nAnswer == 45 || nAnswer == 46) { nAnswer = 35; }
+		else if (nAnswer == 47 || nAnswer == 48) { nAnswer = 17; }
+		if (m_nCounter % 780 == 0)
+		{//	文字を出す
+			CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+			scale.y = m_InitScale.y + 0.2f;
+			pos.y = m_InitPos.y + 4.0f;
+			m_nCounter = 0;
+		}
+		if(m_nCounter > 20)
+		{//	大きさを戻す
+			scale.y = m_InitScale.y;
+			pos.y = m_InitPos.y;
+		}
 		if (m_InitPos.x + 200 <= pos.x)
 		{//	初期位置から+250以上離れた場合
 			m_MoveState = 2;
@@ -269,10 +293,32 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			break;
 		}
 		pos += m_move;				//	動きの加算
-		CSceneX::SetPosition(pos);	//	位置の設定
+
 	}
 	else if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_Z)
 	{//　X座標の移動をするドローン
+		m_nCounter++;
+		int nAnswer = rand() % 48;
+		//	使っていない文字の例外処理
+		if (nAnswer == 0 || nAnswer == 2 || nAnswer == 4 || nAnswer == 6 || nAnswer == 8 || nAnswer == 11){nAnswer = 1;}
+		else if(nAnswer == 13 || nAnswer == 14 || nAnswer == 16 || nAnswer == 17 || nAnswer == 18 || nAnswer == 21){nAnswer = 7;}
+		else if (nAnswer == 22 || nAnswer == 23 || nAnswer == 25 || nAnswer == 26 || nAnswer == 28 || nAnswer == 29){nAnswer = 15;}
+		else if (nAnswer == 31 || nAnswer == 32 || nAnswer == 33 || nAnswer == 34 || nAnswer == 36 || nAnswer == 37){nAnswer = 30;}
+		else if (nAnswer == 38 || nAnswer == 39 || nAnswer == 43 || nAnswer == 44 || nAnswer == 45 || nAnswer == 46){nAnswer = 35;}
+		else if(nAnswer == 47 || nAnswer == 48){ nAnswer = 17;}
+
+		if (m_nCounter % 780 == 0)
+		{//	文字を出す
+			CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+			scale.y = m_InitScale.y + 0.2f;
+			pos.y = m_InitPos.y + 2.0f;
+			m_nCounter = 0;
+		}
+		if (m_nCounter > 20)
+		{//	大きさを戻す
+			scale.y = m_InitScale.y;
+			pos.y = m_InitPos.y;
+		}
 		if (m_InitPos.z + 200 <= pos.z)
 		{//	初期位置から+250以上離れた場合
 			m_MoveState = 2;
@@ -294,12 +340,10 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			break;
 		}
 		pos += m_move;				//	動きの加算
-		CSceneX::SetPosition(pos);	//	位置の設定
 	}
 
 	if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL00)
 	{
-		D3DXVECTOR3 scale = CSceneX::GetScale();
 		m_nCounter++;
 		if (m_nCounter > 0 && m_nCounter < 360)
 		{
@@ -310,26 +354,39 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		else if (m_nCounter > 360 && m_nCounter < 360*2)
 		{
 			pos.y = 0.0f;
-			scale.x = m_InitScale.x;
-			scale.z = m_InitScale.z;
+			//scale.x = m_InitScale.x;
+			//scale.z = m_InitScale.z;
+			scale.x = 0.0f;
+			scale.z = 0.0f;
 		}
 		else  if (m_nCounter > 360*2)
 		{
 			m_nCounter = 0;
 		}
-		CSceneX::SetScale(scale);	//	大きさの設定
-		CSceneX::SetPosition(pos);	//	位置の設定
+		if (m_nCounter % 4 == 0)
+		{//	雷エフェクト
+			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 0); }
+			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 1); }
+		}
+		else if (m_nCounter % 8 == 0)
+		{//	雷エフェクト
+			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 0); }
+			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 1); }
+		}
+		else if (m_nCounter % 12 == 0)
+		{//	雷エフェクト
+			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
+			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }
+		}
 	}
 	else if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL01)
 	{
-		D3DXVECTOR3 pos = CSceneX::GetPosition();
-		D3DXVECTOR3 scale = CSceneX::GetScale();
 		m_nCounter++;
 		if (m_nCounter > 0 && m_nCounter < 360)
 		{
 			pos.y = 0.0f;
-			scale.x = m_InitScale.x;
-			scale.z = m_InitScale.z;
+			scale.x = 0.0f;
+			scale.z = 0.0f;
 		}
 		else if (m_nCounter > 360 && m_nCounter < 360*2)
 		{
@@ -341,10 +398,24 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{
 			m_nCounter = 0;
 		}
-
-		CSceneX::SetScale(scale);	//	大きさの設定
-		CSceneX::SetPosition(pos);	//	位置の設定
+		if (m_nCounter % 4 == 0)
+		{//	雷エフェクト
+			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 0); }
+			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 1); }
+		}
+		else if (m_nCounter % 8 == 0)
+		{//	雷エフェクト
+			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 0); }
+			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 1); }
+		}
+		else if (m_nCounter % 12 == 0)
+		{//	雷エフェクト
+			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
+			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }
+		}
 	}
+	CSceneX::SetPosition(pos);	//	位置の設定
+	CSceneX::SetScale(scale);	//	大きさの設定
 }
 
 //=============================================================================
@@ -367,7 +438,7 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove, int nID)
 	{	// ノックバックの威力が大きい
 		fknockBackMove = KNOCKBACK_MOVE_BIG;
 	}
-
+	CSound *pSound = CManager::GetSound();		//	音の取得
 	// プレイヤーの向きが方向転換するようになったら削除
 	if (CSceneX::GetCollsionNum() == 0 || CSceneX::GetCollsionNum() == 1)
 	{	// 左 又は 右 からの判定
@@ -376,6 +447,11 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove, int nID)
 	else if (CSceneX::GetCollsionNum() == 2 || CSceneX::GetCollsionNum() == 3)
 	{	// 前 又は 後ろ からの判定
 		pMove->z *= -fknockBackMove;
+	}
+	if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL00 || CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL01)
+	{
+		pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
 	}
 
 	// プレイヤーの向きが方向転換するようになったらコメントを外す

@@ -9,8 +9,8 @@
 #include "word_manager.h"
 #include "sceneBillboard.h"
 #include "time.h"
-#include <stdlib.h>		
-#include <time.h>		
+#include <stdlib.h>
+#include <time.h>
 
 //*****************************************************************************
 // マクロ定義
@@ -115,7 +115,7 @@ void CSetWord::WordCreate(void)
 	float fWord = 99.0f;
 	while (m_nNum != nCntNum)
 	{	// カウントが同じになった場合抜ける
-		
+
 		// randで位置決める
 		nRandNum = rand() % m_nNum;	// 行動パターンの数字を決める
 
@@ -192,7 +192,7 @@ void CSetWord::PopWord(void)
 				if (m_nAnswerNumCount == 1) { fWord = m_AnswerNum[m_nRandAnswerNum].y; }
 				if (m_nAnswerNumCount == 2) { fWord = m_AnswerNum[m_nRandAnswerNum].z; }
 
-				CWord::Create(m_pWordPos[nCntPos].pos, 0.0f, 0.0f, "WORD", (int)fWord, nCntPos);
+				CWord::Create(m_pWordPos[nCntPos].pos, 0.0f, 0.0f, "WORD", (int)fWord,0,nCntPos);
 				m_nAnswerNumCount++;
 				m_pWordPos[nCntPos].nCntPop = 0;
 				m_pWordPos[nCntPos].bUse = true;
@@ -208,7 +208,7 @@ void CSetWord::PopWord(void)
 			}
 		}
 	}
-	
+
 	//if (nCount == m_nNum) { m_bCreate = true; }
 }
 

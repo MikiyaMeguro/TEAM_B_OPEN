@@ -59,18 +59,18 @@ void CMeshSphere::Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeig
 
 	//// 頂点数
 	//m_nVtxNum = (m_nMeshWidth + 1) * (m_nMeshHeight + 1);
+	m_nVtxNum = m_nMeshWidth * (m_nMeshHeight + 1);
 
 	//// インデックス数
 	//m_nIdxNum = (m_nMeshWidth + 1) * (m_nMeshHeight + 1)
 	//	+ (2 * (m_nMeshHeight - 1))
 	//	+ (m_nMeshWidth + 1) * (m_nMeshHeight - 1);
-
-	m_nVtxNum = m_nMeshWidth * (m_nMeshHeight + 1);
 	m_nIdxNum = 2 * m_nMeshHeight * (m_nMeshWidth + 1);
 
 	//// ポリゴン数
-	//m_nPolygonNum = m_nIdxNum - 2;
 	m_nPolygonNum =(m_nMeshWidth * m_nMeshHeight * 2) + (4 * (m_nMeshHeight - 1));
+
+	//m_nPolygonNum = m_nIdxNum - 2;
 	//頂点バッファ・インデックスバッファの設定
 	CreateVertex(pDevice);
 	CreateIndex(pDevice);

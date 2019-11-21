@@ -11,6 +11,9 @@
 #include "InputKeyboard.h"
 #include "PlayerNumSelect.h"
 #include "time.h"
+
+#include "debugProc.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -39,6 +42,9 @@
 #define FLASHING_TIME_SMALL	(TIME_FRAME * 23)		// 点滅する始める時間
 #define FLASHING_TIME_MAX	(TIME_FRAME * 28)		// 点滅が激しく時間
 #define REST_TIME		(TIME_FRAME * 30)			// 点滅後に終了する時間
+#define LOST_TIME		(780)			// 時間経過で消える時間
+
+
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
@@ -59,17 +65,21 @@ CWord::CWord() : CSceneBillBoard()
 	m_bRestFlag = false;
 	m_fMoveY = 0.0f;
 	m_col = COL_DEFAULT;
-	m_pBillBoard = NULL;
+	m_pBillBoard[0] = NULL;
+	m_pBillBoard[1] = NULL;
 	m_nAnim = 0;
 	m_nPatten = 0;
 	m_colA = 0.4f;
 	m_nCntFlashing = 0;
+	m_nLostCut = 0;
+	m_nLostType = 0;
 
 	// 3文字候補時の変数
 	m_bSearchFlag = false;
 	m_nCntSearch = 0;
 	m_nNumSearch = 0;
 	m_SearchCol = NULL;
+
 }
 
 //--------------------------------------------
@@ -82,16 +92,17 @@ CWord::~CWord()
 //--------------------------------------------
 // 生成
 //--------------------------------------------
-CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int nNum)
+CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int LostType,int nNum)
 {
 	CWord *pWord = NULL;
 
 	if (pWord == NULL)
 	{
 		pWord = new CWord;
-		
+
 		if (pWord != NULL)
 		{
+			pWord->m_nLostType = LostType;
 			pWord->Init(pos);
 			pWord->BindTexture(Tag);
 			//値の代入
@@ -126,12 +137,24 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 	CSceneBillBoard::Init(pos);
 	CSceneBillBoard::SetObjType(CScene::OBJTYPE_WORD);
 
-	if (m_pBillBoard == NULL)
+	if (m_pBillBoard[0] == NULL)
 	{
-		m_pBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 17.0f, 30.0f, "文字エフェクト");
-		if (m_pBillBoard != NULL) { m_pBillBoard->SetTexture(5, 10, 1, 1); }
-		m_pBillBoard->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
+		m_pBillBoard[0] = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 17.0f, 30.0f, "文字エフェクト");
+		if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->SetTexture(5, 10, 1, 1); }
+		m_pBillBoard[0]->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
 	}
+
+	if (m_nLostType == 1)
+	{//	時間経過で消える文字
+		if (m_pBillBoard[1] == NULL)
+		{
+			m_pBillBoard[1] = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 17.0f, 120.0f, "文字エフェクト");
+			if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->SetTexture(5, 10, 1, 1); }
+			m_pBillBoard[1]->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
+		}
+
+	}
+
 
 	return S_OK;
 }
@@ -141,7 +164,8 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 //=============================================================================
 void CWord::Uninit(void)
 {
-	if (m_pBillBoard != NULL) { m_pBillBoard->Uninit(); m_pBillBoard = NULL; }
+	if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+	if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
 	if (&m_SearchCol != NULL) { delete[] m_SearchCol; m_SearchCol = NULL; }
 	CSceneBillBoard::Uninit();
 }
@@ -194,7 +218,8 @@ void CWord::Update(void)
 
 					if (m_bFlag == true)
 					{	// 終了フラグが立った場合
-						if (m_pBillBoard != NULL) { m_pBillBoard->Uninit(); m_pBillBoard = NULL; }
+						if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+						if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
 						pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
 						pPlayer[nCntPlayer]->SetbSetupBullet(true);
 						m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
@@ -255,7 +280,27 @@ void CWord::Update(void)
 			return;
 		}
 	}
+	if (m_nLostType == 1)
+	{//	時間経過で消える文字
+		if (m_nLostCut > LOST_TIME - 200)
+		{
+			m_nCntUninit++;	// カウントの加算
+			m_size.x += 0.009f;
+			m_size.y += 0.009f;
+			//	カラーの変更
+			if (m_nCntUninit % 10 == 0) { m_col.a = 0.0f; }
+			else { m_col.a = 1.0f; }
+		}
+		if (pos.y < 15.0f)
+		{//	文字エフェクトの削除
+			if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
+		}
+		else if (pos.y > 25.0f)
+		{//	下に移動させるときの加速
+			move.y -= 1.0f;
+		}
 
+	}
 	// 位置更新
 	pos.x += move.x;
 	pos.y += move.y;
@@ -264,6 +309,17 @@ void CWord::Update(void)
 	CSceneBillBoard::Update();
 	CSceneBillBoard::SetBillboard(pos, m_size.x, m_size.y);
 	CSceneBillBoard::SetCol(m_col);
+	if (m_nLostType == 1)
+	{//	時間経過で消える文字
+		m_nLostCut++;
+		CDebugProc::Print("m_nLostCut : %d", m_nLostCut);
+		if (m_nLostCut > LOST_TIME)
+		{//	フレームで消える
+			if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+			if (m_pBillBoard[1] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[1] = NULL; }
+			Uninit();
+		}
+	}
 }
 
 //=============================================================================
@@ -274,8 +330,12 @@ void CWord::Draw(void)
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	if (m_pBillBoard != NULL) { m_pBillBoard->Draw(); }
-	
+	if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Draw(); }
+	if (m_nLostType == 1)
+	{//	時間経過で消える文字
+		if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Draw(); }
+	}
+
 	CSceneBillBoard::Draw();
 }
 
@@ -304,17 +364,17 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 		{	// 位置が指定した場所より小さい場合
 			m_bMoveFlag = true;
 			m_nCntSearch++;
-			if (m_nCntSearch >= m_nNumSearch) { 
+			if (m_nCntSearch >= m_nNumSearch) {
 				m_nCntSearch = 0; }
 			//m_colA = 0.2f;
 		}
 	}
 
-	if (m_pBillBoard != NULL)
-	{ 
-		m_pBillBoard->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA)); 
-		if (m_SearchCol[m_nCntSearch] == COL_DEFAULT) { m_pBillBoard->SetBillboard(m_pBillBoard->GetPos(), 30.0f, 17.0f); }
-		else if (m_SearchCol[m_nCntSearch] != COL_DEFAULT) { m_pBillBoard->SetBillboard(m_pBillBoard->GetPos(), 70.0f, 17.0f); }
+	if (m_pBillBoard[0] != NULL)
+	{
+		m_pBillBoard[0]->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA));
+		if (m_SearchCol[m_nCntSearch] == COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 30.0f, 17.0f); }
+		else if (m_SearchCol[m_nCntSearch] != COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 70.0f, 17.0f); }
 	}
 
 

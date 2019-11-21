@@ -170,7 +170,7 @@ void CWordManager::Update(void)
 				if (m_nCntaAnswer == MAX_WORD)
 				{
 					m_nCreateType = nCntAnswer;
-					if (CGame::GetTube(m_nPlayerID) != NULL) 
+					if (CGame::GetTube(m_nPlayerID) != NULL)
 					{
 						CGame::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType]);
 						CGame::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
@@ -241,8 +241,24 @@ void CWordManager::Update(void)
 //=============================================================================
 void CWordManager::SetWord(int nType)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
 	if (m_nCntNum < MAX_WORD)
 	{
+		if (m_nCntNum == 0)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT000, 0.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT000);
+		}
+		else if (m_nCntNum == 1)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT001, 0.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT001);
+		}
+		else if (m_nCntNum == 2)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT002, 0.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT002);
+		}
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
 		if (CGame::GetTube(m_nPlayerID) != NULL)
@@ -281,6 +297,7 @@ void CWordManager::Reset(void)
 void CWordManager::Delete(void)
 {
 	//if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
+
 	if (m_nCntNum > 0)
 	{
 		if (m_nCntNum < 3)
@@ -304,7 +321,7 @@ void CWordManager::Delete(void)
 //=============================================================================
 // 弾の生成  Editor : Kodama Yuto
 //=============================================================================
-void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot)
+void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot, C3DCharactor* pChara)
 {
 
 	CSound *pSound = CManager::GetSound();		//	音の取得
@@ -322,9 +339,14 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				{
 					int nType = m_nCreateType;
 					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType] ,nID);
 					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
+					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+
 					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					if (m_type[nType] == CModelBullet::TYPE_MISSILE)
+					{
+						pModel->SetHomingChara(pChara);
+					}
 					m_nCreateType = NOT_NUM;
 
 					if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
@@ -356,6 +378,8 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				{
 					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
+
+					//pModel->SetHomingChara(pChara);
 				}
 			}
 
@@ -495,7 +519,7 @@ void CWordManager::SearchAssist(int nCntData)
 	CScene *pScene = NULL;
 
 	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
-	
+
 	while (nCount < nNum)
 	{
 		// 先頭のオブジェクトを取得

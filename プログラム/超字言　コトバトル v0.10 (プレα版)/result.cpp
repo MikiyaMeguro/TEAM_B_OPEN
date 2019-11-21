@@ -66,11 +66,11 @@ HRESULT CResult::Init(void)
 {
 
 
-#if 1
-	m_ResultChara[0].nPoint = 1;
-	m_ResultChara[1].nPoint = 2;
-	m_ResultChara[2].nPoint = 3;
-	m_ResultChara[3].nPoint = 4;
+#if 0
+	m_ResultChara[0].nPoint = 2;
+	m_ResultChara[1].nPoint = 1;
+	m_ResultChara[2].nPoint = 4;
+	m_ResultChara[3].nPoint = 3;
 
 #endif
 	//‡ˆÊŒˆ‚ß
@@ -275,10 +275,11 @@ void CResult::Update(void)
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
 
+	//ƒtƒŒ[ƒ€‚ð‚¸‚ç‚·
 	if (m_bMenu == true)
 	{
 		nCounterMenu++;
-		if (nCounterMenu > 30)
+		if (nCounterMenu > 10)
 		{
 			m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 			m_bMenu = false;

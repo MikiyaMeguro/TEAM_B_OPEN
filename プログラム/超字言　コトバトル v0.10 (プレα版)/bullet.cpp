@@ -188,14 +188,27 @@ bool C3DBullet::SimpleCollision(void)
 	return CollisionObject(&dir);
 }
 
+//=============================================================================
+// 追尾処理(CBulletBase)
+//=============================================================================
 void C3DBullet::Homing(D3DXVECTOR3 HomingPos)
 {
-	D3DXQUATERNION m_Quat,m_HomingQuat;
+	D3DXQUATERNION Quat,HomingQuat,dest;
 	//現在の角度マトリックスからクォータニオンを生成
-	D3DXQuaternionRotationMatrix(&m_Quat,&m_mtxRotate);
+	D3DXQuaternionRotationMatrix(&Quat,&m_mtxRotate);
 
+	//弾の位置ベクトルとホーミングしたい物の位置ベクトルからクォータニオンを作成
 	float fRotY = atan2f((HomingPos.x - m_pos.x), (HomingPos.z - m_pos.z));
+	//float fRotX = atan2f((HomingPos.y - m_pos.y), (HomingPos.z - m_pos.z)) + D3DX_PI;
+	//CUtilityMath::RotateNormarizePI(&fRotX);
+	CUtilityMath::RotateNormarizePI(&fRotY);
+	D3DXQuaternionRotationYawPitchRoll(&HomingQuat,fRotY,0.0f,0.0f);
+	//D3DXQuaternionInverse(&HomingQuat, &HomingQuat);
+	//二つのクォータニオンを球面補間する
+	D3DXQuaternionSlerp(&dest,&Quat,&HomingQuat,0.1f);	//中央をとる
 
+	//求めたクォータニオンを角度マトリックスに変換
+	D3DXMatrixRotationQuaternion(&m_mtxRotate,&dest);
 }
 //=============================================================================
 //
@@ -234,6 +247,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 {
 	m_pModel = CSceneX::Create(pos,rot,D3DXVECTOR3(1.0f,1.0f,1.0f),model,0);
 	m_Prop = type;
+	//float fSpeed = 1.0f;
 
 	float fSpeed = 3.0f;
 	switch (m_Prop)
@@ -302,7 +316,10 @@ void CModelBullet::Update(void)
 	C3DBullet::Update();
 	if (m_Prop == TYPE_MISSILE)
 	{//ミサイルなら
-
+		if (m_pHomingChara != NULL)
+		{
+			Homing(m_pHomingChara->GetPosition());
+		}
 	}
 
 	if (m_pModel != NULL)
@@ -465,7 +482,7 @@ void CWordBullet::Uninit(void)
 {
 
 	CExplosion3D* p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 1.0f, 60.0f, 60,0.01f); }
+	if (p3D != NULL) { p3D->Set(GetPosition(), 1.0f, 100.0f, 60,0.01f); }
 
 	if (m_pWord != NULL)
 	{

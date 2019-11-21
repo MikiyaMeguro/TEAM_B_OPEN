@@ -248,7 +248,7 @@ void CPlayer::Update(void)
 
 
 		//弾打ち(プレイヤー)
-		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT)
+		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT && m_pCharactorMove->m_bWait == false)
 		{
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
@@ -259,6 +259,7 @@ void CPlayer::Update(void)
 			// 弾の生成
 			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
 			{
+				C3DCharactor* Homing = NULL;
 				if (m_pWordManager != NULL)
 				{//文字管理クラスに弾の生成を委託する
 					if (pCam != NULL)
@@ -268,6 +269,7 @@ void CPlayer::Update(void)
 						BulletRot = CamRot;
 						if (m_pLockOnCharactor != NULL)
 						{
+							Homing = m_pLockOnCharactor;
 							LockOnPos = m_pLockOnCharactor->GetPosition();
 							LockOnMove = m_pLockOnCharactor->GetMove();
 
@@ -317,7 +319,7 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
-					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot);
+					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot, Homing);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;

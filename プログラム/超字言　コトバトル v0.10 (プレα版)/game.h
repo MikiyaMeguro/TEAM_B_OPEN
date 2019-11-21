@@ -80,6 +80,7 @@ public:
 	int GetChangeNum(void) { return m_nChangeNum; }
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
 	static int GetNumStage(void) { return m_nNumStage; }
+	static CPlayer::PLAYER_TYPE GetPlayerType(int nNumPlayer = 0) { return m_type[nNumPlayer]; }
 
 private:
 	void CameraSetting(int nNum);		// l”‚É‰‚¶‚½ƒJƒƒ‰¶¬

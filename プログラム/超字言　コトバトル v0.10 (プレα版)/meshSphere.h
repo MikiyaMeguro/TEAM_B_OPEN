@@ -33,6 +33,7 @@ public:
 	void Draw(void);
 
 	D3DXVECTOR3& GetPosition(void) { return m_pos; };
+	D3DXVECTOR3& GetRotation(void) { return m_rot; };
 	D3DXVECTOR3& GetScale(void) { return m_Size; };
 
 
