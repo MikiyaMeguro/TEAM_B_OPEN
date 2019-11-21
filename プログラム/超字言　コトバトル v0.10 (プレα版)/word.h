@@ -22,7 +22,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CWord *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int nNum = 0);
+	static CWord *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int LostType, int nNum = 0 );
 
 	// 関数
 	D3DXVECTOR3 Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle, float fDistance);
@@ -62,7 +62,7 @@ private:
 	int		   m_nNum;
 	int		   m_nCntUninit;	// 終了するまでのカウント
 
-	CSceneBillBoard *m_pBillBoard;
+	CSceneBillBoard *m_pBillBoard[2];
 	int		m_nAnim;
 	int		m_nPatten;
 
@@ -71,6 +71,10 @@ private:
 	bool m_bSearchFlag;		// 探す時のフラグ
 	int m_nCntSearch;
 	int m_nNumSearch;
+
+	int	m_nLostType;		// 消えるか消えないかの種類
+	int m_nLostCut;			// 消えるまでのカウント
+
 };
 
 #endif

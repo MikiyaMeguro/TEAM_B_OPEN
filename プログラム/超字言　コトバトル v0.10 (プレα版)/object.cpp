@@ -16,6 +16,7 @@
 #include "time.h"
 #include "scene3D.h"
 #include "effect.h"
+#include "word.h"
 
 //=============================================================================
 // マクロ定義
@@ -59,6 +60,7 @@ CObject::CObject()
 	m_bSwitch = false;
 	m_nCounter = 0;
 	m_nTypeGimmick = GIMMICK_NONE;
+
 }
 
 //=============================================================================
@@ -246,8 +248,22 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove, bool bSwitch)
 //=============================================================================
 void CObject::BGModelMove(D3DXVECTOR3 pos)
 {
+	D3DXVECTOR3 scale = CSceneX::GetScale();
 	if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_X)
 	{//　X座標の移動をするドローン
+		m_nCounter++;
+		if (m_nCounter % 780 == 0)
+		{//	文字を出す
+			CWord::Create(pos, 12.0f, 12.0f, "WORD", rand() % m_nCounter, 1, 45);
+			scale.y = m_InitScale.y + 0.2f;
+			pos.y = m_InitPos.y + 4.0f;
+			m_nCounter = 0;
+		}
+		if(m_nCounter > 20)
+		{//	大きさを戻す
+			scale.y = m_InitScale.y;
+			pos.y = m_InitPos.y;
+		}
 		if (m_InitPos.x + 200 <= pos.x)
 		{//	初期位置から+250以上離れた場合
 			m_MoveState = 2;
@@ -269,10 +285,23 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			break;
 		}
 		pos += m_move;				//	動きの加算
-		CSceneX::SetPosition(pos);	//	位置の設定
+
 	}
 	else if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_Z)
 	{//　X座標の移動をするドローン
+		m_nCounter++;
+		if (m_nCounter % 780 == 0)
+		{//	文字を出す
+			CWord::Create(pos, 12.0f, 12.0f, "WORD", rand() % m_nCounter, 1, 45);
+			scale.y = m_InitScale.y + 0.2f;
+			pos.y = m_InitPos.y + 2.0f;
+			m_nCounter = 0;
+		}
+		if (m_nCounter > 20)
+		{//	大きさを戻す
+			scale.y = m_InitScale.y;
+			pos.y = m_InitPos.y;
+		}
 		if (m_InitPos.z + 200 <= pos.z)
 		{//	初期位置から+250以上離れた場合
 			m_MoveState = 2;
@@ -294,12 +323,10 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			break;
 		}
 		pos += m_move;				//	動きの加算
-		CSceneX::SetPosition(pos);	//	位置の設定
 	}
 
 	if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL00)
 	{
-		D3DXVECTOR3 scale = CSceneX::GetScale();
 		m_nCounter++;
 		if (m_nCounter > 0 && m_nCounter < 360)
 		{
@@ -334,19 +361,13 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }
 		}
-		CSceneX::SetScale(scale);	//	大きさの設定
-		CSceneX::SetPosition(pos);	//	位置の設定
 	}
 	else if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL01)
 	{
-		D3DXVECTOR3 pos = CSceneX::GetPosition();
-		D3DXVECTOR3 scale = CSceneX::GetScale();
 		m_nCounter++;
 		if (m_nCounter > 0 && m_nCounter < 360)
 		{
 			pos.y = 0.0f;
-			//scale.x = m_InitScale.x;
-			//scale.z = m_InitScale.z;
 			scale.x = 0.0f;
 			scale.z = 0.0f;
 		}
@@ -375,9 +396,9 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }
 		}
-		CSceneX::SetScale(scale);	//	大きさの設定
-		CSceneX::SetPosition(pos);	//	位置の設定
 	}
+	CSceneX::SetPosition(pos);	//	位置の設定
+	CSceneX::SetScale(scale);	//	大きさの設定
 }
 
 //=============================================================================
