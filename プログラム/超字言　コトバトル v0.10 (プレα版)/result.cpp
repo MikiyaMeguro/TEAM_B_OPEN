@@ -66,11 +66,11 @@ HRESULT CResult::Init(void)
 {
 
 
-#if 1
-	m_ResultChara[0].nPoint = 1;
-	m_ResultChara[1].nPoint = 2;
-	m_ResultChara[2].nPoint = 3;
-	m_ResultChara[3].nPoint = 4;
+#if 0
+	m_ResultChara[0].nPoint = 2;
+	m_ResultChara[1].nPoint = 1;
+	m_ResultChara[2].nPoint = 4;
+	m_ResultChara[3].nPoint = 3;
 
 #endif
 	//èáà åàÇﬂ
