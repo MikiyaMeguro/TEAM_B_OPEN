@@ -36,6 +36,7 @@
 #include "wall.h"
 
 #include "result.h"
+#include "effect.h"
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -99,6 +100,10 @@ CGame::~CGame()
 //=============================================================================
 void CGame::Init(void)
 {
+	//	エフェクトのテキストの名前の読み込み
+	CEffect::LoadNameEffect();			//	エフェクトのテキスト読み込み
+	CEffect::LoadDataEffect();			//	エフェクトのデータ読み込み
+	CEffect::Load();					//	エフェクトの読み込み
 	m_nChangeNum = 0;
 	m_nNumStage = 0;
 	m_nNumStage = CStageSelect::GetStageState();
@@ -165,7 +170,7 @@ void CGame::Init(void)
 	}
 
 	CSetObject::Create();
-	SetStage(m_nNumStage,m_nChangeNum);		// ステージ生成
+	SetStage(m_nNumStage, m_nChangeNum);		// ステージ生成
 
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
 	{
@@ -189,6 +194,8 @@ void CGame::Uninit(void)
 		m_pMeshField->Uninit();
 		m_pMeshField = NULL;
 	}
+
+	CEffect::Unload();			//	エフェクトの開放
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{

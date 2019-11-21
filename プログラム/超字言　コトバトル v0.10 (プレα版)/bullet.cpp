@@ -42,6 +42,9 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 
 	m_fCollisionRadius = 10.0f;
 	m_fKnockBack = 7.0f;
+
+	D3DXMatrixRotationYawPitchRoll(&m_mtxRotate, m_rot.y, m_rot.x, m_rot.z);
+
 }
 
 //=============================================================================
@@ -74,13 +77,13 @@ void C3DBullet::Update(void)
 	//マトリックスを使用して移動量を求める
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, m_fMove);
 
-	D3DXMATRIX Mtxmove, Mtxrot, Mtxtrans;
+	D3DXMATRIX Mtxmove, Mtxtrans;
 	D3DXMatrixIdentity(&Mtxmove);
 
 	D3DXMatrixTranslation(&Mtxtrans, move.x, move.y, move.z);
 	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &Mtxtrans);
-	D3DXMatrixRotationYawPitchRoll(&Mtxrot, m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &Mtxrot);
+	//D3DXMatrixRotationYawPitchRoll(&Mtxrot, m_rot.y, m_rot.x, m_rot.z);
+	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &m_mtxRotate);
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
@@ -184,6 +187,16 @@ bool C3DBullet::SimpleCollision(void)
 	CManager::DIRECTION dir;
 	return CollisionObject(&dir);
 }
+
+void C3DBullet::Homing(D3DXVECTOR3 HomingPos)
+{
+	D3DXQUATERNION m_Quat,m_HomingQuat;
+	//現在の角度マトリックスからクォータニオンを生成
+	D3DXQuaternionRotationMatrix(&m_Quat,&m_mtxRotate);
+
+	float fRotY = atan2f((HomingPos.x - m_pos.x), (HomingPos.z - m_pos.z));
+
+}
 //=============================================================================
 //
 // モデル弾処理 (CModelBullet)[bullet.cpp]
@@ -259,7 +272,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 HRESULT CModelBullet::Init(void)
 {
 	C3DBullet::Init();
-
+	m_pHomingChara = NULL;
 	m_Type = TYPE_MODEL;
 	return S_OK;
 }
@@ -287,6 +300,11 @@ void CModelBullet::Update(void)
 	nLife--;
 
 	C3DBullet::Update();
+	if (m_Prop == TYPE_MISSILE)
+	{//ミサイルなら
+
+	}
+
 	if (m_pModel != NULL)
 	{
 		m_pModel->SetPosition(GetPosition());
@@ -447,13 +465,7 @@ void CWordBullet::Uninit(void)
 {
 
 	CExplosion3D* p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60,0.01f); }
-	p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60,-0.005f); }
-	p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60, 0.02f); }
-	p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 10.0f, 60.0f, 60, -0.015f); }
+	if (p3D != NULL) { p3D->Set(GetPosition(), 1.0f, 60.0f, 60,0.01f); }
 
 	if (m_pWord != NULL)
 	{

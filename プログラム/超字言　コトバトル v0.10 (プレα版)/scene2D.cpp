@@ -415,3 +415,29 @@ void CScene2D::SetTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax)
 	//頂点バッファをアンロック
 	m_pVtxBuff->Unlock();
 }
+
+
+//=============================================================================
+//大きさ変更
+//=============================================================================
+void CScene2D::SetScale(float fScale)
+{
+	m_fScale = fScale;	//拡大
+
+						//頂点情報へのポインタ
+	VERTEX_2D *pVtx;
+	//頂点バッファをロックし頂点データのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	pVtx[0].pos.x = m_Pos.x + sinf(D3DX_PI * -0.75f + m_fSpin) *  (m_fWidth + m_fScale);
+	pVtx[0].pos.y = m_Pos.y + cosf(D3DX_PI * -0.75f + m_fSpin) *  (m_fHeight + m_fScale);
+	pVtx[1].pos.x = m_Pos.x + sinf(D3DX_PI * 0.75f + m_fSpin) *  (m_fWidth + m_fScale);
+	pVtx[1].pos.y = m_Pos.y + cosf(D3DX_PI * 0.75f + m_fSpin) *  (m_fHeight + m_fScale);
+	pVtx[2].pos.x = m_Pos.x + sinf(D3DX_PI * -0.25f + m_fSpin) *  (m_fWidth + m_fScale);
+	pVtx[2].pos.y = m_Pos.y + cosf(D3DX_PI * -0.25f + m_fSpin) *  (m_fHeight + m_fScale);
+	pVtx[3].pos.x = m_Pos.x + sinf(D3DX_PI * 0.25f + m_fSpin) *  (m_fWidth + m_fScale);
+	pVtx[3].pos.y = m_Pos.y + cosf(D3DX_PI * 0.25f + m_fSpin) *  (m_fHeight + m_fScale);
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+}

@@ -16,7 +16,6 @@ CMeshSphere::CMeshSphere(int pri, OBJTYPE type) : CScene(pri,type)
 	m_pVtxBuff = NULL;
 	m_pIdxBuff = NULL;
 	m_pTexture = NULL;
-	m_VecNor = NULL;
 }
 CMeshSphere::~CMeshSphere()
 {
@@ -58,23 +57,20 @@ void CMeshSphere::Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeig
 	m_nMeshWidth = nMeshWidth;
 	m_nMeshHeight = nMeshHeight;
 
-	// 頂点数
-	m_nVtxNum = (m_nMeshWidth + 1) * (m_nMeshHeight + 1);
+	//// 頂点数
+	//m_nVtxNum = (m_nMeshWidth + 1) * (m_nMeshHeight + 1);
 
-	// インデックス数
-	m_nIdxNum = (m_nMeshWidth + 1) * (m_nMeshHeight + 1)
-		+ (2 * (m_nMeshHeight - 1))
-		+ (m_nMeshWidth + 1) * (m_nMeshHeight - 1);
+	//// インデックス数
+	//m_nIdxNum = (m_nMeshWidth + 1) * (m_nMeshHeight + 1)
+	//	+ (2 * (m_nMeshHeight - 1))
+	//	+ (m_nMeshWidth + 1) * (m_nMeshHeight - 1);
 
-	// ポリゴン数
-	m_nPolygonNum = m_nIdxNum - 2;
-	if (m_VecNor != NULL)
-	{
-		delete[] m_VecNor;
-		m_VecNor = NULL;
-	}
-	m_VecNor = new D3DXVECTOR3[m_nPolygonNum];
+	m_nVtxNum = m_nMeshWidth * (m_nMeshHeight + 1);
+	m_nIdxNum = 2 * m_nMeshHeight * (m_nMeshWidth + 1);
 
+	//// ポリゴン数
+	//m_nPolygonNum = m_nIdxNum - 2;
+	m_nPolygonNum =(m_nMeshWidth * m_nMeshHeight * 2) + (4 * (m_nMeshHeight - 1));
 	//頂点バッファ・インデックスバッファの設定
 	CreateVertex(pDevice);
 	CreateIndex(pDevice);
@@ -91,7 +87,6 @@ HRESULT CMeshSphere::Init(void)
 	m_pVtxBuff = NULL;
 	m_pIdxBuff = NULL;
 	m_pTexture = NULL;
-	m_VecNor = NULL;
 
 	m_pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -111,12 +106,6 @@ HRESULT CMeshSphere::Init(void)
 //=============================================================================
 void CMeshSphere::Uninit(void)
 {
-	//法線情報の削除
-	if (m_VecNor != NULL)
-	{
-		delete[] m_VecNor;
-		m_VecNor = NULL;
-	}
 	if (m_pVtxBuff != NULL)
 	{
 		m_pVtxBuff->Release();
@@ -175,20 +164,7 @@ void CMeshSphere::Draw(void)
 
 	D3DXMATRIX mtxRot, mtxTrans, mtxScale;	// 計算用マトリックス
 
-	// ワールドマトリックスの初期化
-	D3DXMatrixIdentity(&m_mtxWorld);
-
-	//回転を反映
-	D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
-
-	//拡大縮小の反映
-	D3DXMatrixScaling(&mtxScale, m_Size.x, m_Size.y, m_Size.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxScale);
-
-	// 移動を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,m_rot,NULL,m_Size);
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
@@ -205,9 +181,14 @@ void CMeshSphere::Draw(void)
 	// テクスチャの設定
 	pDevice->SetTexture(0, m_pTexture);
 
+	//pDevice->SetTexture(0, NULL);
+
 	// ポリゴンの描画
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0,
 		m_nVtxNum, 0, m_nPolygonNum);
+
+	//pDevice->DrawIndexedPrimitive(D3DPT_LINESTRIP, 0, 0,
+	//	m_nVtxNum, 0, m_nPolygonNum);
 
 }
 
@@ -236,9 +217,9 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 						// 頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int nCntVtxY = 0; nCntVtxY <= m_nMeshHeight; nCntVtxY++)
+	for (int nCntVtxX = 0; nCntVtxX < m_nMeshWidth; nCntVtxX++)
 	{
-		for (int nCntVtxX = 0; nCntVtxX < m_nMeshWidth; nCntVtxX++)
+		for (int nCntVtxY = 0; nCntVtxY <= m_nMeshHeight; nCntVtxY++)
 		{
 			int nNum = (m_nMeshWidth * nCntVtxY) + nCntVtxX;
 
@@ -253,7 +234,10 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 				D3DXVECTOR2((nCntVtxX * (1.0f / (float)m_nMeshWidth)),
 					(nCntVtxY * (1.0f / (float)m_nMeshHeight)));
 
-			pVtx[nNum].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
+			D3DXVECTOR3 nor;
+			D3DXVec3Normalize(&nor, &pVtx[nNum].pos);
+
+			pVtx[nNum].nor = nor;
 			pVtx[nNum].col = m_Color;
 
 		}
@@ -261,9 +245,6 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
-
-	//法線の更新
-	UpdateNormal();
 }
 
 //=============================================================================
@@ -304,131 +285,10 @@ void CMeshSphere::CreateIndex(LPDIRECT3DDEVICE9 pDev)
 			}
 		}
 	}
+
+
 	// インデックスバッファをアンロック
 	m_pIdxBuff->Unlock();
 
 }
 
-//=============================================================================
-// 法線処理
-//=============================================================================
-void CMeshSphere::UpdateNormal(void)
-{
-	//変数宣言
-	VERTEX_3D *pVtx;	//頂点情報へのポインタ
-
-						//頂点バッファをロックし、頂点データへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-	int nVecNum = 0;
-
-	//ポリゴンの法線設定
-	D3DXVECTOR3 VecA, VecB;
-
-	for (int nCntHeight = 0; nCntHeight <= m_nMeshHeight; nCntHeight++)
-	{
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		for (int nCntWidth = 0; nCntWidth < m_nMeshWidth; nCntWidth++)
-		{
-			int nNum = (m_nMeshWidth * nCntHeight) + nCntWidth;
-
-			VecA = pVtx[nNum + (m_nMeshWidth + 2)].pos - pVtx[nNum].pos;
-			VecB = pVtx[nNum + (m_nMeshWidth + 1)].pos - pVtx[nNum].pos;
-			D3DXVec3Cross(&m_VecNor[nVecNum], &VecA, &VecB);
-
-			D3DXVec3Normalize(&m_VecNor[nVecNum], &m_VecNor[nVecNum]);
-			nVecNum++;
-
-			VecA = pVtx[nNum + 1].pos - pVtx[nNum].pos;
-			VecB = pVtx[nNum + (m_nMeshWidth + 2)].pos - pVtx[nNum].pos;
-			D3DXVec3Cross(&m_VecNor[nVecNum], &VecA, &VecB);
-
-			D3DXVec3Normalize(&m_VecNor[nVecNum], &m_VecNor[nVecNum]);
-			nVecNum++;
-		}
-	}
-	//頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
-
-
-	//頂点ごとの法線設定
-	D3DXVECTOR3 VecC;
-	//頂点バッファをロックし、頂点データへのポインタを取得
-	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
-	for (int nCntHeight = 0; nCntHeight <= m_nMeshHeight; nCntHeight++)
-	{
-		//頂点バッファをロックし、頂点データへのポインタを取得
-		for (int nCntWidth = 0; nCntWidth < m_nMeshWidth; nCntWidth++)
-		{
-			if (nCntWidth == 0)
-			{
-				if (nCntHeight == 0)
-				{
-					VecC = (m_VecNor[0] + m_VecNor[1]) / 2;
-					D3DXVec3Normalize(&pVtx[0].nor, &VecC);
-				}
-				else if (nCntHeight == m_nMeshHeight)
-				{
-					VecC = m_VecNor[((m_nMeshWidth) * 2) * (m_nMeshHeight - 1)];
-					D3DXVec3Normalize(&pVtx[(m_nMeshWidth + 1) * m_nMeshHeight].nor, &VecC);
-				}
-				else
-				{
-					int nA = (m_nMeshWidth * 2) * (nCntHeight - 1);
-					VecC = (m_VecNor[nA] + m_VecNor[nA + (m_nMeshWidth * 2)] + m_VecNor[nA + (m_nMeshWidth * 2) + 1]) / 3;
-					D3DXVec3Normalize(&pVtx[(m_nMeshWidth + 1) * nCntHeight].nor, &VecC);
-				}
-			}
-			else if (nCntWidth == m_nMeshWidth)
-			{
-				if (nCntHeight == 0)
-				{
-					VecC = m_VecNor[(m_nMeshWidth * 2) - 1];
-					D3DXVec3Normalize(&pVtx[m_nMeshWidth].nor, &VecC);
-				}
-				else if (nCntHeight == m_nMeshHeight)
-				{
-					VecC = (m_VecNor[(m_nMeshWidth * m_nMeshHeight * 2) - 2] + m_VecNor[(m_nMeshWidth * m_nMeshHeight * 2) - 1]) / 2;
-					D3DXVec3Normalize(&pVtx[((m_nMeshHeight + 1) * (m_nMeshWidth + 1)) - 1].nor, &VecC);
-
-				}
-				else
-				{
-					int nB = m_nMeshWidth * 2;
-					VecC = (m_VecNor[(nB * nCntHeight) - 2] + m_VecNor[(nB * nCntHeight) - 1] + m_VecNor[(nB * (nCntHeight + 1)) - 1]) / 3;
-					D3DXVec3Normalize(&pVtx[((m_nMeshWidth + 1) * (nCntHeight + 1)) - 1].nor, &VecC);
-				}
-			}
-			else
-			{
-				if (nCntHeight == 0)
-				{
-					int nC = (nCntWidth * 2) - 1;
-					VecC = (m_VecNor[nC] + m_VecNor[nC + 1] + m_VecNor[nC + 2]) / 3;
-					D3DXVec3Normalize(&pVtx[nCntWidth].nor, &VecC);
-
-				}
-				else if (nCntHeight == m_nMeshHeight)
-				{
-					int nD = ((m_nMeshWidth * 2) * (m_nMeshHeight - 1)) + ((nCntWidth - 1) * 2);
-					VecC = (m_VecNor[nD] + m_VecNor[nD + 1] + m_VecNor[nD + 2]) / 3;
-					D3DXVec3Normalize(&pVtx[((m_nMeshWidth + 1) * m_nMeshHeight) + nCntWidth].nor, &VecC);
-				}
-				else
-				{
-					int nE = ((nCntWidth - 1) * 2) + ((m_nMeshWidth * 2) * (nCntHeight - 1));
-					int nF = nE + ((m_nMeshWidth) * 2) + 1;
-					VecC = (m_VecNor[nE] + m_VecNor[nE + 1] + m_VecNor[nE + 2] +
-						m_VecNor[nF] + m_VecNor[nF + 1] + m_VecNor[nF + 2]) / 6;
-					D3DXVec3Normalize(&pVtx[nCntWidth + ((m_nMeshWidth + 1) * nCntHeight)].nor, &VecC);
-
-				}
-			}
-		}
-	}
-
-
-	// 頂点バッファをアンロックする
-	m_pVtxBuff->Unlock();
-
-
-}

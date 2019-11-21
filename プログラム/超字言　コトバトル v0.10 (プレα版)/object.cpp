@@ -116,6 +116,8 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 	{//ƒhƒ[ƒ“ZˆÚ“®
 		m_MoveState = 1;
 	}
+	//	‰Šú‚Ì‘å‚«‚³‚Ì•Û‘¶
+	m_InitScale = CSceneX::GetScale();
 	return S_OK;
 }
 
@@ -143,7 +145,7 @@ void CObject::Update(void)
 
 	BGModelMove(pos);				// ”wŒiƒ‚ƒfƒ‹‚ÌˆÚ“®
 
-	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(Collsiontype); return; }		// ‰½‚à‚È‚¢ê‡‚Í‰½‚à’Ê‚³‚È‚¢
+	if (m_nRealTime == REALTIME::REALTIME_NONE) { Rot(CSceneX::GetModelType()); return; }		// ‰½‚à‚È‚¢ê‡‚Í‰½‚à’Ê‚³‚È‚¢
 
 
 	ModelMove(Collsiontype, pos);	// ƒ‚ƒfƒ‹‚ÌˆÚ“®
@@ -182,7 +184,7 @@ void CObject::SwitchBeltConveyor(bool bSwitch)
 	if (bSwitch == true)
 	{//	SwitchON
 		m_nCounter++;
-		if (m_nCounter > 70)
+		if (m_nCounter > 120)
 		{
 			m_bSwitch = m_bSwitch ? false : true;
 			if (m_bSwitch == true)
@@ -294,6 +296,55 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		pos += m_move;				//	“®‚«‚Ì‰ÁŽZ
 		CSceneX::SetPosition(pos);	//	ˆÊ’u‚ÌÝ’è
 	}
+
+	if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL00)
+	{
+		D3DXVECTOR3 scale = CSceneX::GetScale();
+		m_nCounter++;
+		if (m_nCounter > 0 && m_nCounter < 360)
+		{
+			pos.y = 1000.0f;
+			scale.x = 0.0f;
+			scale.z = 0.0f;
+		}
+		else if (m_nCounter > 360 && m_nCounter < 360*2)
+		{
+			pos.y = 0.0f;
+			scale.x = m_InitScale.x;
+			scale.z = m_InitScale.z;
+		}
+		else  if (m_nCounter > 360*2)
+		{
+			m_nCounter = 0;
+		}
+		CSceneX::SetScale(scale);	//	‘å‚«‚³‚ÌÝ’è
+		CSceneX::SetPosition(pos);	//	ˆÊ’u‚ÌÝ’è
+	}
+	else if (CSceneX::GetModelType() == CLoad::MODEL_ALPHAMODEL01)
+	{
+		D3DXVECTOR3 pos = CSceneX::GetPosition();
+		D3DXVECTOR3 scale = CSceneX::GetScale();
+		m_nCounter++;
+		if (m_nCounter > 0 && m_nCounter < 360)
+		{
+			pos.y = 0.0f;
+			scale.x = m_InitScale.x;
+			scale.z = m_InitScale.z;
+		}
+		else if (m_nCounter > 360 && m_nCounter < 360*2)
+		{
+			pos.y = 1000.0f;
+			scale.x = 0.0f;
+			scale.z = 0.0f;
+		}
+		else  if (m_nCounter >  360 * 2)
+		{
+			m_nCounter = 0;
+		}
+
+		CSceneX::SetScale(scale);	//	‘å‚«‚³‚ÌÝ’è
+		CSceneX::SetPosition(pos);	//	ˆÊ’u‚ÌÝ’è
+	}
 }
 
 //=============================================================================
@@ -364,7 +415,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	}
 	else if (m_nRealTime == REALTIME_NOTMOVE)
 	{	// “®‚©‚È‚¢ê‡
-		Rot(Type);
+		Rot(CSceneX::GetModelType());
 
 		if (((CTime::GetStageTime() % 60) == 0) && CManager::GetGame()->GetChangeNum() < 2)
 		{
@@ -450,15 +501,34 @@ void CObject::Vibration(D3DXVECTOR3 *Pos)
 //=============================================================================
 // ‰ñ“]‚Ìˆ—
 //=============================================================================
-void CObject::Rot(CSceneX::COLLISIONTYPE type)
+void CObject::Rot(CLoad::MODEL mode)
 {
-	if (type == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || type == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING || type == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+	CSceneX::COLLISIONTYPE Collsiontype = CSceneX::GetCollsionType();
+
+	if (mode == CLoad::MODE_GEAR || mode == CLoad::MODEL_PROPELLER)
 	{	// ƒRƒŠƒWƒ‡ƒ“ƒ^ƒCƒv‚ªƒmƒbƒNƒoƒb”»’è‚ðŽ‚Â‚È‚çŒü‚«‚Ì‰ñ“]‚ð‚³‚¹‚é
 		D3DXVECTOR3 rot = CSceneX::GetRot();
 
-		// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
-		rot.y += GEAR_ROT_Y * ((int)type - (int)COLLSIONTYPE_CONVEYOR_LEFT);
-
+		if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL)
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 0.2f;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING)
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 0.5;
+		}
+		else if (Collsiontype == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 1.0f;
+		}
+		else
+		{
+			// ‹­Žã‚ÌŽí—Þ‚É‚æ‚Á‚Ä‰ñ“]—Ê‚ð•Ï‰»
+			rot.y += GEAR_ROT_Y * 1.5f;
+		}
 		CSceneX::SetRot(rot);
 	}
 }

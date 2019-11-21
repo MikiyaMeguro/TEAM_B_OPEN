@@ -63,7 +63,7 @@ public:
 
 private:
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMove);
-	void Rot(CSceneX::COLLISIONTYPE type);
+	void Rot(CLoad::MODEL mode);
 
 	static bool m_bCreateFlag;					// ê∂ê¨Ç∑ÇÈÉtÉâÉO
 	void ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos);
@@ -85,6 +85,9 @@ private:
 	int m_MoveState;
 	int m_nCounter;
 	GIMMICKTYPE m_nTypeGimmick;
+
+	D3DXVECTOR3 m_InitScale;			// èâä˙ëÂÇ´Ç≥ï€ä«
+
 
 
 	//	SWITCH
