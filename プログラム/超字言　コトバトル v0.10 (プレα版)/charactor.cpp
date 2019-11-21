@@ -1292,8 +1292,13 @@ void C3DCharactor::WayPointMove_CPU(void)
 		//移動可能なマスは何マスあるか
 		int nCntWP = m_pWayPoint->CntWayPoint();
 		//ランダムで決める
-		int nRand = rand() % nCntWP;
-		nRandPos = nRand;
+		int nRand = 0;
+
+		if (nCntWP != 0)
+		{
+			nRand = rand() % nCntWP;
+		}
+
 		if (m_pWayPointPos[nRand] != NULL)
 		{
 			m_MarkWayPoint = m_pWayPointPos[nRand];

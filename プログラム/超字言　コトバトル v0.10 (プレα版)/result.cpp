@@ -31,6 +31,11 @@
 #define NUMBERPOS_3RD (D3DXVECTOR3(150.0f,300.0f,0.0f))
 #define NUMBERPOS_4TH (D3DXVECTOR3(150.0f,400.0f,0.0f))
 
+#define PODIUMPOS_1ST (D3DXVECTOR3(20.0f, 0.0f, 0.0f))
+#define PODIUMPOS_2ND (D3DXVECTOR3(50.0f, 0.0f, 0.0f))
+#define PODIUMPOS_3RD (D3DXVECTOR3(-10.0f, 0.0f, 0.0f))
+#define PODIUMPOS_4TH (D3DXVECTOR3(40.0f,0.0f,0.0f))
+
 
 #define TIMER_SPACE			(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 
@@ -64,18 +69,20 @@ CResult::~CResult()
 //=============================================================================
 HRESULT CResult::Init(void)
 {
+	int nCntWinScore = 0;				//勝利カウント
+	int nCntRankNum[4] = { 0,0,0,0 };	//順位ごとに何人いるか
 
+	float fPosX = 20;	//表彰台初期位置
+	float fNext = 30;	//表彰台の間の幅
 
 #if 0
-	m_ResultChara[0].nPoint = 2;
-	m_ResultChara[1].nPoint = 1;
-	m_ResultChara[2].nPoint = 4;
-	m_ResultChara[3].nPoint = 3;
+	m_ResultChara[0].nPoint = 3;
+	m_ResultChara[1].nPoint = 3;
+	m_ResultChara[2].nPoint = 2;
+	m_ResultChara[3].nPoint = 1;
 
 #endif
 	//順位決め
-	int nCntWinScore = 0;
-
 	//ソート処理 大きい順
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -91,15 +98,19 @@ HRESULT CResult::Init(void)
 		{
 		case 0:
 			m_ResultChara[nCntPlayer].nNumRank = 4;
+			nCntRankNum[3]++;
 			break;
 		case 1:
 			m_ResultChara[nCntPlayer].nNumRank = 3;
+			nCntRankNum[2]++;
 			break;
 		case 2:
 			m_ResultChara[nCntPlayer].nNumRank = 2;
+			nCntRankNum[1]++;
 			break;
 		case 3:
 			m_ResultChara[nCntPlayer].nNumRank = 1;
+			nCntRankNum[0]++;
 			break;
 		default:
 			break;
@@ -126,24 +137,83 @@ HRESULT CResult::Init(void)
 	}
 
 	//表彰台生成
-	CSceneX::Create(D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM1, 1);
-	CSceneX::Create(D3DXVECTOR3(50.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM2, 1);
-	CSceneX::Create(D3DXVECTOR3(-10.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM3, 1);
+	for (int nCnt = 0; nCnt < nCntRankNum[0]; nCnt++)
+	{//順位の数だけ
+		CSceneX::Create(D3DXVECTOR3(fPosX, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM1, 1);
+		if(nCnt == 1)
+		{	//3位の場所へ変える
+			fPosX = 20;
+			fNext *= -1;
+		}
+		//位置をずらす
+		fPosX += fNext;
+	}
+
+	fPosX = 50;
+	for (int nCnt = 0; nCnt < nCntRankNum[1]; nCnt++)
+	{//順位の数だけ
+		CSceneX::Create(D3DXVECTOR3(fPosX, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM2, 1);
+		if (nCnt == 0)
+		{	//3位の場所へ変える
+			fPosX = 20;
+			fNext *= -1;
+		}
+		//位置をずらす
+		fPosX += fNext;
+	}
+
+	fPosX = -10;
+	fNext = -30;
+	for (int nCnt = 0; nCnt < nCntRankNum[2]; nCnt++)
+	{//順位の数だけ
+		CSceneX::Create(D3DXVECTOR3(fPosX, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f), CLoad::MODEL_PODIUM3, 1);
+		//位置をずらす
+		fPosX += fNext;
+	}
 
 	D3DXVECTOR3 RankPos;
+	int nCntRankPos[4] = { 0,0,0,0 };	//順位ごとに何人いるか
+
+	fPosX = 20;
+	fNext = 30;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{	//初期位置設定
 		switch (m_ResultChara[nCntPlayer].nNumRank)
 		{
 		case 1:
-			RankPos = POS_1ST;
+			RankPos = D3DXVECTOR3(fPosX, 30.0f, 0.0f);
+			if (nCntRankPos[0] == 1)
+			{	//3位の場所へ変える
+				fPosX = 20;
+				fNext *= -1;
+			}
+			fPosX += fNext;
+			nCntRankPos[0]++;
 			break;
 		case 2:
-			RankPos = POS_2ND;
+			if (nCntRankPos[1] == 0)
+			{
+				fPosX = 20;
+			}
+			if (nCntRankPos[1] == 1)
+			{	//3位の場所へ変える
+				fPosX = 20;
+				fNext *= -1;
+			}
+			fPosX += fNext;
+			nCntRankPos[1]++;
+			RankPos = D3DXVECTOR3(fPosX, 20.0f, 0.0f);
 			break;
 		case 3:
-			RankPos = POS_3RD;
+			if (nCntRankPos[2] == 0)
+			{	//3位の場所へ変える
+				fPosX = 20;
+				fNext = -30;
+			}
+			fPosX += fNext;
+			nCntRankPos[2]++;
+			RankPos = D3DXVECTOR3(fPosX, 20.0f, 0.0f);
 			break;
 		case 4:
 			RankPos = POS_4TH;

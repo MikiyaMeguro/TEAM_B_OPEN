@@ -169,6 +169,12 @@ HRESULT CTime::Init(void)
 		m_pScene2D[nCnt] = NULL;
 	}
 
+	if (m_nNumPlayer == 1)
+	{
+		//カウントダウンの位置設定
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
+	}
 
 	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
 	{
@@ -178,10 +184,6 @@ HRESULT CTime::Init(void)
 			m_pColon->SetWidthHeight(15.0f, 20.0f);
 			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
-
-		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, m_pos.z), "COUNTDOWN2");
-		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 
 		// Timeのロゴ
 		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 35.0f, 0.0f), "TIME", 5);
