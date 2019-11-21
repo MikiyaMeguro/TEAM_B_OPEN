@@ -151,6 +151,9 @@
     <ClCompile Include="explosion.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="effect.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -303,6 +306,7 @@
     <ClInclude Include="meshSphere.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="effect.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">

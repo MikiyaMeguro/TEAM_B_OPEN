@@ -40,37 +40,72 @@ CExplosion3D* CExplosion3D::Create(void)
 //=============================================================================
 // 設定処理
 //=============================================================================
-void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife, float fAnimSpeed,
-	D3DXVECTOR3 rot, D3DXCOLOR col, D3DXVECTOR3 scaleMag, LPCSTR Tag, int nMesh)
-{
-	CMeshSphere::Set(pos, Tag, nMesh, nMesh,
-		D3DXVECTOR3(fStartSize * scaleMag.x, fStartSize * scaleMag.y, fStartSize * scaleMag.z) ,col,rot);
-
-	CMeshSphere::SetTexAnim(D3DXVECTOR2(fAnimSpeed,-fAnimSpeed));
+void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife, float fAnimSpeed, LPCSTR Tag)
+{//短縮設定版
+	CMeshSphere::Set(pos, Tag, 40, 40,
+		D3DXVECTOR3(fStartSize, fStartSize, fStartSize), D3DXCOLOR(0.90f,0.50f,0.05f,0.5f), D3DXVECTOR3(0.0f,0.0f,0.0f));
+	CMeshSphere::SetTexAnim(D3DXVECTOR2(fAnimSpeed, -fAnimSpeed));
 	CMeshSphere::SetCntAnimTime(1);
 
 	m_fDestSize = fDestSize;
 	m_fSize = fStartSize;
 	m_nLife = nLife;
-	m_ScaleMag = scaleMag;
+	m_nExpandTime = nLife;
+	m_nCount = 0;
+	m_spinSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_VibrateLength = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_OrgPosition = pos;
+
 	if (m_bNotDup == false)
 	{
+		//キレイに見せるために何個か重ねる
 		CExplosion3D* p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife,-0.005f); }
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.005f); }
+
 		p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
 		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, 0.02f); }
+
 		p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
 		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.015f); }
+	}
+	m_bNotDup = true;
 
-		////エフェクト
-		//p3D = CExplosion3D::Create();
-		//p3D->IsNotDup(true);
-		//if (p3D != NULL) { p3D->Set(pos, fStartSize + 10.0f, fDestSize + 10.0f, nLife, 0.0f,
-		//	D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),D3DXVECTOR3(1.0f,0.1f,1.0f),"LINE",11); }
+}
+void CExplosion3D::SetEX(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife, float fAnimSpeed,
+	D3DXVECTOR3 rot, D3DXCOLOR col, LPCSTR Tag, int nMesh, int nExpandTime, D3DXVECTOR3 spinSpeed, D3DXVECTOR3 vibrate)
+{//詳細設定版
+	CMeshSphere::Set(pos, Tag, nMesh, nMesh,
+		D3DXVECTOR3(fStartSize, fStartSize, fStartSize) ,col,rot);
 
+	CMeshSphere::SetTexAnim(D3DXVECTOR2(fAnimSpeed,-fAnimSpeed));
+	CMeshSphere::SetCntAnimTime(1);
+	m_nCount = 0;
+
+	m_fDestSize = fDestSize;
+	m_fSize = fStartSize;
+	m_nLife = nLife;
+	m_nExpandTime = nExpandTime;
+	m_spinSpeed = spinSpeed;
+	m_OrgPosition = pos;
+	m_VibrateLength = vibrate;
+
+	if (m_bNotDup == false)
+	{
+		//キレイに見せるために何個か重ねる
+		CExplosion3D* p3D = CExplosion3D::Create();
+		p3D->IsNotDup(true);
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife,-0.005f); }
+
+		p3D = CExplosion3D::Create();
+		p3D->IsNotDup(true);
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, 0.02f); }
+
+		p3D = CExplosion3D::Create();
+		p3D->IsNotDup(true);
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.015f); }
 
 	}
 	m_bNotDup = true;
@@ -83,6 +118,8 @@ HRESULT CExplosion3D::Init(void)
 {
 	m_nCount = 0;
 	m_bNotDup = false;
+	m_VibrateLength = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_spinSpeed = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	CMeshSphere::Init();
 	return S_OK;
 }
@@ -102,10 +139,13 @@ void CExplosion3D::Uninit(void)
 void CExplosion3D::Update(void)
 {
 	//サイズ更新
-	D3DXVECTOR3 Size = D3DXVECTOR3(m_fSize * m_ScaleMag.x, m_fSize * m_ScaleMag.y, m_fSize * m_ScaleMag.z);
-	D3DXVECTOR3 SizeDest = D3DXVECTOR3(m_fDestSize * m_ScaleMag.x, m_fDestSize * m_ScaleMag.y, m_fDestSize * m_ScaleMag.z);
+	D3DXVECTOR3 Size = D3DXVECTOR3(m_fSize, m_fSize, m_fSize);
+	D3DXVECTOR3 SizeDest = D3DXVECTOR3(m_fDestSize, m_fDestSize, m_fDestSize);
 
-	D3DXVec3Lerp(&Size,&Size,&SizeDest,((float)(m_nCount + 1) / (float)m_nLife));
+	if (m_nCount <= m_nExpandTime)
+	{
+		D3DXVec3Lerp(&Size, &Size, &SizeDest, ((float)(m_nCount + 1) / (float)m_nExpandTime));
+	}
 
 
 	GetScale() = Size;
@@ -113,6 +153,15 @@ void CExplosion3D::Update(void)
 
 	m_fSize = Size.x;	//どれも同じなので適当な数値を入れる
 
+	//回転(spinSpeedを加算する)
+	GetRotation() += m_spinSpeed;
+
+	//振動
+	float fVibrateRot = (float)((rand() % 201) - 100);	//-100.0f ～ 100.0f
+	fVibrateRot = CUtilityMath::Mapping(fVibrateRot,-100.0f,100.0f,-D3DX_PI,D3DX_PI);	//-3.14f ～ 3.14fの範囲に変換する
+	GetPosition() = m_OrgPosition + D3DXVECTOR3(sinf(fVibrateRot) * m_VibrateLength.x,
+												0.0f,
+												cosf(fVibrateRot) * m_VibrateLength.z);
 	//親クラスのUpdate
 	CMeshSphere::Update();
 

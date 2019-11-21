@@ -268,12 +268,18 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 	}
-	//カメラ操作（テスト）
+	//カメラ操作(3Pプレイ時の上空カメラ)
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");
 	if (pCam != NULL)
 	{
 		pCam->SetRotation(pCam->GetRotation() + D3DXVECTOR3(0.0f,0.001f,0.0f));
+
+		D3DXVECTOR3 posVdest = pCam->GetPosR() - D3DXVECTOR3(sinf(pCam->GetRotation().y) * pCam->GetLength(),
+			sinf(pCam->GetRotation().x) * pCam->GetLength(),
+			cosf(pCam->GetRotation().y) * pCam->GetLength());
+		pCam->SetPosV(pCam->GetPosV() + (posVdest - pCam->GetPosV()) * CAMERA_POSV_COEFFICIENT);
+
 	}
 
 	//時間停止(デバック用)

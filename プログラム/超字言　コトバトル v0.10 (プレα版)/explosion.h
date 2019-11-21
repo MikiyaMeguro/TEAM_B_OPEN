@@ -27,10 +27,11 @@ public:
 	~CExplosion3D();
 
 	static CExplosion3D* Create(void);
+	void Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife, float fAnimSpeed,LPCSTR Tag = "EXPLOSION");
 
-	void Set(D3DXVECTOR3 pos,float fStartSize,float fDestSize,int nLife,float fAnimSpeed = 0.01f,
-		D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXCOLOR col = D3DXCOLOR(0.90f, 0.55f, 0.1f, 0.5f),
-		D3DXVECTOR3 scaleMag = D3DXVECTOR3(1.0f,1.0f,1.0f),LPCSTR Tag = "EXPLOSION",int nMesh = 40);
+	void SetEX(D3DXVECTOR3 pos,float fStartSize,float fDestSize,int nLife,float fAnimSpeed,
+		D3DXVECTOR3 rot,D3DXCOLOR col,LPCSTR Tag,int nMesh,int nExpandTime,
+		D3DXVECTOR3 spinSpeed = D3DXVECTOR3(0.0f,0.0f,0.0f),D3DXVECTOR3 vibrate = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -43,12 +44,17 @@ public:
 
 private:
 	void IsNotDup(bool bDup) { m_bNotDup = bDup; };
-	float m_fSize;
-	float m_fDestSize;
-	int m_nLife;
+	float m_fSize;		//サイズ
+	float m_fDestSize;	//目標のサイズ
+	int m_nLife;		//体力
 
+	int m_nExpandTime;	//拡大に使う時間
 	bool m_bNotDup;		//重ねて表示するか
-	D3DXVECTOR3 m_ScaleMag;
+
+	D3DXVECTOR3 m_spinSpeed;//回転速度
+
+	D3DXVECTOR3 m_OrgPosition;	//初期位置
+	D3DXVECTOR3 m_VibrateLength;	//爆発のブレ
 
 };
 

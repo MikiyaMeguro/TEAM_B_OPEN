@@ -259,6 +259,7 @@ void CPlayer::Update(void)
 			// ’e‚Ì¶¬
 			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
 			{
+				C3DCharactor* Homing = NULL;
 				if (m_pWordManager != NULL)
 				{//•¶ŽšŠÇ—ƒNƒ‰ƒX‚É’e‚Ì¶¬‚ðˆÏ‘õ‚·‚é
 					if (pCam != NULL)
@@ -268,6 +269,7 @@ void CPlayer::Update(void)
 						BulletRot = CamRot;
 						if (m_pLockOnCharactor != NULL)
 						{
+							Homing = m_pLockOnCharactor;
 							LockOnPos = m_pLockOnCharactor->GetPosition();
 							LockOnMove = m_pLockOnCharactor->GetMove();
 
@@ -317,7 +319,7 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
-					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot);
+					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot, Homing);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;
