@@ -12,6 +12,8 @@
 #include "scene.h"
 #include "load.h"
 #include "manager.h"
+
+#include "charactor.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -89,8 +91,8 @@ public:
 		TYPE_HIGHSPEED,			//速度早い
 		TYPE_STINGER,			//オブジェクト貫通
 		TYPE_REFLECT,			//反射
-		TYPE_MISSILE,
-		TYPE_BOMB,
+		TYPE_MISSILE,			//ミサイル
+		TYPE_BOMB,				//投擲爆弾
 	}BULLET_PROPERTY;
 
 	CModelBullet();
