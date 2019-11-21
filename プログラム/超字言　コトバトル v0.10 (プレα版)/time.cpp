@@ -310,7 +310,7 @@ void CTime::Update(void)
 	CManager::MODE GameMode = CManager::GetMode();
 	DebugKey();		// デバック用
 
-	if ((GameMode == CManager::MODE_GAME) || (GameMode == CManager::MODE_TUTORIAL))
+	if ((GameMode == CManager::MODE_GAME) && m_bEndCntDown == true || (GameMode == CManager::MODE_TUTORIAL) && m_bEndCntDown == true)
 	{//制限時間
 	 //ゲーム
 		if (m_bStart == false)
@@ -327,7 +327,23 @@ void CTime::Update(void)
 		TexTime(nTexData, m_nTimeOne);
 
 		if (m_nTime == 0 && m_nTimeOne == 0 && GameMode == CManager::MODE_GAME)
-		{	// ゲーム終了
+		{
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+			{	// プレイヤーを行動できないように
+				m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(true);
+				m_pPlayer[nCntPlayer]->SetMotion(CPlayer::MOTION_UPPER_NEUTRAL, CPlayer::UPPER_BODY);
+				m_pPlayer[nCntPlayer]->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
+
+				if (m_pScene2D[nCntPlayer] != NULL)
+				{
+					m_pScene2D[nCntPlayer]->BindTexture("GAME_END");
+					m_pScene2D[nCntPlayer]->SetCol(D3DXCOLOR(1.0f,1.0f,1.0f,1.0f));
+					m_pScene2D[nCntPlayer]->SetWidthHeight(m_fWidth + 200, m_fHeight);
+					m_pScene2D[nCntPlayer]->SetScale(200.0f);
+				}
+			}
+
+			// ゲーム終了
 			m_nWaitTime++;	// 待ち時間の加算
 			if ((m_nWaitTime % WAIT_TIME_END) == 0)
 			{

@@ -248,7 +248,7 @@ void CPlayer::Update(void)
 
 
 		//弾打ち(プレイヤー)
-		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT)
+		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT && m_pCharactorMove->m_bWait == false)
 		{
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
