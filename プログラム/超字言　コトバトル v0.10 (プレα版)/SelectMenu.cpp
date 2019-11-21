@@ -58,6 +58,7 @@ CSelectMenu::CSelectMenu(int nPriority) : CScene(7)
 
 	m_fSpace = 0;
 	m_fInitYpos = 0;
+	m_bCanFade = false;
 
 	/* 演出面変数の初期化 */
 	m_nCntScrool = 0;
@@ -230,7 +231,7 @@ void CSelectMenu::Update(void)
 		}
 
 		//エンターキー
-		if (CCommand::GetCommand("DECISION"))
+		if (CCommand::GetCommand("DECISION") == true)
 		{
 			//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
 			if (m_nSelect == 0)
@@ -359,7 +360,6 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 			break;
 		}
 		break;
-
 	case MENU_TYPE_PAUSE:
 		switch (MenuSelect)
 		{

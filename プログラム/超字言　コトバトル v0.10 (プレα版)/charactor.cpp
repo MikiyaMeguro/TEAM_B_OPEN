@@ -113,6 +113,7 @@ HRESULT C3DCharactor::Init(void)
 	m_MarkWayPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nTargetWP = 0;
 	nTestCnt = 0;
+	m_bWait = false;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -136,57 +137,60 @@ void C3DCharactor::Update(void)
 	{
 		m_pWayPoint->InRange(pos);
 	}
-
-	switch (CCharaBase::GetMoveType())
+	if (m_bWait == false)
 	{
-	case CCharaBase::MOVETYPE_PLAYER_INPUT:
-		if (m_pWayPoint == NULL)
+		switch (CCharaBase::GetMoveType())
 		{
-			//	m_nTargetWP = 1;
-			//	m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
-		}
-		CharaMove_Input();
-		break;
-	case CCharaBase::MOVETYPE_NPC_AI:
-		if (m_nActionTimer == 0)
-		{	//考える
-			Think_CPU();
-		}
-		else
-		{	//行動する
-			Action_CPU();
-		}
-
-		//CPUが場外行かないように
-		if (m_bJyougai == false)
-		{
-			if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
-				FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
-			{//場外に移動しそうになった時
-				m_bJyougai = true;
-				move.x = 0;
-				move.z = 0;
-				m_CpuThink = THINK_ROTATION;
-				m_nActionTimer = 2;
-				m_CpuRotation = (CPU_ROTATION)(rand() % 3);
+		case CCharaBase::MOVETYPE_PLAYER_INPUT:
+			if (m_pWayPoint == NULL)
+			{
+				//	m_nTargetWP = 1;
+				//	m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
 			}
-		}
-		else
-		{
-			if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
-				FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
-			{//場内に移動した
-				m_bJyougai = false;
+			CharaMove_Input();
+			break;
+		case CCharaBase::MOVETYPE_NPC_AI:
+			if (m_nActionTimer == 0)
+			{	//考える
+				Think_CPU();
 			}
-		}
+			else
+			{	//行動する
+				Action_CPU();
+			}
 
-		break;
-	case CCharaBase::MOVETYPE_RANKING_CHARA:
-		pos += move;
-		//速度に係数を掛ける
-		CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
-		break;
+			//CPUが場外行かないように
+			if (m_bJyougai == false)
+			{
+				if (FIELD_OUTSIDE < pos.x || -FIELD_OUTSIDE > pos.x ||
+					FIELD_OUTSIDE < pos.z || -FIELD_OUTSIDE > pos.z)
+				{//場外に移動しそうになった時
+					m_bJyougai = true;
+					move.x = 0;
+					move.z = 0;
+					m_CpuThink = THINK_ROTATION;
+					m_nActionTimer = 2;
+					m_CpuRotation = (CPU_ROTATION)(rand() % 3);
+				}
+			}
+			else
+			{
+				if (FIELD_OUTSIDE - 10 > pos.x && -FIELD_OUTSIDE + 10 < pos.x &&
+					FIELD_OUTSIDE - 10 > pos.z && -FIELD_OUTSIDE + 10 < pos.z)
+				{//場内に移動した
+					m_bJyougai = false;
+				}
+			}
+
+			break;
+		case CCharaBase::MOVETYPE_RANKING_CHARA:
+			pos += move;
+			//速度に係数を掛ける
+			CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
+			break;
+		}
 	}
+
 	//メッシュフィールドとの当たり判定
 	CMeshField *pMesh = NULL;
 

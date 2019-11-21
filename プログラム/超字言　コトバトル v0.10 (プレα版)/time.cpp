@@ -12,7 +12,7 @@
 #include "fade.h"
 #include "player.h"
 #include "scene2D.h"
-
+#include "charactor.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -93,7 +93,12 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nType = 0;
 	m_fWidth = 100;
 	m_fHeight = 100;
+	m_bEndCntDown = false;
 
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		m_pPlayer[nCntPlayer] = NULL;			// プレイヤーを取得
+	}
 }
 
 //=============================================================================
@@ -249,6 +254,12 @@ HRESULT CTime::Init(void)
 		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{	// プレイヤーを取得
+		m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
+		m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(true);
+	}
+
 
 	return S_OK;
 }
@@ -294,6 +305,7 @@ void CTime::Uninit(void)
 //=============================================================================
 void CTime::Update(void)
 {
+
 	//現在のモードの取得
 	CManager::MODE GameMode = CManager::GetMode();
 	DebugKey();		// デバック用
@@ -325,67 +337,76 @@ void CTime::Update(void)
 	}
 
 	//カウントダウン
-	if (m_bCntDown == true && m_nType < 4)
+	if (m_bEndCntDown == false)
 	{
+		if (m_bCntDown == true && m_nType < 4)
+		{
+			for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
+			{
+				if (m_pScene2D[nCnt] != NULL)
+				{
+					switch (m_nType)
+					{
+					case 0:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN2");
+						break;
+					case 1:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
+						break;
+					case 2:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
+						break;
+					case 3:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN3");
+						break;
+					default:
+						break;
+					}
+				}
+			}
+			m_bCntDown = false;
+		}
+
+		//大きさ変化
+		m_fScale += COUNTDOWN_SCALE;
+		//透明度上げ
+		if (m_fScale > 200 && m_fScale <= 250)
+		{
+			//カウンター加算
+			if (m_bCntDown == false)
+			{
+				m_Col.a -= 0.1f;
+			}
+		}
+		//大きさ最大
+		if (m_fScale > COUNTDOWN_SCALE * 60)
+		{
+			m_fScale = COUNTDOWN_SCALE * 60;
+			if (m_nType < 3)
+			{
+				m_bCntDown = true;
+				m_nType += 1;
+				m_fScale = 0;
+				m_Col.a = 1.0f;
+			}
+			else if (m_nType == 3)
+			{
+				m_bEndCntDown = true;
+				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+				{	// プレイヤーを取得
+					m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
+					m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(false);
+				}
+			}
+		}
+		//色・大きさ更新
 		for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
 		{
 			if (m_pScene2D[nCnt] != NULL)
 			{
-				switch (m_nType)
-				{
-				case 0:
-					m_pScene2D[nCnt]->BindTexture("COUNTDOWN2");
-					break;
-				case 1:
-					m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
-					break;
-				case 2:
-					m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
-					break;
-				case 3:
-					m_pScene2D[nCnt]->BindTexture("COUNTDOWN3");
-					break;
-				default:
-					break;
-				}
+				m_pScene2D[nCnt]->SetCol(m_Col);
+				m_pScene2D[nCnt]->SetScale(m_fScale);
 			}
-		}
-		m_bCntDown = false;
-	}
-
-	//大きさ変化
-	m_fScale += COUNTDOWN_SCALE;
-	//透明度上げ
-	if (m_fScale > 200 && m_fScale <= 250)
-	{
-		//カウンター加算
-		if (m_bCntDown == false)
-		{
-			m_Col.a -= 0.1f;
-		}
-	}
-	//大きさ最大
-	if (m_fScale > COUNTDOWN_SCALE * 60)
-	{
-		m_fScale = COUNTDOWN_SCALE * 60;
-		if (m_nType < 3)
-		{
-			m_bCntDown = true;
-		}
-		if (m_nType < 4 - 1)
-		{
-			m_nType += 1;
-			m_fScale = 0;
-			m_Col.a = 1.0f;
-		}
-	}
-	//色・大きさ更新
-	for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
-	{
-		if (m_pScene2D[nCnt] != NULL)
-		{
-			m_pScene2D[nCnt]->SetCol(m_Col);
-			m_pScene2D[nCnt]->SetScale(m_fScale);
 		}
 	}
 }

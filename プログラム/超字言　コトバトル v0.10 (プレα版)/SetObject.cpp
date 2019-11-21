@@ -281,7 +281,7 @@ void CSetObject::LoadFile(char *pFileName)
 			{
 				//CSetObject::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
 				//	, (CSetObject::MODELTYPE)nType, CSetObject::MOVETYPE_NONE, 1);
-				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType, (CObject::REALTIME)nGimmickType);
+				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType, (CObject::GIMMICKTYPE)nGimmickType);
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)

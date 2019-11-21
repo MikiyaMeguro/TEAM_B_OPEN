@@ -120,6 +120,8 @@ public:
 	float&		GetMoveCofBlend(void) { return m_fCofMoveBlend; };
 
 	CHARACTOR_MOVE_TYPE GetMoveType(void) { return m_type; };
+	void SetMoveType(CHARACTOR_MOVE_TYPE MoveType) { m_type = MoveType; };
+	void SetWaitBool(bool bWait) { m_bWait = bWait; };
 
 	void SetThisCharactor(CPlayer* pThis) { m_pThisCharactor = pThis; };
 
@@ -149,6 +151,7 @@ public:
 	D3DXVECTOR3 m_RespawnPos;	//出現位置
 	CWaypoint *m_pWayPoint;		//経路情報
 	float m_fCofMoveBlend;	//スティック角に応じた移動係数
+	bool m_bWait;			//待ちのブール
 };
 
 class C2DCharactor : public CCharaBase

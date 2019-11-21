@@ -76,6 +76,7 @@ public:
 	static void SetModeSelectBool(bool ModeSelectBool) { m_bModeSelect = ModeSelectBool; }
 
 	void MenuDecide(SELECT_MENU MenuSelect);
+	void SetbFade(bool bfade) { m_bCanFade = bfade; };
 
 	//メンバ変数
 private:
@@ -133,6 +134,9 @@ private:
 	CScene2D					*m_apPolygon[MAX_SELECTMENU];		// メニューのポリゴン
 	static	bool				m_bModeSelect;						// セレクトメニューの状態
 	int							m_nMaxMenu;							// メニュー最大数
+
+	//遷移可能フラグ
+	bool m_bCanFade;
 
 	/* 演出面変数 */
 	int m_nCntScrool;		//スクロールカウンター

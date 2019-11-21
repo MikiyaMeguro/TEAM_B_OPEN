@@ -86,6 +86,9 @@ private:
 	int m_nCounter;
 	GIMMICKTYPE m_nTypeGimmick;
 
+	D3DXVECTOR3 m_InitScale;			// 初期大きさ保管
+
+
 
 	//	SWITCH
 	static bool m_bSwitch;				//	スイッチ

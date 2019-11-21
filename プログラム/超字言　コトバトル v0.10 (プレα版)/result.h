@@ -56,7 +56,7 @@ private:
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];	// ナンバーへのポインタ
 	bool m_bMenu;
-
+	int nCounterMenu;
 
 };
 #endif
