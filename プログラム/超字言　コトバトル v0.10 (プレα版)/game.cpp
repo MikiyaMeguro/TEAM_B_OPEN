@@ -107,6 +107,10 @@ void CGame::Init(void)
 	m_nChangeNum = 0;
 	m_nNumStage = 0;
 	m_nNumStage = CStageSelect::GetStageState();
+	if (m_nNumStage == NULL)
+	{//	ステージ選択にNULLが入った場合
+		m_nNumStage = 0;
+	}
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
@@ -268,18 +272,12 @@ void CGame::Update(void)
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 
 	}
-	//カメラ操作(3Pプレイ時の上空カメラ)
+	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");
 	if (pCam != NULL)
 	{
 		pCam->SetRotation(pCam->GetRotation() + D3DXVECTOR3(0.0f,0.001f,0.0f));
-
-		D3DXVECTOR3 posVdest = pCam->GetPosR() - D3DXVECTOR3(sinf(pCam->GetRotation().y) * pCam->GetLength(),
-			sinf(pCam->GetRotation().x) * pCam->GetLength(),
-			cosf(pCam->GetRotation().y) * pCam->GetLength());
-		pCam->SetPosV(pCam->GetPosV() + (posVdest - pCam->GetPosV()) * CAMERA_POSV_COEFFICIENT);
-
 	}
 
 	//時間停止(デバック用)
@@ -640,81 +638,6 @@ void CGame::SetStage(int nNumState,int nCntState)
 void CGame::SetCreateWord(void)
 {
 	if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[m_nNumStage][m_nChangeNum]); }
-}
-//=============================================================================
-// 文字管理の処理
-//=============================================================================
-void CGame::WordCreate(void)
-{
-	// ランス
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 38);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 45);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 12);
-
-	// 花壇
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 15);
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 45);
-
-	// まるた
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 30);
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 40);
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 15);
-
-	// かたな
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 5);
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 15);
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 20);
-
-	// イチゴ
-	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 16);
-	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 9);
-
-	// たまご
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 15);
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 30);
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 9);
-
-	// マイク
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 380.0f), 12.0f, 12.0f, "WORD", 30);
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 280.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 180.0f), 12.0f, 12.0f, "WORD", 7);
-
-	// タイヤ
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 15);
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 35);
-
-	// 太鼓
-	CWord::Create(D3DXVECTOR3(180.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 15);
-	CWord::Create(D3DXVECTOR3(280.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(380.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
-
-	// コイン
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 9);
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-180.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 45);
-
-	// いかり
-	CWord::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-150.0f, 0.0f, 20.0f), 12.0f, 12.0f, "WORD", 5);
-	CWord::Create(D3DXVECTOR3(400.0f, 0.0f, 10.0f), 12.0f, 12.0f, "WORD", 39);
-
-	// いかだ
-	CWord::Create(D3DXVECTOR3(200.0f, 0.0f, 400.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(300.0f, 0.0f, 60.0f), 12.0f, 12.0f, "WORD", 5);
-	CWord::Create(D3DXVECTOR3(150.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", 15);
-
-	// すいか
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, -380.0f), 12.0f, 12.0f, "WORD", 12);
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, -280.0f), 12.0f, 12.0f, "WORD", 1);
-	CWord::Create(D3DXVECTOR3(-380.0f, 0.0f, -180.0f), 12.0f, 12.0f, "WORD", 5);
-
-	// たらい
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, -380.0f), 12.0f, 12.0f, "WORD", 15);
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, -280.0f), 12.0f, 12.0f, "WORD", 38);
-	CWord::Create(D3DXVECTOR3(-280.0f, 0.0f, -180.0f), 12.0f, 12.0f, "WORD", 1);
 }
 
 //=============================================================================
