@@ -219,6 +219,7 @@ void CWord::Update(void)
 					if (m_bFlag == true)
 					{	// 終了フラグが立った場合
 						if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+						if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
 						pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
 						pPlayer[nCntPlayer]->SetbSetupBullet(true);
 						m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
@@ -281,22 +282,24 @@ void CWord::Update(void)
 	}
 	if (m_nLostType == 1)
 	{//	時間経過で消える文字
-		if (pos.y < 15.0f)
-		{//	文字エフェクトの削除
-			if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
-		}
-		else if (pos.y > 25.0f)
-		{//	下に移動させるときの加速
-			move.y -= 1.5f;
-		}
 		if (m_nLostCut > LOST_TIME - 200)
 		{
 			m_nCntUninit++;	// カウントの加算
 			m_size.x += 0.009f;
 			m_size.y += 0.009f;
 			//	カラーの変更
-			if (m_nCntUninit % 10 == 0){m_col.a = 0.0f;}else{m_col.a = 1.0f;}
+			if (m_nCntUninit % 10 == 0) { m_col.a = 0.0f; }
+			else { m_col.a = 1.0f; }
 		}
+		if (pos.y < 15.0f)
+		{//	文字エフェクトの削除
+			if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
+		}
+		else if (pos.y > 25.0f)
+		{//	下に移動させるときの加速
+			move.y -= 1.0f;
+		}
+
 	}
 	// 位置更新
 	pos.x += move.x;
@@ -310,11 +313,12 @@ void CWord::Update(void)
 	{//	時間経過で消える文字
 		m_nLostCut++;
 		CDebugProc::Print("m_nLostCut : %d", m_nLostCut);
-			if (m_nLostCut > LOST_TIME)
-			{//	フレームで消える
-				if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
-				Uninit();
-			}
+		if (m_nLostCut > LOST_TIME)
+		{//	フレームで消える
+			if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+			if (m_pBillBoard[1] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[1] = NULL; }
+			Uninit();
+		}
 	}
 }
 
