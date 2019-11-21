@@ -215,6 +215,7 @@ private:
 	D3DXVECTOR3 *m_pWayPointPos;	//経路情報の位置情報ポインタ
 	D3DXVECTOR3 m_MarkWayPoint;		//移動先の位置
 	bool m_bGoal;					//移動先到着フラグ
+	bool m_bRandomGoal;				//移動先到着フラグ(ランダム)
 	bool m_bSearch;					//移動先探索フラグ
 	bool m_bNearWard;				//文字が近くにあるフラグ
 	bool m_bBlock;					//移動先障害物フラグ

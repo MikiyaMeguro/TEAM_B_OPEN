@@ -59,7 +59,6 @@ CWaypoint *CWaypoint::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCST
 			/*pWaypoint->BindTexture(Tag);*/
 		}
 	}
-
 	return pWaypoint;
 }
 //=============================================================================
@@ -461,6 +460,8 @@ int CWaypoint::CntWayPoint(void)
 //=============================================================================
 void CWaypoint::CollisionObj(void)
 {
+	int nCntHitObj = 0; //当たった数をカウント
+
 	CScene *pScene = NULL;
 
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
@@ -478,9 +479,7 @@ void CWaypoint::CollisionObj(void)
 				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
 				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
-					bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(20, 0, 20));
-					CObject *pSceneObj = ((CObject*)pSceneX);
-
+					bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
 					//オブジェクトに当たった
 					if (bLand == true)
 					{
@@ -492,6 +491,43 @@ void CWaypoint::CollisionObj(void)
 			}
 			// 次のシーンに進める
 			pScene = pSceneNext;
+		}
+	}
+
+
+	//オブジェクトと当たっていないウェイポイントを更新
+	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
+	{
+		if (WayPoint[nCntWayPoint].bBlock == true)
+		{
+			// 先頭のオブジェクトを取得
+			pScene = CScene::GetTop(SCENEX_PRIORITY);
+			while (pScene != NULL)
+			{// 優先順位が3のオブジェクトを1つ1つ確かめる
+			 // 処理の最中に消える可能性があるから先に記録しておく
+				CScene *pSceneNext = pScene->GetNext();
+				if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
+				{// 死亡フラグが立っていないもの
+				 // オブジェクトの種類を確かめる
+					CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+					if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+					{
+						bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
+						CObject *pSceneObj = ((CObject*)pSceneX);
+						if (bLand == true)
+						{//当たっていない
+							nCntHitObj++;
+						}
+					}
+				}
+				// 次のシーンに進める
+				pScene = pSceneNext;
+			}
+
+			if (nCntHitObj == 0)
+			{//一度もオブジェクトに当たっていない
+				WayPoint[nCntWayPoint].bBlock = false;
+			}
 		}
 	}
 }

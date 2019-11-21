@@ -13,6 +13,8 @@
 #include "player.h"
 #include "scene2D.h"
 #include "charactor.h"
+#include "result.h"
+#include "point.h"
 //=============================================================================
 // É}ÉNÉçíËã`
 //=============================================================================
@@ -347,6 +349,11 @@ void CTime::Update(void)
 			m_nWaitTime++;	// ë“Çøéûä‘ÇÃâ¡éZ
 			if ((m_nWaitTime % WAIT_TIME_END) == 0)
 			{
+				for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+				{
+					CResult::SetRanking(nCntPlayer, CGame::GetPlayerType(nCntPlayer), CGame::GetPoint(nCntPlayer)->GetPoint());
+				}
+
 				CFade::SetFade(CManager::MODE_RESULT, CFade::FADE_OUT);
 			}
 		}
