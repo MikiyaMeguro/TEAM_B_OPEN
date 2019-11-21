@@ -241,8 +241,24 @@ void CWordManager::Update(void)
 //=============================================================================
 void CWordManager::SetWord(int nType)
 {
+	CSound *pSound = CManager::GetSound();		//	‰¹‚ÌŽæ“¾
 	if (m_nCntNum < MAX_WORD)
 	{
+		if (m_nCntNum == 0)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT000, 0.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT000);
+		}
+		else if (m_nCntNum == 1)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT001, 0.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT001);
+		}
+		else if (m_nCntNum == 2)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT002, 0.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT002);
+		}
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
 		if (CGame::GetTube(m_nPlayerID) != NULL)
@@ -281,6 +297,7 @@ void CWordManager::Reset(void)
 void CWordManager::Delete(void)
 {
 	//if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
+
 	if (m_nCntNum > 0)
 	{
 		if (m_nCntNum < 3)

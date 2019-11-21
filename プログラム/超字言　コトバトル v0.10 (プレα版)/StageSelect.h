@@ -13,6 +13,9 @@
 // 前方宣言
 //=============================================================================
 class CScene2D;
+class CFade;
+class CManager;
+class CSetObject;
 
 //*****************************************************************************
 // マクロ定義
@@ -62,25 +65,55 @@ private:
 		SELECTICON_STATE_MAX
 	}SELECTICONSTATE;
 
-	void InitPolygon(void);																				//ポリゴンの初期設定
-	void ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed);											//テクスチャスクロール処理
-	void Selecttype(SELECTTYPE state);																	//選択状態の管理
+	/* ステージ読み込みの状態 */
+	typedef enum
+	{
+		STAGELOAD_NONE = 0,
+		STAGELOAD_LOAD,
+		STAGELOAD_UNLOAD,
+		STAGELOAD_MAX
+	}STAGELOAD;
+
+	/* マスクのフェード状態 */
+	typedef enum
+	{
+		MASKFADE_NONE = 0,
+		MASKFADE_IN,
+		MASKFADE_OUT,
+		MASKFADE_MAX
+	}MASKFADE;
+
+	void InitPolygon(void);												//ポリゴンの初期設定
+	void ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed);			//テクスチャスクロール処理
+	void Selecttype(SELECTTYPE state, CFade *pFade, CManager *pManager);//選択状態の管理
 	void ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type);		//選択肢の移動演出
-	void Replacement(SELECTICONSTATE state);
+	void Replacement(SELECTICONSTATE state);							//ポリゴン位置の入れ替え処理
+	void SetStage(int nNumState);										//ステージ生成の処理
+	void LoadStage(int nNum);											//ステージのロード処理
+	void StageLoadState(int nSel);										//ステージロードの状態
+	void MaskFade(void);												//マスクのフェード処理
 
 	/* 変数 */
-	static CScene2D *m_apScene2D[MAX_STAGESELECT_TEX];
-	static CScene2D *m_apSelect2D[MAX_STAGESELECT];
+	static CScene2D *m_apScene2D[MAX_STAGESELECT_TEX];				//演出系2D
+	static CScene2D *m_apSelect2D[MAX_STAGESELECT];					//選択肢2D
+	static CScene2D *m_pMask2D;										//カメラマスク
 	static int	m_nSelect;											// 選択している番号
 	SELECTTYPE m_type;												//選択されている番号の状態
+	char *m_pcStageName[MAX_STAGESELECT];							// ステージの名前保管
+	CSetObject *m_pObj;
 
 	/* 演出系変数 */
 	int m_nCntScrool;												//スクロールのカウンター
-	char *m_pcStageName[MAX_STAGESELECT];							// ステージの名前保管
+	char *m_pcStageSelect[MAX_STAGESELECT];							// ステージの名前保管
 	D3DXVECTOR3 m_SelectPos[MAX_STAGESELECT];						//セレクトの位置を保存
 	SELECTICONSTATE m_MoveIconState;								//移動の状態
 	float m_fWidth[MAX_STAGESELECT], m_fHeight[MAX_STAGESELECT];	//縦と横の形を保存しておく
 	D3DXCOLOR m_IconCol[MAX_STAGESELECT];							//色を保存しておく
 	bool m_bRep;													//入れ替えを一回だけやるフラグ
+	D3DXVECTOR3 m_CameraRot, m_CameraPosV,m_CameraPosR;				//カメラ
+	bool m_bLoad;													//ステージの読み込みを１回だけやるフラグ
+	STAGELOAD m_LoadState;											//読み込み状態管理
+	MASKFADE m_MaskFade;											//マスクのフェード処理
+	float m_fMaskAlpha;
 };
 #endif
