@@ -8,7 +8,7 @@
 #define _WORE_MANAGER_H_
 
 #include "main.h"
-
+#include "charactor.h"
 //===================================================================
 // マクロ定義
 //===================================================================
@@ -32,7 +32,7 @@ public:
 	void Init(void);
 	void Uninit(void);
 	void Update(void);
-	 
+
 	CWordManager();
 	~CWordManager();
 
@@ -41,7 +41,7 @@ public:
 
 	// 設定の関数
 	void SetWord(int nType);
-	void BulletCreate(int nID,D3DXVECTOR3 BulletMuzzle,D3DXVECTOR3 BulletRot);	//BulletMuzzle = 弾が出る位置	BulletRot = 弾が出る角度
+	void BulletCreate(int nID,D3DXVECTOR3 BulletMuzzle,D3DXVECTOR3 BulletRot,C3DCharactor* pChara = NULL);	//BulletMuzzle = 弾が出る位置	BulletRot = 弾が出る角度
 	void SetID(int nID) { m_nPlayerID = nID; }
 	static void SetWordLoad(int nNumModel, D3DXVECTOR3 AnswerNum, D3DXVECTOR3 scale, D3DXVECTOR3 rot, int type, int Model, int nPoint);	// ファイルからリソースの読み込み
 	static void SetWordAnswerNum(int nAnswerNum);

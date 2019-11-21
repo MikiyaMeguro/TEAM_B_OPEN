@@ -160,6 +160,7 @@
     <ClInclude Include="CharaSelect.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="debugProc.h" />
+    <ClInclude Include="effect.h" />
     <ClInclude Include="explosion.h" />
     <ClInclude Include="fade.h" />
     <ClInclude Include="game.h" />
@@ -212,6 +213,7 @@
     <ClCompile Include="CharaSelect.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="debugProc.cpp" />
+    <ClCompile Include="effect.cpp" />
     <ClCompile Include="explosion.cpp" />
     <ClCompile Include="fade.cpp" />
     <ClCompile Include="game.cpp" />
