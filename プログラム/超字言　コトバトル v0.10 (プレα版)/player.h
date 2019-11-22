@@ -172,8 +172,9 @@ public:
 
 	//ŠeŽí•Ï”Žæ“¾&‘ã“üˆ—
 	CCharaBase*		GetCharaMover(void)				{ return m_pCharactorMove; };
-	D3DXVECTOR3		GetPosition(void)				{ return GetCharaMover()->GetPosition(); };
-	D3DXVECTOR3		GetRotation(void)				{ return GetCharaMover()->GetRotation(); };
+	D3DXVECTOR3		GetPosition(void)				{ return (GetCharaMover() != NULL) ? GetCharaMover()->GetPosition() : D3DXVECTOR3(0.0f,0.0f,0.0f); };//GetCharaMover()->GetPosition()
+	D3DXVECTOR3		GetRotation(void)				{ return (GetCharaMover() != NULL) ? GetCharaMover()->GetRotation() : D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	};
 	int				GetID(void)						{ return m_nID; };
 	LPCSTR			GetCameraName(void)				{ return m_ChildCameraName; };
 	void			SetCameraName(LPCSTR name)		{ m_ChildCameraName = name; };

@@ -482,7 +482,7 @@ void CWordBullet::Uninit(void)
 {
 
 	CExplosion3D* p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 1.0f, 100.0f, 60,0.01f); }
+	if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 100.0f, 60,0.01f); }
 
 	if (m_pWord != NULL)
 	{
