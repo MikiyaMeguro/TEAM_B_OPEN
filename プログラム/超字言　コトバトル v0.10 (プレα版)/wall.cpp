@@ -47,7 +47,7 @@ CWall::~CWall()
 //=============================================================================
 //	アイテムの生成
 //=============================================================================
-CWall *CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType)
+CWall *CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType, int nTexType)
 {
 	CWall *pWall = {};
 
@@ -56,7 +56,7 @@ CWall *CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOL
 		pWall = new CWall;
 		if (pWall != NULL)
 		{//アイテムの初期化
-			pWall->Init(pos, rot, size, col, TexUV, nType);
+			pWall->Init(pos, rot, size, col, TexUV, nType, nTexType);
 		}
 	}
 	return pWall;
@@ -65,7 +65,7 @@ CWall *CWall::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOL
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType)
+HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType, int nTexType)
 {
 	CScene3D::SetTexUV(TexUV);
 	CScene3D::SetPos(pos);
@@ -73,7 +73,13 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	CScene3D::Init();
 	CScene3D::SetColor(col);
 	CScene3D::SetSizeY(size.y, size.x);
-	CScene3D::BindTexture("FIELD");
+	if (nType == 0){SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL);}
+	else{SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_BILLBOARD); }
+
+	if (nTexType == 0){CScene3D::BindTexture("FIELD");}
+	else if (nTexType == 1){CScene3D::BindTexture("PAD");}
+	else if (nTexType == 2) { CScene3D::BindTexture("TUROFLOW"); }
+
 
 	return S_OK;
 }
@@ -110,8 +116,8 @@ void CWall::Draw(void)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
+	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
 	CScene3D::Draw();
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
+	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
 
 }

@@ -33,12 +33,12 @@ public:
 	CWall();															// コンストラクタ
 	~CWall();															// デストラクタ
 																		// 初期化処理
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType);
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType,int nTexType);
 	void Uninit(void);													// 終了処理
 	void Update(void);													// 更新処理
 	void Draw(void);													// 描画処理
 																		// 生成
-	static CWall *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType);																// 当たり判定
+	static CWall *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType, int nTexType);																// 当たり判定
 private:
 	static LPDIRECT3DTEXTURE9		m_pTexture[MAX_WALL_TEX];			// テクスチャ情報へのポインタ
 };
