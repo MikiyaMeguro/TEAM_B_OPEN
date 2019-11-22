@@ -254,7 +254,7 @@ void CPlayer::Update(void)
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 			D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
 			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
-			float fRotY,fRotX;
+			float fRotY;
 			D3DXVECTOR3 CamRot, LockOnPos, LockOnMove;
 			// íeÇÃê∂ê¨
 			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
