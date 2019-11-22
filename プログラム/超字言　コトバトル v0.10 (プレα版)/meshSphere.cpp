@@ -137,14 +137,9 @@ void CMeshSphere::Update(void)
 							// 頂点バッファをロックし、頂点データへのポインタを取得
 		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-		for (int nCntVtxY = 0; nCntVtxY <= m_nMeshHeight; nCntVtxY++)
+		for (int nCntVtx = 0; nCntVtx < m_nVtxNum; nCntVtx++)
 		{
-			for (int nCntVtxX = 0; nCntVtxX < m_nMeshWidth; nCntVtxX++)
-			{
-				int nNum = (m_nMeshWidth * nCntVtxY) + nCntVtxX;
-				pVtx[nNum].tex += m_AnimTexUV;
-
-			}
+				pVtx[nCntVtx].tex += m_AnimTexUV;
 		}
 
 		// 頂点バッファをアンロックする
@@ -292,3 +287,27 @@ void CMeshSphere::CreateIndex(LPDIRECT3DDEVICE9 pDev)
 
 }
 
+//=============================================================================
+// 頂点色設定処理
+//=============================================================================
+void CMeshSphere::SetColor(D3DXCOLOR col)
+{
+	if (m_pVtxBuff != NULL)
+	{
+		m_Color = col;
+
+		// 頂点情報の設定
+		VERTEX_3D *pVtx;	// 頂点情報へのポインタ
+							// 頂点バッファをロックし、頂点データへのポインタを取得
+		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		for (int nCntVtx = 0; nCntVtx < m_nVtxNum; nCntVtx++)
+		{
+			pVtx[nCntVtx].col = m_Color;
+		}
+
+		// 頂点バッファをアンロックする
+		m_pVtxBuff->Unlock();
+
+	}
+}

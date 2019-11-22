@@ -25,7 +25,7 @@ public:
 	static CMeshSphere* Create(void);
 
 	void Set(D3DXVECTOR3 pos, LPCSTR Tag, int nMeshWidth, int nMeshHeight, D3DXVECTOR3 Size,
-		D3DXCOLOR Col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f),D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		D3DXCOLOR Col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR3 rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -36,6 +36,7 @@ public:
 	D3DXVECTOR3& GetRotation(void) { return m_rot; };
 	D3DXVECTOR3& GetScale(void) { return m_Size; };
 
+	void SetColor(D3DXCOLOR col) ;
 
 	void SetTexAnim(D3DXVECTOR2 Anim) { m_AnimTexUV = Anim; };
 	void SetCntAnimTime(int nTime) { m_nCntTexAnim = nTime; };

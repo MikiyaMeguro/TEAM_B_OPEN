@@ -52,9 +52,7 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 	m_nLife = nLife;
 	m_nExpandTime = nLife;
 	m_nCount = 0;
-	m_spinSpeed = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_VibrateLength = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_OrgPosition = pos;
+	m_spinSpeed = D3DXVECTOR3(0.0f, 0.4f, 0.0f);
 
 	if (m_bNotDup == false)
 	{
@@ -75,7 +73,7 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 
 }
 void CExplosion3D::SetEX(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int nLife, float fAnimSpeed,
-	D3DXVECTOR3 rot, D3DXCOLOR col, LPCSTR Tag, int nMesh, int nExpandTime, D3DXVECTOR3 spinSpeed, D3DXVECTOR3 vibrate)
+	D3DXVECTOR3 rot, D3DXCOLOR col, LPCSTR Tag, int nMesh, int nExpandTime, D3DXVECTOR3 spinSpeed)
 {//Ú×Ý’è”Å
 	CMeshSphere::Set(pos, Tag, nMesh, nMesh,
 		D3DXVECTOR3(fStartSize, fStartSize, fStartSize) ,col,rot);
@@ -89,8 +87,6 @@ void CExplosion3D::SetEX(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int
 	m_nLife = nLife;
 	m_nExpandTime = nExpandTime;
 	m_spinSpeed = spinSpeed;
-	m_OrgPosition = pos;
-	m_VibrateLength = vibrate;
 
 	if (m_bNotDup == false)
 	{
@@ -118,7 +114,6 @@ HRESULT CExplosion3D::Init(void)
 {
 	m_nCount = 0;
 	m_bNotDup = false;
-	m_VibrateLength = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_spinSpeed = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	CMeshSphere::Init();
 	return S_OK;
@@ -147,25 +142,15 @@ void CExplosion3D::Update(void)
 		D3DXVec3Lerp(&Size, &Size, &SizeDest, ((float)(m_nCount + 1) / (float)m_nExpandTime));
 	}
 
-
 	GetScale() = Size;
-
 
 	m_fSize = Size.x;	//‚Ç‚ê‚à“¯‚¶‚È‚Ì‚Å“K“–‚È”’l‚ð“ü‚ê‚é
 
 	//‰ñ“](spinSpeed‚ð‰ÁŽZ‚·‚é)
 	GetRotation() += m_spinSpeed;
 
-	//U“®
-	float fVibrateRot = (float)((rand() % 201) - 100);	//-100.0f ` 100.0f
-	fVibrateRot = CUtilityMath::Mapping(fVibrateRot,-100.0f,100.0f,-D3DX_PI,D3DX_PI);	//-3.14f ` 3.14f‚Ì”ÍˆÍ‚É•ÏŠ·‚·‚é
-	GetPosition() = m_OrgPosition + D3DXVECTOR3(sinf(fVibrateRot) * m_VibrateLength.x,
-												0.0f,
-												cosf(fVibrateRot) * m_VibrateLength.z);
 	//eƒNƒ‰ƒX‚ÌUpdate
 	CMeshSphere::Update();
-
-
 
 	//Á–Å”»’è
 	if (m_nCount > m_nLife)
