@@ -75,10 +75,10 @@ HRESULT CWaypoint::Init(/*D3DXVECTOR3 pos*/)
 	{
 		WayPoint[nCntWayPoint].pWayPoint = NULL;
 		WayPoint[nCntWayPoint].WayPointPos = D3DXVECTOR3(0, 0, 0);
-		WayPoint[nCntWayPoint].bInPlayer = 0;
 		WayPoint[nCntWayPoint].nWayPointNum = 9;
 		WayPoint[nCntWayPoint].bInPlayer = false;
 		WayPoint[nCntWayPoint].bBlock = false;
+		WayPoint[nCntWayPoint].bAdjacent = false;
 	}
 	//ê∂ê¨
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
@@ -178,7 +178,7 @@ void CWaypoint::Update(void)
 				WayPoint[nCntWayPoint].bAdjacent = true;
 			}
 
-			if (WayPoint[nCntWayPoint].nWayPointNum == nCntSplit && bLand == true)
+			if (WayPoint[nCntWayPoint].nWayPointNum == nCntSplit && bLand == true && WayPoint[nCntWayPoint].bAdjacent != true)
 			{//ó◊ê⁄É}ÉXÇ©ÇÁó£ÇÍÇƒÇ¢ÇÈ
 
 				if ((nCntWayPoint + 1) % SPLIT_WAYPOINT != 0 && WayPoint[nCntWayPoint + 1].nWayPointNum > nCntSplit)
@@ -443,6 +443,10 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 			m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
 			m_nNumWayPoint++;
 		}
+		if (m_nNumWayPoint > 8)
+		{
+			m_nNumWayPoint = 0;
+		}
 	}
 	return m_pWayPointPos[0];
 }
@@ -452,6 +456,11 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 //=============================================================================
 int CWaypoint::CntWayPoint(void)
 {
+	if (m_nNumWayPoint > 8)
+	{
+		m_nNumWayPoint = 0;
+	}
+
 	return m_nNumWayPoint;
 }
 
@@ -555,6 +564,10 @@ CWaypoint::WAYPOINT &CWaypoint::GetWayPoint(void)
 //=============================================================================
 int CWaypoint::GetNumTargetPoint(int nWayPoint)
 {
+	if (nWayPoint > MAX_WAYPOINT)
+	{
+		nWayPoint = 0;
+	}
 	return m_nTargetNum[nWayPoint];
 }
 
