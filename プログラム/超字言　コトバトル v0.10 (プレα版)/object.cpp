@@ -262,10 +262,13 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		else if (nAnswer == 47 || nAnswer == 48) { nAnswer = 17; }
 		if (m_nCounter % 780 == 0)
 		{//	•¶Žš‚ðo‚·
-			CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
-			scale.y = m_InitScale.y + 0.2f;
-			pos.y = m_InitPos.y + 4.0f;
-			m_nCounter = 0;
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+				scale.y = m_InitScale.y + 0.2f;
+				pos.y = m_InitPos.y + 4.0f;
+				m_nCounter = 0;
+			}
 		}
 		if(m_nCounter > 20)
 		{//	‘å‚«‚³‚ð–ß‚·
@@ -309,10 +312,13 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 
 		if (m_nCounter % 780 == 0)
 		{//	•¶Žš‚ðo‚·
-			CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
-			scale.y = m_InitScale.y + 0.2f;
-			pos.y = m_InitPos.y + 2.0f;
-			m_nCounter = 0;
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+				scale.y = m_InitScale.y + 0.2f;
+				pos.y = m_InitPos.y + 2.0f;
+				m_nCounter = 0;
+			}
 		}
 		if (m_nCounter > 20)
 		{//	‘å‚«‚³‚ð–ß‚·
