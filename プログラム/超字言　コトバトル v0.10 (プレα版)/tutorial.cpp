@@ -114,7 +114,7 @@ void CTutorial::Init(void)
 	if (m_pWall == NULL)
 	{
 		//	‰º‚Ì•Ç
-		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.25f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0,0);
 		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
