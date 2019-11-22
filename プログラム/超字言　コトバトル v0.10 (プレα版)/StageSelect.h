@@ -16,7 +16,8 @@ class CScene2D;
 class CFade;
 class CManager;
 class CSetObject;
-
+class CMeshField;
+class CWall;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -90,7 +91,7 @@ private:
 	void Replacement(SELECTICONSTATE state);							//ポリゴン位置の入れ替え処理
 	void SetStage(int nNumState);										//ステージ生成の処理
 	void LoadStage(int nNum);											//ステージのロード処理
-	void StageLoadState(int nSel);										//ステージロードの状態
+	void StageLoadState(STAGELOAD Load,int nSel);										//ステージロードの状態
 	void MaskFade(void);												//マスクのフェード処理
 
 	/* 変数 */
@@ -98,6 +99,8 @@ private:
 	static CScene2D *m_apSelect2D[MAX_STAGESELECT];					//選択肢2D
 	static CScene2D *m_pMask2D;										//カメラマスク
 	static int	m_nSelect;											// 選択している番号
+	static CMeshField *m_pMeshField;
+	static CWall *m_pWall;
 	SELECTTYPE m_type;												//選択されている番号の状態
 	char *m_pcStageName[MAX_STAGESELECT];							// ステージの名前保管
 	CSetObject *m_pObj;
@@ -112,7 +115,6 @@ private:
 	bool m_bRep;													//入れ替えを一回だけやるフラグ
 	D3DXVECTOR3 m_CameraRot, m_CameraPosV,m_CameraPosR;				//カメラ
 	bool m_bLoad;													//ステージの読み込みを１回だけやるフラグ
-	STAGELOAD m_LoadState;											//読み込み状態管理
 	MASKFADE m_MaskFade;											//マスクのフェード処理
 	float m_fMaskAlpha;
 };

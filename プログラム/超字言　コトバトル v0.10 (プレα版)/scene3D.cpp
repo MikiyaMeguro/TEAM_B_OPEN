@@ -283,6 +283,7 @@ void CScene3D::SetSizeY(float fHeight, float fWidth)
 	m_size.y = fHeight;
 	m_size.x = fWidth;
 
+	if (m_pVtxBuff == NULL) { return; }
 	// 頂点情報の設定
 	VERTEX_3D *pVtx;
 	// 頂点バッファをロックし、頂点データへのポインタを取得
