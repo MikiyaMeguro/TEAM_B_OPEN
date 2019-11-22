@@ -28,7 +28,7 @@
 #define MOVE_DEFAULT_COEFFICIENT (0.20f)	//デフォルトの移動にかかる係数
 #define SPIN_DEFAULT_COEFFICIENT (0.50f)	//デフォルトの回転にかかる係数
 #define CIRCLE_HOMING	 (3000)				//追尾範囲(上限)
-#define CIRCLE_ANGLE	(100)
+#define CIRCLE_ANGLE	(100000)
 #define PATROL_FLAME	(60)
 #define CAMERA_MOVE_SPEED (0.05f)
 #define NEAR_DISTANCE	(100)
@@ -676,14 +676,7 @@ void C3DCharactor::Action_CPU(void)
 		NotBullet_CPU();
 		break;
 	case  THINK_PICKUP:	//文字を拾う
-		if (m_bGoal == false)
-		{
-			WayPointRoute_CPU();
-		}
-		else
-		{
-			PickUP_CPU();
-		}
+		PickUP_CPU();
 		break;
 	case  THINK_ESCAPE:	//逃げる
 		Homing_CPU();
@@ -932,7 +925,7 @@ void C3DCharactor::Homing_CPU(void)
 	float fLength = CIRCLE_HOMING;
 	if (m_CpuThink == THINK_WATCH)
 	{//WATCHの時は常に見るように
-		fAngle += 50;
+		fAngle += 50000;
 		fLength = 0;
 	}
 	else if (m_CpuThink == THINK_ESCAPE)
@@ -976,8 +969,8 @@ void C3DCharactor::Homing_CPU(void)
 	}
 
 #if 1
-	if (fCompare < fAngle * fAngle && fCompare > fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == false)
-	{	// 距離内に入ったら
+	if (fCompare < 100000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == false)
+	{	// 距離内に入ったら逃げるための処理
 		if (m_CpuThink != THINK_WATCH)
 		{
 			// プレイヤーに近づける
@@ -988,12 +981,9 @@ void C3DCharactor::Homing_CPU(void)
 		TargetPos = D3DXVECTOR3((PlayerPos[nNearPlayer].x + Pos.x) / 2, (PlayerPos[nNearPlayer].y + Pos.y) / 2, (PlayerPos[nNearPlayer].z + Pos.z) / 2);
 		// 目的の角度
 		float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
-
 		// 差分
 		float fDiffAngle = fDestAngle - rot.y;
-
 		DiffAngle(fDiffAngle);
-
 		if (fDestAngle > D3DX_PI)
 		{
 			fDestAngle -= D3DX_PI * 2.0f;
@@ -1002,7 +992,6 @@ void C3DCharactor::Homing_CPU(void)
 		{
 			fDestAngle += D3DX_PI * 2.0f;
 		}
-
 	}
 #endif
 
@@ -1011,14 +1000,10 @@ void C3DCharactor::Homing_CPU(void)
 		TargetPos = D3DXVECTOR3((PlayerPos[nNearPlayer].x + Pos.x) / 2, (PlayerPos[nNearPlayer].y + Pos.y) / 2, (PlayerPos[nNearPlayer].z + Pos.z) / 2);
 		// 目的の角度
 		float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
-
 		// 差分
 		float fDiffAngle = fDestAngle - rot.y;
-
 		CUtilityMath::RotateNormarizePI(&fDiffAngle);
-
 		DiffAngle(fDiffAngle);
-
 		if (fDestAngle > D3DX_PI)
 		{
 			fDestAngle -= D3DX_PI * 2.0f;
@@ -1045,7 +1030,7 @@ void C3DCharactor::Homing_CPU(void)
 		//どのマスに移動するか決める
 		for (int nCnt = 0; nCnt < nCntWP; nCnt++)
 		{
-			// 距離を測る 一番近い文字とウェイポイントを比べてどのポイントに行くか決める
+			// 距離を測る 一番近い敵と自分の周りのウェイポイントを比べてどのポイントに行くか決める
 			float fCircle = ((PlayerPos[nNearPlayer].x - m_pWayPointPos[nCnt].x) * (PlayerPos[nNearPlayer].x - m_pWayPointPos[nCnt].x)) + ((PlayerPos[nNearPlayer].z - m_pWayPointPos[nCnt].z) * (PlayerPos[nNearPlayer].z - m_pWayPointPos[nCnt].z));
 			if (fCircle < fMinCircle)
 			{
@@ -1055,10 +1040,7 @@ void C3DCharactor::Homing_CPU(void)
 			}
 		}
 
-		//目標のマスの番号を渡す
-		m_pWayPoint->ReturnPointMove();
-		int nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
-
+		//目標のマスの位置を渡す
 		m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
 
 		// 目的の角度
@@ -1123,10 +1105,8 @@ void C3DCharactor::PickUP_CPU(void)
 			if (pScene->GetObjType() == CScene::OBJTYPE_WORD)
 			{// オブジェクトの種類を確かめる
 				CWord *pWord = ((CWord*)pScene);		// CWordへキャスト(型の変更)
-
-														// 距離を測る
+				// 距離を測る
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
-
 				if (fCircle < 10000000 && bTango == false)
 				{
 					float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
@@ -1146,7 +1126,6 @@ void C3DCharactor::PickUP_CPU(void)
 						break;
 					}
 				}
-
 				if (fCircle < 50000 && bTango == false)
 				{//範囲内に文字があった
 					nCntNearWord++;		//加算
@@ -1171,10 +1150,9 @@ void C3DCharactor::PickUP_CPU(void)
 	}
 	else if (nCntNearWord == 0)
 	{//近くに文字が一つもない
-		m_bWordNear = true;
+		m_bWordNear = false;
 		m_CpuThink = THINK_WAYPOINTMOVE;
 		m_nActionTimer = 60;
-		m_bWordNear = false;
 	}
 
 }
@@ -1300,41 +1278,34 @@ void C3DCharactor::WayPointMove_CPU(void)
 	if (m_MarkWayPoint.x + 10 > Pos.x && m_MarkWayPoint.x - 10 < Pos.x
 		&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z)
 	{
-		m_bGoal = true;
+		m_bRandomGoal = true;
 	}
 
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 
-	if (pInputKeyboard->GetTrigger(DIK_X))
-	{
-		m_bGoal = true;
-	}
-
-	while (m_bGoal == true)
+	while (m_bRandomGoal == true)
 	{
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
 		//移動可能なマスは何マスあるか
 		int nCntWP = m_pWayPoint->CntWayPoint();
 		//ランダムで決める
-		int nRand = rand() % nCntWP;
-		nRandPos = nRand;
+		int nRand = 0;
+
+		if (nCntWP != 0)
+		{
+			nRand = rand() % nCntWP;
+		}
+
 		if (m_pWayPointPos[nRand] != NULL)
 		{
 			m_MarkWayPoint = m_pWayPointPos[nRand];
-			m_bGoal = false;
+			m_bRandomGoal = false;
 			break;
 		}
 	}
-
-	//int nNextPoint = 0;
-	//nNextPoint = m_pWayPoint->GetNumTargetPoint(nRandPos);
-	//m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
-
-
-
 
 	// 目的の角度
 	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
@@ -1378,100 +1349,99 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	//		m_bNearWard = true;
 	//	}
 	//}
-
-
 	//	// 距離を測る 一番近い文字と自分の距離
 	//float fCircleWard = ((Pos.x - m_MarkWardPos.x) * (Pos.x - m_MarkWardPos.x)) + ((Pos.z - m_MarkWardPos.z) * (Pos.z - m_MarkWardPos.z));
 	//if (fCircleWard < 1000 && m_bBlock == false)
 	//{
 	//	m_bNearWard = true;
 	//}
-
-
 	////目標文字の近く
 	//if (m_MarkWardPos.x + 10 > Pos.x && m_MarkWardPos.x - 10 < Pos.x
 	//	&& m_MarkWardPos.z + 10 > Pos.z && m_MarkWardPos.z - 10 < Pos.z)
 	//{	//文字を拾った
 	//	m_bNearWard = false;
 	//}
-	//目標座標
-	if (m_MarkWayPoint.x + 10 > Pos.x && m_MarkWayPoint.x - 10 < Pos.x
-		&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z)
-	{
+
+	float fCircle = ((Pos.x - m_MarkWayPoint.x) * (Pos.x - m_MarkWayPoint.x)) + ((Pos.z - m_MarkWayPoint.z) * (Pos.z - m_MarkWayPoint.z));
+
+	if (fCircle < 400 && m_bNearWard == false)
+	{	//文字の近くのマスまで移動した
 		m_bSearch = false;
-		m_bGoal = true;
+		m_bNearWard = true;
+	}
+	else if (fCircle < 100 && m_bNearWard == true)
+	{
+		m_bNearWard = false;
 	}
 
-	if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
-	{
-		//位置情報を取得
-		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
-		//移動可能なマスは何マスあるか
-		int nCntWP = m_pWayPoint->CntWayPoint();
-		//どのマスに移動するか決める
-		for (int nCnt = 0; nCnt < nCntWP; nCnt++)
-		{
-			// 距離を測る 一番近い文字とウェイポイントを比べてどのポイントに行くか決める
-			float fCircle = ((m_MarkWardPos.x - m_pWayPointPos[nCnt].x) * (m_MarkWardPos.x - m_pWayPointPos[nCnt].x)) + ((m_MarkWardPos.z - m_pWayPointPos[nCnt].z) * (m_MarkWardPos.z - m_pWayPointPos[nCnt].z));
-			if (fCircle < fMinCircle)
-			{
-				fMinCircle = fCircle;
-				//目標のマス番号を記憶
-				m_nTargetWP = nCnt;
-				m_bSearch = true;
-			}
-		}
-	}
+	//目標座標
+	//if (m_MarkWayPoint.x + 10 > Pos.x && m_MarkWayPoint.x - 10 < Pos.x
+	//	&& m_MarkWayPoint.z + 10 > Pos.z && m_MarkWayPoint.z - 10 < Pos.z)
+	//{
+	//	m_bSearch = false;
+	//	m_bGoal = true;
+	//}
+
+	//if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
+	//{
+	//	//位置情報を取得
+	//	m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
+	//	//移動可能なマスは何マスあるか
+	//	int nCntWP = m_pWayPoint->CntWayPoint();
+	//	//どのマスに移動するか決める
+	//	for (int nCnt = 0; nCnt < nCntWP; nCnt++)
+	//	{
+	//		// 距離を測る 一番近い文字とウェイポイントを比べてどのポイントに行くか決める
+	//		float fCircle = ((m_MarkWardPos.x - m_pWayPointPos[nCnt].x) * (m_MarkWardPos.x - m_pWayPointPos[nCnt].x)) + ((m_MarkWardPos.z - m_pWayPointPos[nCnt].z) * (m_MarkWardPos.z - m_pWayPointPos[nCnt].z));
+	//		if (fCircle < fMinCircle)
+	//		{
+	//			fMinCircle = fCircle;
+	//			//目標のマス番号を記憶
+	//			m_nTargetWP = nCnt;
+	//			m_bSearch = true;
+	//		}
+	//	}
+	//}
 
 	//移動処理
-	if (m_bGoal == true)
-	{
-		//目標のマスの番号を渡す
-		m_pWayPoint->ReturnPointMove();
-		int nNextPoint = 0;
-		nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
-		int nNowWp = 0;
-		nNowWp = m_pWayPoint->GetNowWP();
+	//目標のマスの番号を渡す
+	m_pWayPoint->ReturnPointMove();
+	int nNextPoint = 0;
+	nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
+	int nNowWp = 0;
+	nNowWp = m_pWayPoint->GetNowWP();
+	//目標についていたら
+	//if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
+	//{//自分がブロックマスにいるかの判定
+	//	m_CpuThink = THINK_WAYPOINTMOVE;
+	//	m_nActionTimer = 60;
+	//	m_bGoal = false;
+	//}
 
-		//目標についていたら
-		//if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
-		//{//自分がブロックマスにいるかの判定
-		//	m_CpuThink = THINK_WAYPOINTMOVE;
-		//	m_nActionTimer = 60;
-		//	m_bGoal = false;
-		//}
-		if (m_pWayPoint->GetWPbBlock(nNextPoint) == true && m_bNearWard == false)
-		{//目標マスがブロック　近くに文字がない
-			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
-			//m_bBlock = true;
-			m_bSearch = true;
-			m_bGoal = false;
-		}
-		else if (m_pWayPoint->GetWPbBlock(nNextPoint) == false && m_bNearWard == false)
-		{//目標マスがブロックではない　近くに文字がない
-			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
-			m_bSearch = true;
-			m_bGoal = false;
-		}
-		//else if (m_bNearWard == false && m_bBlock == false)
-		//{//近くに文字がない　ブロックマスではない
-		//	m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
-		//	//m_bSearch = true;
-		//	m_bGoal = false;
-		//}
-		//else if (m_bNearWard == true || m_bBlock == false)
-		//{//近くに文字がある　ブロックマスではない
-		//	m_MarkWayPoint = m_MarkWardPos;
-		//	//m_bSearch = true;
-		//	m_bGoal = false;
-		//}
-		//else
-		//{
-		//	WayPointMove_CPU();
-		//}
+	if (m_pWayPoint->GetWPbBlock(nNextPoint) == true && m_bNearWard == false)
+	{//目標マスがブロック　近くに文字がない
+		m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
+		m_bSearch = true;
 	}
+	else if (m_pWayPoint->GetWPbBlock(nNextPoint) == false && m_bNearWard == false)
+	{//目標マスがブロックではない　近くに文字がない
+		m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
+		m_bSearch = true;
+	}
+	//else if (m_bNearWard == false && m_bBlock == false)
+	//{//近くに文字がない　ブロックマスではない
+	//	m_MarkWayPoint = m_pWayPointPos[m_nTargetWP];
+	//}
+	else if (m_bNearWard == true || m_bBlock == false)
+	{//近くに文字がある　ブロックマスではない
+		m_MarkWayPoint = m_MarkWardPos;
+	}
+	//else
+	//{
+	//	WayPointMove_CPU();
+	//}
 
-	// 目的の角度
+// 目的の角度
 	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
 	// 差分
 	float fDiffAngle = fDestAngle - rot.y;
@@ -1479,6 +1449,7 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	//移動
 	move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+
 
 }
 

@@ -43,7 +43,7 @@ public:
 	D3DXVECTOR3 GetPos(void);
 
 	static void LoadFile(char *pFileName);
-
+	void UnLoadObj(void);
 	static char *ReadLine(FILE *pFile, char *pDst);	//1s“Ç‚İ‚İ
 	static char *GetLineTop(char *pStr);			//s‚Ìæ“ª‚ğæ“¾
 	static int  PopString(char *pStr, char *pDest);	//s‚ÌÅŒã‚ğØ‚èÌ‚Ä

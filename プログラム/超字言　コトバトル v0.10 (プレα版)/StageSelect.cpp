@@ -7,6 +7,7 @@
 #include "StageSelect.h"
 #include "manager.h"
 #include "light.h"
+#include "CameraManager.h"
 #include "camera.h"
 #include "scene3D.h"
 #include "game.h"
@@ -16,6 +17,7 @@
 #include "input.h"
 #include "InputKeyboard.h"
 #include "SetObject.h"
+#include "object.h"
 #include <time.h>
 
 //============================================================================
@@ -26,15 +28,19 @@
 #define DEFAULT_SIZE (150.0f)									//ポリゴンサイズの基本の大きさ
 #define DEFAULT_POS (D3DXVECTOR3(SIZE_X,SIZE_Y,0.0f))			//初期化位置
 #define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))				//初期化回転
-#define DEFAULT_COL (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))			//初期化色
+#define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))		//初期化色_白
 #define STAGESELCHOICE_POS	(D3DXVECTOR3(300.0f,300.0f,0.0f))	//選択肢ポリゴンの位置
 #define STAGESELCHOICE_INTERVAL (350.0f)						//選択肢ポリゴン同士の間隔
 #define STAGESEL_DIFF (0.3f)									//移動の変化量
+#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
+#define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")
+
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
 CScene2D *CStageSelect::m_apScene2D[MAX_STAGESELECT_TEX] = {};
 CScene2D *CStageSelect::m_apSelect2D[MAX_STAGESELECT] = {};
+CScene2D *CStageSelect::m_pMask2D = NULL;
 int	CStageSelect::m_nSelect = 0;
 //=============================================================================
 //	コンストラクタ
@@ -45,11 +51,18 @@ CStageSelect::CStageSelect()
 	m_type = SELECTTYPE_SELECT_MACHINE;
 	m_MoveIconState = SELECTICON_STATE_NONE;
 	m_bRep = false;
-
+	m_bLoad = false;
+	m_CameraRot = DEFAULT_ROT;
+	m_CameraPosV = DEFAULT_POS;
+	m_CameraPosR = DEFAULT_POS;
+	m_LoadState = STAGELOAD_NONE;
+	m_MaskFade = MASKFADE_NONE;
+	m_fMaskAlpha = 0.05f;
+	m_pObj = NULL;
 	for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 	{
 		m_SelectPos[nCnt] = DEFAULT_POS;
-		m_IconCol[nCnt] = DEFAULT_COL;
+		m_IconCol[nCnt] = DEFAULT_COL_WHITE;
 		m_fWidth[nCnt] = 0.0f;
 		m_fHeight[nCnt] = 0.0f;
 	}
@@ -70,6 +83,22 @@ void CStageSelect::Init(void)
 {
 	/*2Dポリゴンの初期設定*/
 	InitPolygon();
+
+	//カメラの設定
+	CCameraManager *pCameraManager = CManager::GetCameraManager();
+	pCameraManager->CreateCamera("STAGESELECT_CAMERA", CCamera::TYPE_SPECTOR, D3DXVECTOR3(20.0f, 1500.0f, 110.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1000.0f);
+	pCameraManager->SetCameraViewPort("STAGESELECT_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+	CCamera *pCamera = pCameraManager->GetCamera("STAGESELECT_CAMERA");
+	if (pCamera != NULL)
+	{
+		pCamera->SetPosR(D3DXVECTOR3(20.0f, 40.0f, 0.0f));
+	}
+
+	m_pcStageSelect[0] = MACHINE_STAGE_MACHINE;
+	m_pcStageSelect[1] = MACHINE_STAGE_WEATHER;
+	m_pcStageSelect[2] = MACHINE_STAGE_MACHINE;
+
 }
 
 //=============================================================================
@@ -88,38 +117,60 @@ void CStageSelect::Update(void)
 {
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
+	CCameraManager *pCameraManager = CManager::GetCameraManager();
+	CCamera *pCamera = pCameraManager->GetCamera("STAGESELECT_CAMERA");
 
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
-
-	//任意のキーENTER
-	if (CCommand::GetCommand("DECISION"))
+	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
-	}
-	/* 選択処理 */
-	if (CCommand::GetCommand("RIGHT"))
-	{//右
-		//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
-		m_nSelect = (m_nSelect + 1) % MAX_STAGESELECT;
-		m_MoveIconState = SELECTICON_STATE_MOVE_R;
-	}
-	else if (CCommand::GetCommand("LEFT"))
-	{//左
-		//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
-		m_nSelect = (m_nSelect + (MAX_STAGESELECT - 1)) % MAX_STAGESELECT;
-		m_MoveIconState = SELECTICON_STATE_MOVE_L;
-	}
 
-	//選択番号を状態変数に反映し、状態にあわせて処理を行う
-	ProductionIcon(m_MoveIconState, m_type);
-	if (m_MoveIconState == SELECTICON_STATE_NONE)
-	{//移動が完了したら
-		m_type = (SELECTTYPE)m_nSelect;
-		Selecttype(m_type);
-	}
+		/* 選択処理 */
+		if (CCommand::GetCommand("RIGHT"))
+		{//右
+			if (m_MoveIconState == SELECTICON_STATE_NONE)
+			{//移動処理中に数値が変わらないようにする
+				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+				m_nSelect = (m_nSelect + 1) % MAX_STAGESELECT;
+				m_MoveIconState = SELECTICON_STATE_MOVE_R;
+			}
+		}
+		else if (CCommand::GetCommand("LEFT"))
+		{//左
+			if (m_MoveIconState == SELECTICON_STATE_NONE)
+			{//移動処理中に数値が変わらないようにする
+				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+				m_nSelect = (m_nSelect + (MAX_STAGESELECT - 1)) % MAX_STAGESELECT;
+				m_MoveIconState = SELECTICON_STATE_MOVE_L;
+			}
+		}
 
+		//選択番号を状態変数に反映し、状態にあわせて処理を行う
+		ProductionIcon(m_MoveIconState, m_type);
+		if (m_MoveIconState == SELECTICON_STATE_NONE)
+		{//移動が完了したら
+			m_type = (SELECTTYPE)m_nSelect;
+			Selecttype(m_type, pFade, pManager);
+		}
+		if (pCamera != NULL)
+		{
+			m_CameraRot.y = pCamera->GetRotation().y;
+			m_CameraPosV = pCamera->GetPosV();
+			m_CameraPosR = pCamera->GetPosR();
+			m_CameraRot.y += 0.001f;
+			m_CameraPosV.x = m_CameraPosR.x + sinf(m_CameraRot.y - D3DX_PI) * pCamera->GetLength();
+			m_CameraPosV.z = m_CameraPosR.z + cosf(m_CameraRot.y - D3DX_PI) * pCamera->GetLength();
+
+			pCamera->SetRotation(D3DXVECTOR3(0.0f, m_CameraRot.y, 0.0f));
+			pCamera->SetPosV(m_CameraPosV);
+
+		}
+		/* マスクのフェード処理 */
+		MaskFade();
+		/* ステージ読み込み */
+		StageLoadState(m_nSelect);
+	}
 	/* 帯のテクスチャスクロール */
 	ScrollMenu(STAGESELECTTYPE_BAND_R, 0.005f);
 	ScrollMenu(STAGESELECTTYPE_BAND_L, -0.005f);
@@ -128,7 +179,7 @@ void CStageSelect::Update(void)
 	CDebugProc::Print("c", "ステージセレクト");
 	CDebugProc::Print("cn", "m_MoveIconState:", m_MoveIconState);
 	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
-
+	CDebugProc::Print("cf", "カメラRot : ", m_CameraRot.y);
 #endif
 }
 
@@ -198,6 +249,9 @@ void CStageSelect::InitPolygon(void)
 	m_apScene2D[STAGESELECTTYPE_BAND_R] = CScene2D::Create(D3DXVECTOR3(1230.0f, SIZE_Y, 0.0f), "STAGESEL_BAND", 4);
 	m_apScene2D[STAGESELECTTYPE_BAND_R]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*3.5f);
 
+	m_pMask2D = CScene2D::Create(D3DXVECTOR3(SIZE_X, SIZE_Y, 0.0f), " ",2);
+	m_pMask2D->SetWidthHeight(DEFAULT_SIZE*5.2f, DEFAULT_SIZE*4.0f);
+	m_pMask2D->SetCol(DEFAULT_COL_WHITE);
 }
 //=============================================================================
 // 横の文字スクロール処理
@@ -214,17 +268,40 @@ void CStageSelect::ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed)
 //=============================================================================
 // 選択状態の管理
 //=============================================================================
-void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE)
+void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CManager *pManager)
 {
+	if (m_bLoad == false)
+	{
+		if (m_MaskFade == MASKFADE_NONE)
+		{
+			m_LoadState = STAGELOAD_LOAD;
+			m_bLoad = true;
+			m_MaskFade = MASKFADE_OUT;
+		}
+	}
 	switch (TYPE)
 	{
-	case SELECTTYPE_SELECT_MACHINE:	//機械		
+	case SELECTTYPE_SELECT_MACHINE:	//機械	
+	
+		//任意のキーENTER
+		if (CCommand::GetCommand("DECISION") == true)
+		{
+			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+		}
 		break;
 
 	case SELECTTYPE_SELECT_WEATHER:	//天候
+		if (CCommand::GetCommand("DECISION") == true)
+		{
+			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+		}
 		break;
 
 	case SELECTTYPE_SELECT_TERRAIN:	//地形
+		if (CCommand::GetCommand("DECISION") == true)
+		{
+			//pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+		}
 		break;
 	}
 }
@@ -243,31 +320,35 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 	case SELECTICON_STATE_NONE:
 		break;
 
-	case SELECTICON_STATE_MOVE_R:
+	case SELECTICON_STATE_MOVE_R:			//右回転
 		if (m_bRep == false)
-		{
+		{//最初の１回だけ数値の入れ替えを行う
 			Replacement(state);
 			m_bRep = true;
+			m_MaskFade = MASKFADE_IN;
 		}
 		for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 		{
+			//移動後と移動前の位置とサイズの差を計算する
 			fDiffpos[nCnt] = m_SelectPos[nCnt].x - m_apSelect2D[nCnt]->GetPosition().x;
 			fDiffScal[nCnt] = D3DXVECTOR2(m_fWidth[nCnt] - m_apSelect2D[nCnt]->GetSize(0), m_fHeight[nCnt] - m_apSelect2D[nCnt]->GetSize(1));
 			if (fDiffpos[nCnt] <= 0.0f)
-			{
+			{//負の値だったら正の値に変換
 				fDiffpos[nCnt] *= -1.0f;
 			}
 			if (fScal[nCnt].x <= 0.0f)
-			{
+			{//負の値だったら正の値に変換
 				fScal[nCnt].x *= -1.0f;
 			}
 			if (fScal[nCnt].y <= 0.0f)
-			{
+			{//負の値だったら正の値に変換
 				fScal[nCnt].y *= -1.0f;
 			}
+			//差から移動量を計算
 			fmove[nCnt] = fDiffpos[nCnt] - (fDiffpos[nCnt] * STAGESEL_DIFF);
 			fScal[nCnt] = D3DXVECTOR2(fDiffScal[nCnt].x - (fDiffScal[nCnt].x*STAGESEL_DIFF), fDiffScal[nCnt].y - (fDiffScal[nCnt].y*STAGESEL_DIFF));
 
+			//位置を反映
 			m_apSelect2D[nCnt]->SetPosition(D3DXVECTOR3(m_SelectPos[nCnt].x + fmove[nCnt], m_SelectPos[nCnt].y, m_SelectPos[nCnt].z));
 			m_apSelect2D[nCnt]->SetWidthHeight(m_fWidth[nCnt] - fScal[nCnt].x, m_fHeight[nCnt] - fScal[nCnt].y);
 			m_apSelect2D[nCnt]->SetCol(m_IconCol[nCnt]);
@@ -279,37 +360,35 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 		}
 		break;
 
-	case SELECTICON_STATE_MOVE_L:
+	case SELECTICON_STATE_MOVE_L:			//左回転
 		if (m_bRep == false)
-		{
+		{//最初の１回だけ数値の入れ替えを行う
 			Replacement(state);
 			m_bRep = true;
-		}
-
-		if (m_bRep == false)
-		{
-			Replacement(state);
-			m_bRep = true;
+			m_MaskFade = MASKFADE_IN;
 		}
 		for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 		{
+			//移動後と移動前の位置とサイズの差を計算する
 			fDiffpos[nCnt] = m_SelectPos[nCnt].x - m_apSelect2D[nCnt]->GetPosition().x;
 			fDiffScal[nCnt] = D3DXVECTOR2(m_fWidth[nCnt] - m_apSelect2D[nCnt]->GetSize(0), m_fHeight[nCnt] - m_apSelect2D[nCnt]->GetSize(1));
 			if (fDiffpos[nCnt] <= 0.0f)
-			{
+			{//負の値だったら正の値に変換
 				fDiffpos[nCnt] *= -1.0f;
 			}
 			if (fScal[nCnt].x <= 0.0f)
-			{
+			{//負の値だったら正の値に変換
 				fScal[nCnt].x *= -1.0f;
 			}
 			if (fScal[nCnt].y <= 0.0f)
-			{
+			{//負の値だったら正の値に変換
 				fScal[nCnt].y *= -1.0f;
 			}
+			//差から移動量を計算
 			fmove[nCnt] = fDiffpos[nCnt] - (fDiffpos[nCnt] * STAGESEL_DIFF);
 			fScal[nCnt] = D3DXVECTOR2(fDiffScal[nCnt].x - (fDiffScal[nCnt].x*STAGESEL_DIFF), fDiffScal[nCnt].y - (fDiffScal[nCnt].y*STAGESEL_DIFF));
-
+			
+			//位置を反映
 			m_apSelect2D[nCnt]->SetPosition(D3DXVECTOR3(m_SelectPos[nCnt].x - fmove[nCnt], m_SelectPos[nCnt].y, m_SelectPos[nCnt].z));
 			m_apSelect2D[nCnt]->SetWidthHeight(m_fWidth[nCnt] - fScal[nCnt].x, m_fHeight[nCnt] - fScal[nCnt].y);
 			m_apSelect2D[nCnt]->SetCol(m_IconCol[nCnt]);
@@ -322,7 +401,7 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 		break;
 
 
-	case SELECTICON_STATE_STOP:
+	case SELECTICON_STATE_STOP:				//回転終了
 		m_bRep = false;
 		state = SELECTICON_STATE_NONE;
 		break;
@@ -337,7 +416,7 @@ void CStageSelect::Replacement(SELECTICONSTATE state)
 	/* 仮置き用変数 */
 	D3DXVECTOR3 Replacement = DEFAULT_POS;
 	float RepW = 0.0f, RepH = 0.0f;
-	D3DXCOLOR RepCol = DEFAULT_COL;
+	D3DXCOLOR RepCol = DEFAULT_COL_WHITE;
 
 	switch (state)
 	{
@@ -385,6 +464,87 @@ void CStageSelect::Replacement(SELECTICONSTATE state)
 		m_IconCol[1] = m_IconCol[2];
 		m_IconCol[2] = m_IconCol[0];
 		m_IconCol[0] = RepCol;
+		break;
+	}
+}
+//=============================================================================
+// ステージ生成の処理
+//=============================================================================
+void CStageSelect::SetStage(int nNumState)
+{
+	m_pObj->LoadFile(m_pcStageSelect[nNumState]);
+}
+//=============================================================================
+// ステージ読み込み
+//=============================================================================
+void CStageSelect::LoadStage(int nNum)
+{
+	m_pObj = CSetObject::Create();
+	SetStage(nNum);
+
+}
+//=============================================================================
+// ステージの読み込み状況
+//=============================================================================
+void CStageSelect::StageLoadState(int nSel)
+{
+	switch (m_LoadState)
+	{
+	case STAGELOAD_NONE:
+		break;
+
+	case STAGELOAD_LOAD:
+		LoadStage(m_nSelect);
+		m_LoadState = STAGELOAD_NONE;
+		break;
+
+	case STAGELOAD_UNLOAD:
+		if (m_pObj != NULL)
+		{
+			m_pObj->UnLoadObj();
+		}
+		m_LoadState = STAGELOAD_NONE;
+		break;
+	}
+}
+//=============================================================================
+// マスクのフェード処理
+//=============================================================================
+void CStageSelect::MaskFade(void)
+{
+	D3DXCOLOR col = m_pMask2D->GetCol();
+
+	switch (m_MaskFade)
+	{
+	case MASKFADE_NONE:
+		break;
+
+	case MASKFADE_IN:
+		if (col.a >= 1.0f)
+		{
+			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, 1.0f));
+			m_LoadState = STAGELOAD_UNLOAD;
+			m_bLoad = false;
+			m_MaskFade = MASKFADE_NONE;
+		}
+		else
+		{
+			col.a += m_fMaskAlpha;
+			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, col.a));
+		}
+		break;
+
+	case MASKFADE_OUT:
+		if (col.a <= 0.0f)
+		{
+			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, 0.0f));
+			m_MaskFade = MASKFADE_NONE;
+		}
+		else
+		{
+			col.a -= m_fMaskAlpha;
+			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, col.a));
+		}
 		break;
 	}
 }

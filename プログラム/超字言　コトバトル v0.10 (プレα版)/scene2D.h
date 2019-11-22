@@ -49,6 +49,7 @@ public:
 	void SetWidthHeight(float fWidth, float fHeight);
 	void SetRIghtLeft(float fRight, float fLeft);
 	void SetCol(D3DXCOLOR col);
+	D3DXCOLOR GetCol(void) { return m_Col; }
 	void SetTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax);
 	LPDIRECT3DVERTEXBUFFER9 GetBuff(void) { return m_pVtxBuff; }
 	void SetBuff(LPDIRECT3DVERTEXBUFFER9 pVtxBuff) { m_pVtxBuff = pVtxBuff; }
