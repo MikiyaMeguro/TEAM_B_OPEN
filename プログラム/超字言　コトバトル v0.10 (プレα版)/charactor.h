@@ -219,9 +219,9 @@ private:
 	bool m_bSearch;					//移動先探索フラグ
 	bool m_bNearWard;				//文字が近くにあるフラグ
 	bool m_bBlock;					//移動先障害物フラグ
+	int m_nTimerMove;				//移動先に行けないときのタイマー
 	int	m_nTargetWP;				//目標のマス番号
 	D3DXVECTOR3 m_MarkWardPos;		//移動先の位置
-
 	int nTestCnt = 0;
 public:
 	bool m_bFront;
