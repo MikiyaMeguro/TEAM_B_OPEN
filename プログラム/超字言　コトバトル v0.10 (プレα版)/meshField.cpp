@@ -367,6 +367,7 @@ void CMeshField::Update(void)
 
 #if(1)
 
+	if (m_pVtxBuff == NULL) { return; }
 	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
 
 	// 頂点バッファをロックし、頂点データへのポインタを取得

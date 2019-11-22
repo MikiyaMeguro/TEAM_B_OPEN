@@ -18,6 +18,8 @@
 #include "InputKeyboard.h"
 #include "SetObject.h"
 #include "object.h"
+#include "meshField.h"
+#include "wall.h"
 #include <time.h>
 
 //============================================================================
@@ -41,6 +43,8 @@
 CScene2D *CStageSelect::m_apScene2D[MAX_STAGESELECT_TEX] = {};
 CScene2D *CStageSelect::m_apSelect2D[MAX_STAGESELECT] = {};
 CScene2D *CStageSelect::m_pMask2D = NULL;
+CMeshField *CStageSelect::m_pMeshField = NULL;
+CWall *CStageSelect::m_pWall = NULL;
 int	CStageSelect::m_nSelect = 0;
 //=============================================================================
 //	コンストラクタ
@@ -55,7 +59,6 @@ CStageSelect::CStageSelect()
 	m_CameraRot = DEFAULT_ROT;
 	m_CameraPosV = DEFAULT_POS;
 	m_CameraPosR = DEFAULT_POS;
-	m_LoadState = STAGELOAD_NONE;
 	m_MaskFade = MASKFADE_NONE;
 	m_fMaskAlpha = 0.05f;
 	m_pObj = NULL;
@@ -86,7 +89,7 @@ void CStageSelect::Init(void)
 
 	//カメラの設定
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
-	pCameraManager->CreateCamera("STAGESELECT_CAMERA", CCamera::TYPE_SPECTOR, D3DXVECTOR3(20.0f, 1500.0f, 110.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1000.0f);
+	pCameraManager->CreateCamera("STAGESELECT_CAMERA", CCamera::TYPE_SPECTOR, D3DXVECTOR3(20.0f, 1500.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1000.0f);
 	pCameraManager->SetCameraViewPort("STAGESELECT_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	CCamera *pCamera = pCameraManager->GetCamera("STAGESELECT_CAMERA");
@@ -168,8 +171,6 @@ void CStageSelect::Update(void)
 		}
 		/* マスクのフェード処理 */
 		MaskFade();
-		/* ステージ読み込み */
-		StageLoadState(m_nSelect);
 	}
 	/* 帯のテクスチャスクロール */
 	ScrollMenu(STAGESELECTTYPE_BAND_R, 0.005f);
@@ -270,15 +271,6 @@ void CStageSelect::ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed)
 //=============================================================================
 void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CManager *pManager)
 {
-	if (m_bLoad == false)
-	{
-		if (m_MaskFade == MASKFADE_NONE)
-		{
-			m_LoadState = STAGELOAD_LOAD;
-			m_bLoad = true;
-			m_MaskFade = MASKFADE_OUT;
-		}
-	}
 	switch (TYPE)
 	{
 	case SELECTTYPE_SELECT_MACHINE:	//機械	
@@ -303,6 +295,22 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 			//pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 		}
 		break;
+	}
+	if (m_bLoad == false)
+	{
+		if (m_MaskFade == MASKFADE_NONE)
+		{
+			StageLoadState(STAGELOAD_LOAD, m_nSelect);
+			m_bLoad = true;
+		}
+	}
+	else if (m_bLoad == true)
+	{
+		if (m_MaskFade == MASKFADE_IN)
+		{
+			StageLoadState(STAGELOAD_UNLOAD, m_nSelect);
+			m_bLoad = false;
+		}
 	}
 }
 //=============================================================================
@@ -479,31 +487,68 @@ void CStageSelect::SetStage(int nNumState)
 //=============================================================================
 void CStageSelect::LoadStage(int nNum)
 {
-	m_pObj = CSetObject::Create();
-	SetStage(nNum);
+	if (m_pObj == NULL)
+	{
+		m_pObj = CSetObject::Create();
+		SetStage(nNum);
+	}
 
 }
 //=============================================================================
 // ステージの読み込み状況
 //=============================================================================
-void CStageSelect::StageLoadState(int nSel)
+void CStageSelect::StageLoadState(STAGELOAD Load, int nSel)
 {
-	switch (m_LoadState)
+	switch (Load)
 	{
 	case STAGELOAD_NONE:
 		break;
 
 	case STAGELOAD_LOAD:
 		LoadStage(m_nSelect);
-		m_LoadState = STAGELOAD_NONE;
+		//switch (m_nSelect)
+		//{
+		//case SELECTTYPE_SELECT_MACHINE:
+		if (m_pMeshField == NULL)
+		{
+			m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		}
+		if (m_pWall == NULL)
+		{
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+		}
+		//	break;
+		//case SELECTTYPE_SELECT_WEATHER:
+		//	break;
+		//case SELECTTYPE_SELECT_TERRAIN:
+		//	break;
+		//}
+		m_MaskFade = MASKFADE_OUT;
 		break;
 
 	case STAGELOAD_UNLOAD:
 		if (m_pObj != NULL)
 		{
 			m_pObj->UnLoadObj();
+			m_pObj = NULL;
 		}
-		m_LoadState = STAGELOAD_NONE;
+		if (m_pMeshField != NULL)
+		{
+			m_pMeshField->Uninit();
+			m_pMeshField = NULL;
+		}
+		if (m_pWall != NULL)
+		{
+			m_pWall->Uninit();
+			m_pWall = NULL;
+		}
 		break;
 	}
 }
@@ -523,9 +568,8 @@ void CStageSelect::MaskFade(void)
 		if (col.a >= 1.0f)
 		{
 			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, 1.0f));
-			m_LoadState = STAGELOAD_UNLOAD;
-			m_bLoad = false;
 			m_MaskFade = MASKFADE_NONE;
+			m_bLoad = false;
 		}
 		else
 		{
