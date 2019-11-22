@@ -1,0 +1,128 @@
+#============================================================
+#
+# [文字配置ツール]スクリプトファイル 
+#  Author : MIKIYA MEGURO
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------
+#         文字配置数 ※プログラム内でも変更してください
+#------------------------------------------------------------
+NUM_MODEL = 24
+
+#------------------------------------------------------------
+#                      モデル配置情報
+#------------------------------------------------------------
+
+#---------------------------
+#  X : 1～10 / Z : 1～10 6個
+#----------------------------
+
+MODELSET
+	POS = -310.0 0.0 280.0
+END_MODELSET
+
+MODELSET
+	POS = -250.0 0.0 280.0
+END_MODELSET
+
+MODELSET
+	POS = -310.0 0.0 240.0
+END_MODELSET
+
+MODELSET
+	POS = -260.0 0.0 40.0
+END_MODELSET
+
+MODELSET
+	POS = -40.0 0.0 220.0
+END_MODELSET
+
+MODELSET
+	POS = -40.0 0.0 40.0
+END_MODELSET
+
+#---------------------------
+#  X : 11～20 / Z : 1～10 6個
+#----------------------------
+MODELSET
+	POS = 310.0 0.0 280.0
+END_MODELSET
+
+MODELSET
+	POS = 250.0 0.0 280.0
+END_MODELSET
+
+MODELSET
+	POS = 310.0 0.0 240.0
+END_MODELSET
+
+MODELSET
+	POS = 220.0 0.0 40.0
+END_MODELSET
+
+MODELSET
+	POS = 40.0 0.0 220.0
+END_MODELSET
+
+MODELSET
+	POS = 40.0 0.0 40.0
+END_MODELSET
+
+
+#---------------------------
+#  X : 1～10 / Z : 11～20 6個
+#----------------------------
+MODELSET
+	POS = -310.0 0.0 -280.0
+END_MODELSET
+
+MODELSET
+	POS = -250.0 0.0 -280.0
+END_MODELSET
+
+MODELSET
+	POS = -310.0 0.0 -240.0
+END_MODELSET
+
+MODELSET
+	POS = -220.0 0.0 -40.0
+END_MODELSET
+
+MODELSET
+	POS = -40.0 0.0 -220.0
+END_MODELSET
+
+MODELSET
+	POS = -40.0 0.0 -40.0
+END_MODELSET
+
+#---------------------------
+#  X : 11～20 / Z : 11～20 6個
+#----------------------------
+MODELSET
+	POS = 310.0 0.0 -280.0
+END_MODELSET
+
+MODELSET
+	POS = 250.0 0.0 -280.0
+END_MODELSET
+
+MODELSET
+	POS = 310.0 0.0 -240.0
+END_MODELSET
+
+MODELSET
+	POS = 260.0 0.0 -40.0
+END_MODELSET
+
+MODELSET
+	POS = 40.0 0.0 -220.0
+END_MODELSET
+
+MODELSET
+	POS = 40.0 0.0 -40.0
+END_MODELSET
+
+END_SCRIPT		# この行は絶対消さないこと！
