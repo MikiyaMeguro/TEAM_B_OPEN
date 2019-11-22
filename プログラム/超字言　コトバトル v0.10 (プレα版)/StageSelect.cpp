@@ -86,7 +86,7 @@ void CStageSelect::Init(void)
 
 	//ƒJƒƒ‰‚ÌÝ’è
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
-	pCameraManager->CreateCamera("STAGESELECT_CAMERA", CCamera::TYPE_SPECTOR, D3DXVECTOR3(20.0f, 100.0f, 110.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1000.0f);
+	pCameraManager->CreateCamera("STAGESELECT_CAMERA", CCamera::TYPE_SPECTOR, D3DXVECTOR3(20.0f, 1500.0f, 110.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 1000.0f);
 	pCameraManager->SetCameraViewPort("STAGESELECT_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	CCamera *pCamera = pCameraManager->GetCamera("STAGESELECT_CAMERA");
