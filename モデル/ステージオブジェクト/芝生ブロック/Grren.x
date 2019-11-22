@@ -289,7 +289,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game105\\Desktop\\ステー時用\\芝生ブロック\\Grren.png";
+    "data\\TEXTURE\\UV\\Grren.png";
    }
   }
  }
