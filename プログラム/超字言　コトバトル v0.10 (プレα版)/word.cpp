@@ -11,6 +11,7 @@
 #include "InputKeyboard.h"
 #include "PlayerNumSelect.h"
 #include "time.h"
+#include "tutorial.h"
 
 #include "debugProc.h"
 
@@ -192,8 +193,15 @@ void CWord::Update(void)
 	{
 		if (m_bFlagUninit == true) { return; }
 		// ローカル変数
-		//CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
-		CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
+		CPlayerSelect::SELECTPLAYER NumPlayer = {};
+		if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+		{
+			NumPlayer = *CPlayerSelect::GetModeSelectMode();
+		}
+		else if (CManager::GetMode() == CManager::MODE_GAME)
+		{
+			NumPlayer = CPlayerSelect::SELECTPLAYER_4P;//テスト
+		}
 
 		CPlayer *pPlayer[MAX_PLAYER] = {};
 		D3DXVECTOR3 PlayerPos[MAX_PLAYER];
@@ -202,37 +210,52 @@ void CWord::Update(void)
 		{	// 拾うことが可能な文字の場合
 			for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
 			{
-				pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
-				PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
+				if (CManager::GetMode() == CManager::MODE_GAME)
+				{// プレイヤーを取得
+					pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
+				}
+				else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+				{
+					pPlayer[nCntPlayer] = CTutorial::GetPlayer(nCntPlayer);
+				}
+
+				if (pPlayer[nCntPlayer] != NULL)
+				{
+					PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
+				}
 			}
 
 			for (int nCntPlayer = 0; nCntPlayer < (int)NumPlayer; nCntPlayer++)
 			{
-				if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
+				if (pPlayer[nCntPlayer] != NULL)
 				{
+					if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
+					{
 
-					Distance(pos, PlayerPos[nCntPlayer], nCntPlayer);
+						Distance(pos, PlayerPos[nCntPlayer], nCntPlayer);
 
-					// 当たり判定(円を使った判定)
-					Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
+						// 当たり判定(円を使った判定)
+						Circle(pos, PlayerPos[nCntPlayer], AREA_COILLSION);
 
-					if (m_bFlag == true)
-					{	// 終了フラグが立った場合
-						if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
-						if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
-						pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
-						pPlayer[nCntPlayer]->SetbSetupBullet(true);
-						m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
-						move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-						m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-						m_col = COL_DEFAULT;
-						break;
+						if (m_bFlag == true)
+						{	// 終了フラグが立った場合
+							if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+							if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
+							pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
+							pPlayer[nCntPlayer]->SetbSetupBullet(true);
+							m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
+							move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+							m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+							m_col = COL_DEFAULT;
+							break;
+						}
+					}
+					else
+					{	// 3個取ったら取らない
+						Distance(pos, D3DXVECTOR3(9999999990.0f, 0.0f, 9999999990.0f), nCntPlayer);
 					}
 				}
-				else
-				{	// 3個取ったら取らない
-					Distance(pos, D3DXVECTOR3(9999999990.0f, 0.0f, 9999999990.0f), nCntPlayer);
-				}
+
 			}
 
 			if (m_bFlag == false)
@@ -253,7 +276,14 @@ void CWord::Update(void)
 
 			if (pPlayer[m_nNumPlayerGet] == NULL)
 			{
-				pPlayer[m_nNumPlayerGet] = CGame::GetPlayer(m_nNumPlayerGet);	// プレイヤーを取得
+				if (CManager::GetMode() == CManager::MODE_GAME)
+				{// プレイヤーを取得
+					pPlayer[m_nNumPlayerGet] = CGame::GetPlayer(m_nNumPlayerGet);
+				}
+				else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+				{
+					pPlayer[m_nNumPlayerGet] = CTutorial::GetPlayer(m_nNumPlayerGet);
+				}
 				float fPlayer = pPlayer[m_nNumPlayerGet]->GetRotation().y;
 
 				//pos = D3DXVECTOR3(sinf(fPlayer + (D3DX_PI)) + (pPlayer[m_nNumPlayerGet]->GetPosition().x + 10.0f), 40.0f, pPlayer[m_nNumPlayerGet]->GetPosition().z);

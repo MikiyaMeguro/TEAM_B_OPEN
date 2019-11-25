@@ -438,6 +438,10 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 		if (WayPoint[nCntWayPoint].bAdjacent == true && WayPoint[nCntWayPoint].bBlock == false)
 		{	//周囲のマスの位置情報と番号を記憶
 			m_pWayPointPos[m_nNumWayPoint] = WayPoint[nCntWayPoint].WayPointPos;
+			if (nCntWayPoint > MAX_WAYPOINT)
+			{
+				m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
+			}
 			m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
 			m_nNumWayPoint++;
 		}

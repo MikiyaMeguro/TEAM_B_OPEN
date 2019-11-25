@@ -81,6 +81,8 @@ public:
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
 	static int GetNumStage(void) { return m_nNumStage; }
 	static CPlayer::PLAYER_TYPE GetPlayerType(int nNumPlayer = 0) { return m_type[nNumPlayer]; }
+	static void bStageSet(bool bStageSet) { m_bStageSet = bStageSet; };
+	static bool GetbStageSet(void) { return m_bStageSet; };
 
 private:
 	void CameraSetting(int nNum);		// êlêîÇ…âûÇ∂ÇΩÉJÉÅÉâê∂ê¨
@@ -92,6 +94,7 @@ private:
 	static CPoint *m_pPoint[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
 	static CWall *m_pWall;
+	static bool m_bStageSet;
 
 	static CSetWord *m_pWordCreate;
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];

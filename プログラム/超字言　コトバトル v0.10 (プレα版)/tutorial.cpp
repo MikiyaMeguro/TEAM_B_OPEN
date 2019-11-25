@@ -67,6 +67,7 @@ CMeshField *CTutorial::m_pMeshField = NULL;
 CPlayer::PLAYER_TYPE CTutorial::m_type[MAX_PLAYER] = {};
 CSetWord *CTutorial::m_pWordCreate = NULL;
 int CTutorial::m_nNumStage = NULL;
+CPoint *CTutorial::m_pPoint[MAX_PLAYER] = {};
 
 //=============================================================================
 //	コンストラクタ
@@ -97,7 +98,7 @@ void CTutorial::Init(void)
 	m_nChangeNum = 0;
 	m_nNumStage = 0;
 
-	//	機械
+	//	チュートリアル
 	m_pcStageName[0][0] = { MACHINE_STAGE_00 };
 	m_pcStageName[0][1] = { MACHINE_STAGE_01 };
 	m_pcStageName[0][2] = { MACHINE_STAGE_02 };
@@ -131,35 +132,48 @@ void CTutorial::Init(void)
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 1);
 		m_pWall->Create(D3DXVECTOR3(-81.0f, 31.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(35.0f, 25.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 1);
-		//	ゲーム説明
-		//m_pWall->Create(D3DXVECTOR3(0.0f, 80.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(70.0f, 50.0f, 0.0f),
 		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 2);
-		//	下の壁
-		m_pWall->Create(D3DXVECTOR3(0.0f, 70.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 70.0f, 0.0f),
+		//周りの壁
+		m_pWall->Create(D3DXVECTOR3(-100.0f, 70.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
-		m_pWall->Create(D3DXVECTOR3(0.0f, 70.0f, -400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 70.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(-100.0f, 70.0f, -400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
-		m_pWall->Create(D3DXVECTOR3(400.0f, 70.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f,70.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(400.0f, 70.0f, -100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f,70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
-		m_pWall->Create(D3DXVECTOR3(-400.0f, 70.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 70.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(-400.0f, 70.0f, -100.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
+
+		m_pWall->Create(D3DXVECTOR3(100.0f, 70.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 3);
+		m_pWall->Create(D3DXVECTOR3(100.0f, 70.0f, -400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 3);
+		m_pWall->Create(D3DXVECTOR3(400.0f, 70.0f, 100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 3);
+		m_pWall->Create(D3DXVECTOR3(-400.0f, 70.0f, 100.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 3);
+		//	チュートリアルボタン
+		m_pWall->Create(D3DXVECTOR3(0.0f, 70.0f, 0.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(50.0f, 20.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 4);
 	}
 
 	// プレイヤーの生成
 	PlayerSetting((int)NumPlayer);
 	// 文字のリソース読み込み
 	CLoadText::LoadFile();
+
 	// 文字の可視化UI(2D)の生成
 	TubeSetting((int)NumPlayer);
-	//m_pWordCreate = NULL;
-	//if (m_pWordCreate == NULL){m_pWordCreate = CSetWord::Create();}
+
+	m_pWordCreate = NULL;
+	if (m_pWordCreate == NULL){m_pWordCreate = CSetWord::Create();}
+	SetCreateWord();
 
 	CSetObject::Create();
 	SetStage(m_nNumStage, m_nChangeNum);		// ステージ生成
 
-	CScene2D* p2D = NULL;
-	p2D = CScene2D::Create(D3DXVECTOR3(1280, 720, 0), "WORD");
-	p2D->SetWidthHeight(1280, 200.0f);
+	//CScene2D* p2D = NULL;
+	//p2D = CScene2D::Create(D3DXVECTOR3(1280, 720, 0), "WORD");
+	//p2D->SetWidthHeight(1280, 200.0f);
 }
 
 //=============================================================================
@@ -190,6 +204,15 @@ void CTutorial::Uninit(void)
 		{	// 文字の可視化UI(2D)の破棄
 			m_apTube[nCntTube]->Uninit();
 			m_apTube[nCntTube] = NULL;
+		}
+	}
+
+	for (int nCntPoint = 0; nCntPoint < MAX_PLAYER; nCntPoint++)
+	{
+		if (m_pPoint[nCntPoint] != NULL)
+		{	// ポイントの破棄
+			m_pPoint[nCntPoint]->Uninit();
+			m_pPoint[nCntPoint] = NULL;
 		}
 	}
 
@@ -346,7 +369,7 @@ void CTutorial::PlayerSetting(int nNum)
 		{
 			if (m_pPlayer[nCntPlayer] == NULL)
 			{
-				m_pPlayer[nCntPlayer] = CPlayer::Create();
+				//m_pPlayer[nCntPlayer] = CPlayer::Create();
 			}
 		}
 		if (m_pPlayer[0] != NULL)
@@ -525,4 +548,35 @@ void CTutorial::SetStage(int nNumState, int nCntState)
 void CTutorial::SetCreateWord(void)
 {
 	if (m_pWordCreate != NULL) { m_pWordCreate->LoadFile(m_pcStageNameWord[m_nNumStage][m_nChangeNum]); }
+}
+//=============================================================================
+// 文字2D可視化の取得処理
+//=============================================================================
+CTube *CTutorial::GetTube(int nNum)
+{
+	if (m_apTube[nNum] != NULL) { return m_apTube[nNum]; }
+	return NULL;
+}
+//=============================================================================
+// ポイントの生成処理
+//=============================================================================
+void CTutorial::SetPointFrame(int nNumPlayer)
+{
+	if (nNumPlayer <= MAX_PLAYER && nNumPlayer >= 0)
+	{	// 指定人数の範囲内
+		for (int nCount = 0; nCount < MAX_PLAYER; nCount++)
+		{
+			if (m_pPoint[nCount] == NULL)
+			{
+				if (nNumPlayer > nCount)
+				{	// プレイ人数分ポイント生成
+					m_pPoint[nCount] = CPoint::Create(nCount, nNumPlayer, CPoint::TYPR_PLAYER);
+				}
+				else
+				{	// CPUのポイント生成
+					m_pPoint[nCount] = CPoint::Create(nCount, nNumPlayer, CPoint::TYPE_CPU);
+				}
+			}
+		}
+	}
 }

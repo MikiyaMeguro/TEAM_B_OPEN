@@ -81,6 +81,7 @@ private:
 	float						m_fScale;						// 拡大縮小量
 	int							m_ScaleCounter;					// 拡大縮小のカウンター
 	bool						m_bEndCntDown;					// カウントダウンが終了したかどうか
+	int							m_StageCounter;					// Stage生成完了までの時間
 
 	CPlayer						*m_pPlayer[PLAYER_MAX];
 };

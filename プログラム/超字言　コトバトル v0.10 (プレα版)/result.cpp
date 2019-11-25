@@ -76,10 +76,10 @@ HRESULT CResult::Init(void)
 	float fNext = 30;	//ï\è≤ë‰ÇÃä‘ÇÃïù
 
 #if 0
-	m_ResultChara[0].nPoint = 3;
-	m_ResultChara[1].nPoint = 3;
-	m_ResultChara[2].nPoint = 2;
-	m_ResultChara[3].nPoint = 1;
+	m_ResultChara[0].nPoint = 0;
+	m_ResultChara[1].nPoint = 0;
+	m_ResultChara[2].nPoint = 0;
+	m_ResultChara[3].nPoint = 0;
 
 #endif
 	//èáà åàÇﬂ
@@ -182,28 +182,40 @@ HRESULT CResult::Init(void)
 		switch (m_ResultChara[nCntPlayer].nNumRank)
 		{
 		case 1:
-			RankPos = D3DXVECTOR3(fPosX, 30.0f, 0.0f);
-			if (nCntRankPos[0] == 1)
-			{	//3à ÇÃèÍèäÇ÷ïœÇ¶ÇÈ
+			if (nCntRankPos[0] == 0)
+			{
 				fPosX = 20;
-				fNext *= -1;
 			}
-			fPosX += fNext;
+			if (nCntRankPos[0] == 1)
+			{
+				fPosX = 50;
+			}
+			if (nCntRankPos[0] == 2)
+			{
+				fPosX = -10;
+			}
+			if (nCntRankPos[0] == 3)
+			{
+				fPosX = -40;
+			}
+			RankPos = D3DXVECTOR3(fPosX, 30.0f, 0.0f);
 			nCntRankPos[0]++;
 			break;
 		case 2:
 			if (nCntRankPos[1] == 0)
 			{
-				fPosX = 20;
+				fPosX = 50;
 			}
 			if (nCntRankPos[1] == 1)
-			{	//3à ÇÃèÍèäÇ÷ïœÇ¶ÇÈ
-				fPosX = 20;
-				fNext *= -1;
+			{
+				fPosX = -10;
 			}
-			fPosX += fNext;
-			nCntRankPos[1]++;
+			if (nCntRankPos[1] == 2)
+			{
+				fPosX = -40;
+			}
 			RankPos = D3DXVECTOR3(fPosX, 20.0f, 0.0f);
+			nCntRankPos[1]++;
 			break;
 		case 3:
 			if (nCntRankPos[2] == 0)
