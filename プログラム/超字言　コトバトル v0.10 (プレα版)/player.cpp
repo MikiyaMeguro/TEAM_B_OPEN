@@ -257,7 +257,7 @@ void CPlayer::Update(void)
 			float fRotY;
 			D3DXVECTOR3 CamRot, LockOnPos, LockOnMove;
 			// íeÇÃê∂ê¨
-			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID))
+			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID) && CGame::GetbStageSet() == false)
 			{
 				C3DCharactor* Homing = NULL;
 				if (m_pWordManager != NULL)

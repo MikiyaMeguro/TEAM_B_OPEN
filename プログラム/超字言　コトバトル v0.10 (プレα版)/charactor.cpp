@@ -1096,7 +1096,7 @@ void C3DCharactor::Homing_CPU(void)
 void C3DCharactor::Attack_CPU(void)
 {
 	//’e‚Ì¶¬	’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯
-	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && CGame::GetbStageSet() == false)
 	{
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),CCharaBase::GetPosition(), CCharaBase::GetRotation());
 		m_CpuThink = THINK_NONE;
@@ -1245,11 +1245,13 @@ void C3DCharactor::NotBullet_CPU(void)
 	if (nCntNear < 3)
 	{
 		m_CpuThink = THINK_PICKUP;
+		//m_CpuThink = THINK_WAYPOINTMOVE;
 		m_nActionTimer = 30;
 	}
 	else
 	{
 		//m_CpuThink = THINK_ESCAPE;
+		//m_CpuThink = THINK_WAYPOINTMOVE;
 		m_CpuThink = THINK_PICKUP;
 		m_nActionTimer = 30;
 	}

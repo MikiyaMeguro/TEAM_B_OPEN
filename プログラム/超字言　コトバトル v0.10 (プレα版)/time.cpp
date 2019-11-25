@@ -85,7 +85,7 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_bStart = false;
 	m_bStageCreate = false;
 	m_nStageChange = 1;
-
+	m_StageCounter = 0;
 	//値の初期化
 	m_bCntDown = false;
 	m_ScaleCounter = 0;
@@ -118,7 +118,7 @@ HRESULT CTime::Init(void)
 	m_nTimeOld = GAME_TIME - 30;
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
 	m_nTimeOne = 3;
-
+	m_StageCounter = 0;
 	// 後ろの背景
 	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
 	{
@@ -434,6 +434,18 @@ void CTime::Update(void)
 			}
 		}
 	}
+
+	//ステージ生成完了タイマー
+	if (CGame::GetbStageSet() == true)
+	{
+		m_StageCounter++;
+		if (m_StageCounter > 120)
+		{
+			m_StageCounter = 0;
+			CGame::bStageSet(false);
+		}
+	}
+
 }
 
 //=============================================================================
@@ -533,11 +545,12 @@ void CTime::TimeManagement(void)
 	if ((m_nStageChange % 60) == 0 && m_bStageCreate == false)
 	{	// 30秒ごとにステージが変わる
 		m_bStageCreate = true;
+		CGame::bStageSet(true);
 		int nStageNum = (m_nStageChange / 60);
 		CManager::GetGame()->SetStage(CGame::GetNumStage(),nStageNum);
 	}
 
-	if (m_nTimeCount % 60 == 0)
+	if (m_nTimeCount % 20 == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
 		m_nStageChange++;

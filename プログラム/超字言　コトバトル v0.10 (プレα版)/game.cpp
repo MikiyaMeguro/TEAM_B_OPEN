@@ -79,7 +79,7 @@ CSetWord *CGame::m_pWordCreate = NULL;
 CWall *CGame::m_pWall = {};
 CPlayer::PLAYER_TYPE CGame::m_type[MAX_PLAYER] = {};
 int CGame::m_nNumStage = NULL;
-
+bool CGame::m_bStageSet = false;
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -106,6 +106,8 @@ void CGame::Init(void)
 	CEffect::Load();					//	エフェクトの読み込み
 	m_nChangeNum = 0;
 	m_nNumStage = 0;
+	m_bStageSet = false;
+
 	m_nNumStage = CStageSelect::GetStageState();
 	if (m_nNumStage == NULL)
 	{//	ステージ選択にNULLが入った場合
@@ -185,6 +187,7 @@ void CGame::Init(void)
 	//デバック用
 	//CTime::SetTimeFlag(false);
 	CCommand::RegistCommand("TIMECOUNT_STOP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_TRIGGER,DIK_M);
+
 }
 //=============================================================================
 // 終了処理
