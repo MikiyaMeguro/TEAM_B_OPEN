@@ -27,15 +27,16 @@
 //============================================================================
 #define SIZE_X (SCREEN_WIDTH/2)
 #define SIZE_Y (SCREEN_HEIGHT/2)
-#define DEFAULT_SIZE (150.0f)									//ポリゴンサイズの基本の大きさ
-#define DEFAULT_POS (D3DXVECTOR3(SIZE_X,SIZE_Y,0.0f))			//初期化位置
-#define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))				//初期化回転
-#define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))		//初期化色_白
-#define STAGESELCHOICE_POS	(D3DXVECTOR3(300.0f,300.0f,0.0f))	//選択肢ポリゴンの位置
-#define STAGESELCHOICE_INTERVAL (350.0f)						//選択肢ポリゴン同士の間隔
-#define STAGESEL_DIFF (0.3f)									//移動の変化量
-#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")
-#define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")
+#define DEFAULT_SIZE (150.0f)														//ポリゴンサイズの基本の大きさ
+#define DEFAULT_POS (D3DXVECTOR3(SIZE_X,SIZE_Y,0.0f))								//初期化位置
+#define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))									//初期化回転
+#define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))							//初期化色_白
+#define STAGESELCHOICE_POS	(D3DXVECTOR3(300.0f,130.0f,0.0f))						//選択肢ポリゴンの位置
+#define STAGESELCHOICE_INTERVAL (350.0f)											//選択肢ポリゴン同士の間隔
+#define STAGESEL_DIFF (0.3f)														//移動の変化量
+#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")	//機械ステージ
+#define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")	//天候ステージ
+#define MACHINE_STAGE_TIKEI	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")		//地形
 
 //============================================================================
 //静的メンバ変数宣言
@@ -100,7 +101,7 @@ void CStageSelect::Init(void)
 
 	m_pcStageSelect[0] = MACHINE_STAGE_MACHINE;
 	m_pcStageSelect[1] = MACHINE_STAGE_WEATHER;
-	m_pcStageSelect[2] = MACHINE_STAGE_MACHINE;
+	m_pcStageSelect[2] = MACHINE_STAGE_TIKEI;
 
 }
 
@@ -227,9 +228,9 @@ void CStageSelect::InitPolygon(void)
 	}
 
 	/* サイズ設定 */
-	m_apSelect2D[0]->SetWidthHeight(DEFAULT_SIZE*1.5f, DEFAULT_SIZE*1.8f);
-	m_apSelect2D[1]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.3f);
-	m_apSelect2D[2]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.3f);
+	m_apSelect2D[0]->SetWidthHeight(DEFAULT_SIZE*1.8f, DEFAULT_SIZE*1.3f);
+	m_apSelect2D[1]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*1.0f);
+	m_apSelect2D[2]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*1.0f);
 
 	for (int nCnt = 0; nCnt < MAX_STAGESELECT; nCnt++)
 	{/* サイズを取得 */
@@ -250,6 +251,11 @@ void CStageSelect::InitPolygon(void)
 	m_apScene2D[STAGESELECTTYPE_BAND_R] = CScene2D::Create(D3DXVECTOR3(1230.0f, SIZE_Y, 0.0f), "STAGESEL_BAND", 4);
 	m_apScene2D[STAGESELECTTYPE_BAND_R]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*3.5f);
 
+	//字幕枠
+	m_apScene2D[STAGESELECTTYPE_FRAME] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SCREEN_HEIGHT-90.0f, 0.0f), "FRAME");
+	m_apScene2D[STAGESELECTTYPE_FRAME]->SetWidthHeight(DEFAULT_SIZE*5.0f, DEFAULT_SIZE*0.8f);
+
+	//マスク
 	m_pMask2D = CScene2D::Create(D3DXVECTOR3(SIZE_X, SIZE_Y, 0.0f), " ",2);
 	m_pMask2D->SetWidthHeight(DEFAULT_SIZE*5.2f, DEFAULT_SIZE*4.0f);
 	m_pMask2D->SetCol(DEFAULT_COL_WHITE);

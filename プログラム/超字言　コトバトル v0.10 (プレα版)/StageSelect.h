@@ -22,7 +22,7 @@ class CWall;
 // マクロ定義
 //*****************************************************************************
 #define MAX_STAGESELECT		(3)
-#define MAX_STAGESELECT_TEX (3)
+#define MAX_STAGESELECT_TEX (4)
 
 class CStageSelect
 {
@@ -44,6 +44,7 @@ private:
 		STAGESELECTTYPE_BG = 0,		//背景
 		STAGESELECTTYPE_BAND_L,		//帯：左
 		STAGESELECTTYPE_BAND_R,		//帯：右
+		STAGESELECTTYPE_FRAME,		//字幕枠
 		STAGESELECTTYPE_MAX			//最大数
 	}STAGESELECTTYPE;
 
