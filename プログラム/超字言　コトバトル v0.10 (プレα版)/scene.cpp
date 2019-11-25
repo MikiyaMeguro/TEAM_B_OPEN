@@ -67,7 +67,7 @@ void CScene::ReleseAll(void)
 
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
-		// 先頭を取得する
+	 // 先頭を取得する
 		pScene = m_apTop[nCntPriority];
 
 		while (pScene != NULL)
@@ -116,7 +116,7 @@ void CScene::UpdeteAll(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 	//フェードしていないときにポーズできる
-	if (pInputKeyboard->GetTrigger(DIK_P) == true && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
+	if (CCommand::GetCommand("PAUSE") && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
 	{
 		m_bPause = m_bPause ? false : true;
 		//CPause::SetPauseBool(m_bPause);
@@ -126,13 +126,13 @@ void CScene::UpdeteAll(void)
 	{
 		for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 		{// 優先順位の数分繰り返す
-			// 先頭を取得する
+		 // 先頭を取得する
 			pScene = m_apTop[nCntPriority];
 
 			while (pScene != NULL)
 			{// 空になるまでアップデートする
 
-				// Updateの最中に消える可能性があるから先に記録しておく
+			 // Updateの最中に消える可能性があるから先に記録しておく
 				CScene *pSceneNext = pScene->m_pNext;
 
 				// 更新
@@ -205,13 +205,13 @@ void CScene::UpdeteAll(void)
 			}
 		}
 	}
-//#ifdef _DEBUG
-//	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
-//	{// 優先順位の数分繰り返す
-//		// デバック表示の更新
-//		CDebugProc::Print("ncn", nCntPriority, " : ", m_nNumPriority[nCntPriority]);
-//	}
-//#endif
+	//#ifdef _DEBUG
+	//	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
+	//	{// 優先順位の数分繰り返す
+	//		// デバック表示の更新
+	//		CDebugProc::Print("ncn", nCntPriority, " : ", m_nNumPriority[nCntPriority]);
+	//	}
+	//#endif
 }
 
 //=============================================================================
@@ -221,12 +221,12 @@ void CScene::DrawAll(void)
 {
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
-		// 先頭の場所を取得
+	 // 先頭の場所を取得
 		CScene *pScene = m_apTop[nCntPriority];
 
 		while (pScene != NULL)
 		{// 空になるまで描画する
-			// Drawの最中に消える可能性があるから先に記録しておく
+		 // Drawの最中に消える可能性があるから先に記録しておく
 			CScene *pSceneNext = pScene->m_pNext;
 
 			// 描画

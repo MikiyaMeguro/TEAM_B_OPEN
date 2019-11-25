@@ -87,6 +87,7 @@ DATA = 00066 data/TEXTURE/UI/Countdown03.png COUNTDOWN2
 DATA = 00067 data/TEXTURE/UI/Countdown00.png COUNTDOWN3
 DATA = 00068 data/TEXTURE/UI/End.png GAME_END
 DATA = 00069 data/TEXTURE/Line.png LINE
-
+DATA = 00070 data/TEXTURE/tutorial/pad.jpg PAD
+DATA = 00071 data/TEXTURE/tutorial/tutorialflow.png TUROFLOW
 
 END_LOAD

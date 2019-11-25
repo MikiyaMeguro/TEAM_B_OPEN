@@ -202,6 +202,10 @@ void C3DCharactor::Update(void)
 	{
 		pMesh = CResult::GetMeshField();
 	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		pMesh = CTutorial::GetMeshField();
+	}
 
 	float fHeight = pMesh->GetHeight(pos);
 	if (pos.y < fHeight)

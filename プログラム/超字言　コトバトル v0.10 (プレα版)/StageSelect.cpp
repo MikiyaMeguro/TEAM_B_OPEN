@@ -206,7 +206,7 @@ void CStageSelect::InitPolygon(void)
 			STAGESELCHOICE_POS.y,
 			STAGESELCHOICE_POS.z), "STAGESEL_ICON");
 		m_apSelect2D[nCnt]->SetTex(D3DXVECTOR2(0.0f+(1.0f/ MAX_STAGESELECT)*nCnt, 0.0f), D3DXVECTOR2((1.0f / MAX_STAGESELECT) + (1.0f / MAX_STAGESELECT)*nCnt, 1.0f));
-		
+
 		/* ‘I‘ðŽˆ‚Ì‰ŠúˆÊ’u‚ð‹L‰¯‚·‚é */
 		m_SelectPos[nCnt] = m_apSelect2D[nCnt]->GetPosition();
 
@@ -279,8 +279,8 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 {
 	switch (TYPE)
 	{
-	case SELECTTYPE_SELECT_MACHINE:	//‹@ŠB	
-	
+	case SELECTTYPE_SELECT_MACHINE:	//‹@ŠB
+
 		//”CˆÓ‚ÌƒL[ENTER
 		if (CCommand::GetCommand("DECISION") == true)
 		{
@@ -401,7 +401,7 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 			//·‚©‚çˆÚ“®—Ê‚ðŒvŽZ
 			fmove[nCnt] = fDiffpos[nCnt] - (fDiffpos[nCnt] * STAGESEL_DIFF);
 			fScal[nCnt] = D3DXVECTOR2(fDiffScal[nCnt].x - (fDiffScal[nCnt].x*STAGESEL_DIFF), fDiffScal[nCnt].y - (fDiffScal[nCnt].y*STAGESEL_DIFF));
-			
+
 			//ˆÊ’u‚ð”½‰f
 			m_apSelect2D[nCnt]->SetPosition(D3DXVECTOR3(m_SelectPos[nCnt].x - fmove[nCnt], m_SelectPos[nCnt].y, m_SelectPos[nCnt].z));
 			m_apSelect2D[nCnt]->SetWidthHeight(m_fWidth[nCnt] - fScal[nCnt].x, m_fHeight[nCnt] - fScal[nCnt].y);
@@ -522,13 +522,13 @@ void CStageSelect::StageLoadState(STAGELOAD Load, int nSel)
 		if (m_pWall == NULL)
 		{
 			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0,0);
 			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0);
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 		}
 		//	break;
 		//case SELECTTYPE_SELECT_WEATHER:

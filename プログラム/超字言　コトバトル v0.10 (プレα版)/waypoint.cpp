@@ -254,9 +254,7 @@ void CWaypoint::Update(void)
 					}
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].bAdjacent = false;
 				}
-
 			}
-
 
 #endif
 			//ŽüˆÍ‚Sƒ}ƒX
@@ -568,6 +566,11 @@ int CWaypoint::GetNumTargetPoint(int nWayPoint)
 	{
 		nWayPoint = 0;
 	}
+	if (nWayPoint < 0)
+	{
+		nWayPoint = 0;
+	}
+
 	return m_nTargetNum[nWayPoint];
 }
 
