@@ -18,7 +18,7 @@
 #define SIZE_Y (SCREEN_HEIGHT/2)								//縦幅
 #define DEFAULT_SIZE (150.0f)									//ポリゴンサイズの基本の大きさ
 #define DEFAULT_POS	(D3DXVECTOR3(0.0f,0.0f,0.0f))				//ポリゴンの初期位置
-#define CHARASELCHOICE_POS	(D3DXVECTOR3(211.0f,180.0f,0.0f))	//選択肢ポリゴンの位置
+#define CHARASELCHOICE_POS	(D3DXVECTOR3(211.0f,220.0f,0.0f))	//選択肢ポリゴンの位置
 #define CURSOL_INITPOS (D3DXVECTOR3(250.0f,545.0f,0.0f))		//カーソルの初期位置
 #define CHARASELCHOICE_INTERVAL (260.0f)						//選択肢ポリゴン同士の間隔
 #define CHARASELICON_INTERVAL (215.0f)							//選択肢アイコン同士の間隔
@@ -55,8 +55,8 @@ CCharaSelect::CCharaSelect()
 	m_bCnfFlash = false;
 	m_bCharaCard = false;
 	m_CharaCardProduction = CHARACARDPRO_START;
-	m_fCharaCardPro_FinishWH[0] = DEFAULT_SIZE*1.0f;
-	m_fCharaCardPro_FinishWH[1] = DEFAULT_SIZE*1.5f;
+	m_fCharaCardPro_FinishWH[0] = 0.0f;
+	m_fCharaCardPro_FinishWH[1] = 0.0f;
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		m_move[nCnt] = DEFAULT_POS;
@@ -266,8 +266,13 @@ void CCharaSelect::InitCharaSelectPoly(void)
 			CHARASELCHOICE_POS.y,
 			CHARASELCHOICE_POS.z), "PLAYERSELECT_BACK");
 		/* サイズ設定 */
-		m_apSelect2D[nCnt]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.5f);
+		m_apSelect2D[nCnt]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*1.4f);
+
 		m_CharaCardPro_FinishPos[nCnt] = m_apSelect2D[nCnt]->GetPosition();
+		m_fCharaCardPro_FinishWH[0] = m_apSelect2D[nCnt]->GetSize(0);
+		m_fCharaCardPro_FinishWH[1] = m_apSelect2D[nCnt]->GetSize(1);
+		m_fCardWidth[nCnt][0]=m_apSelect2D[nCnt]->GetSize(0);
+		m_fCardWidth[nCnt][1]=m_apSelect2D[nCnt]->GetSize(1);
 	}
 
 	/* 演出 */
@@ -385,10 +390,10 @@ bool CCharaSelect::collision(int operation, CPlayer::PLAYER_TYPE type)
 	bool bColl = false;
 
 	/* あたり判定 */
-	if (m_apBadge2D[operation]->GetPosition().x - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apSelect2D[type]->GetPosition().x + (DEFAULT_SIZE*0.8f) &&
-		m_apBadge2D[operation]->GetPosition().x + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apSelect2D[type]->GetPosition().x - (DEFAULT_SIZE*0.8f) &&
-		m_apBadge2D[operation]->GetPosition().y + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apSelect2D[type]->GetPosition().y - (DEFAULT_SIZE*0.8f) &&
-		m_apBadge2D[operation]->GetPosition().y - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apSelect2D[type]->GetPosition().y + (DEFAULT_SIZE*0.8f))
+	if (m_apBadge2D[operation]->GetPosition().x - (m_apBadge2D[operation]->GetSize(0) / 2) <= m_apSelect2D[type]->GetPosition().x + (m_apSelect2D[operation]->GetSize(0) / 2) &&
+		m_apBadge2D[operation]->GetPosition().x + (m_apBadge2D[operation]->GetSize(0) / 2) >= m_apSelect2D[type]->GetPosition().x - (m_apSelect2D[operation]->GetSize(0) / 2) &&
+		m_apBadge2D[operation]->GetPosition().y + (m_apBadge2D[operation]->GetSize(1) / 2) >= m_apSelect2D[type]->GetPosition().y - (m_apSelect2D[operation]->GetSize(1) / 2) &&
+		m_apBadge2D[operation]->GetPosition().y - (m_apBadge2D[operation]->GetSize(1) / 2) <= m_apSelect2D[type]->GetPosition().y + (m_apSelect2D[operation]->GetSize(1) / 2))
 	{
 		bColl = true;
 	}
@@ -476,10 +481,10 @@ bool CCharaSelect::collisionConf(int operation)
 	bool bColl = false;
 
 	/* あたり判定 */
-	if (m_apCursor2D[operation]->GetPosition().x - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apConfirm2D->GetPosition().x + (DEFAULT_SIZE*3.0f) &&
-		m_apCursor2D[operation]->GetPosition().x + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apConfirm2D->GetPosition().x - (DEFAULT_SIZE*3.0f) &&
-		m_apCursor2D[operation]->GetPosition().y + DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) >= m_apConfirm2D->GetPosition().y - (DEFAULT_SIZE*0.8f) &&
-		m_apCursor2D[operation]->GetPosition().y - DEFAULT_SIZE*(CURSOR_SIZE - 0.2f) <= m_apConfirm2D->GetPosition().y + (DEFAULT_SIZE*0.8f))
+	if (m_apCursor2D[operation]->GetPosition().x - (m_apCursor2D[operation]->GetSize(0) / 2) <= m_apConfirm2D->GetPosition().x + (m_apConfirm2D->GetSize(0)/2) &&
+		m_apCursor2D[operation]->GetPosition().x + (m_apCursor2D[operation]->GetSize(0) / 2) >= m_apConfirm2D->GetPosition().x - (m_apConfirm2D->GetSize(0)/2) &&
+		m_apCursor2D[operation]->GetPosition().y + (m_apCursor2D[operation]->GetSize(1) / 2) >= m_apConfirm2D->GetPosition().y - (m_apConfirm2D->GetSize(1)/2) &&
+		m_apCursor2D[operation]->GetPosition().y - (m_apCursor2D[operation]->GetSize(1) / 2) <= m_apConfirm2D->GetPosition().y + (m_apConfirm2D->GetSize(1)/2))
 	{
 		bColl = true;
 	}

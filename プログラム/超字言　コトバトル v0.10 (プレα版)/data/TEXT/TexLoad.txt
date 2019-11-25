@@ -90,4 +90,7 @@ DATA = 00069 data/TEXTURE/Line.png LINE
 DATA = 00070 data/TEXTURE/tutorial/pad.jpg PAD
 DATA = 00071 data/TEXTURE/tutorial/tutorialflow.png TUROFLOW
 
+DATA = 00072 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLANATION
+DATA = 00073 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
+
 END_LOAD

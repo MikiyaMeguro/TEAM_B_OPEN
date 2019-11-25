@@ -45,7 +45,8 @@ CSelect::~CSelect()
 //=============================================================================
 void CSelect::Init(void)
 {
-	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 250, 350, CSelectMenu::MENU_TYPE_TUTORIAL);
+	CSelectMenu::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 250, 350, CSelectMenu::MENU_TYPE_MODESELECT);
+	CSelectMenu::SetModeSelectBool(true);
 }
 
 //=============================================================================

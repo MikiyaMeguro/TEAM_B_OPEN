@@ -53,7 +53,7 @@ CResult::CResult()
 {
 	m_pSeletMenu = NULL;
 	m_bMenu = false;
-	nCounterMenu = 0;
+	m_bMenuCreate = false;
 }
 
 //=============================================================================
@@ -345,25 +345,33 @@ void CResult::Update(void)
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
 
-	//フレームをずらす
-	if (m_bMenu == true)
+	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
-		nCounterMenu++;
-		if (nCounterMenu > 10)
+
+		//フレームをずらす
+		if (m_bMenuCreate == true)
 		{
-			m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
-			m_bMenu = false;
-			nCounterMenu = 0;
+			if (m_bMenu == true)
+			{
+				m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(530.0f, SCREEN_HEIGHT / 2, 0), 220, 320, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
+				m_pSeletMenu->SetModeSelectBool(true);
+				m_bMenu = false;
+			}
+			// 以降の更新処理を飛ばす
+			return;
 		}
 
-	}
-
-	//任意のキーENTER
-	if (CCommand::GetCommand("DECISION"))
-	{
-		if (m_bMenu == false)
+		//任意のキーENTER
+		if (CCommand::GetCommand("DECISION"))
 		{
-			m_bMenu = true;
+			if (m_bMenuCreate == false)
+			{
+				if (m_bMenu == false)
+				{
+					m_bMenu = true;
+					m_bMenuCreate = true;
+				}
+			}
 		}
 	}
 #ifdef _DEBUG
