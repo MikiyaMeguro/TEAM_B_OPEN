@@ -13,6 +13,7 @@
 #include "game.h"
 #include "PlayerNumSelect.h"
 #include "point.h"
+#include "tutorial.h"
 //=============================================================================
 // マクロ関数
 //=============================================================================
@@ -93,7 +94,7 @@ HRESULT CTube::Init(D3DXVECTOR3 pos)
 
 	if (NumPlayer == 1) { m_AnswerPos = POS_ANSWER_001; }
 	else if (NumPlayer != 1) { m_AnswerPos = POS_ANSWER_002; }
-	
+
 	return S_OK;
 }
 
@@ -188,7 +189,7 @@ void CTube::SetAnswer(int nAnswer)
 	if (m_pAnswerModel == NULL)
 	{	// 文字が3文字集まった場合場合
 		D3DXVECTOR2 AnswerSize = {};
-		//int nAnswerNum = 
+		//int nAnswerNum =
 		if (NumPlayer == 1)
 		{	// 1人プレイの場合
 			m_AnswerPos = POS_ANSWER_001;
@@ -232,7 +233,15 @@ void CTube::Delete(int nID)
 	{
 		if (m_apWord[nCntWord] != NULL&& m_apWord[nCntWord + 1] != NULL)
 		{
-			int nNum = CGame::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// 数字を取得
+			int nNum = 0;
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				nNum = CGame::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// 数字を取得
+			}
+			else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+			{
+				nNum = CTutorial::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// 数字を取得
+			}
 			m_apWord[nCntWord]->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
 
 			if (m_pAnswerModel != NULL)
@@ -240,7 +249,7 @@ void CTube::Delete(int nID)
 				m_pAnswerModel->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
 			}
 		}
-		
+
 
 		else if (m_apWord[nCntWord] != NULL && m_apWord[nCntWord + 1] == NULL)
 		{
@@ -312,7 +321,7 @@ void CTube::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum)
 	move.x = sinf(atan2f(OtherPos.x - Pos.x, OtherPos.y - Pos.y)) * MOVE;
 	move.y = cosf(atan2f(OtherPos.x - Pos.x, OtherPos.y - Pos.y)) * MOVE;
 
-	if (m_apWord[nNum] != NULL) 
+	if (m_apWord[nNum] != NULL)
 	{
 		Pos.x += move.x;
 		Pos.y += move.y;
