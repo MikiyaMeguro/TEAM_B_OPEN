@@ -47,8 +47,8 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 	m_type = type;
 	m_pThisCharactor = pThis;
 
-	m_Move = D3DXVECTOR3(0.0f,0.0f,0.0f);
-	m_Spin = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	m_Move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Spin = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_fSpeed = MOVE_DEFAULT_SPEED;
 	m_fStep = STEP_DEFAULT_MOVEMENT;
 	m_fMoveCoeffient = MOVE_DEFAULT_COEFFICIENT;
@@ -63,7 +63,7 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 	}
 
 	//コマンド定義
-	CCommand::RegistCommand("PLAYERMOVE_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_W);
+	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_W);
 	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_UP);
 	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_S);
 	CCommand::RegistCommand("PLAYERMOVE_DOWN", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_DOWN);
@@ -240,7 +240,7 @@ void C3DCharactor::Update(void)
 	}
 
 	//マトリックスの計算
-	CUtilityMath::CalWorldMatrix(&m_mtxWorld,pos,rot);
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld, pos, rot);
 	//カメラの参照位置制御
 	m_CameraPosR = GetPosition() + D3DXVECTOR3(0.0f, 40.0f, 0.0f);
 
@@ -287,7 +287,7 @@ void C3DCharactor::CharaMove_Input(void)
 
 	CCamera* pCamera = pCameraManager->GetCamera(GetThisCharactor()->GetCameraName());
 	int nID = GetThisCharactor()->GetID();
-	D3DXVECTOR3 CameraRot = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	D3DXVECTOR3 CameraRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	if (pCamera != NULL)
 	{
 		CameraRot = pCamera->GetRotation();
@@ -337,15 +337,15 @@ void C3DCharactor::CharaMove_Input(void)
 		}
 		//if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
 		//	GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
-		if (GetThisCharactor()->GetMotion() != 6&&
+		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
 
 		{//今のモーションがステップでも弾打ちでもなければ
 
-	//モーション分け
+		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK,CPlayer::UPPER_BODY);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
 			}
 			else
 			{
@@ -445,13 +445,13 @@ void C3DCharactor::CharaMove_Input(void)
 		 //モーション分け
 			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
 			{
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_NEUTRAL,CPlayer::UPPER_BODY);
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_NEUTRAL, CPlayer::UPPER_BODY);
 			}
 			else
 			{
 				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_NEUTRAL, CPlayer::UPPER_BODY);
 			}
-				GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
 	}
 
@@ -489,11 +489,11 @@ void C3DCharactor::CharaMove_Input(void)
 
 			fStepRot += CameraRot.y;
 
-			StepMove(move,fStepRot);
+			StepMove(move, fStepRot);
 
 		}
 	}
-	CDebugProc::Print("cn" ,"STEP_COOLTIME : ",m_nCntStepCoolTime);
+	CDebugProc::Print("cn", "STEP_COOLTIME : ", m_nCntStepCoolTime);
 
 	pos += move;
 
@@ -752,7 +752,7 @@ void C3DCharactor::Action_CPU(void)
 		WayPointMove_CPU();
 		break;
 	case  THINK_WAYPOINTROUTE:	//ランダム経路
-		//WayPointMove_CPU();
+								//WayPointMove_CPU();
 		WayPointRoute_CPU();
 		break;
 	default:
@@ -886,7 +886,7 @@ void C3DCharactor::CharaMove_CPU(void)
 	spin.y = 0.0f;
 
 	//移動中に壁にぶつかった
-	if (m_bFront == true )
+	if (m_bFront == true)
 	{
 		m_CpuThink = THINK_ROTATION;
 		m_nActionTimer = 2;
@@ -1098,7 +1098,7 @@ void C3DCharactor::Attack_CPU(void)
 	//弾の生成	弾を持っているときだけ
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(),CCharaBase::GetPosition(), CCharaBase::GetRotation());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
 		m_CpuThink = THINK_NONE;
 	}
 }
@@ -1141,7 +1141,7 @@ void C3DCharactor::PickUP_CPU(void)
 			if (pScene->GetObjType() == CScene::OBJTYPE_WORD)
 			{// オブジェクトの種類を確かめる
 				CWord *pWord = ((CWord*)pScene);		// CWordへキャスト(型の変更)
-				// 距離を測る
+														// 距離を測る
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
 				if (fCircle < 10000000 && bTango == false)
 				{
@@ -1165,7 +1165,7 @@ void C3DCharactor::PickUP_CPU(void)
 				if (fCircle < 50000 && bTango == false)
 				{//範囲内に文字があった
 					nCntNearWord++;		//加算
-					//if(m_fCompareRange < fCircle)
+										//if(m_fCompareRange < fCircle)
 					{//単語が完成しないときは適当に拾う
 					 //一番近い距離を記憶
 						m_fCompareRange = fCircle;
@@ -1459,7 +1459,7 @@ void C3DCharactor::WayPointRoute_CPU(void)
 		m_bNearWard = false;
 	}
 
-// 目的の角度
+	// 目的の角度
 	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
 	// 差分
 	float fDiffAngle = fDestAngle - rot.y;
@@ -1480,7 +1480,7 @@ void C3DCharactor::StepMove(D3DXVECTOR3& move, float& fRot)
 	move.x += sinf(fRot) * GetStep();
 	move.z += cosf(fRot) * GetStep();
 
-	GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_STEP,CPlayer::LOWER_BODY,CPlayer::STATE_NORMAL);
+	GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_STEP, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 	GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_STEP, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
 	m_nCntStepCoolTime = 30;
 	GetThisCharactor()->SetTransTime(5);

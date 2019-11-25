@@ -14,6 +14,7 @@
 
 #include "debugProc.h"
 #include "explosion.h"
+#include "tutorial.h"
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
@@ -88,14 +89,26 @@ void C3DBullet::Update(void)
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
 
-	//メッシュフィールドとの当たり判定
-	CMeshField *pMesh = CGame::GetMeshField();
-
-	float fHeight = pMesh->GetHeight(m_pos + move);
-	if (m_pos.y < fHeight)
-	{
-		move.y = 0.0f;
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{//メッシュフィールドとの当たり判定
+		CMeshField *pMesh = CGame::GetMeshField();
+		float fHeight = pMesh->GetHeight(m_pos + move);
+		if (m_pos.y < fHeight)
+		{
+			move.y = 0.0f;
+		}
 	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{//メッシュフィールドとの当たり判定
+		CMeshField *pMesh = CTutorial::GetMeshField();
+		float fHeight = pMesh->GetHeight(m_pos + move);
+		if (m_pos.y < fHeight)
+		{
+			move.y = 0.0f;
+		}
+	}
+
+
 	m_MoveResult = move;		//求めた差分を格納
 	m_pos += move;
 
