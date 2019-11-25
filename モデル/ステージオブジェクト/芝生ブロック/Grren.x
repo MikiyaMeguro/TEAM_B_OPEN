@@ -241,7 +241,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "date\\TEXTURE\\UV\\Grren.png";
+    "data\\TEXTURE\\UV\\Grren.png";
    }
   }
  }
