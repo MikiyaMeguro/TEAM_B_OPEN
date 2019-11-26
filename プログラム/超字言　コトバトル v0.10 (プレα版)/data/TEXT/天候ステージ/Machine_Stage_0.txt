@@ -268,7 +268,7 @@ MODELSET						# 噴水シンボル
 	ROT = 0.0 0.0 0.0
 	SCALE = 2.0 2.0 2.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 -----------------------------------------------------------
@@ -279,7 +279,7 @@ MODELSET						# 噴水囲い右下
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い右下
@@ -288,7 +288,7 @@ MODELSET						# 噴水囲い右下
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い右下
@@ -297,7 +297,7 @@ MODELSET						# 噴水囲い右下
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -308,7 +308,7 @@ MODELSET						# 噴水囲い左下
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い左下
@@ -317,7 +317,7 @@ MODELSET						# 噴水囲い左下
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い左下
@@ -326,7 +326,7 @@ MODELSET						# 噴水囲い左下
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -337,7 +337,7 @@ MODELSET						# 噴水囲い右上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い右上
@@ -346,7 +346,7 @@ MODELSET						# 噴水囲い右上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い右上
@@ -355,7 +355,7 @@ MODELSET						# 噴水囲い右上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -366,7 +366,7 @@ MODELSET						# 噴水囲い左上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い左上
@@ -375,7 +375,7 @@ MODELSET						# 噴水囲い左上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 0.5 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 噴水囲い左上
@@ -384,7 +384,7 @@ MODELSET						# 噴水囲い左上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.5 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 -----------------------------------------------------------
@@ -395,7 +395,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -404,7 +404,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -413,7 +413,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -422,7 +422,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -431,7 +431,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -440,7 +440,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -449,7 +449,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下右
@@ -458,7 +458,7 @@ MODELSET						# 芝生下右
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -469,7 +469,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -478,7 +478,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -487,7 +487,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -496,7 +496,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -505,7 +505,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -514,7 +514,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -523,7 +523,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 芝生下左
@@ -532,7 +532,7 @@ MODELSET						# 芝生下左
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.7 0.7
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 -----------------------------------------------------------
@@ -543,7 +543,7 @@ MODELSET						# 木
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 2.0 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 木
@@ -552,7 +552,7 @@ MODELSET						# 木
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 2.0 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 木
@@ -561,7 +561,7 @@ MODELSET						# 木
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 2.0 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 木
@@ -570,7 +570,7 @@ MODELSET						# 木
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 2.0 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 -----------------------------------------------------------
@@ -581,7 +581,7 @@ MODELSET						# ベンチ左下
 	ROT = 0.0 3.14 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# ベンチ左下
@@ -590,7 +590,7 @@ MODELSET						# ベンチ左下
 	ROT = 0.0 3.14 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -601,7 +601,7 @@ MODELSET						# ベンチ右下
 	ROT = 0.0 3.14 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# ベンチ右下
@@ -610,7 +610,7 @@ MODELSET						# ベンチ右下
 	ROT = 0.0 3.14 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -621,7 +621,7 @@ MODELSET						# ベンチ右上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# ベンチ右上
@@ -630,7 +630,7 @@ MODELSET						# ベンチ右上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 ～～～
@@ -641,7 +641,7 @@ MODELSET						# ベンチ左上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# ベンチ左上
@@ -650,7 +650,7 @@ MODELSET						# ベンチ左上
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.6 0.6
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 -----------------------------------------------------------
@@ -661,7 +661,7 @@ MODELSET						# シーソー
 	ROT = 0.0 1.57 0.0
 	SCALE = 1.5 1.3 1.0
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# シーソー
@@ -670,7 +670,7 @@ MODELSET						# シーソー
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 1.3 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# シーソー
@@ -679,7 +679,7 @@ MODELSET						# シーソー
 	ROT = 0.0 1.57 0.0
 	SCALE = 1.5 1.3 1.0
 	COLLISION = 1
-	GIMMICK = 0		11			# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# シーソー
@@ -688,7 +688,7 @@ MODELSET						# シーソー
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 1.3 1.5
 	COLLISION = 1
-	GIMMICK = 0					# 配置の種類を決める
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
