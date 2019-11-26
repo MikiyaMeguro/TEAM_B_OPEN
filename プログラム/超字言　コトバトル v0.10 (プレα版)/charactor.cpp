@@ -1376,7 +1376,7 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	int nNextPoint = 0;
 	int nNowWp = 0;
 
-	if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
+	if (m_bGoal == true && /*m_bNearWard == false &&*/ m_bSearch == false)
 	{
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
@@ -1392,8 +1392,11 @@ void C3DCharactor::WayPointRoute_CPU(void)
 				fMinCircle = fCircle;
 				//目標のマス番号を記憶
 				m_nTargetWP = nCnt;
-				m_bSearch = true;
-				m_bGoal = false;
+				if (m_bNearWard == false)
+				{
+					m_bSearch = true;
+					m_bGoal = false;
+				}
 			}
 		}
 	}
@@ -1442,6 +1445,10 @@ void C3DCharactor::WayPointRoute_CPU(void)
 
 	if (m_bNearWard == true)
 	{
+		m_pWayPoint->ReturnPointMove();
+		nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
+		nNowWp = m_pWayPoint->GetNowWP();
+
 		m_MarkWayPoint = m_MarkWardPos;
 	}
 
