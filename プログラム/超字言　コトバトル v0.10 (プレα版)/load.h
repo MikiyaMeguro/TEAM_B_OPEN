@@ -46,7 +46,6 @@ public:
 		MODEL_PAUL,			// ポール
 		MODEL_ALPHAMODEL00,	// 雷の見えない判定ver1
 		MODEL_ALPHAMODEL01,	// 雷の見えない判定ver2
-		
 		MODEL_Seesaw,		// シーソー
 		MODEL_Bench,		// ベンチ
 		MODEL_House,		// 家
@@ -58,6 +57,9 @@ public:
 		MODEL_Snowfall,		// 落屑
 		MODEL_SnowWalldistortion,		// 雪壁
 		MODEL_Telephonepole,		// 電柱
+		
+		MODEL_KANBAN,		// 看板
+		MODEL_PILLAR,		// 柱
 
 		//--------------------------------------
 		// 文字モデル

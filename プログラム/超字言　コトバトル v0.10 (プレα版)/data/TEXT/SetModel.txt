@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 29
+NUM_MODEL = 31
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -32,7 +32,6 @@ MODEL_FILENAME = data/MODEL/ResultOBJ/3.x"			#14 表彰台3
 MODEL_FILENAME = data/MODEL/StageOBJ/Pole.x"		#15 ポール
 MODEL_FILENAME = data/MODEL/box000.x"				#16 雷の見えない判定
 MODEL_FILENAME = data/MODEL/box000.x"				#17 雷の見えない判定
-
 MODEL_FILENAME = data/MODEL/StageOBJ/Seesaw.x"				#18 シーソー
 MODEL_FILENAME = data/MODEL/StageOBJ/Bench.x"				#19 ベンチ
 MODEL_FILENAME = data/MODEL/StageOBJ/House.x"				#20 家
@@ -44,5 +43,9 @@ MODEL_FILENAME = data/MODEL/StageOBJ/Wood.x"				#25 木
 MODEL_FILENAME = data/MODEL/StageOBJ/Snowfall.x"			#26 落屑
 MODEL_FILENAME = data/MODEL/StageOBJ/SnowWalldistortion.x"	#27 雪壁
 MODEL_FILENAME = data/MODEL/StageOBJ/Telephonepole.x"		#28 電柱
+
+MODEL_FILENAME = data/MODEL/StageOBJ/kanban.x"				#29 看板(商店街の屋根)
+MODEL_FILENAME = data/MODEL/StageOBJ/Pillar.x"				#30 電柱
+
 
 END_SCRIPT		# この行は絶対消さないこと！
