@@ -369,17 +369,17 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{
 			m_nCounter = 0;
 		}
-		if (m_nCounter % 4 == 0)
+		if (m_nCounter % 20 == 0)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 1); }
 		}
-		else if (m_nCounter % 8 == 0)
+		else if (m_nCounter % 30 == 0)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 1); }
 		}
-		else if (m_nCounter % 12 == 0)
+		else if (m_nCounter % 40 == 0)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }
@@ -404,17 +404,17 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{
 			m_nCounter = 0;
 		}
-		if (m_nCounter % 4 == 0)
+		if (m_nCounter % 20 == 0)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 15.0f, 0.0f), 2, 1); }
 		}
-		else if (m_nCounter % 8 == 0)
+		else if (m_nCounter % 30 == 0)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 20.0f, 0.0f), 2, 1); }
 		}
-		else if (m_nCounter % 12 == 0)
+		else if (m_nCounter % 40 == 0)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }

@@ -60,7 +60,9 @@ public:
 	//TEST
 	int GetNumTargetPoint(int nWayPoint);			//行こうとしているマス番号
 	D3DXVECTOR3 GetNextWayPoint(int nWayPoint);		//隣の行けるマスを渡す
-	bool GetWPbBlock(int nWayPoint) { return WayPoint[nWayPoint].bBlock; };
+	bool GetWPbBlock(int nWayPoint){ return WayPoint[nWayPoint].bBlock;	};
+
+
 	int GetNowWP(void) { return m_nNumNowPoint; };
 	// 関数
 private:
@@ -85,6 +87,9 @@ private:
 
 	FROMHIT m_FromHit;
 
+	int		m_nFlameCnt;	//フレーム数を数える
+	bool	m_bStageStart;	//ゲーム開始時に入るフラグ
+	bool	m_bStageSetEnd;	//ステージが切り替わったフラグ
 
 #ifdef _DEBUG
 	int nNum2Cnt;

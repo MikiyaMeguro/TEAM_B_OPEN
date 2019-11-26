@@ -29,6 +29,8 @@ CWaypoint::CWaypoint() : CScene/*BillBoard*/()
 	m_nNumWayPoint = 0;
 	m_nNumNowPoint = 0;
 	m_FromHit = FROMHIT_NONE;
+	m_bStageStart = false;
+	m_bStageSetEnd = false;
 }
 
 //--------------------------------------------
@@ -148,7 +150,7 @@ void CWaypoint::Update(void)
 			WayPoint[nCntWayPoint].bAdjacent = false;
 			if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint != NULL)
 			{
-			//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(1, 10, 1, 1);
+				//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(1, 10, 1, 1);
 			}
 			bLand = true;
 		}
@@ -173,7 +175,7 @@ void CWaypoint::Update(void)
 				WayPoint[nCntWayPoint].nWayPointNum = 1;
 				if (WayPoint[nCntWayPoint].pWayPoint != NULL)
 				{
-				//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(2, 10, 1, 1);
+					//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(2, 10, 1, 1);
 				}
 				WayPoint[nCntWayPoint].bAdjacent = true;
 			}
@@ -186,7 +188,7 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint + 1].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint + 1].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint + 1].bAdjacent = false;
 				}
@@ -195,7 +197,7 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint - 1].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint - 1].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint - 1].bAdjacent = false;
 				}
@@ -204,7 +206,7 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint - SPLIT_WAYPOINT].bAdjacent = false;
 				}
@@ -213,7 +215,7 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT].bAdjacent = false;
 				}
@@ -223,16 +225,16 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].bAdjacent = false;
 				}
-				if (nNowNumber - nCntWayPoint == (SPLIT_WAYPOINT + 1) * nCntSplit && 0 <= nCntWayPoint - SPLIT_WAYPOINT - 1 && (nCntWayPoint - SPLIT_WAYPOINT - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT -1)
+				if (nNowNumber - nCntWayPoint == (SPLIT_WAYPOINT + 1) * nCntSplit && 0 <= nCntWayPoint - SPLIT_WAYPOINT - 1 && (nCntWayPoint - SPLIT_WAYPOINT - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1)
 				{	//左前	例(5*5で中央にいる場合)　12 - 6 == 分割数 - 1 && 0以上 && 折り返していない
 					WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].bAdjacent = false;
 				}
@@ -241,7 +243,7 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].bAdjacent = false;
 				}
@@ -250,12 +252,11 @@ void CWaypoint::Update(void)
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].nWayPointNum = nCntSplit + 1;
 					if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
 					}
 					WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].bAdjacent = false;
 				}
 			}
-
 #endif
 			//周囲４マス
 #if 0
@@ -298,8 +299,31 @@ void CWaypoint::Update(void)
 		}
 	}
 
-	//ブロックに当たっている
-	CollisionObj();
+	m_nFlameCnt++;
+
+	if (m_nFlameCnt == 2)
+	{
+		//フレーム数を初期化
+		m_nFlameCnt = 0;
+	}
+
+	if (CGame::GetbStageSet() == true && m_bStageSetEnd == false)
+	{	//ステージ切り替わり時に当たり判定更新
+		m_bStageSetEnd = true;
+	}
+	else if (CGame::GetbStageSet() == false && m_bStageSetEnd == true)
+	{
+		CollisionObj();
+		m_bStageSetEnd = false;
+	}
+	else
+	{
+		if (m_bStageStart == false)
+		{	//開始時に当たり判定更新 最初のみ
+			CollisionObj();
+			m_bStageStart = true;
+		}
+	}
 
 
 
@@ -438,16 +462,19 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 		if (WayPoint[nCntWayPoint].bAdjacent == true && WayPoint[nCntWayPoint].bBlock == false)
 		{	//周囲のマスの位置情報と番号を記憶
 			m_pWayPointPos[m_nNumWayPoint] = WayPoint[nCntWayPoint].WayPointPos;
-			if (nCntWayPoint > MAX_WAYPOINT)
-			{
-				m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
-			}
+
+			//if (nCntWayPoint > MAX_WAYPOINT)
+			//{
+			//	m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
+			//}
+
 			m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
 			m_nNumWayPoint++;
-		}
-		if (m_nNumWayPoint > 8)
-		{
-			m_nNumWayPoint = 0;
+
+			if (m_nNumWayPoint == 8)
+			{
+				break;
+			}
 		}
 	}
 	return m_pWayPointPos[0];
@@ -458,11 +485,6 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 //=============================================================================
 int CWaypoint::CntWayPoint(void)
 {
-	if (m_nNumWayPoint > 8)
-	{
-		m_nNumWayPoint = 0;
-	}
-
 	return m_nNumWayPoint;
 }
 
