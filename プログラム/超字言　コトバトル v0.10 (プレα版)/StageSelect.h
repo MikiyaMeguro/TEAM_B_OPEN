@@ -18,11 +18,12 @@ class CManager;
 class CSetObject;
 class CMeshField;
 class CWall;
+class CPlayerSelect;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
 #define MAX_STAGESELECT		(3)
-#define MAX_STAGESELECT_TEX (5)
+#define MAX_STAGESELECT_TEX (7)
 
 class CStageSelect
 {
@@ -41,12 +42,14 @@ private:
 	/* ポリゴンの種類 */
 	typedef enum
 	{
-		STAGESELECTTYPE_BG = 0,		//背景
-		STAGESELECTTYPE_BAND_L,		//帯：左
-		STAGESELECTTYPE_BAND_R,		//帯：右
-		STAGESELECTTYPE_FRAME,		//字幕枠
-		STAGESELECTTYPE_EXPLANATION,		//字幕
-		STAGESELECTTYPE_MAX			//最大数
+		STAGESELECTTYPE_BG = 0,			//背景
+		STAGESELECTTYPE_BAND_L,			//帯：左
+		STAGESELECTTYPE_BAND_R,			//帯：右
+		STAGESELECTTYPE_FRAME,			//字幕枠
+		STAGESELECTTYPE_EXPLANATION,	//字幕
+		STAGESELECTTYPE_UI_OPERATION,	//操作UI
+		STAGESELECTTYPE_UI_DECISION,	//選択中UI
+		STAGESELECTTYPE_MAX				//最大数
 	}STAGESELECTTYPE;
 
 	/* 選択状態 */
@@ -96,6 +99,7 @@ private:
 	void StageLoadState(STAGELOAD Load,int nSel);						//ステージロードの状態
 	void MaskFade(void);												//マスクのフェード処理
 	void InitPointer(void);												//ポインタの初期化処理
+	void SetSelectAnimation(STAGESELECTTYPE type, int AnimType, int MaxAnimPatternX, int MaxAnimPatternY, int AnimSpeed);
 
 	/* 変数 */
 	static CScene2D *m_apScene2D[MAX_STAGESELECT_TEX];				//演出系2D
@@ -119,5 +123,7 @@ private:
 	bool m_bLoad;													//ステージの読み込みを１回だけやるフラグ
 	MASKFADE m_MaskFade;											//マスクのフェード処理
 	float m_fMaskAlpha;
+	int m_nCntAnim;													//アニメーションのカウンター
+	int m_nPatturnAnim;												//アニメーションのパターン
 };
 #endif

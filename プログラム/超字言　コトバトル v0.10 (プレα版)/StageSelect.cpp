@@ -63,6 +63,8 @@ CStageSelect::CStageSelect()
 	m_MaskFade = MASKFADE_NONE;
 	m_fMaskAlpha = 0.05f;
 	m_pObj = NULL;
+	m_nCntAnim = 0;
+	m_nPatturnAnim = 0;
 	for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 	{
 		m_SelectPos[nCnt] = DEFAULT_POS;
@@ -202,6 +204,9 @@ void CStageSelect::Update(void)
 	ScrollMenu(STAGESELECTTYPE_BAND_R, 0.005f);
 	ScrollMenu(STAGESELECTTYPE_BAND_L, -0.005f);
 
+	/* アニメーション */
+	SetSelectAnimation(STAGESELECTTYPE_UI_OPERATION,0,4,1,15);
+
 #ifdef _DEBUG
 	CDebugProc::Print("c", "ステージセレクト");
 	CDebugProc::Print("cn", "m_MoveIconState:", m_MoveIconState);
@@ -285,6 +290,16 @@ void CStageSelect::InitPolygon(void)
 	m_apScene2D[STAGESELECTTYPE_EXPLANATION] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SCREEN_HEIGHT - 80.0f, 0.0f), "STAGESEL_EXPLANATION");
 	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetWidthHeight(DEFAULT_SIZE*4.8f, DEFAULT_SIZE*0.8f);
 	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f / 3));
+
+	//UI_スティック
+	m_apScene2D[STAGESELECTTYPE_UI_OPERATION] = CScene2D::Create(D3DXVECTOR3(200.0f, 465.0f, 0.0f), "UI_OPERATION1", 4);
+	m_apScene2D[STAGESELECTTYPE_UI_OPERATION]->SetWidthHeight(DEFAULT_SIZE*0.8f, DEFAULT_SIZE * 0.8f);
+	m_apScene2D[STAGESELECTTYPE_UI_OPERATION]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.25f, 1.0f));
+
+	//UI_選択中
+	m_apScene2D[STAGESELECTTYPE_UI_DECISION] = CScene2D::Create(D3DXVECTOR3(STAGESELCHOICE_POS.x+ STAGESELCHOICE_INTERVAL, STAGESELCHOICE_POS.y, STAGESELCHOICE_POS.z), "UI_SELECT", 4);
+	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetWidthHeight(DEFAULT_SIZE*1.85f, DEFAULT_SIZE*1.05f);
+	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
 	//マスク
 	m_pMask2D = CScene2D::Create(D3DXVECTOR3(SIZE_X, SIZE_Y, 0.0f), " ",2);
@@ -376,6 +391,10 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 			m_bRep = true;
 			m_MaskFade = MASKFADE_IN;
 		}
+		if (m_apScene2D[STAGESELECTTYPE_UI_DECISION]->GetbDraw() == true)
+		{
+			m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetbDraw(false);
+		}
 		for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 		{
 			//移動後と移動前の位置とサイズの差を計算する
@@ -416,6 +435,10 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 			m_bRep = true;
 			m_MaskFade = MASKFADE_IN;
 		}
+		if (m_apScene2D[STAGESELECTTYPE_UI_DECISION]->GetbDraw() == true)
+		{
+			m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetbDraw(false);
+		}
 		for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 		{
 			//移動後と移動前の位置とサイズの差を計算する
@@ -452,6 +475,10 @@ void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 
 	case SELECTICON_STATE_STOP:				//回転終了
 		m_bRep = false;
+		if (m_apScene2D[STAGESELECTTYPE_UI_DECISION]->GetbDraw() == false)
+		{
+			m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetbDraw(true);
+		}
 		state = SELECTICON_STATE_NONE;
 		break;
 	}
@@ -668,5 +695,45 @@ void CStageSelect::InitPointer(void)
 		{
 			m_pWall[nCnt] = NULL;
 		}
+	}
+}
+//=============================================================================
+// アニメーション処理
+//=============================================================================
+void CStageSelect::SetSelectAnimation(STAGESELECTTYPE type, int AnimType, int MaxAnimPatternX, int MaxAnimPatternY, int AnimSpeed)
+{
+	m_nCntAnim++;
+	if (AnimType == 0)
+	{//横割り
+		if (m_nCntAnim > AnimSpeed)
+		{
+			m_nPatturnAnim++;
+			m_nCntAnim = 0;
+		}
+		if (m_nPatturnAnim >= MaxAnimPatternX)
+		{
+			m_nPatturnAnim = 0;
+		}
+
+		m_apScene2D[type]->SetTex(D3DXVECTOR2(0.0f + (1.0f / MaxAnimPatternX)*m_nPatturnAnim,
+			0.0f + (1.0f / MaxAnimPatternY)),
+			D3DXVECTOR2((1.0f / MaxAnimPatternX) + ((1.0f / MaxAnimPatternX)*m_nPatturnAnim),
+			(1.0f / MaxAnimPatternY) + (1.0f / MaxAnimPatternY)));
+	}
+	else if (AnimType == 1)
+	{//縦割り
+		if (m_nCntAnim > AnimSpeed)
+		{
+			m_nPatturnAnim++;
+			m_nCntAnim = 0;
+		}
+		if (m_nPatturnAnim >= MaxAnimPatternY)
+		{
+			m_nPatturnAnim = 0;
+		}
+
+		m_apScene2D[type]->SetTex(D3DXVECTOR2(0.0f + (1.0f / MaxAnimPatternX), 0.0f + ((1.0f / MaxAnimPatternY) *m_nPatturnAnim)),
+			D3DXVECTOR2((1.0f / MaxAnimPatternX) + (1.0f / MaxAnimPatternX),
+			((1.0f / MaxAnimPatternY)*m_nPatturnAnim) + ((1.0f / MaxAnimPatternY)*m_nPatturnAnim)));
 	}
 }
