@@ -359,7 +359,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TUXTURE\\UV\\Funsui.png";
+    "data\\TEXTURE\\UV\\Funsui.png";
    }
   }
  }

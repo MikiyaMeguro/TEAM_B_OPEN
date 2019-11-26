@@ -35,6 +35,9 @@ LPDIRECT3DTEXTURE9 CWall::m_pTexture[MAX_WALL_TEX] = {};
 //=============================================================================
 CWall::CWall() : CScene3D(4, CScene::OBJTYPE_WALL)
 {
+	m_nType = 0;
+	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_nCounter = 0;
 }
 
 //=============================================================================
@@ -73,12 +76,16 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	CScene3D::Init();
 	CScene3D::SetColor(col);
 	CScene3D::SetSizeY(size.y, size.x);
+	m_nType = nTexType;
 	if (nType == 0){SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL);}
 	else{SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_BILLBOARD); }
 
 	if (nTexType == 0){CScene3D::BindTexture("FIELD");}
 	else if (nTexType == 1){CScene3D::BindTexture("PAD");}
-	else if (nTexType == 2) { CScene3D::BindTexture("TUROFLOW"); }
+	else if (nTexType == 2) { CScene3D::BindTexture("TUROFLOW000"); }
+	else if (nTexType == 3) { CScene3D::BindTexture("TUROFLOW001"); }
+	else if (nTexType == 4) { CScene3D::BindTexture("NEXT"); }
+
 
 
 	return S_OK;
@@ -102,6 +109,15 @@ void CWall::Update(void)
 	float WallSizeY = CScene3D::GetSizeY();			//	幅の取得
 	float WallSizeX = CScene3D::GetSizeX();			//	幅の取得
 
+	if (m_nType == 4)
+	{//	ボタン　表示
+		m_nCounter++;
+		if (m_nCounter < 60){m_move.y = 0.3f;}
+		else if (m_nCounter < 120){m_move.y = -0.3f;}
+		else if (m_nCounter == 120 ){m_nCounter =  0;}
+	}
+
+	WallPos += m_move;
 	CScene3D::SetPos(WallPos);						//	位置の設定
 	CScene3D::SetRot(WallRot);						//	回転の設定
 	CScene3D::SetSizeY(WallSizeY, WallSizeX);		//	大きさの設定
