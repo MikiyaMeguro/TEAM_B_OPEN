@@ -202,8 +202,8 @@ HRESULT CTime::Init(void)
 		}
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 180.0f, m_pos.z), "COUNTDOWN2");
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 540.0f, m_pos.z), "COUNTDOWN2");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 540.0f, m_pos.z), "COUNTDOWN2");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 
 		// Timeのロゴ
@@ -383,6 +383,8 @@ void CTime::Update(void)
 						break;
 					case 3:
 						m_pScene2D[nCnt]->BindTexture("COUNTDOWN3");
+						m_pScene2D[nCnt]->SetWidthHeight(m_fWidth + 100, m_fHeight + 100);
+
 						break;
 					default:
 						break;
@@ -550,7 +552,7 @@ void CTime::TimeManagement(void)
 		CManager::GetGame()->SetStage(CGame::GetNumStage(),nStageNum);
 	}
 
-	if (m_nTimeCount % 20 == 0)
+	if (m_nTimeCount % 60 == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
 		m_nStageChange++;

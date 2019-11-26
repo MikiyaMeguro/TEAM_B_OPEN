@@ -1354,12 +1354,6 @@ void C3DCharactor::WayPointMove_CPU(void)
 		nNextPoint = m_pWayPoint->GetNumTargetPoint(nRand);
 		nNowWp = m_pWayPoint->GetNowWP();
 
-		if (m_pWayPoint->GetWPbBlock(nNowWp) == true)
-		{//自分がブロックマスにいるかの判定
-			m_bGoal = false;
-		}
-
-
 		if (m_pWayPointPos[nRand] != NULL)
 		{
 			//m_MarkWayPoint = m_pWayPointPos[nRand];
@@ -1368,12 +1362,15 @@ void C3DCharactor::WayPointMove_CPU(void)
 		}
 	}
 
-	m_nTimerMove++;
-
-	if (m_nTimerMove >= 180)
+	if (m_bNotWayPoint == true)
 	{
-		m_nTimerMove = 0;
-		m_bRandomGoal = true;
+		m_nTimerMove++;
+
+		if (m_nTimerMove >= 180)
+		{
+			m_nTimerMove = 0;
+			m_bRandomGoal = true;
+		}
 	}
 
 	// 目的の角度
@@ -1520,6 +1517,22 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 
 #endif
+}
+
+//=============================================================================
+//後退移動処理
+//=============================================================================
+void C3DCharactor::WayPointBack_CPU(void)
+{
+	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
+	move.x += sinf(rot.y + (D3DX_PI * 1.0f)) * speed;
+	move.z += cosf(rot.y + (D3DX_PI * 1.0f)) * speed;
+
 }
 
 

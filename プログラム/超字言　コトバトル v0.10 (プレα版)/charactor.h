@@ -198,6 +198,7 @@ private:
 	void NearOrFur_CPU(void);	//‹ß‚¢‚©‰“‚¢‚©
 	void WayPointMove_CPU(void);	//Œo˜Hî•ñˆÚ“®
 	void WayPointRoute_CPU(void);	//Å’Zƒ‹[ƒgˆÚ“®
+	void WayPointBack_CPU(void);	//Œã‘ŞˆÚ“®
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
