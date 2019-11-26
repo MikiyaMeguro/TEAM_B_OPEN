@@ -163,7 +163,10 @@ void CSetWord::WordUninit(void)
 			if (pWord->GetUninitFlag() == true)
 			{
 				nNum = pWord->GetNum();		// ”Ô†‚ğæ“¾
-				m_pWordPos[nNum].bUse = false;
+				if (nNum < m_nNum)
+				{	// “y‘ä‚©‚ço‚Ä‚«‚½•¶š‚È‚ç
+					m_pWordPos[nNum].bUse = false;
+				}
 				pWord->Uninit();
 				pWord = NULL;
 			}
