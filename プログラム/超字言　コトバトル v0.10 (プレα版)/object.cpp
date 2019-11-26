@@ -171,7 +171,11 @@ void CObject::Draw(void)
 	{
 		m_pIcon->Draw();
 	}
-	CSceneX::Draw();
+
+	if (CSceneX::GetModelType() != CLoad::MODEL_BOX)
+	{
+		CSceneX::Draw();
+	}
 }
 
 //=============================================================================
@@ -201,7 +205,7 @@ void CObject::SwitchBeltConveyor(bool bSwitch)
 			m_nCounter = 0;
 		}
 		pos = D3DXVECTOR3(0.0f, -20.0, 0.0f);
-		if (m_bSwitch ==false )
+		if (m_bSwitch == false)
 		{//	SwitchOFF
 			m_nCounter++;
 			pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -270,7 +274,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 				m_nCounter = 0;
 			}
 		}
-		if(m_nCounter > 20)
+		if (m_nCounter > 20)
 		{//	‘å‚«‚³‚ð–ß‚·
 			scale.y = m_InitScale.y;
 			pos.y = m_InitPos.y;
@@ -303,12 +307,12 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		m_nCounter++;
 		int nAnswer = rand() % 48;
 		//	Žg‚Á‚Ä‚¢‚È‚¢•¶Žš‚Ì—áŠOˆ—
-		if (nAnswer == 0 || nAnswer == 2 || nAnswer == 4 || nAnswer == 6 || nAnswer == 8 || nAnswer == 11){nAnswer = 1;}
-		else if(nAnswer == 13 || nAnswer == 14 || nAnswer == 16 || nAnswer == 17 || nAnswer == 18 || nAnswer == 21){nAnswer = 7;}
-		else if (nAnswer == 22 || nAnswer == 23 || nAnswer == 25 || nAnswer == 26 || nAnswer == 28 || nAnswer == 29){nAnswer = 15;}
-		else if (nAnswer == 31 || nAnswer == 32 || nAnswer == 33 || nAnswer == 34 || nAnswer == 36 || nAnswer == 37){nAnswer = 30;}
-		else if (nAnswer == 38 || nAnswer == 39 || nAnswer == 43 || nAnswer == 44 || nAnswer == 45 || nAnswer == 46){nAnswer = 35;}
-		else if(nAnswer == 47 || nAnswer == 48){ nAnswer = 17;}
+		if (nAnswer == 0 || nAnswer == 2 || nAnswer == 4 || nAnswer == 6 || nAnswer == 8 || nAnswer == 11) { nAnswer = 1; }
+		else if (nAnswer == 13 || nAnswer == 14 || nAnswer == 16 || nAnswer == 17 || nAnswer == 18 || nAnswer == 21) { nAnswer = 7; }
+		else if (nAnswer == 22 || nAnswer == 23 || nAnswer == 25 || nAnswer == 26 || nAnswer == 28 || nAnswer == 29) { nAnswer = 15; }
+		else if (nAnswer == 31 || nAnswer == 32 || nAnswer == 33 || nAnswer == 34 || nAnswer == 36 || nAnswer == 37) { nAnswer = 30; }
+		else if (nAnswer == 38 || nAnswer == 39 || nAnswer == 43 || nAnswer == 44 || nAnswer == 45 || nAnswer == 46) { nAnswer = 35; }
+		else if (nAnswer == 47 || nAnswer == 48) { nAnswer = 17; }
 
 		if (m_nCounter % 780 == 0)
 		{//	•¶Žš‚ðo‚·
@@ -357,7 +361,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			scale.x = 0.0f;
 			scale.z = 0.0f;
 		}
-		else if (m_nCounter > 360 && m_nCounter < 360*2)
+		else if (m_nCounter > 360 && m_nCounter < 360 * 2)
 		{
 			pos.y = 0.0f;
 			//scale.x = m_InitScale.x;
@@ -365,7 +369,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			scale.x = 0.0f;
 			scale.z = 0.0f;
 		}
-		else  if (m_nCounter > 360*2)
+		else  if (m_nCounter > 360 * 2)
 		{
 			m_nCounter = 0;
 		}
@@ -394,7 +398,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 			scale.x = 0.0f;
 			scale.z = 0.0f;
 		}
-		else if (m_nCounter > 360 && m_nCounter < 360*2)
+		else if (m_nCounter > 360 && m_nCounter < 360 * 2)
 		{
 			pos.y = 1000.0f;
 			scale.x = 0.0f;
@@ -445,7 +449,7 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove, int nID)
 		fknockBackMove = KNOCKBACK_MOVE_BIG;
 	}
 	CSound *pSound = CManager::GetSound();		//	‰¹‚ÌŽæ“¾
-	// ƒvƒŒƒCƒ„[‚ÌŒü‚«‚ª•ûŒü“]Š·‚·‚é‚æ‚¤‚É‚È‚Á‚½‚çíœ
+												// ƒvƒŒƒCƒ„[‚ÌŒü‚«‚ª•ûŒü“]Š·‚·‚é‚æ‚¤‚É‚È‚Á‚½‚çíœ
 	if (CSceneX::GetCollsionNum() == 0 || CSceneX::GetCollsionNum() == 1)
 	{	// ¶ –”‚Í ‰E ‚©‚ç‚Ì”»’è
 		pMove->x *= -fknockBackMove;
@@ -489,7 +493,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 		if (CSceneX::GetModelType() == CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
 		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }	// “y‘äˆÈŠO
 
-		// U“®‚Ìˆ—
+																							// U“®‚Ìˆ—
 		Vibration(&pos);
 
 		ModelMove(Type, &pos, fMove);
@@ -508,7 +512,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 	{	// ˆÚ“®ƒtƒ‰ƒO‚ªtrue “®‚­ê‡
 		pos.y += MODEL_MOVE_Y;						// ˆÚ“®‘¬“x
 
-		// U“®‚Ìˆ—
+													// U“®‚Ìˆ—
 		Vibration(&pos);
 
 		CSceneX::SetPosition(pos);
@@ -528,7 +532,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 void CObject::AnimationIcon(void)
 {
 	m_nCntAnim++;
-	 if(m_bSwitch == true)
+	if (m_bSwitch == true)
 	{//	Switch‚ªON‚¾‚Á‚½ê‡
 		if ((m_nCntAnim % ANIM_TIME) == 0)
 		{
@@ -659,8 +663,10 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMo
 
 			CSceneX::SetPosition(*pos);
 			m_nRealTime = REALTIME_NOTMOVE;
-			if (m_bCreateFlag == false) { m_bCreateFlag = true;
-			CManager::GetGame()->SetCreateWord();}
+			if (m_bCreateFlag == false) {
+				m_bCreateFlag = true;
+				CManager::GetGame()->SetCreateWord();
+			}
 		}
 	}
 
