@@ -225,8 +225,6 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove, bool bSwitch)
 	switch (bSwitch)
 	{
 	case false:
-		break;
-	case true:
 		if (Collsiontype == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT)
 		{	// 前進する
 			pMove->z += BELTCONVEYER_MOVE;
@@ -243,6 +241,8 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove, bool bSwitch)
 		{	// 左移動
 			pMove->x += BELTCONVEYER_MOVE;
 		}
+		break;
+	case true:
 		break;
 	}
 }
@@ -268,7 +268,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	文字を出す
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
 				scale.y = m_InitScale.y + 0.2f;
 				pos.y = m_InitPos.y + 4.0f;
 				m_nCounter = 0;
@@ -318,7 +318,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	文字を出す
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				CWord::Create(pos, 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
 				scale.y = m_InitScale.y + 0.2f;
 				pos.y = m_InitPos.y + 2.0f;
 				m_nCounter = 0;
@@ -422,6 +422,37 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	雷エフェクト
 			if (m_InitScale.x == 2.3f) { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 0); }
 			else { CEffect::Create(pos + D3DXVECTOR3(0.0f, 25.0f, 0.0f), 2, 1); }
+		}
+	}
+
+	if (CSceneX::GetModelType() == CLoad::MODEL_FSymbol)
+	{
+		m_nCounter++;
+		if (m_nCounter % 6 == 0)
+		{
+			 CEffect::Create(pos + D3DXVECTOR3(0.0f, 65.0f, 0.0f), 3, 3);
+
+		}
+		int nAnswer = rand() % 48;
+		int nAnswerB = rand() % 4;
+
+		//	使っていない文字の例外処理
+		if (nAnswer == 0 || nAnswer == 2 || nAnswer == 4 || nAnswer == 6 || nAnswer == 8 || nAnswer == 11) { nAnswer = 1; }
+		else if (nAnswer == 13 || nAnswer == 14 || nAnswer == 16 || nAnswer == 17 || nAnswer == 18 || nAnswer == 21) { nAnswer = 7; }
+		else if (nAnswer == 22 || nAnswer == 23 || nAnswer == 25 || nAnswer == 26 || nAnswer == 28 || nAnswer == 29) { nAnswer = 15; }
+		else if (nAnswer == 31 || nAnswer == 32 || nAnswer == 33 || nAnswer == 34 || nAnswer == 36 || nAnswer == 37) { nAnswer = 30; }
+		else if (nAnswer == 38 || nAnswer == 39 || nAnswer == 43 || nAnswer == 44 || nAnswer == 45 || nAnswer == 46) { nAnswer = 35; }
+		else if (nAnswer == 47 || nAnswer == 48) { nAnswer = 17; }
+		if (m_nCounter % 180 == 0)
+		{//	文字を出す
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(1.4f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);}
+				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-1.4f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.4f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				else if (nAnswerB == 3) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, -1.4f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				m_nCounter = 0;
+			}
 		}
 	}
 	CSceneX::SetPosition(pos);	//	位置の設定
@@ -532,7 +563,7 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 void CObject::AnimationIcon(void)
 {
 	m_nCntAnim++;
-	if (m_bSwitch == true)
+	if (m_bSwitch == false)
 	{//	SwitchがONだった場合
 		if ((m_nCntAnim % ANIM_TIME) == 0)
 		{
@@ -540,7 +571,6 @@ void CObject::AnimationIcon(void)
 			m_pIcon->SetAnimation(m_nCntPattan, 0.1f, 1.0f);
 		}
 	}
-
 }
 
 //=============================================================================

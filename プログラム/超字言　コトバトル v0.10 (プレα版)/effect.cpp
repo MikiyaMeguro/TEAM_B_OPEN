@@ -112,7 +112,7 @@ HRESULT CEffect::Init(void)
 					(cosf((rand() % 628) / 100.0f) * ((rand() % (int)1) + m_EffectState.posRange[m_nBindText].z)));
 				//	寿命の設定
 				m_nNumLife[nCount] = m_EffectState.nLife[m_nBindText];
-
+				m_fGravity = m_EffectState.fGravity[m_nBindText];
 				//	テクスチャの割り当て
 				m_apScene3D[nCount]->BindTexture(m_pTexture[m_nEffectType]);
 
@@ -170,10 +170,11 @@ void CEffect::Update(void)
 			size[nCount].x = m_apScene3D[nCount]->GetSizeX();	//	大きさの取得X
 			col[nCount] = m_apScene3D[nCount]->Getcol();	//	色の設定
 
-			//	位置に動きを代入する
-			pos[nCount] += m_NumMove[nCount];
+
 			//	重力の設定
 			m_NumMove[nCount].y -= m_fGravity;
+			//	位置に動きを代入する
+			pos[nCount] += m_NumMove[nCount];
 
 			m_apScene3D[nCount]->SetPos(pos[nCount]);		//	位置の設定
 			m_apScene3D[nCount]->SetSizeY(size[nCount].y, size[nCount].x);	//	大きさの設定

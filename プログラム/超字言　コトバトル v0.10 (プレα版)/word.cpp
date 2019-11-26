@@ -73,6 +73,7 @@ CWord::CWord() : CSceneBillBoard()
 	m_colA = 0.4f;
 	m_nCntFlashing = 0;
 	m_nLostCut = 0;
+	m_move = D3DXVECTOR3(0.0f,0.0f,0.0f);		// サイズ
 	m_nLostType = 0;
 
 	// 3文字候補時の変数
@@ -93,7 +94,7 @@ CWord::~CWord()
 //--------------------------------------------
 // 生成
 //--------------------------------------------
-CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int LostType,int nNum)
+CWord *CWord::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fWidth, float fHeight, LPCSTR Tag, int nWord, int LostType,int nNum)
 {
 	CWord *pWord = NULL;
 
@@ -113,6 +114,7 @@ CWord *CWord::Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, i
 			pWord->m_nWordNum = nWord;
 			pWord->SetTexture(nWord, 10, 5, 1);
 			pWord->m_nNum = nNum;
+			pWord->m_move = move;
 		}
 	}
 
@@ -331,11 +333,18 @@ void CWord::Update(void)
 		}
 
 	}
+	//if (pos.y < 15.0f)
+	{
+		move += m_move;
+	}
 	// 位置更新
 	pos.x += move.x;
 	pos.y += move.y;
 	pos.z += move.z;
-
+	if (m_pBillBoard[0] != NULL)
+	{
+		m_pBillBoard[0]->Setpos(D3DXVECTOR3(pos.x, 0.0f, pos.z));
+	}
 	CSceneBillBoard::Update();
 	CSceneBillBoard::SetBillboard(pos, m_size.x, m_size.y);
 	CSceneBillBoard::SetCol(m_col);
@@ -343,11 +352,24 @@ void CWord::Update(void)
 	{//	時間経過で消える文字
 		m_nLostCut++;
 		CDebugProc::Print("m_nLostCut : %d", m_nLostCut);
-		if (m_nLostCut > LOST_TIME)
-		{//	フレームで消える
-			if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
-			if (m_pBillBoard[1] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[1] = NULL; }
-			Uninit();
+
+		if (m_move.x > 0.1f || m_move.z > 0.1f || m_move.x < -0.1f || m_move.z < -0.11f)
+		{
+			if (m_nLostCut > 260)
+			{//	フレームで消える
+				if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+				if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
+				Uninit();
+			}
+		}
+		else if (m_move.x == 0.0f || m_move.z == 0.0f || m_move.x == 0.0f || m_move.z == 0.0f)
+		{
+			if (m_nLostCut > LOST_TIME)
+			{//	フレームで消える
+				if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
+				if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
+				Uninit();
+			}
 		}
 	}
 }

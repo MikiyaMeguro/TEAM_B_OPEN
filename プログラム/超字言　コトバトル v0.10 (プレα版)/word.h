@@ -22,7 +22,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static CWord *Create(D3DXVECTOR3 pos, float fWidth, float fHeight, LPCSTR Tag, int nWord, int LostType, int nNum = 0 );
+	static CWord *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move,float fWidth, float fHeight, LPCSTR Tag, int nWord, int LostType, int nNum = 0);
 
 	// 関数
 	D3DXVECTOR3 Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle, float fDistance);
@@ -41,6 +41,8 @@ private:
 	void SizeScale(D3DXVECTOR3 *size, float fMove, D3DXVECTOR2 MaxSize);		// 拡大縮小
 	void FlashingCol(void);						// 点滅する時の関数
 
+
+	D3DXVECTOR3 m_move;		// サイズ
 
 	D3DXVECTOR3 m_size;		// サイズ
 	D3DXVECTOR3 m_sizeOld;	// サイズ(過去)
