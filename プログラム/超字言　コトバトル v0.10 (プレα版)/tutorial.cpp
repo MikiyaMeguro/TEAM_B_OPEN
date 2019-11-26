@@ -116,7 +116,7 @@ void CTutorial::Init(void)
 	{
 		//	下の壁
 		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0,0);
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 		m_pWall->Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
@@ -132,13 +132,12 @@ void CTutorial::Init(void)
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 1);
 		m_pWall->Create(D3DXVECTOR3(-81.0f, 31.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(35.0f, 25.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 1);
-		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 2);
 		//周りの壁
 		m_pWall->Create(D3DXVECTOR3(-100.0f, 70.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
 		m_pWall->Create(D3DXVECTOR3(-100.0f, 70.0f, -400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
-		m_pWall->Create(D3DXVECTOR3(400.0f, 70.0f, -100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f,70.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(400.0f, 70.0f, -100.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
 		m_pWall->Create(D3DXVECTOR3(-400.0f, 70.0f, -100.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 70.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
@@ -165,15 +164,15 @@ void CTutorial::Init(void)
 	TubeSetting((int)NumPlayer);
 
 	m_pWordCreate = NULL;
-	if (m_pWordCreate == NULL){m_pWordCreate = CSetWord::Create();}
+	if (m_pWordCreate == NULL) { m_pWordCreate = CSetWord::Create(); }
 	SetCreateWord();
 
 	CSetObject::Create();
 	SetStage(m_nNumStage, m_nChangeNum);		// ステージ生成
 
-	//CScene2D* p2D = NULL;
-	//p2D = CScene2D::Create(D3DXVECTOR3(1280, 720, 0), "WORD");
-	//p2D->SetWidthHeight(1280, 200.0f);
+												//CScene2D* p2D = NULL;
+												//p2D = CScene2D::Create(D3DXVECTOR3(1280, 720, 0), "WORD");
+												//p2D->SetWidthHeight(1280, 200.0f);
 }
 
 //=============================================================================
@@ -374,7 +373,7 @@ void CTutorial::PlayerSetting(int nNum)
 		}
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0]);
+			m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOSX, 0.0f, 0.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
@@ -383,12 +382,12 @@ void CTutorial::PlayerSetting(int nNum)
 		{
 			if (nNum > 1)
 			{
-				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOSX, 0.0f, 0.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, m_type[1], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			}
 			else
 			{
 				m_type[1] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
-				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOSX, 0.0f, 0.0f), CCharaBase::MOVETYPE_NPC_AI, 1, m_type[1], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			}
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
@@ -398,12 +397,12 @@ void CTutorial::PlayerSetting(int nNum)
 		{
 			if (nNum > 2)
 			{
-				m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->Set(D3DXVECTOR3(0.0f, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, m_type[2], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			}
 			else
 			{
 				m_type[2] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
-				m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->Set(D3DXVECTOR3(0.0f, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_NPC_AI, 2, m_type[2], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			}
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
@@ -413,12 +412,12 @@ void CTutorial::PlayerSetting(int nNum)
 		{
 			if (nNum > 3)
 			{
-				m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->Set(D3DXVECTOR3(0.0f, 0.0f, -PLAYER_INITPOSX), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, m_type[3], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			}
 			else
 			{
 				m_type[3] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
-				m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->Set(D3DXVECTOR3(0.0f, 0.0f, -PLAYER_INITPOSX), CCharaBase::MOVETYPE_NPC_AI, 3, m_type[3], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			}
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
@@ -438,27 +437,27 @@ void CTutorial::PlayerSetting(int nNum)
 
 		if (m_pPlayer[0] != NULL)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[0]->Set(D3DXVECTOR3(0.0f, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
 
 		if (m_pPlayer[1] != NULL)
 		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[1]->Set(D3DXVECTOR3(0.0f, 0.0f, -PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 		}
 
 		if (m_pPlayer[2] != NULL)
 		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOSX, 0.0f, 0.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
 		if (m_pPlayer[3] != NULL)
 		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOSX, 0.0f, 0.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}
