@@ -56,8 +56,10 @@ public:
 	void SetbDraw(bool bDraw) { m_bDraw = bDraw; };
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
 	void SetScale(float fScale);
+	void SetScene2DLeftCenter(D3DXVECTOR3 pos, float sizeW, float sizeH);
 
 	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else { return m_fHeight; } };
+	bool GetbDraw(void) { return m_bDraw; }
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ

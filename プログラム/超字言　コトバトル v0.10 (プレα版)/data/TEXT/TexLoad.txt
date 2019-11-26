@@ -94,7 +94,8 @@ DATA = 00073 data/TEXTURE/tutorial/next.png NEXT
 
 
 
-DATA = 00072 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLANATION
-DATA = 00073 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
+DATA = 00074 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLANATION
+DATA = 00075 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
+DATA = 00076 data/TEXTURE/CharactorSelect/CharaSel_ModeBack.png CHARASEL_BACKMODE
 
 END_LOAD

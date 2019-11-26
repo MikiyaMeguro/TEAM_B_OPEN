@@ -107,6 +107,10 @@ void CStageSelect::Init(void)
 	m_pcStageSelect[1] = MACHINE_STAGE_WEATHER;
 	m_pcStageSelect[2] = MACHINE_STAGE_TERRAIN;
 
+	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_BACKSPACE);
+	CCommand::RegistCommand("", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_X);
+	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_LEFT_SHOULDER);
+
 }
 
 //=============================================================================
@@ -114,6 +118,20 @@ void CStageSelect::Init(void)
 //=============================================================================
 void CStageSelect::Uninit(void)
 {
+	if (m_pMeshField != NULL)
+	{
+		m_pMeshField->Uninit();
+		m_pMeshField = NULL;
+	}
+	for (int nCnt = 0; nCnt< 4; nCnt++)
+	{
+		if (m_pWall[nCnt] != NULL)
+		{
+			m_pWall[nCnt]->Uninit();
+			m_pWall[nCnt] = NULL;
+		}
+	}
+
 	//全ての終了処理
 	CScene::ReleseAll();
 }
@@ -172,6 +190,10 @@ void CStageSelect::Update(void)
 			pCamera->SetRotation(D3DXVECTOR3(0.0f, m_CameraRot.y, 0.0f));
 			pCamera->SetPosV(m_CameraPosV);
 
+		}
+		if (CCommand::GetCommand("DELETE") == true)
+		{
+			pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
 		}
 		/* マスクのフェード処理 */
 		MaskFade();
