@@ -726,9 +726,27 @@ END_MODELSET
 
 MODELSET		# [63]
 	TYPE = 3					# モデルタイプ
-	POS = -220.0 0.0 0.0		# 位置情報
+	POS = -220.0 0.0 360.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
-	SCALE = 3.00 0.10 20.00		# スケール情報
+	SCALE = 3.00 0.10 2.00		# スケール情報
+	COLLISION = 4				# コリジョンタイプ情報
+	GIMMICK = 1					# ギミック情報
+END_MODELSET
+
+MODELSET		# [63]
+	TYPE = 3					# モデルタイプ
+	POS = -220.0 0.0 -20.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 3.00 0.10 14.70		# スケール情報
+	COLLISION = 4				# コリジョンタイプ情報
+	GIMMICK = 1					# ギミック情報
+END_MODELSET
+
+MODELSET		# [63]
+	TYPE = 3					# モデルタイプ
+	POS = -220.0 0.0 -380.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 3.00 0.10 1.00		# スケール情報
 	COLLISION = 4				# コリジョンタイプ情報
 	GIMMICK = 1					# ギミック情報
 END_MODELSET
