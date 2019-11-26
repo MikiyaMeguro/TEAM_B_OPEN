@@ -441,3 +441,27 @@ void CScene2D::SetScale(float fScale)
 	m_pVtxBuff->Unlock();
 
 }
+//=============================================================================
+// 2Dポリゴンの設定（左を中心座標にする）
+//=============================================================================
+void CScene2D::SetScene2DLeftCenter(D3DXVECTOR3 pos, float sizeW, float sizeH)
+{
+	VERTEX_2D *pVtx;//頂点情報へのポインタ
+
+	m_Pos = pos;
+	m_fWidth = sizeW;
+	m_fHeight = sizeH;
+
+	// 頂点情報を設定
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//ポリゴンの大きさの座標設定
+	pVtx[0].pos = D3DXVECTOR3(m_Pos.x, (m_Pos.y - m_fHeight), 0.0f);
+	pVtx[1].pos = D3DXVECTOR3((m_Pos.x + m_fWidth), (m_Pos.y - m_fHeight), 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(m_Pos.x, (m_Pos.y + m_fHeight), 0.0f);
+	pVtx[3].pos = D3DXVECTOR3((m_Pos.x + m_fWidth), (m_Pos.y + m_fHeight), 0.0f);
+
+	//頂点バッファのアンロック
+	m_pVtxBuff->Unlock();
+
+}
