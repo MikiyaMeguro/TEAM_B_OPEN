@@ -64,6 +64,7 @@ CPlayerSelect::CPlayerSelect(int nPriority) : CScene(7)
 	m_fMoveMode = 0.0f;
 	m_nCntAnim = 0;
 	m_nPatturnAnim = 0;
+
 }
 
 //--------------------------------------------
@@ -134,6 +135,11 @@ HRESULT CPlayerSelect::Init(void)
 
 	//オブジェクト種類の設定
 	CScene::SetObjType(CScene::OBJTYPE_MODESELECT);
+
+	/* コマンド */
+	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_BACKSPACE);
+	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_X);
+	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
 
 	return S_OK;
 }
@@ -406,7 +412,7 @@ void CPlayerSelect::Update(void)
 	SetSelectAnimation(PLNUMSELECTBGTYPE_BG, ANIMTYPE_X, 3, 4, 1, 15);
 
 	//モード選択に戻る
-	if (pInput->GetTrigger(DIK_BACKSPACE) == true && m_bCaution == false)
+	if (CCommand::GetCommand("DELETE") == true && m_bCaution == false)
 	{
 		Uninit();
 		CManager::SetMode(CManager::MODE_SELECT);

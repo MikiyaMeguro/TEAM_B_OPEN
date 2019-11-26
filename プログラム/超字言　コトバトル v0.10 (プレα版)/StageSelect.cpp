@@ -31,12 +31,12 @@
 #define DEFAULT_POS (D3DXVECTOR3(SIZE_X,SIZE_Y,0.0f))								//初期化位置
 #define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))									//初期化回転
 #define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))							//初期化色_白
-#define STAGESELCHOICE_POS	(D3DXVECTOR3(300.0f,130.0f,0.0f))						//選択肢ポリゴンの位置
-#define STAGESELCHOICE_INTERVAL (350.0f)											//選択肢ポリゴン同士の間隔
+#define STAGESELCHOICE_POS	(D3DXVECTOR3(260.0f,110.0f,0.0f))						//選択肢ポリゴンの位置
+#define STAGESELCHOICE_INTERVAL (380.0f)											//選択肢ポリゴン同士の間隔
 #define STAGESEL_DIFF (0.3f)														//移動の変化量
 #define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")	//機械ステージ
 #define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")	//天候ステージ
-#define MACHINE_STAGE_TIKEI	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")		//地形
+#define MACHINE_STAGE_TERRAIN	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")		//地形
 
 //============================================================================
 //静的メンバ変数宣言
@@ -45,7 +45,7 @@ CScene2D *CStageSelect::m_apScene2D[MAX_STAGESELECT_TEX] = {};
 CScene2D *CStageSelect::m_apSelect2D[MAX_STAGESELECT] = {};
 CScene2D *CStageSelect::m_pMask2D = NULL;
 CMeshField *CStageSelect::m_pMeshField = NULL;
-CWall *CStageSelect::m_pWall = NULL;
+CWall *CStageSelect::m_pWall[4] = {};
 int	CStageSelect::m_nSelect = 0;
 //=============================================================================
 //	コンストラクタ
@@ -85,6 +85,9 @@ CStageSelect::~CStageSelect()
 //=============================================================================
 void CStageSelect::Init(void)
 {
+	/* ポインタの初期化処理 */
+	InitPointer();
+
 	/*2Dポリゴンの初期設定*/
 	InitPolygon();
 
@@ -99,9 +102,10 @@ void CStageSelect::Init(void)
 		pCamera->SetPosR(D3DXVECTOR3(20.0f, 40.0f, 0.0f));
 	}
 
+	//読み込むテキストデータを登録
 	m_pcStageSelect[0] = MACHINE_STAGE_MACHINE;
 	m_pcStageSelect[1] = MACHINE_STAGE_WEATHER;
-	m_pcStageSelect[2] = MACHINE_STAGE_TIKEI;
+	m_pcStageSelect[2] = MACHINE_STAGE_TERRAIN;
 
 }
 
@@ -128,8 +132,7 @@ void CStageSelect::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	if (pFade->GetFade() == CFade::FADE_NONE)
-	{
-
+	{//フェードしてないときのみ処理
 		/* 選択処理 */
 		if (CCommand::GetCommand("RIGHT"))
 		{//右
@@ -158,7 +161,7 @@ void CStageSelect::Update(void)
 			Selecttype(m_type, pFade, pManager);
 		}
 		if (pCamera != NULL)
-		{
+		{//カメラの回転
 			m_CameraRot.y = pCamera->GetRotation().y;
 			m_CameraPosV = pCamera->GetPosV();
 			m_CameraPosR = pCamera->GetPosR();
@@ -211,6 +214,7 @@ void CStageSelect::InitPolygon(void)
 		m_SelectPos[nCnt] = m_apSelect2D[nCnt]->GetPosition();
 
 	}
+	/* 各アイコンの色を設定 */
 	m_IconCol[0] = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_IconCol[1] = D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f);
 	m_IconCol[2] = D3DXCOLOR(0.8f, 0.8f, 0.8f, 0.5f);
@@ -228,9 +232,9 @@ void CStageSelect::InitPolygon(void)
 	}
 
 	/* サイズ設定 */
-	m_apSelect2D[0]->SetWidthHeight(DEFAULT_SIZE*1.8f, DEFAULT_SIZE*1.3f);
-	m_apSelect2D[1]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*1.0f);
-	m_apSelect2D[2]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*1.0f);
+	m_apSelect2D[0]->SetWidthHeight(DEFAULT_SIZE*1.9f, DEFAULT_SIZE*1.2f);
+	m_apSelect2D[1]->SetWidthHeight(DEFAULT_SIZE*1.4f, DEFAULT_SIZE*0.9f);
+	m_apSelect2D[2]->SetWidthHeight(DEFAULT_SIZE*1.4f, DEFAULT_SIZE*0.9f);
 
 	for (int nCnt = 0; nCnt < MAX_STAGESELECT; nCnt++)
 	{/* サイズを取得 */
@@ -255,6 +259,11 @@ void CStageSelect::InitPolygon(void)
 	m_apScene2D[STAGESELECTTYPE_FRAME] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SCREEN_HEIGHT-90.0f, 0.0f), "FRAME");
 	m_apScene2D[STAGESELECTTYPE_FRAME]->SetWidthHeight(DEFAULT_SIZE*5.0f, DEFAULT_SIZE*0.8f);
 
+	//字幕
+	m_apScene2D[STAGESELECTTYPE_EXPLANATION] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SCREEN_HEIGHT - 80.0f, 0.0f), "STAGESEL_EXPLANATION");
+	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetWidthHeight(DEFAULT_SIZE*4.8f, DEFAULT_SIZE*0.8f);
+	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f / 3));
+
 	//マスク
 	m_pMask2D = CScene2D::Create(D3DXVECTOR3(SIZE_X, SIZE_Y, 0.0f), " ",2);
 	m_pMask2D->SetWidthHeight(DEFAULT_SIZE*5.2f, DEFAULT_SIZE*4.0f);
@@ -277,6 +286,9 @@ void CStageSelect::ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed)
 //=============================================================================
 void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CManager *pManager)
 {
+	/* 字幕のテクスチャ座標移動 */
+	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, (1.0f / MAX_STAGE)*m_nSelect),
+													D3DXVECTOR2(1.0f, (1.0f / MAX_STAGE) + (1.0f / MAX_STAGE)*m_nSelect));
 	switch (TYPE)
 	{
 	case SELECTTYPE_SELECT_MACHINE:	//機械
@@ -303,17 +315,17 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 		break;
 	}
 	if (m_bLoad == false)
-	{
+	{//ステージ読み込みをしていない場合
 		if (m_MaskFade == MASKFADE_NONE)
-		{
+		{//マスクが透明なときのみステージ読み込みを行う
 			StageLoadState(STAGELOAD_LOAD, m_nSelect);
 			m_bLoad = true;
 		}
 	}
-	else if (m_bLoad == true)
-	{
+	else
+	{//ステージ読み込みがされている
 		if (m_MaskFade == MASKFADE_IN)
-		{
+		{//マスクがフェードインし終わってる時に読み込まれたステージを破棄する
 			StageLoadState(STAGELOAD_UNLOAD, m_nSelect);
 			m_bLoad = false;
 		}
@@ -324,6 +336,7 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 //=============================================================================
 void CStageSelect::ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type)
 {
+	/* 変数宣言 */
 	float fDiffpos[MAX_STAGE] = { 0.0f ,0.0f ,0.0f };											//位置差
 	D3DXVECTOR2 fDiffScal[MAX_STAGE] = { D3DXVECTOR2(0.0f, 0.0f) ,D3DXVECTOR2(0.0f, 0.0f) };	//拡縮差
 	float fmove[MAX_STAGE] = { 0.0f ,0.0f ,0.0f };												//移動量
@@ -486,7 +499,7 @@ void CStageSelect::Replacement(SELECTICONSTATE state)
 //=============================================================================
 void CStageSelect::SetStage(int nNumState)
 {
-	m_pObj->LoadFile(m_pcStageSelect[nNumState]);
+	if (m_pObj != NULL) { m_pObj->LoadFile(m_pcStageSelect[nNumState]); }
 }
 //=============================================================================
 // ステージ読み込み
@@ -498,7 +511,6 @@ void CStageSelect::LoadStage(int nNum)
 		m_pObj = CSetObject::Create();
 		SetStage(nNum);
 	}
-
 }
 //=============================================================================
 // ステージの読み込み状況
@@ -510,24 +522,24 @@ void CStageSelect::StageLoadState(STAGELOAD Load, int nSel)
 	case STAGELOAD_NONE:
 		break;
 
-	case STAGELOAD_LOAD:
+	case STAGELOAD_LOAD:		//読み込み
 		LoadStage(m_nSelect);
 		//switch (m_nSelect)
 		//{
 		//case SELECTTYPE_SELECT_MACHINE:
 		if (m_pMeshField == NULL)
-		{
+		{//床の生成
 			m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 		}
-		if (m_pWall == NULL)
-		{
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0,0);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+		if (m_pWall[0] == NULL&&m_pWall[1] == NULL&&m_pWall[2] == NULL&&m_pWall[3] == NULL)
+		{//下側面の生成
+			m_pWall[0]=CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[1] = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[2] = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * -0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall[3] = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 		}
 		//	break;
@@ -539,21 +551,24 @@ void CStageSelect::StageLoadState(STAGELOAD Load, int nSel)
 		m_MaskFade = MASKFADE_OUT;
 		break;
 
-	case STAGELOAD_UNLOAD:
+	case STAGELOAD_UNLOAD:		//破棄
 		if (m_pObj != NULL)
-		{
+		{//読み込みされているステージオブジェクトを破棄
 			m_pObj->UnLoadObj();
 			m_pObj = NULL;
 		}
 		if (m_pMeshField != NULL)
-		{
+		{//床の破棄
 			m_pMeshField->Uninit();
 			m_pMeshField = NULL;
 		}
-		if (m_pWall != NULL)
+		for (int nCnt = 0; nCnt < 4; nCnt++)
 		{
-			m_pWall->Uninit();
-			m_pWall = NULL;
+			if (m_pWall[nCnt] != NULL)
+			{//側面壁の破棄
+				m_pWall[nCnt]->Uninit();
+				m_pWall[nCnt] = NULL;
+			}
 		}
 		break;
 	}
@@ -570,7 +585,7 @@ void CStageSelect::MaskFade(void)
 	case MASKFADE_NONE:
 		break;
 
-	case MASKFADE_IN:
+	case MASKFADE_IN:		//フェードイン
 		if (col.a >= 1.0f)
 		{
 			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, 1.0f));
@@ -584,7 +599,7 @@ void CStageSelect::MaskFade(void)
 		}
 		break;
 
-	case MASKFADE_OUT:
+	case MASKFADE_OUT:		//フェードアウト
 		if (col.a <= 0.0f)
 		{
 			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, 0.0f));
@@ -596,5 +611,40 @@ void CStageSelect::MaskFade(void)
 			m_pMask2D->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, col.a));
 		}
 		break;
+	}
+}
+//=============================================================================
+// ポインタの初期化処理
+//=============================================================================
+void CStageSelect::InitPointer(void)
+{
+	for (int nCnt = 0; nCnt < MAX_STAGESELECT_TEX; nCnt++)
+	{
+		if (m_apScene2D[nCnt] != NULL)
+		{
+			m_apScene2D[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_STAGESELECT; nCnt++)
+	{
+		if (m_apSelect2D[nCnt] != NULL)
+		{
+			m_apSelect2D[nCnt] = NULL;
+		}
+	}
+	if (m_pMask2D != NULL)
+	{
+		m_pMask2D = NULL;
+	}
+	if (m_pMeshField != NULL)
+	{
+		m_pMeshField = NULL;
+	}
+	for (int nCnt = 0; nCnt< 4; nCnt++)
+	{
+		if(m_pWall[nCnt]!=NULL)
+		{
+			m_pWall[nCnt] = NULL;
+		}
 	}
 }

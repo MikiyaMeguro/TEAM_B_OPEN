@@ -18,6 +18,7 @@
 
 #include "bullet.h"
 #include "CameraManager.h"
+#include "tutorial.h"
 
 #include "sound.h"
 //=============================================================================
@@ -157,7 +158,7 @@ void CWordManager::Update(void)
 					else if (m_AnswerNum[nCntAnswer].z == m_aWord[nCntWord].nNum && m_bAnswer[2] == false) { m_bAnswer[2] = true; }
 				}
 
-				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; m_bFlag = false;}
+				if (m_bAnswer[0] == true && m_bAnswer[1] == true && m_bAnswer[2] == true) { m_nCntaAnswer = MAX_WORD; m_bFlag = false; }
 				else if (m_nCntaAnswer < MAX_WORD)
 				{
 					for (int nCount = 0; nCount < MAX_WORD; nCount++)
@@ -170,10 +171,21 @@ void CWordManager::Update(void)
 				if (m_nCntaAnswer == MAX_WORD)
 				{
 					m_nCreateType = nCntAnswer;
-					if (CGame::GetTube(m_nPlayerID) != NULL)
+					if (CManager::GetMode() == CManager::MODE_GAME)
 					{
-						CGame::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType]);
-						CGame::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
+						if (CGame::GetTube(m_nPlayerID) != NULL)
+						{
+							CGame::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType]);
+							CGame::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
+						}
+					}
+					else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+					{
+						if (CTutorial::GetTube(m_nPlayerID) != NULL)
+						{
+							CTutorial::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType]);
+							CTutorial::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
+						}
 					}
 					return;
 				}
@@ -201,11 +213,23 @@ void CWordManager::Update(void)
 
 	if (m_bFlag == true)
 	{
-		if (CGame::GetTube(m_nPlayerID) != NULL)
+		if (CManager::GetMode() == CManager::MODE_GAME)
 		{
-			m_bFlag = false;
-			CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM);
-			CGame::GetTube(m_nPlayerID)->SetPoint(3, m_nPlayerID, true);
+			if (CGame::GetTube(m_nPlayerID) != NULL)
+			{
+				m_bFlag = false;
+				CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM);
+				CGame::GetTube(m_nPlayerID)->SetPoint(3, m_nPlayerID, true);
+			}
+		}
+		else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+		{
+			if (CTutorial::GetTube(m_nPlayerID) != NULL)
+			{
+				m_bFlag = false;
+				CTutorial::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM);
+				CTutorial::GetTube(m_nPlayerID)->SetPoint(3, m_nPlayerID, true);
+			}
 		}
 	}
 
@@ -220,12 +244,23 @@ void CWordManager::Update(void)
 		}
 		//*m_fAnswerData = 99.0f;		// 空の番号をいれる
 	}
-
-	if (CGame::GetWordCreate()->GetCreateFlag() == true)
+	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
-		m_bSearch = false;
-		SearchWord();
-		CGame::GetWordCreate()->SetCreateFlagr(false);
+		if (CGame::GetWordCreate()->GetCreateFlag() == true)
+		{
+			m_bSearch = false;
+			SearchWord();
+			CGame::GetWordCreate()->SetCreateFlagr(false);
+		}
+	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		if (CTutorial::GetWordCreate()->GetCreateFlag() == true)
+		{
+			m_bSearch = false;
+			SearchWord();
+			CTutorial::GetWordCreate()->SetCreateFlagr(false);
+		}
 	}
 
 #ifdef _DEBUG
@@ -261,9 +296,19 @@ void CWordManager::SetWord(int nType)
 		}
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
-		if (CGame::GetTube(m_nPlayerID) != NULL)
-		{	// NULLチェック
-			CGame::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum);
+		if (CManager::GetMode() == CManager::MODE_GAME)
+		{
+			if (CGame::GetTube(m_nPlayerID) != NULL)
+			{	// NULLチェック
+				CGame::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum);
+			}
+		}
+		else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+		{
+			if (CTutorial::GetTube(m_nPlayerID) != NULL)
+			{	// NULLチェック
+				CTutorial::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum);
+			}
 		}
 		m_nCntNum++;
 	}
@@ -304,9 +349,19 @@ void CWordManager::Delete(void)
 		{	// 3つ以下の場合
 			{
 				m_nCntNum--;
-				if (CGame::GetTube(m_nPlayerID) != NULL)
-				{	// 文字保管がNULLじゃない場合
-					CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+				if (CManager::GetMode() == CManager::MODE_GAME)
+				{
+					if (CGame::GetTube(m_nPlayerID) != NULL)
+					{	// 文字保管がNULLじゃない場合
+						CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+					}
+				}
+				else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+				{
+					if (CTutorial::GetTube(m_nPlayerID) != NULL)
+					{	// 文字保管がNULLじゃない場合
+						CTutorial::GetTube(m_nPlayerID)->Delete(m_nPlayerID);
+					}
 				}
 				m_aWord[0].nNum = NOT_NUM;	// 空の状態に
 				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
@@ -327,85 +382,172 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 	CSound *pSound = CManager::GetSound();		//	音の取得
 
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		if (CGame::GetPlayer(nID) != NULL)\
+		{//指定したプレイヤーが存在していれば
+			if (m_bPress == true)
+			{
+				if (m_nCntaAnswer == MAX_WORD)
+				{	// 指定した文字なら弾を生成する
+					CModelBullet* pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						int nType = m_nCreateType;
+						m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+						pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
 
-	if (CGame::GetPlayer(nID) != NULL)
-	{//指定したプレイヤーが存在していれば
-		if (m_bPress == true)
-		{
-			if (m_nCntaAnswer == MAX_WORD)
-			{	// 指定した文字なら弾を生成する
-				CModelBullet* pModel = CModelBullet::Create();
-				if (pModel != NULL)
-				{
-					int nType = m_nCreateType;
-					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
-					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						if (m_type[nType] == CModelBullet::TYPE_MISSILE)
+						{
+							pModel->SetHomingChara(pChara);
+						}
+						m_nCreateType = NOT_NUM;
 
-					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
-					if (m_type[nType] == CModelBullet::TYPE_MISSILE)
-					{
-						pModel->SetHomingChara(pChara);
-					}
-					m_nCreateType = NOT_NUM;
-
-					if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
+						if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
+						}
 					}
 				}
-			}
-			else if (m_nCntaAnswer < MAX_WORD)
-			{	// ゴミモデルを出す
-				CModelBullet* pModel = CModelBullet::Create();
-				if (pModel != NULL)
-				{
-					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
-					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
+				else if (m_nCntaAnswer < MAX_WORD)
+				{	// ゴミモデルを出す
+					CModelBullet* pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
+						pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
 
-					//pModel->SetHomingChara(pChara);
+						//pModel->SetHomingChara(pChara);
+					}
+				}
+
+
+				//ブレンド無しで弾打ちモーションに移行
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
+
+				Reset();		// 設定を戻す
+				if (CGame::GetTube(m_nPlayerID) != NULL)
+				{//筒クラス内の文字情報を削除
+					CGame::GetTube(m_nPlayerID)->AllDelete();
 				}
 			}
+			else if (m_bPress == false)
+			{	// それ以外の場合
+				if (m_nCntNum > 0)
+				{
+					CWordBullet* pWord = CWordBullet::Create();
 
-			//ブレンド無しで弾打ちモーションに移行
-			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
-			CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
+					if (pWord != NULL)
+					{
+						pWord->Set(BulletMuzzle, BulletRot, 5.0f, 100, GetWordNum(0), nID);
+					}
 
-			Reset();		// 設定を戻す
-			if (CGame::GetTube(m_nPlayerID) != NULL)
-			{//筒クラス内の文字情報を削除
-				CGame::GetTube(m_nPlayerID)->AllDelete();
+					Delete();		// 文字を一部削除
+
+				}
 			}
 		}
-		else if(m_bPress == false)
-		{	// それ以外の場合
-			if (m_nCntNum > 0)
+	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		if (CTutorial::GetPlayer(nID) != NULL)
+		{//指定したプレイヤーが存在していれば
+			if (m_bPress == true)
 			{
-				CWordBullet* pWord = CWordBullet::Create();
+				if (m_nCntaAnswer == MAX_WORD)
+				{	// 指定した文字なら弾を生成する
+					CModelBullet* pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						int nType = m_nCreateType;
+						m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+						pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
 
-				if (pWord != NULL)
-				{
-					pWord->Set(BulletMuzzle, BulletRot, 5.0f, 100, GetWordNum(0), nID);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						if (m_type[nType] == CModelBullet::TYPE_MISSILE)
+						{
+							pModel->SetHomingChara(pChara);
+						}
+						m_nCreateType = NOT_NUM;
+
+						if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
+						}
+					}
+				}
+				else if (m_nCntaAnswer < MAX_WORD)
+				{	// ゴミモデルを出す
+					CModelBullet* pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
+						pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
+
+																			 //pModel->SetHomingChara(pChara);
+					}
 				}
 
-				Delete();		// 文字を一部削除
+				//ブレンド無しで弾打ちモーションに移行
+				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 
+				Reset();		// 設定を戻す
+				if (CTutorial::GetTube(m_nPlayerID) != NULL)
+				{//筒クラス内の文字情報を削除
+					CTutorial::GetTube(m_nPlayerID)->AllDelete();
+				}
+			}
+			else if (m_bPress == false)
+			{	// それ以外の場合
+				if (m_nCntNum > 0)
+				{
+					CWordBullet* pWord = CWordBullet::Create();
+
+					if (pWord != NULL)
+					{
+						pWord->Set(BulletMuzzle, BulletRot, 5.0f, 100, GetWordNum(0), nID);
+					}
+
+					Delete();		// 文字を一部削除
+
+				}
 			}
 		}
 	}
@@ -519,6 +661,8 @@ void CWordManager::SearchAssist(int nCntData)
 	CScene *pScene = NULL;
 
 	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
+	if (CManager::MODE_TUTORIAL == CManager::GetMode()) { nNum = CTutorial::GetWordCreate()->GetPopNum(); }
+
 
 	while (nCount < nNum)
 	{
@@ -571,6 +715,8 @@ void CWordManager::UninitAssist(void)
 	CScene *pScene = NULL;
 
 	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
+	if (CManager::MODE_TUTORIAL == CManager::GetMode()) { nNum = CTutorial::GetWordCreate()->GetPopNum(); }
+
 
 	while (nCount < nNum)
 	{

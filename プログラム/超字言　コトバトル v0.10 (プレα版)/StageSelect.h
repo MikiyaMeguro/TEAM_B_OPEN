@@ -22,7 +22,7 @@ class CWall;
 // マクロ定義
 //*****************************************************************************
 #define MAX_STAGESELECT		(3)
-#define MAX_STAGESELECT_TEX (4)
+#define MAX_STAGESELECT_TEX (5)
 
 class CStageSelect
 {
@@ -45,6 +45,7 @@ private:
 		STAGESELECTTYPE_BAND_L,		//帯：左
 		STAGESELECTTYPE_BAND_R,		//帯：右
 		STAGESELECTTYPE_FRAME,		//字幕枠
+		STAGESELECTTYPE_EXPLANATION,		//字幕
 		STAGESELECTTYPE_MAX			//最大数
 	}STAGESELECTTYPE;
 
@@ -92,23 +93,23 @@ private:
 	void Replacement(SELECTICONSTATE state);							//ポリゴン位置の入れ替え処理
 	void SetStage(int nNumState);										//ステージ生成の処理
 	void LoadStage(int nNum);											//ステージのロード処理
-	void StageLoadState(STAGELOAD Load,int nSel);										//ステージロードの状態
+	void StageLoadState(STAGELOAD Load,int nSel);						//ステージロードの状態
 	void MaskFade(void);												//マスクのフェード処理
+	void InitPointer(void);												//ポインタの初期化処理
 
 	/* 変数 */
 	static CScene2D *m_apScene2D[MAX_STAGESELECT_TEX];				//演出系2D
 	static CScene2D *m_apSelect2D[MAX_STAGESELECT];					//選択肢2D
 	static CScene2D *m_pMask2D;										//カメラマスク
 	static int	m_nSelect;											// 選択している番号
-	static CMeshField *m_pMeshField;
-	static CWall *m_pWall;
+	static CMeshField *m_pMeshField;								//床
+	static CWall *m_pWall[4];										//壁
 	SELECTTYPE m_type;												//選択されている番号の状態
-	char *m_pcStageName[MAX_STAGESELECT];							// ステージの名前保管
+	char *m_pcStageSelect[MAX_STAGESELECT];							// ステージの名前保管
 	CSetObject *m_pObj;
 
 	/* 演出系変数 */
 	int m_nCntScrool;												//スクロールのカウンター
-	char *m_pcStageSelect[MAX_STAGESELECT];							// ステージの名前保管
 	D3DXVECTOR3 m_SelectPos[MAX_STAGESELECT];						//セレクトの位置を保存
 	SELECTICONSTATE m_MoveIconState;								//移動の状態
 	float m_fWidth[MAX_STAGESELECT], m_fHeight[MAX_STAGESELECT];	//縦と横の形を保存しておく

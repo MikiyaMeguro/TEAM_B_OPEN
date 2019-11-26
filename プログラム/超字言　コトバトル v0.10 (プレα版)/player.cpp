@@ -217,7 +217,8 @@ void CPlayer::Update(void)
 	D3DXVECTOR3 testmove;
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
-	if (m_pCharactorMove != NULL && CManager::GetMode() == CManager::MODE_GAME)
+	if (m_pCharactorMove != NULL &&
+		(CManager::GetMode() == CManager::MODE_GAME ||CManager::GetMode() == CManager::MODE_TUTORIAL))
 	{
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
@@ -344,7 +345,9 @@ void CPlayer::Update(void)
 					{
 						if (nPlayer != -1)
 						{
-							m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover());
+
+							if (CManager::GetMode() == CManager::MODE_GAME) { m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover()); }
+							if (CManager::GetMode() == CManager::MODE_TUTORIAL) { m_pLockOnCharactor = (C3DCharactor*)(CTutorial::GetPlayer(nPlayer)->GetCharaMover()); }
 
 							if (pCam != NULL)
 							{
@@ -703,7 +706,7 @@ bool CPlayer::CollisionBullet(void)
 					{	// モデルの場合はポイント加算
 						CPoint *pPoint = NULL;
 						if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
-						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /*チュートリアルで取得する*/ }
+						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { pPoint = CTutorial::GetPoint(pBullet->GetID()); }
 
 						if (pPoint != NULL) { pPoint->AddPoint(1); }
 					}
@@ -820,8 +823,15 @@ int		CPlayer::GetNearPlayer(void)
 	{
 		pChara = NULL;
 		pPlayer = NULL;
+		if (CManager::GetMode() == CManager::MODE_GAME)
+		{
+			pPlayer = CGame::GetPlayer(nCntPlayer);
+		}
+		else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+		{
+			pPlayer = CTutorial::GetPlayer(nCntPlayer);
+		}
 
-		pPlayer = CGame::GetPlayer(nCntPlayer);
 		if (pPlayer != NULL)
 		{
 			pChara = pPlayer->GetCharaMover();
