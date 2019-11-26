@@ -127,7 +127,7 @@ void CSetWord::WordCreate(void)
 			if (m_nAnswerNumCount == 1) { fWord = m_AnswerNum[m_nRandAnswerNum].y; }
 			if (m_nAnswerNumCount == 2) { fWord = m_AnswerNum[m_nRandAnswerNum].z; }
 
-			CWord::Create(m_pWordPos[nRandNum].pos, 0.0f, 0.0f, "WORD", (int)fWord, nRandNum);
+			CWord::Create(m_pWordPos[nRandNum].pos,D3DXVECTOR3(0.0f,0.0f,0.0f), 0.0f, 0.0f, "WORD", (int)fWord, nRandNum);
 			// 使っている場合はカウントを回す
 			nCntNum++;
 			m_nAnswerNumCount++;
@@ -163,10 +163,7 @@ void CSetWord::WordUninit(void)
 			if (pWord->GetUninitFlag() == true)
 			{
 				nNum = pWord->GetNum();		// 番号を取得
-				if (nNum < m_nNum)
-				{	// 土台から出てきた文字なら
-					m_pWordPos[nNum].bUse = false;
-				}
+				m_pWordPos[nNum].bUse = false;
 				pWord->Uninit();
 				pWord = NULL;
 			}
@@ -195,7 +192,7 @@ void CSetWord::PopWord(void)
 				if (m_nAnswerNumCount == 1) { fWord = m_AnswerNum[m_nRandAnswerNum].y; }
 				if (m_nAnswerNumCount == 2) { fWord = m_AnswerNum[m_nRandAnswerNum].z; }
 
-				CWord::Create(m_pWordPos[nCntPos].pos, 0.0f, 0.0f, "WORD", (int)fWord,0,nCntPos);
+				CWord::Create(m_pWordPos[nCntPos].pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 0.0f, 0.0f, "WORD", (int)fWord,0,nCntPos);
 				m_nAnswerNumCount++;
 				m_pWordPos[nCntPos].nCntPop = 0;
 				m_pWordPos[nCntPos].bUse = true;
