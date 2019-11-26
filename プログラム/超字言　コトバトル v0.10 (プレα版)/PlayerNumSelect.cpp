@@ -149,6 +149,41 @@ HRESULT CPlayerSelect::Init(void)
 //=============================================================================
 void CPlayerSelect::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < MAX_PLAYERNUMSEL_BG; nCnt++)
+	{
+		if (m_apPolygonBG[nCnt] != NULL)
+		{
+			m_apPolygonBG[nCnt]->Uninit();
+			m_apPolygonBG[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_PLAYER_SELECTMENU; nCnt++)
+	{
+		if (m_apPolygon[nCnt] != NULL)
+		{
+			m_apPolygon[nCnt]->Uninit();
+			m_apPolygon[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
+	{
+		if (m_pSelect2D[nCnt] != NULL)
+		{
+			m_pSelect2D[nCnt]->Uninit();
+			m_pSelect2D[nCnt] = NULL;
+		}
+	}
+	if (m_pCaution2D != NULL)
+	{
+		m_pCaution2D->Uninit();
+		m_pCaution2D = NULL;
+	}
+	if (m_pCaution2DBG != NULL)
+	{
+		m_pCaution2DBG->Uninit();
+		m_pCaution2DBG = NULL;
+	}
+
 	//Ž©•ª‚ð”jŠü
 	Release();
 }
@@ -401,6 +436,7 @@ void CPlayerSelect::Update(void)
 			{
 				Uninit();
 				CManager::SetMode(CManager::MODE_SELECT);
+				return;
 			}
 		}
 	}

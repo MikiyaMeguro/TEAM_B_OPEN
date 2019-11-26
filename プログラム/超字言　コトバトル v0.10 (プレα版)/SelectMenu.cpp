@@ -170,6 +170,36 @@ HRESULT CSelectMenu::Init()
 //=============================================================================
 void CSelectMenu::Uninit(void)
 {
+	for (int nCnt = 0; nCnt<MAX_SELECTMODE_MODESEL;nCnt++)
+	{
+		if (m_apPolygon_ModeSel[nCnt] != NULL)
+		{
+			m_apPolygon_ModeSel[nCnt]->Uninit();
+			m_apPolygon_ModeSel[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt<m_nMaxMenu; nCnt++)
+	{
+		if (m_apPolygon[nCnt] != NULL)
+		{
+			m_apPolygon[nCnt]->Uninit();
+			m_apPolygon[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt<MAX_SELECTMODE_RANKING; nCnt++)
+	{
+		if (m_apPolygon2D_Ranking[nCnt] != NULL)
+		{
+			m_apPolygon2D_Ranking[nCnt]->Uninit();
+			m_apPolygon2D_Ranking[nCnt] = NULL;
+		}
+	}
+	if (m_apPolygon3D_Ranking != NULL)
+	{
+		m_apPolygon3D_Ranking->Uninit();
+		m_apPolygon3D_Ranking = NULL;
+	}
+
 	//Ž©•ª‚ð”jŠü
 	Release();
 }
@@ -257,9 +287,10 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 		{
 		case SELECT_MENU_ONE:
 			CPlayerSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
+			Uninit();
 			break;
 		case SELECT_MENU_TWO:
-			CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
+			//CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
 			break;
 		case SELECT_MENU_THREE:
 			CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
@@ -341,6 +372,10 @@ void CSelectMenu::MoveMenu(void)
 		{
 			m_SelectMode = SELECT_MENU_ONE;
 			MenuDecide(SELECT_MENU_ONE);
+			if (CManager::GetMode() == CManager::MODE_SELECT)
+			{
+				m_bModeSelect = false;
+			}
 		}
 		else if (m_nSelect == 1)
 		{
@@ -351,13 +386,24 @@ void CSelectMenu::MoveMenu(void)
 		{
 			m_SelectMode = SELECT_MENU_THREE;
 			MenuDecide(SELECT_MENU_THREE);
+			if (CManager::GetMode() == CManager::MODE_SELECT)
+			{
+				m_bModeSelect = false;
+			}
 		}
 		else if (m_nSelect == 3)
 		{
 			m_SelectMode = SELECT_MENU_FOUR;
 			MenuDecide(SELECT_MENU_FOUR);
+			if (CManager::GetMode() == CManager::MODE_SELECT)
+			{
+				m_bModeSelect = false;
+			}
 		}
-		m_bModeSelect = false;
+		if (CManager::GetMode() != CManager::MODE_SELECT)
+		{
+			m_bModeSelect = false;
+		}
 	}
 }
 //=============================================================================
@@ -366,7 +412,6 @@ void CSelectMenu::MoveMenu(void)
 void CSelectMenu::ScrollMenu(SELECTMODETYPE_MODESEL type,float fScroolSpeed)
 {
 	m_nCntScrool++;
-
 	m_apPolygon_ModeSel[type]->SetTex(D3DXVECTOR2(0.0f , 0.0f + (m_nCntScrool*fScroolSpeed)),D3DXVECTOR2(1.0f, 1.0f + (m_nCntScrool*fScroolSpeed)));
 }
 
