@@ -58,8 +58,11 @@ public:
 		MODEL_SnowWalldistortion,		// á•Ç
 		MODEL_Telephonepole,		// “d’Œ
 		
-		MODEL_KANBAN,		// ŠÅ”Â
-		MODEL_PILLAR,		// ’Œ
+		MODEL_KANBAN,		// ŠÅ”Â(¤“XŠX)
+		MODEL_GATE,			// Lê–å
+		MODEL_ORI,			// ŸB
+		MODEL_HASUICO,		// ”r…a
+		MODEL_ICEFLOOR,		// •X°
 
 		//--------------------------------------
 		// •¶Žšƒ‚ƒfƒ‹

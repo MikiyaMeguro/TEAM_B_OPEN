@@ -355,7 +355,7 @@ void CWord::Update(void)
 
 		if (m_move.x > 0.1f || m_move.z > 0.1f || m_move.x < -0.1f || m_move.z < -0.11f)
 		{
-			if (m_nLostCut > 260)
+			if (m_nLostCut > LOST_TIME-320)
 			{//	ƒtƒŒ[ƒ€‚ÅÁ‚¦‚é
 				if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
 				if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }

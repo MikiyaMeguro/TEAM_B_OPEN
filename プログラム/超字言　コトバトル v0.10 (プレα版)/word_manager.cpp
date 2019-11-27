@@ -280,7 +280,7 @@ void CWordManager::Update(void)
 			{
 				m_bFlag = false;
 				CTutorial::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM, m_nCntStock);
-				CTutorial::GetTube(m_nPlayerID)->SetPoint(3, m_nPlayerID, true);
+				CTutorial::GetTube(m_nPlayerID)->SetPoint(1, m_nPlayerID, true);
 				CTutorial::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 			}
 		}
@@ -317,6 +317,10 @@ void CWordManager::SetWord(int nType)
 	{
 		if (m_nCntNum == 0)
 		{
+			for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+			{
+				m_aWord[nCntWord].nNum = EMPTINESS_NUM;
+			}
 			pSound->SetVolume(CSound::SOUND_LABEL_SE_GETTEXT000, 0.5f);
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_GETTEXT000);
 			m_bPress = false;

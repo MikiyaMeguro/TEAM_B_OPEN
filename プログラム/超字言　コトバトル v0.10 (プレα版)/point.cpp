@@ -283,7 +283,7 @@ void CPoint::BGPosition(CScene2D *pBg)
 
 	if (pBg != NULL)
 	{	// サイズと色の設定
-		pBg->SetWidthHeight(150.0f, 70.0f);
+		pBg->SetWidthHeight(80.0f, 60.0f);
 		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
@@ -299,7 +299,6 @@ void CPoint::UIPosition(void)
 	D3DXVECTOR3 posNumber = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 posLogo = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	CScene2D *pNumber = NULL;
-	CScene2D *pLogo = NULL;
 
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer > 0 && m_nNumPlayer <= MAX_PLAYER && m_nID == 0)
@@ -357,13 +356,6 @@ void CPoint::UIPosition(void)
 	pNumber->SetWidthHeight(60.0f, 20.0f);
 	pNumber->SetTex(D3DXVECTOR2(0.0f, m_nID * 0.2f), D3DXVECTOR2(1.0f, (m_nID * 0.2f) + 0.2f));
 	pNumber->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-
-
-	// キャラクター番号の設定
-	pLogo = CScene2D::Create(posLogo, "POINT", 6);
-	pLogo->SetWidthHeight(60.0f, 20.0f);
-	pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-
 }
 
 //=============================================================================

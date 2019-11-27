@@ -228,6 +228,7 @@ private:
 	bool m_bNotWayPoint;			//移動先に行けないときのフラグ
 	int	m_nTargetWP;				//目標のマス番号
 	D3DXVECTOR3 m_MarkWardPos;		//移動先の位置
+	float m_fOldCircle;				//移動先までの距離
 	int nTestCnt = 0;
 	CAvoidUi *m_pCAvoidUi;
 
