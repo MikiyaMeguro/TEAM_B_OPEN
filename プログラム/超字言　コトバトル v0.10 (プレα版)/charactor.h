@@ -26,6 +26,8 @@ class CWaypoint;
 
 class CPlayer;
 
+class CAvoidUi;
+
 class CCharaBase
 {
 public:
@@ -141,6 +143,8 @@ private:
 	CHARACTOR_MOVE_TYPE m_type;		//移動タイプ
 
 	CPlayer* m_pThisCharactor;		//このインスタンスを所持しているプレイヤー
+
+
 public:
 	CPU_THINK m_CpuThink;		//現在の考え
 	CPU_THINK m_OldCpuThink;	//過去の考え
@@ -225,6 +229,8 @@ private:
 	int	m_nTargetWP;				//目標のマス番号
 	D3DXVECTOR3 m_MarkWardPos;		//移動先の位置
 	int nTestCnt = 0;
+	CAvoidUi *m_pCAvoidUi;
+
 public:
 	bool m_bFront;
 };
