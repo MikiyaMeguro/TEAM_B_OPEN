@@ -29,7 +29,7 @@ CMeshSphere* CMeshSphere::Create(void)
 {
 	CMeshSphere* pSphere = NULL;
 
-	pSphere = new CMeshSphere(1, OBJTYPE_PARTICLE);
+	pSphere = new CMeshSphere(1, OBJTYPE_MESH_SPHERE);
 
 	if (pSphere != NULL)
 	{

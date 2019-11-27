@@ -15,6 +15,8 @@
 #include "debugProc.h"
 #include "explosion.h"
 #include "tutorial.h"
+
+#include "LineOrbit.h"
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
@@ -23,6 +25,8 @@ C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 	m_Type = TYPE_NONE;
 	m_fKnockBack = 0.0f;
 	m_MoveResult = D3DXVECTOR3(0.0f,0.0f,0.0f);
+
+	m_pOrbit = NULL;
 }
 C3DBullet::~C3DBullet()
 {
@@ -53,6 +57,12 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 //=============================================================================
 HRESULT C3DBullet::Init(void)
 {
+	m_pOrbit = CLineOrbit::Create();
+	if (m_pOrbit != NULL)
+	{
+		m_pOrbit->Set(m_pos,D3DXVECTOR3(0.0f,0.0f,0.0f),10.0f,&m_mtxTrans,"",
+			D3DXCOLOR(0.0f,0.6f,1.0f,0.7f),40,1);
+	}
 
 	SetObjType(OBJTYPE_BULLET);
 	return S_OK;
@@ -63,7 +73,10 @@ HRESULT C3DBullet::Init(void)
 //=============================================================================
 void C3DBullet::Uninit(void)
 {
-
+	if (m_pOrbit != NULL)
+	{
+		m_pOrbit->Uninit();
+	}
 
 	Release();
 }
@@ -88,7 +101,6 @@ void C3DBullet::Update(void)
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
-
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{//メッシュフィールドとの当たり判定
 		CMeshField *pMesh = CGame::GetMeshField();
@@ -111,6 +123,9 @@ void C3DBullet::Update(void)
 
 	m_MoveResult = move;		//求めた差分を格納
 	m_pos += move;
+
+
+	D3DXMatrixTranslation(&m_mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 
 	CDebugProc::Print("cf","BULLET_ROT_Y",m_rot.y);
 }
@@ -212,13 +227,17 @@ void C3DBullet::Homing(D3DXVECTOR3 HomingPos)
 
 	//弾の位置ベクトルとホーミングしたい物の位置ベクトルからクォータニオンを作成
 	float fRotY = atan2f((HomingPos.x - m_pos.x), (HomingPos.z - m_pos.z));
+
 	//float fRotX = atan2f((HomingPos.y - m_pos.y), (HomingPos.z - m_pos.z)) + D3DX_PI;
 	//CUtilityMath::RotateNormarizePI(&fRotX);
+
 	CUtilityMath::RotateNormarizePI(&fRotY);
 	D3DXQuaternionRotationYawPitchRoll(&HomingQuat,fRotY,0.0f,0.0f);
+
 	//D3DXQuaternionInverse(&HomingQuat, &HomingQuat);
 	//二つのクォータニオンを球面補間する
-	D3DXQuaternionSlerp(&dest,&Quat,&HomingQuat,0.1f);	//中央をとる
+
+	D3DXQuaternionSlerp(&dest,&Quat,&HomingQuat,0.1f);
 
 	//求めたクォータニオンを角度マトリックスに変換
 	D3DXMatrixRotationQuaternion(&m_mtxRotate,&dest);

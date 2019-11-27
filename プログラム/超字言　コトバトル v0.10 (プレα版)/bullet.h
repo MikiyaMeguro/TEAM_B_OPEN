@@ -25,7 +25,7 @@
 //=============================================================================
 class CSceneX;
 class CSceneBillBoard;
-
+class CLineOrbit;
 //=============================================================================
 // クラスの定義
 //=============================================================================
@@ -73,11 +73,12 @@ private:
 	D3DXMATRIX m_mtxRotate;			//回転マトリックス
 	float m_fMove;					//移動量
 	D3DXVECTOR3 m_MoveResult;		//前回との移動差分
-
+	D3DXMATRIX m_mtxTrans;
 
 	int m_nLife;	//体力
 	int m_nID;	//誰が打ったか
 
+	CLineOrbit* m_pOrbit;
 };
 
 //モデル弾クラス

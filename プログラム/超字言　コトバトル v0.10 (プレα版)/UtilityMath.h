@@ -169,6 +169,7 @@ public:
 	static float Mapping(const float& value, const float& fromSource, const float& toSource, const float& fromTarget, const float& toTarget, bool bClamp = false);
 	static D3DXVECTOR3 MoveCoeffient(D3DXVECTOR3& value,const float& coeffient);
 	static float Round_n(float& fValue,const int nRound);
+	//–¢ŽÀ‘•
 	static D3DXVECTOR3 EulerToQuaternion(const D3DXQUATERNION& quat);
 
 private:

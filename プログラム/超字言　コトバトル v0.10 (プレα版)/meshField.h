@@ -30,7 +30,7 @@
 class CMeshField : public CScene
 {
 public:
-	CMeshField(int nPriority = 3, OBJTYPE objType = OBJTYPE_MESHFIELD);	// コンストラクタ
+	CMeshField(int nPriority = 3, OBJTYPE objType = OBJTYPE_MESH_FIELD);	// コンストラクタ
 	~CMeshField();														// デストラクタ
 
 	static CMeshField *Create(D3DXVECTOR3 pos);							// オブジェクトの生成

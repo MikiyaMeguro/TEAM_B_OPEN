@@ -136,8 +136,10 @@ void CScene::UpdeteAll(void)
 				CScene *pSceneNext = pScene->m_pNext;
 
 				// 更新
-				pScene->Update();
-
+				if (pScene->m_bDeath == false)
+				{
+					pScene->Update();
+				}
 				// 次のシーンに進める
 				pScene = pSceneNext;
 			}

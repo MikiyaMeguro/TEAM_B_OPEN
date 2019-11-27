@@ -22,7 +22,7 @@ class CMeshSphere : public CScene
 {
 public:
 	CMeshSphere();
-	CMeshSphere(int pri = 1, OBJTYPE type = OBJTYPE_SCENE3D);
+	CMeshSphere(int pri = 1, OBJTYPE type = OBJTYPE_MESH_SPHERE);
 	~CMeshSphere();
 
 
