@@ -460,124 +460,195 @@ void CGame::PlayerSetting(int nNum)
 				m_pPlayer[nCntPlayer] = CPlayer::Create();
 			}
 		}
-
-		//if (m_pPlayer[0] != NULL)
-		//{
-		//	m_pPlayer[0]->Set(D3DXVECTOR3(80.0f, 0.0f, -80.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
-		//	m_pPlayer[0]->SetCameraName("1P_CAMERA");
-		//	pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
-		//	m_pPlayer[1]->Set(D3DXVECTOR3(-80.0f, 0.0f, 80.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
-		//	m_pPlayer[2]->Set(D3DXVECTOR3(80.0f, 0.0f, 80.0f), CCharaBase::MOVETYPE_NPC_AI, 2);
-		//	m_pPlayer[3]->Set(D3DXVECTOR3(-80.0f, 0.0f, -80.0f), CCharaBase::MOVETYPE_NPC_AI, 3);
-		//}
-
-		//for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
-		//{
-		//	if (m_pPlayer[nCntPlayer] == NULL)
-		//	{
-		//		m_pPlayer[nCntPlayer] = CPlayer::Create();
-		//	}
-		//}
-
-		//if (m_pPlayer[0] != NULL)
-		//{
-		//	m_pPlayer[0]->Set(D3DXVECTOR3(100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0);
-		//	m_pPlayer[0]->SetCameraName("1P_CAMERA");
-		//	pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
-		//	m_pPlayer[1]->Set(D3DXVECTOR3(-100.0f, -20.0f, 100.0f), CCharaBase::MOVETYPE_NPC_AI, 1);
-		//	m_pPlayer[2]->Set(D3DXVECTOR3(100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 2);
-		//	m_pPlayer[3]->Set(D3DXVECTOR3(-100.0f, -20.0f, -100.0f), CCharaBase::MOVETYPE_NPC_AI, 3);
-		//}
-//#if 0
-		if (m_pPlayer[0] != NULL)
+		switch (m_nNumStage)
 		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0]);
-			m_pPlayer[0]->SetCameraName("1P_CAMERA");
-			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
-		}
+		case 0:
+			if (m_pPlayer[0] != NULL)
+			{
+				m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0]);
+				m_pPlayer[0]->SetCameraName("1P_CAMERA");
+				pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
+			}
 
-		if (m_pPlayer[1] != NULL)
-		{
-			if (nNum > 1)
+			if (m_pPlayer[1] != NULL)
 			{
-				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				if (nNum > 1)
+				{
+					m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				else
+				{
+					m_type[1] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
+					m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				m_pPlayer[1]->SetCameraName("2P_CAMERA");
+				pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 			}
-			else
-			{
-				m_type[1] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
-				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			}
-			m_pPlayer[1]->SetCameraName("2P_CAMERA");
-			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
-		}
 
-		if (m_pPlayer[2] != NULL)
-		{
-			if (nNum > 2)
+			if (m_pPlayer[2] != NULL)
 			{
-				m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				if (nNum > 2)
+				{
+					m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				else
+				{
+					m_type[2] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
+					m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				m_pPlayer[2]->SetCameraName("3P_CAMERA");
+				pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 			}
-			else
-			{
-				m_type[2] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
-				m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			}
-			m_pPlayer[2]->SetCameraName("3P_CAMERA");
-			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
-		}
 
-		if (m_pPlayer[3] != NULL)
-		{
-			if (nNum > 3)
+			if (m_pPlayer[3] != NULL)
 			{
-				m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				if (nNum > 3)
+				{
+					m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				else
+				{
+					m_type[3] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
+					m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				m_pPlayer[3]->SetCameraName("4P_CAMERA");
+				pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 			}
-			else
+			break;
+		case 1:
+			if (m_pPlayer[0] != NULL)
 			{
-				m_type[3] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
-				m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_NPC_AI, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[0]->Set(D3DXVECTOR3(200, 0.0f, 200), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0]);
+				m_pPlayer[0]->SetCameraName("1P_CAMERA");
+				pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 			}
-			m_pPlayer[3]->SetCameraName("4P_CAMERA");
-			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
+
+			if (m_pPlayer[1] != NULL)
+			{
+				if (nNum > 1)
+				{
+					m_pPlayer[1]->Set(D3DXVECTOR3(-200, 0.0f, 200), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				else
+				{
+					m_type[1] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
+					m_pPlayer[1]->Set(D3DXVECTOR3(-200, 0.0f, 200), CCharaBase::MOVETYPE_NPC_AI, 1, m_type[1], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				m_pPlayer[1]->SetCameraName("2P_CAMERA");
+				pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
+			}
+
+			if (m_pPlayer[2] != NULL)
+			{
+				if (nNum > 2)
+				{
+					m_pPlayer[2]->Set(D3DXVECTOR3(200, 0.0f, -200), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				else
+				{
+					m_type[2] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
+					m_pPlayer[2]->Set(D3DXVECTOR3(200, 0.0f, -200), CCharaBase::MOVETYPE_NPC_AI, 2, m_type[2], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				m_pPlayer[2]->SetCameraName("3P_CAMERA");
+				pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
+			}
+
+			if (m_pPlayer[3] != NULL)
+			{
+				if (nNum > 3)
+				{
+					m_pPlayer[3]->Set(D3DXVECTOR3(-200, 0.0f, -200), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				else
+				{
+					m_type[3] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
+					m_pPlayer[3]->Set(D3DXVECTOR3(-200, 0.0f, -200), CCharaBase::MOVETYPE_NPC_AI, 3, m_type[3], D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				}
+				m_pPlayer[3]->SetCameraName("4P_CAMERA");
+				pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
+			}
+			break;
 		}
 //#endif
 	}
 	else
 	{
-		// l”•ª‚ğ¶¬
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		switch (m_nNumStage)
 		{
-			if (m_pPlayer[nCntPlayer] == NULL)
+		case 0:
+			// l”•ª‚ğ¶¬
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 			{
-				m_pPlayer[nCntPlayer] = CPlayer::Create();
+				if (m_pPlayer[nCntPlayer] == NULL)
+				{
+					m_pPlayer[nCntPlayer] = CPlayer::Create();
+				}
 			}
-		}
 
-		if (m_pPlayer[0] != NULL)
-		{
-			m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			m_pPlayer[0]->SetCameraName("1P_CAMERA");
-			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
-		}
+			if (m_pPlayer[0] != NULL)
+			{
+				m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[0]->SetCameraName("1P_CAMERA");
+				pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
+			}
 
-		if (m_pPlayer[1] != NULL)
-		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			m_pPlayer[1]->SetCameraName("2P_CAMERA");
-			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
-		}
+			if (m_pPlayer[1] != NULL)
+			{
+				m_pPlayer[1]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[1]->SetCameraName("2P_CAMERA");
+				pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
+			}
 
-		if (m_pPlayer[2] != NULL)
-		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			m_pPlayer[2]->SetCameraName("3P_CAMERA");
-			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
-		}
-		if (m_pPlayer[3] != NULL)
-		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-			m_pPlayer[3]->SetCameraName("4P_CAMERA");
-			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
+			if (m_pPlayer[2] != NULL)
+			{
+				m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->SetCameraName("3P_CAMERA");
+				pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
+			}
+			if (m_pPlayer[3] != NULL)
+			{
+				m_pPlayer[3]->Set(D3DXVECTOR3(-PLAYER_INITPOS, 0.0f, -PLAYER_INITPOS), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->SetCameraName("4P_CAMERA");
+				pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
+			}
+			break;
+		case 1:
+			// l”•ª‚ğ¶¬
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+			{
+				if (m_pPlayer[nCntPlayer] == NULL)
+				{
+					m_pPlayer[nCntPlayer] = CPlayer::Create();
+				}
+			}
+
+			if (m_pPlayer[0] != NULL)
+			{
+				m_pPlayer[0]->Set(D3DXVECTOR3(200, 0.0f, 200), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[0]->SetCameraName("1P_CAMERA");
+				pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
+			}
+
+			if (m_pPlayer[1] != NULL)
+			{
+				m_pPlayer[1]->Set(D3DXVECTOR3(-200, 0.0f, 200), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[1]->SetCameraName("2P_CAMERA");
+				pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
+			}
+
+			if (m_pPlayer[2] != NULL)
+			{
+				m_pPlayer[2]->Set(D3DXVECTOR3(200, 0.0f, -200), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[2]->SetCameraName("3P_CAMERA");
+				pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
+			}
+			if (m_pPlayer[3] != NULL)
+			{
+				m_pPlayer[3]->Set(D3DXVECTOR3(-200, 0.0f, -200), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+				m_pPlayer[3]->SetCameraName("4P_CAMERA");
+				pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
+			}
+			break;
 		}
 	}
 }
