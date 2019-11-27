@@ -41,7 +41,6 @@ public:
 	static CWall *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType, int nTexType);		// 当たり判定
 	int GetType(void) { return m_nType; }
 private:
-	static LPDIRECT3DTEXTURE9		m_pTexture[MAX_WALL_TEX];			// テクスチャ情報へのポインタ
 	int m_nType;
 	int m_nAnimCounter;
 	int m_nCounter;
