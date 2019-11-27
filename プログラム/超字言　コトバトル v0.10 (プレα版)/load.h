@@ -63,6 +63,8 @@ public:
 		MODEL_ORI,			// 檻
 		MODEL_HASUICO,		// 排水溝
 		MODEL_ICEFLOOR,		// 氷床
+		MODEL_FLOOR,		// 第三地形
+		MODEL_ORI2,			// 檻2
 
 		//--------------------------------------
 		// 文字モデル
