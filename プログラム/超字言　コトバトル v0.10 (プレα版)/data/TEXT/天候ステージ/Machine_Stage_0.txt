@@ -404,7 +404,7 @@ MODELSET						# 噴水囲い上
 	TYPE = 24
 	POS = -23.0 0.0 259.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.15 0.1 7.0
+	SCALE = 0.15 0.125 7.0
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -413,7 +413,7 @@ MODELSET						# 噴水囲い上
 	TYPE = 24
 	POS = 23.0 0.0 259.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.15 0.1 7.0
+	SCALE = 0.15 0.125 7.0
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -424,7 +424,7 @@ MODELSET						# 噴水囲い右
 	TYPE = 24
 	POS = 259.0 0.0 -23.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 7.0 0.1 0.15
+	SCALE = 7.0 0.125 0.15
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -433,7 +433,7 @@ MODELSET						# 噴水囲い右
 	TYPE = 24
 	POS = 259.0 0.0 23.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 7.0 0.1 0.15
+	SCALE = 7.0 0.125 0.15
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -444,7 +444,7 @@ MODELSET						# 噴水囲い左
 	TYPE = 24
 	POS = -259.0 0.0 -23.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 7.0 0.1 0.15
+	SCALE = 7.0 0.125 0.15
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -453,7 +453,7 @@ MODELSET						# 噴水囲い左
 	TYPE = 24
 	POS = -259.0 0.0 23.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 7.0 0.1 0.15
+	SCALE = 7.0 0.125 0.15
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
