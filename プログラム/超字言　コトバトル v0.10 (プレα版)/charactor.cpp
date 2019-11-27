@@ -20,6 +20,7 @@
 
 #include "waypoint.h"
 
+#include "avoidui.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -34,6 +35,7 @@
 #define NEAR_DISTANCE	(100)
 #define FIELD_OUTSIDE	(300)
 
+//CAvoidUi *C3DCharactor::m_pCAvoidUi = NULL;
 
 //=============================================================================
 // 設定処理
@@ -121,6 +123,11 @@ HRESULT C3DCharactor::Init(void)
 	{
 		m_bNear[nCnt] = false;
 	}
+
+	//	回避UI
+	m_pCAvoidUi = CAvoidUi::Create(CCharaBase::GetPosition() + D3DXVECTOR3(0.0f, 13.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
+		D3DXVECTOR3(18.0f, 18.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f));
+
 	return S_OK;
 }
 
@@ -280,6 +287,20 @@ void C3DCharactor::Update(void)
 	}
 #endif
 
+
+	if (m_pCAvoidUi != NULL)
+	{//	回避UIが使用されてつ
+		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 13.0f, 0.0f));
+		if (m_nCntStepCoolTime < 1)
+		{//	step時間外
+			m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
+		else
+		{//	step時間内
+			m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+
+		}
+	}
 }
 
 //=============================================================================

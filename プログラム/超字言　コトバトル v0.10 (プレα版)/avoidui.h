@@ -1,11 +1,11 @@
 //=============================================================================
 //
-// 壁処理 [wall.h]
+// 回避UI処理 [avoidui.h]
 // Author : YUTARO ABE
 //
 //=============================================================================
-#ifndef _WALL_H_
-#define _WALL_H_
+#ifndef _AVOIDUI_H_
+#define _AVOIDUI_H_
 
 //*****************************************************************************
 // ヘッダファイルのインクルード
@@ -26,26 +26,22 @@
 //*****************************************************************************
 // クラス定義
 //*****************************************************************************
-class CWall : public CScene3D
+class CAvoidUi : public CScene3D
 {// シーン3D（親：CScene）
 public:
 
-	CWall();															// コンストラクタ
-	~CWall();															// デストラクタ
+	CAvoidUi();															// コンストラクタ
+	~CAvoidUi();														// デストラクタ
 																		// 初期化処理
-	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType,int nTexType);
+	HRESULT Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV);
 	void Uninit(void);													// 終了処理
 	void Update(void);													// 更新処理
 	void Draw(void);													// 描画処理
 																		// 生成
-	static CWall *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV, int nType, int nTexType);		// 当たり判定
-	int GetType(void) { return m_nType; }
+	static CAvoidUi *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV);		// 当たり判定
 private:
-	int m_nType;
-	int m_nAnimCounter;
 	int m_nCounter;
 	D3DXVECTOR3 m_move;
-
 };
 
 #endif
