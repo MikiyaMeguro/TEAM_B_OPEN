@@ -59,7 +59,10 @@ public:
 	void SetScene2DLeftCenter(D3DXVECTOR3 pos, float sizeW, float sizeH);
 
 	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else { return m_fHeight; } };
+	LPDIRECT3DTEXTURE9 GetTexture(void) { return m_pTexture; };
+
 	bool GetbDraw(void) { return m_bDraw; }
+	D3DXVECTOR2 GetTex(int nNum) { return m_Tex[nNum]; };
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
@@ -74,6 +77,7 @@ private:
 	D3DXCOLOR				m_Col;
 	bool					m_bDraw;
 
+	D3DXVECTOR2				m_Tex[2];				// テスクチャの座標確保					
 };
 
 #endif

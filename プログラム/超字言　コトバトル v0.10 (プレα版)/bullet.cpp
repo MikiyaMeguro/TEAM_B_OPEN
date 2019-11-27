@@ -26,7 +26,6 @@ C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 	m_fKnockBack = 0.0f;
 	m_MoveResult = D3DXVECTOR3(0.0f,0.0f,0.0f);
 
-	m_pOrbit = NULL;
 }
 C3DBullet::~C3DBullet()
 {
@@ -57,13 +56,6 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 //=============================================================================
 HRESULT C3DBullet::Init(void)
 {
-	m_pOrbit = CLineOrbit::Create();
-	if (m_pOrbit != NULL)
-	{
-		m_pOrbit->Set(m_pos,D3DXVECTOR3(0.0f,0.0f,0.0f),10.0f,&m_mtxTrans,"",
-			D3DXCOLOR(0.0f,0.6f,1.0f,0.7f),40,1);
-	}
-
 	SetObjType(OBJTYPE_BULLET);
 	return S_OK;
 }
@@ -73,11 +65,6 @@ HRESULT C3DBullet::Init(void)
 //=============================================================================
 void C3DBullet::Uninit(void)
 {
-	if (m_pOrbit != NULL)
-	{
-		m_pOrbit->Uninit();
-	}
-
 	Release();
 }
 
@@ -254,6 +241,8 @@ void C3DBullet::Homing(D3DXVECTOR3 HomingPos)
 CModelBullet::CModelBullet(int nPriority) : C3DBullet(nPriority)
 {
 	m_pModel = NULL;
+	m_pOrbit = NULL;
+
 }
 CModelBullet::~CModelBullet()
 {
@@ -287,6 +276,13 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	case TYPE_HIGHSPEED:
 		fSpeed = 8.0f;
 		m_fKnockBack = 6.0f;
+		m_pOrbit = CLineOrbit::Create();
+		if (m_pOrbit != NULL)
+		{
+			m_pOrbit->Set(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10.0f, &m_mtxTrans, "",
+				D3DXCOLOR(0.0f, 0.6f, 1.0f, 0.7f), 40, 1);
+		}
+
 		break;
 	case TYPE_STINGER:
 		fSpeed = 6.0f;
@@ -328,6 +324,28 @@ HRESULT CModelBullet::Init(void)
 //=============================================================================
 void CModelBullet::Uninit(void)
 {
+	CExplosion3D* p3D = NULL;
+	switch (m_Prop)
+	{
+	case TYPE_HIGHSPEED:
+		if (m_pOrbit != NULL)
+		{
+			m_pOrbit->Uninit();
+		}
+		break;
+	case TYPE_MISSILE:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
+		break;
+	case TYPE_BOMB:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 100.0f, 120, 0.01f); }
+		break;
+	default:
+		break;
+	}
+
+
 	if (m_pModel != NULL)
 	{
 		m_pModel->Uninit();
@@ -513,8 +531,6 @@ HRESULT CWordBullet::Init(void)
 void CWordBullet::Uninit(void)
 {
 
-	CExplosion3D* p3D = CExplosion3D::Create();
-	if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 100.0f, 60,0.01f); }
 
 	if (m_pWord != NULL)
 	{

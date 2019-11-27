@@ -66,6 +66,7 @@ protected:
 	BULLET_TYPE m_Type;
 	float m_fCollisionRadius;
 	float m_fKnockBack;	//ノックバックする値
+	D3DXMATRIX m_mtxTrans;
 private:
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_posOld;			//前回の位置
@@ -73,12 +74,9 @@ private:
 	D3DXMATRIX m_mtxRotate;			//回転マトリックス
 	float m_fMove;					//移動量
 	D3DXVECTOR3 m_MoveResult;		//前回との移動差分
-	D3DXMATRIX m_mtxTrans;
 
 	int m_nLife;	//体力
 	int m_nID;	//誰が打ったか
-
-	CLineOrbit* m_pOrbit;
 };
 
 //モデル弾クラス
@@ -123,6 +121,10 @@ private:
 	D3DXVECTOR3 m_modelRotateOffSet;
 
 	C3DCharactor* m_pHomingChara;
+
+
+	CLineOrbit* m_pOrbit;
+
 };
 
 //文字弾クラス

@@ -207,7 +207,7 @@ void CLineOrbit::Update(void)
 {
 	m_nCount++;
 
-	CDebugProc::ReleseStr();
+	//CDebugProc::ReleseStr();
 	//位置の更新
 	m_pos = m_offset;
 	if (m_Parent != NULL)
@@ -244,9 +244,9 @@ void CLineOrbit::Update(void)
 	for (int nCntVtx = 0; nCntVtx < m_nVtxNum; nCntVtx++)
 	{
 		pVtx[nCntVtx].pos = m_apMesh[nCntVtx];
-		CDebugProc::Print("cfcfcf","pos : X = ",m_apMesh[nCntVtx].x,
-								   "pos : Y = ", m_apMesh[nCntVtx].y,
-								   "pos : Z = ", m_apMesh[nCntVtx].z);
+		//CDebugProc::Print("cfcfcf","pos : X = ",m_apMesh[nCntVtx].x,
+		//						   "pos : Y = ", m_apMesh[nCntVtx].y,
+		//						   "pos : Z = ", m_apMesh[nCntVtx].z);
 	}
 
 	// 頂点バッファをアンロックする
