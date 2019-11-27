@@ -184,6 +184,7 @@ void CCharaSelect::Update(void)
 		}
 		if (m_bConfProFinish == true)
 		{//演出が終了した
+
 			m_bConf = true;	//選択操作可能にする
 		}
 	}
@@ -597,7 +598,7 @@ bool CCharaSelect::ProductionConf(void)
 
 	case CONFPRODUCTION_MOVE_END:
 		m_apConfirm2D->SetPosition(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
-		if (m_fFlashAlpha[0] == 0.0f&&m_fFlashAlpha[1] == 0.0f&&m_fFlashAlpha[2] == 0.0f&&m_fFlashAlpha[3] == 0.0f)
+		if (m_fFlashAlpha[0] <= 0.0f&&m_fFlashAlpha[1] <= 0.0f&&m_fFlashAlpha[2] <= 0.0f&&m_fFlashAlpha[3] <= 0.0f)
 		{
 			m_CnfProState = CONFPRODUCTION_NONE;
 			bFinish = true;
@@ -786,7 +787,9 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
 		/* 選択時演出関数 */
-		if (m_bConf == false) { SelectProduction(nControllNum, m_SelectState[nControllNum], m_SelectStateold[nControllNum], m_CharaType[nControllNum]); }
+		if (m_bConf == false) { 
+			SelectProduction(nControllNum, m_SelectState[nControllNum], m_SelectStateold[nControllNum], m_CharaType[nControllNum]); }
+		
 		if (m_bConf == true)
 		{//選択確定が可能になったら
 			DecisionCharactor(pFade, pManager, nControllNum);
@@ -923,7 +926,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 				}
 			}
 		}
-		else if (collision(nControllNum, CPlayer::TYPE_MAX) == true)
+		else if (collision(nControllNum, CPlayer::TYPE_RANDOM) == true)
 		{//ランダム
 			m_apScene2D[nControllNum + 12]->SetTex(D3DXVECTOR2(0.8f, 0.5f), D3DXVECTOR2(1.0f, 1.0f));
 			m_apScene2D[nControllNum + 12]->SetbDraw(true);
@@ -932,7 +935,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			{//エンター押下
 				if (m_SelectState[nControllNum] != SELECTSTATE_SELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
-					m_CharaType[nControllNum] = CPlayer::TYPE_MAX;
+					m_CharaType[nControllNum] = CPlayer::TYPE_RANDOM;
 					m_SelectState[nControllNum] = SELECTSTATE_FLASH;
 					m_bPCSelMove[nControllNum] = true;
 				}
@@ -993,7 +996,7 @@ void CCharaSelect::DecisionCharactor(CFade *pFade, CManager *pManager, int opera
 			for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
 			{//ランダムを選択した人がいる
 				m_CharaTypeFinal[nCnt] = m_CharaType[nCnt];
-				if (m_CharaTypeFinal[nCnt] == CPlayer::TYPE_MAX)
+				if (m_CharaTypeFinal[nCnt] == CPlayer::TYPE_RANDOM)
 				{//ランダムだった場合
 					m_CharaTypeFinal[nCnt] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
 				}
@@ -1002,7 +1005,11 @@ void CCharaSelect::DecisionCharactor(CFade *pFade, CManager *pManager, int opera
 			{//プレイヤー人数分キャラの種類を渡す
 				CGame::SetCharaSelect(nCnt, m_CharaTypeFinal[nCnt]);
 			}
-			pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
+
+			if (pFade->GetFade() == CFade::FADE_NONE)
+			{
+				pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
+			}
 		}
 	}
 }
