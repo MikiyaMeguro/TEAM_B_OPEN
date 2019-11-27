@@ -75,10 +75,10 @@ HRESULT CResult::Init(void)
 	float fPosX = 20;	//ï\è≤ë‰èâä˙à íu
 	float fNext = 30;	//ï\è≤ë‰ÇÃä‘ÇÃïù
 
-#if 0
+#if 1
 	m_ResultChara[0].nPoint = 0;
-	m_ResultChara[1].nPoint = 0;
-	m_ResultChara[2].nPoint = 0;
+	m_ResultChara[1].nPoint = 10;
+	m_ResultChara[2].nPoint = 20;
 	m_ResultChara[3].nPoint = 0;
 
 #endif
@@ -219,13 +219,15 @@ HRESULT CResult::Init(void)
 			break;
 		case 3:
 			if (nCntRankPos[2] == 0)
-			{	//3à ÇÃèÍèäÇ÷ïœÇ¶ÇÈ
-				fPosX = 20;
-				fNext = -30;
+			{
+				fPosX = -10;
 			}
-			fPosX += fNext;
-			nCntRankPos[2]++;
+			if (nCntRankPos[2] == 1)
+			{
+				fPosX = -40;
+			}
 			RankPos = D3DXVECTOR3(fPosX, 20.0f, 0.0f);
+			nCntRankPos[2]++;
 			break;
 		case 4:
 			RankPos = POS_4TH;
