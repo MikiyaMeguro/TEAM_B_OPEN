@@ -41,8 +41,8 @@
 //	マクロ定義
 //============================================================================
 #define CAMERA_LENGTH_1P_PLAY (100.0f)				//カメラの距離(1pプレイ用)
-#define CAMERA_LENGTH_2P_PLAY (120.0f)				//カメラの距離(2pプレイ用)
-#define CAMERA_LENGTH_3P4P_PLAY (140.0f)			//カメラの距離(3p4pプレイ用)
+#define CAMERA_LENGTH_2P_PLAY (100.0f)				//カメラの距離(2pプレイ用)
+#define CAMERA_LENGTH_3P4P_PLAY (110.0f)			//カメラの距離(3p4pプレイ用)
 #define CAMERA_LENGTH_TOPVIEW_PLAY (750.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
 #define CAMERA_ROTX (-0.05f)		//カメラのデフォルト角度(X)
@@ -370,11 +370,10 @@ void CGame::CameraSetting(int nNumPlayer)
 		case CPlayerSelect::SELECTPLAYER_2P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
 				D3DXVECTOR3(0.0f, 0.0f, -100.0f), D3DXVECTOR3(-0.2f, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
-			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, 355);
-
+			pCameraManager->SetCameraViewPort("1P_CAMERA", 140, 0, 1000, 355);
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
 				D3DXVECTOR3(0.0f, 0.0f, 100.0f), D3DXVECTOR3(-0.2f, D3DX_PI, 0.0f), CAMERA_LENGTH_2P_PLAY);
-			pCameraManager->SetCameraViewPort("2P_CAMERA", 0, 365, SCREEN_WIDTH, 355);
+			pCameraManager->SetCameraViewPort("2P_CAMERA", 140, 365, 1000, 355);
 			break;
 
 		case CPlayerSelect::SELECTPLAYER_3P:

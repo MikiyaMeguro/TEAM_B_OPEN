@@ -657,24 +657,6 @@ void C3DCharactor::Think_CPU(void)
 	switch (GetThisCharactor()->GetID())
 	{
 	case 1:
-#if 1
-		if (m_pWayPoint == NULL)
-		{
-			m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
-		}
-
-		if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
-		{	//’e‚ğ‚Á‚Ä‚¢‚é‚Æ‚«
-			m_Type = CPU_TYPE_NONE;
-			m_CpuThink = THINK_HAVEBULLET;
-			m_nActionTimer = 30;
-		}
-		else
-		{	//’e‚ğ‚Á‚Ä‚¢‚È‚¢‚Æ‚«
-			m_CpuThink = THINK_NOTBULLET;
-			m_nActionTimer = 30;
-		}
-#endif
 
 		break;
 	case 2:
@@ -686,6 +668,25 @@ void C3DCharactor::Think_CPU(void)
 	default:
 		break;
 	}
+
+#if 1
+	if (m_pWayPoint == NULL)
+	{
+		m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
+	}
+
+	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
+	{	//’e‚ğ‚Á‚Ä‚¢‚é‚Æ‚«
+		m_Type = CPU_TYPE_NONE;
+		m_CpuThink = THINK_HAVEBULLET;
+		m_nActionTimer = 30;
+	}
+	else
+	{	//’e‚ğ‚Á‚Ä‚¢‚È‚¢‚Æ‚«
+		m_CpuThink = THINK_NOTBULLET;
+		m_nActionTimer = 30;
+	}
+#endif
 
 #if 0
 	if (m_pWayPoint == NULL)
