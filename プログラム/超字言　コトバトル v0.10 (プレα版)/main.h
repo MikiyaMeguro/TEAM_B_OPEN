@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <vector>
 #include <list>
+#include <algorithm>
 #include <stdlib.h>
 #include <XInput.h>						// XInput API
 #include "xaudio2.h"					// サウンド処理で必要

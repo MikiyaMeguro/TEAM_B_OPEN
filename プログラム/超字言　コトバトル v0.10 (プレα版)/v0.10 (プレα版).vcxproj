@@ -222,6 +222,7 @@
     <ClCompile Include="InputKeyboard.cpp" />
     <ClCompile Include="InputXPad.cpp" />
     <ClCompile Include="light.cpp" />
+    <ClCompile Include="LineOrbit.cpp" />
     <ClCompile Include="load.cpp" />
     <ClCompile Include="loadText.cpp" />
     <ClCompile Include="main.cpp" />
