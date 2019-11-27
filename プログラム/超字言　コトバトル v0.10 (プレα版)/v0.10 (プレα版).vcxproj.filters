@@ -157,6 +157,9 @@
     <ClCompile Include="LineOrbit.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="avoidui.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -313,6 +316,9 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="effect.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="avoidui.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>
