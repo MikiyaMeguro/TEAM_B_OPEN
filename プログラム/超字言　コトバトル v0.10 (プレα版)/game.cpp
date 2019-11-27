@@ -189,8 +189,6 @@ void CGame::Init(void)
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
 			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, 200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, -200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
-				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
 		}
 		break;
 	}

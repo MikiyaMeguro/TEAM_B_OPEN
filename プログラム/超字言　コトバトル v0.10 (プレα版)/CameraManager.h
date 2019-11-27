@@ -56,6 +56,8 @@ public:
 	//ロックオンする対象の設定
 	bool SetCameraLockOnChara(LPCSTR Tag, C3DCharactor* pLockOnChara);
 
+	//カメラの画角の設定
+	bool SetCameraAngle(LPCSTR Tag,float fAngle);
 	//背景色設定
 	bool SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col);
 
