@@ -33,7 +33,9 @@ class CStageSelect;
 
 #define CAMERA_ROTX (-0.05f)		//カメラのデフォルト角度(X)
 
-#define PLAYER_INITPOS (200.0f)
+#define PLAYER_INITPOSX (200.0f)
+#define PLAYER_INITPOSZ (200.0f)
+
 #define MAX_PLAYER (4)
 #define MAX_STAGE	(3)			// ステージの最大数
 #define MAX_STAGECOUNT	(3)		// 各ステージの数

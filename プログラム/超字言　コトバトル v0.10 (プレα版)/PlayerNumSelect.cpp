@@ -149,6 +149,41 @@ HRESULT CPlayerSelect::Init(void)
 //=============================================================================
 void CPlayerSelect::Uninit(void)
 {
+	for (int nCnt = 0; nCnt < MAX_PLAYERNUMSEL_BG; nCnt++)
+	{
+		if (m_apPolygonBG[nCnt] != NULL)
+		{
+			m_apPolygonBG[nCnt]->Uninit();
+			m_apPolygonBG[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_PLAYER_SELECTMENU; nCnt++)
+	{
+		if (m_apPolygon[nCnt] != NULL)
+		{
+			m_apPolygon[nCnt]->Uninit();
+			m_apPolygon[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
+	{
+		if (m_pSelect2D[nCnt] != NULL)
+		{
+			m_pSelect2D[nCnt]->Uninit();
+			m_pSelect2D[nCnt] = NULL;
+		}
+	}
+	if (m_pCaution2D != NULL)
+	{
+		m_pCaution2D->Uninit();
+		m_pCaution2D = NULL;
+	}
+	if (m_pCaution2DBG != NULL)
+	{
+		m_pCaution2DBG->Uninit();
+		m_pCaution2DBG = NULL;
+	}
+
 	//自分を破棄
 	Release();
 }
@@ -184,217 +219,227 @@ void CPlayerSelect::Update(void)
 #endif
 
 	//モードセレクト中
-	if (m_bModeSelect == true && pFade->GetFade() == CFade::FADE_NONE)
+	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
-		//選択処理
-		if (CCommand::GetCommand("DOWN") && m_bCaution == false)
+		if (m_bModeSelect == true)
 		{
-			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
-			if (m_nSelect < 2)
+			//選択処理
+			if (CCommand::GetCommand("DOWN") && m_bCaution == false)
 			{
-				m_nSelect = (m_nSelect + MAX_PLAYER_SELECTMENU / 2) % (MAX_PLAYER_SELECTMENU);
-			}
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
-		}
-		else if (CCommand::GetCommand("UP") && m_bCaution == false)
-		{
-			//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
-			if (m_nSelect > 1)
-			{
-				m_nSelect = m_nSelect - 2;
-			}
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
-		}
-		else if (CCommand::GetCommand("RIGHT") && m_bCaution == false)
-		{
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
-			if (m_nSelect == 1)
-			{
-				m_nSelect = 1;
-			}
-			else if (m_nSelect == 3)
-			{
-				m_nSelect =  3;
-			}
-			else
-			{
-				m_nSelect = (m_nSelect + 1) % 4;
-			}
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
-		}
-		else if (CCommand::GetCommand("LEFT") && m_bCaution == false)
-		{
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
-			if (m_nSelect == 0)
-			{
-				m_nSelect = 0;
-			}
-			else if (m_nSelect == 2)
-			{
-				m_nSelect = 2;
-			}
-			else
-			{
-				m_nSelect = (m_nSelect + 3) % 4;
-			}
-			m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
-		}
-
-		//エンターキー
-		if (CCommand::GetCommand("DECISION")== true && m_bCaution == false)
-		{
-			//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
-			if (m_nSelect == 0)
-			{
-				m_SelectMode = SELECTPLAYER_1P;
-				m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.25f, 1.0f));
-			}
-			else if (m_nSelect == 1)
-			{
-				m_SelectMode = SELECTPLAYER_2P;
-				m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.25f, 0.0f), D3DXVECTOR2(0.5f, 1.0f));
-			}
-			else if (m_nSelect == 2)
-			{
-				m_SelectMode = SELECTPLAYER_3P;
-				m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.5f, 0.0f), D3DXVECTOR2(0.75f, 1.0f));
-			}
-			else if (m_nSelect == 3)
-			{
-				m_SelectMode = SELECTPLAYER_4P;
-				m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.75f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
-			}
-			//警告を表示
-			m_bCaution = true;
-		}
-
-		//最終警告	2Dが作成されたら
-		if (CCommand::GetCommand("DECISION") && m_bCreate2D == true)
-		{
-			switch (m_SelectMode)
-			{
-			case SELECTPLAYER_1P:
-				break;
-			case SELECTPLAYER_2P:
-				break;
-			case SELECTPLAYER_3P:
-				break;
-			case SELECTPLAYER_4P:
-				break;
-			}
-			//2Dを破棄
-			Caution2DUninit();
-			m_apPolygonBG[5]->SetbDraw(false);
-			m_apPolygonBG[6]->SetbDraw(false);
-			if (m_nSelectCaution == 0)
-			{
-				CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
-			}
-
-			m_nSelectCaution = 1;
-			m_SelectCaution[0].select = SELECTTYPE_NONE;
-			m_SelectCaution[1].select = SELECTTYPE_SELECT;
-			m_bCreate2D = false;
-		}
-		else if (pInput->GetTrigger(DIK_B) == true)
-		{
-			//2Dを破棄
-			Caution2DUninit();
-
-			m_nSelectCaution = 1;
-			m_SelectCaution[0].select = SELECTTYPE_NONE;
-			m_SelectCaution[1].select = SELECTTYPE_SELECT;
-			m_bCreate2D = false;
-		}
-
-		//警告表示中
-		if (m_bCaution == true)
-		{
-			m_apPolygonBG[5]->SetbDraw(true);
-			m_apPolygonBG[6]->SetbDraw(true);
-
-			if (m_bCreate2D == false)
-			{
-				//警告を生成
-				m_pCaution2DBG = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), "PLAYERNUMSEL_BG");
-				m_pCaution2DBG->SetWidthHeight(CAUTIONBG_WIDTH, CAUTIONBG_HEIGHT);
-				m_pCaution2DBG->SetbDraw(true);
-
-				m_pCaution2D = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0), "BLOCK",4);
-				m_pCaution2D->SetWidthHeight(CAUTION_WIDTH, CAUTION_HEIGHT);
-				m_pCaution2D->BindTexture(CTexture::GetTexture("MENU_START"));
-				m_pCaution2D->SetbDraw(true);
-
-				//YES or NO　ポリゴン生成
-				for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
+				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
+				if (m_nSelect < 2)
 				{
-					//ポリゴンの位置を左上に初期化
-					m_ChoicePos[nCnt] = m_InitPos;
-					m_ChoicePos[nCnt].x = m_InitPos.x - (480 / 2);
-					//位置をずらす
-					m_ChoicePos[nCnt].x = m_ChoicePos[nCnt].x + (500 * nCnt);
-					m_ChoicePos[nCnt].y = 500.0f;
-					if (m_pSelect2D[nCnt] == NULL)
-					{	//生成
-						m_pSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(m_ChoicePos[nCnt].x, m_ChoicePos[nCnt].y+100.0f, m_ChoicePos[nCnt].z), "MENU_START");
-						m_pSelect2D[nCnt]->SetWidthHeight(400, 200);
-						if (nCnt == 0)
-						{
-							m_pSelect2D[nCnt]->BindTexture(CTexture::GetTexture("MENU_YES"));
+					m_nSelect = (m_nSelect + MAX_PLAYER_SELECTMENU / 2) % (MAX_PLAYER_SELECTMENU);
+				}
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
+			}
+			else if (CCommand::GetCommand("UP") && m_bCaution == false)
+			{
+				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
+				if (m_nSelect > 1)
+				{
+					m_nSelect = m_nSelect - 2;
+				}
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
+			}
+			else if (CCommand::GetCommand("RIGHT") && m_bCaution == false)
+			{
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
+				if (m_nSelect == 1)
+				{
+					m_nSelect = 1;
+				}
+				else if (m_nSelect == 3)
+				{
+					m_nSelect = 3;
+				}
+				else
+				{
+					m_nSelect = (m_nSelect + 1) % 4;
+				}
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
+			}
+			else if (CCommand::GetCommand("LEFT") && m_bCaution == false)
+			{
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
+				if (m_nSelect == 0)
+				{
+					m_nSelect = 0;
+				}
+				else if (m_nSelect == 2)
+				{
+					m_nSelect = 2;
+				}
+				else
+				{
+					m_nSelect = (m_nSelect + 3) % 4;
+				}
+				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
+			}
+
+			//エンターキー
+			if (CCommand::GetCommand("DECISION") == true && m_bCaution == false)
+			{
+				//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
+				if (m_nSelect == 0)
+				{
+					m_SelectMode = SELECTPLAYER_1P;
+					m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(0.25f, 1.0f));
+				}
+				else if (m_nSelect == 1)
+				{
+					m_SelectMode = SELECTPLAYER_2P;
+					m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.25f, 0.0f), D3DXVECTOR2(0.5f, 1.0f));
+				}
+				else if (m_nSelect == 2)
+				{
+					m_SelectMode = SELECTPLAYER_3P;
+					m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.5f, 0.0f), D3DXVECTOR2(0.75f, 1.0f));
+				}
+				else if (m_nSelect == 3)
+				{
+					m_SelectMode = SELECTPLAYER_4P;
+					m_apPolygonBG[6]->SetTex(D3DXVECTOR2(0.75f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+				}
+				//警告を表示
+				m_bCaution = true;
+			}
+
+			//最終警告	2Dが作成されたら
+			if (CCommand::GetCommand("DECISION") && m_bCreate2D == true)
+			{
+				switch (m_SelectMode)
+				{
+				case SELECTPLAYER_1P:
+					break;
+				case SELECTPLAYER_2P:
+					break;
+				case SELECTPLAYER_3P:
+					break;
+				case SELECTPLAYER_4P:
+					break;
+				}
+				//2Dを破棄
+				Caution2DUninit();
+				m_apPolygonBG[5]->SetbDraw(false);
+				m_apPolygonBG[6]->SetbDraw(false);
+				if (m_nSelectCaution == 0)
+				{
+					CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
+				}
+
+				m_nSelectCaution = 1;
+				m_SelectCaution[0].select = SELECTTYPE_NONE;
+				m_SelectCaution[1].select = SELECTTYPE_SELECT;
+				m_bCreate2D = false;
+			}
+			else if (pInput->GetTrigger(DIK_B) == true)
+			{
+				//2Dを破棄
+				Caution2DUninit();
+
+				m_nSelectCaution = 1;
+				m_SelectCaution[0].select = SELECTTYPE_NONE;
+				m_SelectCaution[1].select = SELECTTYPE_SELECT;
+				m_bCreate2D = false;
+			}
+
+			//警告表示中
+			if (m_bCaution == true)
+			{
+				m_apPolygonBG[5]->SetbDraw(true);
+				m_apPolygonBG[6]->SetbDraw(true);
+
+				if (m_bCreate2D == false)
+				{
+					//警告を生成
+					m_pCaution2DBG = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), "PLAYERNUMSEL_BG");
+					m_pCaution2DBG->SetWidthHeight(CAUTIONBG_WIDTH, CAUTIONBG_HEIGHT);
+					m_pCaution2DBG->SetbDraw(true);
+
+					m_pCaution2D = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 100.0f, 0), "BLOCK", 4);
+					m_pCaution2D->SetWidthHeight(CAUTION_WIDTH, CAUTION_HEIGHT);
+					m_pCaution2D->BindTexture(CTexture::GetTexture("MENU_START"));
+					m_pCaution2D->SetbDraw(true);
+
+					//YES or NO　ポリゴン生成
+					for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
+					{
+						//ポリゴンの位置を左上に初期化
+						m_ChoicePos[nCnt] = m_InitPos;
+						m_ChoicePos[nCnt].x = m_InitPos.x - (480 / 2);
+						//位置をずらす
+						m_ChoicePos[nCnt].x = m_ChoicePos[nCnt].x + (500 * nCnt);
+						m_ChoicePos[nCnt].y = 500.0f;
+						if (m_pSelect2D[nCnt] == NULL)
+						{	//生成
+							m_pSelect2D[nCnt] = CScene2D::Create(D3DXVECTOR3(m_ChoicePos[nCnt].x, m_ChoicePos[nCnt].y + 100.0f, m_ChoicePos[nCnt].z), "MENU_START");
+							m_pSelect2D[nCnt]->SetWidthHeight(400, 200);
+							if (nCnt == 0)
+							{
+								m_pSelect2D[nCnt]->BindTexture(CTexture::GetTexture("MENU_YES"));
+							}
+							if (nCnt == 1)
+							{
+								m_pSelect2D[nCnt]->BindTexture(CTexture::GetTexture("MENU_NO"));
+							}
+							m_pSelect2D[nCnt]->SetbDraw(true);
 						}
-						if (nCnt == 1)
-						{
-							m_pSelect2D[nCnt]->BindTexture(CTexture::GetTexture("MENU_NO"));
+					}
+					//2Dポリゴンを生成した
+					m_bCreate2D = true;
+				}
+				else
+				{
+					//色変え
+					for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
+					{
+						if (m_SelectCaution[nCnt].select == SELECTTYPE_SELECT)
+						{//選択中の色
+							m_SelectCaution[nCnt].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+							m_pSelect2D[nCnt]->SetCol(m_SelectCaution[nCnt].col);
 						}
-						m_pSelect2D[nCnt]->SetbDraw(true);
+						else
+						{//未選択の色
+							m_SelectCaution[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+							m_pSelect2D[nCnt]->SetCol(m_SelectCaution[nCnt].col);
+						}
 					}
 				}
-				//2Dポリゴンを生成した
-				m_bCreate2D = true;
-			}
-			else
-			{
-				//色変え
-				for (int nCnt = 0; nCnt < MAX_CAUTIONMENU; nCnt++)
+
+				if (CCommand::GetCommand("RIGHT") && m_bCaution == true)
 				{
-					if (m_SelectCaution[nCnt].select == SELECTTYPE_SELECT)
-					{//選択中の色
-						m_SelectCaution[nCnt].col = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
-						m_pSelect2D[nCnt]->SetCol(m_SelectCaution[nCnt].col);
+					m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_NONE;
+					//右端で止まる
+					if (m_nSelectCaution < 1)
+					{
+						m_nSelectCaution = (m_nSelectCaution + 1) % MAX_CAUTIONMENU;
 					}
-					else
-					{//未選択の色
-						m_SelectCaution[nCnt].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-						m_pSelect2D[nCnt]->SetCol(m_SelectCaution[nCnt].col);
+					m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_SELECT;
+				}
+				else if (CCommand::GetCommand("LEFT") && m_bCaution == true)
+				{
+					m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_NONE;
+					//左端で止まる
+					if (m_nSelectCaution > 0)
+					{
+						m_nSelectCaution = (m_nSelectCaution + 1) % MAX_CAUTIONMENU;
 					}
+					m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_SELECT;
 				}
 			}
 
-			if (CCommand::GetCommand("RIGHT") && m_bCaution == true)
+			//モード選択に戻る
+			if (CCommand::GetCommand("DELETE") == true && m_bCaution == false)
 			{
-				m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_NONE;
-				//右端で止まる
-				if (m_nSelectCaution < 1)
-				{
-					m_nSelectCaution = (m_nSelectCaution + 1) % MAX_CAUTIONMENU;
-				}
-				m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_SELECT;
-			}
-			else if (CCommand::GetCommand("LEFT") && m_bCaution == true)
-			{
-				m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_NONE;
-				//左端で止まる
-				if (m_nSelectCaution > 0)
-				{
-					m_nSelectCaution = (m_nSelectCaution + 1) % MAX_CAUTIONMENU;
-				}
-				m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_SELECT;
+				Uninit();
+				CManager::SetMode(CManager::MODE_SELECT);
+				return;
 			}
 		}
 	}
-
 	/* モードタイトル帯のスクロール処理 */
 	ScrollMenu(PLNUMSELECTBGTYPE_BAND_L, -0.005f);
 	ScrollMenu(PLNUMSELECTBGTYPE_BAND_R, 0.005f);
@@ -411,12 +456,6 @@ void CPlayerSelect::Update(void)
 	/* 操作方法UIのアニメーション */
 	SetSelectAnimation(PLNUMSELECTBGTYPE_BG, ANIMTYPE_X, 3, 4, 1, 15);
 
-	//モード選択に戻る
-	if (CCommand::GetCommand("DELETE") == true && m_bCaution == false)
-	{
-		Uninit();
-		CManager::SetMode(CManager::MODE_SELECT);
-	}
 
 #ifdef _DEBUG
 	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);

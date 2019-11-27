@@ -202,8 +202,8 @@ HRESULT CTime::Init(void)
 		}
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 180.0f, m_pos.z), "COUNTDOWN2");
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 540.0f, m_pos.z), "COUNTDOWN2");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 540.0f, m_pos.z), "COUNTDOWN2");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 
 		// Timeのロゴ
@@ -364,34 +364,6 @@ void CTime::Update(void)
 	//カウントダウン
 	if (m_bEndCntDown == false)
 	{
-		if (m_bCntDown == true && m_nType < 4)
-		{
-			for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
-			{
-				if (m_pScene2D[nCnt] != NULL)
-				{
-					switch (m_nType)
-					{
-					case 0:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN2");
-						break;
-					case 1:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
-						break;
-					case 2:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
-						break;
-					case 3:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN3");
-						break;
-					default:
-						break;
-					}
-				}
-			}
-			m_bCntDown = false;
-		}
-
 		//大きさ変化
 		m_fScale += COUNTDOWN_SCALE;
 		//透明度上げ
@@ -417,10 +389,36 @@ void CTime::Update(void)
 			else if (m_nType == 3)
 			{
 				m_bEndCntDown = true;
+				m_Col.a = 0.0f;
 				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 				{	// プレイヤーを取得
 					m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
 					m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(false);
+				}
+			}
+
+			for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
+			{
+				if (m_pScene2D[nCnt] != NULL)
+				{
+					switch (m_nType)
+					{
+					case 0:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN2");
+						break;
+					case 1:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
+						break;
+					case 2:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
+						break;
+					case 3:
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN3");
+						m_pScene2D[nCnt]->SetWidthHeight(m_fWidth + 100, m_fHeight + 100);
+						break;
+					default:
+						break;
+					}
 				}
 			}
 		}
@@ -550,7 +548,7 @@ void CTime::TimeManagement(void)
 		CManager::GetGame()->SetStage(CGame::GetNumStage(),nStageNum);
 	}
 
-	if (m_nTimeCount % 20 == 0)
+	if (m_nTimeCount % 60 == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
 		m_nStageChange++;

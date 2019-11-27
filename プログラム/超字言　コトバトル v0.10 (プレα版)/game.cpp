@@ -76,7 +76,7 @@ CTube *CGame::m_apTube[MAX_PLAYER] = {};
 CMeshField *CGame::m_pMeshField = NULL;
 CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
 CSetWord *CGame::m_pWordCreate = NULL;
-CWall *CGame::m_pWall = {};
+CWall *CGame::m_pWall = NULL;
 CPlayer::PLAYER_TYPE CGame::m_type[MAX_PLAYER] = {};
 int CGame::m_nNumStage = NULL;
 bool CGame::m_bStageSet = false;
@@ -118,6 +118,12 @@ void CGame::Init(void)
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 	CameraSetting((int)NumPlayer);
 
+	//メッシュフィールド生成
+	m_pMeshField = NULL;
+	if (m_pMeshField == NULL)
+	{
+		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+	}
 	switch (m_nNumStage)
 	{
 	case 0:
@@ -128,6 +134,19 @@ void CGame::Init(void)
 		m_pcStageNameWord[0][0] = { FILE_NAME00 };
 		m_pcStageNameWord[0][1] = { FILE_NAME01 };
 		m_pcStageNameWord[0][2] = { FILE_NAME02 };
+		m_pWall = NULL;
+		if (m_pWall == NULL)
+		{
+			//	下の壁
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+		}
 		break;
 	case 1:
 		//	天候
@@ -137,25 +156,43 @@ void CGame::Init(void)
 		m_pcStageNameWord[1][0] = { FILE_NAME10 };
 		m_pcStageNameWord[1][1] = { FILE_NAME11 };
 		m_pcStageNameWord[1][2] = { FILE_NAME12 };
+		m_pWall = NULL;
+		if (m_pWall == NULL)
+		{
+			//	下の壁
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
+			//	噴水の壁
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, 100.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
+			m_pWall = CWall::Create(D3DXVECTOR3(100.0f, 5.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
+			m_pWall = CWall::Create(D3DXVECTOR3(-100.0f, 5.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
+			//	噴水の上
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 5.0f), 0, 5);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 15.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 5);
+			//	噴水からの水
+			m_pWall = CWall::Create(D3DXVECTOR3(200.0f, 5.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f,20.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
+			m_pWall = CWall::Create(D3DXVECTOR3(-200.0f, 5.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f, 20.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, 200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, -200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
+		}
 		break;
-	}
-	//メッシュフィールド生成
-	m_pMeshField = NULL;
-	if (m_pMeshField == NULL)
-	{
-		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
-	}
-	if (m_pWall == NULL)
-	{
-		//	下の壁
-		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-		m_pWall->Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-		m_pWall->Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-		m_pWall->Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
-			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 	}
 
 	// プレイヤーの生成
@@ -289,6 +326,17 @@ void CGame::Update(void)
 		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
 	}
 
+	if (m_bStageSet == true)
+	{//	ステージが変わるタイミングで消す
+		if (m_pWall != NULL)
+		{//	噴水の水
+			if (m_pWall->GetType() == 5 || m_pWall->GetType() == 6)
+			{//	噴水の水
+				m_pWall->Uninit();
+				m_pWall = NULL;
+			}
+		}
+	}
 #ifdef _DEBUG
 
 #endif

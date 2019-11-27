@@ -29,6 +29,8 @@ CWaypoint::CWaypoint() : CScene/*BillBoard*/()
 	m_nNumWayPoint = 0;
 	m_nNumNowPoint = 0;
 	m_FromHit = FROMHIT_NONE;
+	m_bStageStart = false;
+	m_bStageSetEnd = false;
 }
 
 //--------------------------------------------
@@ -131,176 +133,199 @@ void CWaypoint::Update(void)
 	int nAdjacent = 0;		//隣接しているマスは何マス分離れているか
 	bool bLand = false;		//誰かがマスに乗っている
 	nNum2Cnt = 0;
-
-	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
-	{
-		//WayPoint[nCntWayPoint].pWayPoint->SetTexture(9, 10, 1, 1);
-		WayPoint[nCntWayPoint].nWayPointNum = 9;
-	}
-
-	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
-	{
-		if (WayPoint[nCntWayPoint].bInPlayer == true)
-		{	//今いるマスの番号を代入
-			nNowNumber = nCntWayPoint;
-			m_nNumNowPoint = nCntWayPoint;
-			WayPoint[nCntWayPoint].nWayPointNum = 0;
-			WayPoint[nCntWayPoint].bAdjacent = false;
-			if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint != NULL)
-			{
-			//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(1, 10, 1, 1);
-			}
-			bLand = true;
-		}
-	}
-
-	//今いるマスから何マス分離れているか
-	for (int nCntSplit = 1; nCntSplit < SPLIT_WAYPOINT + 3; nCntSplit++)
+	if (CGame::GetbStageSet() == false)
 	{
 		for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
 		{
-			//周囲8マス
-#if 1
-			if (nNowNumber - 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true
-				|| nNowNumber + 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != 0 && bLand == true
-				|| nNowNumber + SPLIT_WAYPOINT == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT && bLand == true
-				|| nNowNumber - SPLIT_WAYPOINT == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT && bLand == true
-				|| nNowNumber - SPLIT_WAYPOINT + 1 == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT + 1 && (nCntWayPoint - SPLIT_WAYPOINT) % SPLIT_WAYPOINT != 0 && bLand == true
-				|| nNowNumber - SPLIT_WAYPOINT - 1 == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT - 1 && (nCntWayPoint - SPLIT_WAYPOINT) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true
-				|| nNowNumber + SPLIT_WAYPOINT + 1 == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT + 1 && (nCntWayPoint + SPLIT_WAYPOINT) % SPLIT_WAYPOINT != 0 && bLand == true
-				|| nNowNumber + SPLIT_WAYPOINT - 1 == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT - 1 && (nCntWayPoint + SPLIT_WAYPOINT) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true)
-			{//隣接するマス
-				WayPoint[nCntWayPoint].nWayPointNum = 1;
-				if (WayPoint[nCntWayPoint].pWayPoint != NULL)
+			//WayPoint[nCntWayPoint].pWayPoint->SetTexture(9, 10, 1, 1);
+			WayPoint[nCntWayPoint].nWayPointNum = 9;
+		}
+
+		for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
+		{
+			if (WayPoint[nCntWayPoint].bInPlayer == true)
+			{	//今いるマスの番号を代入
+				nNowNumber = nCntWayPoint;
+				m_nNumNowPoint = nCntWayPoint;
+				WayPoint[nCntWayPoint].nWayPointNum = 0;
+				WayPoint[nCntWayPoint].bAdjacent = false;
+				if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint != NULL)
 				{
-				//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(2, 10, 1, 1);
+					//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(1, 10, 1, 1);
 				}
-				WayPoint[nCntWayPoint].bAdjacent = true;
+				bLand = true;
 			}
+		}
 
-			if (WayPoint[nCntWayPoint].nWayPointNum == nCntSplit && bLand == true && WayPoint[nCntWayPoint].bAdjacent != true)
-			{//隣接マスから離れている
-
-				if ((nCntWayPoint + 1) % SPLIT_WAYPOINT != 0 && WayPoint[nCntWayPoint + 1].nWayPointNum > nCntSplit)
-				{//右横　余りが出ないマスは折り返しているマスなので見ないようにする
-					WayPoint[nCntWayPoint + 1].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint + 1].pWayPoint != NULL)
+		//今いるマスから何マス分離れているか
+		for (int nCntSplit = 1; nCntSplit < SPLIT_WAYPOINT + 3; nCntSplit++)
+		{
+			for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
+			{
+				//周囲8マス
+#if 1
+				if (nNowNumber - 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true
+					|| nNowNumber + 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != 0 && bLand == true
+					|| nNowNumber + SPLIT_WAYPOINT == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT && bLand == true
+					|| nNowNumber - SPLIT_WAYPOINT == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT && bLand == true
+					|| nNowNumber - SPLIT_WAYPOINT + 1 == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT + 1 && (nCntWayPoint - SPLIT_WAYPOINT) % SPLIT_WAYPOINT != 0 && bLand == true
+					|| nNowNumber - SPLIT_WAYPOINT - 1 == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT - 1 && (nCntWayPoint - SPLIT_WAYPOINT) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true
+					|| nNowNumber + SPLIT_WAYPOINT + 1 == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT + 1 && (nCntWayPoint + SPLIT_WAYPOINT) % SPLIT_WAYPOINT != 0 && bLand == true
+					|| nNowNumber + SPLIT_WAYPOINT - 1 == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT - 1 && (nCntWayPoint + SPLIT_WAYPOINT) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true)
+				{//隣接するマス
+					WayPoint[nCntWayPoint].nWayPointNum = 1;
+					if (WayPoint[nCntWayPoint].pWayPoint != NULL)
 					{
-					//	WayPoint[nCntWayPoint + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						//	WayPoint[nCntWayPoint].pWayPoint->SetTexture(2, 10, 1, 1);
 					}
-					WayPoint[nCntWayPoint + 1].bAdjacent = false;
-				}
-				if ((nCntWayPoint - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && WayPoint[nCntWayPoint - 1].nWayPointNum > nCntSplit)
-				{//左横 余りが分割数-1のマスは折り返しているマスなので見ないようにする
-					WayPoint[nCntWayPoint - 1].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint - 1].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint - 1].bAdjacent = false;
-				}
-				if ((nCntWayPoint - SPLIT_WAYPOINT) >= 0 && WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
-				{//前 分割数分引いたときに0以下の時は入らない
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT].bAdjacent = false;
-				}
-				if ((nCntWayPoint + SPLIT_WAYPOINT) < MAX_WAYPOINT && WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
-				{//後ろ 最大数以上の時は入らない
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT].bAdjacent = false;
+					WayPoint[nCntWayPoint].bAdjacent = true;
 				}
 
-				if (nNowNumber - nCntWayPoint == (SPLIT_WAYPOINT - 1) * nCntSplit && 0 <= nCntWayPoint - SPLIT_WAYPOINT + 1 && (nCntWayPoint - SPLIT_WAYPOINT + 1) % SPLIT_WAYPOINT != 0)
-				{	//右前	例(5*5で中央にいる場合)　12 - 8 == 分割数 + 1 && 0以上 && 折り返していない
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].bAdjacent = false;
-				}
-				if (nNowNumber - nCntWayPoint == (SPLIT_WAYPOINT + 1) * nCntSplit && 0 <= nCntWayPoint - SPLIT_WAYPOINT - 1 && (nCntWayPoint - SPLIT_WAYPOINT - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT -1)
-				{	//左前	例(5*5で中央にいる場合)　12 - 6 == 分割数 - 1 && 0以上 && 折り返していない
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].bAdjacent = false;
-				}
-				if (nCntWayPoint - nNowNumber == (SPLIT_WAYPOINT + 1) * nCntSplit  && MAX_WAYPOINT > nCntWayPoint + SPLIT_WAYPOINT + 1 && (nCntWayPoint + SPLIT_WAYPOINT + 1) % SPLIT_WAYPOINT != 0)
-				{	//右後	例(5*5で中央にいる場合)　18 - 12 == 分割数 + 1 && 25以内 && 折り返していない
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].bAdjacent = false;
-				}
-				if (nCntWayPoint - nNowNumber == (SPLIT_WAYPOINT - 1) * nCntSplit  && MAX_WAYPOINT > nCntWayPoint + SPLIT_WAYPOINT - 1 && (nCntWayPoint + SPLIT_WAYPOINT - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1)
-				{	//左後	例(5*5で中央にいる場合)　16 - 12 == 分割数 - 1 && 25以内 && 折り返していない
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].nWayPointNum = nCntSplit + 1;
-					if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint != NULL)
-					{
-					//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-					}
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].bAdjacent = false;
-				}
-			}
+				if (WayPoint[nCntWayPoint].nWayPointNum == nCntSplit && bLand == true && WayPoint[nCntWayPoint].bAdjacent != true)
+				{//隣接マスから離れている
 
+					if ((nCntWayPoint + 1) % SPLIT_WAYPOINT != 0 && WayPoint[nCntWayPoint + 1].nWayPointNum > nCntSplit)
+					{//右横　余りが出ないマスは折り返しているマスなので見ないようにする
+						WayPoint[nCntWayPoint + 1].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint + 1].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint + 1].bAdjacent = false;
+					}
+					if ((nCntWayPoint - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && WayPoint[nCntWayPoint - 1].nWayPointNum > nCntSplit)
+					{//左横 余りが分割数-1のマスは折り返しているマスなので見ないようにする
+						WayPoint[nCntWayPoint - 1].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint - 1].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint - 1].bAdjacent = false;
+					}
+					if ((nCntWayPoint - SPLIT_WAYPOINT) >= 0 && WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
+					{//前 分割数分引いたときに0以下の時は入らない
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT].bAdjacent = false;
+					}
+					if ((nCntWayPoint + SPLIT_WAYPOINT) < MAX_WAYPOINT && WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
+					{//後ろ 最大数以上の時は入らない
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT].bAdjacent = false;
+					}
+
+					if (nNowNumber - nCntWayPoint == (SPLIT_WAYPOINT - 1) * nCntSplit && 0 <= nCntWayPoint - SPLIT_WAYPOINT + 1 && (nCntWayPoint - SPLIT_WAYPOINT + 1) % SPLIT_WAYPOINT != 0)
+					{	//右前	例(5*5で中央にいる場合)　12 - 8 == 分割数 + 1 && 0以上 && 折り返していない
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT + 1].bAdjacent = false;
+					}
+					if (nNowNumber - nCntWayPoint == (SPLIT_WAYPOINT + 1) * nCntSplit && 0 <= nCntWayPoint - SPLIT_WAYPOINT - 1 && (nCntWayPoint - SPLIT_WAYPOINT - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1)
+					{	//左前	例(5*5で中央にいる場合)　12 - 6 == 分割数 - 1 && 0以上 && 折り返していない
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT - 1].bAdjacent = false;
+					}
+					if (nCntWayPoint - nNowNumber == (SPLIT_WAYPOINT + 1) * nCntSplit  && MAX_WAYPOINT > nCntWayPoint + SPLIT_WAYPOINT + 1 && (nCntWayPoint + SPLIT_WAYPOINT + 1) % SPLIT_WAYPOINT != 0)
+					{	//右後	例(5*5で中央にいる場合)　18 - 12 == 分割数 + 1 && 25以内 && 折り返していない
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT + 1].bAdjacent = false;
+					}
+					if (nCntWayPoint - nNowNumber == (SPLIT_WAYPOINT - 1) * nCntSplit  && MAX_WAYPOINT > nCntWayPoint + SPLIT_WAYPOINT - 1 && (nCntWayPoint + SPLIT_WAYPOINT - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1)
+					{	//左後	例(5*5で中央にいる場合)　16 - 12 == 分割数 - 1 && 25以内 && 折り返していない
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].nWayPointNum = nCntSplit + 1;
+						if (WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint != NULL)
+						{
+							//	WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+						}
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT - 1].bAdjacent = false;
+					}
+				}
 #endif
-			//周囲４マス
+				//周囲４マス
 #if 0
 			//どこかのマスに乗ったとき
-			if (nNowNumber - 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true
-				|| nNowNumber + 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != 0 && bLand == true
-				|| nNowNumber + SPLIT_WAYPOINT == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT && bLand == true
-				|| nNowNumber - SPLIT_WAYPOINT == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT && bLand == true)
-			{//隣接するマス
-				WayPoint[nCntWayPoint].nWayPointNum = 1;
-				WayPoint[nCntWayPoint].pWayPoint->SetTexture(2, 10, 1, 1);
-			}
+				if (nNowNumber - 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && bLand == true
+					|| nNowNumber + 1 == nCntWayPoint && nCntWayPoint % SPLIT_WAYPOINT != 0 && bLand == true
+					|| nNowNumber + SPLIT_WAYPOINT == nCntWayPoint && MAX_WAYPOINT > nNowNumber + SPLIT_WAYPOINT && bLand == true
+					|| nNowNumber - SPLIT_WAYPOINT == nCntWayPoint && 0 <= nNowNumber - SPLIT_WAYPOINT && bLand == true)
+				{//隣接するマス
+					WayPoint[nCntWayPoint].nWayPointNum = 1;
+					WayPoint[nCntWayPoint].pWayPoint->SetTexture(2, 10, 1, 1);
+				}
 
-			if (WayPoint[nCntWayPoint].nWayPointNum == nCntSplit && bLand == true)
-			{//隣接マスから離れている
-			 //条件文の決め方
-			 //自分から１マス離れたマスの右左前後を見て離れているマスを見つける
-				if (nCntWayPoint + 1 && (nCntWayPoint + 1) % SPLIT_WAYPOINT != 0 && WayPoint[nCntWayPoint + 1].nWayPointNum > nCntSplit)
-				{//右横　余りが出ないマスは折り返しているマスなので見ないようにする
-					WayPoint[nCntWayPoint + 1].nWayPointNum = nCntSplit + 1;
-					WayPoint[nCntWayPoint + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+				if (WayPoint[nCntWayPoint].nWayPointNum == nCntSplit && bLand == true)
+				{//隣接マスから離れている
+				 //条件文の決め方
+				 //自分から１マス離れたマスの右左前後を見て離れているマスを見つける
+					if (nCntWayPoint + 1 && (nCntWayPoint + 1) % SPLIT_WAYPOINT != 0 && WayPoint[nCntWayPoint + 1].nWayPointNum > nCntSplit)
+					{//右横　余りが出ないマスは折り返しているマスなので見ないようにする
+						WayPoint[nCntWayPoint + 1].nWayPointNum = nCntSplit + 1;
+						WayPoint[nCntWayPoint + 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+					}
+					if (nCntWayPoint - 1 && (nCntWayPoint - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && WayPoint[nCntWayPoint - 1].nWayPointNum > nCntSplit)
+					{//左横 余りが分割数-1のマスは折り返しているマスなので見ないようにする
+						WayPoint[nCntWayPoint - 1].nWayPointNum = nCntSplit + 1;
+						WayPoint[nCntWayPoint - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+					}
+					if (nCntWayPoint - SPLIT_WAYPOINT && (nCntWayPoint - SPLIT_WAYPOINT) >= 0 && WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
+					{//前 分割数分引いたときに0以下の時は入らない
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
+						WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+					}
+					if (nCntWayPoint + SPLIT_WAYPOINT && (nCntWayPoint + SPLIT_WAYPOINT) < MAX_WAYPOINT && WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
+					{//後ろ 最大数以上の時は入らない
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
+						WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
+					}
 				}
-				if (nCntWayPoint - 1 && (nCntWayPoint - 1) % SPLIT_WAYPOINT != SPLIT_WAYPOINT - 1 && WayPoint[nCntWayPoint - 1].nWayPointNum > nCntSplit)
-				{//左横 余りが分割数-1のマスは折り返しているマスなので見ないようにする
-					WayPoint[nCntWayPoint - 1].nWayPointNum = nCntSplit + 1;
-					WayPoint[nCntWayPoint - 1].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-				}
-				if (nCntWayPoint - SPLIT_WAYPOINT && (nCntWayPoint - SPLIT_WAYPOINT) >= 0 && WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
-				{//前 分割数分引いたときに0以下の時は入らない
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
-					WayPoint[nCntWayPoint - SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-				}
-				if (nCntWayPoint + SPLIT_WAYPOINT && (nCntWayPoint + SPLIT_WAYPOINT) < MAX_WAYPOINT && WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum > nCntSplit)
-				{//後ろ 最大数以上の時は入らない
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT].nWayPointNum = nCntSplit + 1;
-					WayPoint[nCntWayPoint + SPLIT_WAYPOINT].pWayPoint->SetTexture(nCntSplit + 2, 10, 1, 1);
-				}
-			}
 #endif
+			}
+		}
+
+		m_nFlameCnt++;
+
+		if (m_nFlameCnt == 2)
+		{
+			//フレーム数を初期化
+			m_nFlameCnt = 0;
+		}
+
+		if (CGame::GetbStageSet() == true && m_bStageSetEnd == false)
+		{	//ステージ切り替わり時に当たり判定更新
+			m_bStageSetEnd = true;
+		}
+		else if (CGame::GetbStageSet() == false && m_bStageSetEnd == true)
+		{
+			CollisionObj();
+			m_bStageSetEnd = false;
+		}
+		else
+		{
+			if (m_bStageStart == false)
+			{	//開始時に当たり判定更新 最初のみ
+				CollisionObj();
+				m_bStageStart = true;
+			}
 		}
 	}
-
-	//ブロックに当たっている
-	CollisionObj();
-
 
 
 	// 入力情報を取得
@@ -438,16 +463,19 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 		if (WayPoint[nCntWayPoint].bAdjacent == true && WayPoint[nCntWayPoint].bBlock == false)
 		{	//周囲のマスの位置情報と番号を記憶
 			m_pWayPointPos[m_nNumWayPoint] = WayPoint[nCntWayPoint].WayPointPos;
-			if (nCntWayPoint > MAX_WAYPOINT)
-			{
-				m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
-			}
+
+			//if (nCntWayPoint > MAX_WAYPOINT)
+			//{
+			//	m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
+			//}
+
 			m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
 			m_nNumWayPoint++;
-		}
-		if (m_nNumWayPoint > 8)
-		{
-			m_nNumWayPoint = 0;
+
+			if (m_nNumWayPoint == 8)
+			{
+				break;
+			}
 		}
 	}
 	return m_pWayPointPos[0];
@@ -458,11 +486,6 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 //=============================================================================
 int CWaypoint::CntWayPoint(void)
 {
-	if (m_nNumWayPoint > 8)
-	{
-		m_nNumWayPoint = 0;
-	}
-
 	return m_nNumWayPoint;
 }
 

@@ -198,6 +198,7 @@ private:
 	void NearOrFur_CPU(void);	//近いか遠いか
 	void WayPointMove_CPU(void);	//経路情報移動
 	void WayPointRoute_CPU(void);	//最短ルート移動
+	void WayPointBack_CPU(void);	//後退移動
 
 	void StepMove(D3DXVECTOR3& move,float& fRot);
 
@@ -220,6 +221,7 @@ private:
 	bool m_bNearWard;				//文字が近くにあるフラグ
 	bool m_bBlock;					//移動先障害物フラグ
 	int m_nTimerMove;				//移動先に行けないときのタイマー
+	bool m_bNotWayPoint;			//移動先に行けないときのフラグ
 	int	m_nTargetWP;				//目標のマス番号
 	D3DXVECTOR3 m_MarkWardPos;		//移動先の位置
 	int nTestCnt = 0;

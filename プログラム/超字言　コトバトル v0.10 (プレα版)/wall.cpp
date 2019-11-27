@@ -38,6 +38,7 @@ CWall::CWall() : CScene3D(4, CScene::OBJTYPE_WALL)
 	m_nType = 0;
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
+	m_nAnimCounter = 0;
 }
 
 //=============================================================================
@@ -75,7 +76,11 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	CScene3D::SetRot(rot);
 	CScene3D::Init();
 	CScene3D::SetColor(col);
-	CScene3D::SetSizeY(size.y, size.x);
+	if (size.z > 0.1f)
+	{
+		CScene3D::SetSize(size.z, size.x);
+	}
+	else if (size.y > 0.1f){CScene3D::SetSizeY(size.y, size.x);}
 	m_nType = nTexType;
 	if (nType == 0){SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL);}
 	else{SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_BILLBOARD); }
@@ -85,8 +90,8 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (nTexType == 2) { CScene3D::BindTexture("TUROFLOW000"); }
 	else if (nTexType == 3) { CScene3D::BindTexture("TUROFLOW001"); }
 	else if (nTexType == 4) { CScene3D::BindTexture("NEXT"); }
-
-
+	else if (nTexType == 5) { CScene3D::BindTexture("FIELD002"); }
+	else if (nTexType == 6) { CScene3D::BindTexture("FIELD002"); }
 
 	return S_OK;
 }
@@ -116,7 +121,15 @@ void CWall::Update(void)
 		else if (m_nCounter < 120){m_move.y = -0.3f;}
 		else if (m_nCounter == 120 ){m_nCounter =  0;}
 	}
-
+	if (m_nType == 6)
+	{//	川の流れる
+		m_nCounter++;
+		if (m_nCounter % 10 == 0)
+		{
+			m_nAnimCounter++;
+			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
+		}
+	}
 	WallPos += m_move;
 	CScene3D::SetPos(WallPos);						//	位置の設定
 	CScene3D::SetRot(WallRot);						//	回転の設定
@@ -132,8 +145,12 @@ void CWall::Draw(void)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
+
+	if (m_nType == 6 || m_nType == 5)
+	{//	川は両面化する
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
+	}
 	CScene3D::Draw();
-	//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
+	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
 
 }

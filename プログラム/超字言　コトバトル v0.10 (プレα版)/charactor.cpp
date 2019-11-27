@@ -114,6 +114,8 @@ HRESULT C3DCharactor::Init(void)
 	m_nTargetWP = 0;
 	nTestCnt = 0;
 	m_bWait = false;
+	m_nTimerMove = 0;
+	m_bNotWayPoint = false;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -150,15 +152,17 @@ void C3DCharactor::Update(void)
 			CharaMove_Input();
 			break;
 		case CCharaBase::MOVETYPE_NPC_AI:
-			if (m_nActionTimer == 0)
-			{	//考える
-				Think_CPU();
+			if (CGame::GetbStageSet() == false)
+			{
+				if (m_nActionTimer == 0)
+				{	//考える
+					Think_CPU();
+				}
+				else
+				{	//行動する
+					Action_CPU();
+				}
 			}
-			else
-			{	//行動する
-				Action_CPU();
-			}
-
 			//CPUが場外行かないように
 			if (m_bJyougai == false)
 			{
@@ -648,7 +652,9 @@ void C3DCharactor::Think_CPU(void)
 			m_CpuThink = THINK_NOTBULLET;
 			m_nActionTimer = 30;
 		}
-#endif		break;
+#endif
+
+		break;
 	case 2:
 		m_Type = CPU_TYPE_HOMING;
 		break;
@@ -709,6 +715,10 @@ void C3DCharactor::Action_CPU(void)
 		if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
 		{
 			PickUP_CPU();
+		}
+		else if (m_bNotWayPoint == true)
+		{
+			WayPointMove_CPU();
 		}
 		else
 		{
@@ -1101,6 +1111,11 @@ void C3DCharactor::Attack_CPU(void)
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
 		m_CpuThink = THINK_NONE;
 	}
+	else if(GetThisCharactor()->GetWordManager()->GetBulletFlag() == false
+		&& GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && CGame::GetbStageSet() == false)
+	{
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
+	}
 }
 
 //=============================================================================
@@ -1162,16 +1177,18 @@ void C3DCharactor::PickUP_CPU(void)
 						break;
 					}
 				}
-				if (fCircle < 50000 && bTango == false)
+				if (GetThisCharactor()->GetWordManager()->GetCntNum() < 2 && fCircle < 50000 && bTango == false)
 				{//範囲内に文字があった
-					nCntNearWord++;		//加算
-										//if(m_fCompareRange < fCircle)
-					{//単語が完成しないときは適当に拾う
+					nCntNearWord++;
 					 //一番近い距離を記憶
-						m_fCompareRange = fCircle;
-						m_MarkWardPos = pWord->GetPos();
-						bWord = true;
-					}
+					m_fCompareRange = fCircle;
+					m_MarkWardPos = pWord->GetPos();
+					bWord = true;
+				}
+				else if (GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && bTango == false)
+				{//範囲内に文字があった
+					m_CpuThink = THINK_ATTACK;
+					bWord = true;
 				}
 			}
 		}
@@ -1245,13 +1262,10 @@ void C3DCharactor::NotBullet_CPU(void)
 	if (nCntNear < 3)
 	{
 		m_CpuThink = THINK_PICKUP;
-		//m_CpuThink = THINK_WAYPOINTMOVE;
 		m_nActionTimer = 30;
 	}
 	else
 	{
-		//m_CpuThink = THINK_ESCAPE;
-		//m_CpuThink = THINK_WAYPOINTMOVE;
 		m_CpuThink = THINK_PICKUP;
 		m_nActionTimer = 30;
 	}
@@ -1311,12 +1325,18 @@ void C3DCharactor::WayPointMove_CPU(void)
 	float		 speed = CCharaBase::GetSpeed();
 
 	int nRandPos = 0;
+	int nNextPoint = 0;
+	int nNowWp = 0;
 
 	float fCircle = ((Pos.x - m_MarkWayPoint.x) * (Pos.x - m_MarkWayPoint.x)) + ((Pos.z - m_MarkWayPoint.z) * (Pos.z - m_MarkWayPoint.z));
 
 	if (fCircle < 100)
 	{
 		m_bRandomGoal = true;
+		if (m_bNotWayPoint == true)
+		{
+			m_bNotWayPoint = false;
+		}
 	}
 
 	// 入力情報を取得
@@ -1337,10 +1357,26 @@ void C3DCharactor::WayPointMove_CPU(void)
 			nRand = rand() % nCntWP;
 		}
 
+		m_pWayPoint->ReturnPointMove();
+		nNextPoint = m_pWayPoint->GetNumTargetPoint(nRand);
+		nNowWp = m_pWayPoint->GetNowWP();
+
 		if (m_pWayPointPos[nRand] != NULL)
 		{
-			m_MarkWayPoint = m_pWayPointPos[nRand];
+			//m_MarkWayPoint = m_pWayPointPos[nRand];
+			m_MarkWayPoint = m_pWayPoint->GetNextWayPoint(nNextPoint);
 			m_bRandomGoal = false;
+		}
+	}
+
+	if (m_bNotWayPoint == true)
+	{
+		m_nTimerMove++;
+
+		if (m_nTimerMove >= 30)
+		{
+			m_nTimerMove = 0;
+			m_bRandomGoal = true;
 		}
 	}
 
@@ -1376,7 +1412,7 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	int nNextPoint = 0;
 	int nNowWp = 0;
 
-	if (m_bGoal == true && m_bNearWard == false && m_bSearch == false)
+	if (m_bGoal == true && /*m_bNearWard == false &&*/ m_bSearch == false)
 	{
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
@@ -1392,8 +1428,11 @@ void C3DCharactor::WayPointRoute_CPU(void)
 				fMinCircle = fCircle;
 				//目標のマス番号を記憶
 				m_nTargetWP = nCnt;
-				m_bSearch = true;
-				m_bGoal = false;
+				if (m_bNearWard == false)
+				{
+					m_bSearch = true;
+					m_bGoal = false;
+				}
 			}
 		}
 	}
@@ -1442,6 +1481,10 @@ void C3DCharactor::WayPointRoute_CPU(void)
 
 	if (m_bNearWard == true)
 	{
+		m_pWayPoint->ReturnPointMove();
+		nNextPoint = m_pWayPoint->GetNumTargetPoint(m_nTargetWP);
+		nNowWp = m_pWayPoint->GetNowWP();
+
 		m_MarkWayPoint = m_MarkWardPos;
 	}
 
@@ -1452,11 +1495,23 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	{	//文字の近くのマスまで移動した
 		m_bNearWard = true;
 		m_bGoal = true;
-
+		m_nTimerMove = 0;
 	}
 	else if (fCircle < 100 && m_bNearWard == true)
 	{
 		m_bNearWard = false;
+		m_nTimerMove = 0;
+	}
+	else
+	{
+		m_nTimerMove++;
+
+		if (m_nTimerMove >= 180)
+		{
+			m_nTimerMove = 0;
+			m_bNotWayPoint = true;
+			WayPointMove_CPU();
+		}
 	}
 
 	// 目的の角度
@@ -1469,6 +1524,22 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 
 #endif
+}
+
+//=============================================================================
+//後退移動処理
+//=============================================================================
+void C3DCharactor::WayPointBack_CPU(void)
+{
+	D3DXVECTOR3& Pos = CCharaBase::GetPosition();
+	D3DXVECTOR3& move = CCharaBase::GetMove();
+	D3DXVECTOR3& rot = CCharaBase::GetRotation();
+	D3DXVECTOR3& spin = CCharaBase::GetSpin();
+	float		 speed = CCharaBase::GetSpeed();
+
+	move.x += sinf(rot.y + (D3DX_PI * 1.0f)) * speed;
+	move.z += cosf(rot.y + (D3DX_PI * 1.0f)) * speed;
+
 }
 
 
