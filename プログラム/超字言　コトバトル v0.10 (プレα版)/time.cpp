@@ -261,7 +261,10 @@ HRESULT CTime::Init(void)
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{	// プレイヤーを取得
 		m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
-		m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(true);
+		if (m_pPlayer[nCntPlayer] != NULL)
+		{
+			m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(true);
+		}
 	}
 
 
@@ -393,7 +396,10 @@ void CTime::Update(void)
 				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 				{	// プレイヤーを取得
 					m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
-					m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(false);
+					if (m_pPlayer[nCntPlayer] != NULL)
+					{
+						m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(false);
+					}
 				}
 			}
 
