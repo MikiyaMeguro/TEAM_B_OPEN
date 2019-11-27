@@ -34,22 +34,24 @@ public:
 	static CTube *Create(D3DXVECTOR3 pos, D3DXVECTOR2 size,LPCSTR Tag, int nPriority = 3);				// オブジェクトの生成
 
 	//設定の関数
-	void SetWordNum(int nWordNum, int nNum);
+	void SetWordNum(int nWordNum, int nNum, int nStock);
 	void SetPoint(int nPoint, int nNum, bool bPoint);
-	void SetAnswer(int nAnswer);
+	void SetAnswer(int nAnswer, int nStock);
+	void SetStockNum(int nStock) { m_nStockNum = nStock; }
 	void AllDelete(void);
-	void Delete(int nID);
+	void Delete(int nID, int nStock);
 private:
 	void Collect(void);		//文字を集めてTexを生成
 	void Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum);
 
 	D3DXVECTOR3 m_AnswerPos;
 	CScene2D *m_apWord[MAX_WORD];
-	CScene2D *m_pAnswerModel;
+	CScene2D *m_pAnswerModel[MAX_WORD];
 	int		  m_nAnswer;
 
 	bool	 m_bModelTexFlag;
 	int m_nAnswerModelNum;	// 答えの番号
+	int m_nStockNum;
 
 };
 
