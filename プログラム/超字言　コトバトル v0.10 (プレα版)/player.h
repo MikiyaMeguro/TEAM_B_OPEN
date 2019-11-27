@@ -41,6 +41,7 @@ public:
 		TYPE_POWER,					//パワー
 		TYPE_SPEED,					//スピード
 		TYPE_REACH,					//リーチ
+		TYPE_RANDOM,				//ランダム
 		TYPE_MAX
 	}PLAYER_TYPE;
 
