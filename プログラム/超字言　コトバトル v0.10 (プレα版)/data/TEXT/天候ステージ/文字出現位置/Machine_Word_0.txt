@@ -9,14 +9,58 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         文字配置数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 1
+NUM_MODEL = 12
 
 #------------------------------------------------------------
 #                      モデル配置情報
 #------------------------------------------------------------
 
 MODELSET
-	POS = 200.0 0.0 100.0
+	POS = 40.0 -20.0 -360.0
+END_MODELSET
+
+MODELSET
+	POS = -40.0 -20.0 -360.0
+END_MODELSET
+
+MODELSET
+	POS = -220.0 -20.0 -300.0
+END_MODELSET
+
+MODELSET
+	POS = 220.0 -20.0 -300.0
+END_MODELSET
+
+MODELSET
+	POS = -120.0 -20.0 -200.0
+END_MODELSET
+
+MODELSET
+	POS = 340.0 -20.0 -110.0
+END_MODELSET
+
+MODELSET
+	POS = -300.0.0 -20.0 100.0
+END_MODELSET
+
+MODELSET
+	POS = 100.0 -20.0 300.0
+END_MODELSET
+
+MODELSET
+	POS = -340.0 -20.0 320.0
+END_MODELSET
+
+MODELSET
+	POS = 340.0 -20.0 320.0
+END_MODELSET
+
+MODELSET
+	POS = 220.0 -20.0 380.0
+END_MODELSET
+
+MODELSET
+	POS = -220.0 -20.0 380.0
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
