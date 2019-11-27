@@ -116,6 +116,7 @@ HRESULT C3DCharactor::Init(void)
 	m_bWait = false;
 	m_nTimerMove = 0;
 	m_bNotWayPoint = false;
+	m_fOldCircle = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -1158,7 +1159,7 @@ void C3DCharactor::PickUP_CPU(void)
 				CWord *pWord = ((CWord*)pScene);		// CWordへキャスト(型の変更)
 														// 距離を測る
 				float fCircle = ((Pos.x - pWord->GetPos().x) * (Pos.x - pWord->GetPos().x)) + ((Pos.z - pWord->GetPos().z) * (Pos.z - pWord->GetPos().z));
-				if (fCircle < 10000000 && bTango == false)
+				if (bTango == false)
 				{
 					float fNum = (float)pWord->GetWordNum();	// 文字の番号を取得
 					for (int nCntAnswer = 0; nCntAnswer < nCntData; nCntAnswer++)
@@ -1177,6 +1178,7 @@ void C3DCharactor::PickUP_CPU(void)
 						break;
 					}
 				}
+
 				if (GetThisCharactor()->GetWordManager()->GetCntNum() < 2 && fCircle < 50000 && bTango == false)
 				{//範囲内に文字があった
 					nCntNearWord++;
@@ -1185,15 +1187,17 @@ void C3DCharactor::PickUP_CPU(void)
 					m_MarkWardPos = pWord->GetPos();
 					bWord = true;
 				}
-				else if (GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && bTango == false)
-				{//範囲内に文字があった
-					m_CpuThink = THINK_ATTACK;
-					bWord = true;
-				}
 			}
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
+	}
+
+
+	if (GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && bTango == false)
+	{//範囲内に文字があった
+		//m_CpuThink = THINK_ATTACK;
+	//	bWord = true;
 	}
 
 	//ワードが範囲内にある時移動する
@@ -1259,6 +1263,7 @@ void C3DCharactor::NotBullet_CPU(void)
 			nCntNear++;
 		}
 	}
+
 	if (nCntNear < 3)
 	{
 		m_CpuThink = THINK_PICKUP;
@@ -1502,17 +1507,30 @@ void C3DCharactor::WayPointRoute_CPU(void)
 		m_bNearWard = false;
 		m_nTimerMove = 0;
 	}
-	else
+	else if (m_fOldCircle == fCircle)
 	{
 		m_nTimerMove++;
 
-		if (m_nTimerMove >= 180)
+		if (m_nTimerMove >= 10)
 		{
 			m_nTimerMove = 0;
 			m_bNotWayPoint = true;
 			WayPointMove_CPU();
 		}
 	}
+	else
+	{
+		//m_nTimerMove++;
+
+		//if (m_nTimerMove >= 240)
+		//{
+		//	m_nTimerMove = 0;
+		//	m_bNotWayPoint = true;
+		//	WayPointMove_CPU();
+		//}
+	}
+
+
 
 	// 目的の角度
 	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
@@ -1522,6 +1540,9 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	//移動
 	move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+
+	//距離を記憶
+	m_fOldCircle = fCircle;
 
 #endif
 }
