@@ -120,11 +120,14 @@ float CUtilityMath::Round_n(float& fValue, const int nRound)
 
 	return fValue;
 }
+
 //=============================================================================
 //	クォータニオンをオイラー角(３次元ベクトル)に変換する関数(作成途中)
 //=============================================================================
 D3DXVECTOR3 CUtilityMath::EulerToQuaternion(const D3DXQUATERNION& quat)
 {
+	//MessageBox(hWnd, "EulerToQuaternionはまだ中身が作成されていません", "警告！", MB_ICONWARNING);
+
 	D3DXMATRIX mtxRot;
 	D3DXMatrixRotationQuaternion(&mtxRot,&quat);
 

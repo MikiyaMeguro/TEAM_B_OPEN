@@ -121,7 +121,7 @@ void CDebugProc::ReleseStr(void)
 #ifdef _DEBUG
 	//•¶š—ñ‚Ìíœ(‰Šú‰»)
 	m_strDebug.clear();
-	m_strDebug.shrink_to_fit();
+	//m_strDebug.shrink_to_fit();
 
 #endif
 }

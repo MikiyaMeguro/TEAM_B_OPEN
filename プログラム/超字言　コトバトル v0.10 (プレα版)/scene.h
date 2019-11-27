@@ -37,7 +37,8 @@ public:
 		OBJTYPE_SCENE3D,	// 3Dポリゴン
 		OBJTYPE_SCENEX,		// モデル
 		OBJTYPE_BILLBOARD,	// ビルボード
-		OBJTYPE_MESHFIELD,	// メッシュフィールド
+		OBJTYPE_MESH_FIELD,	// メッシュフィールド
+		OBJTYPE_MESH_SPHERE,// 球メッシュ
 		OBJTYPE_SETOBJECT,	// オブジェクト配置
 		OBJTYPE_PLAYER,
 		OBJTYPE_ENEMY,
@@ -55,6 +56,8 @@ public:
 		OBJTYPE_TIME,		// 時間
 		OBJTYPE_BULLET,
 		OBJTYPE_POINT,		// ポイント
+		OBJTYPE_EXPLOSION,	// 爆発
+		OBJTYPE_ORBIT,		// 軌跡
 		OBJTYPE_MAX			// 総数
 	} OBJTYPE;
 

@@ -23,7 +23,7 @@ class CExplosion3D : public CMeshSphere
 {
 public:
 	CExplosion3D();
-	CExplosion3D(int pri = 1, OBJTYPE type = OBJTYPE_SCENE3D);
+	CExplosion3D(int pri = 1, OBJTYPE type = OBJTYPE_EXPLOSION);
 	~CExplosion3D();
 
 	static CExplosion3D* Create(void);

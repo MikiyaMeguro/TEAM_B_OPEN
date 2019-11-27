@@ -27,7 +27,7 @@ CExplosion3D* CExplosion3D::Create(void)
 {
 	CExplosion3D* pExplosion = NULL;
 
-	pExplosion = new CExplosion3D(4, OBJTYPE_PARTICLE);
+	pExplosion = new CExplosion3D(4, OBJTYPE_EXPLOSION);
 
 	if (pExplosion != NULL)
 	{
@@ -52,7 +52,7 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 	m_nLife = nLife;
 	m_nExpandTime = nLife;
 	m_nCount = 0;
-	m_spinSpeed = D3DXVECTOR3(0.0f, 0.4f, 0.0f);
+	m_spinSpeed = D3DXVECTOR3(0.0f, 0.4f, 0.0f);	//è≠ÇµâÒÇ∑
 
 	if (m_bNotDup == false)
 	{
