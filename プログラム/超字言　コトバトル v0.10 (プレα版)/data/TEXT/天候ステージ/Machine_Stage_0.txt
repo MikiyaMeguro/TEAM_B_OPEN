@@ -34,6 +34,12 @@ SCRIPT			# この行は絶対消さないこと！
 	# 26 : 落屑
 	# 27 : 雪壁
 	# 28 : 電柱
+	# 29 ：看板(商店街の看板)
+	# 30 ：広場門
+	# 31 ：檻
+	# 32 ：排水溝
+	# 33 ：氷床
+	
 #------------------------------------------------------------
 #    配置の種類 (読み込み済み)
 #------------------------------------------------------------
@@ -760,6 +766,116 @@ MODELSET						# シーソー
 	SCALE = 1.0 1.3 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# シーソー
+	TYPE = 18
+	POS = 220.0 0.0 -170.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.3 1.5
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 棒
+	TYPE = 30
+	POS = 100.0 0.0 -380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.3 5.0 0.3
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 棒
+	TYPE = 30
+	POS = -100.0 0.0 -380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.3 5.0 0.3
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 看板
+	TYPE = 29
+	POS = 0.0 170.0 -380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 2.0 1.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 柵
+	TYPE = 31
+	POS = 0.0 0.0 100.1
+	ROT = 0.0 1.57 0.0
+	SCALE = 1.5 0.55 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 柵
+	TYPE = 31
+	POS = 100.1 0.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 0.55 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 柵
+	TYPE = 31
+	POS = -100.1 0.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 0.55 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+～～～
+
+MODELSET						# 排水溝
+	TYPE = 32
+	POS = 0.0 0.0 380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 5.0 2.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET						# 排水溝
+	TYPE = 32
+	POS = 380.0 0.0 0.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 2.0 5.0 5.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 排水溝
+	TYPE = 32
+	POS = -380.0 0.0 0.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 2.0 5.0 5.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 地下
+	TYPE = 3
+	POS = 0.0 -60.1 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 19.9 3.0 19.9
+	COLLISION = 1
+	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
