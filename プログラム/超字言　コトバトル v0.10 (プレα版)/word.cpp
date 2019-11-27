@@ -231,7 +231,7 @@ void CWord::Update(void)
 			{
 				if (pPlayer[nCntPlayer] != NULL)
 				{
-					if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3)
+					if (pPlayer[nCntPlayer]->GetWordManager()->GetCntNum() < 3 && pPlayer[nCntPlayer]->GetWordManager()->GetGatherFlag() == false)
 					{
 
 						Distance(pos, PlayerPos[nCntPlayer], nCntPlayer);

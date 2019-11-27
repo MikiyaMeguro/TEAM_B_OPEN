@@ -12,6 +12,7 @@
 #include "manager.h"		// マネージャー
 #include "renderer.h"		// レンダラー
 #include "wall.h"
+#include "game.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -80,18 +81,18 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	{
 		CScene3D::SetSize(size.z, size.x);
 	}
-	else if (size.y > 0.1f){CScene3D::SetSizeY(size.y, size.x);}
+	else if (size.y > 0.1f) { CScene3D::SetSizeY(size.y, size.x); }
 	m_nType = nTexType;
-	if (nType == 0){SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL);}
-	else{SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_BILLBOARD); }
+	if (nType == 0) { SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL); }
+	else { SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_BILLBOARD); }
 
-	if (nTexType == 0){CScene3D::BindTexture("FIELD");}
-	else if (nTexType == 1){CScene3D::BindTexture("PAD");}
-	else if (nTexType == 2) { CScene3D::BindTexture("TUROFLOW000"); }
-	else if (nTexType == 3) { CScene3D::BindTexture("TUROFLOW001"); }
-	else if (nTexType == 4) { CScene3D::BindTexture("NEXT"); }
-	else if (nTexType == 5) { CScene3D::BindTexture("FIELD002"); }
-	else if (nTexType == 6) { CScene3D::BindTexture("FIELD002"); }
+	if (m_nType == 0) { CScene3D::BindTexture("FIELD"); }
+	else if (m_nType == 1) { CScene3D::BindTexture("PAD"); }
+	else if (m_nType == 2) { CScene3D::BindTexture("TUROFLOW000"); }
+	else if (m_nType == 3) { CScene3D::BindTexture("TUROFLOW001"); }
+	else if (m_nType == 4) { CScene3D::BindTexture("NEXT"); }
+	else if (m_nType == 5) { CScene3D::BindTexture("FIELD002"); }
+	else if (m_nType == 6) { CScene3D::BindTexture("FIELD002"); }
 
 	return S_OK;
 }
@@ -117,11 +118,20 @@ void CWall::Update(void)
 	if (m_nType == 4)
 	{//	ボタン　表示
 		m_nCounter++;
-		if (m_nCounter < 60){m_move.y = 0.3f;}
-		else if (m_nCounter < 120){m_move.y = -0.3f;}
-		else if (m_nCounter == 120 ){m_nCounter =  0;}
+		if (m_nCounter < 60) { m_move.y = 0.3f; }
+		else if (m_nCounter < 120) { m_move.y = -0.3f; }
+		else if (m_nCounter == 120) { m_nCounter = 0; }
 	}
-	if (m_nType == 6)
+
+	if (m_nType == 5)
+	{//	川の流れる
+		m_nCounter++;
+		if (m_nCounter > 3750)
+		{
+			Uninit();
+		}
+	}
+	else if (m_nType == 6)
 	{//	川の流れる
 		m_nCounter++;
 		if (m_nCounter % 10 == 0)
@@ -129,13 +139,16 @@ void CWall::Update(void)
 			m_nAnimCounter++;
 			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
 		}
+		if (m_nCounter > 3750)
+		{
+			Uninit();
+		}
 	}
+
 	WallPos += m_move;
 	CScene3D::SetPos(WallPos);						//	位置の設定
 	CScene3D::SetRot(WallRot);						//	回転の設定
 	CScene3D::SetSizeY(WallSizeY, WallSizeX);		//	大きさの設定
-
-	CScene3D::Update();
 }
 
 //=============================================================================
