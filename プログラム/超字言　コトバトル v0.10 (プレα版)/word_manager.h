@@ -14,6 +14,7 @@
 //===================================================================
 #define MAX_WORD	(3)			// 文字数
 #define NOT_NUM		(99)		// ゴミを示す数字
+#define EMPTINESS_NUM	(100)	// 空の数字
 //===================================================================
 // クラスの定義
 //===================================================================
@@ -52,10 +53,12 @@ public:
 	int GetCntNum(void) { return m_nCntNum; }
 	int GetWordNum(int nNum) { return m_aWord[nNum].nNum; }
 	int GetAnswer(void) { return m_nCreateType;	}		// 持っている文字で作れるモデルの番号を取得
+	int GetStockNum(void) { return m_nCntStock; }		// ストック数の取得
 	bool GetBulletFlag(void) { return m_bPress; }		// 弾が撃てるようになる条件
 	float *GetAnswerData(void) { return m_fAnswerData; }	// 2文字の時に組み合わせることが出来る文字データの取得
 	static D3DXVECTOR3 *GetAnswerNum(void) { return m_AnswerNum; }
 	static int GetAnswerDataNum(void) { return m_nAnswerDataNum; }
+	bool GetGatherFlag(void) { return m_bGatherFlag; }
 
 	// デバック用
 	void CreateOblDebug(void);
@@ -78,12 +81,15 @@ private:
 	int m_nCntNum;
 	int m_nCntaAnswer;
 	int m_nPlayerID;
+	int m_nCntStock;
+	int m_nStock[MAX_WORD];				// 答えモデルのストック
 	float *m_fAnswerData;
 	bool m_bPress;
 	bool m_bSearch;					// サーチのフラグ
 	bool m_bAnswer[MAX_WORD];
 	bool m_bFlag;
 	bool m_bAnswerCheck;
+	bool m_bGatherFlag;		// 集めるフラグ
 
 	/* デバック用*/
 	void DebugWordCreate(void);

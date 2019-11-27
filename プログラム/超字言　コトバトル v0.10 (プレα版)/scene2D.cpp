@@ -412,6 +412,9 @@ void CScene2D::SetTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax)
 	pVtx[2].tex = D3DXVECTOR2(texmin.x, texmax.y);
 	pVtx[3].tex = D3DXVECTOR2(texmax.x, texmax.y);
 
+	m_Tex[0] = texmin;
+	m_Tex[1] = texmax;
+
 	//頂点バッファをアンロック
 	m_pVtxBuff->Unlock();
 }
