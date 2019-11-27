@@ -434,7 +434,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 
 		}
 		int nAnswer = rand() % 48;
-		int nAnswerB = rand() % 4;
+		int nAnswerB = rand() % 3;
 
 		//	égÇ¡ÇƒÇ¢Ç»Ç¢ï∂éöÇÃó·äOèàóù
 		if (nAnswer == 0 || nAnswer == 2 || nAnswer == 4 || nAnswer == 6 || nAnswer == 8 || nAnswer == 11) { nAnswer = 1; }
@@ -447,10 +447,10 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	ï∂éöÇèoÇ∑
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(1.4f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);}
-				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-1.4f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
-				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 1.4f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
-				else if (nAnswerB == 3) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, -1.4f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(0.8f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);}
+				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-0.8f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.8f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				//else if (nAnswerB == 3) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, -0.8f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
 				m_nCounter = 0;
 			}
 		}

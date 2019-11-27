@@ -197,6 +197,22 @@ bool CCameraManager::SetCameraLockOnChara(LPCSTR Tag, C3DCharactor* pLockOnChara
 }
 
 //===================================================================
+// ƒJƒƒ‰‚Ì‰æŠpİ’èˆ—
+//===================================================================
+bool CCameraManager::SetCameraAngle(LPCSTR Tag, float fAngle)
+{
+	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
+
+	if (result != m_vecCameraState.end())
+	{//ƒJƒƒ‰–¼‚ª’è‹`‚³‚ê‚Ä‚¢‚ê‚Î
+		result->pCamera->SetCameraAngle(fAngle);
+
+		return true;
+	}
+	return false;
+}
+
+//===================================================================
 // ”wŒiFİ’èˆ—
 //===================================================================
 bool CCameraManager::SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col)

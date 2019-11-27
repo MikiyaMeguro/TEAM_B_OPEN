@@ -1214,11 +1214,10 @@ void C3DCharactor::PickUP_CPU(void)
 		pScene = pSceneNext;
 	}
 
-
-	if (GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && bTango == false)
-	{//”ÍˆÍ“à‚É•¶š‚ª‚ ‚Á‚½
-		//m_CpuThink = THINK_ATTACK;
-	//	bWord = true;
+	if (GetThisCharactor()->GetWordManager()->GetCntNum() ==  2 && bTango == false)
+	{//
+		m_CpuThink = THINK_ATTACK;
+		bWord = true;
 	}
 
 	//ƒ[ƒh‚ª”ÍˆÍ“à‚É‚ ‚éˆÚ“®‚·‚é

@@ -60,6 +60,7 @@ public:
 	void SetPosRDest(D3DXVECTOR3 posRDest) { m_posRdest = posRDest; };
 	void SetRotationDest(D3DXVECTOR3 rotDest) { m_rotDest = rotDest; };
 
+	//‹¤’Ê
 	void SetLength(float fLength) { m_fLength = fLength; };
 
 	void SetViewPort(D3DVIEWPORT9 ViewPort) { m_ViewPort = ViewPort; };
@@ -75,6 +76,7 @@ public:
 
 	void SetLockOnChara(C3DCharactor* pChara) { m_pLockOnChara = pChara; };
 	void SetHomingChara(C3DCharactor* pChara) { m_pHomingChara = pChara; };
+	void SetCameraAngle(float fAngle) { m_fCameraAngle = fAngle; };
 
 private:
 	D3DXVECTOR3 m_posV;		//Ž‹“_
