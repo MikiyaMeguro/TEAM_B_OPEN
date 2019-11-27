@@ -75,7 +75,7 @@ HRESULT CResult::Init(void)
 	float fPosX = 20;	//•\²‘ä‰ŠúˆÊ’u
 	float fNext = 30;	//•\²‘ä‚ÌŠÔ‚Ì•
 
-#if 1
+#if 0
 	m_ResultChara[0].nPoint = 0;
 	m_ResultChara[1].nPoint = 10;
 	m_ResultChara[2].nPoint = 20;
