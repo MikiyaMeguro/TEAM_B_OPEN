@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="avoidui.h" />
     <ClInclude Include="bullet.h" />
     <ClInclude Include="camera.h" />
     <ClInclude Include="CameraManager.h" />
@@ -206,6 +207,7 @@
     <ClInclude Include="word_manager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="avoidui.cpp" />
     <ClCompile Include="bullet.cpp" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="CameraManager.cpp" />
