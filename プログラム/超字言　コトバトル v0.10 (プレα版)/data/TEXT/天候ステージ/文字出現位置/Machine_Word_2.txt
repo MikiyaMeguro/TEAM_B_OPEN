@@ -1,6 +1,6 @@
 #============================================================
 #
-# [文字配置ツール]スクリプトファイル 
+# [文字配置ツール]スクリプトファイル
 #  Author : DAISUKE OZAKI
 #
 #============================================================
@@ -16,7 +16,63 @@ NUM_MODEL = 1
 #------------------------------------------------------------
 
 MODELSET
-	POS = 200.0 0.0 100.0
+	POS = 0.0 20.0 0.0
+END_MODELSET
+
+MODELSET
+	POS = -350.0 20.0 -30.0		# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = -350.0 20.0 38.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 348.0 20.0 38.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 348.0 20.0 -18.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 106.0 20.0 -188.0		# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 246.0 20.0 80.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 206.0 20.0 198.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = -206.0 20.0 200.0		# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = -228.0 20.0 24.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = -112.0 20.0 -200.0		# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 314.0 20.0 312.0			# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = -364.0 20.0 326.0		# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = -344.0 20.0 -334.0		# 位置情報
+END_MODELSET
+
+MODELSET
+	POS = 330.0 20.0 -306.0		# 位置情報
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
