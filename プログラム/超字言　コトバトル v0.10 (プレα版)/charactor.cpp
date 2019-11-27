@@ -152,15 +152,17 @@ void C3DCharactor::Update(void)
 			CharaMove_Input();
 			break;
 		case CCharaBase::MOVETYPE_NPC_AI:
-			if (m_nActionTimer == 0)
-			{	//l‚¦‚é
-				Think_CPU();
+			if (CGame::GetbStageSet() == false)
+			{
+				if (m_nActionTimer == 0)
+				{	//l‚¦‚é
+					Think_CPU();
+				}
+				else
+				{	//s“®‚·‚é
+					Action_CPU();
+				}
 			}
-			else
-			{	//s“®‚·‚é
-				Action_CPU();
-			}
-
 			//CPU‚ªêŠOs‚©‚È‚¢‚æ‚¤‚É
 			if (m_bJyougai == false)
 			{
@@ -633,6 +635,25 @@ void C3DCharactor::Think_CPU(void)
 	switch (GetThisCharactor()->GetID())
 	{
 	case 1:
+#if 1
+		if (m_pWayPoint == NULL)
+		{
+			m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
+		}
+
+		if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
+		{	//’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«
+			m_Type = CPU_TYPE_NONE;
+			m_CpuThink = THINK_HAVEBULLET;
+			m_nActionTimer = 30;
+		}
+		else
+		{	//’e‚ðŽ‚Á‚Ä‚¢‚È‚¢‚Æ‚«
+			m_CpuThink = THINK_NOTBULLET;
+			m_nActionTimer = 30;
+		}
+#endif
+
 		break;
 	case 2:
 		m_Type = CPU_TYPE_HOMING;
@@ -643,24 +664,6 @@ void C3DCharactor::Think_CPU(void)
 	default:
 		break;
 	}
-#if 1
-	if (m_pWayPoint == NULL)
-	{
-		m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
-	}
-
-	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
-	{	//’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«
-		m_Type = CPU_TYPE_NONE;
-		m_CpuThink = THINK_HAVEBULLET;
-		m_nActionTimer = 30;
-	}
-	else
-	{	//’e‚ðŽ‚Á‚Ä‚¢‚È‚¢‚Æ‚«
-		m_CpuThink = THINK_NOTBULLET;
-		m_nActionTimer = 30;
-	}
-#endif
 
 #if 0
 	if (m_pWayPoint == NULL)
@@ -1108,6 +1111,11 @@ void C3DCharactor::Attack_CPU(void)
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
 		m_CpuThink = THINK_NONE;
 	}
+	else if(GetThisCharactor()->GetWordManager()->GetBulletFlag() == false
+		&& GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && CGame::GetbStageSet() == false)
+	{
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
+	}
 }
 
 //=============================================================================
@@ -1169,16 +1177,18 @@ void C3DCharactor::PickUP_CPU(void)
 						break;
 					}
 				}
-				if (fCircle < 50000 && bTango == false)
+				if (GetThisCharactor()->GetWordManager()->GetCntNum() < 2 && fCircle < 50000 && bTango == false)
 				{//”ÍˆÍ“à‚É•¶Žš‚ª‚ ‚Á‚½
-					nCntNearWord++;		//‰ÁŽZ
-										//if(m_fCompareRange < fCircle)
-					{//’PŒê‚ªŠ®¬‚µ‚È‚¢‚Æ‚«‚Í“K“–‚ÉE‚¤
+					nCntNearWord++;
 					 //ˆê”Ô‹ß‚¢‹——£‚ð‹L‰¯
-						m_fCompareRange = fCircle;
-						m_MarkWardPos = pWord->GetPos();
-						bWord = true;
-					}
+					m_fCompareRange = fCircle;
+					m_MarkWardPos = pWord->GetPos();
+					bWord = true;
+				}
+				else if (GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && bTango == false)
+				{//”ÍˆÍ“à‚É•¶Žš‚ª‚ ‚Á‚½
+					m_CpuThink = THINK_ATTACK;
+					bWord = true;
 				}
 			}
 		}
@@ -1252,13 +1262,10 @@ void C3DCharactor::NotBullet_CPU(void)
 	if (nCntNear < 3)
 	{
 		m_CpuThink = THINK_PICKUP;
-		//m_CpuThink = THINK_WAYPOINTMOVE;
 		m_nActionTimer = 30;
 	}
 	else
 	{
-		//m_CpuThink = THINK_ESCAPE;
-		//m_CpuThink = THINK_WAYPOINTMOVE;
 		m_CpuThink = THINK_PICKUP;
 		m_nActionTimer = 30;
 	}
@@ -1366,7 +1373,7 @@ void C3DCharactor::WayPointMove_CPU(void)
 	{
 		m_nTimerMove++;
 
-		if (m_nTimerMove >= 180)
+		if (m_nTimerMove >= 30)
 		{
 			m_nTimerMove = 0;
 			m_bRandomGoal = true;
