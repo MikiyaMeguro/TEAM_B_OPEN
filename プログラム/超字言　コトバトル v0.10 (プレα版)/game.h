@@ -31,8 +31,8 @@ class CStageSelect;
 //********************************
 // 2画面時の筒の位置
 //********************************
-#define WORD_TUBE002_POS_1P		(D3DXVECTOR3(120.0f, 268.0f, 0.0f))		// 2画面時(1P)の位置
-#define WORD_TUBE002_POS_2P		(D3DXVECTOR3(120.0f, 633.0f, 0.0f))		// 2画面時(2P)の位置
+#define WORD_TUBE002_POS_1P		(D3DXVECTOR3(250.0f, 268.0f, 0.0f))		// 2画面時(1P)の位置
+#define WORD_TUBE002_POS_2P		(D3DXVECTOR3(250.0f, 633.0f, 0.0f))		// 2画面時(2P)の位置
 #define WORD_SIZE_002			(D3DXVECTOR2(150.0f, 120.0f))			// 2画面時のサイズ
 
 //********************************
