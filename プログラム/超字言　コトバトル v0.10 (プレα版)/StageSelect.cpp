@@ -65,6 +65,7 @@ CStageSelect::CStageSelect()
 	m_pObj = NULL;
 	m_nCntAnim = 0;
 	m_nPatturnAnim = 0;
+	m_nSelect = 0;
 	for (int nCnt = 0; nCnt < MAX_STAGE; nCnt++)
 	{
 		m_SelectPos[nCnt] = DEFAULT_POS;
