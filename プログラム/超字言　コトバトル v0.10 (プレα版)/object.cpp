@@ -695,7 +695,6 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMo
 			m_nRealTime = REALTIME_NOTMOVE;
 			if (m_bCreateFlag == false) {
 				m_bCreateFlag = true;
-				CManager::GetGame()->SetCreateWord();
 			}
 		}
 	}

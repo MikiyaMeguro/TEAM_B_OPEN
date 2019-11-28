@@ -445,6 +445,7 @@ void CTime::Update(void)
 		m_StageCounter++;
 		if (m_StageCounter > 120)
 		{
+			CManager::GetGame()->SetCreateWord();
 			m_StageCounter = 0;
 			CGame::bStageSet(false);
 		}
