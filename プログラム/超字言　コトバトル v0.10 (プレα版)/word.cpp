@@ -426,7 +426,7 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 	{
 		m_pBillBoard[0]->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA));
 		if (m_SearchCol[m_nCntSearch] == COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 30.0f, 17.0f); }
-		else if (m_SearchCol[m_nCntSearch] != COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 70.0f, 17.0f); }
+		else if (m_SearchCol[m_nCntSearch] != COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 100.0f, 17.0f); }
 	}
 
 
