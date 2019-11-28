@@ -339,7 +339,7 @@ void CPoint::BGPosition(CScene2D *pBg)
 //=============================================================================
 void CPoint::UIPosition(void)
 {
-	char *cName[MAX_PLAYER] = { "キャラ(スピード)", "キャラ(バランス)", "キャラ(パワー)", "キャラ(リーチ)" };
+	char *cName[MAX_PLAYER] = { "キャラ(バランス)", "キャラ(パワー)", "キャラ(スピード)", "キャラ(リーチ)" };
 	D3DXVECTOR3 posIcon = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 posNumber = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 posLogo = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -413,7 +413,8 @@ void CPoint::UIPosition(void)
 	// キャラクターアイコンのロゴ
 	if (m_pIcon == NULL)
 	{
-		m_pIcon = CScene2D::Create(posIcon, cName[3], 6);
+		int nID = CGame::GetPlayer(m_nID)->GetPlayerType();
+		m_pIcon = CScene2D::Create(posIcon, cName[nID], 6);
 		m_pIcon->SetWidthHeight(40.0f, 30.0f);
 		m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}

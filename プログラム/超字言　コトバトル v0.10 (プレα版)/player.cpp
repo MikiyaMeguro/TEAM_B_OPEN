@@ -104,6 +104,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 
 	//キャラのID設定
 	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+	m_PlayerType = PlayerType;
 
 	// 文字管理クラス生成
 	if (m_pWordManager == NULL)

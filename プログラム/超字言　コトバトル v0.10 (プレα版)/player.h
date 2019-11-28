@@ -191,6 +191,8 @@ public:
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
 
+	PLAYER_TYPE GetPlayerType(void) { return m_PlayerType; }
+
 private:
 	bool			CollisionDamageObj(void);			//’e‚Æ‚Ì“–‚½‚è”»’è
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ƒ_ƒ[ƒW—Ê | HitRotation = UŒ‚‚ğó‚¯‚½Œü‚«
