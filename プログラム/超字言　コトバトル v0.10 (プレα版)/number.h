@@ -27,9 +27,15 @@ public:
 	void SetCol(D3DXCOLOR col);
 	void SetSize(D3DXVECTOR2 size, D3DXVECTOR2 pos);
 
+	D3DXVECTOR2 GetSize(void) { return m_size; }
+	D3DXVECTOR2 GetPos(void) { return m_pos; }
+	D3DXCOLOR GetCol(void) { return m_col; }
 private:
 	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;				// 頂点バッファへのポインタ
 	int							m_nType;				// テクスチャの番号
+	D3DXVECTOR2					m_size;					// サイズ
+	D3DXVECTOR2					m_pos;					// 位置
+	D3DXCOLOR					m_col;					// 色
 };
 
 #endif

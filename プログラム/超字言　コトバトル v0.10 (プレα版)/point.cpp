@@ -73,7 +73,9 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_nID = 0;
 	m_type = TYPE_NONE;
 	m_bSizeChange = false;
-	m_ChangeCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_bChangeFlag = false;
+	m_bColChange = false;
+	m_bFlag = false;
 }
 
 //=============================================================================
@@ -201,7 +203,14 @@ void CPoint::AddPoint(int nPoint)
 	if (MAX_POINT < m_nTotalPoint) { m_nTotalPoint = MAX_POINT; }
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 	m_bSizeChange = true;
-	m_ChangeCol = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+	m_bFlag = false;
+	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	{// テクスチャに反映
+		if (m_apNumber[nCntPoint] != NULL)
+		{
+			m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
 }
 //=============================================================================
 // タイム減算処理
@@ -216,7 +225,14 @@ void CPoint::SubtractionPoint(int nPoint)
 	if (0 > m_nTotalPoint) { m_nTotalPoint = 0; }
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 	m_bSizeChange = true;
-	D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	m_bFlag = true;
+	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	{// テクスチャに反映
+		if (m_apNumber[nCntPoint] != NULL)
+		{
+			m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+		}
+	}
 }
 
 //=============================================================================
@@ -269,7 +285,7 @@ void CPoint::BGPosition(CScene2D *pBg)
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer != 2 && m_nID == 0)
 	{	// 画面左上 (1, 3, 4画面 1P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 30.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nNumPlayer == 1 && m_nID == 3 || m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 1)
 	{	// 画面右上 (1画面 4P , 3～4画面 2P)の位置
@@ -476,7 +492,57 @@ void CPoint::SizeChange(void)
 		{
 			if (m_bSizeChange == true) 
 			{
-				
+				D3DXVECTOR2 size = m_apNumber[nCntPoint]->GetSize();
+				D3DXCOLOR col = m_apNumber[nCntPoint]->GetCol();
+				float fSizeChangeX = 1.5f;
+				float fSizeChangeY = 1.0f;
+				float fCol = 0.1f;
+
+				if (m_bChangeFlag == false)
+				{
+					size.x += fSizeChangeX;
+					size.y += fSizeChangeY;
+				}
+				else if (m_bChangeFlag == true)
+				{
+					size.x -= fSizeChangeX;
+					size.y -= fSizeChangeY;
+				}
+
+				if (m_bColChange == false)
+				{
+					if (m_bFlag == false)
+					{
+						col.r -= fCol;
+						if (col.r < 0.4) { col.r = 0.4f; m_bColChange = true; }
+					}
+					else if (m_bFlag == true)
+					{
+						col.b -= fCol;
+						if (col.b < 0.4) { col.b = 0.4f; m_bColChange = true; }
+					}
+				}
+				else if (m_bColChange == true)
+				{
+					if (m_bFlag == false)
+					{
+						col.r += fCol;
+						if (col.r > 1.0) { col.r = 1.0f; m_bColChange = false; }
+					}
+					else if (m_bFlag == true)
+					{
+						col.b += fCol;
+						if (col.b > 1.0) { col.b = 1.0f; m_bColChange = false; }
+					}
+				}
+
+				if (size.x > MAX_SIZE.x && size.y > MAX_SIZE.y) { m_bChangeFlag = true; }
+				else if (size.x < DEFAULT_SIZE.x && size.y < DEFAULT_SIZE.y) { m_bChangeFlag = false; m_bSizeChange = false; }
+
+				m_apNumber[nCntPoint]->SetSize(size, m_apNumber[nCntPoint]->GetPos());
+				m_apNumber[nCntPoint]->SetCol(col);
+
+				if (m_bSizeChange == false) { m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
 			}
 		}
 	}
