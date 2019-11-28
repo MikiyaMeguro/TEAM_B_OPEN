@@ -79,5 +79,4 @@ private:
 
 	D3DXVECTOR2				m_Tex[2];				// テスクチャの座標確保					
 };
-
 #endif
