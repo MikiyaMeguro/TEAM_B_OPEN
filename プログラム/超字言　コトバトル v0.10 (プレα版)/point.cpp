@@ -89,7 +89,7 @@ CPoint::~CPoint() {}
 HRESULT CPoint::Init(void)
 {
 	int nTexData = 0;
-	m_nTotalPoint = 20;
+	m_nTotalPoint = 0;
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 
 	PointBGCreate();		// É|ÉCÉìÉgÇÃîwåiê∂ê¨
