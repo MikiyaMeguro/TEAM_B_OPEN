@@ -333,6 +333,18 @@ void CModelBullet::Uninit(void)
 			m_pOrbit->Uninit();
 		}
 		break;
+	case TYPE_KNOCKBACK:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 100.0f, 120, 0.01f); }
+		break;
+	case TYPE_STINGER:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
+		break;
+	case TYPE_REFLECT:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
+		break;
 	case TYPE_MISSILE:
 		p3D = CExplosion3D::Create();
 		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
@@ -364,7 +376,7 @@ void CModelBullet::Update(void)
 	nLife--;
 
 	C3DBullet::Update();
-	if (m_Prop == TYPE_MISSILE)
+	if (m_Prop == TYPE_MISSILE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
 	{//ƒ~ƒTƒCƒ‹‚È‚ç
 		if (m_pHomingChara != NULL)
 		{
