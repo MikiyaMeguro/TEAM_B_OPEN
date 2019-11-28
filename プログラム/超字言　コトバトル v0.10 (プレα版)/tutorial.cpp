@@ -221,12 +221,6 @@ void CTutorial::Uninit(void)
 	}
 	CEffect::Unload();			//	エフェクトの開放
 
-	if (m_pWall != NULL)
-	{
-		m_pWall->Uninit();
-		m_pWall = NULL;
-	}
-
 	if (m_pWordCreate != NULL)
 	{
 		m_pWordCreate->Uninit();

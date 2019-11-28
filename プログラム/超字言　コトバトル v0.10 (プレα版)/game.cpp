@@ -264,11 +264,6 @@ void CGame::Uninit(void)
 		}
 	}
 
-	if (m_pWall != NULL)
-	{
-		m_pWall->Uninit();
-		m_pWall = NULL;
-	}
 
 	if (m_pWordCreate != NULL)
 	{
