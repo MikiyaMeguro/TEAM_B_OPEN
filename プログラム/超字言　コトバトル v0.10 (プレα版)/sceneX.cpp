@@ -307,7 +307,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 		bHit = true;
 	}
 
-	if (m_CollisionType != COLLISIONTYPE_NONE)
+	if (m_CollisionType != COLLISIONTYPE_NONE && m_CollisionType != COLLSIONTYPE_FLOORCOLLSION)
 	{
 		if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE &&pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
 			|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y &&pos->y <= m_pos.y + ScaleVtxMin.y
@@ -406,7 +406,7 @@ bool CSceneX::CollisionIN(D3DXVECTOR3 pos,D3DXVECTOR3 radius)
 	ScaleVtxMin.y = m_VtxMin.y;
 	ScaleVtxMin.z = m_VtxMin.z;
 
-	if (m_CollisionType != COLLISIONTYPE_NONE)
+	if (m_CollisionType != COLLISIONTYPE_NONE && m_CollisionType != COLLSIONTYPE_FLOORCOLLSION)
 	{
 		if (pos.z <= m_pos.z + ScaleVtxMax.z + radius.z && pos.z >= m_pos.z + ScaleVtxMin.z - radius.z)
 		{// z�͈̔͂̒�
