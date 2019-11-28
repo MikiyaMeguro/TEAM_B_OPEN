@@ -226,7 +226,7 @@ void CPlayerSelect::Update(void)
 			//選択処理
 			if (CCommand::GetCommand("DOWN") && m_bCaution == false)
 			{
-				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 				if (m_nSelect < 2)
 				{
@@ -236,7 +236,7 @@ void CPlayerSelect::Update(void)
 			}
 			else if (CCommand::GetCommand("UP") && m_bCaution == false)
 			{
-				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 				if (m_nSelect > 1)
 				{
@@ -246,6 +246,7 @@ void CPlayerSelect::Update(void)
 			}
 			else if (CCommand::GetCommand("RIGHT") && m_bCaution == false)
 			{
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 				if (m_nSelect == 1)
 				{
@@ -263,6 +264,7 @@ void CPlayerSelect::Update(void)
 			}
 			else if (CCommand::GetCommand("LEFT") && m_bCaution == false)
 			{
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 				if (m_nSelect == 0)
 				{
@@ -282,7 +284,7 @@ void CPlayerSelect::Update(void)
 			//エンターキー
 			if (CCommand::GetCommand("DECISION") == true && m_bCaution == false)
 			{
-				//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT00);
 				if (m_nSelect == 0)
 				{
 					m_SelectMode = SELECTPLAYER_1P;
@@ -310,6 +312,7 @@ void CPlayerSelect::Update(void)
 			//最終警告	2Dが作成されたら
 			if (CCommand::GetCommand("DECISION") && m_bCreate2D == true)
 			{
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT00);
 				switch (m_SelectMode)
 				{
 				case SELECTPLAYER_1P:
@@ -411,6 +414,7 @@ void CPlayerSelect::Update(void)
 
 				if (CCommand::GetCommand("RIGHT") && m_bCaution == true)
 				{
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 					m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_NONE;
 					//右端で止まる
 					if (m_nSelectCaution < 1)
@@ -421,6 +425,7 @@ void CPlayerSelect::Update(void)
 				}
 				else if (CCommand::GetCommand("LEFT") && m_bCaution == true)
 				{
+					pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 					m_SelectCaution[m_nSelectCaution].select = SELECTTYPE_NONE;
 					//左端で止まる
 					if (m_nSelectCaution > 0)
@@ -435,6 +440,7 @@ void CPlayerSelect::Update(void)
 			if (CCommand::GetCommand("DELETE") == true && m_bCaution == false)
 			{
 				Uninit();
+				pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT01);
 				CManager::SetMode(CManager::MODE_SELECT);
 				return;
 			}

@@ -342,10 +342,13 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 //=============================================================================
 void CSelectMenu::MoveMenu(void)
 {
+
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	//選択処理
 	if (CCommand::GetCommand("RIGHT"))
 	{
-		//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+		pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 		m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 		if (m_nSelect < m_nMaxMenu - 1)
 		{
@@ -355,7 +358,7 @@ void CSelectMenu::MoveMenu(void)
 	}
 	else if (CCommand::GetCommand("LEFT"))
 	{
-		//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
+		pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT02);
 		m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_NONE;
 		if (m_nSelect > 0)
 		{
@@ -367,7 +370,7 @@ void CSelectMenu::MoveMenu(void)
 	//エンターキー
 	if (CCommand::GetCommand("DECISION") == true)
 	{
-		//pSound->PlaySound(pSound->SOUND_LABEL_SE_CANCEL);
+		pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT00);
 		if (m_nSelect == 0)
 		{
 			m_SelectMode = SELECT_MENU_ONE;

@@ -109,7 +109,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 7.0 40.0 30.0
 	ANSWERMODEL = 0				# 答えのモデル
-	POINT = 5					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -119,7 +119,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 30.0 1.0 7.0
 	ANSWERMODEL = 1				# 答えのモデル
-	POINT = 5					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -129,7 +129,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 17.0 7.0 3.0
 	ANSWERMODEL = 2				# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -149,7 +149,7 @@ MODELSET
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 20.0 1.0 27.0
 	ANSWERMODEL = 4				# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -159,7 +159,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 39.0 45.0 9.0
 	ANSWERMODEL = 5				# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -169,7 +169,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 3.0 24.0 7.0
 	ANSWERMODEL = 6				# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -179,7 +179,7 @@ MODELSET
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 15.0 1.0 35.0
 	ANSWERMODEL = 7				# 答えのモデル
-	POINT = 5					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -189,7 +189,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 1.0 9.0
 	ANSWERMODEL = 8				# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -199,7 +199,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 9.0 1.0 45.0
 	ANSWERMODEL = 9				# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -209,7 +209,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 12.0 1.0 5.0
 	ANSWERMODEL = 10			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -219,7 +219,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 38.0 1.0
 	ANSWERMODEL = 11			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -239,7 +239,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 1.0 5.0 39.0
 	ANSWERMODEL = 13			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -249,7 +249,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 1.0 5.0 15.0
 	ANSWERMODEL = 14			# 答えのモデル
-	POINT = 4					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -259,7 +259,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 1.0 27.0
 	ANSWERMODEL = 15			# 答えのモデル
-	POINT = 4					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -279,7 +279,7 @@ MODELSET
 	BULLETTYPE = 0				# 弾の種類
 	ANSWER = 5.0 33.0 38.0
 	ANSWERMODEL = 17			# 答えのモデル
-	POINT = 4					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -299,7 +299,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 16.0 9.0
 	ANSWERMODEL = 19			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -319,7 +319,7 @@ MODELSET
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 38.0 45.0 12.0
 	ANSWERMODEL = 21			# 答えのモデル
-	POINT = 4					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -329,7 +329,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 5.0 15.0 45.0
 	ANSWERMODEL = 22			# 答えのモデル
-	POINT = 4					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -339,7 +339,7 @@ MODELSET
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 5.0 15.0 20.0
 	ANSWERMODEL = 23			# 答えのモデル
-	POINT = 5					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -349,7 +349,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 30.0 40.0 15.0
 	ANSWERMODEL = 24			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -379,7 +379,7 @@ MODELSET
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 30.0 7.0 38.0
 	ANSWERMODEL = 27			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -389,7 +389,7 @@ MODELSET
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 7.0 20.0 1.0
 	ANSWERMODEL = 28			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -409,7 +409,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 5.0 10.0 45.0
 	ANSWERMODEL = 30			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -419,7 +419,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 20.0 12.0 5.0
 	ANSWERMODEL = 31			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -429,7 +429,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 15.0 45.0 7.0
 	ANSWERMODEL = 32			# 答えのモデル
-	POINT = 3					# 獲得ポイン
+	POINT = 2					# 獲得ポイン
 END_MODELSET
 
 MODELSET
@@ -439,7 +439,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 35.0 7.0 38.0
 	ANSWERMODEL = 33			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -469,7 +469,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 15.0 1.0 12.0
 	ANSWERMODEL = 36			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -489,7 +489,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 38.0 12.0
 	ANSWERMODEL = 38			# 答えのモデル
-	POINT = 5					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -499,7 +499,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 39.0 45.0 7.0
 	ANSWERMODEL = 39			# 答えのモデル
-	POINT = 5					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -509,7 +509,7 @@ MODELSET
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 7.0 10.0 35.0
 	ANSWERMODEL = 40			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -540,7 +540,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 38.0 1.0 12.0
 	ANSWERMODEL = 43			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -550,7 +550,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 30.0 45.0 5.0
 	ANSWERMODEL = 44			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -560,7 +560,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 27.0 1.0 9.0
 	ANSWERMODEL = 45			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -570,7 +570,7 @@ MODELSET
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 20.0 30.0 9.0
 	ANSWERMODEL = 46			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 END_MODELSET
@@ -582,7 +582,7 @@ MODELSET
 	BULLETTYPE = 4				# 弾の種類
 	ANSWER = 9.0 45.0 27.0
 	ANSWERMODEL = 47			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -602,7 +602,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 33.0 45.0
 	ANSWERMODEL = 49			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -632,7 +632,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 1.0 5.0
 	ANSWERMODEL = 52			# 答えのモデル
-	POINT = 4					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -642,7 +642,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 30.0 12.0 7.0
 	ANSWERMODEL = 49			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 
@@ -673,7 +673,7 @@ MODELSET
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 33.0 1.0 12.0
 	ANSWERMODEL = 55			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -683,7 +683,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 38.0 1.0
 	ANSWERMODEL = 56			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -733,7 +733,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 15.0 1.0 17.0
 	ANSWERMODEL = 61			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -763,7 +763,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 1.0 45.0
 	ANSWERMODEL = 64			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -773,7 +773,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 15.0 1.0 30.0
 	ANSWERMODEL = 65			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -803,7 +803,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 40.0 1.0
 	ANSWERMODEL = 68			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -813,7 +813,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 1.0 27.0 7.0
 	ANSWERMODEL = 68			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -833,7 +833,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 7.0 7.0 1.0
 	ANSWERMODEL = 70			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -853,7 +853,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 38.0 15.0
 	ANSWERMODEL = 72			# 答えのモデル
-	POINT = 3					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
@@ -863,7 +863,7 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 33.0 45.0 30.0
 	ANSWERMODEL = 73			# 答えのモデル
-	POINT = 1					# 獲得ポイント
+	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET

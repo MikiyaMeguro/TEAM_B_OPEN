@@ -159,6 +159,11 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 
+	if (m_bCreateFlag == true)
+	{
+		UninitChack();		// 終了しているかどうかの確認
+	}
+
 	if (NumPlayer == 1)
 	{	// 1人プレイの場合
 		if (nNum == 0) { pos = POS_ONE_001; }
@@ -363,6 +368,7 @@ void CTube::Collect(void)
 			}
 		}
 
+		m_nAnswerModelNum = 0;
 		m_bCreateFlag = false;
 	}
 }
@@ -425,3 +431,44 @@ void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
 	}
 }
 
+//=============================================================================
+// 終了いてるかどうかの確認処理
+//=============================================================================
+void CTube::UninitChack(void)
+{
+	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	{
+		if (m_apWord[nCntWord] != NULL)
+		{
+			m_apWord[nCntWord]->Uninit();
+			m_apWord[nCntWord] = NULL;
+		}
+	}
+
+	m_bModelTexFlag = false;
+
+	if (m_pAnswerModel[m_nStockNum] != NULL)
+	{
+		if (NOT_NUM == m_nAnswerModelNum)
+		{	// ゴミモデルのtexを出す
+			m_pAnswerModel[m_nStockNum]->BindTexture("ゴミ_モデル");
+			m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+		}
+		else if (NOT_NUM != m_nAnswerModelNum)
+		{	// 正解のモデルを出す
+			m_pAnswerModel[m_nStockNum]->BindTexture("モデル_TEX");
+			m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
+				D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
+		}
+
+		for (int nCntModel = 0; nCntModel < MAX_WORD; nCntModel++)
+		{
+			if (m_pAnswerModel[nCntModel] != NULL)
+			{
+				m_pAnswerModel[nCntModel]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			}
+		}
+	}
+	m_nAnswerModelNum = 0;
+	m_bCreateFlag = false;
+}

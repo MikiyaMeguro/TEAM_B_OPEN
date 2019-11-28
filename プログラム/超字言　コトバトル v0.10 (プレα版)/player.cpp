@@ -104,6 +104,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 
 	//キャラのID設定
 	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+	m_PlayerType = PlayerType;
 
 	// 文字管理クラス生成
 	if (m_pWordManager == NULL)
@@ -712,10 +713,17 @@ bool CPlayer::CollisionDamageObj(void)
 						if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
 						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { pPoint = CTutorial::GetPoint(pBullet->GetID()); }
 
-						if (pPoint != NULL) { pPoint->AddPoint(1); }
+						CModelBullet *pModelBullet = ((CModelBullet*)pBullet);
+
+						int nPoint = 0;
+						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
+						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
+
+						if (pPoint != NULL) { pPoint->AddPoint(nPoint); }
 						pSound->SetVolume(CSound::SOUND_LABEL_SE_POINTUP, 3.0f);
 						pSound->PlaySound(CSound::SOUND_LABEL_SE_POINTUP);
 
+						C3DBullet *pBullet = ((C3DBullet*)pModelBullet);		// CBulletBaseへキャスト(型の変更)
 					}
 
 					//吹き飛ばし
