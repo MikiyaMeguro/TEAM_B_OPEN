@@ -74,9 +74,11 @@ private:
 	int						m_nID;				// 自分の番号
 	bool					m_bStart;
 	bool					m_bSizeChange;		// ポイント増減時のサイズ変更
+	bool					m_bColChange;		// 色の切替
+	bool					m_bChangeFlag;		// 切替フラグ
+	bool					m_bFlag;
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
 	TYPE_CHARACTER			m_type;				// 種類
-	D3DXCOLOR				m_ChangeCol;		// ポイント増減時の色
 };
 #endif

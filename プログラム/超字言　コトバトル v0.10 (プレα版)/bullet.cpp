@@ -17,6 +17,7 @@
 #include "tutorial.h"
 
 #include "LineOrbit.h"
+#include "effect.h"
 //=============================================================================
 // コンストラクタ＆デストラクタ	(CBulletBase)
 //=============================================================================
@@ -376,9 +377,11 @@ void CModelBullet::Update(void)
 	nLife--;
 
 	C3DBullet::Update();
+
+	D3DXVECTOR3 pos = CModelBullet::GetPosition();
 	if (m_Prop == TYPE_MISSILE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
 	{//ミサイルなら
-
+		CEffect::Create(pos, 4, 4);
 		if (m_pHomingChara != NULL)
 		{
 			Homing(m_pHomingChara->GetPosition());

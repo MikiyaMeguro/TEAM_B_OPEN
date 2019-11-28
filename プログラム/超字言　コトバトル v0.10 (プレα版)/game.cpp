@@ -264,11 +264,6 @@ void CGame::Uninit(void)
 		}
 	}
 
-	if (m_pWall != NULL)
-	{
-		m_pWall->Uninit();
-		m_pWall = NULL;
-	}
 
 	if (m_pWordCreate != NULL)
 	{
@@ -315,6 +310,7 @@ void CGame::Update(void)
 	{
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}
+
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");

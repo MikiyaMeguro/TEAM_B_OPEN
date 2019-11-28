@@ -21,7 +21,7 @@
 //--------------------------------------------
 // コンストラクタ
 //--------------------------------------------
-CWaypoint::CWaypoint() : CScene/*BillBoard*/()
+CWaypoint::CWaypoint() : CScene(2)
 {
 	m_bFlagUninit = false;
 	m_bMoveFlag = false;
@@ -31,6 +31,12 @@ CWaypoint::CWaypoint() : CScene/*BillBoard*/()
 	m_FromHit = FROMHIT_NONE;
 	m_bStageStart = false;
 	m_bStageSetEnd = false;
+	for (int nCntWP = 0; nCntWP < 8; nCntWP++)
+	{
+		m_pWayPointPos[nCntWP] = D3DXVECTOR3(0, 0, 0);
+		m_nTargetNum[nCntWP] = 0;
+	}
+	m_nFlameCnt = 0;
 }
 
 //--------------------------------------------
@@ -132,7 +138,7 @@ void CWaypoint::Update(void)
 	int nNowNumber = 0;		//今いるマスの番号
 	int nAdjacent = 0;		//隣接しているマスは何マス分離れているか
 	bool bLand = false;		//誰かがマスに乗っている
-	nNum2Cnt = 0;
+
 	if (CGame::GetbStageSet() == false)
 	{
 		for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
@@ -300,14 +306,6 @@ void CWaypoint::Update(void)
 			}
 		}
 
-		m_nFlameCnt++;
-
-		if (m_nFlameCnt == 2)
-		{
-			//フレーム数を初期化
-			m_nFlameCnt = 0;
-		}
-
 		if (CGame::GetbStageSet() == true && m_bStageSetEnd == false)
 		{	//ステージ切り替わり時に当たり判定更新
 			m_bStageSetEnd = true;
@@ -342,6 +340,7 @@ void CWaypoint::Update(void)
 	}
 
 #ifdef _DEBUG
+	int nNum2Cnt = 0;
 
 	for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
 	{
@@ -448,12 +447,10 @@ void CWaypoint::InRange(D3DXVECTOR3 pos)
 //=============================================================================
 D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 {
-	//int nCnt = 0;
 	m_nNumWayPoint = 0;
 
 	for (int nCntWP = 0; nCntWP < 8; nCntWP++)
 	{
-		//m_pWayPointPos[nCntWP] = NULL;
 		m_pWayPointPos[nCntWP] = D3DXVECTOR3(0, 0, 0);
 		m_nTargetNum[nCntWP] = 0;
 	}
@@ -463,12 +460,6 @@ D3DXVECTOR3 &CWaypoint::ReturnPointMove(void)
 		if (WayPoint[nCntWayPoint].bAdjacent == true && WayPoint[nCntWayPoint].bBlock == false)
 		{	//周囲のマスの位置情報と番号を記憶
 			m_pWayPointPos[m_nNumWayPoint] = WayPoint[nCntWayPoint].WayPointPos;
-
-			//if (nCntWayPoint > MAX_WAYPOINT)
-			//{
-			//	m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
-			//}
-
 			m_nTargetNum[m_nNumWayPoint] = nCntWayPoint;
 			m_nNumWayPoint++;
 

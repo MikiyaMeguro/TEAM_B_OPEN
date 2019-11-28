@@ -24,7 +24,10 @@
 //=============================================================================
 CNumber::CNumber()
 {
+	m_size = D3DXVECTOR2(0.0f, 0.0f);
 	m_pVtxBuff = NULL;
+	m_pos = D3DXVECTOR2(0.0f, 0.0f);
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0, 1.0f);
 }
 
 //=============================================================================
@@ -37,6 +40,7 @@ CNumber::~CNumber(){}
 //=============================================================================
 HRESULT CNumber::Init(D3DXVECTOR3 pos, int nType)
 {
+	m_pos = D3DXVECTOR2(pos.x, pos.y);
 	// デバイス取得
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
@@ -158,6 +162,7 @@ void CNumber::SetNumber(int nNumber)
 //=============================================================================
 void CNumber::SetSize(D3DXVECTOR2 size, D3DXVECTOR2 pos)
 {
+	m_size = size;
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし頂点データのポインタを取得
@@ -178,6 +183,7 @@ void CNumber::SetSize(D3DXVECTOR2 size, D3DXVECTOR2 pos)
 //=============================================================================
 void CNumber::SetCol(D3DXCOLOR col)
 {
+	m_col = col;
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし頂点データのポインタを取得
