@@ -270,7 +270,7 @@ void CWordManager::Update(void)
 			if (CGame::GetTube(m_nPlayerID) != NULL)
 			{
 				CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM, m_nCntStock);
-				CGame::GetTube(m_nPlayerID)->SetPoint(3, m_nPlayerID, true);
+				CGame::GetTube(m_nPlayerID)->SetPoint(1, m_nPlayerID, true);
 				CGame::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 			}
 		}
