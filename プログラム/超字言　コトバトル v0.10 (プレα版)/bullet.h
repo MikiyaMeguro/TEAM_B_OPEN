@@ -114,6 +114,8 @@ public:
 
 	void SetHomingChara(C3DCharactor* pChara) { m_pHomingChara = pChara; };
 
+	BULLET_PROPERTY GetType() { return m_Prop; }
+
 private:
 
 	void Reflect(CManager::DIRECTION dir);
