@@ -885,7 +885,7 @@ MODELSET						# °
 	POS = 0.0 -160.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.1 4.06 20.1
-	COLLISION = 1
+	COLLISION = 0
 	GIMMICK = 1					# ”z’u‚ÌŽí—Þ‚ðŒˆ‚ß‚é
 END_MODELSET
 

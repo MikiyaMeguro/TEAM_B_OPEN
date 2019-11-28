@@ -27,7 +27,7 @@ CExplosion3D* CExplosion3D::Create(void)
 {
 	CExplosion3D* pExplosion = NULL;
 
-	pExplosion = new CExplosion3D(4, OBJTYPE_EXPLOSION);
+	pExplosion = new CExplosion3D(EXPLOSION_PRIORITY, OBJTYPE_EXPLOSION);
 
 	if (pExplosion != NULL)
 	{

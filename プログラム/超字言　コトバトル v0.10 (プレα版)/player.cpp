@@ -16,6 +16,7 @@
 
 #include "debugProc.h"
 #include "bullet.h"
+#include "explosion.h"
 #include "CameraManager.h"
 
 //=============================================================================
@@ -228,7 +229,7 @@ void CPlayer::Update(void)
 		if (m_nCntTransTime <= 0)
 		{
 			//弾との当たり判定
-			CollisionBullet();
+			CollisionDamageObj();
 		}
 
 		// モデルとの当たり判定
@@ -670,14 +671,16 @@ void	CPlayer::SetMotion(int motion, BODY body,MOTION_STATE state)
 //=============================================================================
 // 当たり判定(弾)処理
 //=============================================================================
-bool CPlayer::CollisionBullet(void)
+bool CPlayer::CollisionDamageObj(void)
 {
 	bool bHit = false;
 	CScene *pScene = NULL;
 
 	D3DXVECTOR3 PlayerPos = m_pCharactorMove->GetPosition();
-	D3DXVECTOR3 BulletPos,BulletRot;
+	D3DXVECTOR3 ObjPos,ObjRot;
+	float fObjSize = 0.0f;
 
+	/*弾との当たり判定*/
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(BULLET_PRIORITY);
 
@@ -690,12 +693,12 @@ bool CPlayer::CollisionBullet(void)
 			if (pScene->GetObjType() == CScene::OBJTYPE_BULLET)
 			{// オブジェクトの種類を確かめる
 				C3DBullet *pBullet = ((C3DBullet*)pScene);		// CBulletBaseへキャスト(型の変更)
-				BulletPos = pBullet->GetPosition();
-				BulletRot = pBullet->GetRotation();
+				ObjPos = pBullet->GetPosition();
+				ObjRot = pBullet->GetRotation();
 
-				float X = (BulletPos.x - PlayerPos.x) * (BulletPos.x - PlayerPos.x);
-				float Y = (BulletPos.y - PlayerPos.y) * (BulletPos.y - PlayerPos.y);
-				float Z = (BulletPos.z - PlayerPos.z) * (BulletPos.z - PlayerPos.z);
+				float X = (ObjPos.x - PlayerPos.x) * (ObjPos.x - PlayerPos.x);
+				float Y = (ObjPos.y - PlayerPos.y) * (ObjPos.y - PlayerPos.y);
+				float Z = (ObjPos.z - PlayerPos.z) * (ObjPos.z - PlayerPos.z);
 
 				if(sqrtf(X + Y + Z) < BULLET_COLLISION_SIZE &&
 					m_nID != pBullet->GetID())
@@ -712,7 +715,7 @@ bool CPlayer::CollisionBullet(void)
 					}
 
 					//吹き飛ばし
-					DamageReaction(pBullet->GetKnockBackPower(),BulletRot);
+					DamageReaction(pBullet->GetKnockBackPower(),ObjRot);
 
 					//弾削除
 					pBullet->Uninit();
@@ -723,6 +726,41 @@ bool CPlayer::CollisionBullet(void)
 		}
 		pScene = pSceneNext;
 	}
+
+	/*爆発*/
+	// 先頭のオブジェクトを取得
+	pScene = CScene::GetTop(EXPLOSION_PRIORITY);
+
+	while (pScene != NULL)
+	{// 優先順位が弾と同じオブジェクトを1つ1つ確かめる
+	 // 処理の最中に消える可能性があるから先に記録しておく
+		CScene *pSceneNext = pScene->GetNext();
+		if (pScene->GetDeath() == false)
+		{// 死亡フラグが立っていないもの
+			if (pScene->GetObjType() == CScene::OBJTYPE_EXPLOSION)
+			{// オブジェクトの種類を確かめる
+				CExplosion3D* pExp = (CExplosion3D*)pScene;
+				ObjPos = pExp->GetPosition();
+				fObjSize = pExp->GetSize();
+
+				float fRot = atan2f((ObjPos.x - PlayerPos.x),(ObjPos.z - PlayerPos.z)) + D3DX_PI;
+				float X = (ObjPos.x - PlayerPos.x) * (ObjPos.x - PlayerPos.x);
+				float Y = (ObjPos.y - PlayerPos.y) * (ObjPos.y - PlayerPos.y);
+				float Z = (ObjPos.z - PlayerPos.z) * (ObjPos.z - PlayerPos.z);
+
+				CUtilityMath::RotateNormarizePI(&fRot);
+				if (sqrtf(X + Y + Z) < fObjSize)
+				{
+					//吹き飛ばし
+					DamageReaction(20.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
+					return true;
+				}
+
+			}
+		}
+		pScene = pSceneNext;
+	}
+
 	return false;
 }
 

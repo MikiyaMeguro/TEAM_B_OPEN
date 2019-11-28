@@ -180,6 +180,7 @@ void CLineOrbit::Uninit(void)
 	if (m_apMesh != NULL)
 	{
 		delete[] m_apMesh;
+		m_apMesh = NULL;
 	}
 
 	//頂点バッファ
