@@ -101,29 +101,34 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 //=============================================================================
 HRESULT C3DCharactor::Init(void)
 {
+	m_nThinkTimer = 0;
 	m_nActionTimer = 0;
-	m_PatrolTimer = 0;
 	m_nSameCnt = 0;
 	m_fCompareRange = 0;
+	m_PatrolTimer = 0;
 	m_bWordNear = false;
 	m_bJyougai = false;
 	m_bGoal = true;
+	m_bRandomGoal = true;
 	m_bSearch = false;
-	m_bBlock = false;
 	m_bNearWard = false;
-	m_MarkWardPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_MarkWayPoint = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bBlock = false;
+	m_nTimerMove = 0;
+	m_bNotWayPoint = false;
 	m_nTargetWP = 0;
 	nTestCnt = 0;
 	m_bWait = false;
-	m_nTimerMove = 0;
-	m_bNotWayPoint = false;
 	m_fOldCircle = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		m_bNear[nCnt] = false;
 	}
+
+	m_MarkWardPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_pWayPointPos = NULL;								//経路情報の位置情報ポインタ
+	m_MarkWayPoint = D3DXVECTOR3(0.0f,0.0f,0.0f);		//移動先の位置
+
 
 	//	回避UI
 	m_pCAvoidUi = CAvoidUi::Create(CCharaBase::GetPosition() + D3DXVECTOR3(0.0f, 13.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
