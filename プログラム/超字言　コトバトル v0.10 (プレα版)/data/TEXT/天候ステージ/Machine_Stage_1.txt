@@ -680,7 +680,7 @@ MODELSET		# [70]
 	POS = -220.0 200.0 360.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 3.00 0.10 2.00	# スケール情報
-	COLLISION = 0				# コリジョンタイプ情報
+	COLLISION = 4				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -689,7 +689,7 @@ MODELSET		# [71]
 	POS = -220.0 200.0 -20.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 3.00 0.10 14.70	# スケール情報
-	COLLISION = 0				# コリジョンタイプ情報
+	COLLISION = 4				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -698,8 +698,19 @@ MODELSET		# [72]
 	POS = -220.0 200.0 -380.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 3.00 0.10 1.00	# スケール情報
-	COLLISION = 0				# コリジョンタイプ情報
+	COLLISION = 4				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 床
+	TYPE = 37
+	POS = 0.0 -160.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 20.1 4.06 20.1
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
