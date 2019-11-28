@@ -243,6 +243,7 @@ CModelBullet::CModelBullet(int nPriority) : C3DBullet(nPriority)
 {
 	m_pModel = NULL;
 	m_pOrbit = NULL;
+	m_nCounter = 0;
 
 }
 CModelBullet::~CModelBullet()
@@ -375,26 +376,36 @@ void CModelBullet::Update(void)
 {
 	int& nLife = GetLife();
 	nLife--;
-
+	m_nCounter++;
 	C3DBullet::Update();
 
 	D3DXVECTOR3 pos = CModelBullet::GetPosition();
 	if (m_Prop == TYPE_MISSILE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
-	{//ミサイルなら
-		CEffect::Create(pos, 4, 4);
+	{//ミサイル
+		if (m_nCounter % 6 == 0)
+		{
+			CEffect::Create(pos, 4, 4);
+		}
+
 		if (m_pHomingChara != NULL)
 		{
 			Homing(m_pHomingChara->GetPosition());
 		}
 	}
 	if (m_Prop == TYPE_BOMB || m_Prop == TYPE_KNOCKBACK)
-	{//ミサイルなら
-		CEffect::Create(pos, 5, 5);
+	{//爆発
+		if (m_nCounter % 6 == 0)
+		{
+			CEffect::Create(pos, 5, 5);
+		}
 	}
 
 	if (m_Prop == TYPE_NORMAL)
-	{//ミサイルなら
-		CEffect::Create(pos, 6, 5);
+	{//ゴミ
+		if (m_nCounter % 6 == 0)
+		{
+			CEffect::Create(pos, 6, 5);
+		}
 	}
 
 
