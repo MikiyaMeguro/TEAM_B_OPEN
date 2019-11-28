@@ -368,6 +368,7 @@ void CTube::Collect(void)
 			}
 		}
 
+		m_nAnswerModelNum = 0;
 		m_bCreateFlag = false;
 	}
 }
@@ -468,6 +469,6 @@ void CTube::UninitChack(void)
 			}
 		}
 	}
-
+	m_nAnswerModelNum = 0;
 	m_bCreateFlag = false;
 }
