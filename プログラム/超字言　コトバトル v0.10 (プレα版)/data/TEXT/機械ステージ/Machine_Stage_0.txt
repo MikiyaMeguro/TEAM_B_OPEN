@@ -615,13 +615,14 @@ MODELSET
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+-----------------------------------------------------------
 
 MODELSET						# 地下
 	TYPE = 3
 	POS = 0.0 -60.1 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 19.9 3.0 19.9
-	COLLISION = 1
+	COLLISION = 12
 	GIMMICK = 0					# 配置の種類を決める
 END_MODELSET
 
