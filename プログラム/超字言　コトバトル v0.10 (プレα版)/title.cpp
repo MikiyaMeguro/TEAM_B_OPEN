@@ -93,6 +93,7 @@ void CTitle::Update(void)
 {
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
+	CSound *pSound = CManager::GetSound();		//	‰¹‚ÌŽæ“¾
 
 	// “ü—Íî•ñ‚ðŽæ“¾
 	CInputKeyboard *pInputKeyboard;
@@ -113,6 +114,7 @@ void CTitle::Update(void)
 			if (CCommand::GetCommand("DECISION"))
 			{//ƒGƒ“ƒ^[‰Ÿ‰º
 				m_bPressMode = true;
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_TITLE);
 				pFade->SetFade(pManager->MODE_SELECT, pFade->FADE_OUT);
 			}
 		}

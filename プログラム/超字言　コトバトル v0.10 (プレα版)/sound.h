@@ -51,6 +51,10 @@ public:
 		SOUND_LABEL_SE_SELECT00,		// 決定音
 		SOUND_LABEL_SE_SELECT01,		// キャンセルお”ぉ”ん
 		SOUND_LABEL_SE_SELECT02,		// 選択恩
+		SOUND_LABEL_SE_SELECT03,		// キャラクター選択音
+		SOUND_LABEL_SE_SELECT04,		// ゲームスタート
+
+		SOUND_LABEL_SE_TITLE,		// タイトル
 
 
 		SOUND_LABEL_MAX,
@@ -116,6 +120,10 @@ protected:
 		{ "data/SE/Select1.wav", 0 },	// 決定音
 		{ "data/SE/Select2.wav", 0 },	// キャンセル恩
 		{ "data/SE/Select3.wav", 0 },	// 選択音
+		{ "data/SE/Select4.wav", 0 },	// キャラクター選択音
+		{ "data/SE/Select5.wav", 0 },	// ゲームスタート
+
+		{ "data/SE/Title.wav", 0 },	// タイトル
 
 	};
 };
