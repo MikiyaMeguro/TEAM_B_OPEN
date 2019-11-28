@@ -264,6 +264,12 @@ void CGame::Uninit(void)
 		}
 	}
 
+	if (m_pWall != NULL)
+	{
+		m_pWall->Uninit();
+		m_pWall = NULL;
+	}
+
 	if (m_pWordCreate != NULL)
 	{
 		m_pWordCreate->Uninit();
@@ -308,7 +314,6 @@ void CGame::Update(void)
 	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
 	{
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
-
 	}
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();

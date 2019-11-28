@@ -466,5 +466,4 @@ void CScene2D::SetScene2DLeftCenter(D3DXVECTOR3 pos, float sizeW, float sizeH)
 
 	//頂点バッファのアンロック
 	m_pVtxBuff->Unlock();
-
 }

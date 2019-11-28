@@ -29,6 +29,8 @@
 
 #define WAIT_TIME_END		(180)							// 待ち時間
 #define MAX_POINT			(99)							// 最大数
+#define DEFAULT_SIZE		(D3DXVECTOR2(25.0f, 30.0f))		// デフォルトのサイズ (数字)
+#define	MAX_SIZE			(D3DXVECTOR2(40.0f, 50.0f))		// 最大のサイズ (数字)
 //=============================================================================
 //	静的メンバ変数
 //=============================================================================
@@ -70,6 +72,8 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_pIcon = NULL;
 	m_nID = 0;
 	m_type = TYPE_NONE;
+	m_bSizeChange = false;
+	m_ChangeCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 }
 
 //=============================================================================
@@ -143,6 +147,9 @@ void CPoint::Update(void)
 		int nTexData = 0;
 		// 数字のテクスチャ設定
 		TexPoint(nTexData);
+		
+		// ポイント増減時の変化
+		SizeChange();
 	}
 }
 
@@ -193,6 +200,8 @@ void CPoint::AddPoint(int nPoint)
 
 	if (MAX_POINT < m_nTotalPoint) { m_nTotalPoint = MAX_POINT; }
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
+	m_bSizeChange = true;
+	m_ChangeCol = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
 }
 //=============================================================================
 // タイム減算処理
@@ -206,6 +215,8 @@ void CPoint::SubtractionPoint(int nPoint)
 
 	if (0 > m_nTotalPoint) { m_nTotalPoint = 0; }
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
+	m_bSizeChange = true;
+	D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
 //=============================================================================
@@ -256,12 +267,12 @@ void CPoint::PointBGCreate(void)
 void CPoint::BGPosition(CScene2D *pBg)
 {
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
-	if (m_nNumPlayer > 0 && m_nNumPlayer <= MAX_PLAYER && m_nID == 0)
-	{	// 画面左上 (1～4画面 1P)の位置
+	if (m_nNumPlayer != 2 && m_nID == 0)
+	{	// 画面左上 (1, 3, 4画面 1P)の位置
 		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 60.0f, 0.0f), "BG_FREAME", 5);
 	}
-	else if (m_nNumPlayer == 1 && m_nID == 3 || m_nNumPlayer == 2 && m_nID == 1 || m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 1)
-	{	// 画面右上 (1画面 4P , 2画面 2P, 3～4画面 2P)の位置
+	else if (m_nNumPlayer == 1 && m_nID == 3 || m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 1)
+	{	// 画面右上 (1画面 4P , 3～4画面 2P)の位置
 		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 60.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nID == 1&& m_nNumPlayer == 1)
@@ -272,18 +283,36 @@ void CPoint::BGPosition(CScene2D *pBg)
 	{	// 画面右上 (1画面 3P)の位置
 		pBg = CScene2D::Create(D3DXVECTOR3(880.0f, 60.0f, 0.0f), "BG_FREAME", 5);
 	}
-	else if (m_nNumPlayer > 1 && m_nNumPlayer <= MAX_PLAYER && m_nID == 2)
-	{	// 画面左 (２画面 2P , 3画面、4画面 3P)の位置
+	else if (m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 2)
+	{	// 画面左 ( 3画面、4画面 3P)の位置
 		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 418.0f, 0.0f), "BG_FREAME", 5);
 	}
-	else if (m_nNumPlayer > 1 && m_nNumPlayer <= MAX_PLAYER && m_nID == 3)
-	{	// 画面右 (２画面 ～ 4画面 4P)の位置
+	else if (m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 3)
+	{	// 画面右 (3画面 ～ 4画面 4P)の位置
 		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 418.0f, 0.0f), "BG_FREAME", 5);
 	}
+	else if (m_nNumPlayer == 2 && m_nID == 0)
+	{	// 2画面 1P
+		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+	}
+	else if (m_nID == 1 && m_nNumPlayer == 2)
+	{	// 2画面 2P
+		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 418.0f, 0.0f), "BG_FREAME", 5);
+	}
+	else if (m_nID == 2 && m_nNumPlayer == 2)
+	{	// 2画面 3P
+		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+	}
+	
+	else if (m_nID == 3 && m_nNumPlayer == 2)
+	{	// 2画面 4P
+		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 418.0f, 0.0f), "BG_FREAME", 5);
+	}
+	
 
 	if (pBg != NULL)
 	{	// サイズと色の設定
-		pBg->SetWidthHeight(80.0f, 60.0f);
+		pBg->SetWidthHeight(100.0f, 60.0f);
 		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
@@ -301,48 +330,75 @@ void CPoint::UIPosition(void)
 	CScene2D *pNumber = NULL;
 
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
-	if (m_nNumPlayer > 0 && m_nNumPlayer <= MAX_PLAYER && m_nID == 0)
-	{	// 1～4画面 1Pの位置
-		posIcon = D3DXVECTOR3(65.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(65.0f, 28.0f, 0.0f);
+	if (m_nNumPlayer != 2 && m_nID == 0)
+	{	// 1, 3, 4画面 1Pの位置
+		posIcon = D3DXVECTOR3(85.0f, 75.0f, 0.0f);
+		posNumber = D3DXVECTOR3(125.0f, 38.0f, 0.0f);
 		posLogo = D3DXVECTOR3(165.0f, 32.0f, 0.0f);
 	}
 	else if (m_nID == 1 && m_nNumPlayer == 1)
 	{	// 1画面 2Pの場合
-		posIcon = D3DXVECTOR3(345.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(345.0f, 28.0f, 0.0f);
+		posIcon = D3DXVECTOR3(365.0f, 75.0f, 0.0f);
+		posNumber = D3DXVECTOR3(405.0f, 38.0f, 0.0f);
 		posLogo = D3DXVECTOR3(445.0f, 32.0f, 0.0f);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 1)
 	{	// 1画面 3Pの場合
-		posIcon = D3DXVECTOR3(825.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(825.0f, 28.0f, 0.0f);
+		posIcon = D3DXVECTOR3(845.0f, 75.0f, 0.0f);
+		posNumber = D3DXVECTOR3(885.0f, 38.0f, 0.0f);
 		posLogo = D3DXVECTOR3(925.0f, 32.0f, 0.0f);
 	}
-	else if (m_nID == 3 && m_nNumPlayer == 1 || m_nID == 2 && m_nNumPlayer == 2 || m_nID == 1 && m_nNumPlayer == 3 || m_nID == 1 && m_nNumPlayer == 4)
-	{	// 1画面 4P, 2画面 3P, 3画面 2P, 4画面 2Pの位置
-		posIcon = D3DXVECTOR3(1105.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1105.0f, 28.0f, 0.0f);
+	else if (m_nID == 3 && m_nNumPlayer == 1 || m_nID == 1 && m_nNumPlayer == 3 || m_nID == 1 && m_nNumPlayer == 4)
+	{	// 1画面 4P, 3画面 2P, 4画面 2Pの位置
+		posIcon = D3DXVECTOR3(1125.0f, 75.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1165.0f, 38.0f, 0.0f);
 		posLogo = D3DXVECTOR3(1205.0f, 32.0f, 0.0f);
 	}
-	else if (m_nID == 1 && m_nNumPlayer == 2 || m_nID == 2 && m_nNumPlayer == 3 || m_nID == 2 && m_nNumPlayer == 4)
-	{ // 2画面 2P, 3画面 3P, 4画面 3Pの位置
-		posIcon = D3DXVECTOR3(65.0f, 435.0f, 0.0f);
-		posNumber = D3DXVECTOR3(65.0f, 386.0f, 0.0f);
+	else if (m_nID == 2 && m_nNumPlayer == 3 || m_nID == 2 && m_nNumPlayer == 4)
+	{ // 3画面 3P, 4画面 3Pの位置
+		posIcon = D3DXVECTOR3(85.0f, 435.0f, 0.0f);
+		posNumber = D3DXVECTOR3(125.0f, 396.0f, 0.0f);
 		posLogo = D3DXVECTOR3(165.0f, 390.0f, 0.0f);
 	}
-	else if (m_nID == 3 && m_nNumPlayer == 2 || m_nID == 3 && m_nNumPlayer == 3 || m_nID == 3 && m_nNumPlayer == 4)
-	{	// 2画面 4P, 3画面 4P, 4画面 4Pの位置
-		posIcon = D3DXVECTOR3(1105.0f, 435.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1105.0f, 386.0f, 0.0f);
+	else if  (m_nID == 3 && m_nNumPlayer == 3 || m_nID == 3 && m_nNumPlayer == 4)
+	{	//  3画面 4P, 4画面 4Pの位置
+		posIcon = D3DXVECTOR3(1125.0f, 435.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1165.0f, 396.0f, 0.0f);
 		posLogo = D3DXVECTOR3(1205.0f, 390.0f, 0.0f);
 	}
+
+	else if (m_nNumPlayer == 2 && m_nID == 0)
+	{	// 2画面 1P
+		posIcon = D3DXVECTOR3(215.0f, 75.0f, 0.0f);
+		posNumber = D3DXVECTOR3(255.0f, 38.0f, 0.0f);
+		posLogo = D3DXVECTOR3(295.0f, 32.0f, 0.0f);
+	}
+	else if (m_nID == 1 && m_nNumPlayer == 2)
+	{	// 2画面 2P
+		posIcon = D3DXVECTOR3(215.0f, 435.0f, 0.0f);
+		posNumber = D3DXVECTOR3(255.0f, 396.0f, 0.0f);
+		posLogo = D3DXVECTOR3(295.0f, 390.0f, 0.0f);
+	}
+	else if (m_nID == 2 && m_nNumPlayer == 2)
+	{	// 2画面 3P
+		posIcon = D3DXVECTOR3(985.0f, 75.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1025.0f, 38.0f, 0.0f);
+		posLogo = D3DXVECTOR3(1165.0f, 32.0f, 0.0f);
+	}
+	
+	else if (m_nID == 3 && m_nNumPlayer == 2)
+	{	// 2画面 4P
+		posIcon = D3DXVECTOR3(985.0f, 435.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1025.0f, 396.0f, 0.0f);
+		posLogo = D3DXVECTOR3(1165.0f, 390.0f, 0.0f);
+	}
+	
 
 	// キャラクターアイコンのロゴ
 	if (m_pIcon == NULL)
 	{
 		m_pIcon = CScene2D::Create(posIcon, cName[3], 6);
-		m_pIcon->SetWidthHeight(50.0f, 40.0f);
+		m_pIcon->SetWidthHeight(40.0f, 30.0f);
 		m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
@@ -364,8 +420,8 @@ void CPoint::UIPosition(void)
 void CPoint::PointPostion(int nNumPlayer, int nID)
 {
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
-	if (nNumPlayer > 0 && nNumPlayer <= MAX_PLAYER && nID == 0)
-	{	// 1～4画面 1Pの位置
+	if (nNumPlayer != 2 && nID == 0)
+	{	// 1, 3, 4画面 1Pの位置
 		m_pos = POINT_POS_1P_ONE;
 	}
 	else if (nID == 1 && nNumPlayer == 1)
@@ -376,16 +432,52 @@ void CPoint::PointPostion(int nNumPlayer, int nID)
 	{	// 1画面 3Pの場合
 		m_pos = POINT_POS_3P_ONE;
 	}
-	else if (nID == 3 && nNumPlayer == 1 || nID == 2 && nNumPlayer == 2 || nID == 1 && nNumPlayer == 3 || nID == 1 && nNumPlayer == 4)
-	{	// 1画面 4P, 2画面 3P, 3画面 2P, 4画面 2Pの位置
+	else if (nID == 3 && nNumPlayer == 1 || nID == 1 && nNumPlayer == 3 || nID == 1 && nNumPlayer == 4)
+	{	// 1画面 4P, 3画面 2P, 4画面 2Pの位置
 		m_pos = POINT_POS_4P_ONE;
 	}
-	else if (nID == 1 && nNumPlayer == 2 || nID == 2 && nNumPlayer == 3 || nID == 2 && nNumPlayer == 4)
-	{ // 2画面 2P, 3画面 3P, 4画面 3Pの位置
+	else if ( nID == 2 && nNumPlayer == 3 || nID == 2 && nNumPlayer == 4)
+	{ // 3画面 3P, 4画面 3Pの位置
 		m_pos = POINT_POS_2P_TWO;
 	}
-	else if (nID == 3 && nNumPlayer == 2 || nID == 3 && nNumPlayer == 3 || nID == 3 && nNumPlayer == 4)
-	{	// 2画面 4P, 3画面 4P, 4画面 4Pの位置
+	else if (nID == 3 && nNumPlayer == 3 || nID == 3 && nNumPlayer == 4)
+	{	// 3画面 4P, 4画面 4Pの位置
 		m_pos = POINT_POS_4P_TWO;
+	}
+
+	else if (nNumPlayer == 2 && nID == 0)
+	{	// 2画面 1P
+		m_pos = D3DXVECTOR3(POINT_POS_1P_ONE.x + 130.0f, POINT_POS_1P_ONE.y, POINT_POS_1P_ONE.z);
+	}
+	else if (nID == 1 && nNumPlayer == 2)
+	{	// 2画面 2P
+		m_pos = D3DXVECTOR3(POINT_POS_2P_TWO.x + 130.0f, POINT_POS_2P_TWO.y, POINT_POS_2P_TWO.z);
+	}
+	else if (nID == 2 && nNumPlayer == 2)
+	{	// 2画面 3P
+		m_pos = D3DXVECTOR3(POINT_POS_4P_ONE.x - 140.0f, POINT_POS_4P_ONE.y, POINT_POS_4P_ONE.z);
+	}
+	else if (nID == 3 && nNumPlayer == 2)
+	{	// 2画面 4P
+		m_pos = D3DXVECTOR3(POINT_POS_4P_TWO.x - 140.0f, POINT_POS_4P_TWO.y, POINT_POS_4P_TWO.z);
+	}
+}
+
+//=============================================================================
+// ポイント増減時のサイズ変化
+//=============================================================================
+void CPoint::SizeChange(void)
+{
+	if (m_bSizeChange == false) { return; }
+
+	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	{
+		if (m_apNumber[nCntPoint] != NULL)
+		{
+			if (m_bSizeChange == true) 
+			{
+				
+			}
+		}
 	}
 }

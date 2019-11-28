@@ -65,6 +65,7 @@ private:
 	void BGPosition(CScene2D *pBg);		// 背景の位置まとめ
 	void UIPosition(void);				// UIの位置まとめ
 	void PointPostion(int nNumPlayer, int nID);			// ポイントの位置まとめ
+	void SizeChange(void);				// 増減時のサイズ変更
 
 	CNumber *m_apNumber[MAX_POINT_NUM];	// ナンバーへのポインタ
 	int m_nTotalPoint;							// トータルのポイント
@@ -72,8 +73,10 @@ private:
 	int						m_nNumPlayer;		// 人数保管
 	int						m_nID;				// 自分の番号
 	bool					m_bStart;
+	bool					m_bSizeChange;		// ポイント増減時のサイズ変更
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
 	TYPE_CHARACTER			m_type;				// 種類
+	D3DXCOLOR				m_ChangeCol;		// ポイント増減時の色
 };
 #endif
