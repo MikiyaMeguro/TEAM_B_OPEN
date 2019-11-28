@@ -444,10 +444,17 @@ void CCharaSelect::SelectProduction(int nNum, SELECT_STATE &Sel, SELECT_STATE &S
 		break;
 
 	case SELECTSTATE_SELECT:	//選択されている
+		if (m_apScene2D[nNum + 8]->GetbDraw() != false)
+		{
+			m_apScene2D[nNum + 8]->SetbDraw(false);
+		}
 		break;
 
 	case SELECTSTATE_NOSELECT:	//選択されていない
-		m_apScene2D[nNum + 8]->SetbDraw(false);		//マスクを描画されていない状態に
+		if (m_apScene2D[nNum + 8]->GetbDraw() != false)
+		{
+			m_apScene2D[nNum + 8]->SetbDraw(false);
+		}
 		CharaSelTex(nNum, SELECTSTATE_NOSELECT, type, m_CharaTypeOld[nNum]);
 		break;
 	}
@@ -787,8 +794,10 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
 		/* 選択時演出関数 */
-		if (m_bConf == false) { 
-			SelectProduction(nControllNum, m_SelectState[nControllNum], m_SelectStateold[nControllNum], m_CharaType[nControllNum]); }
+		if (m_bConf == false) 
+		{ 
+			SelectProduction(nControllNum, m_SelectState[nControllNum], m_SelectStateold[nControllNum], m_CharaType[nControllNum]);
+		}
 		
 		if (m_bConf == true)
 		{//選択確定が可能になったら
@@ -874,7 +883,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			m_apScene2D[nControllNum + 12]->SetbDraw(true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
-				if (m_SelectState[nControllNum] != SELECTSTATE_SELECT)
+				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_BARANCE;
 					m_SelectState[nControllNum] = SELECTSTATE_FLASH;
@@ -888,7 +897,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			m_apScene2D[nControllNum + 12]->SetbDraw(true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
-				if (m_SelectState[nControllNum] != SELECTSTATE_SELECT)
+				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_POWER;
 					m_SelectState[nControllNum] = SELECTSTATE_FLASH;
@@ -903,7 +912,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
-				if (m_SelectState[nControllNum] != SELECTSTATE_SELECT)
+				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_SPEED;
 					m_SelectState[nControllNum] = SELECTSTATE_FLASH;
@@ -918,7 +927,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
-				if (m_SelectState[nControllNum] != SELECTSTATE_SELECT)
+				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_REACH;
 					m_SelectState[nControllNum] = SELECTSTATE_FLASH;
@@ -933,7 +942,7 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
-				if (m_SelectState[nControllNum] != SELECTSTATE_SELECT)
+				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_RANDOM;
 					m_SelectState[nControllNum] = SELECTSTATE_FLASH;

@@ -140,7 +140,7 @@ MODELSET		# [8]
 	POS = 156.0 200.0 230.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 2.80 1.20 1.60	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -149,7 +149,7 @@ MODELSET		# [9]
 	POS = -203.0 200.0 -230.3		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 2.90 1.20 1.50	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -158,7 +158,7 @@ MODELSET		# [10]
 	POS = -191.5 200.0 230.3		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 2.60 1.40 1.30	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -167,7 +167,7 @@ MODELSET		# [11]
 	POS = -352.6 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -176,7 +176,7 @@ MODELSET		# [12]
 	POS = -258.6 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -185,7 +185,7 @@ MODELSET		# [13]
 	POS = -158.6 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -194,7 +194,7 @@ MODELSET		# [14]
 	POS = -58.6 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -203,7 +203,7 @@ MODELSET		# [15]
 	POS = 41.4 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -212,7 +212,7 @@ MODELSET		# [16]
 	POS = 139.4 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -221,7 +221,7 @@ MODELSET		# [17]
 	POS = 235.4 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -230,7 +230,7 @@ MODELSET		# [18]
 	POS = 333.4 200.0 445.9		# 位置情報
 	ROT = 0.00 -1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 2				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1			# ギミック情報
 END_MODELSET
 
@@ -499,6 +499,17 @@ MODELSET		# [47]
 	SCALE = 2.00 1.00 2.00	# スケール情報
 	COLLISION = 0				# コリジョンタイプ情報
 	GIMMICK = 1			# ギミック情報
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 床
+	TYPE = 38
+	POS = 0.0 200.0 0.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 20.1 0.075 20.1
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！

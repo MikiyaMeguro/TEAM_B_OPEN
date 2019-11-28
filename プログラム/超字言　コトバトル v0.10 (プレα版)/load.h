@@ -67,6 +67,7 @@ public:
 
 		MODEL_STAGEFLOOR,	// 各ステージの床
 		MODEL_STAGEFLOOR001,	// 各ステージの床
+		MODEL_STAGEFLOOR002,	// 各ステージの床
 
 		//--------------------------------------
 		// 文字モデル
