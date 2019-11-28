@@ -706,9 +706,9 @@ END_MODELSET
 
 MODELSET						# è∞
 	TYPE = 37
-	POS = 0.0 -160.0 0.0
+	POS = 0.0 200.0 0.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 20.1 4.06 20.1
+	SCALE = 20.1 0.01 20.1
 	COLLISION = 0
 	GIMMICK = 1					# îzíuÇÃéÌóﬁÇåàÇﬂÇÈ
 END_MODELSET
