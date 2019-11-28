@@ -387,6 +387,17 @@ void CModelBullet::Update(void)
 			Homing(m_pHomingChara->GetPosition());
 		}
 	}
+	if (m_Prop == TYPE_BOMB || m_Prop == TYPE_KNOCKBACK)
+	{//ミサイルなら
+		CEffect::Create(pos, 5, 5);
+	}
+
+	if (m_Prop == TYPE_NORMAL)
+	{//ミサイルなら
+		CEffect::Create(pos, 6, 5);
+	}
+
+
 
 	if (m_pModel != NULL)
 	{
