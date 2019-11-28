@@ -502,7 +502,7 @@ void CWaypoint::CollisionObj(void)
 			{// 死亡フラグが立っていないもの
 			 // オブジェクトの種類を確かめる
 				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE && pSceneX->GetCollsionType() != CSceneX::COLLSIONTYPE_FLOORCOLLSION)
 				{
 					bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
 					//オブジェクトに当たった
@@ -535,7 +535,7 @@ void CWaypoint::CollisionObj(void)
 				{// 死亡フラグが立っていないもの
 				 // オブジェクトの種類を確かめる
 					CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-					if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+					if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE && pSceneX->GetCollsionType() != CSceneX::COLLSIONTYPE_FLOORCOLLSION)
 					{
 						bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
 						CObject *pSceneObj = ((CObject*)pSceneX);
