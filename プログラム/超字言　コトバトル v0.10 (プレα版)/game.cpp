@@ -43,7 +43,7 @@
 #define CAMERA_LENGTH_1P_PLAY (100.0f)				//カメラの距離(1pプレイ用)
 #define CAMERA_LENGTH_2P_PLAY (100.0f)				//カメラの距離(2pプレイ用)
 #define CAMERA_LENGTH_3P4P_PLAY (110.0f)			//カメラの距離(3p4pプレイ用)
-#define CAMERA_LENGTH_TOPVIEW_PLAY (750.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
+#define CAMERA_LENGTH_TOPVIEW_PLAY (650.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
 #define CAMERA_ROTX (-0.05f)		//カメラのデフォルト角度(X)
 
@@ -379,8 +379,8 @@ void CGame::CameraSetting(int nNumPlayer)
 				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
-			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_SPECTOR,
-				D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(-1.75f, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_TOPVIEW_PLAY);
+			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TOPVIEW,
+				D3DXVECTOR3(0.0f, -100.0f, 0.0f), D3DXVECTOR3(-1.0f, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_TOPVIEW_PLAY);
 			pCameraManager->SetCameraViewPort("TOPVIEW_CAMERA", 645, 365, 635, 355);
 			break;
 
