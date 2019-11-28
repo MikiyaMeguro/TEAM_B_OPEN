@@ -406,7 +406,7 @@ void CCharaSelect::ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed)
 	m_nCntScrool++;
 	if (m_apScene2D[type] != NULL)
 	{
-		m_apScene2D[type]->SetTex(D3DXVECTOR2(0.0f, 0.0f + (m_nCntScrool*fScroolSpeed)), 
+		m_apScene2D[type]->SetTex(D3DXVECTOR2(0.0f, 0.0f + (m_nCntScrool*fScroolSpeed)),
 									D3DXVECTOR2(1.0f, 1.0f + (m_nCntScrool*fScroolSpeed)));
 	}
 }
@@ -672,7 +672,7 @@ void CCharaSelect::ProductionCard(void)
 			m_CharaCardProduction = CHARACARDPRO_TURNOVER_B;
 		}
 		break;
-	
+
 	case CHARACARDPRO_TURNOVER_B:	//裏返す
 
 		for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
@@ -682,7 +682,7 @@ void CCharaSelect::ProductionCard(void)
 			if (m_fCardWidth[nCnt][0] <= 0.0f)
 			{
 				m_apSelect2D[nCnt]->BindTexture("CHARACTORSEL_CHARA");
-				m_apSelect2D[nCnt]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*nCnt),0.0f), 
+				m_apSelect2D[nCnt]->SetTex(D3DXVECTOR2(0.0f + ((1.0f / MAX_CHARASELECT)*nCnt),0.0f),
 					D3DXVECTOR2((1.0f / MAX_CHARASELECT) + ((1.0f / MAX_CHARASELECT)*nCnt),0.5f));
 				m_CharaCardProduction = CHARACARDPRO_FACEUP;
 			}
@@ -735,10 +735,12 @@ bool CCharaSelect::collisionBackMode(int operation)
 //=============================================================================
 void CCharaSelect::PressGauge(CFade *pFade, CManager *pManager, int operation)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
 	if (m_apGauge2D[operation]->GetbDraw() == true)
 	{
 		if (CCommand::GetCommand("RELEASE_L", operation) == true)
 		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT01);
 			m_nCntGauge[operation]++;
 			if (m_nCntGauge[operation] >= 90)
 			{//3秒経ったら
@@ -782,6 +784,8 @@ void CCharaSelect::PressGauge(CFade *pFade, CManager *pManager, int operation)
 void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 {
 	D3DXVECTOR3 pos[MAX_CHARASELECT];
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{//カーソルの位置を取得
 		if (m_apCursor2D[nCnt] != NULL)
@@ -794,11 +798,11 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
 		/* 選択時演出関数 */
-		if (m_bConf == false) 
-		{ 
+		if (m_bConf == false)
+		{
 			SelectProduction(nControllNum, m_SelectState[nControllNum], m_SelectStateold[nControllNum], m_CharaType[nControllNum]);
 		}
-		
+
 		if (m_bConf == true)
 		{//選択確定が可能になったら
 			DecisionCharactor(pFade, pManager, nControllNum);
@@ -883,6 +887,8 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			m_apScene2D[nControllNum + 12]->SetbDraw(true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT03);
+
 				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_BARANCE;
@@ -897,6 +903,8 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			m_apScene2D[nControllNum + 12]->SetbDraw(true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT03);
+
 				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_POWER;
@@ -912,6 +920,8 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT03);
+
 				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_SPEED;
@@ -927,6 +937,8 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT03);
+
 				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_REACH;
@@ -942,6 +954,8 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 
 			if (CCommand::GetCommand("DECISION", nControllNum) == true)
 			{//エンター押下
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT03);
+
 				if (m_SelectState[nControllNum] == SELECTSTATE_NOSELECT)
 				{//セレクト状態じゃない（無限フラッシュ防止）
 					m_CharaType[nControllNum] = CPlayer::TYPE_RANDOM;
@@ -997,11 +1011,14 @@ void CCharaSelect::Move(CFade *pFade, CManager *pManager, int nControllNum)
 //=============================================================================
 void CCharaSelect::DecisionCharactor(CFade *pFade, CManager *pManager, int operation)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
 	if (collisionConf(operation) == true)
 	{//ポリゴンの範囲内
 		if (CCommand::GetCommand("DECISION", operation) == true)
 		{
 			m_bCnfFlash = true;
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT04);
+
 			for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
 			{//ランダムを選択した人がいる
 				m_CharaTypeFinal[nCnt] = m_CharaType[nCnt];
