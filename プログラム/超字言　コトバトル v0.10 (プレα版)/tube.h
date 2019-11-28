@@ -45,6 +45,7 @@ public:
 private:
 	void Collect(void);		//文字を集めてTexを生成
 	void Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum);
+	void UninitChack(void);	// 終了しているかどうかの確認
 
 	D3DXVECTOR3 m_AnswerPos;
 	CScene2D *m_apWord[MAX_WORD];
