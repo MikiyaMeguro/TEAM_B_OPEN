@@ -512,6 +512,7 @@ void CWaypoint::CollisionObj(void)
 						{
 							WayPoint[nCntWayPoint].bBlock = true;
 							WayPoint[nCntWayPoint].nWayPointNum = 9;
+							//break;
 							//WayPoint[nCntWayPoint].pWayPoint->SetTexture(9, 10, 1, 1);
 						}
 					}
