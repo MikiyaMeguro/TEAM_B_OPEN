@@ -474,7 +474,10 @@ void CPoint::SizeChange(void)
 	{
 		if (m_apNumber[nCntPoint] != NULL)
 		{
-			
+			if (m_bSizeChange == true) 
+			{
+				
+			}
 		}
 	}
 }
