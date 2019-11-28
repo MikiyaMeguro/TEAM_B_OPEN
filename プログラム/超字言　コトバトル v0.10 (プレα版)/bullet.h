@@ -125,7 +125,7 @@ private:
 
 	C3DCharactor* m_pHomingChara;
 
-
+	int m_nCounter;
 	CLineOrbit* m_pOrbit;
 
 };
