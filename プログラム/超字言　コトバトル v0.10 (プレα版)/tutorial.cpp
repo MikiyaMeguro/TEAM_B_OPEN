@@ -90,6 +90,11 @@ CTutorial::~CTutorial()
 //=============================================================================
 void CTutorial::Init(void)
 {
+
+	//	エフェクトのテキストの名前の読み込み
+	CEffect::LoadNameEffect();			//	エフェクトのテキスト読み込み
+	CEffect::LoadDataEffect();			//	エフェクトのデータ読み込み
+	CEffect::Load();					//	エフェクトの読み込み
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
@@ -214,6 +219,7 @@ void CTutorial::Uninit(void)
 			m_pPoint[nCntPoint] = NULL;
 		}
 	}
+	CEffect::Unload();			//	エフェクトの開放
 
 	if (m_pWall != NULL)
 	{
@@ -257,6 +263,11 @@ void CTutorial::Update(void)
 	if (CCommand::GetCommand("PAUSE"))
 	{
 		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
+	}
+
+	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
+	{
+		CEffect::Create(D3DXVECTOR3(0.0f, 30.0f, 0.0f), 4, 4);
 	}
 #ifdef _DEBUG
 	CDebugProc::Print("c", "チュートリアル");
