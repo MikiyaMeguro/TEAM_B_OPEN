@@ -134,7 +134,6 @@ void CScene::UpdeteAll(void)
 
 			 // Updateの最中に消える可能性があるから先に記録しておく
 				CScene *pSceneNext = pScene->m_pNext;
-
 				// 更新
 				if (pScene->m_bDeath == false)
 				{
