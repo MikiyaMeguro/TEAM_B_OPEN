@@ -501,4 +501,15 @@ MODELSET		# [47]
 	GIMMICK = 1			# ギミック情報
 END_MODELSET
 
+-----------------------------------------------------------
+
+MODELSET						# 床
+	TYPE = 38
+	POS = 0.0 200.0 0.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 20.1 0.075 20.1
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
 END_SCRIPT		# この行は絶対消さないこと！
