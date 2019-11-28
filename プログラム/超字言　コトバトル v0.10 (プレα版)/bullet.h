@@ -92,6 +92,7 @@ public:
 		TYPE_REFLECT,			//”½ŽË
 		TYPE_MISSILE,			//ƒ~ƒTƒCƒ‹
 		TYPE_BOMB,				//“Š±”š’e
+		TYPE_MAX
 	}BULLET_PROPERTY;
 
 	CModelBullet();
