@@ -48,6 +48,10 @@ public:
 		SOUND_LABEL_SE_POINTUP,			// ポイントアップ
 		SOUND_LABEL_SE_POINTDOWN,		// ポイントダウン
 
+		SOUND_LABEL_SE_SELECT00,		// 決定音
+		SOUND_LABEL_SE_SELECT01,		// キャンセルお”ぉ”ん
+		SOUND_LABEL_SE_SELECT02,		// 選択恩
+
 
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
@@ -108,6 +112,10 @@ protected:
 
 		{ "data/SE/pointup.wav", 0 },		// ポイントアップ
 		{ "data/SE/pointupdown.wav", 0 },	// ポイントダウン
+
+		{ "data/SE/Select1.wav", 0 },	// 決定音
+		{ "data/SE/Select2.wav", 0 },	// キャンセル恩
+		{ "data/SE/Select3.wav", 0 },	// 選択音
 
 	};
 };
