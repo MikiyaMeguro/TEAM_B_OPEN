@@ -325,17 +325,6 @@ void CGame::Update(void)
 		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
 	}
 
-	if (m_bStageSet == true)
-	{//	ステージが変わるタイミングで消す
-		if (m_pWall != NULL)
-		{//	噴水の水
-			if (m_pWall->GetType() == 5 || m_pWall->GetType() == 6)
-			{//	噴水の水
-				m_pWall->Uninit();
-				m_pWall = NULL;
-			}
-		}
-	}
 #ifdef _DEBUG
 
 #endif
@@ -390,7 +379,7 @@ void CGame::CameraSetting(int nNumPlayer)
 				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
-			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TOPVIEW,
+			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_SPECTOR,
 				D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(-1.75f, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_TOPVIEW_PLAY);
 			pCameraManager->SetCameraViewPort("TOPVIEW_CAMERA", 645, 365, 635, 355);
 			break;
