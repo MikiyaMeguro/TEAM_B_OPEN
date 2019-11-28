@@ -40,6 +40,8 @@ public:
 	void SetStockNum(int nStock) { m_nStockNum = nStock; }
 	void AllDelete(void);
 	void Delete(int nID, int nStock);
+
+	bool GetFlag(void) { return m_bCreateFlag; }
 private:
 	void Collect(void);		//•¶š‚ğW‚ß‚ÄTex‚ğ¶¬
 	void Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum);
@@ -50,6 +52,7 @@ private:
 	int		  m_nAnswer;
 
 	bool	 m_bModelTexFlag;
+	bool	 m_bCreateFlag;
 	int m_nAnswerModelNum;	// “š‚¦‚Ì”Ô†
 	int m_nStockNum;
 
