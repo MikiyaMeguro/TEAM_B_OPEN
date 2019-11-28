@@ -138,7 +138,6 @@ void CWaypoint::Update(void)
 	int nNowNumber = 0;		//今いるマスの番号
 	int nAdjacent = 0;		//隣接しているマスは何マス分離れているか
 	bool bLand = false;		//誰かがマスに乗っている
-
 	if (CGame::GetbStageSet() == false)
 	{
 		for (int nCntWayPoint = 0; nCntWayPoint < MAX_WAYPOINT; nCntWayPoint++)
@@ -502,15 +501,19 @@ void CWaypoint::CollisionObj(void)
 			{// 死亡フラグが立っていないもの
 			 // オブジェクトの種類を確かめる
 				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE && pSceneX->GetCollsionType() != CSceneX::COLLSIONTYPE_FLOORCOLLSION)
+				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
-					bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
-					//オブジェクトに当たった
-					if (bLand == true)
+					if (pSceneX->GetCollsionType() != CSceneX::COLLSIONTYPE_FLOORCOLLSION)
 					{
-						WayPoint[nCntWayPoint].bBlock = true;
-						WayPoint[nCntWayPoint].nWayPointNum = 9;
-						//WayPoint[nCntWayPoint].pWayPoint->SetTexture(9, 10, 1, 1);
+						bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
+						//オブジェクトに当たった
+						if (bLand == true)
+						{
+							WayPoint[nCntWayPoint].bBlock = true;
+							WayPoint[nCntWayPoint].nWayPointNum = 9;
+							//break;
+							//WayPoint[nCntWayPoint].pWayPoint->SetTexture(9, 10, 1, 1);
+						}
 					}
 				}
 			}
@@ -535,13 +538,16 @@ void CWaypoint::CollisionObj(void)
 				{// 死亡フラグが立っていないもの
 				 // オブジェクトの種類を確かめる
 					CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-					if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE && pSceneX->GetCollsionType() != CSceneX::COLLSIONTYPE_FLOORCOLLSION)
+					if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 					{
-						bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
-						CObject *pSceneObj = ((CObject*)pSceneX);
-						if (bLand == true)
-						{//当たっていない
-							nCntHitObj++;
+						if (pSceneX->GetCollsionType() != CSceneX::COLLSIONTYPE_FLOORCOLLSION)
+						{
+							bool  bLand = pSceneX->CollisionIN(WayPoint[nCntWayPoint].WayPointPos, D3DXVECTOR3(WAYPOINT_RADIUS, 0, WAYPOINT_RADIUS));
+							CObject *pSceneObj = ((CObject*)pSceneX);
+							if (bLand == true)
+							{//当たっていない
+								nCntHitObj++;
+							}
 						}
 					}
 				}

@@ -29,6 +29,7 @@ CSetWord::CSetWord() : CScene(3, CScene::OBJTYPE_SETOBJECT)
 	m_pWordPos = NULL;
 	m_AnswerNum = NULL;
 	m_nAnswerNumCount = 0;
+	m_nNum = 0;
 }
 
 //--------------------------------------------

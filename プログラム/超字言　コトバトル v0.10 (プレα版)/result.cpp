@@ -36,14 +36,15 @@
 #define PODIUMPOS_3RD (D3DXVECTOR3(-10.0f, 0.0f, 0.0f))
 #define PODIUMPOS_4TH (D3DXVECTOR3(40.0f,0.0f,0.0f))
 
-#define TIMER_SPACE			(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_SPACE			(40.0f)										// 数字と数字の間のサイズ(ゲーム時間)
 
-#define SIZE_X (SCREEN_WIDTH/2)								//横幅
-#define SIZE_Y (SCREEN_HEIGHT/2)							//縦幅
-#define DEFAULT_SIZE (150.0f)								//ポリゴンサイズの基本の大きさ
-#define DEFAULT_POS	(D3DXVECTOR3(0.0f,0.0f,0.0f))			//ポリゴンの初期位置
-#define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))			//初期化回転
-#define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))	//初期化色_白
+#define SIZE_X (SCREEN_WIDTH/2)											//横幅
+#define SIZE_Y (SCREEN_HEIGHT/2)										//縦幅
+#define DEFAULT_SIZE (150.0f)											//ポリゴンサイズの基本の大きさ
+#define DEFAULT_POS	(D3DXVECTOR3(0.0f,0.0f,0.0f))						//ポリゴンの初期位置
+#define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))						//初期化回転
+#define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))				//初期化色_白
+#define DEFAULT_COL_WHITE_ALPHA_HARF (D3DXCOLOR(0.8f,0.8f,0.8f,0.5f))	//初期化色_白（半透明）
 
 //============================================================================
 //静的メンバ変数宣言
@@ -77,6 +78,7 @@ HRESULT CResult::Init(void)
 {
 	int nCntWinScore = 0;				//勝利カウント
 	int nCntRankNum[4] = { 0,0,0,0 };	//順位ごとに何人いるか
+	CharaSet nRepCharaSet = {};			//情報入れ替え
 
 	float fPosX = 20;	//表彰台初期位置
 	float fNext = 30;	//表彰台の間の幅
@@ -107,18 +109,27 @@ HRESULT CResult::Init(void)
 		case 0:
 			m_ResultChara[nCntPlayer].nNumRank = 4;
 			nCntRankNum[3]++;
+			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
+				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
 			break;
 		case 1:
 			m_ResultChara[nCntPlayer].nNumRank = 3;
 			nCntRankNum[2]++;
+			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
+				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
+
 			break;
 		case 2:
 			m_ResultChara[nCntPlayer].nNumRank = 2;
 			nCntRankNum[1]++;
+			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
+				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
 			break;
 		case 3:
 			m_ResultChara[nCntPlayer].nNumRank = 1;
 			nCntRankNum[0]++;
+			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
+				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
 			break;
 		default:
 			break;
@@ -127,7 +138,19 @@ HRESULT CResult::Init(void)
 		nCntWinScore = 0;
 	}
 
-
+	/* ソート */
+	for (int nRank = 0; nRank < 4; nRank++)
+	{
+		for (int nRankCnt = nRank + 1; nRankCnt < 4; nRankCnt++)
+		{
+			if (m_ResultChara[nRank].nNumRank >= m_ResultChara[nRankCnt].nNumRank)
+			{
+				nRepCharaSet = m_ResultChara[nRank];
+				m_ResultChara[nRank] = m_ResultChara[nRankCnt];
+				m_ResultChara[nRankCnt] = nRepCharaSet;
+			}
+		}
+	}
 #if 1
 	//メッシュフィールド生成
 	m_pMeshField = NULL;
@@ -276,12 +299,12 @@ HRESULT CResult::Init(void)
 			if (nCntTime < 2)
 			{	// ３桁まで
 				m_apNumber[nCntPlayer][nCntTime]->Init(D3DXVECTOR3((RankPos.x - TIMER_SPACE * nCntTime), RankPos.y, RankPos.z), 0);
-				m_apNumber[nCntPlayer][nCntTime]->SetSize(D3DXVECTOR2(30.0f, 30.0f), D3DXVECTOR2((RankPos.x - TIMER_SPACE * nCntTime), RankPos.y));
+				m_apNumber[nCntPlayer][nCntTime]->SetSize(D3DXVECTOR2(30.0f, 30.0f), D3DXVECTOR2((RankPos.x - TIMER_SPACE * nCntTime) + 100.0f, RankPos.y + (80.0f*nCntPlayer)));
 				m_apNumber[nCntPlayer][nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 			else if (nCntTime == 2)
 			{	// 3桁目
-				m_apNumber[nCntPlayer][nCntTime]->Init(D3DXVECTOR3((RankPos.x - TIMER_SPACE * nCntTime), RankPos.y, RankPos.z), 0);
+				m_apNumber[nCntPlayer][nCntTime]->Init(D3DXVECTOR3((RankPos.x - TIMER_SPACE * nCntTime) + 100.0f, RankPos.y + (80.0f*nCntPlayer), RankPos.z), 0);
 			}
 		}
 	}
@@ -290,6 +313,11 @@ HRESULT CResult::Init(void)
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		TexPoint(nCntPlayer, m_ResultChara[nCntPlayer].nPoint);
+		m_apPlayerIcon[nCntPlayer]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*(int)m_ResultChara[nCntPlayer].type)),
+											D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(int)m_ResultChara[nCntPlayer].type)));
+		m_apRanking[nCntPlayer]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*(m_ResultChara[nCntPlayer].nNumRank-1))),
+			D3DXVECTOR2(0.5f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(m_ResultChara[nCntPlayer].nNumRank - 1))));
+
 	}
 
 #endif
@@ -355,6 +383,11 @@ void CResult::Uninit(void)
 			m_apRanking[nCntPlayer]->Uninit();
 			m_apRanking[nCntPlayer] = NULL;
 		}
+		if (m_apPlayerNum[nCntPlayer] != NULL)
+		{
+			m_apPlayerNum[nCntPlayer]->Uninit();
+			m_apPlayerNum[nCntPlayer] = NULL;
+		}
 	}
 	for (int nCnt = 0; nCnt < MAX_RESULT_TEX; nCnt++)
 	{
@@ -389,6 +422,7 @@ void CResult::Update(void)
 			{
 				m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(530.0f, SCREEN_HEIGHT / 2, 0), 220, 320, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 				m_pSeletMenu->SetModeSelectBool(true);
+				SetAlpha();
 				m_bMenu = false;
 			}
 			// 以降の更新処理を飛ばす
@@ -486,6 +520,10 @@ void CResult::InitPointer(void)
 		{
 			m_apRanking[nCnt] = NULL;
 		}
+		if (m_apPlayerNum[nCnt] != NULL)
+		{
+			m_apPlayerNum[nCnt] = NULL;
+		}
 	}
 }
 //=============================================================================
@@ -494,5 +532,38 @@ void CResult::InitPointer(void)
 void CResult::SetPolygon(void)
 {
 	m_apScene2D[RESULTTYPE_WINDOW] = CScene2D::Create(D3DXVECTOR3(0.0f+ DEFAULT_SIZE, SIZE_Y, 0.0f), "RANKING_WINDOW",1);
-	m_apScene2D[RESULTTYPE_WINDOW]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*4.0f);
+	m_apScene2D[RESULTTYPE_WINDOW]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*3.35f);
+
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		m_apPlayerIcon[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f,100.0f + (180.0f*nCnt), 0.0f), "RANKCHARA_ICON", 2);
+		m_apPlayerIcon[nCnt]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.5f);
+		m_apPlayerIcon[nCnt]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nCnt)), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCnt)));
+
+		m_apPlayerNum[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 150.0f + (180.0f*nCnt), 0.0f), "RANK&PLNUM");
+		m_apPlayerNum[nCnt]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+		m_apPlayerNum[nCnt]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCnt)), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCnt)));
+
+		m_apRanking[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 40.0f + (180.0f*nCnt), 0.0f), "RANK&PLNUM");
+		m_apRanking[nCnt]->SetWidthHeight(DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.5f);
+		m_apRanking[nCnt]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nCnt)), D3DXVECTOR2(0.5f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCnt)));
+	}
+}
+//=============================================================================
+// セレクトメニュー生成時の2Dポリゴンalpha値の設定
+//=============================================================================
+void CResult::SetAlpha(void)
+{
+	m_apScene2D[RESULTTYPE_WINDOW]->SetCol(DEFAULT_COL_WHITE_ALPHA_HARF);
+
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		m_apPlayerIcon[nCnt]->SetCol(DEFAULT_COL_WHITE_ALPHA_HARF);
+		m_apPlayerNum[nCnt]->SetCol(DEFAULT_COL_WHITE_ALPHA_HARF);
+		m_apRanking[nCnt]->SetCol(DEFAULT_COL_WHITE_ALPHA_HARF);
+		for (int nCntTime = 0; nCntTime < MAX_POINT; nCntTime++)
+		{
+			m_apNumber[nCnt][nCntTime]->SetCol(DEFAULT_COL_WHITE_ALPHA_HARF);
+		}
+	}
 }

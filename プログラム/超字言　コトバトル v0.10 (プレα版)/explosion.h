@@ -15,7 +15,7 @@
 // マクロ定義
 //=============================================================================
 #define TUBE_EFFECT_NUM (3)	//筒エフェクトの数
-
+#define EXPLOSION_PRIORITY (4)
 //=============================================================================
 // クラスの定義
 //=============================================================================
@@ -38,15 +38,15 @@ public:
 	void Update(void);
 	void Draw(void);
 
-
-
-	bool Collision(const D3DXVECTOR3& pos, const D3DXVECTOR3& posOld);
+	bool Collision(const D3DXVECTOR3& pos,float fRadius);
 
 	void SetPosition(D3DXVECTOR3 pos) { CMeshSphere::GetPosition() = pos; };
 	void SetRotation(D3DXVECTOR3 rot) { CMeshSphere::GetRotation() = rot; };
 	void SetColor(D3DXCOLOR col) { CMeshSphere::SetColor(col); };
 
 	void SetSpinSpeed(D3DXVECTOR3 spinspeed) { m_spinSpeed = spinspeed; };
+
+	float GetSize(void) { return m_fSize; };
 private:
 	void IsNotDup(bool bDup) { m_bNotDup = bDup; };
 	float m_fSize;		//サイズ
