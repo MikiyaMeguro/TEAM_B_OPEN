@@ -38,6 +38,7 @@ public:
 		COLLSIONTYPE_SWITCH,			// 当たり判定(スイッチ)
 		COLLSIONTYPE_BREAK,				// 当たり判定(壊れる)
 		COLLSIONTYPE_ICEFLOOR,			// 当たり判定(滑る床)
+		COLLSIONTYPE_FLOORCOLLSION,		// 当たり判定(床の箱の当たり判定)
 	}COLLISIONTYPE;
 
 	CSceneX(int nPriority = SCENEX_PRIORITY, OBJTYPE objType = OBJTYPE_SCENEX);					// コンストラクタ
