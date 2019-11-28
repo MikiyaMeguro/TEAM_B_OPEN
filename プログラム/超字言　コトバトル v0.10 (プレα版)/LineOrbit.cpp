@@ -289,7 +289,10 @@ void CLineOrbit::Draw(void)
 	// テクスチャの設定
 	pDevice->SetTexture(0, m_pTexture);
 
+	//両面カリングを行う
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);
+
+	//ライト無効化
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 
 	// αブレンディングを加算合成に設定
@@ -297,19 +300,20 @@ void CLineOrbit::Draw(void)
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
-	// ポリゴンの描画
+	// ポリゴンの描画(見栄えのために複数回描画する)
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nVtxNum, 0, m_nPolygonNum);
 
 	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nVtxNum, 0, m_nPolygonNum);
 
 	//pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nVtxNum, 0, m_nPolygonNum);
 
-	// αブレンディングを元に戻す
+	// 設定を元に戻す
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
 	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+
 	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
 

@@ -20,7 +20,7 @@ class CRenderer
 public:
 	CRenderer();	// コンストラクタ
 	~CRenderer();	// デストラクタ
-	
+
 	HRESULT Init(HWND hWnd, bool bWindow);	// レンダラーの初期化処理
 	void Uninit(void);						// レンダラーの終了処理
 	void Update(void);						// レンダラーの更新処理
@@ -28,6 +28,7 @@ public:
 
 	LPDIRECT3DDEVICE9 GetDevice(void); /*{ return m_pD3DDevice; }*/
 
+	HRESULT ResetRenderState(void); //もとの設定に戻す
 private:
 //#ifdef _DEBUG
 //	void DrawFPS(void);
