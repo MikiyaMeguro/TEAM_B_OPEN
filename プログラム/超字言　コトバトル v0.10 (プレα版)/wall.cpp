@@ -170,7 +170,7 @@ void CWall::Update(void)
 			m_nAnimCounter++;
 			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
 		}
-		if (m_nCounter > 3750*2)
+		if (m_nCounter > 3750)
 		{
 			Uninit();
 		}

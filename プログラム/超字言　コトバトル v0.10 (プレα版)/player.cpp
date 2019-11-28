@@ -675,6 +675,7 @@ bool CPlayer::CollisionDamageObj(void)
 {
 	bool bHit = false;
 	CScene *pScene = NULL;
+	CSound *pSound = CManager::GetSound();		//	‰¹‚ÌŽæ“¾
 
 	D3DXVECTOR3 PlayerPos = m_pCharactorMove->GetPosition();
 	D3DXVECTOR3 ObjPos,ObjRot;
@@ -712,6 +713,9 @@ bool CPlayer::CollisionDamageObj(void)
 						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { pPoint = CTutorial::GetPoint(pBullet->GetID()); }
 
 						if (pPoint != NULL) { pPoint->AddPoint(1); }
+						pSound->SetVolume(CSound::SOUND_LABEL_SE_POINTUP, 3.0f);
+						pSound->PlaySound(CSound::SOUND_LABEL_SE_POINTUP);
+
 					}
 
 					//‚«”ò‚Î‚µ

@@ -889,4 +889,16 @@ MODELSET						# 床
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+#------------------------------------------
+# 背景床
+#------------------------------------------
+MODELSET
+	TYPE = 3
+	POS = 0.0 0.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 1.0 5.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
 END_SCRIPT		# この行は絶対消さないこと！
