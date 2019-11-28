@@ -45,6 +45,9 @@ public:
 		SOUND_LABEL_SE_SWITCHON,		// スイッチ押した音ON
 		SOUND_LABEL_SE_SWITCHOFF,		// スイッチ押した音OFF
 
+		SOUND_LABEL_SE_POINTUP,			// ポイントアップ
+		SOUND_LABEL_SE_POINTDOWN,		// ポイントダウン
+
 
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
@@ -103,6 +106,8 @@ protected:
 		{ "data/SE/switchon.wav", 0 },		// スイッチ押した音ON
 		{ "data/SE/switchoff.wav", 0 },		// スイッチ押した音OFF
 
+		{ "data/SE/pointup.wav", 0 },		// ポイントアップ
+		{ "data/SE/pointupdown.wav", 0 },	// ポイントダウン
 
 	};
 };

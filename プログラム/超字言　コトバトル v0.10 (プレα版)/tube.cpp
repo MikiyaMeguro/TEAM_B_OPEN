@@ -218,7 +218,7 @@ void CTube::SetAnswer(int nAnswer, int nStock)
 	if (m_pAnswerModel[nStock] == NULL)
 	{	// 文字が3文字集まった場合場合
 		D3DXVECTOR2 AnswerSize = {};
-		//int nAnswerNum = 
+		//int nAnswerNum =
 		if (NumPlayer == 1)
 		{	// 1人プレイの場合
 			m_AnswerPos = POS_ANSWER_001;
@@ -402,14 +402,22 @@ void CTube::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum)
 //=============================================================================
 void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	CPoint *pPoint = NULL;
 	if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(nNum); }
 	else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */ }
 
 	if (pPoint != NULL)
 	{
-		if (bPoint == false) { pPoint->AddPoint(nPoint); }
-		else if (bPoint == true) { pPoint->SubtractionPoint(nPoint); }
+		if (bPoint == false) { pPoint->AddPoint(nPoint);
+		pSound->SetVolume(CSound::SOUND_LABEL_SE_POINTUP, 3.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_SE_POINTUP);
+		}
+		else if (bPoint == true) { pPoint->SubtractionPoint(nPoint);
+		pSound->SetVolume(CSound::SOUND_LABEL_SE_POINTDOWN, 3.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_SE_POINTDOWN);
+		}
 	}
 }
 
