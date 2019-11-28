@@ -285,6 +285,29 @@ void CRenderer::Draw(void)
 //#endif
 
 //=============================================================================
+// 描画設定をもとに戻す
+//=============================================================================
+HRESULT CRenderer::ResetRenderState(void)
+{
+	// レンダーステートの設定
+
+	//カリング設定
+	m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
+
+	//アルファブレンドを有効化
+	m_pD3DDevice->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);
+
+	//通常合成にする
+	m_pD3DDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+	m_pD3DDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+	m_pD3DDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
+
+	//ライティングを有効化
+	m_pD3DDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	return S_OK;
+}
+
+//=============================================================================
 // デバイスの取得
 //=============================================================================
 LPDIRECT3DDEVICE9 CRenderer::GetDevice(void)
