@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 37
+NUM_MODEL = 38
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -52,6 +52,7 @@ MODEL_FILENAME = data/MODEL/StageOBJ/floor.x"				#34 第三地面
 MODEL_FILENAME = data/MODEL/StageOBJ/ori2.x"				#35 檻2
 
 MODEL_FILENAME = data/MODEL/StageOBJ/Stage1.x"				#36 床
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage2.x"				#37 床
 
 
 
