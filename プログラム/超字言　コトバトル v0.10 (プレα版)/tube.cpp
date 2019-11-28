@@ -59,6 +59,7 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	}
 	m_nAnswer = 0;
 	m_bModelTexFlag = false;
+	m_bCreateFlag = false;
 }
 
 //=============================================================================
@@ -323,6 +324,7 @@ void CTube::Delete(int nID, int nStock)
 void CTube::Collect(void)
 {
 	int nCntNum = 0;
+	m_bCreateFlag = true;
 
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{
@@ -360,6 +362,8 @@ void CTube::Collect(void)
 				}
 			}
 		}
+
+		m_bCreateFlag = false;
 	}
 }
 

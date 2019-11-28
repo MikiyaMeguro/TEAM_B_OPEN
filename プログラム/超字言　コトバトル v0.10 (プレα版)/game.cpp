@@ -224,6 +224,8 @@ void CGame::Init(void)
 	//CTime::SetTimeFlag(false);
 	CCommand::RegistCommand("TIMECOUNT_STOP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_TRIGGER,DIK_M);
 
+	SetCreateWord();
+
 }
 //=============================================================================
 // èIóπèàóù
