@@ -92,6 +92,8 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 4) { CScene3D::BindTexture("NEXT"); }
 	else if (m_nType == 5) { CScene3D::BindTexture("FIELD002"); }
 	else if (m_nType == 6) { CScene3D::BindTexture("FIELD002"); }
+	else if (m_nType == 7) { CScene3D::BindTexture("FIELD002"); }
+
 
 	return S_OK;
 }
@@ -140,6 +142,8 @@ void CWall::Update(void)
 		}
 		if (m_nCounter > 3750)
 		{
+			CWall::Create(D3DXVECTOR3(-200.0f, 5.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(40.0f, 400.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 7);
 			Uninit();
 		}
 	}

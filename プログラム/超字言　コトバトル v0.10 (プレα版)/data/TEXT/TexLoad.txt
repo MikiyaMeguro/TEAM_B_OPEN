@@ -95,7 +95,9 @@ DATA = 00074 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLA
 DATA = 00075 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
 DATA = 00076 data/TEXTURE/CharactorSelect/CharaSel_ModeBack.png CHARASEL_BACKMODE
 DATA = 00077 data/TEXTURE/field002.jpg FIELD002 
-DATA = 00077 data/TEXTURE/avoidui.png AVOID
+DATA = 00078 data/TEXTURE/avoidui.png AVOID
+
+DATA = 00079 data/TEXTURE/Ranking/Window.png RANKING_WINDOW
 
 
 END_LOAD

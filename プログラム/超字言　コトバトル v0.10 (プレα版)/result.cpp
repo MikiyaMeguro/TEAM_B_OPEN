@@ -1,7 +1,7 @@
 //=============================================================================
 //
 // リザルト処理 [result.cpp]
-// Author : 目黒未来也
+// Author : 目黒未来也/後閑茜
 //
 //=============================================================================
 #include "result.h"
@@ -36,8 +36,14 @@
 #define PODIUMPOS_3RD (D3DXVECTOR3(-10.0f, 0.0f, 0.0f))
 #define PODIUMPOS_4TH (D3DXVECTOR3(40.0f,0.0f,0.0f))
 
-
 #define TIMER_SPACE			(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+
+#define SIZE_X (SCREEN_WIDTH/2)								//横幅
+#define SIZE_Y (SCREEN_HEIGHT/2)							//縦幅
+#define DEFAULT_SIZE (150.0f)								//ポリゴンサイズの基本の大きさ
+#define DEFAULT_POS	(D3DXVECTOR3(0.0f,0.0f,0.0f))			//ポリゴンの初期位置
+#define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))			//初期化回転
+#define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))	//初期化色_白
 
 //============================================================================
 //静的メンバ変数宣言
@@ -75,6 +81,8 @@ HRESULT CResult::Init(void)
 	float fPosX = 20;	//表彰台初期位置
 	float fNext = 30;	//表彰台の間の幅
 
+	InitPointer();
+	SetPolygon();
 #if 0
 	m_ResultChara[0].nPoint = 0;
 	m_ResultChara[1].nPoint = 10;
@@ -263,7 +271,7 @@ HRESULT CResult::Init(void)
 
 		for (int nCntTime = 0; nCntTime < MAX_POINT; nCntTime++)
 		{
-			// タイマー初期設定
+			// ナンバー初期設定
 			m_apNumber[nCntPlayer][nCntTime] = new CNumber;
 			if (nCntTime < 2)
 			{	// ３桁まで
@@ -295,11 +303,6 @@ HRESULT CResult::Init(void)
 	{
 		pCamera->SetPosR(D3DXVECTOR3(20.0f, 40.0f, 0.0f));
 	}
-
-	//メニューを生成
-	//m_pSeletMenu = NULL;
-	//m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(740, 100.0f, 0), 120, 180, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
-
 	return S_OK;
 }
 
@@ -342,6 +345,24 @@ void CResult::Uninit(void)
 			m_pPlayer[nCntPlayer]->Uninit();
 			m_pPlayer[nCntPlayer] = NULL;
 		}
+		if (m_apPlayerIcon[nCntPlayer] != NULL)
+		{
+			m_apPlayerIcon[nCntPlayer]->Uninit();
+			m_apPlayerIcon[nCntPlayer] = NULL;
+		}
+		if (m_apRanking[nCntPlayer] != NULL)
+		{
+			m_apRanking[nCntPlayer]->Uninit();
+			m_apRanking[nCntPlayer] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_RESULT_TEX; nCnt++)
+	{
+		if (m_apScene2D[nCnt] != NULL)
+		{
+			m_apScene2D[nCnt]->Uninit();
+			m_apScene2D[nCnt] = NULL;
+		}
 	}
 	//全ての終了処理
 	Release();
@@ -361,8 +382,7 @@ void CResult::Update(void)
 
 	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
-
-		//フレームをずらす
+		//生成フラグを管理
 		if (m_bMenuCreate == true)
 		{
 			if (m_bMenu == true)
@@ -443,4 +463,36 @@ void CResult::TexPoint(int nPlayer, int nPoint)
 			}
 		}
 	}
+}
+//=============================================================================
+// ポインタの初期化処理
+//=============================================================================
+void CResult::InitPointer(void)
+{
+	for (int nCnt = 0; nCnt < MAX_RESULT_TEX; nCnt++)
+	{
+		if (m_apScene2D[nCnt] != NULL)
+		{
+			m_apScene2D[nCnt] = NULL;
+		}
+	}
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		if (m_apPlayerIcon[nCnt] != NULL)
+		{
+			m_apPlayerIcon[nCnt] = NULL;
+		}
+		if (m_apRanking[nCnt] != NULL)
+		{
+			m_apRanking[nCnt] = NULL;
+		}
+	}
+}
+//=============================================================================
+// ポインタの初期化処理
+//=============================================================================
+void CResult::SetPolygon(void)
+{
+	m_apScene2D[RESULTTYPE_WINDOW] = CScene2D::Create(D3DXVECTOR3(0.0f+ DEFAULT_SIZE, SIZE_Y, 0.0f), "RANKING_WINDOW",1);
+	m_apScene2D[RESULTTYPE_WINDOW]->SetWidthHeight(DEFAULT_SIZE*1.0f, DEFAULT_SIZE*4.0f);
 }
