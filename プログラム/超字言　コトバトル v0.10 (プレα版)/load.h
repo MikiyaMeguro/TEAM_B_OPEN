@@ -57,7 +57,6 @@ public:
 		MODEL_Snowfall,		// 落屑
 		MODEL_SnowWalldistortion,		// 雪壁
 		MODEL_Telephonepole,		// 電柱
-		
 		MODEL_KANBAN,		// 看板(商店街)
 		MODEL_GATE,			// 広場門
 		MODEL_ORI,			// 檻
@@ -65,6 +64,8 @@ public:
 		MODEL_ICEFLOOR,		// 氷床
 		MODEL_FLOOR,		// 第三地形
 		MODEL_ORI2,			// 檻2
+		
+		MODEL_STAGEFLOOR,	// 各ステージの床
 
 		//--------------------------------------
 		// 文字モデル
