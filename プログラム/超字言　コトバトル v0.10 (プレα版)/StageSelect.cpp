@@ -148,6 +148,7 @@ void CStageSelect::Update(void)
 	CFade *pFade = pManager->GetFade();
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CCamera *pCamera = pCameraManager->GetCamera("STAGESELECT_CAMERA");
+	CSound *pSound = CManager::GetSound();		//	音の取得
 
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
@@ -157,6 +158,8 @@ void CStageSelect::Update(void)
 		/* 選択処理 */
 		if (CCommand::GetCommand("RIGHT"))
 		{//右
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT02);
+
 			if (m_MoveIconState == SELECTICON_STATE_NONE)
 			{//移動処理中に数値が変わらないようにする
 				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
@@ -166,6 +169,8 @@ void CStageSelect::Update(void)
 		}
 		else if (CCommand::GetCommand("LEFT"))
 		{//左
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT02);
+
 			if (m_MoveIconState == SELECTICON_STATE_NONE)
 			{//移動処理中に数値が変わらないようにする
 				//pSound->PlaySound(pSound->SOUND_LABEL_SE_SELECT);
@@ -196,6 +201,8 @@ void CStageSelect::Update(void)
 		}
 		if (CCommand::GetCommand("DELETE") == true)
 		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT01);
+
 			pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
 		}
 		/* マスクのフェード処理 */
@@ -327,6 +334,9 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 	/* 字幕のテクスチャ座標移動 */
 	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, (1.0f / MAX_STAGE)*m_nSelect),
 													D3DXVECTOR2(1.0f, (1.0f / MAX_STAGE) + (1.0f / MAX_STAGE)*m_nSelect));
+
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	switch (TYPE)
 	{
 	case SELECTTYPE_SELECT_MACHINE:	//機械
@@ -334,6 +344,8 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 		//任意のキーENTER
 		if (CCommand::GetCommand("DECISION") == true)
 		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT04);
+
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 		}
 		break;
@@ -341,6 +353,8 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 	case SELECTTYPE_SELECT_WEATHER:	//天候
 		if (CCommand::GetCommand("DECISION") == true)
 		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT04);
+
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 		}
 		break;
@@ -348,6 +362,8 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 	case SELECTTYPE_SELECT_TERRAIN:	//地形
 		if (CCommand::GetCommand("DECISION") == true)
 		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT04);
+
 			//pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 		}
 		break;
