@@ -113,7 +113,7 @@ MODELSET		# [5]
 	POS = -336.0 200.0 274.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 1.30 1.30 1.30	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1			# ギミック情報
 END_MODELSET
 
@@ -122,7 +122,7 @@ MODELSET		# [6]
 	POS = -22.0 200.0 230.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 1.30 1.30 1.30	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -131,7 +131,7 @@ MODELSET		# [7]
 	POS = -12.0 200.0 -216.0		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 1.30 1.30 1.30	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1			# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -239,7 +239,7 @@ MODELSET		# [19]
 	POS = 354.1 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -248,7 +248,7 @@ MODELSET		# [20]
 	POS = 258.1 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -257,7 +257,7 @@ MODELSET		# [21]
 	POS = 164.1 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -266,7 +266,7 @@ MODELSET		# [22]
 	POS = 66.1 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -275,7 +275,7 @@ MODELSET		# [23]
 	POS = -33.9 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1			# ギミック情報
 END_MODELSET
 
@@ -284,7 +284,7 @@ MODELSET		# [24]
 	POS = -133.9 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -293,7 +293,7 @@ MODELSET		# [25]
 	POS = -231.9 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1			# ギミック情報
 END_MODELSET
 
@@ -302,7 +302,7 @@ MODELSET		# [26]
 	POS = -325.9 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1			# ギミック情報
 END_MODELSET
 
@@ -311,7 +311,7 @@ MODELSET		# [27]
 	POS = -413.9 200.0 -452.6		# 位置情報
 	ROT = 0.00 1.57 0.00		# 回転情報
 	SCALE = 1.00 1.00 1.00	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
@@ -320,7 +320,7 @@ MODELSET		# [28]
 	POS = 174.1 200.0 -230.9		# 位置情報
 	ROT = 0.00 0.00 0.00		# 回転情報
 	SCALE = 2.70 1.20 1.30	# スケール情報
-	COLLISION = 3				# コリジョンタイプ情報
+	COLLISION = 1				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
