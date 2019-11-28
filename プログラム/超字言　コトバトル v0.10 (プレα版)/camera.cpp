@@ -48,6 +48,10 @@ void CCamera::Set(CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLen
 		m_posV = pos;
 		m_posR = pos;
 		break;
+	case CCamera::TYPE_TOPVIEW:
+		m_posV = pos;
+		m_posR = pos;
+		break;
 	}
 }
 
@@ -139,13 +143,12 @@ void CCamera::Update(void)
 
 		break;
 	case TYPE_SPECTOR:
-
-
-		//m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
-		//	sinf(m_rot.x) * m_fLength,
-		//	cosf(m_rot.y) * m_fLength);
-		//m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
-
+		break;
+	case TYPE_TOPVIEW:
+		m_posVdest = m_posR - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
+			sinf(m_rot.x) * m_fLength,
+			cosf(m_rot.y) * m_fLength);
+		m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 		break;
 	}
 
