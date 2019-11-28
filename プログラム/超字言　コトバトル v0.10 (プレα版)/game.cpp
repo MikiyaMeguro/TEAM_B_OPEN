@@ -264,11 +264,6 @@ void CGame::Uninit(void)
 		}
 	}
 
-	if (m_pWall != NULL)
-	{
-		m_pWall->Uninit();
-		m_pWall = NULL;
-	}
 
 	if (m_pWordCreate != NULL)
 	{
@@ -315,6 +310,7 @@ void CGame::Update(void)
 	{
 		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	}
+
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");
@@ -329,17 +325,6 @@ void CGame::Update(void)
 		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
 	}
 
-	if (m_bStageSet == true)
-	{//	ステージが変わるタイミングで消す
-		if (m_pWall != NULL)
-		{//	噴水の水
-			if (m_pWall->GetType() == 5 || m_pWall->GetType() == 6)
-			{//	噴水の水
-				m_pWall->Uninit();
-				m_pWall = NULL;
-			}
-		}
-	}
 #ifdef _DEBUG
 
 #endif

@@ -20,12 +20,12 @@
 #define TIMER_SPACE			(30.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
 #define POWER_X				(10)
-#define POINT_POS_1P_ONE	(D3DXVECTOR3(170.0f, 80.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
-#define POINT_POS_2P_ONE	(D3DXVECTOR3(450.0f, 80.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
-#define POINT_POS_3P_ONE	(D3DXVECTOR3(930.0f, 80.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
-#define POINT_POS_4P_ONE	(D3DXVECTOR3(1210.0f, 80.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
-#define POINT_POS_2P_TWO	(D3DXVECTOR3(170.0f, 440.0f, 0.0f))	// 制限時間の位置(2 ～ 4画面だけの場合)
-#define POINT_POS_4P_TWO	(D3DXVECTOR3(1210.0f, 440.0f, 0.0f))// 制限時間の位置(2 ～ 4画面だけの場合)
+#define POINT_POS_1P_ONE	(D3DXVECTOR3(170.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define POINT_POS_2P_ONE	(D3DXVECTOR3(450.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define POINT_POS_3P_ONE	(D3DXVECTOR3(930.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define POINT_POS_4P_ONE	(D3DXVECTOR3(1210.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define POINT_POS_2P_TWO	(D3DXVECTOR3(170.0f, 430.0f, 0.0f))	// 制限時間の位置(2 ～ 4画面だけの場合)
+#define POINT_POS_4P_TWO	(D3DXVECTOR3(1210.0f, 430.0f, 0.0f))// 制限時間の位置(2 ～ 4画面だけの場合)
 
 #define WAIT_TIME_END		(180)							// 待ち時間
 #define MAX_POINT			(99)							// 最大数
@@ -73,7 +73,9 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_nID = 0;
 	m_type = TYPE_NONE;
 	m_bSizeChange = false;
-	m_ChangeCol = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	m_bChangeFlag = false;
+	m_bColChange = false;
+	m_bFlag = false;
 }
 
 //=============================================================================
@@ -201,7 +203,14 @@ void CPoint::AddPoint(int nPoint)
 	if (MAX_POINT < m_nTotalPoint) { m_nTotalPoint = MAX_POINT; }
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 	m_bSizeChange = true;
-	m_ChangeCol = D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f);
+	m_bFlag = false;
+	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	{// テクスチャに反映
+		if (m_apNumber[nCntPoint] != NULL)
+		{
+			m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		}
+	}
 }
 //=============================================================================
 // タイム減算処理
@@ -216,7 +225,14 @@ void CPoint::SubtractionPoint(int nPoint)
 	if (0 > m_nTotalPoint) { m_nTotalPoint = 0; }
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 	m_bSizeChange = true;
-	D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f);
+	m_bFlag = true;
+	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	{// テクスチャに反映
+		if (m_apNumber[nCntPoint] != NULL)
+		{
+			m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+		}
+	}
 }
 
 //=============================================================================
@@ -269,44 +285,44 @@ void CPoint::BGPosition(CScene2D *pBg)
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer != 2 && m_nID == 0)
 	{	// 画面左上 (1, 3, 4画面 1P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 40.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nNumPlayer == 1 && m_nID == 3 || m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 1)
 	{	// 画面右上 (1画面 4P , 3～4画面 2P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 40.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nID == 1&& m_nNumPlayer == 1)
 	{	// 画面左上 (1画面 2P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(400.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(400.0f, 40.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 1)
 	{	// 画面右上 (1画面 3P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(880.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(880.0f, 40.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 2)
 	{	// 画面左 ( 3画面、4画面 3P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 418.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 408.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 3)
 	{	// 画面右 (3画面 ～ 4画面 4P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 418.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 408.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nNumPlayer == 2 && m_nID == 0)
 	{	// 2画面 1P
-		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 40.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nID == 1 && m_nNumPlayer == 2)
 	{	// 2画面 2P
-		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 418.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 408.0f, 0.0f), "BG_FREAME", 5);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 2)
 	{	// 2画面 3P
-		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 60.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 40.0f, 0.0f), "BG_FREAME", 5);
 	}
 	
 	else if (m_nID == 3 && m_nNumPlayer == 2)
 	{	// 2画面 4P
-		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 418.0f, 0.0f), "BG_FREAME", 5);
+		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 408.0f, 0.0f), "BG_FREAME", 5);
 	}
 	
 
@@ -332,65 +348,65 @@ void CPoint::UIPosition(void)
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer != 2 && m_nID == 0)
 	{	// 1, 3, 4画面 1Pの位置
-		posIcon = D3DXVECTOR3(85.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(125.0f, 38.0f, 0.0f);
-		posLogo = D3DXVECTOR3(165.0f, 32.0f, 0.0f);
+		posIcon = D3DXVECTOR3(85.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(125.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(165.0f, 12.0f, 0.0f);
 	}
 	else if (m_nID == 1 && m_nNumPlayer == 1)
 	{	// 1画面 2Pの場合
-		posIcon = D3DXVECTOR3(365.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(405.0f, 38.0f, 0.0f);
-		posLogo = D3DXVECTOR3(445.0f, 32.0f, 0.0f);
+		posIcon = D3DXVECTOR3(365.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(405.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(445.0f, 12.0f, 0.0f);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 1)
 	{	// 1画面 3Pの場合
-		posIcon = D3DXVECTOR3(845.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(885.0f, 38.0f, 0.0f);
-		posLogo = D3DXVECTOR3(925.0f, 32.0f, 0.0f);
+		posIcon = D3DXVECTOR3(845.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(885.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(925.0f, 12.0f, 0.0f);
 	}
 	else if (m_nID == 3 && m_nNumPlayer == 1 || m_nID == 1 && m_nNumPlayer == 3 || m_nID == 1 && m_nNumPlayer == 4)
 	{	// 1画面 4P, 3画面 2P, 4画面 2Pの位置
-		posIcon = D3DXVECTOR3(1125.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1165.0f, 38.0f, 0.0f);
-		posLogo = D3DXVECTOR3(1205.0f, 32.0f, 0.0f);
+		posIcon = D3DXVECTOR3(1125.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1165.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(1205.0f, 12.0f, 0.0f);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 3 || m_nID == 2 && m_nNumPlayer == 4)
 	{ // 3画面 3P, 4画面 3Pの位置
-		posIcon = D3DXVECTOR3(85.0f, 435.0f, 0.0f);
-		posNumber = D3DXVECTOR3(125.0f, 396.0f, 0.0f);
-		posLogo = D3DXVECTOR3(165.0f, 390.0f, 0.0f);
+		posIcon = D3DXVECTOR3(85.0f, 425.0f, 0.0f);
+		posNumber = D3DXVECTOR3(125.0f, 386.0f, 0.0f);
+		posLogo = D3DXVECTOR3(165.0f, 380.0f, 0.0f);
 	}
 	else if  (m_nID == 3 && m_nNumPlayer == 3 || m_nID == 3 && m_nNumPlayer == 4)
 	{	//  3画面 4P, 4画面 4Pの位置
-		posIcon = D3DXVECTOR3(1125.0f, 435.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1165.0f, 396.0f, 0.0f);
-		posLogo = D3DXVECTOR3(1205.0f, 390.0f, 0.0f);
+		posIcon = D3DXVECTOR3(1125.0f, 425.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1165.0f, 386.0f, 0.0f);
+		posLogo = D3DXVECTOR3(1205.0f, 380.0f, 0.0f);
 	}
 
 	else if (m_nNumPlayer == 2 && m_nID == 0)
 	{	// 2画面 1P
-		posIcon = D3DXVECTOR3(215.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(255.0f, 38.0f, 0.0f);
-		posLogo = D3DXVECTOR3(295.0f, 32.0f, 0.0f);
+		posIcon = D3DXVECTOR3(215.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(255.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(295.0f, 12.0f, 0.0f);
 	}
 	else if (m_nID == 1 && m_nNumPlayer == 2)
 	{	// 2画面 2P
-		posIcon = D3DXVECTOR3(215.0f, 435.0f, 0.0f);
-		posNumber = D3DXVECTOR3(255.0f, 396.0f, 0.0f);
-		posLogo = D3DXVECTOR3(295.0f, 390.0f, 0.0f);
+		posIcon = D3DXVECTOR3(215.0f, 425.0f, 0.0f);
+		posNumber = D3DXVECTOR3(255.0f, 386.0f, 0.0f);
+		posLogo = D3DXVECTOR3(295.0f, 380.0f, 0.0f);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 2)
 	{	// 2画面 3P
-		posIcon = D3DXVECTOR3(985.0f, 75.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1025.0f, 38.0f, 0.0f);
-		posLogo = D3DXVECTOR3(1165.0f, 32.0f, 0.0f);
+		posIcon = D3DXVECTOR3(985.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1025.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(1165.0f, 12.0f, 0.0f);
 	}
 	
 	else if (m_nID == 3 && m_nNumPlayer == 2)
 	{	// 2画面 4P
-		posIcon = D3DXVECTOR3(985.0f, 435.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1025.0f, 396.0f, 0.0f);
-		posLogo = D3DXVECTOR3(1165.0f, 390.0f, 0.0f);
+		posIcon = D3DXVECTOR3(985.0f, 425.0f, 0.0f);
+		posNumber = D3DXVECTOR3(1025.0f, 386.0f, 0.0f);
+		posLogo = D3DXVECTOR3(1165.0f, 380.0f, 0.0f);
 	}
 	
 
@@ -476,7 +492,57 @@ void CPoint::SizeChange(void)
 		{
 			if (m_bSizeChange == true) 
 			{
-				
+				D3DXVECTOR2 size = m_apNumber[nCntPoint]->GetSize();
+				D3DXCOLOR col = m_apNumber[nCntPoint]->GetCol();
+				float fSizeChangeX = 1.5f;
+				float fSizeChangeY = 1.0f;
+				float fCol = 0.1f;
+
+				if (m_bChangeFlag == false)
+				{
+					size.x += fSizeChangeX;
+					size.y += fSizeChangeY;
+				}
+				else if (m_bChangeFlag == true)
+				{
+					size.x -= fSizeChangeX;
+					size.y -= fSizeChangeY;
+				}
+
+				if (m_bColChange == false)
+				{
+					if (m_bFlag == false)
+					{
+						col.r -= fCol;
+						if (col.r < 0.4) { col.r = 0.4f; m_bColChange = true; }
+					}
+					else if (m_bFlag == true)
+					{
+						col.b -= fCol;
+						if (col.b < 0.4) { col.b = 0.4f; m_bColChange = true; }
+					}
+				}
+				else if (m_bColChange == true)
+				{
+					if (m_bFlag == false)
+					{
+						col.r += fCol;
+						if (col.r > 1.0) { col.r = 1.0f; m_bColChange = false; }
+					}
+					else if (m_bFlag == true)
+					{
+						col.b += fCol;
+						if (col.b > 1.0) { col.b = 1.0f; m_bColChange = false; }
+					}
+				}
+
+				if (size.x > MAX_SIZE.x && size.y > MAX_SIZE.y) { m_bChangeFlag = true; }
+				else if (size.x < DEFAULT_SIZE.x && size.y < DEFAULT_SIZE.y) { m_bChangeFlag = false; m_bSizeChange = false; }
+
+				m_apNumber[nCntPoint]->SetSize(size, m_apNumber[nCntPoint]->GetPos());
+				m_apNumber[nCntPoint]->SetCol(col);
+
+				if (m_bSizeChange == false) { m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
 			}
 		}
 	}

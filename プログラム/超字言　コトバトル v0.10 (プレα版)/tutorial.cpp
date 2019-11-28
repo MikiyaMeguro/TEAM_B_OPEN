@@ -90,6 +90,11 @@ CTutorial::~CTutorial()
 //=============================================================================
 void CTutorial::Init(void)
 {
+
+	//	エフェクトのテキストの名前の読み込み
+	CEffect::LoadNameEffect();			//	エフェクトのテキスト読み込み
+	CEffect::LoadDataEffect();			//	エフェクトのデータ読み込み
+	CEffect::Load();					//	エフェクトの読み込み
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
@@ -214,12 +219,7 @@ void CTutorial::Uninit(void)
 			m_pPoint[nCntPoint] = NULL;
 		}
 	}
-
-	if (m_pWall != NULL)
-	{
-		m_pWall->Uninit();
-		m_pWall = NULL;
-	}
+	CEffect::Unload();			//	エフェクトの開放
 
 	if (m_pWordCreate != NULL)
 	{
@@ -253,10 +253,24 @@ void CTutorial::Update(void)
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
+
+	//カメラ操作（テスト）
+	CCameraManager *pCameraManager = CManager::GetCameraManager();
+	CCamera* pCam = pCameraManager->GetCamera("TOPVIEW_CAMERA");
+	if (pCam != NULL)
+	{
+		pCam->SetRotation(pCam->GetRotation() + D3DXVECTOR3(0.0f, 0.001f, 0.0f));
+	}
+
 	//任意のキーENTER
 	if (CCommand::GetCommand("PAUSE"))
 	{
 		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
+	}
+
+	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
+	{
+		CEffect::Create(D3DXVECTOR3(0.0f, 30.0f, 0.0f), 4, 4);
 	}
 #ifdef _DEBUG
 	CDebugProc::Print("c", "チュートリアル");
@@ -309,7 +323,7 @@ void CTutorial::CameraSetting(int nNumPlayer)
 				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
-			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_SPECTOR,
+			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TOPVIEW,
 				D3DXVECTOR3(100.0f, 0.0f, 0.0f), D3DXVECTOR3(-1.75f, D3DX_PI * -0.5f, 0.0f), 750.0f);
 			pCameraManager->SetCameraViewPort("TOPVIEW_CAMERA", 645, 365, 635, 355);
 			break;

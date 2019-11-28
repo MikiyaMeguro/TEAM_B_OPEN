@@ -29,6 +29,7 @@ public:
 	{
 		TYPE_FPS,		//一人称(PosV追従、PosR回転)
 		TYPE_TPS,		//三人称(PosR追従、PosV回転)
+		TYPE_TOPVIEW,	//上空カメラ
 		TYPE_SPECTOR,	//自由(固定無し,PosVとRotでPosRが決まる)
 	}CAMERA_TYPE;
 

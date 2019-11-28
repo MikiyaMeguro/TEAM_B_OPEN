@@ -142,8 +142,36 @@ void CWall::Update(void)
 		}
 		if (m_nCounter > 3750)
 		{
-			CWall::Create(D3DXVECTOR3(-200.0f, 5.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(40.0f, 400.0f, 0.0f),
+			CWall::Create(D3DXVECTOR3(-220.0f, 2.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(60.0f, 400.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 7);
+			Uninit();
+		}
+	}
+	else if (m_nType == 6)
+	{//	ì‚Ì—¬‚ê‚é
+		m_nCounter++;
+		if (m_nCounter % 10 == 0)
+		{
+			m_nAnimCounter++;
+			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
+		}
+		if (m_nCounter > 3750)
+		{
+			CWall::Create(D3DXVECTOR3(-220.0f, 2.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(60.0f, 400.0f, 0.0f),
+				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 7);
+			Uninit();
+		}
+	}
+	else if (m_nType == 7)
+	{//	ì‚Ì—¬‚ê‚é
+		m_nCounter++;
+		if (m_nCounter % 10 == 0)
+		{
+			m_nAnimCounter++;
+			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
+		}
+		if (m_nCounter > 3750*2)
+		{
 			Uninit();
 		}
 	}

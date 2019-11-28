@@ -59,6 +59,8 @@ private:
 
 	void InitPointer(void);
 	void SetPolygon(void);
+	void SetAlpha(void);
+
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	static CharaSet m_ResultChara[MAX_PLAYER];
@@ -68,6 +70,7 @@ private:
 	CScene2D *m_apScene2D[MAX_RESULT_TEX];		//演出系2Dポリゴン
 	CScene2D *m_apPlayerIcon[MAX_PLAYER];		//プレイヤーのアイコン
 	CScene2D *m_apRanking[MAX_PLAYER];			//順位
+	CScene2D *m_apPlayerNum[MAX_PLAYER];		//プレイヤー番号
 
 	bool m_bMenu;
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ

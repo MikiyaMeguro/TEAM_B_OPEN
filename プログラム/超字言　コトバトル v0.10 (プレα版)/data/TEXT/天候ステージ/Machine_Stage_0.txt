@@ -812,16 +812,7 @@ END_MODELSET
 
 MODELSET						# 柵
 	TYPE = 35
-	POS = 0.0 0.0 100.1
-	ROT = 0.0 0.0 0.0
-	SCALE = 1.5 0.55 1.0
-	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
-END_MODELSET
-
-MODELSET						# 柵
-	TYPE = 31
-	POS = 100.1 0.0 0.0
+	POS = 0.0 0.0 119.9
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.55 1.0
 	COLLISION = 1
@@ -830,7 +821,16 @@ END_MODELSET
 
 MODELSET						# 柵
 	TYPE = 31
-	POS = -100.1 0.0 0.0
+	POS = 119.9 0.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 0.55 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 柵
+	TYPE = 31
+	POS = -119.9 0.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.0 0.55 1.0
 	COLLISION = 1
@@ -874,8 +874,19 @@ MODELSET						# 地下
 	POS = 0.0 -60.1 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 19.9 3.0 19.9
-	COLLISION = 1
+	COLLISION = 12
 	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 床
+	TYPE = 36
+	POS = 0.0 -160.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 20.1 4.06 20.1
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
