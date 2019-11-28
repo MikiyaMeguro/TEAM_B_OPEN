@@ -53,7 +53,6 @@ MODEL_FILENAME = data/MODEL/StageOBJ/ori2.x"				#35 üB2
 
 MODEL_FILENAME = data/MODEL/StageOBJ/Stage1.x"				#36 è∞
 MODEL_FILENAME = data/MODEL/StageOBJ/Stage2.x"				#37 è∞
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage3.x"				#38 è∞
 
 
 
