@@ -83,14 +83,19 @@ HRESULT CResult::Init(void)
 	float fPosX = 20;	//表彰台初期位置
 	float fNext = 30;	//表彰台の間の幅
 
+
 	InitPointer();
 	SetPolygon();
 #if 0
-	m_ResultChara[0].nPoint = 0;
-	m_ResultChara[1].nPoint = 10;
+	m_ResultChara[0].nPoint = 40;
+	m_ResultChara[1].nPoint = 20;
 	m_ResultChara[2].nPoint = 20;
-	m_ResultChara[3].nPoint = 0;
+	m_ResultChara[3].nPoint = 30;
 
+	m_ResultChara[0].type = CPlayer::TYPE_BARANCE;
+	m_ResultChara[1].type = CPlayer::TYPE_POWER;
+	m_ResultChara[2].type = CPlayer::TYPE_SPEED;
+	m_ResultChara[3].type = CPlayer::TYPE_REACH;
 #endif
 	//順位決め
 	//ソート処理 大きい順
@@ -111,25 +116,28 @@ HRESULT CResult::Init(void)
 			nCntRankNum[3]++;
 			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
 				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
+			m_apPlayerNum[nCntPlayer]->SetPosition(D3DXVECTOR3(100.0f, 500.0f + (180.0f * nCntRankNum[3]), 0.0f));
 			break;
 		case 1:
 			m_ResultChara[nCntPlayer].nNumRank = 3;
 			nCntRankNum[2]++;
 			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
 				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
-
+			m_apPlayerNum[nCntPlayer]->SetPosition(D3DXVECTOR3(100.0f, 320 + (180.0f * nCntRankNum[2]), 0.0f));
 			break;
 		case 2:
 			m_ResultChara[nCntPlayer].nNumRank = 2;
 			nCntRankNum[1]++;
 			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
 				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
+			m_apPlayerNum[nCntPlayer]->SetPosition(D3DXVECTOR3(100.0f, 140.0f + (180.0f * nCntRankNum[1]), 0.0f));
 			break;
 		case 3:
 			m_ResultChara[nCntPlayer].nNumRank = 1;
-			nCntRankNum[0]++;
 			m_apPlayerNum[nCntPlayer]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCntPlayer)),
 				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCntPlayer)));
+			m_apPlayerNum[nCntPlayer]->SetPosition(D3DXVECTOR3(100.0f, 140.0f + (180.0f * nCntRankNum[0]), 0.0f));
+			nCntRankNum[0]++;
 			break;
 		default:
 			break;
@@ -138,19 +146,6 @@ HRESULT CResult::Init(void)
 		nCntWinScore = 0;
 	}
 
-	/* ソート */
-	for (int nRank = 0; nRank < 4; nRank++)
-	{
-		for (int nRankCnt = nRank + 1; nRankCnt < 4; nRankCnt++)
-		{
-			if (m_ResultChara[nRank].nNumRank >= m_ResultChara[nRankCnt].nNumRank)
-			{
-				nRepCharaSet = m_ResultChara[nRank];
-				m_ResultChara[nRank] = m_ResultChara[nRankCnt];
-				m_ResultChara[nRankCnt] = nRepCharaSet;
-			}
-		}
-	}
 #if 1
 	//メッシュフィールド生成
 	m_pMeshField = NULL;
@@ -309,6 +304,25 @@ HRESULT CResult::Init(void)
 		}
 	}
 
+
+#if 1
+	int nPlayer[2] = { 0,0 };
+	/* ソート */
+	for (int nRank = 0; nRank < 4; nRank++)
+	{
+		for (int nRankCnt = nRank + 1; nRankCnt < 4; nRankCnt++)
+		{
+			if (m_ResultChara[nRank].nNumRank > m_ResultChara[nRankCnt].nNumRank)
+			{
+				nRepCharaSet = m_ResultChara[nRank];
+				m_ResultChara[nRank] = m_ResultChara[nRankCnt];
+				m_ResultChara[nRankCnt] = nRepCharaSet;
+			}
+		}
+	}
+
+#endif
+
 	//数字のテクスチャ設定
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -317,6 +331,13 @@ HRESULT CResult::Init(void)
 											D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(int)m_ResultChara[nCntPlayer].type)));
 		m_apRanking[nCntPlayer]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*(m_ResultChara[nCntPlayer].nNumRank-1))),
 			D3DXVECTOR2(0.5f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(m_ResultChara[nCntPlayer].nNumRank - 1))));
+
+		////アイコン
+		//m_apPlayerIcon[nCntPlayer]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)* 1)),
+		//	D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)* 1 )));
+		////順位
+		//m_apRanking[nCntPlayer]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*(1))),
+		//	D3DXVECTOR2(0.5f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(1))));
 
 	}
 
@@ -542,7 +563,7 @@ void CResult::SetPolygon(void)
 
 		m_apPlayerNum[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 150.0f + (180.0f*nCnt), 0.0f), "RANK&PLNUM");
 		m_apPlayerNum[nCnt]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
-		m_apPlayerNum[nCnt]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nCnt)), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCnt)));
+		m_apPlayerNum[nCnt]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)* 3)), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nCnt)));
 
 		m_apRanking[nCnt] = CScene2D::Create(D3DXVECTOR3(100.0f, 40.0f + (180.0f*nCnt), 0.0f), "RANK&PLNUM");
 		m_apRanking[nCnt]->SetWidthHeight(DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.5f);

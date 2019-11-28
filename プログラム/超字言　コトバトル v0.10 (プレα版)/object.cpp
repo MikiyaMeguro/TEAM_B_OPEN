@@ -506,9 +506,12 @@ void CObject::KnockBack(D3DXVECTOR3 *pMove, int nID)
 //=============================================================================
 void CObject::AffectedLanding(D3DXVECTOR3 *pMove, int nID)
 {
-	float fPlayer = CGame::GetPlayer(nID)->GetRotation().y;
-	pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
-	pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		float fPlayer = CGame::GetPlayer(nID)->GetRotation().y;
+		pMove->x = sinf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
+		pMove->z = cosf(fPlayer + (D3DX_PI * 1.0f)) * (AFFECTED_LANDING);
+	}
 }
 
 //=============================================================================
