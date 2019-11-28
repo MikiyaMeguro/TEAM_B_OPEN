@@ -549,7 +549,12 @@ void CPoint::SizeChange(void)
 	{
 		if (m_apNumber[nCntPoint] != NULL)
 		{
-			if (m_bSizeChange == false) { m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
+			if (m_bSizeChange == false)
+			{ 
+				m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); 
+				m_apNumber[nCntPoint]->SetSize(DEFAULT_SIZE, m_apNumber[nCntPoint]->GetPos());
+
+			}
 		}
 	}
 }
