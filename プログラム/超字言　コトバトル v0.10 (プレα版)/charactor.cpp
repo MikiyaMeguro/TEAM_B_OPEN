@@ -1125,6 +1125,21 @@ void C3DCharactor::Homing_CPU(void)
 		//移動
 		move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 		move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+
+		if (GetThisCharactor()->GetMotion() != 6 &&
+			GetThisCharactor()->GetMotion() != 7)
+		{//今のモーションがステップでも弾打ちでもなければ
+		 //モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
+			}
+			else
+			{
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
+			}
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
+		}
 	}
 }
 
@@ -1420,6 +1435,21 @@ void C3DCharactor::WayPointMove_CPU(void)
 	move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 
+	if (GetThisCharactor()->GetMotion() != 6 &&
+		GetThisCharactor()->GetMotion() != 7)
+	{//今のモーションがステップでも弾打ちでもなければ
+	 //モーション分け
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
+		}
+		else
+		{
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
+		}
+		GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
+	}
+
 #ifdef _DEBUG
 	CDebugProc::Print("cfcfcf", "目標のマスの位置 : X ", m_MarkWayPoint.x, " Y ", m_MarkWayPoint.y, " Z ", m_MarkWayPoint.z);
 #endif
@@ -1566,6 +1596,21 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	//移動
 	move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 	move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+
+	if (GetThisCharactor()->GetMotion() != 6 &&
+		GetThisCharactor()->GetMotion() != 7)
+	{//今のモーションがステップでも弾打ちでもなければ
+	 //モーション分け
+		if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+		{
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
+		}
+		else
+		{
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
+		}
+		GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
+	}
 
 	//距離を記憶
 	m_fOldCircle = fCircle;
