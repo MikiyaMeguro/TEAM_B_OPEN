@@ -89,7 +89,7 @@ CPoint::~CPoint() {}
 HRESULT CPoint::Init(void)
 {
 	int nTexData = 0;
-	m_nTotalPoint = 0;
+	m_nTotalPoint = 20;
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 
 	PointBGCreate();		// ƒ|ƒCƒ“ƒg‚Ì”wŒi¶¬
@@ -541,9 +541,15 @@ void CPoint::SizeChange(void)
 
 				m_apNumber[nCntPoint]->SetSize(size, m_apNumber[nCntPoint]->GetPos());
 				m_apNumber[nCntPoint]->SetCol(col);
-
-				if (m_bSizeChange == false) { m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
 			}
+		}
+	}
+
+	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
+	{
+		if (m_apNumber[nCntPoint] != NULL)
+		{
+			if (m_bSizeChange == false) { m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
 		}
 	}
 }
