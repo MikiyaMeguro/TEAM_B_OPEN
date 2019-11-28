@@ -212,9 +212,9 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 						// 頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int nCntVtxX = 0; nCntVtxX < m_nMeshWidth; nCntVtxX++)
+	for (int nCntVtxY = 0; nCntVtxY <= m_nMeshHeight; nCntVtxY++)
 	{
-		for (int nCntVtxY = 0; nCntVtxY <= m_nMeshHeight; nCntVtxY++)
+		for (int nCntVtxX = 0; nCntVtxX < m_nMeshWidth; nCntVtxX++)
 		{
 			int nNum = (m_nMeshWidth * nCntVtxY) + nCntVtxX;
 
@@ -227,7 +227,7 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 
 			pVtx[nNum].tex =
 				D3DXVECTOR2((nCntVtxX * (1.0f / (float)m_nMeshWidth)),
-					(nCntVtxY * (1.0f / (float)m_nMeshHeight)));
+				(nCntVtxY * (1.0f / (float)m_nMeshHeight)));
 
 			D3DXVECTOR3 nor;
 			D3DXVec3Normalize(&nor, &pVtx[nNum].pos);
@@ -237,6 +237,7 @@ void CMeshSphere::CreateVertex(LPDIRECT3DDEVICE9 pDev)
 
 		}
 	}
+
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();

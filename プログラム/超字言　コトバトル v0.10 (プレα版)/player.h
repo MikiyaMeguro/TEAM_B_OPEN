@@ -192,7 +192,7 @@ public:
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
 
 private:
-	bool			CollisionBullet(void);			//弾との当たり判定
+	bool			CollisionDamageObj(void);			//弾との当たり判定
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
 	bool			CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新

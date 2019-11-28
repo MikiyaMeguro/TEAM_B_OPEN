@@ -378,7 +378,6 @@ void CModelBullet::Update(void)
 	C3DBullet::Update();
 	if (m_Prop == TYPE_MISSILE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
 	{//ƒ~ƒTƒCƒ‹‚È‚ç
-
 		if (m_pHomingChara != NULL)
 		{
 			Homing(m_pHomingChara->GetPosition());
