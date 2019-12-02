@@ -64,6 +64,7 @@ public:
 		MODEL_ICEFLOOR,		// 氷床
 		MODEL_FLOOR,		// 第三地形
 		MODEL_ORI2,			// 檻2
+		MODEL_BUSH,			// 草むら
 
 		MODEL_STAGEFLOOR,	// 各ステージの床
 		MODEL_STAGEFLOOR001,	// 各ステージの床
