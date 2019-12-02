@@ -38,7 +38,7 @@ public:
 	void SetPoint(int nPoint, int nNum, bool bPoint);
 	void SetAnswer(int nAnswer, int nStock);
 	void SetStockNum(int nStock) { m_nStockNum = nStock; }
-	void AllDelete(void);
+	void AllDelete(int nNum);
 	void Delete(int nID, int nStock);
 
 	bool GetFlag(void) { return m_bCreateFlag; }

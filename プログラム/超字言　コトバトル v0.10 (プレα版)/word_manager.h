@@ -38,7 +38,6 @@ public:
 	~CWordManager();
 
 	void Reset(void);	// ƒŠƒZƒbƒg
-	void Delete(void);	// íœ
 
 	// İ’è‚ÌŠÖ”
 	void SetWord(int nType);

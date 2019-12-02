@@ -33,6 +33,7 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_CollisionType = COLLISIONTYPE_NONE;
 	m_nCollsionNum = 0;
 	m_bDraw = true;
+	m_bTranslucent = false;
 	m_pParentMatrix = NULL;
 }
 
@@ -307,7 +308,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 		bHit = true;
 	}
 
-	if (m_CollisionType != COLLISIONTYPE_NONE && m_CollisionType != COLLSIONTYPE_FLOORCOLLSION)
+	if (m_CollisionType != COLLISIONTYPE_NONE && m_CollisionType != COLLSIONTYPE_FLOORCOLLSION && m_CollisionType != COLLSIONTYPE_BUSH)
 	{
 		if (pos->y <= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE &&pos->y + radius.y >= m_pos.y + ScaleVtxMax.y - SCENEX_SIZE
 			|| pos->y + radius.y >= m_pos.y + ScaleVtxMin.y &&pos->y <= m_pos.y + ScaleVtxMin.y
@@ -380,6 +381,18 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 			{// 下からブロックに当たったとき
 				pos->y = posOld->y;
 				move->y = 0.0f;  // 移動量をなくす
+				bLand = true;
+			}
+		}
+	}
+
+	if (m_CollisionType == COLLSIONTYPE_BUSH)
+	{//　草むらの判定
+		if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
+		{// zの範囲の中
+			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
+			{// X座標の中に左から入った
+				m_bTranslucent = true;
 				bLand = true;
 			}
 		}

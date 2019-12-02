@@ -126,8 +126,6 @@ void CCamera::Update(void)
 				//D3DXVec3Lerp(&m_posRdest, &m_pLockOnChara->GetCameraPosR(), &m_pHomingChara->GetCameraPosR(), 1.0f);
 				m_posRdest = m_pLockOnChara->GetCameraPosR();
 				m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
-
-
 			}
 			else
 			{
@@ -140,7 +138,6 @@ void CCamera::Update(void)
 			m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 		}
 
-
 		break;
 	case TYPE_SPECTOR:
 		break;
@@ -151,8 +148,6 @@ void CCamera::Update(void)
 		m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 		break;
 	}
-
-
 
 	//äpìxYÇÃï‚ê≥
 	CUtilityMath::RotateNormarizePI(&m_rot.y);

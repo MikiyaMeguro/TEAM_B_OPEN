@@ -195,9 +195,9 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	if (nNum == 2)
 	{
 		m_bModelTexFlag = true;
+		SetAnswer(nWordNum, nStock);
 		if (m_pAnswerModel[nStock] != NULL)
 		{
-			m_pAnswerModel[nStock]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 			if (nStock == 1 || nStock == 2)
 			{
 				m_pAnswerModel[nStock]->SetWidthHeight(StockSize.x, StockSize.y);
@@ -208,8 +208,8 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	}
 	else if (nNum < 2)
 	{
-		if (m_pAnswerModel[0] != NULL && nStock >= 1) { m_pAnswerModel[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f)); }
-		SetAnswer(nWordNum, nStock);
+		if (m_pAnswerModel[0] != NULL && nStock >= 1) { m_pAnswerModel[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
+		
 	}
 }
 
@@ -240,14 +240,15 @@ void CTube::SetAnswer(int nAnswer, int nStock)
 		m_pAnswerModel[nStock] = CScene2D::Create(m_AnswerPos, "WORD", 3);
 		m_pAnswerModel[nStock]->SetWidthHeight(AnswerSize.x, AnswerSize.y);	// サイズ設定
 		m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
+		m_pAnswerModel[nStock]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 }
 //=============================================================================
 // 全ての文字を削除
 //=============================================================================
-void CTube::AllDelete(void)
+void CTube::AllDelete(int nNum)
 {
-	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	for (int nCntWord = nNum; nCntWord < MAX_WORD; nCntWord++)
 	{
 		if (m_apWord[nCntWord] != NULL)
 		{
@@ -268,59 +269,6 @@ void CTube::AllDelete(void)
 	}
 
 	if (m_pAnswerModel[nCount] != NULL) { m_pAnswerModel[nCount]->Uninit(); m_pAnswerModel[nCount] = NULL; }
-}
-
-//=============================================================================
-// 一部の文字を削除
-//=============================================================================
-void CTube::Delete(int nID, int nStock)
-{
-	for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
-	{
-		if (m_apWord[nCntWord] != NULL&& m_apWord[nCntWord + 1] != NULL)
-		{
-			int nNum = 0;
-			if (CManager::GetMode() == CManager::MODE_GAME)
-			{
-				nNum = CGame::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// 数字を取得
-			}
-			else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-			{
-				nNum = CTutorial::GetPlayer(nID)->GetWordManager()->GetWordNum(nCntWord + 1);	// 数字を取得
-			}
-			m_apWord[nCntWord]->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
-
-			if (m_pAnswerModel[nStock] != NULL)
-			{
-				m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f + ((nNum / 5) * 0.1f), 0.0f + ((nNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nNum / 5) * 0.1f), 0.2f + ((nNum % 5) * 0.2f)));
-			}
-		}
-
-
-		else if (m_apWord[nCntWord] != NULL && m_apWord[nCntWord + 1] == NULL)
-		{
-			if (m_apWord[nCntWord] != NULL)
-			{
-				m_apWord[nCntWord]->Uninit();
-				m_apWord[nCntWord] = NULL;
-			}
-		}
-
-		if (m_apWord[0] == NULL)
-		{
-			if (m_pAnswerModel[nStock] != NULL)
-			{
-				m_pAnswerModel[nStock]->Uninit();
-				m_pAnswerModel[nStock] = NULL;
-			}
-		}
-	}
-
-	for (int nCntAnswerModel = 0; nCntAnswerModel < MAX_WORD; nCntAnswerModel++)
-	{
-		if (m_pAnswerModel[nCntAnswerModel] != NULL) { m_pAnswerModel[nCntAnswerModel]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
-		else if (m_pAnswerModel[nCntAnswerModel] == NULL) { break; }
-	}
 }
 
 //=============================================================================

@@ -39,6 +39,7 @@ public:
 		COLLSIONTYPE_BREAK,				// 当たり判定(壊れる)
 		COLLSIONTYPE_ICEFLOOR,			// 当たり判定(滑る床)
 		COLLSIONTYPE_FLOORCOLLSION,		// 当たり判定(床の箱の当たり判定)
+		COLLSIONTYPE_BUSH,				// 当たり判定(草むら)
 	}COLLISIONTYPE;
 
 	CSceneX(int nPriority = SCENEX_PRIORITY, OBJTYPE objType = OBJTYPE_SCENEX);					// コンストラクタ
@@ -104,7 +105,8 @@ private:
 	int						m_nCollsionNum;		// 当たり判定を行った場所
 
 	bool					m_bDraw;			//透明化フラグ(falseで消える)
-	D3DXMATRIX*				m_pParentMatrix;		//親マトリックス
+	bool					m_bTranslucent;		//半透明化フラグ(trueで消える)
+	D3DXMATRIX*				m_pParentMatrix;	//親マトリックス
 };
 
 #endif

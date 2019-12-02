@@ -558,11 +558,11 @@ void C3DCharactor::CharaMove_Input(void)
 		//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
 		if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//ŽžŒv‰ñ‚è
 		{
-			CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
+		//	CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
 		}
 		if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//”½ŽžŒv‰ñ‚è
 		{
-			CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
+		//	CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
 		}
 
 		//X
@@ -575,6 +575,7 @@ void C3DCharactor::CharaMove_Input(void)
 		}
 
 		//fCoefficient = CCommand::GetXPadStickRotation(false, true, nID);
+#if 0
 		if (CCommand::GetCommand("CAMERAMOVE_UP", nID))
 		{
 			if (CameraRot.x < D3DX_PI * 0.2f)
@@ -597,7 +598,7 @@ void C3DCharactor::CharaMove_Input(void)
 				CameraRot.x = -D3DX_PI * 0.2f;
 			}
 		}
-
+#endif
 #ifdef _DEBUG
 		// “ü—Íî•ñ‚ðŽæ“¾
 		CInputKeyboard *pInputKeyboard;
