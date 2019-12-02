@@ -413,7 +413,11 @@ void CPoint::UIPosition(void)
 	// キャラクターアイコンのロゴ
 	if (m_pIcon == NULL)
 	{
-		int nID = CGame::GetPlayer(m_nID)->GetPlayerType();
+		int nID = 0;
+		if (CGame::GetPlayer(m_nID) != NULL)
+		{
+			nID = CGame::GetPlayer(m_nID)->GetPlayerType();
+		}
 		m_pIcon = CScene2D::Create(posIcon, cName[nID], 6);
 		m_pIcon->SetWidthHeight(40.0f, 30.0f);
 		m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));

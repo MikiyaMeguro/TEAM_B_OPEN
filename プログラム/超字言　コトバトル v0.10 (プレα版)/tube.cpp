@@ -195,6 +195,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	if (nNum == 2)
 	{
 		m_bModelTexFlag = true;
+		SetAnswer(nWordNum, nStock);
 		if (m_pAnswerModel[nStock] != NULL)
 		{
 			if (nStock == 1 || nStock == 2)
@@ -208,7 +209,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	else if (nNum < 2)
 	{
 		if (m_pAnswerModel[0] != NULL && nStock >= 1) { m_pAnswerModel[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
-		SetAnswer(nWordNum, nStock);
+		
 	}
 }
 
@@ -245,9 +246,9 @@ void CTube::SetAnswer(int nAnswer, int nStock)
 //=============================================================================
 // ëSÇƒÇÃï∂éöÇçÌèú
 //=============================================================================
-void CTube::AllDelete(void)
+void CTube::AllDelete(int nNum)
 {
-	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	for (int nCntWord = nNum; nCntWord < MAX_WORD; nCntWord++)
 	{
 		if (m_apWord[nCntWord] != NULL)
 		{
