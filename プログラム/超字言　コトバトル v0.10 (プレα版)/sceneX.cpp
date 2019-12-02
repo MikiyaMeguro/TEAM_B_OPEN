@@ -157,8 +157,11 @@ void CSceneX::Draw(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
-	// ライトの無効化
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	if (m_ModelType != CLoad::MODEL_BUSH)
+	{
+		// ライトの無効化
+		pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	}
 
 	//頂点法線の自動正規化
 	pDevice->SetRenderState(D3DRS_NORMALIZENORMALS, TRUE);
@@ -180,6 +183,16 @@ void CSceneX::Draw(void)
 
 		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 		{
+
+			if (m_bTranslucent == true)
+			{	//頂点色のα値に値を反映する
+				pMat[nCntMat].MatD3D.Diffuse.a = 0.6f;
+			}
+			else
+			{	//頂点色のα値に値を反映する
+				pMat[nCntMat].MatD3D.Diffuse.a = 1.0f;
+			}
+
 			// マテリアルの設定
 			pDevice->SetMaterial(&pMat[nCntMat].MatD3D);
 
@@ -388,13 +401,21 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 
 	if (m_CollisionType == COLLSIONTYPE_BUSH)
 	{//　草むらの判定
-		if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
+		if (pos->z  <= m_pos.z + ScaleVtxMax.z && pos->z  >= m_pos.z + ScaleVtxMin.z)
 		{// zの範囲の中
-			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
+			if (pos->x  <= m_pos.x + ScaleVtxMax.x && pos->x > m_pos.x + ScaleVtxMin.x)
 			{// X座標の中に左から入った
 				m_bTranslucent = true;
 				bLand = true;
 			}
+			else
+			{
+				m_bTranslucent = false;
+			}
+		}
+		else
+		{
+			m_bTranslucent = false;
 		}
 	}
 

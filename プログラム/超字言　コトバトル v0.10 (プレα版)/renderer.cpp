@@ -183,63 +183,63 @@ void CRenderer::Draw(void)
 			case CManager::MODE_STAGESELECT:
 				if (pCameraManager->SetCamera("STAGESELECT_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(0);
 				}
 				break;
 			case CManager::MODE_GAME:
 				if (pCameraManager->SetCamera("1P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(1);
 				}
 				if (pCameraManager->SetCamera("2P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(2);
 				}
 				if (pCameraManager->SetCamera("3P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(3);
 				}
 				if (pCameraManager->SetCamera("4P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(4);
 				}
 				if (pCameraManager->SetCamera("TOPVIEW_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(5);
 				}
 				break;
 			case CManager::MODE_TUTORIAL:
 				if (pCameraManager->SetCamera("1P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(1);
 				}
 				if (pCameraManager->SetCamera("2P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(2);
 				}
 				if (pCameraManager->SetCamera("3P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(3);
 				}
 				if (pCameraManager->SetCamera("4P_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(4);
 				}
 				if (pCameraManager->SetCamera("TOPVIEW_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(5);
 				}
 				break;
 			case CManager::MODE_RESULT:
 				if (pCameraManager->SetCamera("RESULT_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(6);
 				}
 				break;
 			default:
 				if (pCameraManager->SetCamera("DEFAULT_CAMERA"))
 				{
-					CScene::DrawAll();
+					CScene::DrawAll(7);
 				}
 				break;
 			}
