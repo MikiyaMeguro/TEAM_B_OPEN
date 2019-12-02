@@ -72,6 +72,8 @@ public:
 	int m_nNum;
 	int m_nAnswerNumCount;			// カウント
 	bool m_bCreate;
+
+	bool m_bUninitFlag;				// ステージ変化時のフラグ
 };
 
 #endif

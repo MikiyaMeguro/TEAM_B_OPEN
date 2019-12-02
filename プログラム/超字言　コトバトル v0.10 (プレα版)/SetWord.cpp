@@ -30,6 +30,7 @@ CSetWord::CSetWord() : CScene(3, CScene::OBJTYPE_SETOBJECT)
 	m_AnswerNum = NULL;
 	m_nAnswerNumCount = 0;
 	m_nNum = 0;
+	m_bUninitFlag = false;
 }
 
 //--------------------------------------------
@@ -148,6 +149,12 @@ void CSetWord::WordCreate(void)
 //=============================================================================
 void CSetWord::WordUninit(void)
 {
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		if (CGame::GetbStageSet() == true) { m_bUninitFlag = true; }
+		else if (CGame::GetbStageSet() == false) { m_bUninitFlag = false; }
+	}
+
 	CScene *pScene = NULL;
 	int nNum = m_nNum;
 
@@ -161,13 +168,18 @@ void CSetWord::WordUninit(void)
 		if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_WORD)
 		{// 死亡フラグが立っていないもの
 			CWord *pWord = ((CWord*)pScene);		// CBulletBaseへキャスト(型の変更)
-			if (pWord->GetUninitFlag() == true)
+			if (pWord->GetUninitFlag() == true && m_bUninitFlag == false)
 			{
 				nNum = pWord->GetNum();		// 番号を取得
 				if (nNum < m_nNum)
 				{
 					m_pWordPos[nNum].bUse = false;
 				}
+				pWord->Uninit();
+				pWord = NULL;
+			}
+			else if (m_bUninitFlag == true)
+			{
 				pWord->Uninit();
 				pWord = NULL;
 			}
