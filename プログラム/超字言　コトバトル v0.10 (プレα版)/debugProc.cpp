@@ -99,7 +99,7 @@ void CDebugProc::Print(char *fmt, ...)
 			break;
 
 		case 'f':	// float型
-			m_strDebug += std::_Floating_to_string("%.1f", va_arg(ap, double));//引き出した数字をstring型に変換して入れる
+			m_strDebug += std::_Floating_to_string("%.4f", va_arg(ap, double));//引き出した数字をstring型に変換して入れる
 			m_strDebug += " ";	//数値の間は1マス開ける
 			break;
 		}

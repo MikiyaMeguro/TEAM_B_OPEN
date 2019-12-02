@@ -155,12 +155,36 @@ public:
 };
 
 //=============================================================================
-//	クラス定義(CUtilityMath)
+//	クラス定義(CEasingFunc)
+//	概要　時間X(0.0f～1.0f)を与えられた時の変化量Y(0.0f～1.0f)を求める
 //=============================================================================
-class CUtilityMath
+class CEasingFunc final
 {
 public:
-	//ワールドマトリックス計算クラス
+	enum EASE_TYPE
+	{
+		EASE_LINIAR,			//線形
+		EASE_IN_QUAD,			//二次関数(IN)
+		EASE_OUT_QUAD,			//二次関数(OUT)
+		EASE_INOUT_QUAD,		//二次関数(IN&OUT)
+		EASE_IN_CUBIC,			//三次関数(IN)
+		EASE_OUT_CUBIC,			//三次関数(OUT)
+		EASE_INOUT_CUBIC,		//三次関数(IN&OUT)
+	};
+
+	static float Easing(EASE_TYPE type,float& fTime);
+
+private:
+	CEasingFunc();
+	~CEasingFunc();
+};
+
+//=============================================================================
+//	クラス定義(CUtilityMath)
+//=============================================================================
+class CUtilityMath final
+{
+public:
 	static D3DXMATRIX* CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f),D3DXMATRIX* pViewMtx = NULL);
 
 	static float RotateNormarizePI(float* value);
@@ -172,5 +196,6 @@ public:
 	static float RoundF_n(float& fValue,const int nRound);
 private:
 	CUtilityMath();
+	~CUtilityMath() {};
 };
 #endif // !_UTILITY_MATH_H_

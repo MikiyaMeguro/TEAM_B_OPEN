@@ -137,6 +137,78 @@ float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 
 //=============================================================================
 //
+// イージングクラス [UtilityMath.cpp](CEasingFunc)
+// Author : Kodama Yuto
+//
+//=============================================================================
+//=============================================================================
+//	イージング関数
+//=============================================================================
+float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
+{
+	float fResult = 0.0f;
+
+	if (fTime > 1.0f)
+	{
+		fTime = 1.0f;
+	}
+	else if (fTime < 0.0f)
+	{
+		fTime = 0.0f;
+	}
+
+	float Time = fTime;
+	//タイプごとに処理を分ける
+	switch (type)
+	{
+	case EASE_LINIAR:
+		fResult = Time;
+		break;
+	case EASE_IN_QUAD:
+		fResult = Time * Time;
+		break;
+	case EASE_OUT_QUAD:
+		fResult = -1.0f*Time*(Time - 2.0f);
+		break;
+	case EASE_INOUT_QUAD:
+		Time /= 0.5f;
+		if (Time < 1.0f)
+		{
+			fResult = Time * Time * 0.5f;
+		}
+		else
+		{
+			Time = Time - 1.0f;
+			fResult = -0.5f * (Time*(Time - 2) - 1);
+		}
+		break;
+	case EASE_IN_CUBIC:
+		fResult = Time * Time * Time;
+		break;
+	case EASE_OUT_CUBIC:
+		Time = Time - 1.0f;
+		fResult = (Time*Time*Time + 1);
+		break;
+	case EASE_INOUT_CUBIC:
+		Time /= 0.5f;
+		if (Time < 1.0f)
+		{
+			fResult = 0.5f*Time*Time*Time;
+		}
+		else
+		{
+			Time = Time - 2;
+			fResult = 0.5f * (Time*Time*Time + 2);
+		}
+
+		break;
+	}
+
+	return fResult;
+}
+
+//=============================================================================
+//
 // ３次元ベクトルクラス [UtilityMath.cpp](VECTOR_3D)
 // Author : Kodama Yuto
 //
