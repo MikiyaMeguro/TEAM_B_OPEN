@@ -18,7 +18,7 @@ class CScene2D;
 class CPlayer;
 class CFade;
 class CManager;
-
+class CCharaSelCursol;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -37,6 +37,26 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CCharaSelect *Create(void);
+
+	/* 選ばれてるかの状態 */
+	typedef enum
+	{
+		SELECTSTATE_NONE = 0,
+		SELECTSTATE_FLASH,
+		SELECTSTATE_SELECT,
+		SELECTSTATE_NOSELECT
+	}SELECT_STATE;
+
+	bool GetCardPro(void) { return m_bCharaCard; }															//カードの演出のフラグ
+	bool GetConf(void) { return m_bConf; }																	//確定のフラグ
+	bool collision(int operation, CPlayer::PLAYER_TYPE type);												//あたり判定
+	void SelectProduction(int nNum, SELECT_STATE &Sel, SELECT_STATE &Selold, CPlayer::PLAYER_TYPE type);	//演出処理
+	void CharaSelTex(int nNum, SELECT_STATE Sel, CPlayer::PLAYER_TYPE &type);								//テクスチャ座標管理
+	void DecisionCharactor(CFade *pFade, CManager *pManager, int operation);								//遷移前の設定
+	bool collisionBackMode(int operation);																	//モード戻ポリゴンとあたり判定
+	void SetBackModeTex(bool Set);																			//戻るポリゴンの座標設定
+	void SetPlayerWindowChara(int operation, CPlayer::PLAYER_TYPE type);									//カーソルが当たっている場所でウィンドウにキャラを出す
+	void SetWindowCharaDraw(int nNum, bool bDraw);
 
 private:
 	/* ポリゴンの種類 */
@@ -57,16 +77,6 @@ private:
 		CHARASEL_POLYGONTYPE_MAX			//最大数
 
 	}CHARASEL_POLYGONTYPE;
-
-	/* 選ばれてるかの状態 */
-	typedef enum
-	{
-		SELECTSTATE_NONE = 0,
-		SELECTSTATE_FLASH,
-		SELECTSTATE_SELECT,
-		SELECTSTATE_NOSELECT
-	}SELECT_STATE;
-
 	/* 確定の演出 */
 	typedef enum
 	{
@@ -93,42 +103,26 @@ private:
 
 	void Initpointer(void);																						//ポインタの初期化
 	void ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed);												//テクスチャスクロール処理
-	void SelectProduction(int nNum,SELECT_STATE &Sel, SELECT_STATE &Selold, CPlayer::PLAYER_TYPE type);			//演出処理
 	void InitCharaSelectPoly(void);																				//ポインタの初期化
-	bool collision(int operation,CPlayer::PLAYER_TYPE type);													//あたり判定
-	D3DXVECTOR3 MoveRestriction(D3DXVECTOR3 pos);																//移動制限
-	void SetCommand(void);																						//コマンド設定
-	void CharaSelTex(int nNum, SELECT_STATE Sel, CPlayer::PLAYER_TYPE &type, CPlayer::PLAYER_TYPE &typeOld);	//テクスチャ座標管理
 	bool ConfirmationSelect(void);																				//プレイヤーが全員選択したか確認する												
 	bool collisionConf(int operation);																			//確定ポリとあたり判定
 	bool ProductionConf(void);																					//確定ポリの演出
 	void FlashConf(void);																						//確定ポリの点滅
 	void ProductionCard(void);																					//キャラ選択カード演出処理
-	void DecisionCharactor(CFade *pFade, CManager *pManager, int operation);									//遷移前の設定
-	void Move(CFade *pFade, CManager *pManager, int nControllNum);												//移動/選択処理
-	bool collisionBackMode(int operation);																		//モード戻ポリゴンとあたり判定
-	void PressGauge(CFade *pFade, CManager *pManager, int operation);											//戻るボタン押してる時のゲージ
 
-	static CScene2D *m_apScene2D[MAX_CHARASELTEX];		//背景系のポインタ
-	static CScene2D *m_apSelect2D[MAX_CHARASELECT];		//選択肢
-	static CScene2D *m_apCursor2D[MAX_PLAYER];			//カーソル
-	static CScene2D *m_apBadge2D[MAX_PLAYER];			//バッジ
-	static CScene2D *m_apConfirm2D;						//確定
-	static CScene2D *m_apGauge2D[MAX_PLAYER];			//戻る時のゲージ
+	static CScene2D *m_apScene2D[MAX_CHARASELTEX];	//背景系のポインタ
+	static CScene2D *m_apSelect2D[MAX_CHARASELECT];	//選択肢
+	static CScene2D *m_apConfirm2D;					//確定
+	static CCharaSelCursol *m_apCursol[MAX_PLAYER];	//カーソル
 	CPlayer::PLAYER_TYPE m_CharaType[MAX_PLAYER];		//選ばれたキャラの種類
-	CPlayer::PLAYER_TYPE m_CharaTypeOld[MAX_PLAYER];	//前回選ばれたキャラの種類
-	CPlayer::PLAYER_TYPE m_CharaTypeFinal[MAX_PLAYER];	//最終的に選ばれたキャラの種類
-	D3DXVECTOR3 m_move[MAX_PLAYER];						//移動量
-	bool m_bPCSelMove[MAX_PLAYER];						//選ばれていない時のみ移動できる
 
 	/* 演出系変数 */
 	int m_nCntScrool, m_CntFlash, m_CntFadeF;						//スクロールのカウンター/確定時のフラッシュ/遷移までの秒数カウンター
 	float m_fFlashAlpha[MAX_PLAYER];								//演出の透明値管理
-	bool m_bConfProFinish, m_bConfProStart,m_bConf,m_bCharaCard;	//演出が終わったか
+	bool m_bConfProFinish, m_bConfProStart,m_bConf;					//演出が終わったか
+	static bool m_bCharaCard;
 	bool m_bCnfFlash;												//確認ポリのフラシュ開始
 	float m_moveConfPro;											//確定ポリの移動
-	SELECT_STATE m_SelectState[MAX_PLAYER];							//演出の状態
-	SELECT_STATE m_SelectStateold[MAX_PLAYER];						//前回の演出状態を記録
 	CPlayerSelect::SELECTPLAYER *m_PlayerNum;						//プレイヤーの人数
 	CONFPRODUCTION_STATE m_CnfProState;								//確定の演出状態
 	CHARACARDPRO_STATE m_CharaCardProduction;						//キャラ選択カードの演出の状態
@@ -137,7 +131,8 @@ private:
 	float m_fCharaCardPro_FinishWH[2];								//選択カードの最終幅と高さ
 	float m_fGaugeSizeX[MAX_PLAYER];								//戻るゲージの長さを保管
 	float m_fMaxGaugeX[MAX_PLAYER];									//ゲージの最大の長さ
-	int m_nCntGauge[MAX_PLAYER];									//ゲージ長押し時間を管理
 	bool m_bBackMode[MAX_PLAYER];									//戻るモードのあたり判定のフラグ
+	int m_nId = 0;				//ID
+
 };
 #endif
