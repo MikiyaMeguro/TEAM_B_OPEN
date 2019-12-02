@@ -558,11 +558,11 @@ void C3DCharactor::CharaMove_Input(void)
 		//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
 		if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//ŽžŒv‰ñ‚è
 		{
-			CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
+		//	CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
 		}
 		if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//”½ŽžŒv‰ñ‚è
 		{
-			CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
+		//	CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
 		}
 
 		//X
