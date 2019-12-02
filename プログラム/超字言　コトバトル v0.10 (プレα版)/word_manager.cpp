@@ -423,7 +423,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 	{
 		if (CGame::GetPlayer(nID) != NULL)
 		{//指定したプレイヤーが存在していれば
-			if (/*m_bPress == true && m_nCntStock >= 0 ||*/ m_nCntStock > 0)
+			if (m_nCntStock > 0)
 			{
 				if (m_nStock[0] < m_nAnswerDataNum)
 				{	// 指定した文字なら弾を生成する
@@ -493,7 +493,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 	{
 		if (CTutorial::GetPlayer(nID) != NULL)
 		{//指定したプレイヤーが存在していれば
-			if (m_bPress == true && m_nCntStock >= 0)
+			if (m_nCntStock > 0)
 			{
 				if (m_nStock[0] < m_nAnswerDataNum)
 				{	// 指定した文字なら弾を生成する
