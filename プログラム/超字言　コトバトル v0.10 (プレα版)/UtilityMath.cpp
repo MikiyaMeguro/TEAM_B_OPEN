@@ -10,7 +10,7 @@
 //=============================================================================
 //	ワールドマトリックス計算関数
 //=============================================================================
-void CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
+D3DXMATRIX* CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
 	const D3DXMATRIX* parent,const D3DXVECTOR3& scale, D3DXMATRIX* pViewMtx)
 {
 	D3DXMATRIX mtxRot, mtxTrans, mtxScale,mtxInv, mtxParent;				// 計算用マトリックス
@@ -52,18 +52,20 @@ void CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, cons
 	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(pOut, pOut, &mtxTrans);
 
+
 	if (parent != NULL)
 	{
 		//親のマトリックスを掛け合わせる
 		D3DXMatrixMultiply(pOut,pOut,parent);
 	}
 
+	return pOut;
 }
 
 //=============================================================================
 //	角度補正関数
 //=============================================================================
-void CUtilityMath::RotateNormarizePI(float* value)
+float CUtilityMath::RotateNormarizePI(float* value)
 {//float
 	if (*value > D3DX_PI)
 	{
@@ -73,13 +75,25 @@ void CUtilityMath::RotateNormarizePI(float* value)
 	{
 		*value += D3DX_PI * 2.0f;
 	}
+
+	return *value;
 }
-void CUtilityMath::RotateNormarizePI(D3DXVECTOR3* RotateValue)
+D3DXVECTOR3 CUtilityMath::RotateNormarizePI(D3DXVECTOR3* RotateValue)
 {//D3DXVECTOR3(float３回)
 
 	RotateNormarizePI(&RotateValue->x);
 	RotateNormarizePI(&RotateValue->y);
 	RotateNormarizePI(&RotateValue->z);
+
+	return *RotateValue;
+}
+
+//=============================================================================
+//	float型の線形補完関数
+//=============================================================================
+float CUtilityMath::FloatLeap(const float& fromValue, const float& toValue, const float fTime)
+{
+	return (1.0f - fTime) * fromValue + fTime * toValue;
 }
 
 //=============================================================================
@@ -90,7 +104,7 @@ float CUtilityMath::Mapping(const float& value, const float& fromSource, const f
 	float fResult = (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
 
 	if (bClamp == true)
-	{
+	{//クランプ
 		if (fResult > toTarget) { fResult = toTarget; }
 		else if (fResult < fromTarget) { fResult = fromTarget; }
 	}
@@ -112,26 +126,13 @@ D3DXVECTOR3 CUtilityMath::MoveCoeffient(D3DXVECTOR3& value, const float& coeffie
 //=============================================================================
 //	任意の桁数でfloatを四捨五入する関数
 //=============================================================================
-float CUtilityMath::Round_n(float& fValue, const int nRound)
+float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 {
 	fValue *= powf(10.0f,(float)(nRound - 1));	//四捨五入したい値を10の(n-1)乗倍する。
 	fValue = round(fValue);						//小数点以下を四捨五入する。
 	fValue /= pow(10.0f, (float)(nRound - 1));  //10の(n-1)乗で割る。
 
 	return fValue;
-}
-
-//=============================================================================
-//	クォータニオンをオイラー角(３次元ベクトル)に変換する関数(作成途中)
-//=============================================================================
-D3DXVECTOR3 CUtilityMath::EulerToQuaternion(const D3DXQUATERNION& quat)
-{
-	//MessageBox(hWnd, "EulerToQuaternionはまだ中身が作成されていません", "警告！", MB_ICONWARNING);
-
-	D3DXMATRIX mtxRot;
-	D3DXMatrixRotationQuaternion(&mtxRot,&quat);
-
-	return D3DXVECTOR3(0.0f,0.0f,0.0f);
 }
 
 //=============================================================================

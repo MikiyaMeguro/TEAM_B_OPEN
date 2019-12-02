@@ -15,7 +15,7 @@
 //=============================================================================
 //	マクロ定義
 //=============================================================================
-
+#define DIFFUSE_ALPHA_FLAME (30)		//m_fDiffuseAlphaを遷移させるまでの時間
 
 //=============================================================================
 //	クラス定義
@@ -48,6 +48,8 @@ public:
 	bool GetDrawFlag(void) { return m_bDrawFlag; };
 
 	void BindTexture(LPCSTR Tag);
+
+	void SetAlpha(float& fAlpha);
 private:
 	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -60,7 +62,12 @@ private:
 	D3DXVECTOR3 m_Rot;		//角度(親から見た相対角度)
 	D3DXMATRIX* m_pParent;	//親マトリックス
 
+	float m_fDiffuseAlpha;	//頂点色のα値
+	float m_fDestAlpha;		//m_fDiffuseAlphaを滑らかに遷移させるための目標値
+
 	D3DXVECTOR3 m_WorldPosition;	//ワールド座標での位置(m_mtxWorldから取り出す)
 	bool m_bDrawFlag;				//描画するかのフラグ
+
+	int m_nCount;
 };
 #endif // !_CHARA_PARTS_H_

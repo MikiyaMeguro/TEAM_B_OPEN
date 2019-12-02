@@ -13,7 +13,7 @@
 
 #include "main.h"
 
-#define _PI (3.141592f)
+#define _PI ((FLOAT)3.1415926535f)
 //=============================================================================
 //	クラス定義(VECTOR_3D)	独自の３次元ベクトルクラス
 //=============================================================================
@@ -127,7 +127,7 @@ public:
 		return *this;
 	}
 
-	//比較(可読性のために三項演算子を使う)
+	//比較(コード短縮のために三項演算子を使う)
 	bool operator == (const VECTOR_3D& vec)
 	{// ==
 		return (this->X == vec.X && this->Y == vec.Y && this->Z == vec.Z) ? true : false;
@@ -161,17 +161,15 @@ class CUtilityMath
 {
 public:
 	//ワールドマトリックス計算クラス
-	static void CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f),D3DXMATRIX* pViewMtx = NULL);
+	static D3DXMATRIX* CalWorldMatrix(D3DXMATRIX* pOut,const D3DXVECTOR3& pos, const D3DXVECTOR3& rot, const D3DXMATRIX* parent = NULL, const D3DXVECTOR3& scale = D3DXVECTOR3(1.0f,1.0f,1.0f),D3DXMATRIX* pViewMtx = NULL);
 
-	static void RotateNormarizePI(float* value);
-	static void RotateNormarizePI(D3DXVECTOR3* RotateValue);
+	static float RotateNormarizePI(float* value);
+	static D3DXVECTOR3 RotateNormarizePI(D3DXVECTOR3* RotateValue);
+	static float FloatLeap(const float& fromValue,const float& toValue,const float fTime);
 
 	static float Mapping(const float& value, const float& fromSource, const float& toSource, const float& fromTarget, const float& toTarget, bool bClamp = false);
 	static D3DXVECTOR3 MoveCoeffient(D3DXVECTOR3& value,const float& coeffient);
-	static float Round_n(float& fValue,const int nRound);
-	//未実装
-	static D3DXVECTOR3 EulerToQuaternion(const D3DXQUATERNION& quat);
-
+	static float RoundF_n(float& fValue,const int nRound);
 private:
 	CUtilityMath();
 };

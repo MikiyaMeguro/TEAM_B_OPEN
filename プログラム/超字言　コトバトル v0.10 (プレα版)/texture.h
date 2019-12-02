@@ -10,8 +10,10 @@
 //	  既にあるテクスチャをそのまま渡す
 //	・テクスチャは外部ファイルで変更できるIDとタグで管理され、
 //	　使用者はIDもしくはタグを引数に入れることで必要なテクスチャを取得する
+//	・new/deleteと派生を禁止するため、コンストラクタとデストラクタをprivate化し、
+//	　クラス定義の末尾にfinalを付けた(消さないこと!!)
 //
-//	注、使用するときはmain.hに<stdio.h>と警告解除文を入れること!!
+//	注::使用するときはmain.hに<stdio.h>と警告解除文を入れること!!
 //
 //=============================================================================
 #ifndef _TEXTURE_H_
@@ -19,7 +21,7 @@
 
 #include "main.h"
 
-class CTexture
+class CTexture final	//final = 継承を禁止する構文
 {
 public:
 	//テクスチャデータの構造体
@@ -29,6 +31,7 @@ public:
 		char TexAddress[256];				//テクスチャのアドレス
 		char TexNameTag[256];				//テクスチャの略称
 		LPDIRECT3DTEXTURE9 pTexture;		//テクスチャのポインタ
+
 
 		//std::findで検索するときに使う比較関数
 		bool operator == (const int ID)
@@ -59,7 +62,8 @@ public:
 	//テクスチャ数
 	static int GetTexNum(bool bCreate);
 private:
-	//コンストラクタ&デストラクタ
+
+	//コンストラクタ&デストラクタ (new/deleteを禁止するためにprivateに入れる)
 	CTexture() {};
 	~CTexture() {};
 
