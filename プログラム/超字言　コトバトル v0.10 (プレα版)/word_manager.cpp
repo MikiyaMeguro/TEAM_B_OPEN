@@ -48,7 +48,7 @@ CWordManager::CWordManager()
 {
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{	// 管理の中身を初期化
-		m_aWord[nCntWord].nNum = NOT_NUM;
+		m_aWord[nCntWord].nNum = EMPTINESS_NUM;
 		m_aWord[nCntWord].cWord = "NULL";
 		m_aWord[nCntWord].bClearFlag = false;
 
@@ -408,56 +408,10 @@ void CWordManager::Reset(void)
 }
 
 //=============================================================================
-// 文字の削除
-//=============================================================================
-void CWordManager::Delete(void)
-{
-	//if (CManager::GetInputKeyboard()->GetTrigger(DIK_LCONTROL))
-
-	if (m_nCntNum > 0)
-	{
-		if (m_nCntNum < 3)
-		{	// 3つ以下の場合
-			{
-				m_nCntNum--;
-				if (CManager::GetMode() == CManager::MODE_GAME)
-				{
-					if (CGame::GetTube(m_nPlayerID) != NULL)
-					{	// 文字保管がNULLじゃない場合
-						CGame::GetTube(m_nPlayerID)->Delete(m_nPlayerID, m_nCntStock);
-					}
-				}
-				else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-				{
-					if (CTutorial::GetTube(m_nPlayerID) != NULL)
-					{	// 文字保管がNULLじゃない場合
-						CTutorial::GetTube(m_nPlayerID)->Delete(m_nPlayerID, m_nCntStock);
-					}
-				}
-				m_aWord[0].nNum = NOT_NUM;	// 空の状態に
-				for (int nCntWord = 0; nCntWord < MAX_WORD - 1; nCntWord++)
-				{
-					m_aWord[nCntWord].nNum = m_aWord[nCntWord + 1].nNum;
-					WordDebug(nCntWord);
-				}
-			}
-		}
-	}
-
-	if (m_nCntNum == 0 && m_nStock[0] < m_nAnswerDataNum || m_nCntNum == 0 && m_nStock[0] == NOT_NUM)
-	{
-		m_bGatherFlag = false;
-		m_bAnswerCheck = true;
-		m_bPress = true;
-	}
-	else { m_bPress = false;  m_bGatherFlag = false; }
-}
-//=============================================================================
 // 弾の生成  Editor : Kodama Yuto
 //=============================================================================
 void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot, C3DCharactor* pChara)
 {
-
 	CSound *pSound = CManager::GetSound();		//	音の取得
 
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
@@ -465,7 +419,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 	{
 		if (CGame::GetPlayer(nID) != NULL)
 		{//指定したプレイヤーが存在していれば
-			if (m_bPress == true && m_nCntStock >= 0)
+			if (m_bPress == true && m_nCntStock >= 0 || m_nCntStock > 0)
 			{
 				if (m_nStock[0] < m_nAnswerDataNum)
 				{	// 指定した文字なら弾を生成する
@@ -527,21 +481,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (CGame::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CGame::GetTube(m_nPlayerID)->AllDelete();
-				}
-			}
-			else if (m_bPress == false)
-			{	// それ以外の場合
-				if (m_nCntNum > 0)
-				{
-					CWordBullet* pWord = CWordBullet::Create();
-
-					if (pWord != NULL)
-					{
-						pWord->Set(BulletMuzzle, BulletRot, 5.0f, 100, GetWordNum(0), nID);
-					}
-
-					Delete();		// 文字を一部削除
-
 				}
 			}
 		}
@@ -611,21 +550,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (CTutorial::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CTutorial::GetTube(m_nPlayerID)->AllDelete();
-				}
-			}
-			else if (m_bPress == false)
-			{	// それ以外の場合
-				if (m_nCntNum > 0)
-				{
-					CWordBullet* pWord = CWordBullet::Create();
-
-					if (pWord != NULL)
-					{
-						pWord->Set(BulletMuzzle, BulletRot, 5.0f, 100, GetWordNum(0), nID);
-					}
-
-					Delete();		// 文字を一部削除
-
 				}
 			}
 		}

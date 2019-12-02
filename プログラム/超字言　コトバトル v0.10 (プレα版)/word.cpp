@@ -306,10 +306,14 @@ void CWord::Update(void)
 			}
 		}
 
-		if (((CTime::GetStageTime() % STAGE_REST_TIME) == 0) && CManager::GetGame()->GetChangeNum() < 2)
+
+		if (CManager::GetMode() == CManager::MODE_GAME)
 		{
-			Uninit();
-			return;
+			if (((CTime::GetStageTime() % STAGE_REST_TIME) == 0) && CManager::GetGame()->GetChangeNum() < 2)
+			{
+				Uninit();
+				return;
+			}
 		}
 	}
 	if (m_nLostType == 1)
