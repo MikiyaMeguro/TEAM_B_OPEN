@@ -15,7 +15,7 @@
 //=============================================================================
 //	マクロ定義
 //=============================================================================
-#define DIFFUSE_ALPHA_FLAME (30)		//m_fDiffuseAlphaを遷移させるまでの時間
+#define DIFFUSE_ALPHA_FLAME (300)		//m_fDiffuseAlphaを遷移させるまでの時間
 
 //=============================================================================
 //	クラス定義
@@ -50,6 +50,7 @@ public:
 	void BindTexture(LPCSTR Tag);
 
 	void SetAlpha(float& fAlpha);
+	float GetAlpha(void) { return m_fDiffuseAlpha; };
 private:
 	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -64,6 +65,7 @@ private:
 
 	float m_fDiffuseAlpha;	//頂点色のα値
 	float m_fDestAlpha;		//m_fDiffuseAlphaを滑らかに遷移させるための目標値
+	float m_fOldAlpha;		//遷移させるために保持する過去の値
 
 	D3DXVECTOR3 m_WorldPosition;	//ワールド座標での位置(m_mtxWorldから取り出す)
 	bool m_bDrawFlag;				//描画するかのフラグ

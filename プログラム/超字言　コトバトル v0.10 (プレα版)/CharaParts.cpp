@@ -60,7 +60,9 @@ HRESULT CCharaParts::Init(void)
 	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_WorldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_bDrawFlag = true;
+
 	m_fDiffuseAlpha = 0.1f;
+	m_fOldAlpha = 0.1f;
 	m_fDestAlpha = 1.0f;
 	m_nCount = 0;
 	return S_OK;
@@ -92,10 +94,17 @@ void CCharaParts::Update(void)
 {
 	if (m_nCount < DIFFUSE_ALPHA_FLAME)
 	{
-		m_fDiffuseAlpha = CUtilityMath::FloatLeap(m_fDiffuseAlpha,m_fDestAlpha, (float)(m_nCount + 1) / (float)DIFFUSE_ALPHA_FLAME);
+		float fTime = (float)(m_nCount + 1) / (float)DIFFUSE_ALPHA_FLAME;
+		float fEasing = CEasingFunc::Easing(CEasingFunc::EASE_INOUT_CUBIC, fTime);
+		m_fDiffuseAlpha = CUtilityMath::FloatLeap(m_fOldAlpha,m_fDestAlpha, fEasing);
+		m_nCount++;
+	}
+	else
+	{
+		m_fDiffuseAlpha = m_fDestAlpha;
+		m_fOldAlpha = m_fDestAlpha;
 	}
 
-	m_nCount++;
 }
 
 //=============================================================================
@@ -163,6 +172,7 @@ void CCharaParts::BindTexture(LPCSTR Tag)
 //=============================================================================
 void CCharaParts::SetAlpha(float& fAlpha)
 {
+	m_fOldAlpha = m_fDiffuseAlpha;
 	if (fAlpha < 0.0f)
 	{
 		fAlpha = 0.0f;
