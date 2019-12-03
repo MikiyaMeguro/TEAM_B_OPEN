@@ -160,6 +160,9 @@
     <ClCompile Include="avoidui.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="CharaSelect_Cursol.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -319,6 +322,9 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="avoidui.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CharaSelect_Cursol.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

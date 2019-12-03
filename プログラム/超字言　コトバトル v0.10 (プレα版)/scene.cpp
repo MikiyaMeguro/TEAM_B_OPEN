@@ -218,7 +218,7 @@ void CScene::UpdeteAll(void)
 //=============================================================================
 // 全てのオブジェクトの描画処理
 //=============================================================================
-void CScene::DrawAll(void)
+void CScene::DrawAll(int nCamera)
 {
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す

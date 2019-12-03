@@ -73,7 +73,7 @@ public:
 
 	static void ReleseAll(void);								// 全てのオブジェクトの解放
 	static void UpdeteAll(void);								// 全てのオブジェクトの更新
-	static void DrawAll(void);									// 全てのオブジェクトの描画
+	static void DrawAll(int nCamera);									// 全てのオブジェクトの描画
 	static CScene *GetTop(int nPriority);						// 先頭のオブジェクトを取得
 	CScene *GetNext(void);										// 次のオブジェクトのポインタを取得
 	bool GetDeath(void);										// 死亡フラグを取得

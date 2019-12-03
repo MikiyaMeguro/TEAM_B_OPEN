@@ -28,7 +28,7 @@ class CStageSelect;
 #define MAX_TUTORIAL			(3)
 #define CAMERA_LENGTH_1P_PLAY (250.0f)				//カメラの距離(1pプレイ用)
 #define CAMERA_LENGTH_2P_PLAY (250.0f)				//カメラの距離(2pプレイ用)
-#define CAMERA_LENGTH_3P4P_PLAY (250.0f)			//カメラの距離(3p4pプレイ用)
+#define CAMERA_LENGTH_3P4P_PLAY (200.0f)			//カメラの距離(3p4pプレイ用)
 #define CAMERA_LENGTH_TOPVIEW_PLAY (650.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
 #define CAMERA_ROTX (-1.57f)		//カメラのデフォルト角度(X)
@@ -37,7 +37,7 @@ class CStageSelect;
 #define PLAYER_INITPOSZ (200.0f)
 
 #define MAX_PLAYER (4)
-#define MAX_STAGE	(3)			// ステージの最大数
+#define MAX_STAGE	(2)			// ステージの最大数
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
 
 class CTutorial

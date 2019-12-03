@@ -322,7 +322,7 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
-					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot, Homing);
+					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot,m_PlayerType,Homing);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;
@@ -498,6 +498,11 @@ void CPlayer::Draw(void)
 			}
 		}
 	}
+
+	if (m_pPlayerParts[0][0] != NULL)
+	{
+		CDebugProc::Print("cf","ALPHA = ", m_pPlayerParts[0][0]->GetAlpha());
+	}
 	// ライトを元に戻る
 	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
@@ -670,6 +675,23 @@ void	CPlayer::SetMotion(int motion, BODY body,MOTION_STATE state)
 }
 
 //=============================================================================
+// キャラの透明度設定処理
+//=============================================================================
+void CPlayer::SetPartsAlpha(float fAlpha)
+{
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
+	{
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+			{
+				m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha);
+			}
+		}
+	}
+}
+
+//=============================================================================
 // 当たり判定(弾)処理
 //=============================================================================
 bool CPlayer::CollisionDamageObj(void)
@@ -813,7 +835,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
 				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
 				{
-					m_bLand = pSceneX->Collision(pos, posOld, move, radius);
+					m_bLand = pSceneX->Collision(pos, posOld, move, radius, m_nID);
 
 					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
 					if (m_bLand == true)
@@ -836,10 +858,25 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							{//	スイッチ
 								pSceneObj->SwitchBeltConveyor(m_bLand);
 							}
+
 						}
 						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
 						{
 							pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
+						}
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
+						{
+							for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
+							{
+								for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+								{
+									if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+									{
+										float fAlpha = 0.5f;
+										m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha);
+									}
+								}
+							}
 						}
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
 						{
@@ -848,6 +885,17 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					}
 					else
 					{
+						float fAlpha = 1.0f;
+						for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
+						{
+							for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+							{
+								if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+								{
+									m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha);
+								}
+							}
+						}
 						bHit = false;
 					}
 				}

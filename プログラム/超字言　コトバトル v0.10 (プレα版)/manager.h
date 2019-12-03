@@ -14,6 +14,7 @@
 #include "texture.h"
 #include "Command.h"
 #include "UtilityMath.h"
+
 //=============================================================================
 // 前方宣言
 //=============================================================================
@@ -36,6 +37,10 @@ class CTutorial;
 class CCharaSelect;
 class CStageSelect;
 class CCameraManager;
+
+class CPlayer;
+class CTube;
+class CSetWord;
 //=============================================================================
 // マクロ
 //=============================================================================
@@ -114,6 +119,12 @@ public:
 	static CSound *GetSound(void) { return m_pSound[0]; }			// サウンド取得
 
 	static CCameraManager* GetCameraManager(void) { return m_pCameraManager; };
+
+
+	//複数のモードが持っている値を取得
+	static CPlayer* GetPlayer(int nID);
+	static CTube* GetTube(int nID);
+	static CSetWord* GetWordCreate(void);
 private:
 	static CRenderer *m_pRenderer;
 	static CInputKeyboard *m_pInputKeyboard;

@@ -352,19 +352,19 @@ void C3DCharactor::CharaMove_Input(void)
 		{//右上
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.25f)) * (speed * m_fCofMoveBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.25f)) *  (speed * m_fCofMoveBlend);
+			spin.y = D3DX_PI * 0.25f - rot.y;
 		}
 		else if (CCommand::GetCommand("PLAYERMOVE_DOWN", nID))
 		{//右下
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.75f)) *  (speed * m_fCofMoveBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.75f)) *  (speed * m_fCofMoveBlend);
-
+			spin.y = D3DX_PI * 0.75f - rot.y;
 		}
 		else
 		{//右
 			move.x += sinf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
-
-
+			spin.y = D3DX_PI * 0.5f - rot.y;
 		}
 		//if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
 		//	GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
@@ -392,6 +392,7 @@ void C3DCharactor::CharaMove_Input(void)
 		{//左上
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.25f)) *  (speed * m_fCofMoveBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.25f)) *  (speed * m_fCofMoveBlend);
+			spin.y = D3DX_PI * -0.25f - rot.y;
 
 
 		}
@@ -399,12 +400,14 @@ void C3DCharactor::CharaMove_Input(void)
 		{//左下
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.75f)) *  (speed * m_fCofMoveBlend);
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.75f)) *  (speed * m_fCofMoveBlend);
+			spin.y = D3DX_PI * -0.75f - rot.y;
 
 		}
 		else
 		{//左
 			move.x += sinf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
 			move.z += cosf(CameraRot.y + (D3DX_PI * -0.5f)) * (speed * fMoveCoefficientX);
+			spin.y = D3DX_PI * -0.5f - rot.y;
 
 		}
 		if (GetThisCharactor()->GetMotion() != 6 &&
@@ -428,6 +431,8 @@ void C3DCharactor::CharaMove_Input(void)
 	{//上
 		move.x += sinf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
+		spin.y = D3DX_PI * 0.0f - rot.y;
+
 
 		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
@@ -450,6 +455,7 @@ void C3DCharactor::CharaMove_Input(void)
 	{//下
 		move.x += sinf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
 		move.z += cosf(CameraRot.y + (D3DX_PI * 1.0f)) * (speed * fMoveCoefficientZ);
+		spin.y = D3DX_PI * 1.0f - rot.y;
 
 		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
@@ -531,7 +537,7 @@ void C3DCharactor::CharaMove_Input(void)
 	//速度に係数を掛ける
 	CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
 
-	spin.y = CameraRot.y - rot.y;
+	//spin.y = CameraRot.y - rot.y;
 
 	//回転制御
 	CUtilityMath::RotateNormarizePI(&spin.y);
@@ -542,63 +548,6 @@ void C3DCharactor::CharaMove_Input(void)
 
 	spin.y = 0.0f;
 
-	//カメラ位置制御
-	if (GetThisCharactor()->GetLockOnCharactor() == NULL)
-	{//ロックオンしていなければ
-		float fCameraCoefficient = 1.0f;
-		//視点移動
-		//Y
-		if (CManager::GetXInput(nID) != NULL)
-		{
-			if (CManager::GetXInput(nID)->GetConnect() == true)
-			{
-				fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false, false, nID));
-			}
-		}
-		//fCoefficient = CCommand::GetXPadStickRotation(false,false,nID);
-		if (CCommand::GetCommand("CAMERAMOVE_LEFT", nID))//時計回り
-		{
-		//	CameraRot.y -= CAMERA_MOVE_SPEED * fCameraCoefficient;
-		}
-		if (CCommand::GetCommand("CAMERAMOVE_RIGHT", nID))//反時計回り
-		{
-		//	CameraRot.y += CAMERA_MOVE_SPEED * fCameraCoefficient;
-		}
-
-		//X
-		if (CManager::GetXInput(nID) != NULL)
-		{
-			if (CManager::GetXInput(nID)->GetConnect() == true)
-			{
-				fCameraCoefficient = fabsf(CCommand::GetXPadStickRotation(false, true, nID));
-			}
-		}
-
-		//fCoefficient = CCommand::GetXPadStickRotation(false, true, nID);
-#if 0
-		if (CCommand::GetCommand("CAMERAMOVE_UP", nID))
-		{
-			if (CameraRot.x < D3DX_PI * 0.2f)
-			{
-				CameraRot.x += CAMERA_MOVE_SPEED * fCameraCoefficient;
-			}
-			else
-			{
-				CameraRot.x = D3DX_PI * 0.2f;
-			}
-		}
-		if (CCommand::GetCommand("CAMERAMOVE_DOWN", nID))
-		{
-			if (CameraRot.x > D3DX_PI * -0.2f)
-			{
-				CameraRot.x -= CAMERA_MOVE_SPEED * fCameraCoefficient;
-			}
-			else
-			{
-				CameraRot.x = -D3DX_PI * 0.2f;
-			}
-		}
-#endif
 #ifdef _DEBUG
 		// 入力情報を取得
 		CInputKeyboard *pInputKeyboard;
@@ -636,14 +585,6 @@ void C3DCharactor::CharaMove_Input(void)
 			CDebugProc::Print("cn", "現在のマス :", m_pWayPoint->GetNowWP());
 		}
 #endif
-
-		//カメラ設定
-		pCameraManager->CreateCamera(GetThisCharactor()->GetCameraName(),
-			pCamera->GetType(),
-			pCamera->GetPosR(),
-			CameraRot,
-			pCamera->GetLength());
-	}
 }
 
 //=============================================================================
@@ -1152,13 +1093,13 @@ void C3DCharactor::Attack_CPU(void)
 	//弾の生成	弾を持っているときだけ
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(),GetThisCharactor()->GetPlayerType());
 		m_CpuThink = THINK_NONE;
 	}
 	else if(GetThisCharactor()->GetWordManager()->GetBulletFlag() == false
 		&& GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation());
+		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 	}
 }
 

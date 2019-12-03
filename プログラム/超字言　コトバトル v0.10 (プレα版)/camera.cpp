@@ -111,7 +111,7 @@ void CCamera::Update(void)
 				m_rot.y += m_rotDest.y * CAMERA_ROT_COEFFICIENT;
 				CUtilityMath::RotateNormarizePI(&m_rot.y);
 
-				m_pHomingChara->GetSpin().y = m_rot.y;
+				//m_pHomingChara->GetSpin().y = m_rot.y;
 
 				//X
 				//m_rot.x = atan2f(m_pLockOnChara->GetCameraPosR().y - m_pHomingChara->GetCameraPosR().y,

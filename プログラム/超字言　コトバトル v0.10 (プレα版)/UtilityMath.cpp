@@ -10,7 +10,7 @@
 //=============================================================================
 //	ワールドマトリックス計算関数
 //=============================================================================
-void CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
+D3DXMATRIX* CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, const D3DXVECTOR3& rot,
 	const D3DXMATRIX* parent,const D3DXVECTOR3& scale, D3DXMATRIX* pViewMtx)
 {
 	D3DXMATRIX mtxRot, mtxTrans, mtxScale,mtxInv, mtxParent;				// 計算用マトリックス
@@ -52,18 +52,20 @@ void CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& pos, cons
 	D3DXMatrixTranslation(&mtxTrans, pos.x, pos.y, pos.z);
 	D3DXMatrixMultiply(pOut, pOut, &mtxTrans);
 
+
 	if (parent != NULL)
 	{
 		//親のマトリックスを掛け合わせる
 		D3DXMatrixMultiply(pOut,pOut,parent);
 	}
 
+	return pOut;
 }
 
 //=============================================================================
 //	角度補正関数
 //=============================================================================
-void CUtilityMath::RotateNormarizePI(float* value)
+float CUtilityMath::RotateNormarizePI(float* value)
 {//float
 	if (*value > D3DX_PI)
 	{
@@ -73,13 +75,25 @@ void CUtilityMath::RotateNormarizePI(float* value)
 	{
 		*value += D3DX_PI * 2.0f;
 	}
+
+	return *value;
 }
-void CUtilityMath::RotateNormarizePI(D3DXVECTOR3* RotateValue)
+D3DXVECTOR3 CUtilityMath::RotateNormarizePI(D3DXVECTOR3* RotateValue)
 {//D3DXVECTOR3(float３回)
 
 	RotateNormarizePI(&RotateValue->x);
 	RotateNormarizePI(&RotateValue->y);
 	RotateNormarizePI(&RotateValue->z);
+
+	return *RotateValue;
+}
+
+//=============================================================================
+//	float型の線形補完関数
+//=============================================================================
+float CUtilityMath::FloatLeap(const float& fromValue, const float& toValue, const float fTime)
+{
+	return (1.0f - fTime) * fromValue + fTime * toValue;
 }
 
 //=============================================================================
@@ -90,7 +104,7 @@ float CUtilityMath::Mapping(const float& value, const float& fromSource, const f
 	float fResult = (value - fromSource) / (toSource - fromSource) * (toTarget - fromTarget) + fromTarget;
 
 	if (bClamp == true)
-	{
+	{//クランプ
 		if (fResult > toTarget) { fResult = toTarget; }
 		else if (fResult < fromTarget) { fResult = fromTarget; }
 	}
@@ -112,7 +126,7 @@ D3DXVECTOR3 CUtilityMath::MoveCoeffient(D3DXVECTOR3& value, const float& coeffie
 //=============================================================================
 //	任意の桁数でfloatを四捨五入する関数
 //=============================================================================
-float CUtilityMath::Round_n(float& fValue, const int nRound)
+float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 {
 	fValue *= powf(10.0f,(float)(nRound - 1));	//四捨五入したい値を10の(n-1)乗倍する。
 	fValue = round(fValue);						//小数点以下を四捨五入する。
@@ -122,16 +136,83 @@ float CUtilityMath::Round_n(float& fValue, const int nRound)
 }
 
 //=============================================================================
-//	クォータニオンをオイラー角(３次元ベクトル)に変換する関数(作成途中)
+//
+// イージングクラス [UtilityMath.cpp](CEasingFunc)
+// Author : Kodama Yuto
+//
 //=============================================================================
-D3DXVECTOR3 CUtilityMath::EulerToQuaternion(const D3DXQUATERNION& quat)
+//=============================================================================
+//	イージング関数
+//	IN = 初めのほうに掛ける　OUT = 後ろのほうに掛ける　INOUT = 両方に掛ける
+//	QUAD = 二次関数(QuadFunc.)　CUBIC = 三次関数(CubicFunc.)　
+//	EXPO = 指数関数(ExpoFunc.)(未実装)
+//
+//=============================================================================
+float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 {
-	//MessageBox(hWnd, "EulerToQuaternionはまだ中身が作成されていません", "警告！", MB_ICONWARNING);
+	float fResult = 0.0f;
 
-	D3DXMATRIX mtxRot;
-	D3DXMatrixRotationQuaternion(&mtxRot,&quat);
+	//0～1の間でclampする
+	if (fTime > 1.0f)
+	{
+		fTime = 1.0f;
+	}
+	else if (fTime < 0.0f)
+	{
+		fTime = 0.0f;
+	}
 
-	return D3DXVECTOR3(0.0f,0.0f,0.0f);
+	//float Time = fTime;
+	//タイプごとに処理を分ける
+	switch (type)
+	{
+	case EASE_LINIAR://線形
+		fResult = fTime;//X = Y
+		break;
+	case EASE_IN_QUAD://二次関数(IN)
+		fResult = fTime * fTime;
+		break;
+	case EASE_OUT_QUAD://二次関数(OUT)
+		fResult = -1.0f*fTime*(fTime - 2.0f);
+		break;
+	case EASE_INOUT_QUAD://二次関数(IN&OUT)
+		fTime /= 0.5f;//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
+
+		/*結果によって処理を変える*/
+		if (fTime < 1.0f)
+		{//1以下なら通常の二次関数を使う
+			fResult = fTime * fTime * 0.5f;
+		}
+		else
+		{//それ以上なら傾きが逆になった二次関数を使う
+			fTime = fTime - 1.0f;
+			fResult = -0.5f * (fTime*(fTime - 2) - 1);
+		}
+		break;
+	case EASE_IN_CUBIC://三次関数(IN)
+		fResult = fTime * fTime * fTime;
+		break;
+	case EASE_OUT_CUBIC://三次関数(OUT)
+		fTime = fTime - 1.0f;
+		fResult = (fTime*fTime*fTime + 1);
+		break;
+	case EASE_INOUT_CUBIC://三次関数(IN&OUT)
+		fTime /= 0.5f;	//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
+
+		/*結果によって処理を変える*/
+		if (fTime < 1.0f)
+		{//1以下なら通常の三次関数を使う
+			fResult = 0.5f*fTime*fTime*fTime;
+		}
+		else
+		{//それ以上なら傾きが逆になった三次関数を使う
+			fTime = fTime - 2;
+			fResult = 0.5f * (fTime*fTime*fTime + 2);
+		}
+		break;
+	}
+
+	return fResult;
 }
 
 //=============================================================================
