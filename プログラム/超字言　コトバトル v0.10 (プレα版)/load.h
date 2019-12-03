@@ -65,6 +65,9 @@ public:
 		MODEL_FLOOR,		// 第三地形
 		MODEL_ORI2,			// 檻2
 		MODEL_BUSH,			// 草むら
+		MODEL_KUSA,			// 大曹源　久佐さん
+		MODEL_SAKU,			// 柵
+		MODEL_SAKU2,			// 柵
 
 		MODEL_STAGEFLOOR,	// 各ステージの床
 		MODEL_STAGEFLOOR001,	// 各ステージの床
