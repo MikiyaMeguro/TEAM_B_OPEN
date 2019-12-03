@@ -143,11 +143,16 @@ float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 //=============================================================================
 //=============================================================================
 //	イージング関数
+//	IN = 初めのほうに掛ける　OUT = 後ろのほうに掛ける　INOUT = 両方に掛ける
+//	QUAD = 二次関数(QuadFunc.)　CUBIC = 三次関数(CubicFunc.)　
+//	EXPO = 指数関数(ExpoFunc.)(未実装)
+//
 //=============================================================================
 float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 {
 	float fResult = 0.0f;
 
+	//0～1の間でclampする
 	if (fTime > 1.0f)
 	{
 		fTime = 1.0f;
@@ -157,50 +162,53 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 		fTime = 0.0f;
 	}
 
-	float Time = fTime;
+	//float Time = fTime;
 	//タイプごとに処理を分ける
 	switch (type)
 	{
-	case EASE_LINIAR:
-		fResult = Time;
+	case EASE_LINIAR://線形
+		fResult = fTime;//X = Y
 		break;
-	case EASE_IN_QUAD:
-		fResult = Time * Time;
+	case EASE_IN_QUAD://二次関数(IN)
+		fResult = fTime * fTime;
 		break;
-	case EASE_OUT_QUAD:
-		fResult = -1.0f*Time*(Time - 2.0f);
+	case EASE_OUT_QUAD://二次関数(OUT)
+		fResult = -1.0f*fTime*(fTime - 2.0f);
 		break;
-	case EASE_INOUT_QUAD:
-		Time /= 0.5f;
-		if (Time < 1.0f)
-		{
-			fResult = Time * Time * 0.5f;
-		}
-		else
-		{
-			Time = Time - 1.0f;
-			fResult = -0.5f * (Time*(Time - 2) - 1);
-		}
-		break;
-	case EASE_IN_CUBIC:
-		fResult = Time * Time * Time;
-		break;
-	case EASE_OUT_CUBIC:
-		Time = Time - 1.0f;
-		fResult = (Time*Time*Time + 1);
-		break;
-	case EASE_INOUT_CUBIC:
-		Time /= 0.5f;
-		if (Time < 1.0f)
-		{
-			fResult = 0.5f*Time*Time*Time;
-		}
-		else
-		{
-			Time = Time - 2;
-			fResult = 0.5f * (Time*Time*Time + 2);
-		}
+	case EASE_INOUT_QUAD://二次関数(IN&OUT)
+		fTime /= 0.5f;//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
 
+		/*結果によって処理を変える*/
+		if (fTime < 1.0f)
+		{//1以下なら通常の二次関数を使う
+			fResult = fTime * fTime * 0.5f;
+		}
+		else
+		{//それ以上なら傾きが逆になった二次関数を使う
+			fTime = fTime - 1.0f;
+			fResult = -0.5f * (fTime*(fTime - 2) - 1);
+		}
+		break;
+	case EASE_IN_CUBIC://三次関数(IN)
+		fResult = fTime * fTime * fTime;
+		break;
+	case EASE_OUT_CUBIC://三次関数(OUT)
+		fTime = fTime - 1.0f;
+		fResult = (fTime*fTime*fTime + 1);
+		break;
+	case EASE_INOUT_CUBIC://三次関数(IN&OUT)
+		fTime /= 0.5f;	//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
+
+		/*結果によって処理を変える*/
+		if (fTime < 1.0f)
+		{//1以下なら通常の三次関数を使う
+			fResult = 0.5f*fTime*fTime*fTime;
+		}
+		else
+		{//それ以上なら傾きが逆になった三次関数を使う
+			fTime = fTime - 2;
+			fResult = 0.5f * (fTime*fTime*fTime + 2);
+		}
 		break;
 	}
 
