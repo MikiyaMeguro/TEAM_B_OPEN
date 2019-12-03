@@ -61,7 +61,7 @@ HRESULT CCharaParts::Init(void)
 	m_WorldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_bDrawFlag = true;
 
-	m_fDiffuseAlpha = 0.1f;
+	m_fDiffuseAlpha = 1.0f;
 	m_fOldAlpha = 0.1f;
 	m_fDestAlpha = 1.0f;
 	m_nCount = 0;
@@ -128,7 +128,6 @@ void CCharaParts::Draw(void)
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 	if (m_bDrawFlag == true)
 	{
-
 		// 現在のマテリアルを取得
 		pDevice->GetMaterial(&matDef);
 
@@ -170,7 +169,7 @@ void CCharaParts::BindTexture(LPCSTR Tag)
 //=============================================================================
 //	透明度反映処理
 //=============================================================================
-void CCharaParts::SetAlpha(float& fAlpha)
+void CCharaParts::SetAlpha(float& fAlpha,int nCount)
 {
 	m_fOldAlpha = m_fDiffuseAlpha;
 	if (fAlpha < 0.0f)
@@ -183,5 +182,5 @@ void CCharaParts::SetAlpha(float& fAlpha)
 	}
 
 	m_fDestAlpha = fAlpha;
-	m_nCount = 0;
+	m_nCount = nCount;
 }

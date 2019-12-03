@@ -33,6 +33,8 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_CollisionType = COLLISIONTYPE_NONE;
 	m_nCollsionNum = 0;
 	m_bDraw = true;
+	m_nCamera = 0;
+
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		m_bTranslucent[nCnt] = false;
@@ -187,7 +189,7 @@ void CSceneX::Draw(void)
 		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 		{
 
-			if (m_bTranslucent[0] == true)
+			if (m_bTranslucent[m_nCamera] == true)
 			{	//頂点色のα値に値を反映する
 				pMat[nCntMat].MatD3D.Diffuse.a = 0.6f;
 			}
@@ -332,8 +334,7 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 		{// yの範囲の中
 			if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
 			{// zの範囲の中
-				if (posOld->x + radius.x <= m_pos.x + ScaleVtxMin.x
-					&& pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
+				if (posOld->x + radius.x <= m_pos.x + ScaleVtxMin.x && pos->x + radius.x > m_pos.x + ScaleVtxMin.x)
 				{// X座標の中に左から入った
 					pos->x = posOld->x;
 					if (m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_DURING && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL && m_CollisionType != CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
@@ -404,10 +405,10 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 
 	if (m_CollisionType == COLLSIONTYPE_BUSH)
 	{//　草むらの判定
-		if (pos->z  <= m_pos.z + ScaleVtxMax.z && pos->z  >= m_pos.z + ScaleVtxMin.z)
+		if (pos->z - radius.z <= m_pos.z + ScaleVtxMax.z && pos->z + radius.z >= m_pos.z + ScaleVtxMin.z)
 		{// zの範囲の中
-			if (pos->x  <= m_pos.x + ScaleVtxMax.x && pos->x > m_pos.x + ScaleVtxMin.x)
-			{// X座標の中に左から入った
+			if (pos->x - radius.x <= m_pos.x + ScaleVtxMax.x && pos->x + radius.x> m_pos.x + ScaleVtxMin.x)
+			{// X座標の中に入った
 				m_bTranslucent[nPlayer] = true;
 				bLand = true;
 			}
