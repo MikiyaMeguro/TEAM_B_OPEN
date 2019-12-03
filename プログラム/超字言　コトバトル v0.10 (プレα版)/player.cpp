@@ -328,7 +328,7 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
-					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot, Homing);
+					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot,m_PlayerType,Homing);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;
@@ -504,6 +504,11 @@ void CPlayer::Draw(void)
 			}
 		}
 	}
+
+	if (m_pPlayerParts[0][0] != NULL)
+	{
+		CDebugProc::Print("cf","ALPHA = ", m_pPlayerParts[0][0]->GetAlpha());
+	}
 	// ライトを元に戻る
 	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 
@@ -672,6 +677,23 @@ void	CPlayer::SetMotion(int motion, BODY body,MOTION_STATE state)
 		m_motion[body] = motion;
 		m_Mstate[body] = state;
 
+	}
+}
+
+//=============================================================================
+// キャラの透明度設定処理
+//=============================================================================
+void CPlayer::SetPartsAlpha(float fAlpha)
+{
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
+	{
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+			{
+				m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha);
+			}
+		}
 	}
 }
 

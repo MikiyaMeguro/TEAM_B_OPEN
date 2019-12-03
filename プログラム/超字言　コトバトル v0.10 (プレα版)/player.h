@@ -196,6 +196,7 @@ public:
 
 	PLAYER_TYPE GetPlayerType(void) { return m_PlayerType; }
 
+	void SetPartsAlpha(float fAlpha);
 private:
 	bool			CollisionDamageObj(void);			//’e‚Æ‚Ì“–‚½‚è”»’è
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ƒ_ƒ[ƒW—Ê | HitRotation = UŒ‚‚ğó‚¯‚½Œü‚«

@@ -95,7 +95,7 @@ void CCharaParts::Update(void)
 	if (m_nCount < DIFFUSE_ALPHA_FLAME)
 	{
 		float fTime = (float)(m_nCount + 1) / (float)DIFFUSE_ALPHA_FLAME;
-		float fEasing = CEasingFunc::Easing(CEasingFunc::EASE_INOUT_CUBIC, fTime);
+		float fEasing = CEasingFunc::Easing(CEasingFunc::EASE_OUT_CUBIC, fTime);
 		m_fDiffuseAlpha = CUtilityMath::FloatLeap(m_fOldAlpha,m_fDestAlpha, fEasing);
 		m_nCount++;
 	}

@@ -146,23 +146,11 @@ void CWordManager::Update(void)
 
 	CreateOblDebug();		// 数字で文字の管理(デバック用)
 
-	if (CManager::GetMode() == CManager::MODE_GAME)
+	if (CManager::GetWordCreate()->GetCreateFlag() == true)
 	{
-		if (CGame::GetWordCreate()->GetCreateFlag() == true)
-		{
-			m_bSearch = false;
-			SearchWord();
-			CGame::GetWordCreate()->SetCreateFlagr(false);
-		}
-	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{
-		if (CTutorial::GetWordCreate()->GetCreateFlag() == true)
-		{
-			m_bSearch = false;
-			SearchWord();
-			CTutorial::GetWordCreate()->SetCreateFlagr(false);
-		}
+		m_bSearch = false;
+		SearchWord();
+		CManager::GetWordCreate()->SetCreateFlagr(false);
 	}
 
 	if (m_nCntNum != 2 && m_bSearch == true)
@@ -216,23 +204,11 @@ void CWordManager::Update(void)
 					m_nCntNum = 0;
 					m_nCreateType = nCntAnswer;
 					m_nStock[m_nCntStock] = nCntAnswer;
-					if (CManager::GetMode() == CManager::MODE_GAME)
+					if (CManager::GetTube(m_nPlayerID) != NULL)
 					{
-						if (CGame::GetTube(m_nPlayerID) != NULL)
-						{
-							CGame::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType], m_nCntStock);
-							CGame::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
-							CGame::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
-						}
-					}
-					else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-					{
-						if (CTutorial::GetTube(m_nPlayerID) != NULL)
-						{
-							CTutorial::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType], m_nCntStock);
-							CTutorial::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
-							CTutorial::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
-						}
+						CManager::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType], m_nCntStock);
+						CManager::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
+						CManager::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 					}
 
 					m_nCntaAnswer = 0;
@@ -269,23 +245,11 @@ void CWordManager::Update(void)
 
 	if (m_bFlag == true)
 	{
-		if (CManager::GetMode() == CManager::MODE_GAME)
+		if (CManager::GetTube(m_nPlayerID) != NULL)
 		{
-			if (CGame::GetTube(m_nPlayerID) != NULL)
-			{
-				CGame::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM, m_nCntStock);
-				CGame::GetTube(m_nPlayerID)->SetPoint(1, m_nPlayerID, true);
-				CGame::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
-			}
-		}
-		else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-		{
-			if (CTutorial::GetTube(m_nPlayerID) != NULL)
-			{
-				CTutorial::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM, m_nCntStock);
-				CTutorial::GetTube(m_nPlayerID)->SetPoint(1, m_nPlayerID, true);
-				CTutorial::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
-			}
+			CManager::GetTube(m_nPlayerID)->SetAnswer(NOT_NUM, m_nCntStock);
+			CManager::GetTube(m_nPlayerID)->SetPoint(1, m_nPlayerID, true);
+			CManager::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 		}
 		m_nStock[m_nCntStock] = NOT_NUM;
 		m_nCntNum = 0;
@@ -300,7 +264,7 @@ void CWordManager::Update(void)
 		}
 	}
 
-	
+
 
 #ifdef _DEBUG
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
@@ -339,19 +303,9 @@ void CWordManager::SetWord(int nType)
 		}
 		m_aWord[m_nCntNum].nNum = nType;
 		WordDebug(m_nCntNum);
-		if (CManager::GetMode() == CManager::MODE_GAME)
-		{
-			if (CGame::GetTube(m_nPlayerID) != NULL)
-			{	// NULLチェック
-				CGame::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum, m_nCntStock);
-			}
-		}
-		else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-		{
-			if (CTutorial::GetTube(m_nPlayerID) != NULL)
-			{	// NULLチェック
-				CTutorial::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum, m_nCntStock);
-			}
+		if (CManager::GetTube(m_nPlayerID) != NULL)
+		{	// NULLチェック
+			CManager::GetTube(m_nPlayerID)->SetWordNum(nType, m_nCntNum, m_nCntStock);
 		}
 		m_nCntNum++;
 	}
@@ -387,21 +341,10 @@ void CWordManager::Reset(void)
 	m_bGatherFlag = false;
 	m_nCntStock--;
 	if (m_nCntStock < 0) { m_nCntStock = 0; }
-	if (CManager::GetMode() == CManager::MODE_GAME)
+	if (CManager::GetTube(m_nPlayerID) != NULL)
 	{
-		if (CGame::GetTube(m_nPlayerID) != NULL)
-		{
-			CGame::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
-		}
+		CManager::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{
-		if (CTutorial::GetTube(m_nPlayerID) != NULL)
-		{	// NULLチェック
-			CTutorial::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
-		}
-	}
-
 	m_nCntaAnswer = 0;
 
 	if (m_nStock[0] < m_nAnswerDataNum || m_nStock[0] == NOT_NUM)
@@ -414,19 +357,29 @@ void CWordManager::Reset(void)
 //=============================================================================
 // 弾の生成  Editor : Kodama Yuto
 //=============================================================================
-void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot, C3DCharactor* pChara)
+void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot, CPlayer::PLAYER_TYPE type, C3DCharactor* pChara)
 {
 	CSound *pSound = CManager::GetSound();		//	音の取得
 
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
-	if (CManager::GetMode() == CManager::MODE_GAME)
-	{
-		if (CGame::GetPlayer(nID) != NULL)
-		{//指定したプレイヤーが存在していれば
-			if (m_nCntStock > 0)
-			{
-				if (m_nStock[0] < m_nAnswerDataNum)
-				{	// 指定した文字なら弾を生成する
+
+	if (type == CPlayer::TYPE_RANDOM)
+	{//ランダムが選ばれるのは不正なので処理を打ち切る
+		return;
+	}
+
+	/*モードによって処理を変える*/
+	if (CManager::GetPlayer(nID) != NULL)
+	{//指定したプレイヤーが存在していれば
+		if (m_nCntStock > 0)
+		{
+			if (m_nStock[0] < m_nAnswerDataNum)
+			{	// 指定した文字なら弾を生成する
+				switch (type)
+				{
+				case CPlayer::TYPE_RANDOM:
+					break;
+				default:
 					CModelBullet* pModel = CModelBullet::Create();
 					if (pModel != NULL)
 					{
@@ -463,20 +416,22 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
 						}
 					}
-				}
-				else if (m_nStock[0] == NOT_NUM)
-				{	// ゴミモデルを出す
-					CModelBullet* pModel = CModelBullet::Create();
-					if (pModel != NULL)
-					{
-						pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
-						pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
-
-						//pModel->SetHomingChara(pChara);
-					}
+					break;
 				}
 
+			}
+			else if (m_nStock[0] == NOT_NUM)
+			{	// ゴミモデルを出す
+				CModelBullet* pModel = CModelBullet::Create();
+				if (pModel != NULL)
+				{
+					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
+					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
+				}
+			}
 
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
 				//ブレンド無しで弾打ちモーションに移行
 				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
 				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
@@ -485,67 +440,11 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (CGame::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CGame::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CGame::GetTube(m_nPlayerID)->UninitChack(false);
 				}
 			}
-		}
-	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{
-		if (CTutorial::GetPlayer(nID) != NULL)
-		{//指定したプレイヤーが存在していれば
-			if (m_nCntStock > 0)
+			else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
 			{
-				if (m_nStock[0] < m_nAnswerDataNum)
-				{	// 指定した文字なら弾を生成する
-					CModelBullet* pModel = CModelBullet::Create();
-					if (pModel != NULL)
-					{
-						int nType = m_nStock[0];
-						m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-						pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
-						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
-
-						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
-						if (m_type[nType] == CModelBullet::TYPE_MISSILE)
-						{
-							pModel->SetHomingChara(pChara);
-						}
-						m_nCreateType = NOT_NUM;
-
-						if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
-						{
-							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
-							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
-						}
-						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
-						{
-							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
-							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
-						}
-						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
-						{
-							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
-							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
-						}
-						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
-						{
-							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
-							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
-						}
-					}
-				}
-				else if (m_nStock[0] == NOT_NUM)
-				{	// ゴミモデルを出す
-					CModelBullet* pModel = CModelBullet::Create();
-					if (pModel != NULL)
-					{
-						pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
-						pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
-
-																			 //pModel->SetHomingChara(pChara);
-					}
-				}
-
 				//ブレンド無しで弾打ちモーションに移行
 				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
 				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
@@ -554,8 +453,10 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (CTutorial::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CTutorial::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CTutorial::GetTube(m_nPlayerID)->UninitChack(false);
 				}
 			}
+
 		}
 	}
 }
@@ -667,9 +568,7 @@ void CWordManager::SearchAssist(int nCntData)
 
 	CScene *pScene = NULL;
 
-	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
-	if (CManager::MODE_TUTORIAL == CManager::GetMode()) { nNum = CTutorial::GetWordCreate()->GetPopNum(); }
-
+	nNum = CManager::GetWordCreate()->GetPopNum();
 
 	while (nCount < nNum)
 	{

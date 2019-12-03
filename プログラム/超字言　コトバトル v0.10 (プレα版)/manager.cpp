@@ -29,7 +29,9 @@
 #include "Command.h"
 #include "CameraManager.h"
 
-
+#include "player.h"
+#include "tube.h"
+#include "SetWord.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -848,4 +850,57 @@ void CManager::SetMode(MODE mode)
 			break;
 	}
 
+}
+
+//=============================================================================
+// プレイヤーの取得
+//=============================================================================
+CPlayer* CManager::GetPlayer(int nID)
+{
+	switch (m_mode)
+	{
+	case MODE_GAME:
+		return CGame::GetPlayer(nID);
+		break;
+	case MODE_TUTORIAL:
+		return CTutorial::GetPlayer(nID);
+		break;
+	}
+
+	return NULL;
+}
+
+//=============================================================================
+// 筒の取得
+//=============================================================================
+CTube* CManager::GetTube(int nID)
+{
+	switch (m_mode)
+	{
+	case MODE_GAME:
+		return CGame::GetTube(nID);
+		break;
+	case MODE_TUTORIAL:
+		return CTutorial::GetTube(nID);
+		break;
+	}
+
+	return NULL;
+}
+
+//=============================================================================
+// 文字配置オブジェクトの取得
+//=============================================================================
+CSetWord* CManager::GetWordCreate(void)
+{
+	switch (m_mode)
+	{
+	case MODE_GAME:
+		return CGame::GetWordCreate();
+		break;
+	case MODE_TUTORIAL:
+		return CTutorial::GetWordCreate();
+		break;
+	}
+	return NULL;
 }

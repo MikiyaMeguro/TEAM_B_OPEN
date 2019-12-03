@@ -51,7 +51,7 @@ class CStageSelect;
 #define WORD_TUBE004_POS_4P		(D3DXVECTOR3(770.0f, 633.0f, 0.0f))		// 4画面時(4P)の位置
 
 #define MAX_PLAYER (4)
-#define MAX_STAGE	(3)			// ステージの最大数
+#define MAX_STAGE	(2)			// ステージの最大数
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
 
 //クラス（シーン2Dの派生クラス）
