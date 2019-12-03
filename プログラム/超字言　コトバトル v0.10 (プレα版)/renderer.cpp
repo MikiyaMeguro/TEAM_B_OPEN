@@ -233,13 +233,13 @@ void CRenderer::Draw(void)
 			case CManager::MODE_RESULT:
 				if (pCameraManager->SetCamera("RESULT_CAMERA"))
 				{
-					CScene::DrawAll(6);
+					CScene::DrawAll(5);
 				}
 				break;
 			default:
 				if (pCameraManager->SetCamera("DEFAULT_CAMERA"))
 				{
-					CScene::DrawAll(7);
+					CScene::DrawAll(5);
 				}
 				break;
 			}

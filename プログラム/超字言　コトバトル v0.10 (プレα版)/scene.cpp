@@ -6,11 +6,14 @@
 //=============================================================================
 #include "scene.h"
 #include "scene2D.h"
+#include "sceneX.h"
 #include "debugProc.h"
 #include "input.h"
 #include "manager.h"
 #include "fade.h"
-
+#include "player.h"
+#include "tutorial.h"
+#include "game.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -220,6 +223,18 @@ void CScene::UpdeteAll(void)
 //=============================================================================
 void CScene::DrawAll(int nCamera)
 {
+	CPlayer *pPlayer = NULL;
+
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		pPlayer = CGame::GetPlayer(nCamera - 1);			// プレイヤーを取得
+	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		pPlayer = CTutorial::GetPlayer(nCamera - 1);			// プレイヤーを取得
+	}
+
+
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
 	 // 先頭の場所を取得
@@ -229,9 +244,44 @@ void CScene::DrawAll(int nCamera)
 		{// 空になるまで描画する
 		 // Drawの最中に消える可能性があるから先に記録しておく
 			CScene *pSceneNext = pScene->m_pNext;
+			if (pScene->GetObjType() == OBJTYPE_PLAYER && nCamera != 5)
+			{
+				CPlayer *pPlayerScene = ((CPlayer*)pScene);
 
-			// 描画
-			pScene->Draw();
+				if (pPlayerScene->GetID() == nCamera - 1)
+				{	// 自分を描画
+					int ntest = pPlayerScene->GetID();
+					pScene->Draw();
+				}
+				else
+				{	// 他プレイヤー描画
+					if (pPlayer->GetVision(pPlayerScene->GetID()) == true)
+					{
+						int ntest = pPlayerScene->GetID();
+						pScene->Draw();
+					}
+				}
+			}
+			else if (pScene->GetObjType() == OBJTYPE_SCENEX)
+			{
+				CSceneX *pSceneX = ((CSceneX*)pScene);
+				if (pSceneX->GetModelType() == CLoad::MODEL_BUSH)
+				{	//草むらのみ判定
+					//どのプレイヤーカメラかを渡す
+					pSceneX->SetCameraNum(nCamera - 1);
+					// モデル描画
+					pScene->Draw();
+				}
+				else
+				{	//草むら以外を描画
+					pScene->Draw();
+				}
+			}
+			else
+			{
+				// 描画
+				pScene->Draw();
+			}
 
 			// 次のシーンに進める
 			pScene = pSceneNext;
