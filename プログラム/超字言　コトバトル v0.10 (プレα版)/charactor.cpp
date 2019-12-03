@@ -131,7 +131,7 @@ HRESULT C3DCharactor::Init(void)
 
 
 	//	回避UI
-	m_pCAvoidUi = CAvoidUi::Create(CCharaBase::GetPosition() + D3DXVECTOR3(0.0f, 13.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
+	m_pCAvoidUi = CAvoidUi::Create(CCharaBase::GetPosition() + D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
 		D3DXVECTOR3(18.0f, 18.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f));
 
 	return S_OK;
@@ -296,16 +296,29 @@ void C3DCharactor::Update(void)
 
 	if (m_pCAvoidUi != NULL)
 	{//	回避UIが使用されてつ
-		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 13.0f, 0.0f));
-		if (m_nCntStepCoolTime < 1)
-		{//	step時間外
-			m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		}
-		else
-		{//	step時間内
-			m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
+		if (GetMoveType() == MOVETYPE_PLAYER_INPUT)
+		{
+			if (GetThisCharactor()->GetID() == 0) { m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.7f)); }
+			else if (GetThisCharactor()->GetID() == 1) { m_pCAvoidUi->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.9f, 0.7f)); }
+			else if (GetThisCharactor()->GetID() == 2) { m_pCAvoidUi->SetColor(D3DXCOLOR(0.0f, 1.0f, 0.0f, 0.7f)); }
+			else if (GetThisCharactor()->GetID() == 3) { m_pCAvoidUi->SetColor(D3DXCOLOR(0.7f, 0.4f, 0.0f, 0.7f)); }
 		}
+		else if (GetMoveType() == MOVETYPE_NPC_AI)
+		{
+			m_pCAvoidUi->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 0.7f)); 
+		}
+
+		//if (m_nCntStepCoolTime < 1)
+		//{//	step時間外
+		//	m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		//}
+		//else
+		//{//	step時間内
+		//	m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+
+		//}
 	}
 }
 
