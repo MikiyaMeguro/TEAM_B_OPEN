@@ -485,6 +485,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (CGame::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CGame::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CGame::GetTube(m_nPlayerID)->UninitChack(false);
 				}
 			}
 		}
@@ -554,6 +555,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (CTutorial::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CTutorial::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CTutorial::GetTube(m_nPlayerID)->UninitChack(false);
 				}
 			}
 		}

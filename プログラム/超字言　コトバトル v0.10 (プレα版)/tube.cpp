@@ -45,7 +45,11 @@
 
 #define MOVE			(3.0f)
 #define AREA			(2.0f * 2.0f)
+#define AREA_STAR		(5.0f * 5.0f)
+
 #define WORD_SCALE		(0.5f)															// 文字が縮む速度
+
+#define STAR_POS		(D3DXVECTOR3(640.0f, 300.0f, 0.0f))
 //=============================================================================
 // シーンクラスのコンストラクタ
 //=============================================================================
@@ -56,10 +60,18 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	{
 		m_apWord[nCntWord] = NULL;
 		m_pAnswerModel[nCntWord] = NULL;
+		m_pShootingStar[nCntWord] = NULL;
+		m_anAnswerNum[nCntWord] = 0;
 	}
+
+	m_size = D3DXVECTOR2(0.0f, 0.0f);
+	m_sizeAnswer = D3DXVECTOR2(0.0f, 0.0f);
 	m_nAnswer = 0;
+	m_nStockNum = 0;
+	m_nAnswerModelNum = 0;
 	m_bModelTexFlag = false;
 	m_bCreateFlag = false;
+	m_bTowardFlag = false;
 }
 
 //=============================================================================
@@ -101,8 +113,8 @@ HRESULT CTube::Init(D3DXVECTOR3 pos)
 
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 
-	if (NumPlayer == 1) { m_AnswerPos = POS_ANSWER_001; }
-	else if (NumPlayer != 1) { m_AnswerPos = POS_ANSWER_002; }
+	if (NumPlayer == 1) { m_AnswerPos = POS_ANSWER_001; m_size = SIZE_000; }
+	else if (NumPlayer != 1) { m_AnswerPos = POS_ANSWER_002; m_size = SIZE_001; }
 
 	return S_OK;
 }
@@ -125,6 +137,11 @@ void CTube::Uninit(void)
 	{
 		if (m_pAnswerModel[nCntWord] != NULL) { m_pAnswerModel[nCntWord]->Uninit(); m_pAnswerModel[nCntWord] = NULL; }
 	}
+
+	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	{
+		if (m_pShootingStar[nCntWord] != NULL) { m_pShootingStar[nCntWord]->Uninit(); m_pShootingStar[nCntWord] = NULL; }
+	}
 	CScene2D::Uninit();
 }
 
@@ -134,6 +151,19 @@ void CTube::Uninit(void)
 void CTube::Update(void)
 {
 	if (m_bModelTexFlag == true) { Collect(); }		// 中心点に集まる
+
+	Toward();
+
+	WordCreate2D();
+
+	if (m_bSizeFlag == true)
+	{	// サイズ変更
+		if (m_pAnswerModel[m_nStockNum] != NULL)
+		{
+			D3DXVECTOR2 size = D3DXVECTOR2(m_pAnswerModel[m_nStockNum]->GetSize(0), m_pAnswerModel[m_nStockNum]->GetSize(1));
+			SizeChange(size);
+		}
+	}
 
 	CScene2D::Update();
 }
@@ -156,12 +186,13 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	D3DXVECTOR3 StockPos = {};
 	D3DXVECTOR2 StockSize = {};
 	float fWhile = 0.0f;
+	//m_anAnswerNum[nNum] = nWordNum;
 
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 
 	if (m_bCreateFlag == true)
 	{
-		UninitChack();		// 終了しているかどうかの確認
+		UninitChack(true);		// 終了しているかどうかの確認
 	}
 
 	if (NumPlayer == 1)
@@ -169,47 +200,48 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 		if (nNum == 0) { pos = POS_ONE_001; }
 		else if (nNum == 1) { pos = POS_TOW_001; }
 		else if (nNum == 2) { pos = POS_THREE_001; }
-		size = SIZE_000;
 		StockPos = POS_ANSWER_STOCK_001;
-		StockSize = SIZE_ANSWER_STOCK_001;
 		fWhile = WHILE_1P;
+
+		if (nNum == 2)
+		{
+			m_sizeAnswer = SIZE_ANSWER_STOCK_001;
+		}
 	}
 	else if (NumPlayer != 1)
 	{ // 1人プレイじゃない場合
 		if (nNum == 0) { pos = POS_ONE_002; }
 		else if (nNum == 1) { pos = POS_TOW_002; }
 		else if (nNum == 2) { pos = POS_THREE_002; }
-		size = SIZE_001;
 		StockPos = POS_ANSWER_STOCK_002;
-		StockSize = SIZE_ANSWER_STOCK_002;
 		fWhile = WHILE_2P;
+
+		if (nNum == 2)
+		{
+			m_sizeAnswer = SIZE_ANSWER_STOCK_002;
+		}
 	}
 
 	if (m_apWord[nNum] == NULL)
 	{
 		m_apWord[nNum] = CScene2D::Create(pos, "WORD", 3);
-		m_apWord[nNum]->SetWidthHeight(size.x, size.y);	// サイズ設定
+		m_apWord[nNum]->SetWidthHeight(0.0f, 0.0f);	// サイズ設定
+		m_apWord[nNum]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_apWord[nNum]->SetTex(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f)));
+	}
+
+	if (m_pShootingStar[nNum] == NULL)
+	{
+		m_pShootingStar[nNum] = CScene2D::Create(STAR_POS, "WORD", 3);
+		m_pShootingStar[nNum]->SetWidthHeight(0.0f, 0.0f);	// サイズ設定
+		m_pShootingStar[nNum]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		m_pShootingStar[nNum]->SetTex(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f)));
 	}
 
 	if (nNum == 2)
 	{
-		m_bModelTexFlag = true;
-		SetAnswer(nWordNum, nStock);
-		if (m_pAnswerModel[nStock] != NULL)
-		{
-			if (nStock == 1 || nStock == 2)
-			{
-				m_pAnswerModel[nStock]->SetWidthHeight(StockSize.x, StockSize.y);
-				if (nStock == 1) { m_pAnswerModel[nStock]->SetPosition(StockPos); }
-				else if (nStock == 2) { m_pAnswerModel[nStock]->SetPosition(D3DXVECTOR3(StockPos.x + fWhile, StockPos.y, StockPos.z)); }
-			}
-		}
-	}
-	else if (nNum < 2)
-	{
-		if (m_pAnswerModel[0] != NULL && nStock >= 1) { m_pAnswerModel[0]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
-		
+		m_bCreateFlag = true;
+		//m_bModelTexFlag = true;		
 	}
 }
 
@@ -219,7 +251,20 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 void CTube::SetAnswer(int nAnswer, int nStock)
 {
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	D3DXVECTOR3 StockPos = {};
+	float fWhile = 0.0f;
 	m_nAnswerModelNum = nAnswer;
+
+	if (NumPlayer == 1)
+	{	// 1人プレイの場合
+		StockPos = POS_ANSWER_STOCK_001;
+		fWhile = WHILE_1P;
+	}
+	else if (NumPlayer != 1)
+	{ // 1人プレイじゃない場合
+		StockPos = POS_ANSWER_STOCK_002;
+		fWhile = WHILE_2P;
+	}
 
 	if (m_pAnswerModel[nStock] == NULL)
 	{	// 文字が3文字集まった場合場合
@@ -228,19 +273,44 @@ void CTube::SetAnswer(int nAnswer, int nStock)
 		if (NumPlayer == 1)
 		{	// 1人プレイの場合
 			m_AnswerPos = POS_ANSWER_001;
-			AnswerSize = SIZE_ANSWER_001;
+			if (nStock == 0)
+			{
+				m_sizeAnswer = SIZE_ANSWER_001;
+			}
 		}
 		else if (NumPlayer != 1)
 		{	// 1人プレイじゃない場合
 			m_AnswerPos = POS_ANSWER_002;
-			AnswerSize = SIZE_ANSWER_002;
+			if (nStock == 0)
+			{
+				m_sizeAnswer = SIZE_ANSWER_002;
+			}
 		}
 
+		if (NOT_NUM == m_nAnswerModelNum)
+		{	// ゴミモデルのtexを出す
+			m_pAnswerModel[nStock] = CScene2D::Create(m_AnswerPos, "ゴミ_モデル", 3);
+			m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+		}
+		else if (NOT_NUM != m_nAnswerModelNum)
+		{	// 正解のモデルを出す
+			m_pAnswerModel[nStock] = CScene2D::Create(m_AnswerPos, "モデル_TEX", 3);
+			m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
+						D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
+		}
 		//	文字で作れるモデルをまとめた画像に変える
-		m_pAnswerModel[nStock] = CScene2D::Create(m_AnswerPos, "WORD", 3);
-		m_pAnswerModel[nStock]->SetWidthHeight(AnswerSize.x, AnswerSize.y);	// サイズ設定
-		m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f + ((nAnswer / 5) * 0.1f), 0.0f + ((nAnswer % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nAnswer / 5) * 0.1f), 0.2f + ((nAnswer % 5) * 0.2f)));
+		m_pAnswerModel[nStock]->SetWidthHeight(0.0f, 0.0f);	// サイズ設定
 		m_pAnswerModel[nStock]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
+	}
+
+	if (m_pAnswerModel[nStock] != NULL)
+	{
+		if (nStock == 1 || nStock == 2)
+		{
+			m_pAnswerModel[nStock]->SetWidthHeight(0.0f, 0.0f);
+			if (nStock == 1) { m_pAnswerModel[nStock]->SetPosition(StockPos); }
+			else if (nStock == 2) { m_pAnswerModel[nStock]->SetPosition(D3DXVECTOR3(StockPos.x + fWhile, StockPos.y, StockPos.z)); }
+		}
 	}
 }
 //=============================================================================
@@ -277,7 +347,6 @@ void CTube::AllDelete(int nNum)
 void CTube::Collect(void)
 {
 	int nCntNum = 0;
-	m_bCreateFlag = true;
 
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{
@@ -291,21 +360,21 @@ void CTube::Collect(void)
 
 	if (nCntNum == MAX_WORD)
 	{
-		m_bModelTexFlag = false;
-
 		if (m_pAnswerModel[m_nStockNum] != NULL)
 		{
-			if (NOT_NUM == m_nAnswerModelNum)
-			{	// ゴミモデルのtexを出す
-				m_pAnswerModel[m_nStockNum]->BindTexture("ゴミ_モデル");
-				m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
-			}
-			else if (NOT_NUM != m_nAnswerModelNum)
-			{	// 正解のモデルを出す
-				m_pAnswerModel[m_nStockNum]->BindTexture("モデル_TEX");
-				m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
-					D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
-			}
+			D3DXVECTOR2 size = D3DXVECTOR2(m_pAnswerModel[m_nStockNum]->GetSize(0), m_pAnswerModel[m_nStockNum]->GetSize(1));
+
+			//if (NOT_NUM == m_nAnswerModelNum)
+			//{	// ゴミモデルのtexを出す
+			//	m_pAnswerModel[m_nStockNum]->BindTexture("ゴミ_モデル");
+			//	m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+			//}
+			//else if (NOT_NUM != m_nAnswerModelNum)
+			//{	// 正解のモデルを出す
+			//	m_pAnswerModel[m_nStockNum]->BindTexture("モデル_TEX");
+			//	m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
+			//		D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
+			//}
 
 			for (int nCntModel = 0; nCntModel < MAX_WORD; nCntModel++)
 			{
@@ -314,10 +383,9 @@ void CTube::Collect(void)
 					m_pAnswerModel[nCntModel]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 				}
 			}
-		}
 
-		m_nAnswerModelNum = 0;
-		m_bCreateFlag = false;
+			SizeChange(size);	// サイズの変化
+		}		
 	}
 }
 
@@ -361,10 +429,14 @@ void CTube::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum)
 void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
 {
 	CSound *pSound = CManager::GetSound();		//	音の取得
+	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+
 
 	CPoint *pPoint = NULL;
 	if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(nNum); }
 	else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { /* チュートリアルの作業によりかかった場合 ここでチュートリアルからポイントを取得 */ }
+
+	//m_bSizeFlag = false;	// サイズ変更のフラグをfalseに
 
 	if (pPoint != NULL)
 	{
@@ -382,32 +454,48 @@ void CTube::SetPoint(int nPoint, int nNum, bool bPoint)
 //=============================================================================
 // 終了いてるかどうかの確認処理
 //=============================================================================
-void CTube::UninitChack(void)
+void CTube::UninitChack(bool bFlag)
 {
-	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
-	{
-		if (m_apWord[nCntWord] != NULL)
+	if (bFlag == true)
+	{	// フラグがtrueなら文字を破棄
+		m_bSizeFlag = true;
+		for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 		{
-			m_apWord[nCntWord]->Uninit();
-			m_apWord[nCntWord] = NULL;
+			if (m_apWord[nCntWord] != NULL)
+			{
+				m_apWord[nCntWord]->Uninit();
+				m_apWord[nCntWord] = NULL;
+			}
 		}
 	}
 
-	m_bModelTexFlag = false;
-
-	if (m_pAnswerModel[m_nStockNum] != NULL)
+	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{
-		if (NOT_NUM == m_nAnswerModelNum)
-		{	// ゴミモデルのtexを出す
-			m_pAnswerModel[m_nStockNum]->BindTexture("ゴミ_モデル");
-			m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
-		}
-		else if (NOT_NUM != m_nAnswerModelNum)
-		{	// 正解のモデルを出す
-			m_pAnswerModel[m_nStockNum]->BindTexture("モデル_TEX");
-			m_pAnswerModel[m_nStockNum]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
-				D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
-		}
+		if (m_pShootingStar[nCntWord] != NULL) { m_pShootingStar[nCntWord]->Uninit(); m_pShootingStar[nCntWord] = NULL; }
+	}
+
+	m_bModelTexFlag = false;
+	int nCount = 0;
+
+	for (int nCntTex = 0; nCntTex < m_nStockNum; nCntTex++)
+	{
+		if (m_pAnswerModel[nCntTex] != NULL) { nCount++; }
+		else if (m_pAnswerModel[nCntTex] == NULL) { break; }
+	}
+
+	if (m_pAnswerModel[nCount] != NULL)
+	{
+		//if (NOT_NUM == m_nAnswerModelNum)
+		//{	// ゴミモデルのtexを出す
+		//	m_pAnswerModel[nCount]->BindTexture("ゴミ_モデル");
+		//	m_pAnswerModel[nCount]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f));
+		//}
+		//else if (NOT_NUM != m_nAnswerModelNum)
+		//{	// 正解のモデルを出す
+		//	m_pAnswerModel[nCount]->BindTexture("モデル_TEX");
+		//	m_pAnswerModel[nCount]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.125f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
+		//		D3DXVECTOR2(0.125f + ((m_nAnswerModelNum / 10) * 0.125f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
+		//}
 
 		for (int nCntModel = 0; nCntModel < MAX_WORD; nCntModel++)
 		{
@@ -416,7 +504,118 @@ void CTube::UninitChack(void)
 				m_pAnswerModel[nCntModel]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 		}
+
+		//m_pAnswerModel[m_nStockNum]->SetWidthHeight(m_sizeAnswer.x, m_sizeAnswer.y);
+
 	}
 	m_nAnswerModelNum = 0;
 	m_bCreateFlag = false;
+}
+
+//=============================================================================
+// 目的の場所に向かう処理
+//=============================================================================
+void CTube::Toward(void)
+{
+	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	{
+		if (m_apWord[nCntWord] != NULL && m_pShootingStar[nCntWord] != NULL)
+		{	
+			float fDistance = 0.0f;
+			float fRot = m_pShootingStar[nCntWord]->GetRot();
+			D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			D3DXVECTOR3 pos = m_pShootingStar[nCntWord]->GetPosition();
+			D3DXVECTOR2 size = D3DXVECTOR2(m_pShootingStar[nCntWord]->GetSize(0), m_pShootingStar[nCntWord]->GetSize(1));
+
+			// 移動方向調整
+			pos.y -= 3.0f;
+
+			// 向き加算
+			//fRot += 0.1f;
+
+			// 目的地と自身の位置を測る
+			move.x = sinf(atan2f(m_apWord[nCntWord]->GetPosition().x - m_pShootingStar[nCntWord]->GetPosition().x, m_apWord[nCntWord]->GetPosition().y - m_pShootingStar[nCntWord]->GetPosition().y)) * 10.0f;
+			move.y = cosf(atan2f(m_apWord[nCntWord]->GetPosition().x - m_pShootingStar[nCntWord]->GetPosition().x, m_apWord[nCntWord]->GetPosition().y - m_pShootingStar[nCntWord]->GetPosition().y)) * 10.0f;
+
+			pos += move;
+
+			// サイズ調整
+			size.x += 1.0f; 
+			size.y += 1.0f;
+
+			// 位置とサイズ, 向き設定
+			m_pShootingStar[nCntWord]->SetPosition(pos);
+			m_pShootingStar[nCntWord]->SetWidthHeight(size.x, size.y);
+			//m_pShootingStar[nCntWord]->SetRot(fRot);
+
+			// 目的地の範囲に入ったら削除
+			fDistance = sqrtf((m_pShootingStar[nCntWord]->GetPosition().x - m_apWord[nCntWord]->GetPosition().x)* (m_pShootingStar[nCntWord]->GetPosition().x - m_apWord[nCntWord]->GetPosition().x) +
+				(m_pShootingStar[nCntWord]->GetPosition().z - m_apWord[nCntWord]->GetPosition().z)*(m_pShootingStar[nCntWord]->GetPosition().z - m_apWord[nCntWord]->GetPosition().z));
+
+
+			// 範囲内にはいったら削除
+			if (fDistance < AREA_STAR)
+			{
+				if (m_pShootingStar[nCntWord] != NULL) { m_pShootingStar[nCntWord]->Uninit(); m_pShootingStar[nCntWord] = NULL; }
+			}
+		}
+	}
+}
+
+//=============================================================================
+// 文字の表示2D処理
+//=============================================================================
+void CTube::WordCreate2D(void)
+{
+	int nCount = 0;
+	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+	{
+		if (m_apWord[nCntWord] != NULL && m_pShootingStar[nCntWord] == NULL)
+		{
+			D3DXVECTOR2 size = D3DXVECTOR2(m_apWord[nCntWord]->GetSize(0), m_apWord[nCntWord]->GetSize(1));
+			// サイズを拡大
+			size.x += 2.14f;
+			size.y += 2.38f;
+
+			// 指定したサイズ以上の場合
+			if (size.x > m_size.x ) { size.x = m_size.x; }
+			if (size.y > m_size.y) { size.y = m_size.y; }
+
+			if (size.x >= m_size.x && size.y >= m_size.y) 
+			{
+				nCount++; 
+			}
+
+			m_apWord[nCntWord]->SetWidthHeight(size.x, size.y);
+		}
+	}
+
+	if (nCount == MAX_WORD) { m_bModelTexFlag = true; }		// 中心点に集まる
+}
+
+//=============================================================================
+// サイズ変化の処理
+//=============================================================================
+void CTube::SizeChange(D3DXVECTOR2 size)
+{
+	// サイズを拡大
+	size.x += 2.14f;
+	size.y += 2.38f;
+
+	// 指定したサイズ以上の場合
+	if (size.x > m_sizeAnswer.x) { size.x = m_sizeAnswer.x; }
+	if (size.y > m_sizeAnswer.y) { size.y = m_sizeAnswer.y; }
+
+	if (size.x >= m_sizeAnswer.x && size.y >= m_sizeAnswer.y)
+	{
+		m_bModelTexFlag = false;
+		m_bCreateFlag = false;
+		m_nAnswerModelNum = 0;
+		m_bSizeFlag = false;
+	}
+
+	if (m_pAnswerModel[m_nStockNum] != NULL)
+	{
+		m_pAnswerModel[m_nStockNum]->SetWidthHeight(size.x, size.y);
+	}
 }
