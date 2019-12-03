@@ -427,21 +427,36 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				{
 					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
-
-					//pModel->SetHomingChara(pChara);
 				}
 			}
 
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				//ブレンド無しで弾打ちモーションに移行
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 
-			//ブレンド無しで弾打ちモーションに移行
-			CManager::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
-			CManager::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
-
-			Reset();		// 設定を戻す
-			if (CManager::GetTube(m_nPlayerID) != NULL)
-			{//筒クラス内の文字情報を削除
-				CManager::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+				Reset();		// 設定を戻す
+				if (CGame::GetTube(m_nPlayerID) != NULL)
+				{//筒クラス内の文字情報を削除
+					CGame::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CGame::GetTube(m_nPlayerID)->UninitChack(false);
+				}
 			}
+			else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+			{
+				//ブレンド無しで弾打ちモーションに移行
+				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
+
+				Reset();		// 設定を戻す
+				if (CTutorial::GetTube(m_nPlayerID) != NULL)
+				{//筒クラス内の文字情報を削除
+					CTutorial::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CTutorial::GetTube(m_nPlayerID)->UninitChack(false);
+				}
+			}
+
 		}
 	}
 }

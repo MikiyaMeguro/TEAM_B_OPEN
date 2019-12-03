@@ -39,21 +39,30 @@ public:
 	void SetAnswer(int nAnswer, int nStock);
 	void SetStockNum(int nStock) { m_nStockNum = nStock; }
 	void AllDelete(int nNum);
-	void Delete(int nID, int nStock);
+	void UninitChack(bool bFlag);	// 終了しているかどうかの確認
+
 
 	bool GetFlag(void) { return m_bCreateFlag; }
 private:
 	void Collect(void);		//文字を集めてTexを生成
 	void Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNum);
-	void UninitChack(void);	// 終了しているかどうかの確認
+	void Toward(void);		// 向かっていく処理
+	void WordCreate2D(void);	// 文字の表示
+	void SizeChange(D3DXVECTOR2 size);
 
 	D3DXVECTOR3 m_AnswerPos;
+	D3DXVECTOR2 m_size;
+	D3DXVECTOR2 m_sizeAnswer;
 	CScene2D *m_apWord[MAX_WORD];
 	CScene2D *m_pAnswerModel[MAX_WORD];
+	CScene2D *m_pShootingStar[MAX_WORD];
+	int			m_anAnswerNum[MAX_WORD];
 	int		  m_nAnswer;
 
 	bool	 m_bModelTexFlag;
 	bool	 m_bCreateFlag;
+	bool	 m_bTowardFlag;	// 目的の場所に向かう処理
+	bool	 m_bSizeFlag;	// サイズ変化のフラグ
 	int m_nAnswerModelNum;	// 答えの番号
 	int m_nStockNum;
 
