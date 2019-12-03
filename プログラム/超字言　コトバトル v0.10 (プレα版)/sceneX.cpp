@@ -33,7 +33,10 @@ CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_CollisionType = COLLISIONTYPE_NONE;
 	m_nCollsionNum = 0;
 	m_bDraw = true;
-	m_bTranslucent = false;
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		m_bTranslucent[nCnt] = false;
+	}
 	m_pParentMatrix = NULL;
 }
 
@@ -184,7 +187,7 @@ void CSceneX::Draw(void)
 		for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 		{
 
-			if (m_bTranslucent == true)
+			if (m_bTranslucent[0] == true)
 			{	//頂点色のα値に値を反映する
 				pMat[nCntMat].MatD3D.Diffuse.a = 0.6f;
 			}
@@ -299,7 +302,7 @@ void CSceneX::SetVtx(void)
 //=============================================================================
 // ブロックとの当たり判定処理
 //=============================================================================
-bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius)
+bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius,int nPlayer)
 {
 	bool bLand = false;	// 乗っていない状態
 	bool bHit = false;	// ヒット判定のフラグ
@@ -405,17 +408,17 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 		{// zの範囲の中
 			if (pos->x  <= m_pos.x + ScaleVtxMax.x && pos->x > m_pos.x + ScaleVtxMin.x)
 			{// X座標の中に左から入った
-				m_bTranslucent = true;
+				m_bTranslucent[nPlayer] = true;
 				bLand = true;
 			}
 			else
 			{
-				m_bTranslucent = false;
+				m_bTranslucent[nPlayer] = false;
 			}
 		}
 		else
 		{
-			m_bTranslucent = false;
+			m_bTranslucent[nPlayer] = false;
 		}
 	}
 
