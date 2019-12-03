@@ -375,42 +375,50 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 		{
 			if (m_nStock[0] < m_nAnswerDataNum)
 			{	// 指定した文字なら弾を生成する
-				CModelBullet* pModel = CModelBullet::Create();
-				if (pModel != NULL)
+				switch (type)
 				{
-					int nType = m_nStock[0];
-					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
-					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+				case CPlayer::TYPE_RANDOM:
+					break;
+				default:
+					CModelBullet* pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						int nType = m_nStock[0];
+						m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+						pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
 
-					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
-					if (m_type[nType] == CModelBullet::TYPE_MISSILE)
-					{
-						pModel->SetHomingChara(pChara);
-					}
-					m_nCreateType = EMPTINESS_NUM;
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						if (m_type[nType] == CModelBullet::TYPE_MISSILE)
+						{
+							pModel->SetHomingChara(pChara);
+						}
+						m_nCreateType = EMPTINESS_NUM;
 
-					if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+						if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
+						}
 					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
-					}
+					break;
 				}
+
 			}
 			else if (m_nStock[0] == NOT_NUM)
 			{	// ゴミモデルを出す
