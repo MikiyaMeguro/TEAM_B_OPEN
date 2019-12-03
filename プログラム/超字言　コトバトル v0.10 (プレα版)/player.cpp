@@ -322,7 +322,7 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
-					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot, Homing);
+					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot,m_PlayerType,Homing);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;

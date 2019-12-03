@@ -159,6 +159,7 @@
     <ClInclude Include="charactor.h" />
     <ClInclude Include="CharaParts.h" />
     <ClInclude Include="CharaSelect.h" />
+    <ClInclude Include="CharaSelect_Cursol.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="effect.h" />
@@ -214,6 +215,7 @@
     <ClCompile Include="charactor.cpp" />
     <ClCompile Include="CharaParts.cpp" />
     <ClCompile Include="CharaSelect.cpp" />
+    <ClCompile Include="CharaSelect_Cursol.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="effect.cpp" />
