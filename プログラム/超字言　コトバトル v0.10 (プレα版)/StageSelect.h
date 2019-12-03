@@ -22,7 +22,7 @@ class CPlayerSelect;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define MAX_STAGESELECT		(3)
+#define MAX_STAGESELECT		(2)
 #define MAX_STAGESELECT_TEX (7)
 
 class CStageSelect
@@ -57,19 +57,8 @@ private:
 	{
 		SELECTTYPE_SELECT_MACHINE = 0,			//機械ステージ
 		SELECTTYPE_SELECT_WEATHER,				//天候ステージ
-		SELECTTYPE_SELECT_TERRAIN,				//地形ステージ
 		SELECTTYPE_MAX							//状態の総数
 	}SELECTTYPE;
-
-	/* 選択肢移動の状態 */
-	typedef enum
-	{
-		SELECTICON_STATE_NONE = 0,
-		SELECTICON_STATE_MOVE_R,	//右回り
-		SELECTICON_STATE_MOVE_L,	//左回り
-		SELECTICON_STATE_STOP,
-		SELECTICON_STATE_MAX
-	}SELECTICONSTATE;
 
 	/* ステージ読み込みの状態 */
 	typedef enum
@@ -92,8 +81,7 @@ private:
 	void InitPolygon(void);												//ポリゴンの初期設定
 	void ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed);			//テクスチャスクロール処理
 	void Selecttype(SELECTTYPE state, CFade *pFade, CManager *pManager);//選択状態の管理
-	void ProductionIcon(SELECTICONSTATE &state, SELECTTYPE type);		//選択肢の移動演出
-	void Replacement(SELECTICONSTATE state);							//ポリゴン位置の入れ替え処理
+	void ProductionIcon(SELECTTYPE type);								//選択肢の移動演出
 	void SetStage(int nNumState);										//ステージ生成の処理
 	void LoadStage(int nNum);											//ステージのロード処理
 	void StageLoadState(STAGELOAD Load,int nSel);						//ステージロードの状態
@@ -108,17 +96,15 @@ private:
 	static int	m_nSelect;											// 選択している番号
 	static CMeshField *m_pMeshField;								//床
 	static CWall *m_pWall[4];										//壁
-	SELECTTYPE m_type;												//選択されている番号の状態
+	SELECTTYPE m_type, m_typeOld;												//選択されている番号の状態
 	char *m_pcStageSelect[MAX_STAGESELECT];							// ステージの名前保管
 	CSetObject *m_pObj;
 
 	/* 演出系変数 */
 	int m_nCntScrool;												//スクロールのカウンター
 	D3DXVECTOR3 m_SelectPos[MAX_STAGESELECT];						//セレクトの位置を保存
-	SELECTICONSTATE m_MoveIconState;								//移動の状態
 	float m_fWidth[MAX_STAGESELECT], m_fHeight[MAX_STAGESELECT];	//縦と横の形を保存しておく
 	D3DXCOLOR m_IconCol[MAX_STAGESELECT];							//色を保存しておく
-	bool m_bRep;													//入れ替えを一回だけやるフラグ
 	D3DXVECTOR3 m_CameraRot, m_CameraPosV,m_CameraPosR;				//カメラ
 	bool m_bLoad;													//ステージの読み込みを１回だけやるフラグ
 	MASKFADE m_MaskFade;											//マスクのフェード処理
