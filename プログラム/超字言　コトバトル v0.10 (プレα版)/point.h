@@ -14,6 +14,7 @@
 //　前方宣言
 //*****************************************************************************
 class CNumber;
+class CBillNumber;
 class CScene2D;
 
 //*****************************************************************************
@@ -55,6 +56,7 @@ public:
 	//============================
 	void AddPoint(int nPoint);				// 加算処理
 	void SubtractionPoint(int nPoint);		// 減算処理
+	void RankLogoTex(int nWinNum);			// 順位のTEX変更
 
 
 private:
@@ -63,15 +65,18 @@ private:
 	int PowerCalculation(int nData);
 	void PointBGCreate(void);			// ポイントの背景生成
 	void BGPosition(CScene2D *pBg);		// 背景の位置まとめ
-	void UIPosition(void);				// UIの位置まとめ
-	void PointPostion(int nNumPlayer, int nID);			// ポイントの位置まとめ
+	void UIPosition(int nID);			// UIの位置まとめ
+	void PointPostion();				// ポイントの位置まとめ
 	void SizeChange(void);				// 増減時のサイズ変更
+	void RankPos(void);					// 順位の位置まとめ
 
-	CNumber *m_apNumber[MAX_POINT_NUM];	// ナンバーへのポインタ
+	CBillNumber *m_apNumber[MAX_POINT_NUM];	// ナンバーへのポインタ
 	int m_nTotalPoint;							// トータルのポイント
 	int						m_nPointNum;		// ポイントの表示数字数
 	int						m_nNumPlayer;		// 人数保管
 	int						m_nID;				// 自分の番号
+	int						m_nCount;			// 二桁目に行くかのカウント
+	float					m_fPosOld;
 	bool					m_bStart;
 	bool					m_bSizeChange;		// ポイント増減時のサイズ変更
 	bool					m_bColChange;		// 色の切替
@@ -79,6 +84,7 @@ private:
 	bool					m_bFlag;
 	D3DXVECTOR3				m_pos;				// 位置
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
+	CScene2D				*m_pRank;			// 順位のロゴ
 	TYPE_CHARACTER			m_type;				// 種類
 };
 #endif

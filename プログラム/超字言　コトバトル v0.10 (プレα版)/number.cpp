@@ -357,7 +357,7 @@ void CBillNumber::SetNumber(int nNumber)
 //=============================================================================
 // サイズ設定
 //=============================================================================
-void CBillNumber::SetSize(D3DXVECTOR3 size, D3DXVECTOR3 pos)
+void CBillNumber::SetSize(D3DXVECTOR3 size)
 {
 	m_size = size;
 	VERTEX_3D *pVtx;				//頂点情報へのポインタ
@@ -366,14 +366,23 @@ void CBillNumber::SetSize(D3DXVECTOR3 size, D3DXVECTOR3 pos)
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	//頂点座標
-	pVtx[0].pos = D3DXVECTOR3(pos.x - size.x, pos.y + size.y, 0.0f);
-	pVtx[1].pos = D3DXVECTOR3(pos.x + size.x, pos.y + size.y, 0.0f);
-	pVtx[2].pos = D3DXVECTOR3(pos.x - size.x, 0.0f, 0.0f);
-	pVtx[3].pos = D3DXVECTOR3(pos.x + size.x, 0.0f, 0.0f);
+	pVtx[0].pos = D3DXVECTOR3(-size.x, size.y, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(size.x, size.y, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(-size.x, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(size.x, 0.0f, 0.0f);
 
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
+
+//=============================================================================
+// 位置設定
+//=============================================================================
+void CBillNumber::SetPos(D3DXVECTOR3 pos)
+{
+	m_pos = pos;
+}
+
 
 //=============================================================================
 // 色の設定

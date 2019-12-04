@@ -51,7 +51,8 @@ public:
 
 	void SetNumber(int nNumber);
 	void SetCol(D3DXCOLOR col);
-	void SetSize(D3DXVECTOR3 size, D3DXVECTOR3 pos);
+	void SetSize(D3DXVECTOR3 size);
+	void SetPos(D3DXVECTOR3 pos);
 
 	D3DXVECTOR3 GetSize(void) { return m_size; }
 	D3DXVECTOR3 GetPos(void) { return m_pos; }

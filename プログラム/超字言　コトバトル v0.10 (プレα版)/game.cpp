@@ -327,6 +327,8 @@ void CGame::Update(void)
 		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
 	}
 
+	RankingUpdata();	// 順位を常に変更
+
 #ifdef _DEBUG
 
 #endif
@@ -762,7 +764,47 @@ CTube *CGame::GetTube(int nNum)
 	return NULL;
 }
 
+//=============================================================================
+// 順位の更新処理
+//=============================================================================
+void CGame::RankingUpdata(void)
+{
+	int nPoint[MAX_PLAYER] = {};
+	int nRank[MAX_PLAYER] = {};
+	int nNumWin[MAX_PLAYER] = {};
 
+	for (int nCntPoint = 0; nCntPoint < MAX_PLAYER; nCntPoint++)
+	{	// ポイントと自身の番号を取得
+		if (m_pPoint[nCntPoint] != NULL)
+		{
+			nPoint[nCntPoint] = m_pPoint[nCntPoint]->GetPoint();
+		}
+	}
+
+	for (int nCntRank = 0; nCntRank < MAX_PLAYER; nCntRank++)
+	{
+		int nCntWin = 0;
+		for (int nCntSort = 0; nCntSort < MAX_PLAYER; nCntSort++)
+		{
+			if (nPoint[nCntRank] >= nPoint[nCntSort])
+			{	// 勝利数を加算
+				nCntWin++;
+			}
+		}
+
+		nNumWin[nCntRank] = nCntWin;	// 勝利数代入
+	}
+
+	// Tex変更 順位を合わせる
+	for (int nCntRankTex = 0; nCntRankTex < MAX_PLAYER; nCntRankTex++)
+	{
+		if (m_pPoint[nCntRankTex] != NULL)
+		{
+			m_pPoint[nCntRankTex]->RankLogoTex(MAX_PLAYER - nNumWin[nCntRankTex]);
+		}
+	}
+
+}
 
 #if 0
 //=============================================================================
