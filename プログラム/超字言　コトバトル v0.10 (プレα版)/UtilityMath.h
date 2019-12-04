@@ -170,6 +170,9 @@ public:
 		EASE_IN_CUBIC,			//三次関数(IN)
 		EASE_OUT_CUBIC,			//三次関数(OUT)
 		EASE_INOUT_CUBIC,		//三次関数(IN&OUT)
+		EASE_IN_EXPO,			//指数関数(IN)
+		EASE_OUT_EXPO,			//指数関数(OUT)
+		EASE_INOUT_EXPO,		//指数関数(IN&OUT)
 	};
 
 	static float Easing(EASE_TYPE type,float& fTime);

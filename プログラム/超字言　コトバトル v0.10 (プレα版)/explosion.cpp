@@ -49,6 +49,7 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 
 	m_fDestSize = fDestSize;
 	m_fSize = fStartSize;
+	m_DefaultSize = fStartSize;
 	m_nLife = nLife;
 	m_nExpandTime = nLife;
 	m_nCount = 0;
@@ -84,6 +85,7 @@ void CExplosion3D::SetEX(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int
 
 	m_fDestSize = fDestSize;
 	m_fSize = fStartSize;
+	m_DefaultSize = fStartSize;
 	m_nLife = nLife;
 	m_nExpandTime = nExpandTime;
 	m_spinSpeed = spinSpeed;
@@ -134,14 +136,14 @@ void CExplosion3D::Uninit(void)
 void CExplosion3D::Update(void)
 {
 	//サイズ更新
-	D3DXVECTOR3 Size = D3DXVECTOR3(m_fSize, m_fSize, m_fSize);
+	D3DXVECTOR3 Size = D3DXVECTOR3(m_DefaultSize, m_DefaultSize, m_DefaultSize);
 	D3DXVECTOR3 SizeDest = D3DXVECTOR3(m_fDestSize, m_fDestSize, m_fDestSize);
 
 	if (m_nCount <= m_nExpandTime)
 	{
 		float fTime = ((float)(m_nCount + 1) / (float)m_nExpandTime);
-		float fEasing = CEasingFunc::Easing(CEasingFunc::EASE_OUT_CUBIC,fTime);
-		D3DXVec3Lerp(&Size, &Size, &SizeDest, fTime);
+		float fEasing = CEasingFunc::Easing(CEasingFunc::EASE_OUT_EXPO,fTime);
+		D3DXVec3Lerp(&Size, &Size, &SizeDest, fEasing);
 	}
 
 	GetScale() = Size;

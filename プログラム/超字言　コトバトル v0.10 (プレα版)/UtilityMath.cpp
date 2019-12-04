@@ -179,7 +179,7 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 		fTime /= 0.5f;//0`1‚ğ0`2‚Ö‚Æ•â³‚·‚é(Œã‚Å0.5‚ğŠ|‚¯‚Ä‘Å‚¿Á‚·)
 
 		/*Œ‹‰Ê‚É‚æ‚Á‚Äˆ—‚ğ•Ï‚¦‚é*/
-		if (fTime < 1.0f)
+		if (fTime < 1)
 		{//1ˆÈ‰º‚È‚ç’Êí‚Ì“ñŸŠÖ”‚ğg‚¤
 			fResult = fTime * fTime * 0.5f;
 		}
@@ -200,7 +200,7 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 		fTime /= 0.5f;	//0`1‚ğ0`2‚Ö‚Æ•â³‚·‚é(Œã‚Å0.5‚ğŠ|‚¯‚Ä‘Å‚¿Á‚·)
 
 		/*Œ‹‰Ê‚É‚æ‚Á‚Äˆ—‚ğ•Ï‚¦‚é*/
-		if (fTime < 1.0f)
+		if (fTime < 1)
 		{//1ˆÈ‰º‚È‚ç’Êí‚ÌOŸŠÖ”‚ğg‚¤
 			fResult = 0.5f*fTime*fTime*fTime;
 		}
@@ -208,6 +208,24 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 		{//‚»‚êˆÈã‚È‚çŒX‚«‚ª‹t‚É‚È‚Á‚½OŸŠÖ”‚ğg‚¤
 			fTime = fTime - 2;
 			fResult = 0.5f * (fTime*fTime*fTime + 2);
+		}
+		break;
+	case EASE_IN_EXPO:
+		fResult = (float)exp2(10.0 * ((double)fTime - 1.0));
+		break;
+	case EASE_OUT_EXPO:
+		fResult = (-((float)exp2(-10.0 * (double)fTime)) + 1);
+		break;
+	case EASE_INOUT_EXPO:
+		fTime /= 0.5f;//0`1‚ğ0`2‚Ö‚Æ•â³‚·‚é(Œã‚Å0.5‚ğŠ|‚¯‚Ä‘Å‚¿Á‚·)
+		if (fTime < 1)
+		{
+			fResult = 0.5f * (float)exp2(10.0 * ((double)fTime - 1.0));
+		}
+		else
+		{
+			fTime -= 1.0f;
+			fResult = 0.5f * (-((float)exp2(-10.0 * (double)fTime)) + 2.0f);
 		}
 		break;
 	}
