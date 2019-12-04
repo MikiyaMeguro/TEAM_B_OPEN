@@ -14,6 +14,7 @@
 #include "player.h"
 #include "tutorial.h"
 #include "game.h"
+#include "avoidui.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -276,6 +277,14 @@ void CScene::DrawAll(int nCamera)
 				{	//草むら以外を描画
 					pScene->Draw();
 				}
+			}
+			else if (pScene->GetObjType() == OBJTYPE_AVOIDUI)
+			{
+				CAvoidUi *pAvoidUI = ((CAvoidUi*)pScene);
+				//どのプレイヤーカメラかを渡す
+				pAvoidUI->SetCameraNum(nCamera - 1);
+				//モデル描画
+				pScene->Draw();
 			}
 			else
 			{

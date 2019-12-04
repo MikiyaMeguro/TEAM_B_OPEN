@@ -58,6 +58,7 @@ public:
 		OBJTYPE_POINT,		// ポイント
 		OBJTYPE_EXPLOSION,	// 爆発
 		OBJTYPE_ORBIT,		// 軌跡
+		OBJTYPE_AVOIDUI,	// プレイヤー足元UI
 		OBJTYPE_MAX			// 総数
 	} OBJTYPE;
 

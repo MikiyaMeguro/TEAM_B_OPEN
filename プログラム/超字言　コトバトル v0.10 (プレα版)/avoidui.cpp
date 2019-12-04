@@ -80,6 +80,7 @@ HRESULT CAvoidUi::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXC
 	CScene3D::Init();
 	CScene3D::SetSizeY(size.y, size.x);
 	CScene3D::BindTexture("AVOID");
+	SetObjType(CScene::OBJTYPE_AVOIDUI);
 
 	return S_OK;
 }

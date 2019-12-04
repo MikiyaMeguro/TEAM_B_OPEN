@@ -337,7 +337,6 @@ void CPlayer::Update(void)
 				m_bStealth = true;
 				m_nStealthTimer = 0;
 			}
-
 			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 			{
 				if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
@@ -855,15 +854,12 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							{
 								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
 								{	//‘¼ƒvƒŒƒCƒ„[‚ÉŒ©‚¦‚Ä‚¢‚é
-									if (CManager::GetMode() == CManager::MODE_RESULT)
-									{
-										int nte = GetID();
-										pPlayer[nCntPlayer]->SetVision(GetID(), true);
-									}
+									int nte = GetID();
+									pPlayer[nCntPlayer]->SetVision(GetID(), true);
 								}
 							}
 
-							//m_bStealth = false;
+							//m_bStealth = true;
 							bHit = false;
 						}
 					}

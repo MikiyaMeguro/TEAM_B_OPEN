@@ -147,6 +147,12 @@ void C3DCharactor::Update(void)
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 	D3DXVECTOR3& move = CCharaBase::GetMove();
 
+	CPlayer *pPlayer[MAX_PLAYER];
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		pPlayer[nCntPlayer] = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
+	}
+
 	//経路情報
 	if (m_pWayPoint != NULL)
 	{
@@ -210,8 +216,8 @@ void C3DCharactor::Update(void)
 	if (m_pCAvoidUi != NULL)
 	{
 		for (int nCP = 0; nCP < MAX_PLAYER; nCP++)
-		{
-			m_pCAvoidUi->SetVision(nCP, GetThisCharactor()->GetVision(nCP));
+		{	//見えていないプレイヤーの足元のUIを消す処理
+			m_pCAvoidUi->SetVision(nCP, pPlayer[nCP]->GetVision(GetThisCharactor()->GetID()));
 		}
 	}
 
