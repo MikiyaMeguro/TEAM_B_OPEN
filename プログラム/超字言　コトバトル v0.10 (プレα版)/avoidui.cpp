@@ -38,6 +38,11 @@ CAvoidUi::CAvoidUi() : CScene3D(4, CScene::OBJTYPE_WALL)
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
 	m_bDraw = true;
+	m_nCamera = 0;
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{	//他プレイヤーから見えているかどうか
+		m_bVision[nCnt] = true;
+	}
 }
 
 //=============================================================================
@@ -103,7 +108,7 @@ void CAvoidUi::Draw(void)
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	if (m_bDraw == true)
+	if (m_bDraw == true && m_bVision[m_nCamera] == true)
 	{
 		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
 		CScene3D::Draw();

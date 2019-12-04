@@ -41,10 +41,16 @@ public:
 	static CAvoidUi *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV);		// ìñÇΩÇËîªíË
 
 	void SetDrawFlag(bool bDraw) { m_bDraw = bDraw; };
+	void SetCameraNum(int nCamera) { m_nCamera = nCamera; };
+	bool GetVision(int nPlayer) { return m_bVision[nPlayer]; };
+	void SetVision(int nPlayer, bool Vision) { m_bVision[nPlayer] = Vision; };
+
 private:
 	int m_nCounter;
 	bool m_bDraw;
 	D3DXVECTOR3 m_move;
+	int	m_nCamera;			//ÉJÉÅÉâÇÃî‘çÜ
+	bool m_bVision[4];		//å©Ç¶ÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©
 };
 
 #endif

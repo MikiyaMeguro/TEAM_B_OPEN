@@ -17,6 +17,7 @@
 class CPlayer;
 class CNumber;
 class CScene2D;
+class CCharaBase;
 
 //=============================================================================
 // マクロ定義
@@ -36,6 +37,7 @@ public:
 		int nNumRank;
 		int nPoint;
 		CPlayer::PLAYER_TYPE type;
+		CCharaBase::CHARACTOR_MOVE_TYPE Movetype;
 	}CharaSet;
 
 	CResult();
@@ -45,9 +47,10 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 地面の取得
-	static void SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, int nPoint);
+	static void SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, CCharaBase::CHARACTOR_MOVE_TYPE typeM, int nPoint);
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
 	void TexPoint(int nPlayer, int nPoint);
+	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
 
 private:
 	/* ポリゴンの種類 */
@@ -56,10 +59,13 @@ private:
 		RESULTTYPE_WINDOW = 0,	//ウィンドウ
 		RESULTTYPE_MAX			//最大数
 	}STAGESELECTTYPE;
-
+	
 	void InitPointer(void);
 	void SetPolygon(void);
 	void SetAlpha(void);
+	void Set2DUI(int nNum,int nPosNum);
+	void RankTex(int nNum,int nRank);
+	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
 
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
@@ -74,6 +80,12 @@ private:
 
 	bool m_bMenu;
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ
+	D3DXVECTOR3 m_RankPos[MAX_PLAYER];			//順位の位置を保存
+	D3DXVECTOR3 m_PlayerNumPos[MAX_PLAYER];		//プレイヤーナンバーの位置を保存
+	D3DXVECTOR3 m_PlayerIconPos[MAX_PLAYER];	//アイコンの位置を保存
+	D3DXVECTOR2 m_RankIconSize[MAX_PLAYER];		//順位のサイズを保存(X:幅,Y:高さ)
+	D3DXVECTOR2 m_PlayerNumSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
+	D3DXVECTOR2 m_PlayerIconSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
 
 };
 #endif

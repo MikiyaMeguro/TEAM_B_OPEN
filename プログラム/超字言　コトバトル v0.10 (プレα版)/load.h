@@ -65,10 +65,16 @@ public:
 		MODEL_FLOOR,		// 第三地形
 		MODEL_ORI2,			// 檻2
 		MODEL_BUSH,			// 草むら
+		MODEL_ITA,			// 板柵
+		MODEL_ITA2,			// 板柵
+		MODEL_KUSA,			// 草
 
-		MODEL_STAGEFLOOR,	// 各ステージの床
+
+		MODEL_STAGEFLOOR,		// 各ステージの床
 		MODEL_STAGEFLOOR001,	// 各ステージの床
 		MODEL_STAGEFLOOR002,	// 各ステージの床
+
+		MODEL_STAGEOUT,			// 各ステージ周り
 
 		//--------------------------------------
 		// 文字モデル

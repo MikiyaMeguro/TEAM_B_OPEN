@@ -529,6 +529,13 @@ void CTube::UninitChack(bool bFlag)
 //=============================================================================
 void CTube::Toward(void)
 {
+	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
+	float fMove = 0.0f;
+
+	if (NumPlayer == 1) { fMove = 12.0f; }
+	else if (NumPlayer != 1) { fMove = 10.0f; }
+
+
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{
 		if (m_apWord[nCntWord] != NULL && m_pShootingStar[nCntWord] != NULL)
@@ -546,8 +553,8 @@ void CTube::Toward(void)
 			//fRot += 0.1f;
 
 			// 目的地と自身の位置を測る
-			move.x = sinf(atan2f(m_apWord[nCntWord]->GetPosition().x - m_pShootingStar[nCntWord]->GetPosition().x, m_apWord[nCntWord]->GetPosition().y - m_pShootingStar[nCntWord]->GetPosition().y)) * 10.0f;
-			move.y = cosf(atan2f(m_apWord[nCntWord]->GetPosition().x - m_pShootingStar[nCntWord]->GetPosition().x, m_apWord[nCntWord]->GetPosition().y - m_pShootingStar[nCntWord]->GetPosition().y)) * 10.0f;
+			move.x = sinf(atan2f(m_apWord[nCntWord]->GetPosition().x - m_pShootingStar[nCntWord]->GetPosition().x, m_apWord[nCntWord]->GetPosition().y - m_pShootingStar[nCntWord]->GetPosition().y)) * fMove;
+			move.y = cosf(atan2f(m_apWord[nCntWord]->GetPosition().x - m_pShootingStar[nCntWord]->GetPosition().x, m_apWord[nCntWord]->GetPosition().y - m_pShootingStar[nCntWord]->GetPosition().y)) * fMove;
 
 			pos += move;
 
