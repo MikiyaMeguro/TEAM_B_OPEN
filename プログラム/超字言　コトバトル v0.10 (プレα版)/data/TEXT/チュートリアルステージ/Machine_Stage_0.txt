@@ -236,6 +236,24 @@ MODELSET
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 -50.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.4 1.5 7.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 36
+	POS = 200.0 0.0 100.0		#草
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 1.0 3.0
+	COLLISION = 13
+	GIMMICK = 0	
+END_MODELSET
+
 #==========================================================
 # 			文字の配置
 #==========================================================
