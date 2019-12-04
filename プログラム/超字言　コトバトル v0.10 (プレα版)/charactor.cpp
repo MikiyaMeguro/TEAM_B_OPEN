@@ -217,7 +217,10 @@ void C3DCharactor::Update(void)
 	{
 		for (int nCP = 0; nCP < MAX_PLAYER; nCP++)
 		{	//Œ©‚¦‚Ä‚¢‚È‚¢ƒvƒŒƒCƒ„[‚Ì‘«Œ³‚ÌUI‚ðÁ‚·ˆ—
-			m_pCAvoidUi->SetVision(nCP, pPlayer[nCP]->GetVision(GetThisCharactor()->GetID()));
+			if (pPlayer[nCP] != NULL)
+			{
+				m_pCAvoidUi->SetVision(nCP, pPlayer[nCP]->GetVision(GetThisCharactor()->GetID()));
+			}
 		}
 	}
 
