@@ -50,6 +50,7 @@ public:
 private:
 	void IsNotDup(bool bDup) { m_bNotDup = bDup; };
 	float m_fSize;		//サイズ
+	float m_DefaultSize;//初期サイズ
 	float m_fDestSize;	//目標のサイズ
 	int m_nLife;		//体力
 
