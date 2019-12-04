@@ -82,13 +82,14 @@ void CInputXPad::Update(void)
 	{
 		WORD RightStick = 0;
 
+		CheckDeadZone(state);
+
 		//横がY、縦がXになっているので逆にする
 		m_sLStickRotX = state.Gamepad.sThumbLY;
 		m_sLStickRotY = state.Gamepad.sThumbLX;
 		m_sRStickRotX = state.Gamepad.sThumbRY;
 		m_sRStickRotY = state.Gamepad.sThumbRX;
 
-		CheckDeadZone(state);
 		CDebugProc::Print("cn","L_STICKROT_X : ", m_sLStickRotX);
 		CDebugProc::Print("cn", "L_STICKROT_Y : ", m_sLStickRotY);
 		CDebugProc::Print("cn", "R_STICKROT_X : ", m_sRStickRotX);
@@ -238,6 +239,25 @@ void CInputXPad::CheckDeadZone(XINPUT_STATE& state)
 	}
 }
 
+//===================================================================
+//	スティック角度取得処理
+//===================================================================
+float CInputXPad::GetStickRot(bool LorR, float fRotDeff)
+{
+	float fAngle = fRotDeff;
+	if (LorR == true)
+	{//左スティック
+		fAngle = atan2f((float)m_sLStickRotY, (float)m_sLStickRotX);
+		CUtilityMath::RotateNormarizePI(&fAngle);
+	}
+	else
+	{//右スティック
+		fAngle = atan2f((float)m_sRStickRotY, (float)m_sRStickRotX);
+		CUtilityMath::RotateNormarizePI(&fAngle);
+	}
+
+	return fAngle;
+}
 //===================================================================
 //	入力情報取得処理
 //===================================================================

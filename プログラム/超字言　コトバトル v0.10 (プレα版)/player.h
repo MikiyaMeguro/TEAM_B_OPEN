@@ -188,8 +188,10 @@ public:
 	C3DCharactor*   GetLockOnCharactor(void)		{ return m_pLockOnCharactor;};
 	D3DXVECTOR3     GetBulletMuzzle(void);
 	bool			GetVision(int nPlayer)			{ return m_bVision[nPlayer]; };
-	bool			GetStealth(void)				{ return m_bStealth; };
 	void			SetVision(int nPlayer, bool Vision) { m_bVision[nPlayer] = Vision; };
+	bool			GetStealth(void)				{ return m_bStealth; };
+	void			SetStealth(bool bStealth)		{  m_bStealth = bStealth; };
+	CCharaBase::CHARACTOR_MOVE_TYPE GetMovetype(void) { return m_pCharactorMove->GetMoveType(); }
 	//モーション
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
@@ -203,6 +205,7 @@ private:
 	bool			CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move, D3DXVECTOR3 radius);	// 当たり判定
 	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新
 	int				GetNearPlayer(void);		//近いプレイヤーを取得
+	void			PlayerAlpha(float fAlpha);
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX][BODY_MAX];	//パーツ情報
 
@@ -221,9 +224,9 @@ private:
 	bool m_bSetupBullet;									//弾が撃てる状態の判定用
 	bool m_bAssist;											//エイムアシストのフラグ
 	C3DCharactor* m_pLockOnCharactor;						//ロックオンしているキャラクターの情報
-	bool m_bStealth;											//ステルス状態
+	bool m_bStealth;										//ステルス状態
 	bool m_bVision[4];										//見えているかどうか
-
+	int	 m_nStealthTimer;									//見えている時間をカウント
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報
 	int m_motion[BODY_MAX];												//現在のモーション

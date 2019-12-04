@@ -865,6 +865,9 @@ CPlayer* CManager::GetPlayer(int nID)
 	case MODE_TUTORIAL:
 		return CTutorial::GetPlayer(nID);
 		break;
+	case MODE_RESULT:
+		return CResult::GetPlayer(nID);
+		break;
 	}
 
 	return NULL;
