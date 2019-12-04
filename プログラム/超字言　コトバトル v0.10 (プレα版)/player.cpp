@@ -267,9 +267,9 @@ void CPlayer::Update(void)
 				{//•¶ŽšŠÇ—ƒNƒ‰ƒX‚É’e‚Ì¶¬‚ðˆÏ‘õ‚·‚é
 					if (pCam != NULL)
 					{
-						CamRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+						//CamRot = D3DXVECTOR3(0.0f, pCam->GetRotation().y, 0.0f);
 
-						BulletRot = CamRot;
+						//BulletRot = CamRot;
 						if (m_pLockOnCharactor != NULL)
 						{
 							Homing = m_pLockOnCharactor;
