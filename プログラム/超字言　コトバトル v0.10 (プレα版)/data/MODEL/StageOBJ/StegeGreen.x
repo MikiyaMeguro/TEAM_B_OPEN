@@ -241,7 +241,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\UV\\Green.jpg";
+    "data\\TEXTURE\\UV\\StegeGreen.jpg";
    }
   }
  }
