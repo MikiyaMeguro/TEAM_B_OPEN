@@ -37,6 +37,7 @@ CAvoidUi::CAvoidUi() : CScene3D(4, CScene::OBJTYPE_WALL)
 {
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
+	m_bDraw = true;
 }
 
 //=============================================================================
@@ -101,7 +102,11 @@ void CAvoidUi::Draw(void)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
-	CScene3D::Draw();
-	pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
+
+	if (m_bDraw == true)
+	{
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
+		CScene3D::Draw();
+		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
+	}
 }
