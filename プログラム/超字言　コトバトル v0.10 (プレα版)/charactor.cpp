@@ -307,7 +307,7 @@ void C3DCharactor::Update(void)
 		}
 		else if (GetMoveType() == MOVETYPE_NPC_AI)
 		{
-			m_pCAvoidUi->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 0.7f)); 
+			m_pCAvoidUi->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 0.7f));
 		}
 
 		//if (m_nCntStepCoolTime < 1)
@@ -1108,6 +1108,7 @@ void C3DCharactor::Attack_CPU(void)
 	{
 		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(),GetThisCharactor()->GetPlayerType());
 		m_CpuThink = THINK_NONE;
+		GetThisCharactor()->SetStealth(false);
 	}
 	else if(GetThisCharactor()->GetWordManager()->GetBulletFlag() == false
 		&& GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && CGame::GetbStageSet() == false)

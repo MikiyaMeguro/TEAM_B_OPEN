@@ -38,6 +38,8 @@
 #define USAGI_REACH_LOADTEXT_UPPER "data/MOTION/motion_rabbit_up.txt"			//猫(スピード型)の上半身のロードテキスト
 #define USAGI_REACH_LOADTEXT_LOWER "data/MOTION/motion_rabbit_down.txt"			//猫(スピード型)の下半身のロードテキスト
 
+#define STEALTH_TIMER		(120)
+
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -54,7 +56,8 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_nCntTransTime = 0;
 	m_pPlayerNum = NULL;
 	m_bAssist = true;
-	m_bStealth = false;		//ステルス状態
+	m_bStealth = true;		//ステルス状態になれるかどうか
+	m_nStealthTimer = 0;
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
@@ -225,6 +228,24 @@ void CPlayer::Update(void)
 	D3DXVECTOR3 testmove;
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
+	CPlayer *pPlayer[MAX_PLAYER];
+	// プレイヤーを取得
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
+		}
+	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			pPlayer[nCntPlayer] = CTutorial::GetPlayer(nCntPlayer);
+		}
+	}
+
+
 	if (m_pCharactorMove != NULL &&
 		(CManager::GetMode() == CManager::MODE_GAME ||CManager::GetMode() == CManager::MODE_TUTORIAL))
 	{
@@ -328,11 +349,18 @@ void CPlayer::Update(void)
 					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
 					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
 
+					if (m_pWordManager->GetBulletFlag() == true)
+					{
+						m_bStealth = false;
+					}
+
 					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot,m_PlayerType,Homing);
 					if (m_pWordManager->GetCntNum() == 0)
 					{
 						m_bSetupBullet = false;
 					}
+
+
 				}
 				m_pLockOnCharactor = NULL;
 				if (pCam != NULL)
@@ -397,6 +425,26 @@ void CPlayer::Update(void)
 			CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
 
 		}
+
+		//弾発射時に半透明
+		if(m_bStealth == false)
+		{
+			m_nStealthTimer++;
+			if (m_nStealthTimer > STEALTH_TIMER)
+			{
+				m_bStealth = true;
+				m_nStealthTimer = 0;
+			}
+
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+			{
+				if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
+				{	//他プレイヤーに見えている
+					pPlayer[nCntPlayer]->SetVision(GetID(), true);
+				}
+			}
+		}
+
 
 		//文字管理クラスの更新
 		if (m_pWordManager != NULL)
@@ -889,17 +937,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 						}
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
 						{	//草むらにいるとき透明にする
-							for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
-							{
-								for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
-								{
-									if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
-									{
-										float fAlpha = 0.5f;
-										m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha, 300);
-									}
-								}
-							}
+							PlayerAlpha(0.5f);
 
 							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 							{
@@ -909,7 +947,6 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 									pPlayer[nCntPlayer]->SetVision(GetID(), false);
 								}
 							}
-							m_bStealth = true;
 							nCntBush++;
 						}
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
@@ -919,20 +956,10 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					}
 					else
 					{
-						if (m_bStealth == true && nCntBush == 0)
-						{
+						if (nCntBush == 0)
+						{//草むらに入っていないとき
 							//透明を戻す
-							float fAlpha = 1.0f;
-							for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
-							{
-								for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
-								{
-									if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
-									{
-										m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha, 300);
-									}
-								}
-							}
+							PlayerAlpha(1.0f);
 
 							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 							{
@@ -942,7 +969,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 								}
 							}
 
-							m_bStealth = false;
+							//m_bStealth = false;
 							bHit = false;
 						}
 					}
@@ -1022,6 +1049,23 @@ int		CPlayer::GetNearPlayer(void)
 		}
 	}
 	return nPlayerNum;
+}
+
+//=============================================================================
+// 透明度の設定処理
+//=============================================================================
+void CPlayer::PlayerAlpha(float fAlpha)
+{
+	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
+	{
+		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+		{
+			if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+			{
+				m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha, 300);
+			}
+		}
+	}
 }
 
 //=============================================================================
