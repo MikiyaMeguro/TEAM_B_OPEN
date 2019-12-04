@@ -1057,6 +1057,33 @@ MODELSET						# 草
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+MODELSET						# 草
+	TYPE = 39
+	POS = -86 0.0 -186.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.3 0.3 0.3
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39
+	POS = -336 0.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.3 0.3 0.3
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39
+	POS = 185 0.0 -117.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.3 0.3 0.3
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
 -----------------------------------------------------------
 
 MODELSET						# 地下
