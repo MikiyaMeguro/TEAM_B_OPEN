@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 40 
+NUM_MODEL = 44
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -51,11 +51,15 @@ MODEL_FILENAME = data/MODEL/StageOBJ/Icefloor.x"			#33 氷床
 MODEL_FILENAME = data/MODEL/StageOBJ/floor.x"				#34 第三地面
 MODEL_FILENAME = data/MODEL/StageOBJ/ori2.x"				#35 檻2
 MODEL_FILENAME = data/MODEL/StageOBJ/bush.x"				#36 草
+MODEL_FILENAME = data/MODEL/StageOBJ/ita.x"					#37 板柵
+MODEL_FILENAME = data/MODEL/StageOBJ/ita2.x"				#38 板柵
+MODEL_FILENAME = data/MODEL/StageOBJ/kusa.x"				#39 草2
 
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage1.x"				#37 床
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage2.x"				#38 床
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage3.x"				#39 床
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage1.x"				#40 床
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage2.x"				#41 床
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage3.x"				#42 床
 
+MODEL_FILENAME = data/MODEL/StageOBJ/StegeGreen.x"			#43 ステージ周り
 
 
 
