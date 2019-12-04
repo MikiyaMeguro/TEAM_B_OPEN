@@ -63,8 +63,6 @@ private:
 	void DebugKey(void);
 	void TimeManagement(void);
 	int PowerCalculation(int nData);
-	void PointBGCreate(void);			// ポイントの背景生成
-	void BGPosition(CScene2D *pBg);		// 背景の位置まとめ
 	void UIPosition(int nID);			// UIの位置まとめ
 	void PointPostion();				// ポイントの位置まとめ
 	void SizeChange(void);				// 増減時のサイズ変更

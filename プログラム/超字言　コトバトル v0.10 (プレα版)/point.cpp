@@ -100,8 +100,6 @@ HRESULT CPoint::Init(void)
 	m_nTotalPoint = 0;
 	m_nPointNum = PowerCalculation(m_nTotalPoint);
 
-	PointBGCreate();		// ポイントの背景生成
-
 	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
 	{	// ポイント初期設定
 		m_apNumber[nCntPoint] = new CBillNumber;
@@ -283,73 +281,6 @@ void CPoint::DebugKey(void)
 }
 
 //=============================================================================
-// ポイントの背景生成
-//=============================================================================
-void CPoint::PointBGCreate(void)
-{
-	CScene2D *pBg = NULL;
-
-	BGPosition(pBg);
-}
-
-//=============================================================================
-// 背景の位置設定
-//=============================================================================
-void CPoint::BGPosition(CScene2D *pBg)
-{
-	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
-	if (m_nNumPlayer != 2 && m_nID == 0)
-	{	// 画面左上 (1, 3, 4画面 1P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 40.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nNumPlayer == 1 && m_nID == 3 || m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 1)
-	{	// 画面右上 (1画面 4P , 3～4画面 2P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 40.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nID == 1&& m_nNumPlayer == 1)
-	{	// 画面左上 (1画面 2P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(400.0f, 40.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nID == 2 && m_nNumPlayer == 1)
-	{	// 画面右上 (1画面 3P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(880.0f, 40.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 2)
-	{	// 画面左 ( 3画面、4画面 3P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(120.0f, 408.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nNumPlayer > 2 && m_nNumPlayer <= MAX_PLAYER && m_nID == 3)
-	{	// 画面右 (3画面 ～ 4画面 4P)の位置
-		pBg = CScene2D::Create(D3DXVECTOR3(1160.0f, 408.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nNumPlayer == 2 && m_nID == 0)
-	{	// 2画面 1P
-		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 40.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nID == 1 && m_nNumPlayer == 2)
-	{	// 2画面 2P
-		pBg = CScene2D::Create(D3DXVECTOR3(250.0f, 408.0f, 0.0f), "BG_FREAME", 5);
-	}
-	else if (m_nID == 2 && m_nNumPlayer == 2)
-	{	// 2画面 3P
-		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 40.0f, 0.0f), "BG_FREAME", 5);
-	}
-	
-	else if (m_nID == 3 && m_nNumPlayer == 2)
-	{	// 2画面 4P
-		pBg = CScene2D::Create(D3DXVECTOR3(1020.0f, 408.0f, 0.0f), "BG_FREAME", 5);
-	}
-	
-
-	if (pBg != NULL)
-	{	// サイズと色の設定
-		pBg->SetWidthHeight(100.0f, 60.0f);
-		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-
-}
-
-//=============================================================================
 // UIの位置設定
 //=============================================================================
 void CPoint::UIPosition(int nID)
@@ -360,6 +291,7 @@ void CPoint::UIPosition(int nID)
 	D3DXVECTOR3 posLogo = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	CScene2D *pNumber = NULL;
 
+	//
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer != 2 && nID == 0)
 	{	// 1, 3, 4画面 1Pの位置
@@ -379,11 +311,17 @@ void CPoint::UIPosition(int nID)
 		posNumber = D3DXVECTOR3(885.0f, 18.0f, 0.0f);
 		posLogo = D3DXVECTOR3(925.0f, 12.0f, 0.0f);
 	}
-	else if (nID == 3 && m_nNumPlayer == 1 || nID == 1 && m_nNumPlayer == 3 || nID == 1 && m_nNumPlayer == 4)
-	{	// 1画面 4P, 3画面 2P, 4画面 2Pの位置
+	else if (nID == 3 && m_nNumPlayer == 1 )
+	{	// 1画面 4P
 		posIcon = D3DXVECTOR3(1125.0f, 55.0f, 0.0f);
 		posNumber = D3DXVECTOR3(1165.0f, 18.0f, 0.0f);
 		posLogo = D3DXVECTOR3(1205.0f, 12.0f, 0.0f);
+	}
+	else if (nID == 1 && m_nNumPlayer == 3 || nID == 1 && m_nNumPlayer == 4)
+	{	// 3画面 2P, 4画面 2Pの位置
+		posIcon = D3DXVECTOR3(700.0f, 55.0f, 0.0f);
+		posNumber = D3DXVECTOR3(740.0f, 18.0f, 0.0f);
+		posLogo = D3DXVECTOR3(780.0f, 12.0f, 0.0f);
 	}
 	else if (nID == 2 && m_nNumPlayer == 3 || nID == 2 && m_nNumPlayer == 4)
 	{ // 3画面 3P, 4画面 3Pの位置
@@ -393,9 +331,9 @@ void CPoint::UIPosition(int nID)
 	}
 	else if  (nID == 3 && m_nNumPlayer == 3 || nID == 3 && m_nNumPlayer == 4)
 	{	//  3画面 4P, 4画面 4Pの位置
-		posIcon = D3DXVECTOR3(1125.0f, 425.0f, 0.0f);
-		posNumber = D3DXVECTOR3(1165.0f, 386.0f, 0.0f);
-		posLogo = D3DXVECTOR3(1205.0f, 380.0f, 0.0f);
+		posIcon = D3DXVECTOR3(700.0f, 425.0f, 0.0f);
+		posNumber = D3DXVECTOR3(740.0f, 386.0f, 0.0f);
+		posLogo = D3DXVECTOR3(780.0f, 380.0f, 0.0f);
 	}
 
 	else if (m_nNumPlayer == 2 && nID == 0)
@@ -433,7 +371,8 @@ void CPoint::UIPosition(int nID)
 		{
 			nIDIcon = CGame::GetPlayer(nID)->GetPlayerType();
 		}
-		m_pIcon = CScene2D::Create(posIcon, cName[nID], 6);
+		m_pIcon = CScene2D::Create(posIcon, "RANKCHARA_ICON", 6);
+		m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (nID * 0.25f)) , D3DXVECTOR2(1.0f, 0.25f + (nID * 0.25f)));
 		m_pIcon->SetWidthHeight(40.0f, 30.0f);
 		m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
@@ -502,9 +441,13 @@ void CPoint::RankPos(void)
 	{	// 1画面 3Pの場合
 		pos = POINT_POS_3P_ONE;
 	}
-	else if (m_nID == 3 && m_nNumPlayer == 1 || m_nID == 1 && m_nNumPlayer == 3 || m_nID == 1 && m_nNumPlayer == 4)
-	{	// 1画面 4P, 3画面 2P, 4画面 2Pの位置
+	else if (m_nID == 3 && m_nNumPlayer == 1 )
+	{	// 1画面 4P
 		pos = POINT_POS_4P_ONE;
+	}
+	else if (m_nID == 1 && m_nNumPlayer == 3 || m_nID == 1 && m_nNumPlayer == 4)
+	{	// 3画面 2P, 4画面 2Pの位置
+		pos = D3DXVECTOR3(POINT_POS_4P_ONE.x - 425.0f, POINT_POS_4P_ONE.y, POINT_POS_4P_ONE.z);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 3 || m_nID == 2 && m_nNumPlayer == 4)
 	{ // 3画面 3P, 4画面 3Pの位置
@@ -512,7 +455,7 @@ void CPoint::RankPos(void)
 	}
 	else if (m_nID == 3 && m_nNumPlayer == 3 || m_nID == 3 && m_nNumPlayer == 4)
 	{	// 3画面 4P, 4画面 4Pの位置
-		pos = POINT_POS_4P_TWO;
+		pos = D3DXVECTOR3(POINT_POS_4P_TWO.x - 425.0f, POINT_POS_4P_TWO.y, POINT_POS_4P_TWO.z);
 	}
 
 	else if (m_nNumPlayer == 2 && m_nID == 0)
