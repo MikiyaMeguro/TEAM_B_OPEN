@@ -39,8 +39,11 @@ public:
 	void Draw(void);													// ï`âÊèàóù
 																		// ê∂ê¨
 	static CAvoidUi *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV);		// ìñÇΩÇËîªíË
+
+	void SetDrawFlag(bool bDraw) { m_bDraw = bDraw; };
 private:
 	int m_nCounter;
+	bool m_bDraw;
 	D3DXVECTOR3 m_move;
 };
 

@@ -139,7 +139,9 @@ void CExplosion3D::Update(void)
 
 	if (m_nCount <= m_nExpandTime)
 	{
-		D3DXVec3Lerp(&Size, &Size, &SizeDest, ((float)(m_nCount + 1) / (float)m_nExpandTime));
+		float fTime = ((float)(m_nCount + 1) / (float)m_nExpandTime);
+		float fEasing = CEasingFunc::Easing(CEasingFunc::EASE_OUT_CUBIC,fTime);
+		D3DXVec3Lerp(&Size, &Size, &SizeDest, fTime);
 	}
 
 	GetScale() = Size;
