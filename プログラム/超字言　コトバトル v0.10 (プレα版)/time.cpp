@@ -30,7 +30,7 @@
 #define TIME_POS_4P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 380.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define WAIT_TIME_END		(180)							// 待ち時間
 
-#define COUNTDOWN_SCALE		(4.0f)							// 待ち時間
+#define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
 
 //=============================================================================
 //	静的メンバ変数
@@ -172,7 +172,7 @@ HRESULT CTime::Init(void)
 	if (m_nNumPlayer == 1)
 	{
 		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 	}
 
@@ -201,9 +201,9 @@ HRESULT CTime::Init(void)
 			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 180.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 540.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 
 		// Timeのロゴ
@@ -221,11 +221,11 @@ HRESULT CTime::Init(void)
 			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		}
 		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 180.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(940.0f, 180.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(940.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 540.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
 
 		// Timeのロゴ
@@ -243,13 +243,13 @@ HRESULT CTime::Init(void)
 		}
 
 		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 180.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(940.0f, 180.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(940.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 540.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 540.0f, m_pos.z), "COUNTDOWN2");
+		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[3]->SetWidthHeight(m_fWidth, m_fHeight);
 
 		// Timeのロゴ
@@ -379,17 +379,17 @@ void CTime::Update(void)
 			}
 		}
 		//大きさ最大
-		if (m_fScale > COUNTDOWN_SCALE * 60)
+		if (m_fScale > COUNTDOWN_SCALE * 75)
 		{
-			m_fScale = COUNTDOWN_SCALE * 60;
-			if (m_nType < 3)
+			m_fScale = COUNTDOWN_SCALE * 75;
+			if (m_nType < 1)
 			{
 				m_bCntDown = true;
 				m_nType += 1;
 				m_fScale = 0;
 				m_Col.a = 1.0f;
 			}
-			else if (m_nType == 3)
+			else if (m_nType == 1)
 			{
 				m_bEndCntDown = true;
 				m_Col.a = 0.0f;
@@ -410,16 +410,10 @@ void CTime::Update(void)
 					switch (m_nType)
 					{
 					case 0:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN2");
+						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
 						break;
 					case 1:
 						m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
-						break;
-					case 2:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
-						break;
-					case 3:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN3");
 						m_pScene2D[nCnt]->SetWidthHeight(m_fWidth + 100, m_fHeight + 100);
 						break;
 					default:
