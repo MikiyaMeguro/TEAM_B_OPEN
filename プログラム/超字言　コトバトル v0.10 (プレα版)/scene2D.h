@@ -64,6 +64,8 @@ public:
 	bool GetbDraw(void) { return m_bDraw; }
 	D3DXVECTOR2 GetTex(int nNum) { return m_Tex[nNum]; };
 
+	float GetRot(void) { return m_fSpin; }
+
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ

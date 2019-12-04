@@ -375,42 +375,50 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 		{
 			if (m_nStock[0] < m_nAnswerDataNum)
 			{	// 指定した文字なら弾を生成する
-				CModelBullet* pModel = CModelBullet::Create();
-				if (pModel != NULL)
+				switch (type)
 				{
-					int nType = m_nStock[0];
-					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
-					pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
-					//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+				case CPlayer::TYPE_RANDOM:
+					break;
+				default:
+					CModelBullet* pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						int nType = m_nStock[0];
+						m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+						pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
 
-					pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
-					if (m_type[nType] == CModelBullet::TYPE_MISSILE)
-					{
-						pModel->SetHomingChara(pChara);
-					}
-					m_nCreateType = EMPTINESS_NUM;
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						if (m_type[nType] == CModelBullet::TYPE_MISSILE)
+						{
+							pModel->SetHomingChara(pChara);
+						}
+						m_nCreateType = EMPTINESS_NUM;
 
-					if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+						if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[0])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET000, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET000);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
+						}
+						else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
+						{
+							pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
+							pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
+						}
 					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[1])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET001, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET001);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[2])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET002, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET002);
-					}
-					else if ((CModelBullet::BULLET_PROPERTY)m_type[nType] == (CModelBullet::BULLET_PROPERTY)m_type[3])
-					{
-						pSound->SetVolume(CSound::SOUND_LABEL_SE_BULLET003, 3.0f);
-						pSound->PlaySound(CSound::SOUND_LABEL_SE_BULLET003);
-					}
+					break;
 				}
+
 			}
 			else if (m_nStock[0] == NOT_NUM)
 			{	// ゴミモデルを出す
@@ -419,21 +427,36 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				{
 					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
-
-					//pModel->SetHomingChara(pChara);
 				}
 			}
 
+			if (CManager::GetMode() == CManager::MODE_GAME)
+			{
+				//ブレンド無しで弾打ちモーションに移行
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 
-			//ブレンド無しで弾打ちモーションに移行
-			CManager::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
-			CManager::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
-
-			Reset();		// 設定を戻す
-			if (CManager::GetTube(m_nPlayerID) != NULL)
-			{//筒クラス内の文字情報を削除
-				CManager::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+				Reset();		// 設定を戻す
+				if (CGame::GetTube(m_nPlayerID) != NULL)
+				{//筒クラス内の文字情報を削除
+					CGame::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CGame::GetTube(m_nPlayerID)->UninitChack(false);
+				}
 			}
+			else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+			{
+				//ブレンド無しで弾打ちモーションに移行
+				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
+				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
+
+				Reset();		// 設定を戻す
+				if (CTutorial::GetTube(m_nPlayerID) != NULL)
+				{//筒クラス内の文字情報を削除
+					CTutorial::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
+					CTutorial::GetTube(m_nPlayerID)->UninitChack(false);
+				}
+			}
+
 		}
 	}
 }

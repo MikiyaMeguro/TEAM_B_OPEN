@@ -49,7 +49,7 @@ public:
 
 	void BindTexture(LPCSTR Tag);
 
-	void SetAlpha(float& fAlpha);
+	void SetAlpha(float& fAlpha, int nCount = 0);
 	float GetAlpha(void) { return m_fDiffuseAlpha; };
 private:
 	LPDIRECT3DTEXTURE9     m_pTexture;			// テクスチャへのポインタ

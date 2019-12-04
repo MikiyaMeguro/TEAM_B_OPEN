@@ -54,6 +54,12 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_nCntTransTime = 0;
 	m_pPlayerNum = NULL;
 	m_bAssist = true;
+	m_bStealth = false;		//ステルス状態
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{	//他プレイヤーから見えているかどうか
+		m_bVision[nCnt] = true;
+	}
+
 	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
 		m_nCntKey[nCntBody] = 0;
@@ -156,7 +162,7 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 
 	//描画用モデル生成
 	//m_pPlayerModel = CSceneX::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(1.0f, 1.0f, 1.0f),CLoad::MODEL_SAMPLE_PLAYER,1);
-	//m_pPlayerModel->SetObjType(CScene::OBJTYPE_PLAYER);
+	SetObjType(CScene::OBJTYPE_PLAYER);
 }
 
 //=============================================================================
@@ -267,9 +273,9 @@ void CPlayer::Update(void)
 				{//文字管理クラスに弾の生成を委託する
 					if (pCam != NULL)
 					{
-						CamRot = D3DXVECTOR3(-pCam->GetRotation().x, pCam->GetRotation().y, 0.0f);
+						//CamRot = D3DXVECTOR3(0.0f, pCam->GetRotation().y, 0.0f);
 
-						BulletRot = CamRot;
+						//BulletRot = CamRot;
 						if (m_pLockOnCharactor != NULL)
 						{
 							Homing = m_pLockOnCharactor;
@@ -819,9 +825,26 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 {
 	bool bHit = false;
 	CScene *pScene = NULL;
+	CPlayer *pPlayer[MAX_PLAYER];
+	int nCntBush = 0;
 
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(SCENEX_PRIORITY);
+
+	if (CManager::GetMode() == CManager::MODE_GAME)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
+		}
+	}
+	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
+	{
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			pPlayer[nCntPlayer] = CTutorial::GetPlayer(nCntPlayer);			// プレイヤーを取得
+		}
+	}
 
 	while (pScene != NULL)
 	{// 優先順位が3のオブジェクトを1つ1つ確かめる
@@ -862,10 +885,10 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 						}
 						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
 						{
-							pSceneObj->AffectedLanding(move, m_nID);		// 落ちてくるモデルの着地時の影響
+							pSceneObj->AffectedLanding(move, m_nID);
 						}
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
-						{
+						{	//草むらにいるとき透明にする
 							for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 							{
 								for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
@@ -873,10 +896,21 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 									if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
 									{
 										float fAlpha = 0.5f;
-										m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha);
+										m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha, 300);
 									}
 								}
 							}
+
+							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+							{
+								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID() )
+								{//他プレイヤーに見えていない
+									int ntest = GetID();
+									pPlayer[nCntPlayer]->SetVision(GetID(), false);
+								}
+							}
+							m_bStealth = true;
+							nCntBush++;
 						}
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
 						{
@@ -885,18 +919,32 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					}
 					else
 					{
-						float fAlpha = 1.0f;
-						for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
+						if (m_bStealth == true && nCntBush == 0)
 						{
-							for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
+							//透明を戻す
+							float fAlpha = 1.0f;
+							for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 							{
-								if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+								for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
 								{
-									m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha);
+									if (m_pPlayerParts[nCntParts][nCntBody] != NULL)
+									{
+										m_pPlayerParts[nCntParts][nCntBody]->SetAlpha(fAlpha, 300);
+									}
 								}
 							}
+
+							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+							{
+								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
+								{	//他プレイヤーに見えている
+									pPlayer[nCntPlayer]->SetVision(GetID(), true);
+								}
+							}
+
+							m_bStealth = false;
+							bHit = false;
 						}
-						bHit = false;
 					}
 				}
 			}

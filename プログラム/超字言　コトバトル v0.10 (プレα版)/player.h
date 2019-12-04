@@ -185,8 +185,11 @@ public:
 	bool			GetbSetupBullet(void)			{ return m_bSetupBullet; };	//弾が撃てる状態の判定用
 	void			SetOldPosition(D3DXVECTOR3 pos) { m_posOld = pos; }
 	D3DXVECTOR3		GetOldPosition(void)			{ return m_posOld; };
-	C3DCharactor*   GetLockOnCharactor(void)		{return m_pLockOnCharactor;};
+	C3DCharactor*   GetLockOnCharactor(void)		{ return m_pLockOnCharactor;};
 	D3DXVECTOR3     GetBulletMuzzle(void);
+	bool			GetVision(int nPlayer)			{ return m_bVision[nPlayer]; };
+	bool			GetStealth(void)				{ return m_bStealth; };
+	void			SetVision(int nPlayer, bool Vision) { m_bVision[nPlayer] = Vision; };
 	//モーション
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
@@ -216,8 +219,10 @@ private:
 	CWordManager *m_pWordManager;							//文字管理クラスのポインタ
 
 	bool m_bSetupBullet;									//弾が撃てる状態の判定用
-	bool m_bAssist;										//エイムアシストのフラグ
+	bool m_bAssist;											//エイムアシストのフラグ
 	C3DCharactor* m_pLockOnCharactor;						//ロックオンしているキャラクターの情報
+	bool m_bStealth;											//ステルス状態
+	bool m_bVision[4];										//見えているかどうか
 
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報
