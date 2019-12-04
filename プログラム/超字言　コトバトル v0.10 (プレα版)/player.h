@@ -188,9 +188,9 @@ public:
 	C3DCharactor*   GetLockOnCharactor(void)		{ return m_pLockOnCharactor;};
 	D3DXVECTOR3     GetBulletMuzzle(void);
 	bool			GetVision(int nPlayer)			{ return m_bVision[nPlayer]; };
+	void			SetVision(int nPlayer, bool Vision) { m_bVision[nPlayer] = Vision; };
 	bool			GetStealth(void)				{ return m_bStealth; };
 	void			SetStealth(bool bStealth)		{  m_bStealth = bStealth; };
-	void			SetVision(int nPlayer, bool Vision) { m_bVision[nPlayer] = Vision; };
 	//ÉÇÅ[ÉVÉáÉì
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };

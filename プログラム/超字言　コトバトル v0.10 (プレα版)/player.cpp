@@ -5,13 +5,14 @@
 //
 //=============================================================================
 #include "player.h"
+#include "charactor.h"
 #include "manager.h"
 #include "word_manager.h"
 #include "object.h"
 #include "point.h"
 #include "game.h"
 #include "tutorial.h"
-
+#include "result.h"
 #include "sceneX.h"
 
 #include "debugProc.h"
@@ -230,19 +231,9 @@ void CPlayer::Update(void)
 
 	CPlayer *pPlayer[MAX_PLAYER];
 	// プレイヤーを取得
-	if (CManager::GetMode() == CManager::MODE_GAME)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-		{
-			pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
-		}
-	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-		{
-			pPlayer[nCntPlayer] = CTutorial::GetPlayer(nCntPlayer);
-		}
+		pPlayer[nCntPlayer] = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
 	}
 
 
@@ -789,19 +780,9 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(SCENEX_PRIORITY);
 
-	if (CManager::GetMode() == CManager::MODE_GAME)
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-		{
-			pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
-		}
-	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{
-		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-		{
-			pPlayer[nCntPlayer] = CTutorial::GetPlayer(nCntPlayer);			// プレイヤーを取得
-		}
+		pPlayer[nCntPlayer] = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
 	}
 
 	while (pScene != NULL)
@@ -874,7 +855,11 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							{
 								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
 								{	//他プレイヤーに見えている
-									pPlayer[nCntPlayer]->SetVision(GetID(), true);
+									if (CManager::GetMode() == CManager::MODE_RESULT)
+									{
+										int nte = GetID();
+										pPlayer[nCntPlayer]->SetVision(GetID(), true);
+									}
 								}
 							}
 
@@ -905,14 +890,8 @@ int		CPlayer::GetNearPlayer(void)
 	{
 		pChara = NULL;
 		pPlayer = NULL;
-		if (CManager::GetMode() == CManager::MODE_GAME)
-		{
-			pPlayer = CGame::GetPlayer(nCntPlayer);
-		}
-		else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-		{
-			pPlayer = CTutorial::GetPlayer(nCntPlayer);
-		}
+
+		pPlayer = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
 
 		if (pPlayer != NULL)
 		{

@@ -203,7 +203,15 @@ void C3DCharactor::Update(void)
 			pos += move;
 			//‘¬“x‚ÉŒW”‚ğŠ|‚¯‚é
 			CUtilityMath::MoveCoeffient(move, GetMoveCoeffient());
-			break;
+			true;
+		}
+	}
+
+	if (m_pCAvoidUi != NULL)
+	{
+		for (int nCP = 0; nCP < MAX_PLAYER; nCP++)
+		{
+			m_pCAvoidUi->SetVision(nCP, GetThisCharactor()->GetVision(nCP));
 		}
 	}
 

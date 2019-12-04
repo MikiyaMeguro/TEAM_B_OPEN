@@ -48,6 +48,7 @@ public:
 	static void SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, int nPoint);
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
 	void TexPoint(int nPlayer, int nPoint);
+	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
 
 private:
 	/* ポリゴンの種類 */
