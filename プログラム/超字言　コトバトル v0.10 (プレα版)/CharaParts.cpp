@@ -61,8 +61,8 @@ HRESULT CCharaParts::Init(void)
 	m_WorldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_bDrawFlag = true;
 
-	m_fDiffuseAlpha = 1.0f;
-	m_fOldAlpha = 0.1f;
+	m_fDiffuseAlpha = m_fOldAlpha = 0.5f;
+	//m_fOldAlpha = 0.1f;
 	m_fDestAlpha = 1.0f;
 	m_nCount = 0;
 	return S_OK;
@@ -117,7 +117,7 @@ void CCharaParts::Draw(void)
 
 	D3DMATERIAL9 matDef;		//現在のマテリアル保存用
 	D3DXMATERIAL *pMat;			//マテリアルデータのポインタ
-
+	float fOrgMatAlpha = 0.0f;
 	//マトリックスの計算
 	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_Pos,m_Rot,m_pParent);
 
@@ -137,6 +137,9 @@ void CCharaParts::Draw(void)
 			pMat = (D3DXMATERIAL*)m_pBuffMat->GetBufferPointer();
 			for (int nCntMat = 0; nCntMat < (int)m_nNumMat; nCntMat++)
 			{
+				//元々の値を保存する
+				fOrgMatAlpha = pMat[nCntMat].MatD3D.Diffuse.a;
+
 				//頂点色のα値に値を反映する
 				pMat[nCntMat].MatD3D.Diffuse.a = m_fDiffuseAlpha;
 
@@ -148,6 +151,9 @@ void CCharaParts::Draw(void)
 
 				// モデル(パーツ)の描画
 				m_pMesh->DrawSubset(nCntMat);
+
+				//色を戻す
+				pMat[nCntMat].MatD3D.Diffuse.a = fOrgMatAlpha;
 			}
 		}
 
