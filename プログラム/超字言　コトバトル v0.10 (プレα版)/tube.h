@@ -40,7 +40,7 @@ public:
 	void SetStockNum(int nStock) { m_nStockNum = nStock; }
 	void AllDelete(int nNum);
 	void UninitChack(bool bFlag);	// èIóπÇµÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©ÇÃämîF
-
+	void SetID(int nID) { m_nID = nID; }	// î‘çÜê›íË
 
 	bool GetFlag(void) { return m_bCreateFlag; }
 private:
@@ -57,7 +57,8 @@ private:
 	CScene2D *m_pAnswerModel[MAX_WORD];
 	CScene2D *m_pShootingStar[MAX_WORD];
 	int			m_anAnswerNum[MAX_WORD];
-	int		  m_nAnswer;
+	int		    m_nAnswer;
+	int			m_nID;
 
 	bool	 m_bModelTexFlag;
 	bool	 m_bCreateFlag;

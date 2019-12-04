@@ -185,6 +185,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	D3DXVECTOR2 size = {};
 	D3DXVECTOR3 StockPos = {};
 	D3DXVECTOR2 StockSize = {};
+	D3DXVECTOR3 ToWardPos = {};
 	float fWhile = 0.0f;
 	//m_anAnswerNum[nNum] = nWordNum;
 
@@ -200,9 +201,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 		if (nNum == 0) { pos = POS_ONE_001; }
 		else if (nNum == 1) { pos = POS_TOW_001; }
 		else if (nNum == 2) { pos = POS_THREE_001; }
-		StockPos = POS_ANSWER_STOCK_001;
-		fWhile = WHILE_1P;
-
+		ToWardPos = STAR_POS;
 		if (nNum == 2)
 		{
 			m_sizeAnswer = SIZE_ANSWER_STOCK_001;
@@ -213,14 +212,27 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 		if (nNum == 0) { pos = POS_ONE_002; }
 		else if (nNum == 1) { pos = POS_TOW_002; }
 		else if (nNum == 2) { pos = POS_THREE_002; }
-		StockPos = POS_ANSWER_STOCK_002;
-		fWhile = WHILE_2P;
 
 		if (nNum == 2)
 		{
 			m_sizeAnswer = SIZE_ANSWER_STOCK_002;
 		}
 	}
+
+	if(NumPlayer == 2) 
+	{																																																																																			
+		if (m_nID == 0) { ToWardPos = D3DXVECTOR3(640.0f, 150.0f, 0.0f); }
+		else if (m_nID == 1) { ToWardPos = D3DXVECTOR3(640.0f, 550.0f, 0.0f); }
+	}
+	else if (NumPlayer == 3 || NumPlayer == 4)
+	{
+		if (m_nID == 0) { ToWardPos = D3DXVECTOR3(340.0f, 150.0f, 0.0f); }
+		if (m_nID == 1) { ToWardPos = D3DXVECTOR3(940.0f, 150.0f, 0.0f); }
+		if (m_nID == 2) { ToWardPos = D3DXVECTOR3(340.0f, 550.0f, 0.0f); }
+		if (m_nID == 3) { ToWardPos = D3DXVECTOR3(940.0f, 550.0f, 0.0f); }
+	}
+
+
 
 	if (m_apWord[nNum] == NULL)
 	{
@@ -232,7 +244,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 
 	if (m_pShootingStar[nNum] == NULL)
 	{
-		m_pShootingStar[nNum] = CScene2D::Create(STAR_POS, "WORD", 3);
+		m_pShootingStar[nNum] = CScene2D::Create(ToWardPos, "WORD", 3);
 		m_pShootingStar[nNum]->SetWidthHeight(0.0f, 0.0f);	// ƒTƒCƒYÝ’è
 		m_pShootingStar[nNum]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 		m_pShootingStar[nNum]->SetTex(D3DXVECTOR2(0.0f + ((nWordNum / 5) * 0.1f), 0.0f + ((nWordNum % 5) * 0.2f)), D3DXVECTOR2(0.1f + ((nWordNum / 5) * 0.1f), 0.2f + ((nWordNum % 5) * 0.2f)));

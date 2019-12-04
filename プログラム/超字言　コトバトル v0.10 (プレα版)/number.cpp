@@ -199,3 +199,200 @@ void CNumber::SetCol(D3DXCOLOR col)
 	m_pVtxBuff->Unlock();
 
 }
+
+
+//------------------------------------------------------------------------------
+//	ビルボードのナンバクラス
+//------------------------------------------------------------------------------
+//=============================================================================
+// コンストラクタ
+//=============================================================================
+CBillNumber::CBillNumber()
+{
+	m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_pVtxBuff = NULL;
+	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0, 1.0f);
+	// ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtrxWorld);
+}
+
+//=============================================================================
+// デストラクタ
+//=============================================================================
+CBillNumber::~CBillNumber() {}
+
+//=============================================================================
+//	初期化処理
+//=============================================================================
+HRESULT CBillNumber::Init(D3DXVECTOR3 pos)
+{
+	//デバイスを取得
+	CRenderer *pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+
+	// 頂点情報の作成
+	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
+		D3DUSAGE_WRITEONLY,
+		FVF_VERTEX_3D,
+		D3DPOOL_MANAGED,
+		&m_pVtxBuff,
+		NULL);
+
+	VERTEX_3D *pVtx;
+	//頂点バッファをロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+	//頂点座標 (サイズだけ決める)
+	pVtx[0].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
+	//法線の設定
+	pVtx[0].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	pVtx[1].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	pVtx[2].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	pVtx[3].nor = D3DXVECTOR3(0.0f, 0.0f, -1.0f);
+	//頂点カラー
+	pVtx[0].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[1].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[2].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	pVtx[3].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
+	//テクスチャ座標
+	pVtx[0].tex = D3DXVECTOR2(0.0f, 0.0f);
+	pVtx[1].tex = D3DXVECTOR2(0.1f, 0.0f);
+	pVtx[2].tex = D3DXVECTOR2(0.0f, 1.0f);
+	pVtx[3].tex = D3DXVECTOR2(0.1f, 1.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+	return S_OK;
+}
+
+//=============================================================================
+//	終了処理
+//=============================================================================
+void CBillNumber::Uninit(void)
+{
+	// 頂点バッファの開放
+	if (m_pVtxBuff != NULL)
+	{
+		m_pVtxBuff->Release();
+		m_pVtxBuff = NULL;
+	}
+	//自分を消す(シーン2Dを破棄)
+	delete this;
+}
+
+//=============================================================================
+//	更新処理
+//=============================================================================
+void CBillNumber::Update(void) {}
+
+//=============================================================================
+//	描画処理
+//=============================================================================
+void CBillNumber::Draw(void)
+{
+	//デバイスを取得
+	CRenderer *pRenderer = CManager::GetRenderer();
+	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
+	//計算用マトリックス
+	D3DXMATRIX  mtxView;
+
+	// ワールドマトリックスの初期化
+	D3DXMatrixIdentity(&m_mtrxWorld);
+
+	//ビューマトリックスを取得
+	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
+
+	//マトリックスの設定
+	CUtilityMath::CalWorldMatrix(&m_mtrxWorld,
+		m_pos,
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		NULL,
+		D3DXVECTOR3(1.0f, 1.0f, 1.0f),
+		&mtxView);
+
+	// ワールドマトリックスの設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtrxWorld);
+	//頂点バッファをデータストリームに設定
+	pDevice->SetStreamSource(0, m_pVtxBuff, 0, sizeof(VERTEX_3D));
+	//頂点フォーマットを設定
+	pDevice->SetFVF(FVF_VERTEX_3D);
+
+	//テクスチャの設定
+	pDevice->SetTexture(0, CTexture::GetTexture("NUMBER"));
+
+	// ビルボードの描画
+	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,
+		0,	//開始する頂点のインデックス
+		2); //描画するプリミティブ数
+}
+
+//=============================================================================
+// ナンバーの設定
+//=============================================================================
+void CBillNumber::SetNumber(int nNumber)
+{
+	VERTEX_3D *pVtx;				//頂点情報へのポインタ
+
+	//頂点バッファをロックし頂点データのポインタを取得
+	if (m_pVtxBuff != NULL)
+	{
+		m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+		//テクスチャ座標
+		pVtx[0].tex = D3DXVECTOR2((nNumber % 10) * 0.1f, 0.0f);
+		pVtx[1].tex = D3DXVECTOR2((nNumber % 10) * 0.1f + 0.1f, 0.0f);
+		pVtx[2].tex = D3DXVECTOR2((nNumber % 10) * 0.1f, 1.0f);
+		pVtx[3].tex = D3DXVECTOR2((nNumber % 10) * 0.1f + 0.1f, 1.0f);
+
+		//頂点バッファをアンロックする
+		m_pVtxBuff->Unlock();
+	}
+}
+
+//=============================================================================
+// サイズ設定
+//=============================================================================
+void CBillNumber::SetSize(D3DXVECTOR3 size, D3DXVECTOR3 pos)
+{
+	m_size = size;
+	VERTEX_3D *pVtx;				//頂点情報へのポインタ
+
+	//頂点バッファをロックし頂点データのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	//頂点座標
+	pVtx[0].pos = D3DXVECTOR3(pos.x - size.x, pos.y + size.y, 0.0f);
+	pVtx[1].pos = D3DXVECTOR3(pos.x + size.x, pos.y + size.y, 0.0f);
+	pVtx[2].pos = D3DXVECTOR3(pos.x - size.x, 0.0f, 0.0f);
+	pVtx[3].pos = D3DXVECTOR3(pos.x + size.x, 0.0f, 0.0f);
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+
+//=============================================================================
+// 色の設定
+//=============================================================================
+void CBillNumber::SetCol(D3DXCOLOR col)
+{
+	m_col = col;
+	VERTEX_3D *pVtx;				//頂点情報へのポインタ
+
+	//頂点バッファをロックし頂点データのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 色の設定
+	for (int nCntCol = 0; nCntCol < 4; nCntCol++)
+	{
+		pVtx[nCntCol].col = col;
+	}
+
+	//頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+
+}
