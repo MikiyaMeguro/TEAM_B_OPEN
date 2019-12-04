@@ -179,10 +179,10 @@ HRESULT CPlayer::Init(void)
 	m_nCntTransTime = 0;
 	m_pLockOnCharactor = NULL;
 	//コマンドセット
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_LSHIFT);
-	CCommand::RegistCommand("PLAYER_SHOTBULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_LSHIFT);
+	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
 
-	CCommand::RegistCommand("PLAYER_HOMINGSET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
 	return S_OK;
 }
 
@@ -282,148 +282,59 @@ void CPlayer::Update(void)
 		{
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
-			D3DXVECTOR3 BulletRot = m_pCharactorMove->GetRotation();
+			static D3DXVECTOR3 BulletRot;
 			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
-			float fRotY;
-			D3DXVECTOR3 CamRot, LockOnPos, LockOnMove;
+			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
 			// 弾の生成
-			if (CCommand::GetCommand("PLAYER_SHOTBULLET", m_nID) && CGame::GetbStageSet() == false)
+			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false)
 			{
-				C3DCharactor* Homing = NULL;
-				if (m_pWordManager != NULL)
-				{//文字管理クラスに弾の生成を委託する
-					if (pCam != NULL)
-					{
-						//CamRot = D3DXVECTOR3(0.0f, pCam->GetRotation().y, 0.0f);
+				C3DCharactor* pChara = NULL;
+				if (m_bAssist == true)
+				{//オートエイムモードなら弾角度を敵の方向に合わせる
+					int nNear = GetNearPlayer();
+					if (nNear != -1)
+					{//近いプレイヤーがいればその方向に弾を打つ
+						pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
 
-						//BulletRot = CamRot;
-						if (m_pLockOnCharactor != NULL)
-						{
-							Homing = m_pLockOnCharactor;
-							LockOnPos = m_pLockOnCharactor->GetPosition();
-							LockOnMove = m_pLockOnCharactor->GetMove();
-
-							//普通の計算
-							fRotY = atan2f(((LockOnPos.x + (LockOnMove.x * LOCKON_FUTURE_ROTATE)) - BulletPos.x),
-								((LockOnPos.z + (LockOnMove.z * LOCKON_FUTURE_ROTATE)) - BulletPos.z)) -
-								atan2f(((LockOnPos.x) - BulletPos.x),
-								((LockOnPos.z) - BulletPos.z));
-							CUtilityMath::RotateNormarizePI(&fRotY);
-
-							//fRotX = atan2f((LockOnPos.y - BulletPos.y),
-							//	(LockOnPos.z - BulletPos.z));
-							//CUtilityMath::RotateNormarizePI(&fRotX);
-
-							BulletRot.y += fRotY;
-							CUtilityMath::RotateNormarizePI(&BulletRot.y);
-
-							//クォータニオンを使った計算
-
-							//D3DXQUATERNION BaseQuat,AddQuat;
-							//D3DXQuaternionIdentity(&BaseQuat);
-							//D3DXQuaternionRotationYawPitchRoll(&BaseQuat,BulletRot.y,BulletRot.x,BulletRot.z);	//今の角度をクォータニオンに変換
-
-							////
-							//D3DXQuaternionIdentity(&AddQuat);
-
-							//fRotY = atan2f(((LockOnPos.x + (LockOnMove.x * LOCKON_FUTURE_ROTATE)) - BulletPos.x),
-							//				((LockOnPos.z + (LockOnMove.z * LOCKON_FUTURE_ROTATE)) - BulletPos.z)) -
-							//	    atan2f(((LockOnPos.x) - BulletPos.x),
-							//		((LockOnPos.z) - BulletPos.z));
-							//CUtilityMath::RotateNormarizePI(&fRotY);
-
-							//fRotX = atan2f((LockOnPos.y - BulletPos.y),
-							//	(LockOnPos.z - BulletPos.z));
-							//CUtilityMath::RotateNormarizePI(&fRotX);
-
-							//D3DXQuaternionRotationYawPitchRoll(&AddQuat, fRotY, fRotX, 0.0f);	//足したい角度をクォータニオンに変換
-
-							//D3DXQuaternionMultiply(&BaseQuat,&BaseQuat,&AddQuat);
-
-
-						}
-
+						LockOnObjPos = pChara->GetPosition();
+						LockOnObjRot = pChara->GetRotation();
+						BulletRot.y = atan2f((LockOnObjPos.x - BulletPos.x), (LockOnObjPos.z - BulletPos.z));
+						CUtilityMath::RotateNormarizePI(&BulletRot.y);
 					}
-
-
-					//CUtilityMath::RotateNormarizePI(&BulletRot.x);
-					//CUtilityMath::RotateNormarizePI(&BulletRot.y);
-
-					if (m_pWordManager->GetBulletFlag() == true)
-					{
-						m_bStealth = false;
+					else
+					{//近いプレイヤーがいなければプレイヤーの向きに打つ
+						BulletRot.y = m_pCharactorMove->GetRotation().y;
 					}
-
-					m_pWordManager->BulletCreate(m_nID, GetBulletMuzzle(), BulletRot,m_PlayerType,Homing);
-					if (m_pWordManager->GetCntNum() == 0)
-					{
-						m_bSetupBullet = false;
-					}
-
-
 				}
-				m_pLockOnCharactor = NULL;
-				if (pCam != NULL)
+
+				if (m_pWordManager->GetBulletFlag() == true)
 				{
-					pCam->SetLockOnChara(NULL);
+					m_bStealth = false;
 				}
-				m_bAssist = true;
+
+				m_pWordManager->BulletCreate(m_nID,BulletPos,BulletRot,m_PlayerType, pChara);
 			}
 
-			if (CCommand::GetCommand("PLAYER_HOMINGSET", m_nID))
+			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID))
 			{
-				//テスト
-				int nPlayer = GetNearPlayer();
 
-				if (m_pLockOnCharactor == NULL)
-				{//まだロックオンしてなければ
-					if (m_bAssist == true)
-					{
-						if (nPlayer != -1)
-						{
+				if (CManager::GetXInput(m_nID) != NULL)
+				{//スティック角を取得して発射角とする
+					BulletRot.y = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
 
-							if (CManager::GetMode() == CManager::MODE_GAME) { m_pLockOnCharactor = (C3DCharactor*)(CGame::GetPlayer(nPlayer)->GetCharaMover()); }
-							if (CManager::GetMode() == CManager::MODE_TUTORIAL) { m_pLockOnCharactor = (C3DCharactor*)(CTutorial::GetPlayer(nPlayer)->GetCharaMover()); }
-
-							if (pCam != NULL)
-							{
-								pCam->SetLockOnChara(m_pLockOnCharactor);
-							}
-						}
-						else
-						{
-							m_pLockOnCharactor = NULL;
-							if (pCam != NULL)
-							{
-								pCam->SetLockOnChara(NULL);
-							}
-							m_bAssist = false;
-						}
-					}
 				}
-				else
-				{//ロックオンしていれば
-					if (nPlayer == -1)
-					{
-						m_pLockOnCharactor = NULL;
-						if (pCam != NULL)
-						{
-							pCam->SetLockOnChara(NULL);
-						}
-						m_bAssist = false;
-					}
-				}
+				m_bAssist = false;//セルフエイムモードに設定
 			}
 			else
 			{
-				m_pLockOnCharactor = NULL;
-				if (pCam != NULL)
-				{
-					pCam->SetLockOnChara(NULL);
-				}
+				BulletRot.y = m_pCharactorMove->GetRotation().y;
 			}
-			CDebugProc::Print("cfcfcf", "PLAYER.BulletRot :", BulletRot.x, " ", BulletRot.y, " ", BulletRot.z);
 
+
+			m_pCharactorMove->GetRotation().y = BulletRot.y;
+			m_pCharactorMove->GetSpin().y = 0.0f;
+
+			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
 		}
 
 		//弾発射時に半透明
@@ -519,7 +430,6 @@ void CPlayer::Update(void)
 
 	CDebugProc::Print("cfcfcf", "PLAYER.Pos :", testpos.x, " ", testpos.y, " ", testpos.z);
 	CDebugProc::Print("cfcfcf", "PLAYER.Move :", testmove.x, " ", testmove.y, " ", testmove.z);
-	CDebugProc::Print("cn", "PLAYER.LockOn : ", m_pLockOnCharactor != NULL ? 1 : 0);
 #endif
 }
 
@@ -938,7 +848,6 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
 						{	//草むらにいるとき透明にする
 							PlayerAlpha(0.5f);
-
 							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 							{
 								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID() )
