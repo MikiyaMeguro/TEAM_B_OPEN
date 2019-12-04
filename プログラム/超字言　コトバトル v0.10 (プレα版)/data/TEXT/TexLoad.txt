@@ -100,5 +100,6 @@ DATA = 00078 data/TEXTURE/avoidui.png AVOID
 DATA = 00079 data/TEXTURE/Ranking/Window.png RANKING_WINDOW
 DATA = 00080 data/TEXTURE/Ranking/Rank&PlayerNum.png RANK&PLNUM
 DATA = 00081 data/TEXTURE/Ranking/ICon.png RANKCHARA_ICON
+DATA = 00082 data/TEXTURE/CharactorSelect/ComDisplay.png RANKCHARA_PLNUM_COM
 
 END_LOAD

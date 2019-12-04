@@ -190,6 +190,8 @@ public:
 	bool			GetVision(int nPlayer)			{ return m_bVision[nPlayer]; };
 	bool			GetStealth(void)				{ return m_bStealth; };
 	void			SetVision(int nPlayer, bool Vision) { m_bVision[nPlayer] = Vision; };
+	CCharaBase::CHARACTOR_MOVE_TYPE GetMovetype(void) { return m_pCharactorMove->GetMoveType(); }
+
 	//ÉÇÅ[ÉVÉáÉì
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
