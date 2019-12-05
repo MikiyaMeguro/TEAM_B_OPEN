@@ -12,6 +12,8 @@
 #include "player.h"
 #include "tube.h"
 #include "meshField.h"
+#include "game.h"
+
 //=============================================================================
 // 前方宣言
 //=============================================================================
@@ -38,7 +40,6 @@ class CStageSelect;
 #define PLAYER_INITPOSZ (200.0f)
 
 #define MAX_PLAYER (4)
-#define MAX_STAGE	(2)			// ステージの最大数
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
 #define UI_MAX		(16)
 
