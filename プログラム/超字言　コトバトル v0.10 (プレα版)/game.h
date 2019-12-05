@@ -51,7 +51,7 @@ class CStageSelect;
 #define WORD_TUBE004_POS_4P		(D3DXVECTOR3(770.0f, 633.0f, 0.0f))		// 4画面時(4P)の位置
 
 #define MAX_PLAYER (4)
-#define MAX_STAGE	(2)			// ステージの最大数
+#define MAX_STAGE	(3)			// ステージの最大数
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
 
 //クラス（シーン2Dの派生クラス）
@@ -71,6 +71,8 @@ public:
 	void SetStage(int nNumState,int nCntState);	// ステージの生成
 	void SetCreateWord(void);
 
+	void RankingUpdata(void);	// 順位の入れ替え
+
 	// 取得の関数
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
 	static CTube *GetTube(int nNum);		// 文字の可視化UIの取得
@@ -89,8 +91,6 @@ private:
 	void PlayerSetting(int nNum);		// 人数に応じたプレイヤー生成
 	void TubeSetting(int nNum);			// 人数に応じた筒の生成
 	void SetPointFrame(int nNum);		// 人数に応じたポイントの生成
-	void RankingUpdata(void);			// 順位を常に更新
-
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPoint *m_pPoint[MAX_PLAYER];
