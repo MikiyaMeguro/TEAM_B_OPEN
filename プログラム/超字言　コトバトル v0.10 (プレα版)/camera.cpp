@@ -43,6 +43,7 @@ void CCamera::Set(CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLen
 	case CCamera::TYPE_TPS:
 		m_posR = pos;
 		m_posV = pos - D3DXVECTOR3(sinf(rot.y) * fLength, sinf(rot.x) * fLength, cosf(rot.y) * fLength);
+		m_vecU = D3DXVECTOR3(0.0f,1.0f,0.0f);
 		break;
 	case CCamera::TYPE_SPECTOR:
 		m_posV = pos;
@@ -133,7 +134,7 @@ void CCamera::Update(void)
 				m_posR += (m_posRdest - m_posR) * CAMERA_POSR_COEFFICIENT;
 			}
 			m_posVdest = m_pHomingChara->GetCameraPosR() - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
-				sinf(m_rot.x) * m_fLength,
+				-m_fLength,
 				cosf(m_rot.y) * m_fLength);
 			m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 		}
@@ -193,8 +194,8 @@ void CCamera::SetCamera(void)
 	pDevice->SetTransform(D3DTS_VIEW, &m_mtxView);
 
 #ifdef _DEBUG
-	CDebugProc::Print("cff", "Camera.PosV :", m_posV.x, m_posV.y, m_posV.z);
-	CDebugProc::Print("cff","Camera.PosR :", m_posR.x, m_posR.y, m_posR.z);
+	CDebugProc::Print("cfff", "Camera.PosV :", m_posV.x, m_posV.y, m_posV.z);
+	CDebugProc::Print("cfff","Camera.PosR :", m_posR.x, m_posR.y, m_posR.z);
 #endif
 
 }

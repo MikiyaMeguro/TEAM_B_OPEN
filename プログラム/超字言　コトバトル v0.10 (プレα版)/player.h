@@ -220,7 +220,6 @@ private:
 	bool m_bLand;											// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;									//前フレームの座標
 	int m_nCntTransTime;									//無敵時間
-	CSceneBillBoard *m_pPlayerNum;							// プレイヤー番号表示用ビルボード
 	CWordManager *m_pWordManager;							//文字管理クラスのポインタ
 
 	bool m_bSetupBullet;									//弾が撃てる状態の判定用

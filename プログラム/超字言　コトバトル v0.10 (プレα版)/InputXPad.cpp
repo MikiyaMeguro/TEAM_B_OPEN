@@ -248,13 +248,12 @@ float CInputXPad::GetStickRot(bool LorR, float fRotDeff)
 	if (LorR == true)
 	{//左スティック
 		fAngle = atan2f((float)m_sLStickRotY, (float)m_sLStickRotX);
-		CUtilityMath::RotateNormarizePI(&fAngle);
 	}
 	else
 	{//右スティック
 		fAngle = atan2f((float)m_sRStickRotY, (float)m_sRStickRotX);
-		CUtilityMath::RotateNormarizePI(&fAngle);
 	}
+	CUtilityMath::RotateNormarizePI(&fAngle);
 
 	return fAngle;
 }

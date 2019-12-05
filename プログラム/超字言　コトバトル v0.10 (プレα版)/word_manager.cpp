@@ -386,6 +386,19 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel = CModelBullet::Create();
 					if (pModel != NULL)
 					{
+						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_MISSILE,
+							nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+
+						pModel->SetModelScale(m_Scale[nType]);	//‘å‚«‚³‚ÌÝ’è
+						pModel->SetHomingChara(pChara);
+					}
+
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
 						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, 0.75f, 0.0f),
 							(CLoad::MODEL)m_nCreateType,
 							CModelBullet::TYPE_MISSILE,
