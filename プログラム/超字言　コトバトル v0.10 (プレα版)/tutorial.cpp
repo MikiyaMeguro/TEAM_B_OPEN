@@ -411,30 +411,42 @@ void CTutorial::CameraSetting(int nNumPlayer)
 		{
 		case CPlayerSelect::SELECTPLAYER_1P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_1P_PLAY);
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_1P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 			break;
 
 		case CPlayerSelect::SELECTPLAYER_2P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 140, 0, 1000, 355);
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+<<<<<<< HEAD
 				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_2P_PLAY);
+=======
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
+>>>>>>> 5cee7e79b67a8bb8c4c0569ca7ed9bbaf3cf74c5
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 140, 365, 1000, 355);
 			break;
 
 		case CPlayerSelect::SELECTPLAYER_3P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+<<<<<<< HEAD
 				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
 				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+=======
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
+
+			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+>>>>>>> 5cee7e79b67a8bb8c4c0569ca7ed9bbaf3cf74c5
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TOPVIEW,
@@ -444,10 +456,11 @@ void CTutorial::CameraSetting(int nNumPlayer)
 
 		case CPlayerSelect::SELECTPLAYER_4P:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+<<<<<<< HEAD
 				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
@@ -457,15 +470,27 @@ void CTutorial::CameraSetting(int nNumPlayer)
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
 				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+=======
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
+
+			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
+
+			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+>>>>>>> 5cee7e79b67a8bb8c4c0569ca7ed9bbaf3cf74c5
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 
 		default:
 			pCameraManager->CreateCamera("1P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
+<<<<<<< HEAD
 				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
@@ -475,6 +500,17 @@ void CTutorial::CameraSetting(int nNumPlayer)
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
 				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+=======
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
+
+			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
+
+			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
+				D3DXVECTOR3(0.0f, CAMERA_POSR, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+>>>>>>> 5cee7e79b67a8bb8c4c0569ca7ed9bbaf3cf74c5
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 		}

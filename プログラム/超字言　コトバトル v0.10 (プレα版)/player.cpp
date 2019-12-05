@@ -280,13 +280,15 @@ void CPlayer::Update(void)
 			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false)
 			{
 				C3DCharactor* pChara = NULL;
+				int nNear = GetNearPlayer();
+				if (nNear != -1)
+				{//近いプレイヤーがいればその方向に弾を打つ
+					pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
+				}
 				if (m_bAssist == true)
 				{//オートエイムモードなら弾角度を敵の方向に合わせる
-					int nNear = GetNearPlayer();
-					if (nNear != -1)
+					if (pChara != NULL)
 					{//近いプレイヤーがいればその方向に弾を打つ
-						pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
-
 						LockOnObjPos = pChara->GetPosition();
 						LockOnObjRot = pChara->GetRotation();
 						BulletRot.y = atan2f((LockOnObjPos.x - BulletPos.x), (LockOnObjPos.z - BulletPos.z));
@@ -299,11 +301,12 @@ void CPlayer::Update(void)
 				}
 
 				if (m_pWordManager->GetBulletFlag() == true)
-				{
+				{	//可視化
 					m_bStealth = false;
 				}
 
-				m_pWordManager->BulletCreate(m_nID,BulletPos,BulletRot,m_PlayerType, pChara);
+				m_pWordManager->BulletCreate(m_nID,BulletPos,BulletRot,m_PlayerType,
+													(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
 			}
 
 			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID))
@@ -319,6 +322,7 @@ void CPlayer::Update(void)
 			else
 			{
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
+				m_bAssist = true;
 			}
 
 
@@ -707,6 +711,9 @@ bool CPlayer::CollisionDamageObj(void)
 
 					//弾削除
 					pBullet->Uninit();
+
+					//可視化
+					m_bStealth = false;
 
 					return true;
 				}

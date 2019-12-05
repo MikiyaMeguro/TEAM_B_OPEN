@@ -375,15 +375,61 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 		{
 			if (m_nStock[0] < m_nAnswerDataNum)
 			{	// 指定した文字なら弾を生成する
+				int nType = 0;
+				CModelBullet* pModel = NULL;
 				switch (type)
 				{
-				case CPlayer::TYPE_RANDOM:
-					break;
-				default:
-					CModelBullet* pModel = CModelBullet::Create();
+				case CPlayer::TYPE_SPEED://猫はミサイル型
+					nType = m_nStock[0];
+					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+
+					pModel = CModelBullet::Create();
 					if (pModel != NULL)
 					{
-						int nType = m_nStock[0];
+						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_MISSILE,
+							nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						pModel->SetHomingChara(pChara);
+					}
+
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, 0.75f, 0.0f),
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_MISSILE,
+							nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						pModel->SetHomingChara(pChara);
+					}
+
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, -0.75f, 0.0f),
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_MISSILE,
+							nID, m_rot[nType]);
+						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);
+
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						pModel->SetHomingChara(pChara);
+					}
+
+						m_nCreateType = EMPTINESS_NUM;
+					break;
+
+				default:
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						nType = m_nStock[0];
 						m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
 						pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, (CModelBullet::BULLET_PROPERTY)m_type[nType], nID, m_rot[nType]);
 						//pModel->Set(BulletMuzzle, BulletRot, (CLoad::MODEL)m_nCreateType, CModelBullet::TYPE_MISSILE, nID, m_rot[nType]);

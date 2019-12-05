@@ -224,8 +224,7 @@ void C3DBullet::Homing(D3DXVECTOR3 HomingPos)
 
 	//D3DXQuaternionInverse(&HomingQuat, &HomingQuat);
 	//二つのクォータニオンを球面補間する
-
-	D3DXQuaternionSlerp(&dest,&Quat,&HomingQuat,0.1f);
+	D3DXQuaternionSlerp(&dest,&Quat,&HomingQuat, BULLET_HOMING_COEFFICIENT);
 
 	//求めたクォータニオンを角度マトリックスに変換
 	D3DXMatrixRotationQuaternion(&m_mtxRotate,&dest);
@@ -297,6 +296,11 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	case TYPE_REFLECT:
 		m_fKnockBack = 8.0f;
 		break;
+
+	case TYPE_MISSILE:
+		fSpeed = 4.0f;
+		m_fKnockBack = 4.0f;
+		break;
 	default:
 		fSpeed = 5.0f;
 		m_fKnockBack = 6.0f;
@@ -333,6 +337,7 @@ void CModelBullet::Uninit(void)
 		if (m_pOrbit != NULL)
 		{
 			m_pOrbit->Uninit();
+			m_pOrbit = NULL;
 		}
 		break;
 	case TYPE_KNOCKBACK:
@@ -341,15 +346,15 @@ void CModelBullet::Uninit(void)
 		break;
 	case TYPE_STINGER:
 		p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
 	case TYPE_REFLECT:
 		p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
 	case TYPE_MISSILE:
 		p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 0.01f, 30.0f, 60, 0.01f); }
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
 	case TYPE_BOMB:
 		p3D = CExplosion3D::Create();
@@ -418,22 +423,20 @@ void CModelBullet::Update(void)
 		CUtilityMath::RotateNormarizePI(&Rotate);
 		m_pModel->SetRot(Rotate);
 	}
-	if (m_Prop != TYPE_STINGER)
-	{//貫通タイプでなければオブジェクトとの当たり判定をチェックする
-		CManager::DIRECTION dir;
-		if (CollisionObject(&dir))
-		{//当たっていれば
-			//反射タイプなら当たった後に角度をY軸で回転させる
-			if (m_Prop == TYPE_REFLECT)
-			{
-				Reflect(dir);
-			}
-			else
-			{
-				Uninit();
-				return;
-			}
-		}
+
+	CManager::DIRECTION dir;
+	if (CollisionObject(&dir))
+	{//当たっていれば
+		//反射タイプなら当たった後に角度をY軸で回転させる
+		//if (m_Prop == TYPE_REFLECT)
+		//{
+		//	Reflect(dir);
+		//}
+		//else
+		//{
+			Uninit();
+			return;
+		//}
 	}
 
 
@@ -568,8 +571,6 @@ HRESULT CWordBullet::Init(void)
 //=============================================================================
 void CWordBullet::Uninit(void)
 {
-
-
 	if (m_pWord != NULL)
 	{
 		m_pWord->Uninit();
@@ -577,7 +578,6 @@ void CWordBullet::Uninit(void)
 	}
 
 	C3DBullet::Uninit();
-
 }
 
 //=============================================================================

@@ -14,8 +14,10 @@
 //　前方宣言
 //*****************************************************************************
 class CNumber;
-class CScene2D;
+class CBillNumber;
+class CSceneBillBoard;
 class CPlayer;
+class CScene2D;
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -52,9 +54,8 @@ private:
 	void DebugKey(void);
 	void TimeManagement(void);
 	int PowerCalculation(int nData, int nOperation);
-	CNumber *m_apNumber[TIME_MAX];	// ナンバーへのポインタ
+	CBillNumber *m_apNumber[TIME_MAX];	// ナンバーへのポインタ
 	static int				m_nTime;			// 時間
-	static int				m_nTimeNumCount;	// 時間の表示回数
 	static int				m_nTimeCount;		// 時間のカウンタ
 	static int				m_nTimeOld;
 	static int				m_nStageChange;		// ステージが切り替わる時間
@@ -65,7 +66,7 @@ private:
 	bool					m_bStart;
 	bool					m_bStageCreate;		// ステージ生成時の制限
 	D3DXVECTOR3				m_pos;				// 位置
-	CScene2D				*m_pColon;			// コロン
+	CSceneBillBoard			*m_pColon;			// コロン
 
 	static bool m_bCountFlag;			//時間をカウントするか
 
