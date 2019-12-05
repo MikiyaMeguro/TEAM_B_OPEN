@@ -163,6 +163,7 @@ void CNumber::SetNumber(int nNumber)
 void CNumber::SetSize(D3DXVECTOR2 size, D3DXVECTOR2 pos)
 {
 	m_size = size;
+	m_pos = pos;
 	VERTEX_2D *pVtx;				//頂点情報へのポインタ
 
 	//頂点バッファをロックし頂点データのポインタを取得

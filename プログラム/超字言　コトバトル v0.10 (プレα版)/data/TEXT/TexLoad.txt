@@ -101,6 +101,7 @@ DATA = 00079 data/TEXTURE/Ranking/Window.png RANKING_WINDOW
 DATA = 00080 data/TEXTURE/Ranking/Rank&PlayerNum.png RANK&PLNUM
 DATA = 00081 data/TEXTURE/Ranking/ICon.png RANKCHARA_ICON
 DATA = 00082 data/TEXTURE/CharactorSelect/ComDisplay.png RANKCHARA_PLNUM_COM
+DATA = 00082 data/TEXTURE/Ranking/Callout.png RANKCHARA_CALLOUT
 
 DATA = 00083 data/TEXTURE/tutorial/tutorial_operation000.png TOP000
 DATA = 00084 data/TEXTURE/tutorial/tutorial_operation001.png TOP001
