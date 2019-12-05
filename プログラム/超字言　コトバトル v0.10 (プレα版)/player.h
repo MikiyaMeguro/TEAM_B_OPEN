@@ -220,7 +220,6 @@ private:
 	bool m_bLand;											// モデルに乗っているかどうか
 	D3DXVECTOR3 m_posOld;									//前フレームの座標
 	int m_nCntTransTime;									//無敵時間
-	CSceneBillBoard *m_pPlayerNum;							// プレイヤー番号表示用ビルボード
 	CWordManager *m_pWordManager;							//文字管理クラスのポインタ
 
 	bool m_bSetupBullet;									//弾が撃てる状態の判定用
@@ -230,6 +229,11 @@ private:
 	bool m_bVision[4];										//見えているかどうか
 	int	 m_nStealthTimer;									//見えている時間をカウント
 	int  m_nObjNumber;										//今いるオブジェクトの番号
+	D3DXVECTOR3 m_BulletRot;								//弾発射方向保持
+	int m_nMachineGunTime;									//マシンガン発射時間
+	bool m_bMachineGun;										//マシンガンフラグ
+	D3DXVECTOR3 m_MachineGunPos;									//マシンガン発射位置
+
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報
 	int m_motion[BODY_MAX];												//現在のモーション

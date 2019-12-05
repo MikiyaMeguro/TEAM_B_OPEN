@@ -13,6 +13,7 @@
 #include "tube.h"
 #include "meshField.h"
 #include "game.h"
+
 //=============================================================================
 // 前方宣言
 //=============================================================================
@@ -27,18 +28,21 @@ class CStageSelect;
 // マクロ定義
 //*****************************************************************************
 #define MAX_TUTORIAL			(3)
-#define CAMERA_LENGTH_1P_PLAY (250.0f)				//カメラの距離(1pプレイ用)
-#define CAMERA_LENGTH_2P_PLAY (250.0f)				//カメラの距離(2pプレイ用)
-#define CAMERA_LENGTH_3P4P_PLAY (200.0f)			//カメラの距離(3p4pプレイ用)
+#define CAMERA_LENGTH_1P_PLAY (300.0f)				//カメラの距離(1pプレイ用)
+#define CAMERA_LENGTH_2P_PLAY (300.0f)				//カメラの距離(2pプレイ用)
+#define CAMERA_LENGTH_3P4P_PLAY (300.0f)			//カメラの距離(3p4pプレイ用)
 #define CAMERA_LENGTH_TOPVIEW_PLAY (650.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
-#define CAMERA_ROTX (-1.57f)		//カメラのデフォルト角度(X)
+#define CAMERA_ROTX (-(D3DX_PI * 0.5f))		//カメラのデフォルト角度(X)
+#define CAMERA_POSR (100.0f)		//カメラの注視点
 
 #define PLAYER_INITPOSX (200.0f)
 #define PLAYER_INITPOSZ (200.0f)
 
 #define MAX_PLAYER (4)
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
+#define UI_MAX		(16)
+
 
 class CTutorial
 {
@@ -73,5 +77,7 @@ private:
 	int m_nChangeNum;
 	static int m_nNumStage;
 	static CPoint *m_pPoint[MAX_PLAYER];
+	CScene2D *m_pScene2D[16];			// 2Dポリゴンへのポインタ
+
 };
 #endif

@@ -58,7 +58,6 @@ CWord::CWord() : CSceneBillBoard()
 	m_bFlagUninit = false;
 	m_bMoveFlag = false;
 	m_bScaleFlag = false;
-	m_nNumPlayerGet = 0;
 	m_nCntUninit = 0;
 	m_bFlag = false;
 	m_bPopFlag = false;
@@ -245,10 +244,13 @@ void CWord::Update(void)
 							if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
 							pPlayer[nCntPlayer]->GetWordManager()->SetWord(m_nWordNum);
 							pPlayer[nCntPlayer]->SetbSetupBullet(true);
-							m_nNumPlayerGet = nCntPlayer;				// プレイヤー番号を取得
 							move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 							m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 							m_col = COL_DEFAULT;
+							if (m_nLostType == 0)
+							{
+								m_bFlagUninit = true;
+							}
 							break;
 						}
 					}
@@ -270,42 +272,6 @@ void CWord::Update(void)
 
 			pos = Move(pos);
 		}
-
-		if (m_bFlag == true)
-		{	// 取得後の演出の場合
-			m_fMoveY += 0.2f;
-			SizeScale(&m_size, 0.5f, D3DXVECTOR2(6.0f, 6.0f));
-
-			if (pPlayer[m_nNumPlayerGet] == NULL)
-			{
-				if (CManager::GetMode() == CManager::MODE_GAME)
-				{// プレイヤーを取得
-					pPlayer[m_nNumPlayerGet] = CGame::GetPlayer(m_nNumPlayerGet);
-				}
-				else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-				{
-					pPlayer[m_nNumPlayerGet] = CTutorial::GetPlayer(m_nNumPlayerGet);
-				}
-				float fPlayer = pPlayer[m_nNumPlayerGet]->GetRotation().y;
-
-				//pos = D3DXVECTOR3(sinf(fPlayer + (D3DX_PI)) + (pPlayer[m_nNumPlayerGet]->GetPosition().x + 10.0f), 40.0f, pPlayer[m_nNumPlayerGet]->GetPosition().z);
-				pos = D3DXVECTOR3(pPlayer[m_nNumPlayerGet]->GetPosition().x, 50.0f + m_fMoveY, pPlayer[m_nNumPlayerGet]->GetPosition().z);
-			}
-
-			m_nCntUninit++;	// カウントの加算
-
-			// 透明度の変化
-			if (m_nCntUninit > α_COL_TIME)
-			{
-				m_col.a -= 0.01f;
-			}
-
-			if ((m_nCntUninit % UNITI_TIME) == 0)
-			{	// 時間になったら終了する
-				m_bFlagUninit = true;
-			}
-		}
-
 
 		if (CManager::GetMode() == CManager::MODE_GAME)
 		{

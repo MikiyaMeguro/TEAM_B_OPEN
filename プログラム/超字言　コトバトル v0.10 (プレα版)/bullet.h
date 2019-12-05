@@ -19,7 +19,7 @@
 //=============================================================================
 #define BULLET_PRIORITY (1)
 #define BULLET_COLLISION_SIZE (45.0f)
-#define BULLET_HOMING_COEFFICIENT (0.075f)	//追尾にかかる係数
+#define BULLET_HOMING_COEFFICIENT (0.07f)	//追尾にかかる係数
 
 //=============================================================================
 // 前方宣言
@@ -93,6 +93,7 @@ public:
 		TYPE_REFLECT,			//反射
 		TYPE_MISSILE,			//ミサイル
 		TYPE_BOMB,				//投擲爆弾
+		TYPE_MACHINEGUN,		//マシンガン
 		TYPE_MAX
 	}BULLET_PROPERTY;
 

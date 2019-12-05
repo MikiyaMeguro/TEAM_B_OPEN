@@ -55,10 +55,13 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
-	m_pPlayerNum = NULL;
 	m_bAssist = true;
 	m_bStealth = true;		//ステルス状態になれるかどうか
 	m_nStealthTimer = 0;
+	m_BulletRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bMachineGun = false;
+	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
@@ -121,15 +124,6 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	{
 		ObjCreate(m_pWordManager);
 		m_pWordManager->SetID(m_nID);
-	}
-
-	if (m_pPlayerNum == NULL)
-	{
-		int nID = m_nID;
-		if (MoveType == CCharaBase::MOVETYPE_NPC_AI) { nID = MAX_PLAYER; }	// COM表示にする
-		m_pPlayerNum = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, pos.y + 45.0f, pos.z), 7.0f, 3.0f, "プレイ人数");
-		m_pPlayerNum->SetTexture(D3DXVECTOR2(0.0f, nID * 0.2f), D3DXVECTOR2(1.0f, (nID * 0.2f) + 0.2f));
-		m_pPlayerNum->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
 
@@ -203,13 +197,6 @@ void CPlayer::Uninit(void)
 			m_pPlayerParts[nCntParts][nCntBody] = NULL;
 		}
 	}
-	// プレイヤー番号破棄
-	if (m_pPlayerNum != NULL)
-	{
-		m_pPlayerNum->Uninit();
-		m_pPlayerNum = NULL;
-	}
-
 
 	// 文字管理クラスの削除
 	if (m_pWordManager != NULL)
@@ -277,7 +264,7 @@ void CPlayer::Update(void)
 			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
 			// 弾の生成
-			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false)
+			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false && m_bMachineGun == false)
 			{
 				C3DCharactor* pChara = NULL;
 				int nNear = GetNearPlayer();
@@ -298,15 +285,26 @@ void CPlayer::Update(void)
 					{//近いプレイヤーがいなければプレイヤーの向きに打つ
 						BulletRot.y = m_pCharactorMove->GetRotation().y;
 					}
+					//発射方向保持
+					m_BulletRot.y = BulletRot.y;
 				}
 
 				if (m_pWordManager->GetBulletFlag() == true)
-				{
+				{	//可視化
 					m_bStealth = false;
 				}
 
-				m_pWordManager->BulletCreate(m_nID,BulletPos,BulletRot,m_PlayerType,
-													(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
+				if (m_PlayerType != TYPE_REACH)
+				{	//ウサギ以外
+					m_pWordManager->BulletCreate(m_nID, BulletPos, BulletRot, m_PlayerType,
+						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
+				}
+				else
+				{
+					//マシンガン発射時間初期化
+					m_nMachineGunTime = 0;
+					m_bMachineGun = true;
+				}
 			}
 
 			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID))
@@ -328,6 +326,23 @@ void CPlayer::Update(void)
 
 			m_pCharactorMove->GetRotation().y = BulletRot.y;
 			m_pCharactorMove->GetSpin().y = 0.0f;
+
+			//マシンガン発射
+			if (m_bMachineGun == true)
+			{
+				m_nMachineGunTime++;
+				if (m_nMachineGunTime % 10 == 0)
+				{
+					m_MachineGunPos.x = (rand() % 16) - (rand() % 16);
+					m_MachineGunPos.z = (rand() % 16) - (rand() % 16);
+					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType,NULL);
+				}
+				else if (m_nMachineGunTime > 60)
+				{
+					m_bMachineGun = false;
+					m_pWordManager->Reset();
+				}
+			}
 
 			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
 		}
@@ -393,11 +408,6 @@ void CPlayer::Update(void)
 				}
 			}
 		}
-	}
-
-	if (m_pPlayerNum != NULL)
-	{
-		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 45.0f, m_pCharactorMove->GetPosition().z));
 	}
 
 	MotionUpdate(LOWER_BODY);
@@ -711,6 +721,9 @@ bool CPlayer::CollisionDamageObj(void)
 
 					//弾削除
 					pBullet->Uninit();
+
+					//可視化
+					m_bStealth = false;
 
 					return true;
 				}
