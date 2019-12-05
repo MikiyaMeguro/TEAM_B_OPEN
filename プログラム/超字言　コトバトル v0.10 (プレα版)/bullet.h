@@ -19,7 +19,7 @@
 //=============================================================================
 #define BULLET_PRIORITY (1)
 #define BULLET_COLLISION_SIZE (45.0f)
-#define BULLET_HOMING_COEFFICIENT (0.075f)	//’Ç”ö‚É‚©‚©‚éŒW”
+#define BULLET_HOMING_COEFFICIENT (0.07f)	//’Ç”ö‚É‚©‚©‚éŒW”
 
 //=============================================================================
 // ‘O•ûéŒ¾

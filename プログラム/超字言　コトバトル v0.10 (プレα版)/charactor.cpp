@@ -312,7 +312,7 @@ void C3DCharactor::Update(void)
 
 
 	if (m_pCAvoidUi != NULL)
-	{//	回避UIが使用されてつ
+	{//	回避UIが使用されてる
 		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 1.0f, 0.0f));
 
 		if (GetMoveType() == MOVETYPE_PLAYER_INPUT)
@@ -1004,7 +1004,7 @@ void C3DCharactor::Homing_CPU(void)
 	{
 		if (pPlayer[nCntPlayer] != NULL)
 		{
-			if (pPlayer[nCntPlayer]->GetID() != GetThisCharactor()->GetID())
+			if (pPlayer[nCntPlayer]->GetID() != GetThisCharactor()->GetID() && GetThisCharactor()->GetVision(nCntPlayer) == true)
 			{//自分のIDと一致していなければ実行
 			 // 距離を測る
 				fCircle = ((Pos.x - PlayerPos[nCntPlayer].x) * (Pos.x - PlayerPos[nCntPlayer].x)) + ((Pos.z - PlayerPos[nCntPlayer].z) * (Pos.z - PlayerPos[nCntPlayer].z));

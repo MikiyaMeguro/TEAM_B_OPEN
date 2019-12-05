@@ -301,7 +301,7 @@ void CPlayer::Update(void)
 				}
 
 				if (m_pWordManager->GetBulletFlag() == true)
-				{
+				{	//‰ÂŽ‹‰»
 					m_bStealth = false;
 				}
 
@@ -711,6 +711,9 @@ bool CPlayer::CollisionDamageObj(void)
 
 					//’eíœ
 					pBullet->Uninit();
+
+					//‰ÂŽ‹‰»
+					m_bStealth = false;
 
 					return true;
 				}
