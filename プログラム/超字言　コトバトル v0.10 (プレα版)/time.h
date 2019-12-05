@@ -54,6 +54,9 @@ private:
 	void DebugKey(void);
 	void TimeManagement(void);
 	int PowerCalculation(int nData, int nOperation);
+	void ChangeStage(void);				// ステージが切り替わることを知らせる演出
+	void DefaultCol(void);				// 数字などをdefaultの色に戻す
+
 	CBillNumber *m_apNumber[TIME_MAX];	// ナンバーへのポインタ
 	static int				m_nTime;			// 時間
 	static int				m_nTimeCount;		// 時間のカウンタ
@@ -70,8 +73,6 @@ private:
 
 	static bool m_bCountFlag;			//時間をカウントするか
 
-
-
 	//カウントダウン用
 	float						m_fWidth, m_fHeight;			// 幅 高さ
 	CScene2D					*m_pScene2D[PLAYER_MAX];		// 2Dポリゴンへのポインタ
@@ -85,5 +86,10 @@ private:
 	int							m_StageCounter;					// Stage生成完了までの時間
 
 	CPlayer						*m_pPlayer[PLAYER_MAX];
+
+	// ステージ変更用
+	float						m_fWarningCol;					// 色変化
+	bool						m_bChangeStage;
+	bool						m_bWarning;						// 警告フラグ
 };
 #endif

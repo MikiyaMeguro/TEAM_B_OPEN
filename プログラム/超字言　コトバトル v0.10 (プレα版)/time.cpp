@@ -99,6 +99,9 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_fWidth = 100;
 	m_fHeight = 100;
 	m_bEndCntDown = false;
+	m_bChangeStage = false;
+	m_fWarningCol = 0.0f;
+	m_bWarning = false;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -299,6 +302,11 @@ void CTime::Update(void)
 				CFade::SetFade(CManager::MODE_RESULT, CFade::FADE_OUT);
 			}
 		}
+
+		if (m_bChangeStage == true)
+		{	// ステージ変化の色変化
+			ChangeStage();
+		}
 	}
 
 	//カウントダウン
@@ -425,16 +433,20 @@ void CTime::TexTime(int nTexData, int nTimeOne)
 				m_apNumber[nCntTime]->SetNumber(nTimeOne);
 				nTexData /= 10;
 			}
-			// 色の設定
-			if (m_nTime <= 10 && m_nTimeOne == 0)
-			{ // 10秒以下 色を赤に
-				m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-				if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)); }
-			}
-			else
+			if (m_bChangeStage == false)
 			{
-				m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-				if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
+
+				// 色の設定
+				if (m_nTime <= 10 && m_nTimeOne == 0)
+				{ // 10秒以下 色を赤に
+					m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+					if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f)); }
+				}
+				else
+				{
+					m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+					if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
+				}
 			}
 		}
 	}
@@ -486,16 +498,63 @@ void CTime::TimeManagement(void)
 		CManager::GetGame()->SetStage(CGame::GetNumStage(),nStageNum);
 	}
 
+	if (m_nTime == 10 && m_nTimeOne != 0)
+	{	// 警告の時間
+		m_bChangeStage = true;
+	}
+
 	if (m_nTimeCount % 60 == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
 		m_nStageChange++;
 		m_bStageCreate = false;
+		m_bChangeStage = false;
 
-		if (m_nTime < 0) { m_nTime = 59; m_nTimeOne -= 1; }
+		if (m_nTime < 0) { m_nTime = 59; m_nTimeOne -= 1; 	DefaultCol();}
 		//m_nTimeNum = PowerCalculation(m_nTime, 0);
 	}
 }
+//=============================================================================
+// ステージ切替時の演出
+//=============================================================================
+void CTime::ChangeStage(void)
+{
+	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
+	{// テクスチャに反映
+		if (m_apNumber[nCntTime] != NULL)
+		{
+			// 色の設定
+			if (m_bWarning == false)
+			{ 
+				m_fWarningCol -= 0.1f;
+				if (m_fWarningCol < 0.2f) { m_fWarningCol = 0.2f;  m_bWarning = true; }
+			}
+			else if (m_bWarning == true)
+			{
+				m_fWarningCol += 0.1f;
+				if (m_fWarningCol > 1.0f) { m_fWarningCol = 1.0f;  m_bWarning = false; }
+			}
+			m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, m_fWarningCol, 0.0f, 1.0f));
+			if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, m_fWarningCol, 0.0f, 1.0f)); }
+		}
+	}
+}
+
+//=============================================================================
+// 色を元に戻す
+//=============================================================================
+void CTime::DefaultCol(void)
+{
+	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
+	{// テクスチャに反映
+		if (m_apNumber[nCntTime] != NULL)
+		{
+			m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
+		}
+	}
+}
+
 //=============================================================================
 // デバック用
 //=============================================================================
