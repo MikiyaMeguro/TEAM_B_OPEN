@@ -247,6 +247,10 @@ void CWord::Update(void)
 							move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 							m_size = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 							m_col = COL_DEFAULT;
+							if (m_nLostType == 0)
+							{
+								m_bFlagUninit = true;
+							}
 							break;
 						}
 					}
