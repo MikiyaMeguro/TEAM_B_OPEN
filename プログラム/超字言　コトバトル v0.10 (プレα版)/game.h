@@ -71,6 +71,8 @@ public:
 	void SetStage(int nNumState,int nCntState);	// ステージの生成
 	void SetCreateWord(void);
 
+	void RankingUpdata(void);	// 順位の入れ替え
+
 	// 取得の関数
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
 	static CTube *GetTube(int nNum);		// 文字の可視化UIの取得
