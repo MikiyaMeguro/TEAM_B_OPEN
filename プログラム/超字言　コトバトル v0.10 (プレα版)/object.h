@@ -53,7 +53,7 @@ public:
 	void KnockBack(D3DXVECTOR3 *pMove, int nID);			// ノックバック
 	void AffectedLanding(D3DXVECTOR3 *pMove, int nID);		// モデルの着地時の影響
 
-	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL mode , CObject::GIMMICKTYPE realtime);	// オブジェクトの生成
+	static CObject *Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale,CSceneX::COLLISIONTYPE type, CLoad::MODEL mode , CObject::GIMMICKTYPE realtime,int nNumver = 0);	// オブジェクトの生成
 	static HRESULT Load(void);
 	static void UnLoad(void);
 
@@ -88,7 +88,7 @@ private:
 
 	D3DXVECTOR3 m_InitScale;			// 初期大きさ保管
 
-
+	int m_nObjNumber;		//オブジェクトの番号
 
 	//	SWITCH
 	static bool m_bSwitch;				//	スイッチ
