@@ -15,11 +15,12 @@
 #include "charactor.h"
 #include "result.h"
 #include "point.h"
+#include "sceneBillboard.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
 #define CENTER_WIDTH		(SCREEN_WIDTH / 2)				// Xの中心座標
-#define TIMER_SPACE			(30.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_SPACE			(15.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
 #define GAME_TIME			(130)							// ゲーム開始時の時間
 #define GAME_TIME_MAX		(9)							// ゲームの時間最大数
@@ -36,7 +37,6 @@
 //	静的メンバ変数
 //=============================================================================
 int						CTime::m_nTime = 0;
-int						CTime::m_nTimeNumCount = 0;
 int						CTime::m_nTimeCount = 0;
 bool					CTime::m_bCountFlag = true;			//時間をカウントするか
 int						CTime::m_nTimeOld = 0;
@@ -58,11 +58,15 @@ CTime *CTime::Create(int nNumPlayer)
 		if (pTime != NULL)
 		{
 			//位置の設定
+#if 0
 			if (nNumPlayer == 1) { pTime->m_pos = TIME_POS_1P; }
 			if (nNumPlayer == 2 && m_nTimeNumCount == 0) { pTime->m_pos = TIME_POS_1P; }
 			else if (nNumPlayer == 2 && m_nTimeNumCount == 1) { pTime->m_pos = TIME_POS_2P; }
 			if (nNumPlayer == 3) { pTime->m_pos = TIME_POS_3P; }
 			if (nNumPlayer == 4) { pTime->m_pos = TIME_POS_4P; }
+#endif
+			pTime->m_pos = D3DXVECTOR3(20.0f, 80.0f, 0.0f);
+
 			pTime->m_nNumPlayer = nNumPlayer;
 
 			//初期化処理
@@ -82,7 +86,6 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nTimeNum = 3;
 	m_nWaitTime = 0;
 	m_pColon = NULL;
-	m_bStart = false;
 	m_bStageCreate = false;
 	m_nStageChange = 1;
 	m_StageCounter = 0;
@@ -119,48 +122,37 @@ HRESULT CTime::Init(void)
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
 	m_nTimeOne = 3;
 	m_StageCounter = 0;
-	// 後ろの背景
-	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
-	{
-		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 50.0f, 0.0f), "BG_FREAME", 5);
-		pBg->SetWidthHeight(80.0f, 60.0f);
-		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-	if (m_nNumPlayer == 2 && m_nTimeNumCount == 1)
-	{
-		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 420.0f, 0.0f), "BG_FREAME", 5);
-		pBg->SetWidthHeight(80.0f, 60.0f);
-		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-	if (m_nNumPlayer == 3)
-	{
-		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 100.0f, 420.0f, 0.0f), "BG_FREAME", 5);
-		pBg->SetWidthHeight(80.0f, 60.0f);
-		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
-	if (m_nNumPlayer == 4)
-	{
-		CScene2D *pBg = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 370.0f, 0.0f), "BG_FREAME", 5);
-		pBg->SetWidthHeight(80.0f, 60.0f);
-		pBg->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
 
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
 		{	// タイマー初期設定
-			m_apNumber[nCntTime] = new CNumber;
+			m_apNumber[nCntTime] = new CBillNumber;
 			if (nCntTime < 2)
 			{	// ３桁まで
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3((m_pos.x - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z), 0);
+				m_apNumber[nCntTime]->Init(D3DXVECTOR3((m_pos.x - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
+				m_apNumber[nCntTime]->SetPos(D3DXVECTOR3((m_pos.x - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
 			}
 			else if (nCntTime == 2)
 			{	// 3桁目
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3(((m_pos.x - 20.0f) - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z), 0);
+				m_apNumber[nCntTime]->Init(D3DXVECTOR3(((m_pos.x - 10.0f) - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
+				m_apNumber[nCntTime]->SetPos(D3DXVECTOR3(((m_pos.x - 10.0f) - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
 			}
+
+			m_apNumber[nCntTime]->SetSize(D3DXVECTOR3(10.0f, 15.0f, 0.0f));
 		}
 		// 数字のテクスチャ設定
 		TexTime(nTexData, m_nTimeOne);
+	}
+
+	// Timeのロゴ
+	CSceneBillBoard *pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 20.0f, 12.0f, "TIME");
+	pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+
+	if (m_pColon == NULL)
+	{
+		m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-7.0f, 85.0f, 0.0f), 5.0f, 8.0f,"COLON");
+		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
 	//カウントダウン生成
@@ -175,51 +167,17 @@ HRESULT CTime::Init(void)
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 	}
-
-	if (m_nNumPlayer == 1 || m_nNumPlayer == 2 && m_nTimeNumCount == 0)
+	else if (m_nNumPlayer == 2)
 	{
-		if (m_pColon == NULL)
-		{
-			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 70.0f, 0.0f), "COLON", 5);
-			m_pColon->SetWidthHeight(15.0f, 20.0f);
-			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		}
-
-		// Timeのロゴ
-		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 35.0f, 0.0f), "TIME", 5);
-		pLogo->SetWidthHeight(40.0f, 20.0f);
-		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-
-		if (m_nNumPlayer == 2) { m_nTimeNumCount++; }
-	}
-	else if (m_nNumPlayer == 2 && m_nTimeNumCount == 1)
-	{
-		if (m_pColon == NULL)
-		{
-			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 440.0f, 0.0f), "COLON", 5);
-			m_pColon->SetWidthHeight(15.0f, 20.0f);
-			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		}
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 
-		// Timeのロゴ
-		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 405.0f, 0.0f), "TIME", 5);
-		pLogo->SetWidthHeight(40.0f, 20.0f);
-		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-		m_bStart = true;
 	}
 	else if (m_nNumPlayer == 3)
-	{
-		if (m_pColon == NULL)
-		{
-			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 82.0f, 440.0f, 0.0f), "COLON", 5);
-			m_pColon->SetWidthHeight(15.0f, 20.0f);
-			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		}
+	{	
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
@@ -227,21 +185,9 @@ HRESULT CTime::Init(void)
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
-
-		// Timeのロゴ
-		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 + 100.0f, 405.0f, 0.0f), "TIME", 5);
-		pLogo->SetWidthHeight(40.0f, 20.0f);
-		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 	if (m_nNumPlayer == 4)
 	{
-		if (m_pColon == NULL)
-		{
-			m_pColon = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2 - 18.0f, 380.0f, 0.0f), "COLON", 5);
-			m_pColon->SetWidthHeight(15.0f, 20.0f);
-			m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		}
-
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
@@ -251,11 +197,6 @@ HRESULT CTime::Init(void)
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
 		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[3]->SetWidthHeight(m_fWidth, m_fHeight);
-
-		// Timeのロゴ
-		CScene2D *pLogo = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 350.0f, 0.0f), "TIME", 5);
-		pLogo->SetWidthHeight(40.0f, 20.0f);
-		pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -302,7 +243,6 @@ void CTime::Uninit(void)
 			m_pScene2D[nCnt] = NULL;
 		}
 	}
-	m_nTimeNumCount = 0;
 
 	Release();
 }
@@ -320,13 +260,10 @@ void CTime::Update(void)
 	if ((GameMode == CManager::MODE_GAME) && m_bEndCntDown == true || (GameMode == CManager::MODE_TUTORIAL) && m_bEndCntDown == true)
 	{//制限時間
 	 //ゲーム
-		if (m_bStart == false)
+		if (m_bCountFlag == true)
 		{
-			if (m_bCountFlag == true)
-			{
-				m_nTimeCount++;
-				TimeManagement();	// 時間の管理
-			}
+			m_nTimeCount++;
+			TimeManagement();	// 時間の管理
 		}
 
 		int nTexData = 0;
