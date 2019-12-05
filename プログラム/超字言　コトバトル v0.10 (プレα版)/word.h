@@ -55,7 +55,6 @@ private:
 	bool m_bFlashingFlag;	// 点滅フラグ
 	bool m_bRestFlag;		// リセットフラグ
 	int m_nWordNum;			// 文字の番号
-	int m_nNumPlayerGet;	// 取得された時のプレイヤーの番号
 	int m_nCntFlashing;		// 点滅して消滅の時間
 	float m_fDistance[MAX_PLAYER];	// プレイヤーとの距離
 	float m_fMoveY;			// 移動距離
