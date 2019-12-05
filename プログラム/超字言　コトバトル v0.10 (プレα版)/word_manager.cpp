@@ -411,7 +411,22 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 
 						m_nCreateType = EMPTINESS_NUM;
 					break;
+				case CPlayer::TYPE_REACH://うさぎはマシンガン型
+					nType = m_nStock[0];
+					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						pModel->Set(BulletMuzzle, BulletRot,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_MACHINEGUN,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+						//pModel->SetHomingChara(pChara);
+					}
 
+					m_nCreateType = EMPTINESS_NUM;
+					break;
 				default:
 					pModel = CModelBullet::Create();
 					if (pModel != NULL)
@@ -461,6 +476,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
 				}
+				Reset();
 			}
 
 			if (CManager::GetMode() == CManager::MODE_GAME)
@@ -469,7 +485,10 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
 				CGame::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
 
-				Reset();		// 設定を戻す
+				if (type != CPlayer::TYPE_REACH)
+				{
+					Reset();		// 設定を戻す
+				}
 				if (CGame::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CGame::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
@@ -481,8 +500,10 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				//ブレンド無しで弾打ちモーションに移行
 				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_UPPER_SHOT, CPlayer::UPPER_BODY, CPlayer::STATE_NORMAL);
 				CTutorial::GetPlayer(nID)->SetMotion(CPlayer::MOTION_LOWER_SHOT, CPlayer::LOWER_BODY, CPlayer::STATE_NORMAL);
-
-				Reset();		// 設定を戻す
+				if (type != CPlayer::TYPE_REACH)
+				{
+					Reset();		// 設定を戻す
+				}
 				if (CTutorial::GetTube(m_nPlayerID) != NULL)
 				{//筒クラス内の文字情報を削除
 					CTutorial::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);

@@ -93,6 +93,7 @@ public:
 		TYPE_REFLECT,			//反射
 		TYPE_MISSILE,			//ミサイル
 		TYPE_BOMB,				//投擲爆弾
+		TYPE_MACHINEGUN,		//マシンガン
 		TYPE_MAX
 	}BULLET_PROPERTY;
 
