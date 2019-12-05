@@ -828,12 +828,17 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
 						{	//‘‚Þ‚ç‚É‚¢‚é‚Æ‚«“§–¾‚É‚·‚é
 							PlayerAlpha(0.5f);
+							m_nObjNumber = pSceneObj->GetSceneXNum();
+
 							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 							{
-								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID() )
+								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
 								{//‘¼ƒvƒŒƒCƒ„[‚ÉŒ©‚¦‚Ä‚¢‚È‚¢
 									int ntest = GetID();
-									pPlayer[nCntPlayer]->SetVision(GetID(), false);
+									if (m_nObjNumber != pPlayer[nCntPlayer]->GetLandObjNumber())
+									{	//“¯‚¶‘‚Þ‚ç‚É‚¢‚È‚¢‚Æ‚«
+										pPlayer[nCntPlayer]->SetVision(GetID(), false);
+									}
 								}
 							}
 							nCntBush++;
@@ -861,6 +866,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 
 							//m_bStealth = true;
 							bHit = false;
+							m_nObjNumber = 0;
 						}
 					}
 				}

@@ -192,6 +192,8 @@ public:
 	bool			GetStealth(void)				{ return m_bStealth; };
 	void			SetStealth(bool bStealth)		{  m_bStealth = bStealth; };
 	CCharaBase::CHARACTOR_MOVE_TYPE GetMovetype(void) { return m_pCharactorMove->GetMoveType(); }
+	int				GetLandObjNumber(void)			{ return m_nObjNumber; };
+
 	//モーション
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
@@ -227,6 +229,7 @@ private:
 	bool m_bStealth;										//ステルス状態
 	bool m_bVision[4];										//見えているかどうか
 	int	 m_nStealthTimer;									//見えている時間をカウント
+	int  m_nObjNumber;										//今いるオブジェクトの番号
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報
 	int m_motion[BODY_MAX];												//現在のモーション
