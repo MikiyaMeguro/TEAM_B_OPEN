@@ -144,8 +144,8 @@ float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 //=============================================================================
 //	イージング関数
 //	IN = 初めのほうに掛ける　OUT = 後ろのほうに掛ける　INOUT = 両方に掛ける
-//	QUAD = 二次関数(QuadFunc.)　CUBIC = 三次関数(CubicFunc.)　
-//	EXPO = 指数関数(ExpoFunc.)[未実装]
+//	QUAD = 二次関数の変形(QuadFunc.)　CUBIC = 三次関数の変形(CubicFunc.)　
+//	EXPO = 指数関数の変形(ExpoFunc.)
 //
 //=============================================================================
 float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
