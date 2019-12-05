@@ -174,10 +174,115 @@ void CTutorial::Init(void)
 
 	CSetObject::Create();
 	SetStage(m_nNumStage, m_nChangeNum);		// ステージ生成
+												//カウントダウン生成
+	for (int nCnt = 0; nCnt < UI_MAX; nCnt++)
+	{
+		m_pScene2D[nCnt] = NULL;
+	}
+	if (NumPlayer == CPlayerSelect::SELECTPLAYER_1P)
+	{
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(955.0f, 500.0f, 0), "TOP002");
+		m_pScene2D[0]->SetWidthHeight(125.0f, 27.0f);
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(955.0f, 580.0f, 0), "TOP003");
+		m_pScene2D[1]->SetWidthHeight(125.0f, 27.0f);
+		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(360.0f, 500.0f, 0), "TOP000");
+		m_pScene2D[2]->SetWidthHeight(125.0f, 27.0f);
+		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(385.0f, 580.0f, 0), "TOP001");
+		m_pScene2D[3]->SetWidthHeight(160.0f, 27.0f);
+	}
+	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
+	{
+		// 1P 操作UI
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(955.0f, 220.0f, 0), "TOP002");
+		m_pScene2D[0]->SetWidthHeight(85.0f, 24.0f);
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(955.0f, 260.0f, 0), "TOP003");
+		m_pScene2D[1]->SetWidthHeight(85.0f, 24.0f);
+		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(340.0f, 220.0f, 0), "TOP000");
+		m_pScene2D[2]->SetWidthHeight(85.0f, 24.0f);
+		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(355.0f, 260.0f, 0), "TOP001");
+		m_pScene2D[3]->SetWidthHeight(105.0f, 25.0f);
 
-												//CScene2D* p2D = NULL;
-												//p2D = CScene2D::Create(D3DXVECTOR3(1280, 720, 0), "WORD");
-												//p2D->SetWidthHeight(1280, 200.0f);
+		// 2P 操作UI
+		m_pScene2D[4] = CScene2D::Create(D3DXVECTOR3(955.0f, 585.0f, 0), "TOP002");
+		m_pScene2D[4]->SetWidthHeight(85.0f, 24.0f);
+		m_pScene2D[5] = CScene2D::Create(D3DXVECTOR3(955.0f, 625.0f, 0), "TOP003");
+		m_pScene2D[5]->SetWidthHeight(85.0f, 24.0f);
+		m_pScene2D[6] = CScene2D::Create(D3DXVECTOR3(340.0f, 585.0f, 0), "TOP000");
+		m_pScene2D[6]->SetWidthHeight(85.0f, 24.0f);
+		m_pScene2D[7] = CScene2D::Create(D3DXVECTOR3(355.0f, 625.0f, 0), "TOP001");
+		m_pScene2D[7]->SetWidthHeight(105.0f, 25.0f);
+	}
+	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_3P )
+	{
+		// 1P 操作UI
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(575.0f, 235.0f, 0), "TOP002");
+		m_pScene2D[0]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(575.0f, 270.0f, 0), "TOP003");
+		m_pScene2D[1]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(575.0f, 305.0f, 0), "TOP000");
+		m_pScene2D[2]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(567.0f, 340.0f, 0), "TOP001");
+		m_pScene2D[3]->SetWidthHeight(110.0f, 26.0f);
+		// 3P 操作UI
+		m_pScene2D[4] = CScene2D::Create(D3DXVECTOR3(575.0f, 599.0f, 0), "TOP002");
+		m_pScene2D[4]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[5] = CScene2D::Create(D3DXVECTOR3(575.0f, 634.0f, 0), "TOP003");
+		m_pScene2D[5]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[6] = CScene2D::Create(D3DXVECTOR3(575.0f, 669.0f, 0), "TOP000");
+		m_pScene2D[6]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[7] = CScene2D::Create(D3DXVECTOR3(567.0f, 704.0f, 0), "TOP001");
+		m_pScene2D[7]->SetWidthHeight(110.0f, 26.0f);
+		// 2P 操作UI
+		m_pScene2D[8] = CScene2D::Create(D3DXVECTOR3(1219.0f, 235.0f, 0), "TOP002");
+		m_pScene2D[8]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[9] = CScene2D::Create(D3DXVECTOR3(1219.0f, 270.0f, 0), "TOP003");
+		m_pScene2D[9]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[10] = CScene2D::Create(D3DXVECTOR3(1219.0f, 305.0f, 0), "TOP000");
+		m_pScene2D[10]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[11] = CScene2D::Create(D3DXVECTOR3(1214.0f, 340.0f, 0), "TOP001");
+		m_pScene2D[11]->SetWidthHeight(110.0f, 26.0f);
+
+	}
+	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_4P)
+	{
+		// 1P 操作UI
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(575.0f, 235.0f, 0), "TOP002");
+		m_pScene2D[0]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(575.0f, 270.0f, 0), "TOP003");
+		m_pScene2D[1]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(575.0f, 305.0f, 0), "TOP000");
+		m_pScene2D[2]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(567.0f, 340.0f, 0), "TOP001");
+		m_pScene2D[3]->SetWidthHeight(110.0f, 26.0f);
+		// 3P 操作UI
+		m_pScene2D[4] = CScene2D::Create(D3DXVECTOR3(575.0f, 599.0f, 0), "TOP002");
+		m_pScene2D[4]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[5] = CScene2D::Create(D3DXVECTOR3(575.0f, 634.0f, 0), "TOP003");
+		m_pScene2D[5]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[6] = CScene2D::Create(D3DXVECTOR3(575.0f, 669.0f, 0), "TOP000");
+		m_pScene2D[6]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[7] = CScene2D::Create(D3DXVECTOR3(567.0f, 704.0f, 0), "TOP001");
+		m_pScene2D[7]->SetWidthHeight(110.0f, 26.0f);
+		// 2P 操作UI
+		m_pScene2D[8] = CScene2D::Create(D3DXVECTOR3(1219.0f, 235.0f, 0), "TOP002");
+		m_pScene2D[8]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[9] = CScene2D::Create(D3DXVECTOR3(1219.0f, 270.0f, 0), "TOP003");
+		m_pScene2D[9]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[10] = CScene2D::Create(D3DXVECTOR3(1219.0f, 305.0f, 0), "TOP000");
+		m_pScene2D[10]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[11] = CScene2D::Create(D3DXVECTOR3(1214.0f, 340.0f, 0), "TOP001");
+		m_pScene2D[11]->SetWidthHeight(110.0f, 26.0f);
+		// 4P 操作UI
+		m_pScene2D[12] = CScene2D::Create(D3DXVECTOR3(1219.0f, 599.0f, 0), "TOP002");
+		m_pScene2D[12]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[13] = CScene2D::Create(D3DXVECTOR3(1219.0f, 634.0f, 0), "TOP003");
+		m_pScene2D[13]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[14] = CScene2D::Create(D3DXVECTOR3(1219.0f, 669.0f, 0), "TOP000");
+		m_pScene2D[14]->SetWidthHeight(90.0f, 25.0f);
+		m_pScene2D[15] = CScene2D::Create(D3DXVECTOR3(1214.0f, 704.0f, 0), "TOP001");
+		m_pScene2D[15]->SetWidthHeight(110.0f, 26.0f);
+
+	}
 }
 
 //=============================================================================
@@ -225,6 +330,15 @@ void CTutorial::Uninit(void)
 	{
 		m_pWordCreate->Uninit();
 		m_pWordCreate = NULL;
+	}
+
+	for (int nCnt = 0; nCnt < UI_MAX; nCnt++)
+	{
+		if (m_pScene2D[nCnt] != NULL)
+		{
+			m_pScene2D[nCnt]->Uninit();
+			m_pScene2D[nCnt] = NULL;
+		}
 	}
 
 
@@ -306,7 +420,7 @@ void CTutorial::CameraSetting(int nNumPlayer)
 				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 140, 0, 1000, 355);
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_2P_PLAY);
+				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_2P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 140, 365, 1000, 355);
 			break;
 
@@ -316,11 +430,11 @@ void CTutorial::CameraSetting(int nNumPlayer)
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("TOPVIEW_CAMERA", CCamera::TYPE_TOPVIEW,
@@ -334,15 +448,15 @@ void CTutorial::CameraSetting(int nNumPlayer)
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 
@@ -352,15 +466,15 @@ void CTutorial::CameraSetting(int nNumPlayer)
 			pCameraManager->SetCameraViewPort("1P_CAMERA", 0, 0, 635, 355);
 
 			pCameraManager->CreateCamera("2P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("2P_CAMERA", 645, 0, 635, 355);
 
 			pCameraManager->CreateCamera("3P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(-100.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * 0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("3P_CAMERA", 0, 365, 635, 355);
 
 			pCameraManager->CreateCamera("4P_CAMERA", CCamera::TYPE_TPS,
-				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
+				D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, D3DX_PI * -0.5f, 0.0f), CAMERA_LENGTH_3P4P_PLAY);
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 		}
