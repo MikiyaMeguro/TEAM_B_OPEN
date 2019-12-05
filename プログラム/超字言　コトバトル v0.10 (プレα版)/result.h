@@ -24,7 +24,6 @@ class CCharaBase;
 //=============================================================================
 #define MAX_PLAYER (4)
 #define MAX_POINT (2)
-#define MAX_RESULT_TEX (1)
 
 //========================================
 // クラスの定義
@@ -32,6 +31,7 @@ class CCharaBase;
 class CResult : public CScene
 {
 public:
+
 	typedef struct
 	{
 		int nNumRank;
@@ -57,15 +57,20 @@ private:
 	typedef enum
 	{
 		RESULTTYPE_WINDOW = 0,	//ウィンドウ
+		RESULTTYPE_CALLOUT_1,	//吹き出し：1位
+		RESULTTYPE_CALLOUT_2,	//吹き出し：2位
+		RESULTTYPE_CALLOUT_3,	//吹き出し：3位
+		RESULTTYPE_CALLOUT_4,	//吹き出し：4位
 		RESULTTYPE_MAX			//最大数
 	}STAGESELECTTYPE;
-	
+
 	void InitPointer(void);
 	void SetPolygon(void);
 	void SetAlpha(void);
 	void Set2DUI(int nNum,int nPosNum);
-	void RankTex(int nNum,int nRank);
+	void RankTex(int nNum, int nRank);
 	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
+	void SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE type);
 
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
@@ -73,7 +78,7 @@ private:
 	static CMeshField *m_pMeshField;
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];	// ナンバーへのポインタ
-	CScene2D *m_apScene2D[MAX_RESULT_TEX];		//演出系2Dポリゴン
+	CScene2D *m_apScene2D[RESULTTYPE_MAX];		//演出系2Dポリゴン
 	CScene2D *m_apPlayerIcon[MAX_PLAYER];		//プレイヤーのアイコン
 	CScene2D *m_apRanking[MAX_PLAYER];			//順位
 	CScene2D *m_apPlayerNum[MAX_PLAYER];		//プレイヤー番号
@@ -86,6 +91,5 @@ private:
 	D3DXVECTOR2 m_RankIconSize[MAX_PLAYER];		//順位のサイズを保存(X:幅,Y:高さ)
 	D3DXVECTOR2 m_PlayerNumSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
 	D3DXVECTOR2 m_PlayerIconSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
-
 };
 #endif
