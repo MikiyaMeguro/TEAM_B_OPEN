@@ -55,7 +55,6 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_posOld = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_pWordManager = NULL;
 	m_nCntTransTime = 0;
-	m_pPlayerNum = NULL;
 	m_bAssist = true;
 	m_bStealth = true;		//ステルス状態になれるかどうか
 	m_nStealthTimer = 0;
@@ -121,15 +120,6 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	{
 		ObjCreate(m_pWordManager);
 		m_pWordManager->SetID(m_nID);
-	}
-
-	if (m_pPlayerNum == NULL)
-	{
-		int nID = m_nID;
-		if (MoveType == CCharaBase::MOVETYPE_NPC_AI) { nID = MAX_PLAYER; }	// COM表示にする
-		m_pPlayerNum = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, pos.y + 45.0f, pos.z), 7.0f, 3.0f, "プレイ人数");
-		m_pPlayerNum->SetTexture(D3DXVECTOR2(0.0f, nID * 0.2f), D3DXVECTOR2(1.0f, (nID * 0.2f) + 0.2f));
-		m_pPlayerNum->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
 
@@ -203,13 +193,6 @@ void CPlayer::Uninit(void)
 			m_pPlayerParts[nCntParts][nCntBody] = NULL;
 		}
 	}
-	// プレイヤー番号破棄
-	if (m_pPlayerNum != NULL)
-	{
-		m_pPlayerNum->Uninit();
-		m_pPlayerNum = NULL;
-	}
-
 
 	// 文字管理クラスの削除
 	if (m_pWordManager != NULL)
@@ -393,11 +376,6 @@ void CPlayer::Update(void)
 				}
 			}
 		}
-	}
-
-	if (m_pPlayerNum != NULL)
-	{
-		m_pPlayerNum->Setpos(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, m_pCharactorMove->GetPosition().y + 45.0f, m_pCharactorMove->GetPosition().z));
 	}
 
 	MotionUpdate(LOWER_BODY);
