@@ -65,7 +65,7 @@ CTime *CTime::Create(int nNumPlayer)
 			if (nNumPlayer == 3) { pTime->m_pos = TIME_POS_3P; }
 			if (nNumPlayer == 4) { pTime->m_pos = TIME_POS_4P; }
 #endif
-			pTime->m_pos = D3DXVECTOR3(20.0f, 50.0f, 0.0f);
+			pTime->m_pos = D3DXVECTOR3(20.0f, 80.0f, 0.0f);
 
 			pTime->m_nNumPlayer = nNumPlayer;
 
@@ -146,12 +146,12 @@ HRESULT CTime::Init(void)
 	}
 
 	// Time‚ÌƒƒS
-	CSceneBillBoard *pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 75.0f, 0.0f), 20.0f, 12.0f, "TIME");
+	CSceneBillBoard *pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 20.0f, 12.0f, "TIME");
 	pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 
 	if (m_pColon == NULL)
 	{
-		m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-7.0f, 55.0f, 0.0f), 5.0f, 8.0f,"COLON");
+		m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-7.0f, 85.0f, 0.0f), 5.0f, 8.0f,"COLON");
 		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
