@@ -58,6 +58,10 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_bAssist = true;
 	m_bStealth = true;		//ステルス状態になれるかどうか
 	m_nStealthTimer = 0;
+	m_BulletRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bMachineGun = false;
+	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
@@ -260,7 +264,7 @@ void CPlayer::Update(void)
 			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
 			// 弾の生成
-			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false)
+			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false && m_bMachineGun == false)
 			{
 				C3DCharactor* pChara = NULL;
 				int nNear = GetNearPlayer();
@@ -281,6 +285,8 @@ void CPlayer::Update(void)
 					{//近いプレイヤーがいなければプレイヤーの向きに打つ
 						BulletRot.y = m_pCharactorMove->GetRotation().y;
 					}
+					//発射方向保持
+					m_BulletRot.y = BulletRot.y;
 				}
 
 				if (m_pWordManager->GetBulletFlag() == true)
@@ -288,8 +294,17 @@ void CPlayer::Update(void)
 					m_bStealth = false;
 				}
 
-				m_pWordManager->BulletCreate(m_nID,BulletPos,BulletRot,m_PlayerType,
-													(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
+				if (m_PlayerType != TYPE_REACH)
+				{	//ウサギ以外
+					m_pWordManager->BulletCreate(m_nID, BulletPos, BulletRot, m_PlayerType,
+						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
+				}
+				else
+				{
+					//マシンガン発射時間初期化
+					m_nMachineGunTime = 0;
+					m_bMachineGun = true;
+				}
 			}
 
 			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID))
@@ -311,6 +326,23 @@ void CPlayer::Update(void)
 
 			m_pCharactorMove->GetRotation().y = BulletRot.y;
 			m_pCharactorMove->GetSpin().y = 0.0f;
+
+			//マシンガン発射
+			if (m_bMachineGun == true)
+			{
+				m_nMachineGunTime++;
+				if (m_nMachineGunTime % 10 == 0)
+				{
+					m_MachineGunPos.x = (rand() % 16) - (rand() % 16);
+					m_MachineGunPos.z = (rand() % 16) - (rand() % 16);
+					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType,NULL);
+				}
+				else if (m_nMachineGunTime > 60)
+				{
+					m_bMachineGun = false;
+					m_pWordManager->Reset();
+				}
+			}
 
 			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
 		}
