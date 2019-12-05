@@ -53,11 +53,11 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 	m_nLife = nLife;
 	m_nExpandTime = nLife;
 	m_nCount = 0;
-	m_spinSpeed = D3DXVECTOR3(0.0f, 0.4f, 0.0f);	//少し回す
+	m_spinSpeed = D3DXVECTOR3(0.0f, 0.4f, 0.0f);	//デフォルトで少し回す
 
+	//多重アニメーションをするために何個か重ねる
 	if (m_bNotDup == false)
 	{
-		//キレイに見せるために何個か重ねる
 		CExplosion3D* p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
 		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.005f); }
@@ -81,6 +81,7 @@ void CExplosion3D::SetEX(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int
 
 	CMeshSphere::SetTexAnim(D3DXVECTOR2(fAnimSpeed,-fAnimSpeed));
 	CMeshSphere::SetCntAnimTime(1);
+
 	m_nCount = 0;
 
 	m_fDestSize = fDestSize;
@@ -90,20 +91,23 @@ void CExplosion3D::SetEX(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int
 	m_nExpandTime = nExpandTime;
 	m_spinSpeed = spinSpeed;
 
+	//多重アニメーションをするために何個か重ねる
 	if (m_bNotDup == false)
 	{
-		//キレイに見せるために何個か重ねる
 		CExplosion3D* p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife,-0.005f); }
+		if (p3D != NULL) { p3D->SetEX(pos, fStartSize, fDestSize, nLife,-0.005f,
+										rot,col,Tag,nMesh,nExpandTime,spinSpeed); }
 
 		p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, 0.02f); }
+		if (p3D != NULL) { p3D->SetEX(pos, fStartSize, fDestSize, nLife, 0.02f,
+										rot, col, Tag, nMesh, nExpandTime, spinSpeed); }
 
 		p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.015f); }
+		if (p3D != NULL) { p3D->SetEX(pos, fStartSize, fDestSize, nLife, -0.015f,
+										rot, col, Tag, nMesh, nExpandTime, spinSpeed); }
 
 	}
 	m_bNotDup = true;
@@ -126,7 +130,6 @@ HRESULT CExplosion3D::Init(void)
 //=============================================================================
 void CExplosion3D::Uninit(void)
 {
-
 	CMeshSphere::Uninit();
 }
 
@@ -181,7 +184,6 @@ void CExplosion3D::Draw(void)
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 	CMeshSphere::Draw();
-
 	// αブレンディングを元に戻す
 	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
 	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);

@@ -98,7 +98,7 @@ void CDebugProc::Print(char *fmt, ...)
 			m_strDebug += " ";	//数値の間は1マス開ける
 			break;
 
-		case 'f':	// float型
+		case 'f':	// float型(4桁で丸める)
 			m_strDebug += std::_Floating_to_string("%.4f", va_arg(ap, double));//引き出した数字をstring型に変換して入れる
 			m_strDebug += " ";	//数値の間は1マス開ける
 			break;
