@@ -32,7 +32,7 @@ class CStageSelect;
 #define CAMERA_LENGTH_3P4P_PLAY (200.0f)			//カメラの距離(3p4pプレイ用)
 #define CAMERA_LENGTH_TOPVIEW_PLAY (650.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
-#define CAMERA_ROTX (-1.57f)		//カメラのデフォルト角度(X)
+#define CAMERA_ROTX (-(D3DX_PI * 0.5f))		//カメラのデフォルト角度(X)
 
 #define PLAYER_INITPOSX (200.0f)
 #define PLAYER_INITPOSZ (200.0f)
