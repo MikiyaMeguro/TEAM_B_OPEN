@@ -73,7 +73,7 @@ CObject::~CObject()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::GIMMICKTYPE realtime)
+CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CSceneX::COLLISIONTYPE type, CLoad::MODEL model, CObject::GIMMICKTYPE realtime,int nNumber)
 {
 	CObject *pObject = NULL;
 	if (pObject == NULL)
@@ -83,6 +83,7 @@ CObject *CObject::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 Scale, CS
 
 		if (pObject != NULL)
 		{
+			pObject->m_nObjNumber = nNumber;	//オブジェクトの番号設定
 			pObject->SetModelType(model);
 			pObject->BindModel(CLoad::GetBuffMat(model), CLoad::GetNumMat(model), CLoad::GetMesh(model));		// モデルの割り当て
 			pObject->SetScale(Scale);	// スケールの設定
@@ -119,6 +120,8 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 	}
 	//	初期の大きさの保存
 	m_InitScale = CSceneX::GetScale();
+	// 番号を設定
+	CSceneX::SetSceneXNum(m_nObjNumber);
 	return S_OK;
 }
 
