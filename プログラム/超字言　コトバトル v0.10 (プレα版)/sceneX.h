@@ -89,6 +89,8 @@ public:
 	void SetParent(D3DXMATRIX* pParent) { m_pParentMatrix = pParent; };
 	void SetCameraNum(int nCamera) { m_nCamera = nCamera; };
 
+	void SetSceneXNum(int nNumber) { m_nSceneXNumber = nNumber; };
+	int GetSceneXNum(void) {return m_nSceneXNumber; };
 
 private:
 	LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
@@ -109,6 +111,7 @@ private:
 	bool					m_bTranslucent[4];	//半透明化フラグ(trueで消える)
 	D3DXMATRIX*				m_pParentMatrix;	//親マトリックス
 	int						m_nCamera;			//カメラの番号
+	int						m_nSceneXNumber;	//シーンXの番号
 
 };
 

@@ -987,10 +987,13 @@ void C3DCharactor::Homing_CPU(void)
 	float fCompare = 1000000;		//比べる
 	int nNearPlayer;
 
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		pPlayer[nCntPlayer] = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
+	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
-		pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
 		if (pPlayer[nCntPlayer] != NULL)
 		{
 			PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得
@@ -1308,7 +1311,11 @@ void C3DCharactor::NearOrFur_CPU(void)
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
-		pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);			// プレイヤーを取得
+		pPlayer[nCntPlayer] = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
+	}
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
 		if (pPlayer[nCntPlayer] != NULL)
 		{
 			PlayerPos[nCntPlayer] = pPlayer[nCntPlayer]->GetPosition();	// プレイヤーの位置を取得

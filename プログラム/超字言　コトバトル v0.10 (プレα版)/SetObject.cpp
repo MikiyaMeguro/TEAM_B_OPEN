@@ -279,9 +279,8 @@ void CSetObject::LoadFile(char *pFileName)
 			//モデルを生成
 			if (memcmp(pStrcur, "END_MODELSET", strlen("END_MODELSET")) == 0)
 			{
-				//CSetObject::Create(ModelPos, ModelRot, D3DXVECTOR3(0.0f, 0.0f, 0.0f)
-				//	, (CSetObject::MODELTYPE)nType, CSetObject::MOVETYPE_NONE, 1);
-				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType, (CObject::GIMMICKTYPE)nGimmickType);
+				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType, (CObject::GIMMICKTYPE)nGimmickType, nNumModel);
+				nNumModel++;
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)
