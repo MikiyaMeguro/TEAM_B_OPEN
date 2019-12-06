@@ -119,6 +119,10 @@ HRESULT C3DCharactor::Init(void)
 	nTestCnt = 0;
 	m_bWait = false;
 	m_fOldCircle = 0;
+	m_BulletRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bMachineGun = false;
+	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_nMachineGunTime = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -562,6 +566,11 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn", "STEP_COOLTIME : ", m_nCntStepCoolTime);
 
+	//e‚ğŒ‚‚Á‚Ä‚¢‚éŠÔˆÚ“®‚ğ’x‚­‚·‚é
+	if (GetThisCharactor()->GetbMachineGun() == true)
+	{
+		move /= 1.2f;
+	}
 	pos += move;
 
 	//‘¬“x‚ÉŒW”‚ğŠ|‚¯‚é
@@ -570,8 +579,9 @@ void C3DCharactor::CharaMove_Input(void)
 	//spin.y = CameraRot.y - rot.y;
 
 	//‰ñ“]§Œä
+
 	if (GetThisCharactor()->GetbMachineGun() == false)
-	{
+	{//e‚ğŒ‚‚Á‚Ä‚¢‚È‚¢‚Æ‚«‚É‰ñ“]‚µ‚È‚¢‚æ‚¤‚É
 		CUtilityMath::RotateNormarizePI(&spin.y);
 
 		rot.y += spin.y * GetSpinCoeffient();
@@ -708,7 +718,15 @@ void C3DCharactor::Action_CPU(void)
 	case  THINK_MISSING:	//“G‚ğŒ©¸‚Á‚½
 		break;
 	case  THINK_HAVEBULLET:	//’e‚ğ‚Á‚Ä‚¢‚é‚Æ‚«
-		HaveBullet_CPU();
+		if (m_bMachineGun == true)
+		{
+			Attack_CPU();
+		}
+		else
+		{
+			HaveBullet_CPU();
+		}
+
 		break;
 	case  THINK_NOTBULLET:	//’e‚ğ‚Á‚Ä‚¢‚È‚¢
 		NotBullet_CPU();
@@ -1049,22 +1067,29 @@ void C3DCharactor::Homing_CPU(void)
 	if (fCompare < 100000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{// ‹——£“à‚É“ü‚è’e‚ğ‚Á‚Ä‚¢‚é
 		TargetPos = D3DXVECTOR3((PlayerPos[nNearPlayer].x + Pos.x) / 2, (PlayerPos[nNearPlayer].y + Pos.y) / 2, (PlayerPos[nNearPlayer].z + Pos.z) / 2);
-		// –Ú“I‚ÌŠp“x
-		float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
-		// ·•ª
-		float fDiffAngle = fDestAngle - rot.y;
-		CUtilityMath::RotateNormarizePI(&fDiffAngle);
-		DiffAngle(fDiffAngle);
-		if (fDestAngle > D3DX_PI)
+		if (m_bMachineGun == false)
 		{
-			fDestAngle -= D3DX_PI * 2.0f;
+			// –Ú“I‚ÌŠp“x
+			float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
+			// ·•ª
+			float fDiffAngle = fDestAngle - rot.y;
+			CUtilityMath::RotateNormarizePI(&fDiffAngle);
+			DiffAngle(fDiffAngle);
+			if (fDestAngle > D3DX_PI)
+			{
+				fDestAngle -= D3DX_PI * 2.0f;
+			}
+			if (fDestAngle < -D3DX_PI)
+			{
+				fDestAngle += D3DX_PI * 2.0f;
+			}
+			//‹–ì“à‚É“ü‚Á‚½‚çŒ‚‚Â
+			if (fDestAngle - 0.11f < rot.y && fDestAngle + 0.11f > rot.y)
+			{
+				m_CpuThink = THINK_ATTACK;
+			}
 		}
-		if (fDestAngle < -D3DX_PI)
-		{
-			fDestAngle += D3DX_PI * 2.0f;
-		}
-		//‹–ì“à‚É“ü‚Á‚½‚çŒ‚‚Â
-		if (fDestAngle - 0.11f < rot.y && fDestAngle + 0.11f > rot.y)
+		else if(m_bMachineGun == true)
 		{
 			m_CpuThink = THINK_ATTACK;
 		}
@@ -1128,15 +1153,62 @@ void C3DCharactor::Attack_CPU(void)
 	//’e‚Ì¶¬	’e‚ğ‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(),GetThisCharactor()->GetPlayerType());
-		m_CpuThink = THINK_NONE;
+		switch (GetThisCharactor()->GetPlayerType())
+		{
+		case CPlayer::TYPE_BARANCE:
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			m_CpuThink = THINK_NONE;
+			break;
+		case CPlayer::TYPE_POWER:
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			m_CpuThink = THINK_NONE;
+			break;
+		case CPlayer::TYPE_SPEED:
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			m_CpuThink = THINK_NONE;
+			break;
+		case CPlayer::TYPE_REACH:
+			m_bMachineGun = true;
+			break;
+
+		default:
+			break;
+		}
 		GetThisCharactor()->SetStealth(false);
 	}
 	else if(GetThisCharactor()->GetWordManager()->GetBulletFlag() == false
 		&& GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+	//	GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 	}
+
+
+	//ƒ}ƒVƒ“ƒKƒ“”­Ë
+	if (m_bMachineGun == true)
+	{
+		m_nMachineGunTime++;
+		if (m_nMachineGunTime % 10 == 0)
+		{//10ƒtƒŒ[ƒ€‚Éˆê‰ñ’e”­Ë
+			m_MachineGunPos.x = (float)(rand() % 16) - (rand() % 16);
+			m_MachineGunPos.z = (float)(rand() % 16) - (rand() % 16);
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition() + m_MachineGunPos, CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), NULL);
+		}
+		else if (m_nMachineGunTime > 60)
+		{//6‰ñ”­Ë‚µ‚½‚ç’eî•ñ‚ğíœ
+			m_bMachineGun = false;
+			GetThisCharactor()->GetWordManager()->Reset();
+			m_CpuThink = THINK_NONE;
+			m_nMachineGunTime = 0;
+		}
+		else if (GetThisCharactor()->GetWordManager()->Getm_nStock(0) == 99)
+		{//ƒSƒ~ƒ‚ƒfƒ‹—p‚Ì”­Ë
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition() + m_MachineGunPos, CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), NULL);
+			m_bMachineGun = false;
+			GetThisCharactor()->GetWordManager()->Reset();
+			m_nMachineGunTime = 0;
+		}
+	}
+
 }
 
 //=============================================================================
@@ -1240,6 +1312,8 @@ void C3DCharactor::PickUP_CPU(void)
 void C3DCharactor::HaveBullet_CPU(void)
 {
 	int	nCntNear = 0;
+
+
 
 	//’N‚ª‹ß‚¢‚©
 	NearOrFur_CPU();
