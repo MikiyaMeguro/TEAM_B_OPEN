@@ -94,6 +94,9 @@ public:
 		TYPE_REFLECT,			//反射
 		TYPE_MISSILE,			//ミサイル
 		TYPE_MACHINEGUN,		//マシンガン
+		TYPE_SHOTGUN,			//ショットガン通常(じゃやい)
+		TYPE_SHOTGUN_MEDIUM,	//ショットガン(通常)
+		TYPE_SHOTGUN_SLOW,		//ショットガン(遅い)
 		TYPE_MAX
 	}BULLET_PROPERTY;
 

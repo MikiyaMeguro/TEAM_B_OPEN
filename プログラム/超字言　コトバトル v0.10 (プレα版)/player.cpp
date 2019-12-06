@@ -293,9 +293,12 @@ void CPlayer::Update(void)
 				if (m_pWordManager->GetBulletFlag() == true)
 				{	//‰ÂŽ‹‰»
 					m_bStealth = false;
-					//ƒ}ƒVƒ“ƒKƒ“”­ŽËŽžŠÔ‰Šú‰»
-					m_nMachineGunTime = 0;
-					m_bMachineGun = true;
+					if (m_PlayerType == TYPE_REACH)
+					{
+						//ƒ}ƒVƒ“ƒKƒ“”­ŽËŽžŠÔ‰Šú‰»
+						m_nMachineGunTime = 0;
+						m_bMachineGun = true;
+					}
 				}
 
 				if (m_PlayerType != TYPE_REACH)
@@ -708,6 +711,9 @@ bool CPlayer::CollisionDamageObj(void)
 						int nPoint = 0;
 						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
 						else if (pModelBullet->GetType() == CModelBullet::TYPE_MACHINEGUN) { nPoint = 1; }
+						else if (pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN
+							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_MEDIUM
+							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_SLOW) { nPoint = 1; }
 						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
 
 						if (pPoint != NULL) { pPoint->AddPoint(nPoint); }
