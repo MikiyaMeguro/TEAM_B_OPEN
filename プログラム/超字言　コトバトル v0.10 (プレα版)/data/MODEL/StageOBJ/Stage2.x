@@ -241,7 +241,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\UV\\S2Main.jpg";
+    "data\\TEXTURE\\UV\\StegeGreen.jpg";
    }
   }
   Material {
@@ -250,7 +250,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\UV\\S1ÅE2Sub.jpg";
+    "data\\TEXTURE\\UV\\Gake.jpg";
    }
   }
  }

@@ -231,6 +231,13 @@ private:
 	float m_fOldCircle;				//移動先までの距離
 	int nTestCnt = 0;
 	CAvoidUi *m_pCAvoidUi;
+	//弾発射情報
+	D3DXVECTOR3 m_BulletRot;		//弾発射方向保持
+	int m_nMachineGunTime;			//マシンガン発射時間
+	bool m_bMachineGun;				//マシンガンフラグ
+	D3DXVECTOR3 m_MachineGunPos;	//マシンガン発射位置
+
+
 
 public:
 	bool m_bFront;
