@@ -405,7 +405,17 @@ void CModelBullet::Update(void)
 			CEffect::Create(pos, 5, 5);
 		}
 	}
-
+	if (m_Prop == TYPE_MACHINEGUN)
+	{//	ƒ}ƒVƒ“ƒKƒ“
+		if (m_nCounter % 7 == 0)
+		{
+			CEffect::Create(pos, 5, 7);
+		}
+		if (m_nCounter % 14 == 0)
+		{
+			CEffect::Create(pos, 5, 8);
+		}
+	}
 	if (m_Prop == TYPE_NORMAL)
 	{//ƒSƒ~
 		if (m_nCounter % 6 == 0)
