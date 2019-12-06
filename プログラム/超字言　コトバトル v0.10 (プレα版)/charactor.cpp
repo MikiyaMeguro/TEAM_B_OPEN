@@ -970,7 +970,8 @@ void C3DCharactor::Homing_CPU(void)
 	float		 speed = CCharaBase::GetSpeed();
 
 	float fAngle = CIRCLE_ANGLE;
-	float fLength = CIRCLE_HOMING;
+	float fLength = 0;
+
 	if (m_CpuThink == THINK_WATCH)
 	{//WATCH‚Ì‚Íí‚ÉŒ©‚é‚æ‚¤‚É
 		fAngle += 50000;
@@ -980,6 +981,28 @@ void C3DCharactor::Homing_CPU(void)
 	{//ESCAPE‚Ì‚Í–Úü‚É“ü‚Á‚½“¦‚°‚é
 		fLength = 0;
 	}
+
+	//ƒLƒƒƒ‰‚²‚Æ‚ÌË’ö‹——£
+	switch (GetThisCharactor()->GetPlayerType())
+	{
+	case CPlayer::TYPE_BARANCE:
+		fLength = 50000;
+		break;
+	case CPlayer::TYPE_POWER:
+		fLength = 100000;
+		break;
+	case CPlayer::TYPE_SPEED:
+		fLength = 100000;
+		break;
+	case CPlayer::TYPE_REACH:
+		fLength = 200000;
+		break;
+
+	default:
+		break;
+	}
+
+
 
 	CPlayer *pPlayer[MAX_PLAYER];
 	D3DXVECTOR3 PlayerPos[MAX_PLAYER];
@@ -1046,7 +1069,7 @@ void C3DCharactor::Homing_CPU(void)
 	}
 #endif
 
-	if (fCompare < 100000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+	if (fCompare < fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{// ‹——£“à‚É“ü‚è’e‚ğ‚Á‚Ä‚¢‚é
 		TargetPos = D3DXVECTOR3((PlayerPos[nNearPlayer].x + Pos.x) / 2, (PlayerPos[nNearPlayer].y + Pos.y) / 2, (PlayerPos[nNearPlayer].z + Pos.z) / 2);
 		if (m_bMachineGun == false)
@@ -1076,9 +1099,9 @@ void C3DCharactor::Homing_CPU(void)
 			m_CpuThink = THINK_ATTACK;
 		}
 	}
-	else if (fCompare >= 100000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+	else if (fCompare >= fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{// ‹——£ŠO‚Å’e‚ğ‚Á‚Ä‚¢‚é
-		float	fMinCircle = 100000;
+		float	fMinCircle = fLength;
 		int nNumWP = 0;
 
 		//ˆÊ’uî•ñ‚ğæ“¾

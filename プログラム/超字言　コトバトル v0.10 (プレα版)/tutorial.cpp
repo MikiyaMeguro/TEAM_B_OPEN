@@ -504,7 +504,7 @@ void CTutorial::PlayerSetting(int nNum)
 		}
 		if (m_pPlayer[0] != NULL)
 		{
-			m_type[0] = CPlayer::TYPE_REACH;
+			m_type[0] = CPlayer::TYPE_BARANCE;
 			m_pPlayer[0]->Set(D3DXVECTOR3(PLAYER_INITPOSX, 0.0f, 0.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());

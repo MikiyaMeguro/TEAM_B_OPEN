@@ -281,6 +281,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 
 	//É^ÉCÉvÇ…ÇÊÇ¡ÇƒèàóùÇï™ÇØÇÈ
 	float fSpeed = 3.0f;
+	int nLife = 100;
 	switch (m_Prop)
 	{
 	case TYPE_HIGHSPEED:
@@ -307,6 +308,21 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		break;
 	case TYPE_MACHINEGUN:
 		m_fKnockBack = 1.0f;
+	case TYPE_SHOTGUN:
+		m_fKnockBack = 3.0f;
+		fSpeed = 7.0f;
+		nLife = 20;
+		break;
+	case TYPE_SHOTGUN_MEDIUM:
+		m_fKnockBack = 3.0f;
+		fSpeed = 6.5f;
+		nLife = 20;
+		break;
+	case TYPE_SHOTGUN_SLOW:
+		m_fKnockBack = 3.0f;
+		fSpeed = 6.0f;
+		nLife = 20;
+		break;
 	case TYPE_MISSILE:
 		fSpeed = 4.0f;
 		m_fKnockBack = 4.0f;
@@ -320,7 +336,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	C3DBullet::Set(pos,
 		rot,
 		fSpeed,
-		100,
+		nLife,
 		nID);
 }
 
