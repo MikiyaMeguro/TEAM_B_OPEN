@@ -24,7 +24,7 @@ class CCharaBase;
 //=============================================================================
 #define MAX_PLAYER (4)
 #define MAX_POINT (2)
-
+#define MAX_MODEL (4)
 //========================================
 // クラスの定義
 //========================================
@@ -64,13 +64,23 @@ private:
 		RESULTTYPE_MAX			//最大数
 	}STAGESELECTTYPE;
 
+	typedef enum
+	{
+		EFFECTPRO_NONE = 0,
+		EFFECTPRO_PATTURN1,
+		EFFECTPRO_PATTURN2,
+		EFFECTPRO_MAX
+	}EFFECTPRO_STATE;
+
 	void InitPointer(void);
 	void SetPolygon(void);
+	void SetModel(void);
 	void SetAlpha(void);
 	void Set2DUI(int nNum,int nPosNum);
 	void RankTex(int nNum, int nRank);
 	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE type);
+	void EffectPro(void);
 
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
@@ -82,14 +92,19 @@ private:
 	CScene2D *m_apPlayerIcon[MAX_PLAYER];		//プレイヤーのアイコン
 	CScene2D *m_apRanking[MAX_PLAYER];			//順位
 	CScene2D *m_apPlayerNum[MAX_PLAYER];		//プレイヤー番号
-
+	CScene2D *m_apEffect[MAX_PLAYER][2];		//エフェクト[プレイヤー人数][エフェクト出す数]
+	CSceneX *m_apStadium[MAX_MODEL];			//モデルの配置
 	bool m_bMenu;
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ
+	bool m_bEffectPro;							//演出が始まってるかどうかフラグ
 	D3DXVECTOR3 m_RankPos[MAX_PLAYER];			//順位の位置を保存
 	D3DXVECTOR3 m_PlayerNumPos[MAX_PLAYER];		//プレイヤーナンバーの位置を保存
 	D3DXVECTOR3 m_PlayerIconPos[MAX_PLAYER];	//アイコンの位置を保存
 	D3DXVECTOR2 m_RankIconSize[MAX_PLAYER];		//順位のサイズを保存(X:幅,Y:高さ)
 	D3DXVECTOR2 m_PlayerNumSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
 	D3DXVECTOR2 m_PlayerIconSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
+	D3DXVECTOR3 m_RankEffect[MAX_PLAYER][2];	//プレイヤーナンバーの位置を保存
+	D3DXVECTOR2 m_EffectAlpha;		//エフェクトのalpha値管理（X:エフェクト番号0　Y:エフェクト番号1）
+	EFFECTPRO_STATE m_EffectState;				//エフェクトの状態管理
 };
 #endif

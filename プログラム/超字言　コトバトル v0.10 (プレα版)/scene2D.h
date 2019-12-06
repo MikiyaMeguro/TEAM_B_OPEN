@@ -65,7 +65,7 @@ public:
 	D3DXVECTOR2 GetTex(int nNum) { return m_Tex[nNum]; };
 
 	float GetRot(void) { return m_fSpin; }
-
+	void SetAdd(bool bAdd) { m_bAddition = bAdd; }		//加算合成フラグ
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;					// 頂点バッファへのポインタ
@@ -78,7 +78,7 @@ private:
 	float					m_fScale;				// 大きさ変更
 	D3DXCOLOR				m_Col;
 	bool					m_bDraw;
-
+	bool					m_bAddition;					//加算合成にするか否かのフラグ
 	D3DXVECTOR2				m_Tex[2];				// テスクチャの座標確保					
 };
 #endif
