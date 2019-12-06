@@ -1,0 +1,369 @@
+#============================================================
+#
+# [モデル配置ツール]スクリプトファイル 
+#  Author : Daisuke Ozaki
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------
+#         モデル数 ※プログラム内でも変更してください
+#------------------------------------------------------------
+
+#------------------------------------------------------------
+#    モデルの種類 (読み込み済み)
+#------------------------------------------------------------
+	# 0 : 小さい壁  
+	# 1 : 大きい壁
+	# 2 : 歯車
+	# 3 :はてなぼっくす
+	# 4 : 文字土台
+	# 6 : プロペラの土台
+	# 7 : プロペラ
+	# 8 : ドローンX移動
+	# 9 : ドローンZ移動
+	# 10 : 背景床
+	
+#------------------------------------------------------------
+#    配置の種類 (読み込み済み)
+#------------------------------------------------------------
+	# 0 : ただの配置物
+	# 1 : 何かしらの動きがある物
+	
+#------------------------------------------------------------
+#    当たり判定の種類 
+#------------------------------------------------------------
+	# 0 : 当たり判定無し
+	# 1 : ボックス当り判定
+	# 2 : ベルトコンベア ( 移動方向 -> 前方 )
+	# 3 : ベルトコンベア ( 移動方向 -> 右 )
+	# 4 : ベルトコンベア ( 移動方向 -> 後方 )
+	# 5 : ベルトコンベア ( 移動方向 -> 左 )
+	# 6 : ノックバック ( 威力-> 小 )
+	# 7 : ノックバック ( 威力-> 中 )
+	# 8 : ノックバック ( 威力-> 大 )
+	# 9 : ボタン	   ( スイッチ )
+	
+
+#------------------------------------------------------------
+#                      モデル配置情報
+#------------------------------------------------------------
+
+#------------------------------------------
+# 背景床
+#------------------------------------------
+MODELSET
+	TYPE = 10
+	POS = 0.0 -500.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 100.0 1.0 100.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+#------------------------------------------
+# プロペラ
+#------------------------------------------
+
+MODELSET
+	TYPE = 6
+	POS = 0.0 -150.0 400.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 7.0 5.5 7.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = 0.0 80.0 1000.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 6.0 4.0 6.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 6
+	POS = 0.0 -150.0 -400.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 7.0 5.5 7.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = 0.0 80.0 -1000.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 6.0 4.0 6.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 6
+	POS = 400.0 -150.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 7.0 5.5 7.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = 1000.0 80.0 0.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 6.0 4.0 6.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 6
+	POS = -400.0 -150.0 0.0
+	ROT = 0.0 3.14 0.0
+	SCALE = 7.0 5.5 7.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 7
+	POS = -1000.0 80.0 0.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 6.0 4.0 6.0
+	COLLISION = 0
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+#------------------------------------------
+# 中央壁ブロック
+#------------------------------------------
+
+MODELSET
+	TYPE = 1
+	POS = 0.0 100.0 0.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.5 1.0 4.2
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 0.0 0.0 85.0			# 大ブロック
+	ROT = 0.0 1.57 0.0
+	SCALE = 4.8 0.2 0.5
+	COLLISION = 7
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 0.0 0.0 -85.0		# 大ブロック
+	ROT = 0.0 1.57 0.0
+	SCALE = 4.8 0.2 0.5
+	COLLISION = 7
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = 80.0 0.0 0.0			# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.5 0.2 3.8
+	COLLISION = 7
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 1
+	POS = -80.0 0.0 0.0		# 大ブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.5 0.2 3.8
+	COLLISION = 7
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+#=========================================================
+#====================ハーフブロック=======================
+#=========================================================
+
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 0.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 4.0 5.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 0
+	POS = 50.0 0.0 0.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.0 1.5 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 0
+	POS = -50.0 0.0 0.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.0 1.5 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 50.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.4 1.5 7.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 -50.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.4 1.5 7.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 0
+	POS = 0.0 0.0 -50.0			# ハーフブロック
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.4 1.5 7.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 36
+	POS = 200.0 0.0 100.0		#草
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 1.0 3.0
+	COLLISION = 13
+	GIMMICK = 0	
+END_MODELSET
+
+#==========================================================
+# 			文字の配置
+#==========================================================
+
+MODELSET
+	TYPE = 4
+	POS = 300.0 -20.0 300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 250.0 -20.0 300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 300.0 -20.0 250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -300.0 -20.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -250.0 -20.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -300.0 -20.0 -250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 300.0 -20.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 250.0 -20.0 -300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 300.0 -20.0 -250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -300.0 -20.0 300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -250.0 -20.0 300.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -300.0 -20.0 250.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+END_SCRIPT		# この行は絶対消さないこと！

@@ -279,5 +279,3 @@ VECTOR_3D VECTOR_3D::RotateNormalize(void)
 
 	return *this;
 }
-
-}
