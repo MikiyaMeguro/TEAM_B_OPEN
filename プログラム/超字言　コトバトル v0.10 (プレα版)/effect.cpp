@@ -232,15 +232,6 @@ void CEffect::Unload(void)
 		m_EffectState.nBillType[nCount] = false;						//	加算合成ありかなしか
 	}
 	m_EffectState.nCounter = false;										//	加算合成ありかなしか
-																		////	使っていないメモリの開放
-																		//for (int nCount = 0; nCount < MAX_EFFECTTYPE; nCount++)
-																		//{//	テクスチャの数文回す
-																		//	if (m_pTexture[nCount] != NULL)
-																		//	{//	テクスチャの破棄
-																		//		m_pTexture[nCount]->Release();
-																		//		m_pTexture[nCount] = NULL;
-																		//	}
-																		//}
 }
 
 //=============================================================================

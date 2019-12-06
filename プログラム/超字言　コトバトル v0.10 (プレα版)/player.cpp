@@ -333,8 +333,8 @@ void CPlayer::Update(void)
 				m_nMachineGunTime++;
 				if (m_nMachineGunTime % 10 == 0)
 				{
-					m_MachineGunPos.x = (rand() % 16) - (rand() % 16);
-					m_MachineGunPos.z = (rand() % 16) - (rand() % 16);
+					m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
+					m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
 					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType,NULL);
 				}
 				else if (m_nMachineGunTime > 60)
@@ -454,8 +454,6 @@ void CPlayer::Draw(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
-	// ライトの無効化
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
 		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
@@ -471,9 +469,6 @@ void CPlayer::Draw(void)
 	{
 		CDebugProc::Print("cf","ALPHA = ", m_pPlayerParts[0][0]->GetAlpha());
 	}
-	// ライトを元に戻る
-	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
 }
 //=============================================================================
 // モーション更新処理

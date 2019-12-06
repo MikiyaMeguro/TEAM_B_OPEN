@@ -264,33 +264,11 @@ void CRenderer::Draw(void)
 	m_pD3DDevice->Present(NULL, NULL, NULL, NULL);
 }
 
-
-//#ifdef _DEBUG
-////=============================================================================
-//// FPS表示
-////=============================================================================
-//void CRenderer::DrawFPS(void)
-//{
-//
-//	char str[256];
-//
-//	int nCntFPS = 0;
-//
-//	nCntFPS = GetFPS();
-//
-//	wsprintf(str, "FPS:%d\n", nCntFPS);
-//
-//
-//}
-//#endif
-
 //=============================================================================
 // 描画設定をもとに戻す
 //=============================================================================
 HRESULT CRenderer::ResetRenderState(void)
 {
-	// レンダーステートの設定
-
 	//カリング設定
 	m_pD3DDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);
 
