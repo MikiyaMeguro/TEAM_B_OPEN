@@ -602,7 +602,7 @@ void CCharaSelect::DecisionCharactor(CFade *pFade, CManager *pManager, int opera
 				m_CharaType[nCnt] = m_apCursol[nCnt]->GetPlayerType();
 				if (m_CharaType[nCnt] == CPlayer::TYPE_RANDOM)
 				{//ƒ‰ƒ“ƒ_ƒ€‚¾‚Á‚½ê‡
-					m_CharaType[nCnt] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX);
+					m_CharaType[nCnt] = (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_RANDOM);
 				}
 			}
 			for (int nCnt = 0; nCnt < *m_PlayerNum; nCnt++)

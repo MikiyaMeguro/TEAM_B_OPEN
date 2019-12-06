@@ -26,7 +26,6 @@ C3DBullet::C3DBullet(int nPriority) : CScene(nPriority)
 	m_Type = TYPE_NONE;
 	m_fKnockBack = 0.0f;
 	m_MoveResult = D3DXVECTOR3(0.0f,0.0f,0.0f);
-
 }
 C3DBullet::~C3DBullet()
 {
@@ -48,6 +47,7 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 	m_fCollisionRadius = 10.0f;
 	m_fKnockBack = 7.0f;
 
+	//先に回転マトリックスを作成しておく
 	D3DXMatrixRotationYawPitchRoll(&m_mtxRotate, m_rot.y, m_rot.x, m_rot.z);
 
 }
@@ -57,7 +57,18 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 //=============================================================================
 HRESULT C3DBullet::Init(void)
 {
-	SetObjType(OBJTYPE_BULLET);
+	SetObjType(OBJTYPE_BULLET);//タイプをセット
+
+	/*変数初期化*/
+	m_pos = D3DXVECTOR3(0.0f,0.0f,0.0f);
+	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_fMove = 0.0f;
+	m_nLife = 0;
+	m_nID = 0;
+	m_fCollisionRadius = 10.0f;
+	m_fKnockBack = 7.0f;
+	D3DXMatrixRotationYawPitchRoll(&m_mtxRotate, m_rot.y, m_rot.x, m_rot.z);
+
 	return S_OK;
 }
 
@@ -74,7 +85,7 @@ void C3DBullet::Uninit(void)
 //=============================================================================
 void C3DBullet::Update(void)
 {
-	m_posOld = m_pos;
+	m_posOld = m_pos;	//１フレーム前の座標を変数に格納
 
 	//マトリックスを使用して移動量を求める
 	D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, m_fMove);
@@ -84,7 +95,8 @@ void C3DBullet::Update(void)
 
 	D3DXMatrixTranslation(&Mtxtrans, move.x, move.y, move.z);
 	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &Mtxtrans);
-	//D3DXMatrixRotationYawPitchRoll(&Mtxrot, m_rot.y, m_rot.x, m_rot.z);
+
+	//回転マトリックスは最初に求めたものを使う
 	D3DXMatrixMultiply(&Mtxmove, &Mtxmove, &m_mtxRotate);
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
@@ -110,11 +122,12 @@ void C3DBullet::Update(void)
 
 
 	m_MoveResult = move;		//求めた差分を格納
-	m_pos += move;
+	m_pos += move;		//座標に移動値をプラス
 
-
+	//移動後の位置マトリックスを生成
 	D3DXMatrixTranslation(&m_mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 
+	/*デバック*/
 	CDebugProc::Print("cf","BULLET_ROT_Y",m_rot.y);
 }
 
@@ -213,16 +226,11 @@ void C3DBullet::Homing(D3DXVECTOR3 HomingPos)
 	//現在の角度マトリックスからクォータニオンを生成
 	D3DXQuaternionRotationMatrix(&Quat,&m_mtxRotate);
 
-	//弾の位置ベクトルとホーミングしたい物の位置ベクトルからクォータニオンを作成
+	//弾の位置ベクトルとホーミングしたい物の位置ベクトルからクォータニオンを作成(Y軸回転のみ)
 	float fRotY = atan2f((HomingPos.x - m_pos.x), (HomingPos.z - m_pos.z));
-
-	//float fRotX = atan2f((HomingPos.y - m_pos.y), (HomingPos.z - m_pos.z)) + D3DX_PI;
-	//CUtilityMath::RotateNormarizePI(&fRotX);
-
 	CUtilityMath::RotateNormarizePI(&fRotY);
 	D3DXQuaternionRotationYawPitchRoll(&HomingQuat,fRotY,0.0f,0.0f);
 
-	//D3DXQuaternionInverse(&HomingQuat, &HomingQuat);
 	//二つのクォータニオンを球面補間する
 	D3DXQuaternionSlerp(&dest,&Quat,&HomingQuat, BULLET_HOMING_COEFFICIENT);
 
@@ -271,6 +279,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	m_Prop = type;
 	//float fSpeed = 1.0f;
 
+	//タイプによって処理を分ける
 	float fSpeed = 3.0f;
 	switch (m_Prop)
 	{
@@ -357,15 +366,11 @@ void CModelBullet::Uninit(void)
 		p3D = CExplosion3D::Create();
 		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
-	case TYPE_BOMB:
-		p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 100.0f, 120, 0.01f); }
-		break;
 	default:
 		break;
 	}
 
-
+	//モデルを消す
 	if (m_pModel != NULL)
 	{
 		m_pModel->Uninit();
@@ -398,7 +403,7 @@ void CModelBullet::Update(void)
 			Homing(m_pHomingChara->GetPosition());
 		}
 	}
-	if (m_Prop == TYPE_BOMB || m_Prop == TYPE_KNOCKBACK)
+	if (m_Prop == TYPE_KNOCKBACK)
 	{//爆発
 		if (m_nCounter % 6 == 0)
 		{
@@ -424,8 +429,7 @@ void CModelBullet::Update(void)
 		}
 	}
 
-
-
+	//弾モデルに正しい角度を設定する
 	if (m_pModel != NULL)
 	{
 		m_pModel->SetPosition(GetPosition());
@@ -435,25 +439,17 @@ void CModelBullet::Update(void)
 		m_pModel->SetRot(Rotate);
 	}
 
-	CManager::DIRECTION dir;
-	if (CollisionObject(&dir))
-	{//当たっていれば
-		//反射タイプなら当たった後に角度をY軸で回転させる
-		//if (m_Prop == TYPE_REFLECT)
-		//{
-		//	Reflect(dir);
-		//}
-		//else
-		//{
-			Uninit();
-			return;
-		//}
+	//当たり判定
+	if (SimpleCollision())
+	{
+		Uninit();//当たっていたら消す
+		return;
 	}
 
-
+	//体力判定
 	if (nLife < 0)
 	{
-		Uninit();
+		Uninit();//寿命0なら消す
 		return;
 	}
 
@@ -499,18 +495,16 @@ void CModelBullet::Reflect(CManager::DIRECTION dir)
 	switch (dir)
 	{
 	case CManager::DIR_RIGHT_EAST:	//東(+X方向)
-		rot.y *= -1.0f;
+		rot.y *= -1.0f;		//反転
 		break;
 	case CManager::DIR_LEFT_WEST:	//西(-X方向)
-		rot.y *= -1.0f;
+		rot.y *= -1.0f;		//反転
 		break;
 	case CManager::DIR_DOWN_SOUTH:  //南(-Z方向)
-		rot.y += D3DX_PI;
-		rot.y *= -1.0f;
+		rot.y = (rot.y + D3DX_PI) * -1.0f;	//線対称→反転
 		break;
 	case CManager::DIR_UP_NORTH:	//北(+Z方向)
-		rot.y += D3DX_PI;
-		rot.y *= -1.0f;
+		rot.y = (rot.y + D3DX_PI) * -1.0f;  //線対称→反転
 		break;
 	default:
 		return;	//万が一それ以外の値が入っていたときは処理から抜ける
@@ -518,6 +512,7 @@ void CModelBullet::Reflect(CManager::DIRECTION dir)
 	}
 	CUtilityMath::RotateNormarizePI(&rot.y);
 
+	//モデルにも角度を設定
 	SetModelRot(rot);
 
 }
@@ -541,7 +536,7 @@ CWordBullet::~CWordBullet()
 }
 
 //=============================================================================
-// 設定処理(CModelBullet)
+// 生成処理(CWordBullet)
 //=============================================================================
 CWordBullet* CWordBullet::Create(void)
 {
@@ -623,3 +618,38 @@ void CWordBullet::Draw(void)
 {
 
 }
+
+////=============================================================================
+////
+//// 投擲弾処理 (CThrowBullet)[bullet.cpp]
+//// Author : Kodama Yuto
+////
+////=============================================================================
+////=============================================================================
+//// コンストラクタ＆デストラクタ	(CThrowBullet)
+////=============================================================================
+//CThrowBullet::CThrowBullet(int nPriority) : C3DBullet(nPriority)
+//{
+//
+//}
+//CThrowBullet::~CThrowBullet()
+//{
+//
+//}
+//
+////=============================================================================
+//// 生成処理(CThrowBullet)
+////=============================================================================
+//CThrowBullet* CThrowBullet::Create(void)
+//{
+//	CThrowBullet* pBullet = NULL;
+//
+//	pBullet = new CThrowBullet(BULLET_PRIORITY);
+//
+//	if (pBullet != NULL)
+//	{
+//		pBullet->Init();
+//	}
+//
+//	return pBullet;
+//}

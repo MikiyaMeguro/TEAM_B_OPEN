@@ -115,7 +115,6 @@ void CGame::Init(void)
 		m_nNumStage = 0;
 	}
 	//カメラのクリエイト
-	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 	CameraSetting((int)NumPlayer);
 
@@ -348,8 +347,6 @@ void CGame::Draw(void)
 //=============================================================================
 void CGame::CameraSetting(int nNumPlayer)
 {
-	//CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
-	////CPlayerSelect::SELECTPLAYER NumPlayer = CPlayerSelect::SELECTPLAYER_3P;
 	//カメラのクリエイト
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	if (pCameraManager != NULL)
