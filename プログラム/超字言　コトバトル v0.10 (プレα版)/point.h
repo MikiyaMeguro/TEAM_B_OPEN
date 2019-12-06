@@ -16,6 +16,7 @@
 class CNumber;
 class CBillNumber;
 class CScene2D;
+class CSceneBillBoard;
 
 //*****************************************************************************
 // マクロ定義
@@ -68,6 +69,7 @@ private:
 	void SizeChange(void);				// 増減時のサイズ変更
 	void RankPos(void);					// 順位の位置まとめ
 	void ChangeRank(void);				// 順位入れ替わり処理
+	void ConfirmDirecting(D3DXVECTOR2 size);		// 確定演出
 
 	CBillNumber *m_apNumber[MAX_POINT_NUM];	// ナンバーへのポインタ
 	int m_nTotalPoint;							// トータルのポイント
@@ -76,6 +78,8 @@ private:
 	int						m_nID;				// 自分の番号
 	int						m_nCount;			// 二桁目に行くかのカウント
 	int						m_nWinNum;			// 現時点での勝利数
+	int						m_nCntbConfirm;		// 確定の時間カウント
+	int						m_nCountNum;			// カウント
 	float					m_fPosOld;
 	bool					m_bStart;
 	bool					m_bSizeChange;		// ポイント増減時のサイズ変更
@@ -84,10 +88,12 @@ private:
 	bool					m_bFlag;
 	bool					m_bRankChangeFlag;	// 順位入れ替え時のフラグ
 	bool					m_bFlag001;
+	bool					m_bConfirmFlag;		// 順位確定フラグ
 	D3DXVECTOR3				m_pos;				// 位置
 	D3DXVECTOR3				m_RnakSize;			// 順位のサイズ
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
 	CScene2D				*m_pRank;			// 順位のロゴ
+	CSceneBillBoard			*m_pCrown;			// 王冠
 	TYPE_CHARACTER			m_type;				// 種類
 
 	D3DXVECTOR2				m_TexMin, m_TexMax;	// テクスチャ座標保存
