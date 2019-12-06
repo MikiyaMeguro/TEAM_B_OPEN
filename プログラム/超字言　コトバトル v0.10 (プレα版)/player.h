@@ -193,7 +193,7 @@ public:
 	void			SetStealth(bool bStealth)		{  m_bStealth = bStealth; };
 	CCharaBase::CHARACTOR_MOVE_TYPE GetMovetype(void) { return m_pCharactorMove->GetMoveType(); }
 	int				GetLandObjNumber(void)			{ return m_nObjNumber; };
-
+	bool			GetbMachineGun(void)			{ return m_bMachineGun; };
 	//ÉÇÅ[ÉVÉáÉì
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
