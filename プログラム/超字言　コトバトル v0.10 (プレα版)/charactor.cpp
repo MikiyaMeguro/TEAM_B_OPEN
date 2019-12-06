@@ -557,14 +557,16 @@ void C3DCharactor::CharaMove_Input(void)
 	//spin.y = CameraRot.y - rot.y;
 
 	//‰ñ“]§Œä
-	CUtilityMath::RotateNormarizePI(&spin.y);
+	if (GetThisCharactor()->GetbMachineGun() == false)
+	{
+		CUtilityMath::RotateNormarizePI(&spin.y);
 
-	rot.y += spin.y * GetSpinCoeffient();
+		rot.y += spin.y * GetSpinCoeffient();
 
-	CUtilityMath::RotateNormarizePI(&rot.y);
+		CUtilityMath::RotateNormarizePI(&rot.y);
 
-	spin.y = 0.0f;
-
+		spin.y = 0.0f;
+	}
 #ifdef _DEBUG
 		// “ü—Íî•ñ‚ğæ“¾
 		CInputKeyboard *pInputKeyboard;
