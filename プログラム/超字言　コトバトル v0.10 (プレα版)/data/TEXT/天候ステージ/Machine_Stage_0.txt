@@ -1316,7 +1316,7 @@ END_MODELSET
 -----------------------------------------------------------
 
 MODELSET						# 床
-	TYPE = 40
+	TYPE = 42
 	POS = 0.0 -200.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.1 5.06 20.1
@@ -1407,6 +1407,210 @@ MODELSET
 	ROT = 0.0 0.0 0.0
 	SCALE = 5.0 1.0 5.0
 	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+=========================ステージ場外====================== # X/Z 410~500:-410~630
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -300.0 0.0 450.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = 60.0 0.0 450.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = 413.0 0.0 525.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = 123.0 0.0 550.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -80.0 0.0 450.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = 280.0 0.0 450.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -180.0 0.0 623.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -534.0 0.0 573.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = 558.0 0.0 523.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -562.0 0.0 423.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -524.0 0.0 291.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -561.0 0.0 193.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -399.0 0.0 553.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -592.0 0.0 103.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -469.0 0.0 -231.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -439.0 0.0 3.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -519.0 0.0 -88.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -502.0 0.0 -323.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00		# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1					# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -589.0 0.0 -182.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 木
+	TYPE = 25					# モデルタイプ
+	POS = -264.0 0.0 666.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 2.00 2.50 2.00	# スケール情報
+	COLLISION = 1				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 草
+	TYPE = 39
+	POS = 185 0.0 -117.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 0.15 0.15 0.15
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+-----------------------------------------------------------
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -260.0 0.0 -160.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
