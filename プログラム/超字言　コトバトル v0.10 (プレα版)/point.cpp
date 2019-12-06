@@ -13,6 +13,7 @@
 #include "player.h"
 #include "scene2D.h"
 #include "tutorial.h"
+#include "sceneBillboard.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -84,6 +85,7 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_bRankChangeFlag = false;
 	m_bFlag001 = true;
 	m_pRank = NULL;
+	m_pCrown = NULL;
 	m_bConfirmFlag = false;
 	m_RnakSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
@@ -143,6 +145,11 @@ void CPoint::Uninit(void)
 			m_apNumber[nCntPoint] = NULL;
 		}
 	}
+
+	
+	if (m_pRank != NULL) { m_pRank->Uninit(); m_pRank = NULL; }
+
+	if (m_pCrown != NULL) { m_pCrown->Uninit(); m_pCrown = NULL; }
 
 	if (m_pIcon != NULL)
 	{
@@ -409,10 +416,22 @@ void CPoint::PointPostion()
 	if (CManager::GetMode() == CManager::MODE_GAME) { pPlayer = CGame::GetPlayer(m_nID); }
 	else if (CManager::GetMode() == CManager::MODE_TUTORIAL) { pPlayer = CTutorial::GetPlayer(m_nID); }
 
+
 	if (pPlayer != NULL)
 	{
 		PlayerPos = pPlayer->GetPosition();
 		m_pos = D3DXVECTOR3(PlayerPos.x + (5 * m_nCount), PlayerPos.y + 50.0f, PlayerPos.z);
+
+		if (m_pCrown == NULL)
+		{
+			m_pCrown = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 60.0f, PlayerPos.z - 30.0f), 20.0f, 10.0f, "RANK&PLNUM");
+			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 0.25f));
+		}
+
+		if (m_pCrown != NULL)
+		{
+			m_pCrown->Setpos(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 60.0f, PlayerPos.z - 30.0f));
+		}
 	}
 
 	for (int nCntPoint = 0; nCntPoint < m_nPointNum; nCntPoint++)
@@ -677,5 +696,10 @@ void CPoint::ConfirmDirecting(D3DXVECTOR2 size)
 	{	// 順位入れ替わりを可能に
 		m_bFlag001 = false;  
 		m_bRankChangeFlag = false;
+
+		if (m_pCrown != NULL)
+		{
+			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f + (m_nWinNum * 0.25f)), D3DXVECTOR2(1.0f, 0.25f + (m_nWinNum * 0.25f)));
+		}
 	}
 }

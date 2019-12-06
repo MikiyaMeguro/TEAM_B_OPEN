@@ -16,6 +16,7 @@
 class CNumber;
 class CBillNumber;
 class CScene2D;
+class CSceneBillBoard;
 
 //*****************************************************************************
 // マクロ定義
@@ -92,6 +93,7 @@ private:
 	D3DXVECTOR3				m_RnakSize;			// 順位のサイズ
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
 	CScene2D				*m_pRank;			// 順位のロゴ
+	CSceneBillBoard			*m_pCrown;			// 王冠
 	TYPE_CHARACTER			m_type;				// 種類
 
 	D3DXVECTOR2				m_TexMin, m_TexMax;	// テクスチャ座標保存
