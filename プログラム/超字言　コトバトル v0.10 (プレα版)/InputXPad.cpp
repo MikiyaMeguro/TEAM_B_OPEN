@@ -90,7 +90,7 @@ void CInputXPad::Update(void)
 		m_sRStickRotX = state.Gamepad.sThumbRY;
 		m_sRStickRotY = state.Gamepad.sThumbRX;
 
-		CDebugProc::Print("cn","L_STICKROT_X : ", m_sLStickRotX);
+		CDebugProc::Print("cn", "L_STICKROT_X : ", m_sLStickRotX);
 		CDebugProc::Print("cn", "L_STICKROT_Y : ", m_sLStickRotY);
 		CDebugProc::Print("cn", "R_STICKROT_X : ", m_sRStickRotX);
 		CDebugProc::Print("cn", "R_STICKROT_Y : ", m_sRStickRotY);

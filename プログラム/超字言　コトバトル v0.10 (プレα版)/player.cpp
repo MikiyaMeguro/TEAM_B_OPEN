@@ -262,8 +262,9 @@ void CPlayer::Update(void)
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 			static D3DXVECTOR3 BulletRot;
-			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
+			D3DXVECTOR3 BulletPos(GetBulletMuzzle());
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
+
 			// 弾の生成
 			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false && m_bMachineGun == false)
 			{
@@ -293,9 +294,12 @@ void CPlayer::Update(void)
 				if (m_pWordManager->GetBulletFlag() == true)
 				{	//可視化
 					m_bStealth = false;
-					//マシンガン発射時間初期化
-					m_nMachineGunTime = 0;
-					m_bMachineGun = true;
+					if (m_PlayerType == TYPE_REACH)
+					{
+						//マシンガン発射時間初期化
+						m_nMachineGunTime = 0;
+						m_bMachineGun = true;
+					}
 				}
 
 				if (m_PlayerType != TYPE_REACH)
@@ -322,10 +326,6 @@ void CPlayer::Update(void)
 				m_bAssist = true;
 			}
 
-
-			m_pCharactorMove->GetRotation().y = BulletRot.y;
-			m_pCharactorMove->GetSpin().y = 0.0f;
-
 			//マシンガン発射
 			if (m_bMachineGun == true)
 			{
@@ -348,6 +348,10 @@ void CPlayer::Update(void)
 					m_pWordManager->Reset();
 				}
 			}
+
+
+			m_pCharactorMove->GetRotation().y = BulletRot.y;
+			m_pCharactorMove->GetSpin().y = 0.0f;
 
 			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
 		}
@@ -708,6 +712,9 @@ bool CPlayer::CollisionDamageObj(void)
 						int nPoint = 0;
 						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
 						else if (pModelBullet->GetType() == CModelBullet::TYPE_MACHINEGUN) { nPoint = 1; }
+						else if (pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN
+							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_MEDIUM
+							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_SLOW) { nPoint = 1; }
 						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
 
 						if (pPoint != NULL) { pPoint->AddPoint(nPoint); }

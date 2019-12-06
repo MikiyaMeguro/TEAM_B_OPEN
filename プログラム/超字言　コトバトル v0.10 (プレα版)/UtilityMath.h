@@ -4,7 +4,7 @@
 // Author : Kodama Yuto
 //	クラスの概要:
 //	・よく使う計算をクラス化してまとめた物
-//	・基本的にすべての変数を参照で渡す
+//	・基本的にすべての変数を参照かポインタで渡す
 //	・本来はライブラリ化したほうがいいらしいが、編集を楽にするために今回はこのまま使う
 //
 //=============================================================================
@@ -31,19 +31,24 @@ public:
 		this->Y = 0.0f;
 		this->Z = 0.0f;
 	}
-	//コンストラクタ(引数あり)
+	//コンストラクタ(引数float3個)
 	VECTOR_3D(const float& X, const float& Y, const float& Z)
 	{
 		this->X = X;
 		this->Y = Y;
 		this->Z = Z;
 	}
+	//コンストラクタ(引数VECTOR_3D)
+	VECTOR_3D(const VECTOR_3D& vec)
+	{
+		*this = vec;
+	}
+
 	//デストラクタ(デフォルト)
 	~VECTOR_3D() {};
 
 	//独自関数
 	VECTOR_3D RotateNormalize(void);
-
 	/*オペレータ*/
 	//代入
 	void operator = (const VECTOR_3D& vec)

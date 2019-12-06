@@ -379,6 +379,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 			{	// 指定した文字なら弾を生成する
 				int nType = 0;
 				CModelBullet* pModel = NULL;
+				D3DXVECTOR3 Sector = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				switch (type)
 				{
 				case CPlayer::TYPE_SPEED://猫はミサイル型
@@ -440,6 +441,76 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 						//pModel->SetHomingChara(pChara);
 					}
 
+					m_nCreateType = EMPTINESS_NUM;
+					break;
+				case CPlayer::TYPE_BARANCE://犬はショットガン型
+					nType = m_nStock[0];
+					m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
+
+					//弾生成
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						Sector.y = 0.4f;
+						pModel->Set(BulletMuzzle, BulletRot + Sector,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_SHOTGUN_SLOW,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					}
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						Sector.y = -0.4f;
+						pModel->Set(BulletMuzzle, BulletRot + Sector,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_SHOTGUN_SLOW,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					}
+
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						Sector.y = 0.2f;
+						pModel->Set(BulletMuzzle, BulletRot + Sector,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_SHOTGUN_MEDIUM,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					}
+
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						Sector.y = - 0.2f;
+						pModel->Set(BulletMuzzle, BulletRot + Sector,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_SHOTGUN_MEDIUM,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					}
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						Sector.y = 0.1f;
+						pModel->Set(BulletMuzzle, BulletRot + Sector,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_SHOTGUN,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					}
+
+					pModel = CModelBullet::Create();
+					if (pModel != NULL)
+					{
+						Sector.y = -0.1f;
+						pModel->Set(BulletMuzzle, BulletRot + Sector,
+							(CLoad::MODEL)m_nCreateType,
+							CModelBullet::TYPE_SHOTGUN,
+							nID, m_rot[nType]);
+						pModel->SetModelScale(m_Scale[nType]);	//大きさの設定
+					}
 					m_nCreateType = EMPTINESS_NUM;
 					break;
 				default:
