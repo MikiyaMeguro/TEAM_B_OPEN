@@ -32,6 +32,8 @@
 #define WAIT_TIME_END		(180)							// 待ち時間
 
 #define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
+#define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))	// デフォルトサイズ
+#define SCALE_CHANGE_TIME	(10)								// スケール変化の時間
 
 //=============================================================================
 //	静的メンバ変数
@@ -102,6 +104,8 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_bChangeStage = false;
 	m_fWarningCol = 0.0f;
 	m_bWarning = false;
+	m_bScaleFlag = false;
+	m_nCntScale = 0;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -255,7 +259,6 @@ void CTime::Uninit(void)
 //=============================================================================
 void CTime::Update(void)
 {
-
 	//現在のモードの取得
 	CManager::MODE GameMode = CManager::GetMode();
 	DebugKey();		// デバック用
@@ -307,8 +310,50 @@ void CTime::Update(void)
 		{	// ステージ変化の色変化
 			ChangeStage();
 		}
+
+		ScaleNumber();	// サイズの切替
 	}
 
+	CountDown();	// カウントダウン処理
+
+	//ステージ生成完了タイマー
+	if (CGame::GetbStageSet() == true)
+	{
+		m_StageCounter++;
+		if (m_StageCounter > 120)
+		{
+			CManager::GetGame()->SetCreateWord();
+			m_StageCounter = 0;
+			CGame::bStageSet(false);
+		}
+	}
+
+}
+
+//=============================================================================
+// 描画処理
+//=============================================================================
+void CTime::Draw(void)
+{
+	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
+	{
+		if (m_apNumber[nCntTime] != NULL)
+		{
+			m_apNumber[nCntTime]->Draw();
+		}
+	}
+
+	if (m_pColon != NULL)
+	{
+		m_pColon->Draw();
+	}
+}
+
+//=============================================================================
+// カウントダウン
+//=============================================================================
+void CTime::CountDown(void)
+{
 	//カウントダウン
 	if (m_bEndCntDown == false)
 	{
@@ -378,39 +423,7 @@ void CTime::Update(void)
 		}
 	}
 
-	//ステージ生成完了タイマー
-	if (CGame::GetbStageSet() == true)
-	{
-		m_StageCounter++;
-		if (m_StageCounter > 120)
-		{
-			CManager::GetGame()->SetCreateWord();
-			m_StageCounter = 0;
-			CGame::bStageSet(false);
-		}
-	}
-
 }
-
-//=============================================================================
-// 描画処理
-//=============================================================================
-void CTime::Draw(void)
-{
-	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
-	{
-		if (m_apNumber[nCntTime] != NULL)
-		{
-			m_apNumber[nCntTime]->Draw();
-		}
-	}
-
-	if (m_pColon != NULL)
-	{
-		m_pColon->Draw();
-	}
-}
-
 //=============================================================================
 // タイマーのTexture管理
 //=============================================================================
@@ -435,7 +448,6 @@ void CTime::TexTime(int nTexData, int nTimeOne)
 			}
 			if (m_bChangeStage == false)
 			{
-
 				// 色の設定
 				if (m_nTime <= 10 && m_nTimeOne == 0)
 				{ // 10秒以下 色を赤に
@@ -508,7 +520,6 @@ void CTime::TimeManagement(void)
 		m_nTime--;
 		m_nStageChange++;
 		m_bStageCreate = false;
-		m_bChangeStage = false;
 
 		if (m_nTime < 0) { m_nTime = 59; m_nTimeOne -= 1; 	DefaultCol();}
 		//m_nTimeNum = PowerCalculation(m_nTime, 0);
@@ -526,12 +537,12 @@ void CTime::ChangeStage(void)
 			// 色の設定
 			if (m_bWarning == false)
 			{ 
-				m_fWarningCol -= 0.1f;
+				m_fWarningCol -= 0.01f;
 				if (m_fWarningCol < 0.2f) { m_fWarningCol = 0.2f;  m_bWarning = true; }
 			}
 			else if (m_bWarning == true)
 			{
-				m_fWarningCol += 0.1f;
+				m_fWarningCol += 0.01f;
 				if (m_fWarningCol > 1.0f) { m_fWarningCol = 1.0f;  m_bWarning = false; }
 			}
 			m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, m_fWarningCol, 0.0f, 1.0f));
@@ -551,6 +562,56 @@ void CTime::DefaultCol(void)
 		{
 			m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			if (m_pColon != NULL) { m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
+		}
+	}
+
+	m_bChangeStage = false;
+}
+
+//=============================================================================
+// ステージタイムの拡大縮小処理
+//=============================================================================
+void CTime::ScaleNumber(void)
+{
+	if (m_bChangeStage == false) 
+	{	// ステージ切り替えの警告フラグがfalseならサイズを戻す
+		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
+		{
+			if (m_apNumber[nCntTime] != NULL && m_apNumber[nCntTime]->GetSize() != DEFAULT_SIZE) { m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE); }
+		}
+		m_nCntScale = 0;
+		return; 
+	}	
+
+	m_nCntScale++;	// 加算
+	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
+	{
+		if (m_apNumber[nCntTime] != NULL)
+		{
+			// サイズの取得
+			D3DXVECTOR3 size = m_apNumber[nCntTime]->GetSize();
+			float fSizeChange = 0.5f;
+
+			// フラグがfalseなら縮小
+			if (m_bScaleFlag == false)
+			{
+				size.x += fSizeChange / 2;
+				size.y += fSizeChange;
+
+				if ((m_nCntScale % SCALE_CHANGE_TIME) == 0) { m_bScaleFlag = true; }
+			}
+			// フラグがtrueなら拡大
+			else if (m_bScaleFlag == true)
+			{
+				size.x -= fSizeChange / 2;
+				size.y -= fSizeChange;
+
+				if ((m_nCntScale % SCALE_CHANGE_TIME) == 0) { 
+					m_bScaleFlag = false; }
+			}
+
+			// サイズの設定
+			m_apNumber[nCntTime]->SetSize(size);
 		}
 	}
 }

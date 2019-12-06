@@ -184,11 +184,7 @@ void CExplosion3D::Draw(void)
 	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
 
 	CMeshSphere::Draw();
-	// αブレンディングを元に戻す
-	pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
-	pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
-	pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);
 
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
+	//設定をもとに戻す
+	pRenderer->ResetRenderState();
 }

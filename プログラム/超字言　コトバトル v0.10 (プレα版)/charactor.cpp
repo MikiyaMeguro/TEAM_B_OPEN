@@ -400,8 +400,6 @@ void C3DCharactor::CharaMove_Input(void)
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 			spin.y = D3DX_PI * 0.5f - rot.y;
 		}
-		//if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
-		//	GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
 		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
 
@@ -467,7 +465,6 @@ void C3DCharactor::CharaMove_Input(void)
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 		spin.y = D3DX_PI * 0.0f - rot.y;
 
-
 		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
 
@@ -525,16 +522,6 @@ void C3DCharactor::CharaMove_Input(void)
 			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
 	}
-
-	//飛行(TEST)
-	//if (CCommand::GetCommand("TEST_FLY_UP", nID))
-	//{
-	//	pos.y -= speed;
-	//}
-	//else if (CCommand::GetCommand("TEST_FLY_DOWN", nID))
-	//{
-	//	pos.y += speed;
-	//}
 
 	//ステップ移動の設定
 	if (CCommand::GetCommand("PLAYERMOVE_STEP", nID))
@@ -782,7 +769,7 @@ void C3DCharactor::Action_CPU(void)
 		WayPointMove_CPU();
 		break;
 	case  THINK_WAYPOINTROUTE:	//ランダム経路
-								//WayPointMove_CPU();
+		//WayPointMove_CPU();
 		WayPointRoute_CPU();
 		break;
 	default:
@@ -923,11 +910,6 @@ void C3DCharactor::CharaMove_CPU(void)
 		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
 		m_bFront = false;
 	}
-
-#ifdef _DEBUG
-	//CDebugProc::Print("cn", "ActionTimer :", m_nActionTimer);
-	//CDebugProc::Print("cn", "CpuMove :", m_CpuMove);
-#endif
 
 }
 
@@ -1687,9 +1669,7 @@ void C3DCharactor::WayPointBack_CPU(void)
 
 	move.x += sinf(rot.y + (D3DX_PI * 1.0f)) * speed;
 	move.z += cosf(rot.y + (D3DX_PI * 1.0f)) * speed;
-
 }
-
 
 //=============================================================================
 // ステップ処理

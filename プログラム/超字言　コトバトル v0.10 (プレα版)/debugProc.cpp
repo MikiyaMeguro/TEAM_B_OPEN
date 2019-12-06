@@ -90,7 +90,7 @@ void CDebugProc::Print(char *fmt, ...)
 		switch (*fmt)
 		{
 		case 'c':	// char型
-			m_strDebug += va_arg(ap, char*);		// リストの中のキャラ型を取り出して、m_strDebugに入れる
+			m_strDebug += va_arg(ap, char*);//リストの中のchar*(string)型を取り出して、m_strDebugに入れる
 			break;
 
 		case 'n':	// int型
@@ -121,8 +121,6 @@ void CDebugProc::ReleseStr(void)
 #ifdef _DEBUG
 	//文字列の削除(初期化)
 	m_strDebug.clear();
-	//m_strDebug.shrink_to_fit();
-
 #endif
 }
 
