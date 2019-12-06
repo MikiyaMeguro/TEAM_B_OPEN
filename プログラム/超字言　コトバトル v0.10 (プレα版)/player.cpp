@@ -261,8 +261,9 @@ void CPlayer::Update(void)
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 			static D3DXVECTOR3 BulletRot;
-			D3DXVECTOR3 BulletPos = GetBulletMuzzle();
+			D3DXVECTOR3 BulletPos(GetBulletMuzzle());
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
+
 			// 弾の生成
 			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false && m_bMachineGun == false)
 			{
@@ -313,6 +314,8 @@ void CPlayer::Update(void)
 				if (CManager::GetXInput(m_nID) != NULL)
 				{//スティック角を取得して発射角とする
 					BulletRot.y = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
+					//発射方向保持
+					m_BulletRot.y = BulletRot.y;
 
 				}
 				m_bAssist = false;//セルフエイムモードに設定
@@ -322,10 +325,6 @@ void CPlayer::Update(void)
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_bAssist = true;
 			}
-
-
-			m_pCharactorMove->GetRotation().y = BulletRot.y;
-			m_pCharactorMove->GetSpin().y = 0.0f;
 
 			//マシンガン発射
 			if (m_bMachineGun == true)
@@ -343,6 +342,10 @@ void CPlayer::Update(void)
 					m_pWordManager->Reset();
 				}
 			}
+
+
+			m_pCharactorMove->GetRotation().y = BulletRot.y;
+			m_pCharactorMove->GetSpin().y = 0.0f;
 
 			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
 		}

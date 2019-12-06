@@ -6,7 +6,6 @@
 //=============================================================================
 #include "UtilityMath.h"
 
-
 //=============================================================================
 //	ƒ[ƒ‹ƒhƒ}ƒgƒŠƒbƒNƒXŒvŽZŠÖ”
 //=============================================================================
@@ -79,7 +78,7 @@ float CUtilityMath::RotateNormarizePI(float* value)
 	return *value;
 }
 D3DXVECTOR3 CUtilityMath::RotateNormarizePI(D3DXVECTOR3* RotateValue)
-{//D3DXVECTOR3(float‚R‰ñ)
+{//D3DXVECTOR3(float3‰ñ)
 
 	RotateNormarizePI(&RotateValue->x);
 	RotateNormarizePI(&RotateValue->y);
@@ -115,7 +114,7 @@ float CUtilityMath::Mapping(const float& value, const float& fromSource, const f
 //	ˆÚ“®—Í‚ÉŒW”‚ðŠ|‚¯‚éŠÖ”
 //=============================================================================
 D3DXVECTOR3 CUtilityMath::MoveCoeffient(D3DXVECTOR3& value, const float& coeffient)
-{//D3DXVECTOR3
+{
 	value.x += (0.0f - value.x) * coeffient;
 	value.y += (0.0f - value.y) * coeffient;
 	value.z += (0.0f - value.z) * coeffient;
@@ -279,4 +278,6 @@ VECTOR_3D VECTOR_3D::RotateNormalize(void)
 	this->Z = CUtilityMath::Mapping(this->Z, -_PI, _PI, -1.0f, 1.0f, true);
 
 	return *this;
+}
+
 }
