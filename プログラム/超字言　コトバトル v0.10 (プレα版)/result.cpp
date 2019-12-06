@@ -91,7 +91,6 @@ HRESULT CResult::Init(void)
 	float fPosX = 30;	//•\²‘ä‰ŠúˆÊ’u
 	float fNext = 42;	//•\²‘ä‚ÌŠÔ‚Ì•
 
-
 	InitPointer();
 	SetPolygon();
 	SetModel();
