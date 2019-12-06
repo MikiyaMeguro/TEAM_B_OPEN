@@ -38,6 +38,7 @@ public:
 		TYPE_NONE = 0,
 		TYPE_WORD,
 		TYPE_MODEL,
+		TYPE_THROW,
 		TYPE_MAX
 	}BULLET_TYPE;
 
@@ -92,7 +93,6 @@ public:
 		TYPE_STINGER,			//オブジェクト貫通
 		TYPE_REFLECT,			//反射
 		TYPE_MISSILE,			//ミサイル
-		TYPE_BOMB,				//投擲爆弾
 		TYPE_MACHINEGUN,		//マシンガン
 		TYPE_MAX
 	}BULLET_PROPERTY;
@@ -152,4 +152,21 @@ private:
 	CSceneBillBoard* m_pWord;
 };
 
+//投擲弾クラス
+class CThrowBullet : public C3DBullet
+{
+public:
+	CThrowBullet();
+	CThrowBullet(int nPriority = BULLET_PRIORITY);
+	~CThrowBullet();
+
+	static CThrowBullet* Create(void);
+
+	HRESULT Init(void);
+	void Uninit(void);
+	void Update(void);
+	void Draw(void);
+private:
+
+};
 #endif // !_BULLET_H_

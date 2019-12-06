@@ -119,6 +119,10 @@ HRESULT C3DCharactor::Init(void)
 	nTestCnt = 0;
 	m_bWait = false;
 	m_fOldCircle = 0;
+	m_BulletRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_bMachineGun = false;
+	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_nMachineGunTime = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -396,8 +400,6 @@ void C3DCharactor::CharaMove_Input(void)
 			move.z += cosf(CameraRot.y + (D3DX_PI * 0.5f)) * (speed * fMoveCoefficientX);
 			spin.y = D3DX_PI * 0.5f - rot.y;
 		}
-		//if (GetThisCharactor()->GetMotion() != CPlayer::MOTION_STEP&&
-		//	GetThisCharactor()->GetMotion() != CPlayer::MOTION_SHOT)
 		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
 
@@ -463,7 +465,6 @@ void C3DCharactor::CharaMove_Input(void)
 		move.z += cosf(CameraRot.y + (D3DX_PI * 0.0f)) * (speed * fMoveCoefficientZ);
 		spin.y = D3DX_PI * 0.0f - rot.y;
 
-
 		if (GetThisCharactor()->GetMotion() != 6 &&
 			GetThisCharactor()->GetMotion() != 7)
 
@@ -522,16 +523,6 @@ void C3DCharactor::CharaMove_Input(void)
 		}
 	}
 
-	//飛行(TEST)
-	//if (CCommand::GetCommand("TEST_FLY_UP", nID))
-	//{
-	//	pos.y -= speed;
-	//}
-	//else if (CCommand::GetCommand("TEST_FLY_DOWN", nID))
-	//{
-	//	pos.y += speed;
-	//}
-
 	//ステップ移動の設定
 	if (CCommand::GetCommand("PLAYERMOVE_STEP", nID))
 	{
@@ -562,6 +553,11 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn", "STEP_COOLTIME : ", m_nCntStepCoolTime);
 
+	//銃を撃っている間移動を遅くする
+	if (GetThisCharactor()->GetbMachineGun() == true)
+	{
+		move /= 1.2f;
+	}
 	pos += move;
 
 	//速度に係数を掛ける
@@ -570,14 +566,17 @@ void C3DCharactor::CharaMove_Input(void)
 	//spin.y = CameraRot.y - rot.y;
 
 	//回転制御
-	CUtilityMath::RotateNormarizePI(&spin.y);
 
-	rot.y += spin.y * GetSpinCoeffient();
+	if (GetThisCharactor()->GetbMachineGun() == false)
+	{//銃を撃っていないときに回転しないように
+		CUtilityMath::RotateNormarizePI(&spin.y);
 
-	CUtilityMath::RotateNormarizePI(&rot.y);
+		rot.y += spin.y * GetSpinCoeffient();
 
-	spin.y = 0.0f;
+		CUtilityMath::RotateNormarizePI(&rot.y);
 
+		spin.y = 0.0f;
+	}
 #ifdef _DEBUG
 		// 入力情報を取得
 		CInputKeyboard *pInputKeyboard;
@@ -706,7 +705,15 @@ void C3DCharactor::Action_CPU(void)
 	case  THINK_MISSING:	//敵を見失った
 		break;
 	case  THINK_HAVEBULLET:	//弾を持っているとき
-		HaveBullet_CPU();
+		if (m_bMachineGun == true)
+		{
+			Attack_CPU();
+		}
+		else
+		{
+			HaveBullet_CPU();
+		}
+
 		break;
 	case  THINK_NOTBULLET:	//弾を持っていない
 		NotBullet_CPU();
@@ -762,7 +769,7 @@ void C3DCharactor::Action_CPU(void)
 		WayPointMove_CPU();
 		break;
 	case  THINK_WAYPOINTROUTE:	//ランダム経路
-								//WayPointMove_CPU();
+		//WayPointMove_CPU();
 		WayPointRoute_CPU();
 		break;
 	default:
@@ -904,11 +911,6 @@ void C3DCharactor::CharaMove_CPU(void)
 		m_bFront = false;
 	}
 
-#ifdef _DEBUG
-	//CDebugProc::Print("cn", "ActionTimer :", m_nActionTimer);
-	//CDebugProc::Print("cn", "CpuMove :", m_CpuMove);
-#endif
-
 }
 
 
@@ -1047,22 +1049,29 @@ void C3DCharactor::Homing_CPU(void)
 	if (fCompare < 100000 && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
 	{// 距離内に入り弾を持っている時
 		TargetPos = D3DXVECTOR3((PlayerPos[nNearPlayer].x + Pos.x) / 2, (PlayerPos[nNearPlayer].y + Pos.y) / 2, (PlayerPos[nNearPlayer].z + Pos.z) / 2);
-		// 目的の角度
-		float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
-		// 差分
-		float fDiffAngle = fDestAngle - rot.y;
-		CUtilityMath::RotateNormarizePI(&fDiffAngle);
-		DiffAngle(fDiffAngle);
-		if (fDestAngle > D3DX_PI)
+		if (m_bMachineGun == false)
 		{
-			fDestAngle -= D3DX_PI * 2.0f;
+			// 目的の角度
+			float fDestAngle = atan2f((TargetPos.x - sinf(rot.y)) - Pos.x, (TargetPos.z - cosf(rot.y)) - Pos.z);
+			// 差分
+			float fDiffAngle = fDestAngle - rot.y;
+			CUtilityMath::RotateNormarizePI(&fDiffAngle);
+			DiffAngle(fDiffAngle);
+			if (fDestAngle > D3DX_PI)
+			{
+				fDestAngle -= D3DX_PI * 2.0f;
+			}
+			if (fDestAngle < -D3DX_PI)
+			{
+				fDestAngle += D3DX_PI * 2.0f;
+			}
+			//視野内に入ったら撃つ
+			if (fDestAngle - 0.11f < rot.y && fDestAngle + 0.11f > rot.y)
+			{
+				m_CpuThink = THINK_ATTACK;
+			}
 		}
-		if (fDestAngle < -D3DX_PI)
-		{
-			fDestAngle += D3DX_PI * 2.0f;
-		}
-		//視野内に入ったら撃つ
-		if (fDestAngle - 0.11f < rot.y && fDestAngle + 0.11f > rot.y)
+		else if(m_bMachineGun == true)
 		{
 			m_CpuThink = THINK_ATTACK;
 		}
@@ -1126,15 +1135,62 @@ void C3DCharactor::Attack_CPU(void)
 	//弾の生成	弾を持っているときだけ
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(),GetThisCharactor()->GetPlayerType());
-		m_CpuThink = THINK_NONE;
+		switch (GetThisCharactor()->GetPlayerType())
+		{
+		case CPlayer::TYPE_BARANCE:
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			m_CpuThink = THINK_NONE;
+			break;
+		case CPlayer::TYPE_POWER:
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			m_CpuThink = THINK_NONE;
+			break;
+		case CPlayer::TYPE_SPEED:
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			m_CpuThink = THINK_NONE;
+			break;
+		case CPlayer::TYPE_REACH:
+			m_bMachineGun = true;
+			break;
+
+		default:
+			break;
+		}
 		GetThisCharactor()->SetStealth(false);
 	}
 	else if(GetThisCharactor()->GetWordManager()->GetBulletFlag() == false
 		&& GetThisCharactor()->GetWordManager()->GetCntNum() > 1 && CGame::GetbStageSet() == false)
 	{
-		GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+	//	GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 	}
+
+
+	//マシンガン発射
+	if (m_bMachineGun == true)
+	{
+		m_nMachineGunTime++;
+		if (m_nMachineGunTime % 10 == 0)
+		{//10フレームに一回弾発射
+			m_MachineGunPos.x = (float)(rand() % 16) - (rand() % 16);
+			m_MachineGunPos.z = (float)(rand() % 16) - (rand() % 16);
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition() + m_MachineGunPos, CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), NULL);
+		}
+		else if (m_nMachineGunTime > 60)
+		{//6回発射したら弾情報を削除
+			m_bMachineGun = false;
+			GetThisCharactor()->GetWordManager()->Reset();
+			m_CpuThink = THINK_NONE;
+			m_nMachineGunTime = 0;
+		}
+		else if (GetThisCharactor()->GetWordManager()->Getm_nStock(0) == 99)
+		{//ゴミモデル用の発射
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition() + m_MachineGunPos, CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), NULL);
+			m_bMachineGun = false;
+			GetThisCharactor()->GetWordManager()->Reset();
+			m_nMachineGunTime = 0;
+		}
+	}
+
 }
 
 //=============================================================================
@@ -1238,6 +1294,8 @@ void C3DCharactor::PickUP_CPU(void)
 void C3DCharactor::HaveBullet_CPU(void)
 {
 	int	nCntNear = 0;
+
+
 
 	//誰が近いか
 	NearOrFur_CPU();
@@ -1611,9 +1669,7 @@ void C3DCharactor::WayPointBack_CPU(void)
 
 	move.x += sinf(rot.y + (D3DX_PI * 1.0f)) * speed;
 	move.z += cosf(rot.y + (D3DX_PI * 1.0f)) * speed;
-
 }
-
 
 //=============================================================================
 // ステップ処理

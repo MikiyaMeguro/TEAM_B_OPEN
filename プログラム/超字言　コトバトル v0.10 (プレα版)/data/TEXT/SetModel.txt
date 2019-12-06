@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 45
+NUM_MODEL = 47
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -54,14 +54,17 @@ MODEL_FILENAME = data/MODEL/StageOBJ/bush.x"				#36 草
 MODEL_FILENAME = data/MODEL/StageOBJ/ita.x"					#37 板柵
 MODEL_FILENAME = data/MODEL/StageOBJ/ita2.x"				#38 板柵
 MODEL_FILENAME = data/MODEL/StageOBJ/kusa.x"				#39 草2
+MODEL_FILENAME = data/MODEL/StageOBJ/Rock.x"				#40 石
+MODEL_FILENAME = data/MODEL/StageOBJ/Snow.x"				#41 雪
 
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage1.x"				#40 床
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage2.x"				#41 床
-MODEL_FILENAME = data/MODEL/StageOBJ/Stage3.x"				#42 床
 
-MODEL_FILENAME = data/MODEL/StageOBJ/StegeGreen.x"			#43 ステージ周り
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage1.x"				#42 床
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage2.x"				#43 床
+MODEL_FILENAME = data/MODEL/StageOBJ/Stage3.x"				#44 床
 
-MODEL_FILENAME = data/MODEL/Ranking/Stadium.x"				#44 ランキングのスタジアム壁
+MODEL_FILENAME = data/MODEL/StageOBJ/StegeGreen.x"			#45 ステージ周り
+
+MODEL_FILENAME = data/MODEL/Ranking/Stadium.x"				#46 ランキングのスタジアム壁
 
 
 END_SCRIPT		# この行は絶対消さないこと！

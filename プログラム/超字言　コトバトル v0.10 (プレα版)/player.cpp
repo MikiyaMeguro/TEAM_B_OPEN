@@ -61,6 +61,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_BulletRot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bMachineGun = false;
 	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_nMachineGunTime = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
@@ -292,18 +293,15 @@ void CPlayer::Update(void)
 				if (m_pWordManager->GetBulletFlag() == true)
 				{	//可視化
 					m_bStealth = false;
+					//マシンガン発射時間初期化
+					m_nMachineGunTime = 0;
+					m_bMachineGun = true;
 				}
 
 				if (m_PlayerType != TYPE_REACH)
 				{	//ウサギ以外
 					m_pWordManager->BulletCreate(m_nID, BulletPos, BulletRot, m_PlayerType,
 						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
-				}
-				else
-				{
-					//マシンガン発射時間初期化
-					m_nMachineGunTime = 0;
-					m_bMachineGun = true;
 				}
 			}
 
@@ -313,7 +311,8 @@ void CPlayer::Update(void)
 				if (CManager::GetXInput(m_nID) != NULL)
 				{//スティック角を取得して発射角とする
 					BulletRot.y = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
-
+					//発射方向保持
+					m_BulletRot.y = BulletRot.y;
 				}
 				m_bAssist = false;//セルフエイムモードに設定
 			}
@@ -332,13 +331,19 @@ void CPlayer::Update(void)
 			{
 				m_nMachineGunTime++;
 				if (m_nMachineGunTime % 10 == 0)
-				{
-					m_MachineGunPos.x = (rand() % 16) - (rand() % 16);
-					m_MachineGunPos.z = (rand() % 16) - (rand() % 16);
+				{//10フレームに一回弾発射
+					m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
+					m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
 					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType,NULL);
 				}
 				else if (m_nMachineGunTime > 60)
-				{
+				{//6回発射したら弾情報を削除
+					m_bMachineGun = false;
+					m_pWordManager->Reset();
+				}
+				else if (m_pWordManager->Getm_nStock(0) == 99)
+				{//ゴミモデル用の発射
+					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
 					m_bMachineGun = false;
 					m_pWordManager->Reset();
 				}
@@ -454,8 +459,6 @@ void CPlayer::Draw(void)
 		pDevice = pRenderer->GetDevice();
 	}
 
-	// ライトの無効化
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
 	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
 		for (int nCntParts = 0; nCntParts < PLAYER_MODELNUM; nCntParts++)
@@ -471,9 +474,6 @@ void CPlayer::Draw(void)
 	{
 		CDebugProc::Print("cf","ALPHA = ", m_pPlayerParts[0][0]->GetAlpha());
 	}
-	// ライトを元に戻る
-	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
 }
 //=============================================================================
 // モーション更新処理
@@ -707,6 +707,7 @@ bool CPlayer::CollisionDamageObj(void)
 
 						int nPoint = 0;
 						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
+						else if (pModelBullet->GetType() == CModelBullet::TYPE_MACHINEGUN) { nPoint = 1; }
 						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
 
 						if (pPoint != NULL) { pPoint->AddPoint(nPoint); }

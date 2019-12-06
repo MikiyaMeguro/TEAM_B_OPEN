@@ -68,7 +68,8 @@ public:
 		MODEL_ITA,			// 板柵
 		MODEL_ITA2,			// 板柵
 		MODEL_KUSA,			// 草
-
+		MODEL_ROCK,			// 石
+		MODEL_SNOW,			// 雪
 
 		MODEL_STAGEFLOOR,		// 各ステージの床
 		MODEL_STAGEFLOOR001,	// 各ステージの床

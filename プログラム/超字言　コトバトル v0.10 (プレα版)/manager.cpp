@@ -267,14 +267,6 @@ void CManager::Uninit(void)
 		}
 
 	}
-	//if (m_pXInput != NULL)
-	//{// レンダリングクラスの破棄
-	// // 終了処理
-
-	// // メモリを開放
-	//	delete m_pXInput;
-	//	m_pXInput = NULL;
-	//}
 
 	//テクスチャの破棄
 	CTexture::Unload();
@@ -405,7 +397,7 @@ void CManager::Update(void)
 	// デバック表示を消す
 	CDebugProc::ReleseStr();
 
-	CDebugProc::Print("cn","FADESTATE = ",(int)m_pFade->GetFade());
+	CDebugProc::Print("cn", "FADESTATE = ", (int)m_pFade->GetFade());
 #endif
 
 	// 入力情報を取得
@@ -417,20 +409,16 @@ void CManager::Update(void)
 		m_pRenderer->Update();
 	}
 
-	//if (bPause == false)
+	//カメラ
+	if (m_pCameraManager != NULL)
 	{
-		//カメラ
-		if (m_pCameraManager != NULL)
-		{
-			m_pCameraManager->Update();
-		}
-
-		if (m_pLight != NULL)
-		{// ライト更新処理
-			m_pLight->Update();
-		}
+		m_pCameraManager->Update();
 	}
 
+	if (m_pLight != NULL)
+	{// ライト更新処理
+		m_pLight->Update();
+	}
 
 	if (m_pInputKeyboard != NULL)
 	{// キーボード入力更新処理
@@ -446,7 +434,7 @@ void CManager::Update(void)
 			m_pXInput[nCntXPad]->Update();
 			bConnect = m_pXInput[nCntXPad]->GetConnect();
 		}
-		m_pDebugProc->Print("cn","XINPUT_CONNECT ::",(bConnect == true) ? 1 : 0);
+		m_pDebugProc->Print("cn", "XINPUT_CONNECT ::", (bConnect == true) ? 1 : 0);
 	}
 	if (m_pMask != NULL)
 	{// フェード更新処理
@@ -479,11 +467,8 @@ void CManager::Update(void)
 	case CManager::MODE_GAME:
 		if (m_pGame != NULL)
 		{
-			//if (bPause == false)
-			{
-				m_pSound[0]->SetVolume(CSound::SOUND_LABEL_BGM_GAME000, 0.2f);
-				m_pGame->Update();
-			}
+			m_pSound[0]->SetVolume(CSound::SOUND_LABEL_BGM_GAME000, 0.2f);
+			m_pGame->Update();
 		}
 		break;
 

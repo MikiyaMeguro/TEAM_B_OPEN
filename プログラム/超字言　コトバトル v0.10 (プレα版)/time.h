@@ -56,6 +56,8 @@ private:
 	int PowerCalculation(int nData, int nOperation);
 	void ChangeStage(void);				// ステージが切り替わることを知らせる演出
 	void DefaultCol(void);				// 数字などをdefaultの色に戻す
+	void ScaleNumber(void);				// ステージタイムの拡大縮小
+	void CountDown(void);				// カウントダウン
 
 	CBillNumber *m_apNumber[TIME_MAX];	// ナンバーへのポインタ
 	static int				m_nTime;			// 時間
@@ -91,5 +93,9 @@ private:
 	float						m_fWarningCol;					// 色変化
 	bool						m_bChangeStage;
 	bool						m_bWarning;						// 警告フラグ
+
+	// 拡大縮小用
+	bool						m_bScaleFlag;					// スケール変化時のフラグ
+	int							m_nCntScale;					// スケール変化の時間管理
 };
 #endif
