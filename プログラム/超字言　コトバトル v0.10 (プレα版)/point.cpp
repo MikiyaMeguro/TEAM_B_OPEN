@@ -31,6 +31,7 @@
 #define MAX_POINT			(99)							// 最大数
 #define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))		// デフォルトのサイズ (数字)
 #define	MAX_SIZE			(D3DXVECTOR3(25.0f, 30.0f, 0.0f))		// 最大のサイズ (数字)
+#define CONFIRM_TIME		(30)							// 確定演出の時間
 //=============================================================================
 //	静的メンバ変数
 //=============================================================================
@@ -72,6 +73,9 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_bStart = false;
 	m_pIcon = NULL;
 	m_nID = 0;
+	m_nWinNum = 0;
+	m_nCountNum = 0;
+	m_nCntbConfirm = CONFIRM_TIME - 1;
 	m_type = TYPE_NONE;
 	m_bSizeChange = false;
 	m_bChangeFlag = false;
@@ -80,6 +84,7 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_bRankChangeFlag = false;
 	m_bFlag001 = true;
 	m_pRank = NULL;
+	m_bConfirmFlag = false;
 	m_RnakSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
 	{
@@ -116,8 +121,11 @@ HRESULT CPoint::Init(void)
 	// 数字のテクスチャ設定
 	TexPoint(nTexData);
 
-	// 順位ロゴの位置
-	RankPos();
+	if (m_type == TYPR_PLAYER)
+	{
+		// 順位ロゴの位置
+		RankPos();
+	}
 
 	return S_OK;
 }
@@ -574,10 +582,16 @@ void CPoint::RankLogoTex(int nWinNum)
 	if (m_pRank != NULL)
 	{
 		//if (m_TexMax == m_pRank->GetTex(1) && m_TexMin == m_pRank->GetTex(0))
-		if(m_nWinNum != nWinNum)
+		if (m_nWinNum != nWinNum)
 		{
+			m_bRankChangeFlag = true;	// 順位入れ替わりにフラグをtrueに
+			m_bFlag001 = false;
+			// 順位の入れ替え確認
+			if (m_nWinNum < nWinNum) { m_bConfirmFlag = false; }	 // 順位が下がったら
+			else if (m_nWinNum > nWinNum) { m_bConfirmFlag = true; } // 順位が上がったら
+
+			m_nCntbConfirm = 0;
 			m_nWinNum = nWinNum;
-			m_bRankChangeFlag = true;
 		}
 	}
 }
@@ -591,7 +605,7 @@ void CPoint::ChangeRank(void)
 	{
 		if (m_pRank != NULL && m_bFlag001 == false)
 		{	// 縮小
-			float fSizeDown = 1.0f;
+			float fSizeDown = 2.0f;
 			float fRotZ = 0.4f;
 			D3DXVECTOR2 size = D3DXVECTOR2(m_pRank->GetSize(0), m_pRank->GetSize(1));
 			float rot = m_pRank->GetRot();
@@ -611,17 +625,22 @@ void CPoint::ChangeRank(void)
 		}
 		else if (m_pRank != NULL && m_bFlag001 == true)
 		{	// 拡大
-			float fSizeUp = 1.0f;
+			float fSizeUp = 2.0f;
 			float fRotZ = 0.4f;
 			D3DXVECTOR2 size = D3DXVECTOR2(m_pRank->GetSize(0), m_pRank->GetSize(1));
 			float rot = m_pRank->GetRot();
 
+		
+			if (size.x >= m_RnakSize.x && size.y >= m_RnakSize.y)
+			{
+				// 順位確定の処理
+				ConfirmDirecting(size);
+				return;
+			}
 
 			m_pRank->SetTex(D3DXVECTOR2(0.0f, 0.0f + (m_nWinNum * 0.25f)), D3DXVECTOR2(0.5f, 0.25f + (m_nWinNum * 0.25f)));
 			m_TexMin = m_pRank->GetTex(0);
 			m_TexMax = m_pRank->GetTex(1);
-
-			if (size.x >= m_RnakSize.x && size.y >= m_RnakSize.y) { m_bFlag001 = false;  m_bRankChangeFlag = false; return; }
 
 			size.x += fSizeUp;
 			size.y += fSizeUp;
@@ -634,5 +653,29 @@ void CPoint::ChangeRank(void)
 			m_pRank->SetWidthHeight(size.x, size.y);
 			m_pRank->SetRot(rot);
 		}
+	}
+}
+
+//=============================================================================
+// 順位確定
+//=============================================================================
+void CPoint::ConfirmDirecting(D3DXVECTOR2 size)
+{
+	m_nCntbConfirm++;
+	D3DXVECTOR2 sizeOld = size;
+
+	//sizeOld = D3DXVECTOR2(m_RnakSize.x, m_RnakSize.y);
+	if (m_pRank != NULL)
+	{
+		if (m_nCntbConfirm < 15) { sizeOld.x +=1.0f; sizeOld.y += 1.0f;}
+		if (m_nCntbConfirm > 15) { sizeOld.x -= 1.0f; sizeOld.y -= 1.0f; }
+
+		m_pRank->SetWidthHeight(sizeOld.x, sizeOld.y);
+	}
+
+	if ((m_nCntbConfirm % CONFIRM_TIME) == 0)
+	{	// 順位入れ替わりを可能に
+		m_bFlag001 = false;  
+		m_bRankChangeFlag = false;
 	}
 }
