@@ -300,7 +300,7 @@ void CPlayer::Update(void)
 
 				if (m_PlayerType != TYPE_REACH)
 				{	//ƒEƒTƒMˆÈŠO
-					m_pWordManager->BulletCreate(m_nID, BulletPos, BulletRot, m_PlayerType,
+					m_pWordManager->BulletCreate(m_nID, BulletPos, m_BulletRot, m_PlayerType,
 						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
 				}
 			}

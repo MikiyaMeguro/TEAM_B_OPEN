@@ -72,6 +72,8 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	m_bModelTexFlag = false;
 	m_bCreateFlag = false;
 	m_bTowardFlag = false;
+
+
 }
 
 //=============================================================================
@@ -219,8 +221,8 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 		}
 	}
 
-	if(NumPlayer == 2) 
-	{																																																																																			
+	if(NumPlayer == 2)
+	{
 		if (m_nID == 0) { ToWardPos = D3DXVECTOR3(640.0f, 150.0f, 0.0f); }
 		else if (m_nID == 1) { ToWardPos = D3DXVECTOR3(640.0f, 550.0f, 0.0f); }
 	}
@@ -253,7 +255,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 	if (nNum == 2)
 	{
 		m_bCreateFlag = true;
-		//m_bModelTexFlag = true;		
+		//m_bModelTexFlag = true;
 	}
 }
 
@@ -397,7 +399,7 @@ void CTube::Collect(void)
 			}
 
 			SizeChange(size);	// サイズの変化
-		}		
+		}
 	}
 }
 
@@ -539,7 +541,7 @@ void CTube::Toward(void)
 	for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
 	{
 		if (m_apWord[nCntWord] != NULL && m_pShootingStar[nCntWord] != NULL)
-		{	
+		{
 			float fDistance = 0.0f;
 			float fRot = m_pShootingStar[nCntWord]->GetRot();
 			D3DXVECTOR3 move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -559,7 +561,7 @@ void CTube::Toward(void)
 			pos += move;
 
 			// サイズ調整
-			size.x += 1.0f; 
+			size.x += 1.0f;
 			size.y += 1.0f;
 
 			// 位置とサイズ, 向き設定
@@ -600,9 +602,9 @@ void CTube::WordCreate2D(void)
 			if (size.x > m_size.x ) { size.x = m_size.x; }
 			if (size.y > m_size.y) { size.y = m_size.y; }
 
-			if (size.x >= m_size.x && size.y >= m_size.y) 
+			if (size.x >= m_size.x && size.y >= m_size.y)
 			{
-				nCount++; 
+				nCount++;
 			}
 
 			m_apWord[nCntWord]->SetWidthHeight(size.x, size.y);
