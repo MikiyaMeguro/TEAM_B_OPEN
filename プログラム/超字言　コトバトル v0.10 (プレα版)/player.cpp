@@ -230,14 +230,10 @@ void CPlayer::Update(void)
 	{
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
-
 		//移動、回転の更新
 		m_pCharactorMove->Update();
-		if (m_nCntTransTime <= 0)
-		{
-			//弾との当たり判定
-			CollisionDamageObj();
-		}
+		//弾との当たり判定
+		CollisionDamageObj();
 
 		// モデルとの当たり判定
 		if ((CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON)) == true)
