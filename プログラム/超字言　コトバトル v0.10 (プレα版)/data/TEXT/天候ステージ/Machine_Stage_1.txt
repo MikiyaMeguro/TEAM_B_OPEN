@@ -922,38 +922,38 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 800.0 200.0 800.0
+	POS = 800.0 -200.0 800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = -800.0 200.0 800.0
+	POS = -800.0 -200.0 800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 800.0 200.0 -800.0
+	POS = 800.0 -200.0 -800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = -800.0 200.0 -800.0
+	POS = -800.0 -200.0 -800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2				# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
@@ -967,29 +967,29 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 0.0 200.0 800.0
+	POS = 0.0 -200.0 800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 800.0 200.0 0.0
+	POS = 800.0 -200.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2					# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = -800.0 200.0 0.0
+	POS = -800.0 -200.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 2					# 配置の種類を決める
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
