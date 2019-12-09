@@ -731,7 +731,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = -380.0 200.0 -400.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 1.8 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -739,8 +739,8 @@ END_MODELSET
 MODELSET						# 石
 	TYPE = 40
 	POS = -340.0 200.0 -400.0
-	ROT = 0.0 0.0 0.0
-	SCALE = 1.5 1.5 1.5
+	ROT = 0.0 0.1 0.0
+	SCALE = 1.0 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -757,7 +757,7 @@ END_MODELSET
 MODELSET						# 石
 	TYPE = 40
 	POS = -260.0 200.0 -400.0
-	ROT = 0.0 0.0 0.0
+	ROT = 0.0 1.57 0.0
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
@@ -767,7 +767,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = -220.0 200.0 -400.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 2.2 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -784,8 +784,8 @@ END_MODELSET
 MODELSET						# 石
 	TYPE = 40
 	POS = -140.0 200.0 -400.0
-	ROT = 0.0 0.1 0.0
-	SCALE = 1.5 1.5 1.5
+	ROT = 0.0 2.285 0.0
+	SCALE = 2.2 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -793,8 +793,8 @@ END_MODELSET
 MODELSET						# 石
 	TYPE = 40
 	POS = -100.0 200.0 -400.0
-	ROT = 0.0 0.2 0.0
-	SCALE = 1.5 1.5 1.5
+	ROT = 0.0 0.7825 0.0
+	SCALE = 2.2 1.0 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -821,7 +821,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = 20.0 200.0 -400.0
 	ROT = 0.0 0.5 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 1.0 1.0 1.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -839,7 +839,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = 100.0 200.0 -400.0
 	ROT = 0.0 0.7 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 1.0 1.0 1.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -848,7 +848,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = 140.0 200.0 -400.0
 	ROT = 0.0 0.8 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 2.0 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -857,7 +857,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = 180.0 200.0 -400.0
 	ROT = 0.0 0.9 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 1.0 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -866,7 +866,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = 220.0 200.0 -400.0
 	ROT = 0.0 1.0 0.0
-	SCALE = 1.5 1.5 1.5
+	SCALE = 2.5 1.5 1.5
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -893,7 +893,7 @@ MODELSET						# 石
 	TYPE = 40
 	POS = 340.0 200.0 -400.0
 	ROT = 0.0 0.0 0.5
-	SCALE = 1.5 1.5 1.5
+	SCALE = 1.0 1.0 1.0
 	COLLISION = 1
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
@@ -907,11 +907,373 @@ MODELSET						# 石
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+------------------------------------------------------------
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -360.0 200.0 -200.0
+	ROT = 0.01 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -320.0 200.0 -200.0
+	ROT = 0.01 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -360.0 200.0 -160.0
+	ROT = 0.01 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -320.0 200.0 -160.0
+	ROT = 0.01 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -360.0 200.0 150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -360.0 200.0 110.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -320.0 200.0 150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = -320.0 200.0 110.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 -80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 -80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 -120.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 -120.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 20.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 60.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 100.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 140.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 180.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 220.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 -310.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 -270.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 20.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 60.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 100.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 140.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 180.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 220.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 240.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
 -----------------------------------------------------------
 
 MODELSET						# 床
 	TYPE = 45
-	POS = 0.0 150.0 0.0
+	POS = 0.0 -150.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.1 0.06 20.1
 	COLLISION = 0
@@ -922,7 +1284,7 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 800.0 200.0 800.0
+	POS = 800.0 -200.0 800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
@@ -931,7 +1293,7 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = -800.0 200.0 800.0
+	POS = -800.0 -200.0 800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
@@ -940,7 +1302,7 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 800.0 200.0 -800.0
+	POS = 800.0 -200.0 -800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
@@ -949,25 +1311,25 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = -800.0 200.0 -800.0
+	POS = -800.0 -200.0 -800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 1				# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 0.0 120.0 -800.0
+	POS = 0.0 -120.0 -800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 0.05 21.0
 	COLLISION = 1
-	GIMMICK = 1					# 配置の種類を決める
+	GIMMICK = 1				# 配置の種類を決める
 END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 0.0 200.0 800.0
+	POS = 0.0 -200.0 800.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
@@ -976,7 +1338,7 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = 800.0 200.0 0.0
+	POS = 800.0 -200.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1
@@ -985,7 +1347,7 @@ END_MODELSET
 
 MODELSET						# 床周り
 	TYPE = 43
-	POS = -800.0 200.0 0.0
+	POS = -800.0 -200.0 0.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 20.0 5.00 20.0
 	COLLISION = 1

@@ -997,7 +997,6 @@ void C3DCharactor::Homing_CPU(void)
 	case CPlayer::TYPE_REACH:
 		fLength = 200000;
 		break;
-
 	default:
 		break;
 	}

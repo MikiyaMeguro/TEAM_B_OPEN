@@ -51,7 +51,7 @@ public:
 	void Update(void);							// 3Dオブジェクト更新処理
 	void Draw(void);							// 3Dオブジェクト描画処理
 
-	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CLoad::MODEL model, int nCollision);	// オブジェクトの生成
+	static CSceneX *Create(D3DXVECTOR3 pos, D3DXVECTOR3 Rot, D3DXVECTOR3 Scale, CLoad::MODEL model, int nCollision = 0);	// オブジェクトの生成
 
 	D3DXVECTOR3 GetPosition(void);		 				// 位置の取得
 	void SetPosition(D3DXVECTOR3 pos);					// 位置の設定
@@ -89,9 +89,9 @@ public:
 	void SetParent(D3DXMATRIX* pParent) { m_pParentMatrix = pParent; };
 	void SetCameraNum(int nCamera) { m_nCamera = nCamera; };
 
-	void SetSceneXNum(int nNumber) { m_nSceneXNumber = nNumber; };
-	int GetSceneXNum(void) {return m_nSceneXNumber; };
-
+	void SetSceneXNum(int nNumber) { m_nBushNum = nNumber; };
+	int GetSceneXNum(void) {return m_nBushNum; };
+	static void SetTranslucentBush(int nPlayer,int nNumber) { m_nTranslucentBush[nPlayer] = nNumber; };
 private:
 	LPDIRECT3DTEXTURE9		*m_pTexture;		// テクスチャへのポインタ
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;			// 頂点バッファへのポインタ
@@ -111,8 +111,8 @@ private:
 	bool					m_bTranslucent[4];	//半透明化フラグ(trueで消える)
 	D3DXMATRIX*				m_pParentMatrix;	//親マトリックス
 	int						m_nCamera;			//カメラの番号
-	int						m_nSceneXNumber;	//シーンXの番号
-
+	int						m_nBushNum;			//草の番号
+	static int				m_nTranslucentBush[4]; //透明な草の番号
 };
 
 #endif

@@ -53,22 +53,22 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 	m_nLife = nLife;
 	m_nExpandTime = nLife;
 	m_nCount = 0;
-	m_spinSpeed = D3DXVECTOR3(0.0f, 0.4f, 0.0f);	//デフォルトで少し回す
+	m_spinSpeed = D3DXVECTOR3(0.0f, 0.3f, 0.0f);	//デフォルトで少し回す
 
 	//多重アニメーションをするために何個か重ねる
 	if (m_bNotDup == false)
 	{
 		CExplosion3D* p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.005f); }
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.01f); }
 
 		p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, 0.02f); }
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, 0.04f); }
 
 		p3D = CExplosion3D::Create();
 		p3D->IsNotDup(true);
-		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.015f); }
+		if (p3D != NULL) { p3D->Set(pos, fStartSize, fDestSize, nLife, -0.03f); }
 	}
 	m_bNotDup = true;
 

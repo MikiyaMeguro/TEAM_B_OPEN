@@ -13,7 +13,8 @@
 
 #include "main.h"
 
-#define _PI ((FLOAT)3.1415926535f)
+#define _PI ((FLOAT)3.1415926535f)		//π
+#define _GRAVITY ((FLOAT)0.98f)			//重力
 //=============================================================================
 //	クラス定義(VECTOR_3D)	独自の３次元ベクトルクラス
 //=============================================================================
@@ -203,6 +204,9 @@ public:
 	static float Mapping(const float& value, const float& fromSource, const float& toSource, const float& fromTarget, const float& toTarget, bool bClamp = false);
 	static D3DXVECTOR3 MoveCoeffient(D3DXVECTOR3& value,const float& coeffient);
 	static float RoundF_n(float& fValue,const int nRound);
+
+	static D3DXVECTOR3 ParabolaRotation(D3DXVECTOR3* pOutRot,float* pOutSpeed,
+										const D3DXVECTOR3& ParabolaMuzzle,const D3DXVECTOR3& Target,int nTime);
 private:
 	CUtilityMath();
 	~CUtilityMath() {};

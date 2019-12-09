@@ -275,12 +275,26 @@ void CSetObject::LoadFile(char *pFileName)
 					//文字列の先頭を設定
 					pStrcur = ReadLine(pFile, &aLine[0]);
 				}
+				if (memcmp(pStrcur, "BUSH = ", strlen("BUSH = ")) == 0)
+				{
+					//頭出し
+					pStrcur += strlen("BUSH = ");
+					//文字列の先頭を設定
+					strcpy(aStr, pStrcur);
+
+					//文字数を返してもらう
+					nWord = PopString(pStrcur, &aStr[0]);
+					//文字列変換
+					nNumModel = (int)atoi(pStrcur);
+					//文字列の先頭を設定
+					pStrcur = ReadLine(pFile, &aLine[0]);
+				}
 			}
 			//モデルを生成
 			if (memcmp(pStrcur, "END_MODELSET", strlen("END_MODELSET")) == 0)
 			{
 				CObject::Create(ModelPos, ModelRot, ModelScale, (CSceneX::COLLISIONTYPE)nCollisionType, (CLoad::MODEL)nType, (CObject::GIMMICKTYPE)nGimmickType, nNumModel);
-				nNumModel++;
+				//nNumModel++;
 			}
 			//スクリプトの終わり
 			if (memcmp(pStrcur, "END_SCRIPT	", strlen("END_SCRIPT")) == 0)

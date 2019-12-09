@@ -93,7 +93,10 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 5) { CScene3D::BindTexture("FIELD002"); }
 	else if (m_nType == 6) { CScene3D::BindTexture("FIELD002"); }
 	else if (m_nType == 7) { CScene3D::BindTexture("FIELD002"); }
-
+	else if (m_nType == 8) { CScene3D::BindTexture("TUROFLOW002"); }
+	else if (m_nType == 9) { CScene3D::BindTexture("TUROFLOWTEXT001"); }
+	else if (m_nType == 10) { CScene3D::BindTexture("TUROFLOWTEXT000"); }
+	else if (m_nType == 11) { CScene3D::BindTexture("TUROFLOWFLOOR"); }
 
 	return S_OK;
 }
@@ -173,6 +176,15 @@ void CWall::Update(void)
 		if (m_nCounter > 3750)
 		{
 			Uninit();
+		}
+	}
+	else if (m_nType == 11)
+	{
+		m_nCounter++;
+		if (m_nCounter % 60 == 0)
+		{
+			m_nAnimCounter++;
+			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
 		}
 	}
 

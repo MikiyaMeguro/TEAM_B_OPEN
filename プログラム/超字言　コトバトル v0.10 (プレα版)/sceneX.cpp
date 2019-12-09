@@ -17,6 +17,11 @@
 #define SCENEX_SIZE	(1.0f)	// サイズの調節
 
 //=============================================================================
+// 静的メンバ変数宣言
+//=============================================================================
+int CSceneX::m_nTranslucentBush[4] = {0,0,0,0};
+
+//=============================================================================
 // 3Dモデルクラスのコンストラクタ
 //=============================================================================
 CSceneX::CSceneX(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
@@ -411,15 +416,28 @@ bool CSceneX::Collision(D3DXVECTOR3 *pos, D3DXVECTOR3 *posOld, D3DXVECTOR3 *move
 			{// X座標の中に入った
 				m_bTranslucent[nPlayer] = true;
 				bLand = true;
+				//今入っている草の番号を代入
+				m_nTranslucentBush[nPlayer] = m_nBushNum;
 			}
-			else
-			{
+			else if (m_nTranslucentBush[nPlayer] != m_nBushNum)
+			{//草の番号が違うとき
 				m_bTranslucent[nPlayer] = false;
+			}
+			else if (m_nTranslucentBush[nPlayer] == m_nBushNum)
+			{//草の番号が同じ
+				m_bTranslucent[nPlayer] = true;
 			}
 		}
 		else
 		{
-			m_bTranslucent[nPlayer] = false;
+			if (m_nTranslucentBush[nPlayer] != m_nBushNum)
+			{//草の番号が違うとき
+				m_bTranslucent[nPlayer] = false;
+			}
+			else if(m_nTranslucentBush[nPlayer] == m_nBushNum)
+			{//草の番号が同じ
+				m_bTranslucent[nPlayer] = true;
+			}
 		}
 	}
 

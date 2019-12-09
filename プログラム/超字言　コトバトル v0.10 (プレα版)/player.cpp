@@ -14,7 +14,7 @@
 #include "tutorial.h"
 #include "result.h"
 #include "sceneX.h"
-
+#include "time.h"
 #include "debugProc.h"
 #include "bullet.h"
 #include "explosion.h"
@@ -230,14 +230,10 @@ void CPlayer::Update(void)
 	{
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
-
 		//移動、回転の更新
 		m_pCharactorMove->Update();
-		if (m_nCntTransTime <= 0)
-		{
-			//弾との当たり判定
-			CollisionDamageObj();
-		}
+		//弾との当たり判定
+		CollisionDamageObj();
 
 		// モデルとの当たり判定
 		if ((CollisonObject(&m_pCharactorMove->GetPosition(), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &m_pCharactorMove->GetMove(), PLAYER_COLLISON)) == true)
@@ -304,7 +300,7 @@ void CPlayer::Update(void)
 
 				if (m_PlayerType != TYPE_REACH)
 				{	//ウサギ以外
-					m_pWordManager->BulletCreate(m_nID, BulletPos, BulletRot, m_PlayerType,
+					m_pWordManager->BulletCreate(m_nID, BulletPos, m_BulletRot, m_PlayerType,
 						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
 				}
 			}
@@ -709,6 +705,7 @@ bool CPlayer::CollisionDamageObj(void)
 
 						CModelBullet *pModelBullet = ((CModelBullet*)pBullet);
 
+
 						int nPoint = 0;
 						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
 						else if (pModelBullet->GetType() == CModelBullet::TYPE_MACHINEGUN) { nPoint = 1; }
@@ -716,6 +713,11 @@ bool CPlayer::CollisionDamageObj(void)
 							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_MEDIUM
 							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_SLOW) { nPoint = 1; }
 						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
+						//フィーバータイム時に得点２倍
+						if (CTime::GetFeverFlag() == true)
+						{
+							nPoint *= 2;
+						}
 
 						if (pPoint != NULL) { pPoint->AddPoint(nPoint); }
 						pSound->SetVolume(CSound::SOUND_LABEL_SE_POINTUP, 3.0f);
@@ -814,85 +816,86 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 	 // 処理の最中に消える可能性があるから先に記録しておく
 		CScene *pSceneNext = pScene->GetNext();
 
-		if (pScene->GetDeath() == false)
+		if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
 		{// 死亡フラグが立っていないもの
-			if (pScene->GetObjType() == CScene::OBJTYPE_SCENEX)
-			{// オブジェクトの種類を確かめる
-				CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
-				if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
-				{
-					m_bLand = pSceneX->Collision(pos, posOld, move, radius, m_nID);
+			// オブジェクトの種類を確かめる
+			CSceneX *pSceneX = ((CSceneX*)pScene);		// CSceneXへキャスト(型の変更)
+			if (pSceneX->GetCollsionType() != CSceneX::COLLISIONTYPE_NONE)
+			{
+				m_bLand = pSceneX->Collision(pos, posOld, move, radius, m_nID);
 
-					CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
-					if (m_bLand == true)
-					{// モデルに当たる
-						bHit = true;
+				CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+				if (m_bLand == true)
+				{// モデルに当たる
+					bHit = true;
 
-						if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NOTMOVE)
-						{
-							if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
-								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
-							{	// ベルトコンベアの判定
-								pSceneObj->BeltConveyor(move, pSceneObj->GetSwitch());
-							}
-							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
-								pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
-							{	// ノックバックの判定
-								pSceneObj->KnockBack(move, m_nID);
-							}
-							else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_SWITCH)
-							{//	スイッチ
-								pSceneObj->SwitchBeltConveyor(m_bLand);
-							}
-
-						}
-						else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
-						{
-							pSceneObj->AffectedLanding(move, m_nID);
-						}
-						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
-						{	//草むらにいるとき透明にする
-							PlayerAlpha(0.5f);
-							m_nObjNumber = pSceneObj->GetSceneXNum();
-
-							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-							{
-								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
-								{//他プレイヤーに見えていない
-									int ntest = GetID();
-									if (m_nObjNumber != pPlayer[nCntPlayer]->GetLandObjNumber())
-									{	//同じ草むらにいないとき
-										pPlayer[nCntPlayer]->SetVision(GetID(), false);
-									}
-								}
-							}
-							nCntBush++;
-						}
-						else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
-						{
-						}
-						break;
-					}
-					else
+					if (pSceneObj->GetRealTimeType() == CObject::REALTIME_NOTMOVE)
 					{
-						if (nCntBush == 0)
-						{//草むらに入っていないとき
-							//透明を戻す
-							PlayerAlpha(1.0f);
+						if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_FRONT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_BACK ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_LEFT || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_CONVEYOR_RIHHT)
+						{	// ベルトコンベアの判定
+							pSceneObj->BeltConveyor(move, pSceneObj->GetSwitch());
+						}
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_SMALL || pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_DURING ||
+							pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_KNOCKBACK_BIG)
+						{	// ノックバックの判定
+							pSceneObj->KnockBack(move, m_nID);
+						}
+						else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_SWITCH)
+						{//	スイッチ
+							pSceneObj->SwitchBeltConveyor(m_bLand);
+						}
 
-							for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-							{
-								if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
-								{	//他プレイヤーに見えている
-									int nte = GetID();
-									pPlayer[nCntPlayer]->SetVision(GetID(), true);
+					}
+					else if (pSceneObj->GetRealTimeType() == CObject::REALTIME_INITPOS)
+					{
+						pSceneObj->AffectedLanding(move, m_nID);
+					}
+
+					if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
+					{	//草むらにいるとき透明にする
+						PlayerAlpha(0.5f);
+						//今いる草むらの番号を取得
+						m_nObjNumber = pSceneObj->GetSceneXNum();
+
+						for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+						{
+							if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
+							{//他プレイヤーに見えていない
+								int ntest = GetID();
+								if (m_nObjNumber != pPlayer[nCntPlayer]->GetLandObjNumber())
+								{	//同じ草むらにいないとき
+									pPlayer[nCntPlayer]->SetVision(GetID(), false);
 								}
 							}
-
-							//m_bStealth = true;
-							bHit = false;
-							m_nObjNumber = 0;
 						}
+						nCntBush++;
+					}
+					else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
+					{
+					}
+					break;
+				}
+				else
+				{
+					if (nCntBush == 0)
+					{//草むらに入っていないとき
+						//透明を戻す
+						PlayerAlpha(1.0f);
+
+						for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+						{
+							if (pPlayer[nCntPlayer] != NULL && nCntPlayer != GetID())
+							{	//他プレイヤーに見えている
+								int nte = GetID();
+								pPlayer[nCntPlayer]->SetVision(GetID(), true);
+							}
+						}
+						//m_bStealth = true;
+						bHit = false;
+						m_nObjNumber = 0;
+						//透明な草を戻す
+						//CSceneX::SetTranslucentBush(0);
 					}
 				}
 			}
@@ -900,6 +903,13 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 		// 次のシーンに進める
 		pScene = pSceneNext;
 	}
+
+	if (nCntBush == 0)
+	{//草むらに入っていないとき
+	 //透明な草を戻す
+	 CSceneX::SetTranslucentBush(GetID(),0);
+	}
+
 	return bHit;
 }
 //=============================================================================
