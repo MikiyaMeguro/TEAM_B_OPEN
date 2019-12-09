@@ -48,7 +48,7 @@ public:
 
 	static bool GetTimeFlag(void) { return m_bCountFlag; };
 	static void SetTimeFlag(bool bFlag) { m_bCountFlag = bFlag; };
-
+	static bool GetFeverFlag(void) { return m_bFever; };
 	static int GetStageTime(void) { return m_nStageChange; }	// ステージ切替時の時間取得
 private:
 	void DebugKey(void);
@@ -58,6 +58,7 @@ private:
 	void DefaultCol(void);				// 数字などをdefaultの色に戻す
 	void ScaleNumber(void);				// ステージタイムの拡大縮小
 	void CountDown(void);				// カウントダウン
+
 
 	CBillNumber *m_apNumber[TIME_MAX];	// ナンバーへのポインタ
 	static int				m_nTime;			// 時間
@@ -86,10 +87,12 @@ private:
 	int							m_ScaleCounter;					// 拡大縮小のカウンター
 	bool						m_bEndCntDown;					// カウントダウンが終了したかどうか
 	int							m_StageCounter;					// Stage生成完了までの時間
-
 	CPlayer						*m_pPlayer[PLAYER_MAX];
-
-	// ステージ変更用
+	//フィーバータイム用
+	int							m_nFeverTime;					// フィーバータイムの経過時間
+	static bool					m_bFever;						// フィーバーフラグ
+	CScene2D					*m_pFeverUI[PLAYER_MAX];		// 2Dポリゴンへのポインタ
+																// ステージ変更用
 	float						m_fWarningCol;					// 色変化
 	bool						m_bChangeStage;
 	bool						m_bWarning;						// 警告フラグ
