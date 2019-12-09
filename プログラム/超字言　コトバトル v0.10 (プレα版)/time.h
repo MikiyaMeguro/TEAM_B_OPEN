@@ -50,6 +50,8 @@ public:
 	static void SetTimeFlag(bool bFlag) { m_bCountFlag = bFlag; };
 	static bool GetFeverFlag(void) { return m_bFever; };
 	static int GetStageTime(void) { return m_nStageChange; }	// ステージ切替時の時間取得
+
+	static int GetSatgeNum(void) { return m_nStageNum; }		// ステージ形態の取得
 private:
 	void DebugKey(void);
 	void TimeManagement(void);
@@ -66,6 +68,7 @@ private:
 	static int				m_nTimeOld;
 	static int				m_nStageChange;		// ステージが切り替わる時間
 	static int				m_nTimeOne;
+	static int				m_nStageNum;
 	int						m_nTimeNum;			// 時間の表示数字数
 	int						m_nWaitTime;		// ゲーム終了時の待ち時間
 	int						m_nNumPlayer;		// 人数保管

@@ -45,6 +45,7 @@ int						CTime::m_nTimeOld = 0;
 int						CTime::m_nStageChange = 1;
 int						CTime::m_nTimeOne = 3;
 bool					CTime::m_bFever = false;
+int						CTime::m_nStageNum = 0;
 //=============================================================================
 // ê∂ê¨èàóù
 //=============================================================================
@@ -108,8 +109,8 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_bScaleFlag = false;
 	m_nCntScale = 0;
 	m_nFeverTime = 0;
-	m_bFever = 0
-		;
+	m_bFever = 0;
+	m_nStageNum = 0;
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		m_pPlayer[nCntPlayer] = NULL;			// ÉvÉåÉCÉÑÅ[ÇéÊìæ
@@ -530,6 +531,7 @@ void CTime::TimeManagement(void)
 		m_bStageCreate = true;
 		CGame::bStageSet(true);
 		int nStageNum = (m_nStageChange / 60);
+		m_nStageNum = (m_nStageChange / 60);
 		CManager::GetGame()->SetStage(CGame::GetNumStage(),nStageNum);
 	}
 

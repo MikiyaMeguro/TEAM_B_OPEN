@@ -27,6 +27,7 @@ public:
 	{	// ƒMƒ~ƒbƒN‚ÌŽí—Þ
 		GIMMICK_NONE = 0,
 		GIMMICK_MOYE_Y,
+		GIMMICK_MOYE_STAGE,
 		GIMMICK_MAX
 	}GIMMICKTYPE;
 

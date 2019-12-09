@@ -104,7 +104,7 @@ HRESULT CObject::Init(D3DXVECTOR3 pos)
 	// ƒIƒuƒWƒFƒNƒg‚ÌŽí—Þ‚ÌÝ’è
 	SetObjType(CScene::OBJTYPE_SCENEX);
 
-	if (m_nTypeGimmick == GIMMICK_MOYE_Y) { m_nRealTime = REALTIME_INITPOS; }
+	if (m_nTypeGimmick == GIMMICK_MOYE_Y || m_nTypeGimmick == GIMMICK_MOYE_STAGE) { m_nRealTime = REALTIME_INITPOS; }
 	else if (m_nTypeGimmick == GIMMICK_NONE) { m_nRealTime = REALTIME_NONE; }
 
 	CSceneX::Init(pos);
@@ -528,10 +528,9 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 
 		// ‚»‚ê‚¼‚êˆÚ“®’l‚ðŒˆ‚ß‚é
 		if (CSceneX::GetModelType() == CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
-		if (m_nTypeGimmick == 2)
-		{
-			if(CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR001 || CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR002) { fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
-		}
+			if(CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR001 || CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR002 ||
+				CSceneX::GetModelType() == CLoad::MODEL_STAGEOUT) {
+				fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
 		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }	// “y‘äˆÈŠO
 
 																							// U“®‚Ìˆ—
@@ -695,11 +694,12 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMo
 	}
 	else if (fMove >= 0)
 	{
-		if (m_nTypeGimmick == 2)
+		if (CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR001 || CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR002 ||
+			CSceneX::GetModelType() == CLoad::MODEL_STAGEOUT)
 		{
-			if (pos->y + CSceneX::GetVtxMax().y > 0)
+			if (CTime::GetSatgeNum() == 0)
 			{
-				pos->y = pos->y - CSceneX::GetVtxMax().y;
+				pos->y = pos->y + CSceneX::GetVtxMin().y;
 				pos->x = m_posOld.x;
 				pos->z = m_posOld.z;
 
@@ -709,9 +709,23 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMo
 					m_bCreateFlag = true;
 				}
 			}
+			else if (CTime::GetSatgeNum() != 0)
+			{
+				if (pos->y > 0)
+				{
+					pos->y = -1.0f;
+					pos->x = m_posOld.x;
+					pos->z = m_posOld.z;
 
+					CSceneX::SetPosition(*pos);
+					m_nRealTime = REALTIME_NOTMOVE;
+					if (m_bCreateFlag == false) {
+						m_bCreateFlag = true;
+					}
+				}
+			}
 		}
-		else if (m_nTypeGimmick != 2)
+		else if (CSceneX::GetModelType() == CLoad::MODEL_DODAI)
 		{
 			if (pos->y > 0)
 			{

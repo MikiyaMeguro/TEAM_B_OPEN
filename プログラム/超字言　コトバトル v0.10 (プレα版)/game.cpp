@@ -213,12 +213,7 @@ void CGame::Init(void)
 	CSetObject::Create();
 	SetStage(m_nNumStage, m_nChangeNum);		// ステージ生成
 
-	if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
-	{
-		CTime::Create((int)NumPlayer);
-		CTime::Create((int)NumPlayer);
-	}
-	else if (NumPlayer != CPlayerSelect::SELECTPLAYER_2P) { CTime::Create((int)NumPlayer); }
+	CTime::Create((int)NumPlayer);
 
 	//デバック用
 	//CTime::SetTimeFlag(false);

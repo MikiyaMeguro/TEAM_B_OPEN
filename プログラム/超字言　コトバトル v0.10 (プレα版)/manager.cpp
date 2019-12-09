@@ -371,6 +371,7 @@ void CManager::Uninit(void)
 			delete m_pStageSelect;
 			m_pStageSelect = NULL;
 		}
+		break;
 	}
 
 	//サウンド
@@ -790,49 +791,49 @@ void CManager::SetMode(MODE mode)
 		}
 		break;
 
-		case CManager::MODE_TUTORIAL:
-			if (m_pTutorial == NULL)
+	case CManager::MODE_TUTORIAL:
+		if (m_pTutorial == NULL)
+		{
+			m_pTutorial = new CTutorial;
+			if (m_pTutorial != NULL)
 			{
-				m_pTutorial = new CTutorial;
-				if (m_pTutorial != NULL)
-				{
-					//リザルトのBGMを再生
-					m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TUTORIAL);
-					m_pTutorial->Init();
-				}
-				else
-				{
-					MessageBox(0, "NULLじゃないです", "警告", MB_OK);
-				}
+				//リザルトのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TUTORIAL);
+				m_pTutorial->Init();
 			}
 			else
 			{
-				MessageBox(0, "NULLでした", "警告", MB_OK);
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
 			}
-			break;
-		case CManager::MODE_SELECT:
-			//リザルトの初期化
-			if (m_pSelect == NULL)
-			{
-				//リザルトのメモリを動的確保
-				m_pSelect = new CSelect;
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
+	case CManager::MODE_SELECT:
+		//リザルトの初期化
+		if (m_pSelect == NULL)
+		{
+			//リザルトのメモリを動的確保
+			m_pSelect = new CSelect;
 
-				if (m_pSelect != NULL)
-				{//リザルトのBGMを再生
-					m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_SELECT);
-					// 初期化処理
-					m_pSelect->Init();
-				}
-				else
-				{
-					MessageBox(0, "NULLじゃないです", "警告", MB_OK);
-				}
+			if (m_pSelect != NULL)
+			{//リザルトのBGMを再生
+				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_SELECT);
+				// 初期化処理
+				m_pSelect->Init();
 			}
 			else
 			{
-				MessageBox(0, "NULLでした", "警告", MB_OK);
+				MessageBox(0, "NULLじゃないです", "警告", MB_OK);
 			}
-			break;
+		}
+		else
+		{
+			MessageBox(0, "NULLでした", "警告", MB_OK);
+		}
+		break;
 	}
 
 }
