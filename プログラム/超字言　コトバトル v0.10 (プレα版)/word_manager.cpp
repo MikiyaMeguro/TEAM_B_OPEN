@@ -562,7 +562,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//‘å‚«‚³‚Ìİ’è
 				}
-				Reset();
 			}
 
 			if (CManager::GetMode() == CManager::MODE_GAME)
