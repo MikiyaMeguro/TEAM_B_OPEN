@@ -247,11 +247,42 @@ END_MODELSET
 
 MODELSET
 	TYPE = 36
-	POS = 200.0 0.0 100.0		#ëê
+	POS = 150.0 0.0 100.0		#ëê
 	ROT = 0.0 0.0 0.0
-	SCALE = 3.0 1.0 3.0
+	SCALE = 1.0 1.0 4.0
 	COLLISION = 13
 	GIMMICK = 0	
+	BUSH = 1					#ëêî‘çÜ
+END_MODELSET
+
+MODELSET
+	TYPE = 36
+	POS = 200.0 0.0 150.0		#ëê
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
+	COLLISION = 13
+	GIMMICK = 0	
+	BUSH = 1					#ëêî‘çÜ	
+END_MODELSET	
+
+MODELSET
+	TYPE = 36
+	POS = 150.0 0.0 -50.0		#ëê
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 4.0
+	COLLISION = 13
+	GIMMICK = 0	
+	BUSH = 2					#ëêî‘çÜ	
+END_MODELSET
+
+MODELSET
+	TYPE = 36
+	POS = 200.0 0.0 -100.0		#ëê
+	ROT = 0.0 0.0 0.0
+	SCALE = 4.0 1.0 1.0
+	COLLISION = 13
+	GIMMICK = 0	
+	BUSH = 2					#ëêî‘çÜ	
 END_MODELSET
 
 #==========================================================
