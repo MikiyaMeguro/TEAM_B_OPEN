@@ -347,6 +347,7 @@ void CWordManager::Reset(void)
 		CManager::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
 		CManager::GetTube(m_nPlayerID)->UninitChack(false);
 	}
+
 	m_nCntaAnswer = 0;
 
 	if (m_nStock[0] < m_nAnswerDataNum || m_nStock[0] == NOT_NUM)
@@ -560,7 +561,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel->Set(BulletMuzzle, BulletRot, CLoad::MODE_DUST, CModelBullet::TYPE_NORMAL, nID);
 					pModel->SetModelScale(D3DXVECTOR3(1.0f, 1.0f, 1.0f));//大きさの設定
 				}
-				Reset();
 			}
 
 			if (CManager::GetMode() == CManager::MODE_GAME)
@@ -572,12 +572,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (type != CPlayer::TYPE_REACH)
 				{
 					Reset();		// 設定を戻す
-
-					if (CGame::GetTube(m_nPlayerID) != NULL)
-					{//筒クラス内の文字情報を削除
-						CGame::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
-						CGame::GetTube(m_nPlayerID)->UninitChack(false);
-					}
 				}
 			}
 			else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
@@ -588,12 +582,6 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				if (type != CPlayer::TYPE_REACH)
 				{
 					Reset();		// 設定を戻す
-
-					if (CTutorial::GetTube(m_nPlayerID) != NULL)
-					{//筒クラス内の文字情報を削除
-						CTutorial::GetTube(m_nPlayerID)->AllDelete(m_nCntNum);
-						CTutorial::GetTube(m_nPlayerID)->UninitChack(false);
-					}
 				}
 			}
 
