@@ -300,7 +300,7 @@ void CPlayer::Update(void)
 
 				if (m_PlayerType != TYPE_REACH)
 				{	//ƒEƒTƒMˆÈŠO
-					m_pWordManager->BulletCreate(m_nID, BulletPos, BulletRot, m_PlayerType,
+					m_pWordManager->BulletCreate(m_nID, BulletPos, m_BulletRot, m_PlayerType,
 						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
 				}
 			}
@@ -851,7 +851,8 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 					{
 						pSceneObj->AffectedLanding(move, m_nID);
 					}
-					else if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
+
+					if (pSceneObj->GetCollsionType() == CSceneX::COLLSIONTYPE_BUSH)
 					{	//‘‚Þ‚ç‚É‚¢‚é‚Æ‚«“§–¾‚É‚·‚é
 						PlayerAlpha(0.5f);
 						//¡‚¢‚é‘‚Þ‚ç‚Ì”Ô†‚ðŽæ“¾

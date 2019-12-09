@@ -36,8 +36,8 @@ class CStageSelect;
 #define CAMERA_ROTX (-(D3DX_PI * 0.5f))		//カメラのデフォルト角度(X)
 #define CAMERA_POSR (100.0f)		//カメラの注視点
 
-#define PLAYER_INITPOSX (200.0f)
-#define PLAYER_INITPOSZ (200.0f)
+#define PLAYER_INITPOSX (45.0f)
+#define PLAYER_INITPOSZ (-80.0f)
 
 #define MAX_PLAYER (4)
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
@@ -53,7 +53,7 @@ public:
 	void Init(void);
 	void Uninit(void);
 	void Update(void);
-	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 地面の取得
+	static CMeshField *GetMeshField(void) { return m_pMeshField[0]; }			// 地面の取得
 	void Draw(void);
 	void SetStage(int nNumState, int nCntState);	// ステージの生成
 	void SetCreateWord(void);
@@ -69,7 +69,7 @@ private:
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
-	static CMeshField *m_pMeshField;
+	static CMeshField *m_pMeshField[MAX_STAGE];
 	static CWall *m_pWall;
 	static CSetWord *m_pWordCreate;
 	char *m_pcStageName[MAX_STAGE][MAX_STAGECOUNT];		// ステージの名前保管

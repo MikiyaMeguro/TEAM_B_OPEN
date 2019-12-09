@@ -133,7 +133,6 @@ float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 
 	return fValue;
 }
-
 //=============================================================================
 //
 // イージングクラス [UtilityMath.cpp](CEasingFunc)
