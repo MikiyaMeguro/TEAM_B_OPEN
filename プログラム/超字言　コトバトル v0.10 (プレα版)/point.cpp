@@ -182,6 +182,15 @@ void CPoint::Update(void)
 		PointPostion();	// ポイントの位置更新
 
 		ChangeRank();	// 順位切替時の演出処理
+
+		if (m_nWinNum == 3) { if (m_pCrown != NULL) { m_pCrown->Uninit(); m_pCrown = NULL; } }
+		else if (m_nWinNum != 3)
+		{
+			if (m_pCrown != NULL)
+			{
+				m_pCrown->SetTexture(D3DXVECTOR2((0.333f * m_nWinNum), 0.0f), D3DXVECTOR2(0.333f + (m_nWinNum * 0.333f), 1.0f));
+			}
+		}
 	}
 }
 
@@ -424,13 +433,13 @@ void CPoint::PointPostion()
 
 		if (m_pCrown == NULL)
 		{
-			m_pCrown = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 60.0f, PlayerPos.z - 30.0f), 20.0f, 10.0f, "RANK&PLNUM");
-			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 0.25f));
+			m_pCrown = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 20.0f, PlayerPos.z - 50.0f), 20.0f, 20.0f, "crown");
+			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2((0.333f*1), 1.0f));
 		}
 
 		if (m_pCrown != NULL)
 		{
-			m_pCrown->Setpos(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 60.0f, PlayerPos.z - 30.0f));
+			m_pCrown->Setpos(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 20.0f, PlayerPos.z - 50.0f));
 		}
 	}
 
@@ -598,20 +607,22 @@ void CPoint::SizeChange(void)
 //=============================================================================
 void CPoint::RankLogoTex(int nWinNum)
 {
-	if (m_pRank != NULL)
+	// 順位の入れ替え確認
+	if (m_nWinNum != nWinNum)
 	{
-		//if (m_TexMax == m_pRank->GetTex(1) && m_TexMin == m_pRank->GetTex(0))
-		if (m_nWinNum != nWinNum)
+
+		if (m_nWinNum < nWinNum) { m_bConfirmFlag = false; }	 // 順位が下がったら
+		else if (m_nWinNum > nWinNum) { m_bConfirmFlag = true; } // 順位が上がったら
+
+		if (m_pRank != NULL)
 		{
+			//if (m_TexMax == m_pRank->GetTex(1) && m_TexMin == m_pRank->GetTex(0))
 			m_bRankChangeFlag = true;	// 順位入れ替わりにフラグをtrueに
 			m_bFlag001 = false;
-			// 順位の入れ替え確認
-			if (m_nWinNum < nWinNum) { m_bConfirmFlag = false; }	 // 順位が下がったら
-			else if (m_nWinNum > nWinNum) { m_bConfirmFlag = true; } // 順位が上がったら
 
 			m_nCntbConfirm = 0;
-			m_nWinNum = nWinNum;
 		}
+		m_nWinNum = nWinNum;
 	}
 }
 
@@ -696,10 +707,5 @@ void CPoint::ConfirmDirecting(D3DXVECTOR2 size)
 	{	// 順位入れ替わりを可能に
 		m_bFlag001 = false;  
 		m_bRankChangeFlag = false;
-
-		if (m_pCrown != NULL)
-		{
-			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f + (m_nWinNum * 0.25f)), D3DXVECTOR2(1.0f, 0.25f + (m_nWinNum * 0.25f)));
-		}
 	}
 }
