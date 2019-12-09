@@ -111,4 +111,10 @@ DATA = 00087 data/TEXTURE/Ranking/Effect_1St.png RANKING_EFFECT
 DATA = 00088 data/TEXTURE/Ranking/Callout.png RANKCHARA_CALLOUT
 DATA = 00089 data/TEXTURE/Game/crown.png crown
 
+DATA = 00090 data/TEXTURE/tutorial/tutorialflow002.png TUROFLOW002
+DATA = 00091 data/TEXTURE/tutorial/tutorialflowtext001.png TUROFLOWTEXT001
+DATA = 00092 data/TEXTURE/tutorial/tutorialflowtext000.png TUROFLOWTEXT000
+
+DATA = 00093 data/TEXTURE/tutorial/tutorialfloor.png TUROFLOWFLOOR
+
 END_LOAD
