@@ -1093,6 +1093,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1102,6 +1103,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1111,6 +1113,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1120,6 +1123,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 1					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1129,6 +1133,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.0 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1138,6 +1143,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.0 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1147,6 +1153,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.0 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1156,6 +1163,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.0 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1165,6 +1173,7 @@ MODELSET						# 茂み
 	SCALE = 3.0 1.5 3.0
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 2					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1174,6 +1183,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1183,6 +1193,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1192,6 +1203,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1201,6 +1213,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1210,6 +1223,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1219,6 +1233,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1228,6 +1243,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1237,6 +1253,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1246,6 +1263,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1255,6 +1273,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1264,6 +1283,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1273,15 +1293,17 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
 	TYPE = 36
 	POS = -160.0 0.0 210.0
-	ROT = 0.0 0.0 0.0
+	ROT = 0.0 0.0 0.0g
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1291,6 +1313,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5					#草番号
 END_MODELSET
 
 MODELSET						# 茂み
@@ -1300,6 +1323,7 @@ MODELSET						# 茂み
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5					#草番号
 END_MODELSET
 
 -----------------------------------------------------------
@@ -1749,7 +1773,7 @@ END_MODELSET
 
 MODELSET						# 草
 	TYPE = 39
-	POS = 185 0.0 -117.0
+	POS = 185 0.0 487.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 0.15 0.15 0.15
 	COLLISION = 0
@@ -1760,7 +1784,7 @@ END_MODELSET
 
 MODELSET						# 茂み
 	TYPE = 36
-	POS = -260.0 0.0 -160.0
+	POS = -460.0 0.0 -160.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 1.5 1.5 1.5
 	COLLISION = 13

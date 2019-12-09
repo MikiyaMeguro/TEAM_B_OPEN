@@ -14,7 +14,7 @@
 #include "tutorial.h"
 #include "result.h"
 #include "sceneX.h"
-
+#include "time.h"
 #include "debugProc.h"
 #include "bullet.h"
 #include "explosion.h"
@@ -705,6 +705,7 @@ bool CPlayer::CollisionDamageObj(void)
 
 						CModelBullet *pModelBullet = ((CModelBullet*)pBullet);
 
+
 						int nPoint = 0;
 						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
 						else if (pModelBullet->GetType() == CModelBullet::TYPE_MACHINEGUN) { nPoint = 1; }
@@ -712,6 +713,11 @@ bool CPlayer::CollisionDamageObj(void)
 							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_MEDIUM
 							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_SLOW) { nPoint = 1; }
 						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
+						//フィーバータイム時に得点２倍
+						if (CTime::GetFeverFlag() == true)
+						{
+							nPoint *= 2;
+						}
 
 						if (pPoint != NULL) { pPoint->AddPoint(nPoint); }
 						pSound->SetVolume(CSound::SOUND_LABEL_SE_POINTUP, 3.0f);

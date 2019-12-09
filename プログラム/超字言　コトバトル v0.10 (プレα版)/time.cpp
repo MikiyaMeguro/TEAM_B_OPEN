@@ -44,6 +44,7 @@ bool					CTime::m_bCountFlag = true;			//時間をカウントするか
 int						CTime::m_nTimeOld = 0;
 int						CTime::m_nStageChange = 1;
 int						CTime::m_nTimeOne = 3;
+bool					CTime::m_bFever = false;
 int						CTime::m_nStageNum = 0;
 //=============================================================================
 // 生成処理
@@ -107,8 +108,9 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_bWarning = false;
 	m_bScaleFlag = false;
 	m_nCntScale = 0;
+	m_nFeverTime = 0;
+	m_bFever = 0;
 	m_nStageNum = 0;
-
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		m_pPlayer[nCntPlayer] = NULL;			// プレイヤーを取得
@@ -175,6 +177,9 @@ HRESULT CTime::Init(void)
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
+		//フィーバーの位置設定
+		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 50, m_pos.z), "COUNTDOWN0");
+		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 	}
 	else if (m_nNumPlayer == 2)
 	{
@@ -186,7 +191,7 @@ HRESULT CTime::Init(void)
 
 	}
 	else if (m_nNumPlayer == 3)
-	{	
+	{
 		//カウントダウンの位置設定
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
@@ -272,6 +277,23 @@ void CTime::Update(void)
 		{
 			m_nTimeCount++;
 			TimeManagement();	// 時間の管理
+		}
+
+		//フィーバータイム
+		if (m_nTimeCount == 60 * 10
+			|| m_nTimeCount == 60 * 60)
+		{
+			m_bFever = true;
+		}
+
+		if (m_bFever == true)
+		{
+			m_nFeverTime++;
+			if (m_nFeverTime == 60 * 30)
+			{
+				m_bFever = false;
+				m_nFeverTime = 0;
+			}
 		}
 
 		int nTexData = 0;
@@ -539,7 +561,7 @@ void CTime::ChangeStage(void)
 		{
 			// 色の設定
 			if (m_bWarning == false)
-			{ 
+			{
 				m_fWarningCol -= 0.01f;
 				if (m_fWarningCol < 0.2f) { m_fWarningCol = 0.2f;  m_bWarning = true; }
 			}
@@ -576,15 +598,15 @@ void CTime::DefaultCol(void)
 //=============================================================================
 void CTime::ScaleNumber(void)
 {
-	if (m_bChangeStage == false) 
+	if (m_bChangeStage == false)
 	{	// ステージ切り替えの警告フラグがfalseならサイズを戻す
 		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
 		{
 			if (m_apNumber[nCntTime] != NULL && m_apNumber[nCntTime]->GetSize() != DEFAULT_SIZE) { m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE); }
 		}
 		m_nCntScale = 0;
-		return; 
-	}	
+		return;
+	}
 
 	m_nCntScale++;	// 加算
 	for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
@@ -609,7 +631,7 @@ void CTime::ScaleNumber(void)
 				size.x -= fSizeChange / 2;
 				size.y -= fSizeChange;
 
-				if ((m_nCntScale % SCALE_CHANGE_TIME) == 0) { 
+				if ((m_nCntScale % SCALE_CHANGE_TIME) == 0) {
 					m_bScaleFlag = false; }
 			}
 
