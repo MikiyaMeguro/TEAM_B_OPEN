@@ -34,6 +34,7 @@
 #define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
 #define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))	// デフォルトサイズ
 #define SCALE_CHANGE_TIME	(10)								// スケール変化の時間
+#define SCALE_UI			(200)								// UIの大きさ
 
 //=============================================================================
 //	静的メンバ変数
@@ -111,6 +112,9 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nFeverTime = 0;
 	m_bFever = 0;
 	m_nStageNum = 0;
+	m_nCntUIRepeat = 0;
+	m_bStopUI = false;
+
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		m_pPlayer[nCntPlayer] = NULL;			// プレイヤーを取得
@@ -170,6 +174,7 @@ HRESULT CTime::Init(void)
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		m_pScene2D[nCnt] = NULL;
+		m_pFeverUI[nCnt] = NULL;
 	}
 
 	if (m_nNumPlayer == 1)
@@ -178,8 +183,8 @@ HRESULT CTime::Init(void)
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 50, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, SCREEN_HEIGHT / 2 + 50, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[0]->SetWidthHeight(SCALE_UI, SCALE_UI);
 	}
 	else if (m_nNumPlayer == 2)
 	{
@@ -188,6 +193,11 @@ HRESULT CTime::Init(void)
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
+		//フィーバーの位置設定
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[0]->SetWidthHeight(SCALE_UI, SCALE_UI);
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[1]->SetWidthHeight(SCALE_UI, SCALE_UI);
 
 	}
 	else if (m_nNumPlayer == 3)
@@ -199,6 +209,13 @@ HRESULT CTime::Init(void)
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
+		//フィーバーの位置設定
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[0]->SetWidthHeight(SCALE_UI, SCALE_UI);
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[1]->SetWidthHeight(SCALE_UI, SCALE_UI);
+		m_pFeverUI[2] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[2]->SetWidthHeight(SCALE_UI, SCALE_UI);
 	}
 	if (m_nNumPlayer == 4)
 	{
@@ -211,6 +228,15 @@ HRESULT CTime::Init(void)
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
 		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[3]->SetWidthHeight(m_fWidth, m_fHeight);
+		//フィーバーの位置設定
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[0]->SetWidthHeight(SCALE_UI, SCALE_UI);
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[1]->SetWidthHeight(SCALE_UI, SCALE_UI);
+		m_pFeverUI[2] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[2]->SetWidthHeight(SCALE_UI, SCALE_UI);
+		m_pFeverUI[3] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[3]->SetWidthHeight(SCALE_UI, SCALE_UI);
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -256,6 +282,12 @@ void CTime::Uninit(void)
 			m_pScene2D[nCnt]->Uninit();
 			m_pScene2D[nCnt] = NULL;
 		}
+
+		if (m_pFeverUI[nCnt] != NULL)
+		{
+			m_pFeverUI[nCnt]->Uninit();
+			m_pFeverUI[nCnt] = NULL;
+		}
 	}
 
 	Release();
@@ -291,10 +323,67 @@ void CTime::Update(void)
 			m_nFeverTime++;
 			if (m_nFeverTime == 60 * 30)
 			{
+				m_bStopUI = false;
 				m_bFever = false;
 				m_nFeverTime = 0;
+				m_nCntUIRepeat = 0;
+
+				if (m_nNumPlayer == 1)
+				{
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, SCREEN_HEIGHT / 2, 0.0f));
+				}
+				if (m_nNumPlayer == 2)
+				{
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
+				}
+				if (m_nNumPlayer == 3)
+				{
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
+					m_pFeverUI[2]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
+				}
+				if (m_nNumPlayer == 4)
+				{
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
+					m_pFeverUI[2]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
+					m_pFeverUI[3]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
+				}
 			}
 		}
+
+		//フィーバータイムのUI位置更新
+		if (m_bFever == true)
+		{
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+			{
+				if (m_pFeverUI[nCntPlayer] != NULL)
+				{
+					D3DXVECTOR3 UIPos = m_pFeverUI[nCntPlayer]->GetPosition();
+					if (m_bStopUI == false)
+					{
+						UIPos.x -= 5;
+					}
+					m_pFeverUI[nCntPlayer]->SetPosition(UIPos);
+					if (UIPos.x < -SCALE_UI)
+					{
+						if (nCntPlayer == 1)
+						{
+							m_nCntUIRepeat++;
+						}
+						UIPos.x = SCREEN_WIDTH + SCALE_UI;
+						m_pFeverUI[nCntPlayer]->SetPosition(UIPos);
+						if (m_nCntUIRepeat == 2)
+						{
+							m_bStopUI = true;
+						}
+					}
+				}
+			}
+		}
+
+
 
 		int nTexData = 0;
 		// 数字のテクスチャ設定

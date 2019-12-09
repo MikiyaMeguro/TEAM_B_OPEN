@@ -95,7 +95,11 @@ private:
 	int							m_nFeverTime;					// フィーバータイムの経過時間
 	static bool					m_bFever;						// フィーバーフラグ
 	CScene2D					*m_pFeverUI[PLAYER_MAX];		// 2Dポリゴンへのポインタ
-																// ステージ変更用
+	bool						m_bStopUI;						// UIを止めるフラグ
+	int							m_nCntUIRepeat;					// UI何回繰り返したか
+
+
+	// ステージ変更用
 	float						m_fWarningCol;					// 色変化
 	bool						m_bChangeStage;
 	bool						m_bWarning;						// 警告フラグ
