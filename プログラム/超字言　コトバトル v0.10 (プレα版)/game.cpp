@@ -226,6 +226,10 @@ void CGame::Init(void)
 
 	SetCreateWord();
 
+	//先にテクスチャを生成しておく
+	CTexture::GetTexture("モデル_TEX");
+	CTexture::GetTexture("WORD");
+
 }
 //=============================================================================
 // 終了処理

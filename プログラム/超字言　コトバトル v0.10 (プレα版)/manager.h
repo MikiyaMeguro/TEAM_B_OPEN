@@ -41,6 +41,7 @@ class CCameraManager;
 class CPlayer;
 class CTube;
 class CSetWord;
+class CMeshField;
 //=============================================================================
 // マクロ
 //=============================================================================
@@ -58,6 +59,7 @@ class CSetWord;
 #define PLAYER_C_BUTTON		(DIK_S)
 #define MAX_SOUND			(3)
 #define MAX_PLAYER			(4)
+
 //=============================================================================
 // マクロ(コントローラー)
 //=============================================================================
@@ -125,6 +127,8 @@ public:
 	static CPlayer* GetPlayer(int nID);
 	static CTube* GetTube(int nID);
 	static CSetWord* GetWordCreate(void);
+	static CMeshField* GetMeshField(void);
+
 private:
 	static CRenderer *m_pRenderer;
 	static CInputKeyboard *m_pInputKeyboard;

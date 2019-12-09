@@ -41,12 +41,13 @@ void C3DBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fSpeed, int nLife, i
 	m_rot = rot;
 	m_fMove = fSpeed;
 	m_nLife = nLife;
-
+	m_nMaxLife = nLife;
+	m_fHeight = pos.y;
 	m_nID = (nID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
 
 	m_fCollisionRadius = 10.0f;
 	m_fKnockBack = 7.0f;
-
+	m_nCount = 0;
 	//先に回転マトリックスを作成しておく
 	D3DXMatrixRotationYawPitchRoll(&m_mtxRotate, m_rot.y, m_rot.x, m_rot.z);
 
@@ -101,25 +102,14 @@ void C3DBullet::Update(void)
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
-	if (CManager::GetMode() == CManager::MODE_GAME)
-	{//メッシュフィールドとの当たり判定
-		CMeshField *pMesh = CGame::GetMeshField();
-		float fHeight = pMesh->GetHeight(m_pos + move);
-		if (m_pos.y < fHeight)
-		{
-			move.y = 0.0f;
-		}
-	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{//メッシュフィールドとの当たり判定
-		CMeshField *pMesh = CTutorial::GetMeshField();
-		float fHeight = pMesh->GetHeight(m_pos + move);
-		if (m_pos.y < fHeight)
-		{
-			move.y = 0.0f;
-		}
-	}
 
+	//床との当たり判定
+	CMeshField *pMesh = CManager::GetMeshField();
+	float fHeight = pMesh->GetHeight(m_pos + move);
+	if (m_pos.y < fHeight)
+	{
+		move.y = 0.0f;
+	}
 
 	m_MoveResult = move;		//求めた差分を格納
 	m_pos += move;		//座標に移動値をプラス
@@ -128,7 +118,7 @@ void C3DBullet::Update(void)
 	D3DXMatrixTranslation(&m_mtxTrans, m_pos.x, m_pos.y, m_pos.z);
 
 	/*デバック*/
-	CDebugProc::Print("cf","BULLET_ROT_Y",m_rot.y);
+	CDebugProc::Print("cf", "BULLET_ROT_Y", m_rot.y);
 }
 
 //=============================================================================
@@ -250,7 +240,7 @@ CModelBullet::CModelBullet(int nPriority) : C3DBullet(nPriority)
 {
 	m_pModel = NULL;
 	m_pOrbit = NULL;
-	m_nCounter = 0;
+	m_nCntEffect = 0;
 
 }
 CModelBullet::~CModelBullet()
@@ -281,7 +271,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 
 	//タイプによって処理を分ける
 	float fSpeed = 3.0f;
-	int nLife = 100;
+	int nLife = 60;
 	switch (m_Prop)
 	{
 	case TYPE_HIGHSPEED:
@@ -327,6 +317,11 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		fSpeed = 4.0f;
 		m_fKnockBack = 4.0f;
 		break;
+	case TYPE_BOMB:
+		fSpeed = 4.0f;
+		m_fKnockBack = 10.0f;
+		break;
+
 	default:
 		fSpeed = 5.0f;
 		m_fKnockBack = 6.0f;
@@ -368,7 +363,7 @@ void CModelBullet::Uninit(void)
 		break;
 	case TYPE_KNOCKBACK:
 		p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 100.0f, 120, 0.01f); }
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 80.0f, 120, 0.01f); }
 		break;
 	case TYPE_STINGER:
 		p3D = CExplosion3D::Create();
@@ -382,6 +377,11 @@ void CModelBullet::Uninit(void)
 		p3D = CExplosion3D::Create();
 		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
+	case TYPE_BOMB:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 80.0f, 120, 0.01f); }
+		break;
+
 	default:
 		break;
 	}
@@ -403,13 +403,14 @@ void CModelBullet::Update(void)
 {
 	int& nLife = GetLife();
 	nLife--;
-	m_nCounter++;
+	m_nCntEffect++;
 	C3DBullet::Update();
+	m_nCount++;
 
 	D3DXVECTOR3 pos = CModelBullet::GetPosition();
 	if (m_Prop == TYPE_MISSILE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
 	{//ミサイル
-		if (m_nCounter % 6 == 0)
+		if (m_nCntEffect % 6 == 0)
 		{
 			CEffect::Create(pos, 4, 4);
 		}
@@ -419,27 +420,42 @@ void CModelBullet::Update(void)
 			Homing(m_pHomingChara->GetPosition());
 		}
 	}
-	if (m_Prop == TYPE_KNOCKBACK)
+	else if (m_Prop == TYPE_KNOCKBACK || m_Prop == TYPE_BOMB)
 	{//爆発
-		if (m_nCounter % 6 == 0)
+		float fUp = sinf((float)m_nCount / (float) ((float)m_nMaxLife / 4.0f));
+		fUp *= 100.0f;//定数を掛ける
+
+		GetPosition().y = m_fHeight + fUp;
+
+		//床との当たり判定
+		CMeshField *pMesh = CManager::GetMeshField();
+		float fHeight = pMesh->GetHeight(GetPosition());
+		if (GetPosition().y < fHeight)
+		{
+			Uninit();
+			return;
+		}
+
+		if (m_nCntEffect % 6 == 0)
 		{
 			CEffect::Create(pos, 5, 5);
 		}
 	}
-	if (m_Prop == TYPE_MACHINEGUN)
+	else if (m_Prop == TYPE_MACHINEGUN)
 	{//	マシンガン
-		if (m_nCounter % 7 == 0)
+		if (m_nCntEffect % 7 == 0)
 		{
 			CEffect::Create(pos, 5, 7);
 		}
-		if (m_nCounter % 14 == 0)
+		if (m_nCntEffect % 14 == 0)
 		{
 			CEffect::Create(pos, 5, 8);
+
 		}
 	}
-	if (m_Prop == TYPE_NORMAL)
+	else if (m_Prop == TYPE_NORMAL)
 	{//ゴミ
-		if (m_nCounter % 6 == 0)
+		if (m_nCntEffect % 6 == 0)
 		{
 			CEffect::Create(pos, 6, 5);
 		}
@@ -635,37 +651,3 @@ void CWordBullet::Draw(void)
 
 }
 
-////=============================================================================
-////
-//// 投擲弾処理 (CThrowBullet)[bullet.cpp]
-//// Author : Kodama Yuto
-////
-////=============================================================================
-////=============================================================================
-//// コンストラクタ＆デストラクタ	(CThrowBullet)
-////=============================================================================
-//CThrowBullet::CThrowBullet(int nPriority) : C3DBullet(nPriority)
-//{
-//
-//}
-//CThrowBullet::~CThrowBullet()
-//{
-//
-//}
-//
-////=============================================================================
-//// 生成処理(CThrowBullet)
-////=============================================================================
-//CThrowBullet* CThrowBullet::Create(void)
-//{
-//	CThrowBullet* pBullet = NULL;
-//
-//	pBullet = new CThrowBullet(BULLET_PRIORITY);
-//
-//	if (pBullet != NULL)
-//	{
-//		pBullet->Init();
-//	}
-//
-//	return pBullet;
-//}

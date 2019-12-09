@@ -32,6 +32,7 @@
 #include "player.h"
 #include "tube.h"
 #include "SetWord.h"
+#include "meshField.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -890,5 +891,23 @@ CSetWord* CManager::GetWordCreate(void)
 		return CTutorial::GetWordCreate();
 		break;
 	}
+	return NULL;
+}
+
+//=============================================================================
+//	床オブジェクトの取得
+//=============================================================================
+CMeshField* CManager::GetMeshField(void)
+{
+	switch (m_mode)
+	{
+	case MODE_GAME:
+		return CGame::GetMeshField();
+		break;
+	case MODE_TUTORIAL:
+		return CTutorial::GetMeshField();
+		break;
+	}
+
 	return NULL;
 }

@@ -38,7 +38,6 @@ public:
 		TYPE_NONE = 0,
 		TYPE_WORD,
 		TYPE_MODEL,
-		TYPE_THROW,
 		TYPE_MAX
 	}BULLET_TYPE;
 
@@ -69,6 +68,8 @@ protected:
 	float m_fCollisionRadius;
 	float m_fKnockBack;	//ノックバックする値
 	D3DXMATRIX m_mtxTrans;
+	float m_fHeight;
+	int m_nMaxLife;
 private:
 	D3DXVECTOR3 m_pos;				//位置
 	D3DXVECTOR3 m_posOld;			//前回の位置
@@ -97,6 +98,7 @@ public:
 		TYPE_SHOTGUN,			//ショットガン通常(じゃやい)
 		TYPE_SHOTGUN_MEDIUM,	//ショットガン(通常)
 		TYPE_SHOTGUN_SLOW,		//ショットガン(遅い)
+		TYPE_BOMB,				//爆弾
 		TYPE_MAX
 	}BULLET_PROPERTY;
 
@@ -130,7 +132,7 @@ private:
 
 	C3DCharactor* m_pHomingChara;
 
-	int m_nCounter;
+	int m_nCntEffect;
 	CLineOrbit* m_pOrbit;
 
 };
@@ -153,23 +155,5 @@ public:
 
 private:
 	CSceneBillBoard* m_pWord;
-};
-
-//投擲弾クラス
-class CThrowBullet : public C3DBullet
-{
-public:
-	CThrowBullet();
-	CThrowBullet(int nPriority = BULLET_PRIORITY);
-	~CThrowBullet();
-
-	static CThrowBullet* Create(void);
-
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
-private:
-
 };
 #endif // !_BULLET_H_
