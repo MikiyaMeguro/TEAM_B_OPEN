@@ -528,6 +528,10 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 pos)
 
 		// ‚»‚ê‚¼‚êˆÚ“®’l‚ðŒˆ‚ß‚é
 		if (CSceneX::GetModelType() == CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
+		if (m_nTypeGimmick == 2)
+		{
+			if(CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR001 || CSceneX::GetModelType() == CLoad::MODEL_STAGEFLOOR002) { fMove = MODEL_MOVE_Y * -1; } // “y‘ä‚Ìê‡
+		}
 		else if (CSceneX::GetModelType() != CLoad::MODEL_DODAI) { fMove = MODEL_MOVE_Y; }	// “y‘äˆÈŠO
 
 																							// U“®‚Ìˆ—
@@ -691,16 +695,35 @@ void CObject::ModelMove(CSceneX::COLLISIONTYPE Type, D3DXVECTOR3 *pos, float fMo
 	}
 	else if (fMove >= 0)
 	{
-		if (pos->y > 0)
+		if (m_nTypeGimmick == 2)
 		{
-			pos->y = pos->y - CSceneX::GetVtxMin().y;
-			pos->x = m_posOld.x;
-			pos->z = m_posOld.z;
+			if (pos->y + CSceneX::GetVtxMax().y > 0)
+			{
+				pos->y = pos->y - CSceneX::GetVtxMax().y;
+				pos->x = m_posOld.x;
+				pos->z = m_posOld.z;
 
-			CSceneX::SetPosition(*pos);
-			m_nRealTime = REALTIME_NOTMOVE;
-			if (m_bCreateFlag == false) {
-				m_bCreateFlag = true;
+				CSceneX::SetPosition(*pos);
+				m_nRealTime = REALTIME_NOTMOVE;
+				if (m_bCreateFlag == false) {
+					m_bCreateFlag = true;
+				}
+			}
+
+		}
+		else if (m_nTypeGimmick != 2)
+		{
+			if (pos->y > 0)
+			{
+				pos->y = pos->y - CSceneX::GetVtxMin().y;
+				pos->x = m_posOld.x;
+				pos->z = m_posOld.z;
+
+				CSceneX::SetPosition(*pos);
+				m_nRealTime = REALTIME_NOTMOVE;
+				if (m_bCreateFlag == false) {
+					m_bCreateFlag = true;
+				}
 			}
 		}
 	}
