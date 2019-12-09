@@ -477,14 +477,14 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 		/* –ß‚é */
 		if (pCharaSel->collisionBackMode(nControllNum) == true)
 		{
-			pCharaSel->SetBackModeTex(true);
+			pCharaSel->SetBackMode(m_nId,true);
 			m_apGauge2D->SetbDraw(true);
 			m_apBadge2D->SetbDraw(false);
 			PressGauge(pFade, pManager, nControllNum);
 		}
 		else
 		{
-			pCharaSel->SetBackModeTex(false);
+			pCharaSel->SetBackMode(m_nId, false);
 			m_apGauge2D->SetbDraw(false);
 			m_apBadge2D->SetbDraw(true);
 		}

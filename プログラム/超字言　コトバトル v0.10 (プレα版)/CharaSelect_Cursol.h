@@ -50,21 +50,21 @@ private:
 	D3DXVECTOR3 MoveRestriction(D3DXVECTOR3 pos);																//移動制限
 	void Set(int nId);
 
-	CScene2D *m_apCursor2D;		//カーソル
-	CScene2D *m_apBadge2D;		//バッジ
-	CScene2D *m_apGauge2D;		//戻る時のゲージ
-	CPlayerSelect::SELECTPLAYER *m_PlayerNum;						//プレイヤーの人数
+	CScene2D *m_apCursor2D;								//カーソル
+	CScene2D *m_apBadge2D;								//バッジ
+	CScene2D *m_apGauge2D;								//戻る時のゲージ
+	CPlayerSelect::SELECTPLAYER *m_PlayerNum;			//プレイヤーの人数
 	float m_fGaugeSizeX;								//戻るゲージの長さを保管
 	float m_fMaxGaugeX;									//ゲージの最大の長さ
 	int m_nCntGauge;									//ゲージ長押し時間を管理
-	int m_nId = 0;				//ID
-	CPlayer::PLAYER_TYPE m_CharaType;		//選ばれたキャラの種類
-	CPlayer::PLAYER_TYPE m_CharaTypeOld;	//前回選ばれたキャラの種類
-	CCharaSelect::SELECT_STATE m_SelectState;							//演出の状態
-	CCharaSelect::SELECT_STATE m_SelectStateold;						//前回の演出状態を記録
-	D3DXVECTOR3 m_move;						//移動量
-	D3DXVECTOR3 m_pos;						//移動量
-	bool m_bPCSelMove;						//選ばれていない時のみ移動できる
-	bool m_bPlayer;							//プレイヤーかどうか見る
+	int m_nId = 0;										//ID
+	CPlayer::PLAYER_TYPE m_CharaType;					//選ばれたキャラの種類
+	CPlayer::PLAYER_TYPE m_CharaTypeOld;				//前回選ばれたキャラの種類
+	CCharaSelect::SELECT_STATE m_SelectState;			//演出の状態
+	CCharaSelect::SELECT_STATE m_SelectStateold;		//前回の演出状態を記録
+	D3DXVECTOR3 m_move;									//移動量
+	D3DXVECTOR3 m_pos;									//移動量
+	bool m_bPCSelMove;									//選ばれていない時のみ移動できる
+	bool m_bPlayer;										//プレイヤーかどうか見る
 };
 #endif

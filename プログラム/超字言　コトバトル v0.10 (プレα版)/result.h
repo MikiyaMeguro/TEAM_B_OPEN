@@ -18,7 +18,7 @@ class CPlayer;
 class CNumber;
 class CScene2D;
 class CCharaBase;
-
+class CSpotLight;
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -81,11 +81,12 @@ private:
 	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void EffectPro(void);
-
+	void SetAudience(void);
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	static CharaSet m_ResultChara[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
+	static CScene3D *m_apAudience;
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];	// ナンバーへのポインタ
 	CScene2D *m_apScene2D[RESULTTYPE_MAX];		//演出系2Dポリゴン
@@ -94,6 +95,7 @@ private:
 	CScene2D *m_apPlayerNum[MAX_PLAYER];		//プレイヤー番号
 	CScene2D *m_apEffect[MAX_PLAYER][2];		//エフェクト[プレイヤー人数][エフェクト出す数]
 	CSceneX *m_apStadium[MAX_MODEL];			//モデルの配置
+	CSpotLight *m_pSpotLight[MAX_PLAYER];		//スポットライト
 	bool m_bMenu;
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ
 	bool m_bEffectPro;							//演出が始まってるかどうかフラグ
@@ -104,7 +106,7 @@ private:
 	D3DXVECTOR2 m_PlayerNumSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
 	D3DXVECTOR2 m_PlayerIconSize[MAX_PLAYER];	//プレイヤーナンバーのサイズを保存(X:幅,Y:高さ)
 	D3DXVECTOR3 m_RankEffect[MAX_PLAYER][2];	//プレイヤーナンバーの位置を保存
-	D3DXVECTOR2 m_EffectAlpha;		//エフェクトのalpha値管理（X:エフェクト番号0　Y:エフェクト番号1）
+	D3DXVECTOR2 m_EffectAlpha;					//エフェクトのalpha値管理（X:エフェクト番号0　Y:エフェクト番号1）
 	EFFECTPRO_STATE m_EffectState;				//エフェクトの状態管理
 };
 #endif

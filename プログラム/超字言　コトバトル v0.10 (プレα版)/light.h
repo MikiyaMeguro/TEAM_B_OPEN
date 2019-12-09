@@ -30,8 +30,11 @@ public:
 	void Uninit(void);
 	void Update(void);
 
+	static void SetLight(int nNum,D3DLIGHT9 light) { m_light[nNum] = light; }
+
 private:
 	static D3DLIGHT9 m_light[MAX_LIGHT];	// ƒ‰ƒCƒg‚Ìî•ñ
+	static D3DLIGHT9 m_SpotLight;
 };
 
 #endif

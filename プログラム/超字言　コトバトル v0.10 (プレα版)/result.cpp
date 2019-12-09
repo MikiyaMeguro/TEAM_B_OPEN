@@ -13,7 +13,10 @@
 #include "camera.h"
 #include "CameraManager.h"
 #include "sceneX.h"
+#include "scene3D.h"
 #include "number.h"
+#include "SpotLight.h"
+
 //============================================================================
 //	マクロ定義
 //============================================================================
@@ -44,6 +47,7 @@
 CPlayer *CResult::m_pPlayer[MAX_PLAYER] = {};
 CResult::CharaSet CResult::m_ResultChara[MAX_PLAYER] = {};
 CMeshField *CResult::m_pMeshField = NULL;
+CScene3D *CResult::m_apAudience = NULL;
 
 //=============================================================================
 //	コンストラクタ
@@ -92,10 +96,10 @@ HRESULT CResult::Init(void)
 	float fNext = 42;	//表彰台の間の幅
 
 	InitPointer();
-	SetPolygon();
+	//SetPolygon();
 	SetModel();
-
-#if 1
+	SetAudience();
+#if 0
 	m_ResultChara[0].nPoint = 3;
 	m_ResultChara[1].nPoint = 2;
 	m_ResultChara[2].nPoint = 0;
@@ -150,6 +154,7 @@ HRESULT CResult::Init(void)
 	if (m_pMeshField == NULL)
 	{
 		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pMeshField->BindTexture("RANKING_MESHFIELD");
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -275,6 +280,7 @@ HRESULT CResult::Init(void)
 			m_pPlayer[nCntPlayer]->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
 	}
+#if 0
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{	//初期位置設定
@@ -298,6 +304,8 @@ HRESULT CResult::Init(void)
 		TexPoint(nCntPlayer, m_ResultChara[nCntPlayer].nPoint);
 		SetNumCallout(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank, m_ResultChara[nCntPlayer].Movetype);
 	}
+#endif // 0
+
 #if 0
 	/* ソート */
 	for (int nRank = 0; nRank < 4; nRank++)
@@ -317,7 +325,7 @@ HRESULT CResult::Init(void)
 #endif
 	//カメラの設定
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
-	pCameraManager->CreateCamera("RESULT_CAMERA",CCamera::TYPE_SPECTOR,D3DXVECTOR3(7.0f, 50.0f, 130.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 135.0f);
+	pCameraManager->CreateCamera("RESULT_CAMERA",CCamera::TYPE_SPECTOR,D3DXVECTOR3(7.0f, 30.0f, 130.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), 135.0f);
 	pCameraManager->SetCameraViewPort("RESULT_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	CCamera *pCamera = pCameraManager->GetCamera("RESULT_CAMERA");
@@ -326,7 +334,19 @@ HRESULT CResult::Init(void)
 		pCamera->SetPosR(D3DXVECTOR3(7.0f, 50.0f, 0.0f));
 	}
 
-
+	//ライト設定
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		if (m_pSpotLight[nCnt] == NULL)
+		{
+			m_pSpotLight[nCnt] = CSpotLight::Create(nCnt,D3DXVECTOR3(m_pPlayer[nCnt]->GetPosition().x, m_pPlayer[nCnt]->GetPosition().y + 60.0f, m_pPlayer[nCnt]->GetPosition().z),
+				SPOTLIGHT_DIRECTION, SPOTLIGHT_DEFFUSE, SPOTLIGHT_AMBIENT, SPOTLIGHT_SPECULAR, 0.0f, 0.0f, 0.0f, 800.0f, SPOTLIGHT_FALLOFF, D3DXToRadian(30.0f), D3DXToRadian(30.0f));
+			if (m_ResultChara[nCnt].nNumRank != 1)
+			{//一位以外だったらライトをつけてない状態にする
+				m_pSpotLight[nCnt]->SetLightEnable(nCnt, FALSE);
+			}
+		}
+	}
 	return S_OK;
 }
 
@@ -392,6 +412,8 @@ void CResult::Uninit(void)
 				m_apEffect[nCntPlayer][nCntEff] = NULL;
 			}
 		}
+		if (m_pSpotLight[nCntPlayer] != NULL) { m_pSpotLight[nCntPlayer]->Uninit(); m_pSpotLight[nCntPlayer] = NULL; }
+
 	}
 	for (int nCnt = 0; nCnt < RESULTTYPE_MAX; nCnt++)
 	{
@@ -400,6 +422,11 @@ void CResult::Uninit(void)
 			m_apScene2D[nCnt]->Uninit();
 			m_apScene2D[nCnt] = NULL;
 		}
+	}
+	if (m_apAudience != NULL)
+	{
+		m_apAudience->Uninit();
+		m_apAudience = NULL;
 	}
 	//全ての終了処理
 	Release();
@@ -453,6 +480,7 @@ void CResult::Update(void)
 	}
 	/* 演出処理関数呼び出し */
 	EffectPro();
+
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");
 
@@ -527,6 +555,13 @@ void CResult::InitPointer(void)
 	}
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
+		for (int nCntP = 0; nCntP < MAX_POINT; nCntP++)
+		{
+			if (m_apNumber[nCnt][nCntP] != NULL)
+			{
+				m_apNumber[nCnt][nCntP] = NULL;
+			}
+		}
 		if (m_apPlayerIcon[nCnt] != NULL)
 		{
 			m_apPlayerIcon[nCnt] = NULL;
@@ -546,8 +581,9 @@ void CResult::InitPointer(void)
 				m_apEffect[nCnt][nCntEff] = NULL;
 			}
 		}
+		if (m_pSpotLight[nCnt] != NULL) { m_pSpotLight[nCnt] = NULL; }
 	}
-	
+	if (m_apAudience != NULL) { m_apAudience = NULL; }
 }
 //=============================================================================
 // ポインタの初期化処理
@@ -624,30 +660,44 @@ void CResult::SetModel(void)
 	if (m_apStadium[0] == NULL)
 	{//正面
 		m_apStadium[0] = CSceneX::Create(DEFAULT_POS, DEFAULT_ROT, DEFAULT_SCALE, CLoad::MODEL_RANKINGSTADIUM, 0);
-		m_apStadium[0]->SetScale(D3DXVECTOR3(1.2f, 1.3f, 1.0f));
+		m_apStadium[0]->SetScale(D3DXVECTOR3(1.2f, 1.5f, 1.0f));
 		m_apStadium[0]->SetPosition(D3DXVECTOR3(0.0f, 0.0f, -120.0f));
 		m_apStadium[0]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI*-0.5f, 0.0f));
 	}
 	if (m_apStadium[1] == NULL)
 	{//右
 		m_apStadium[1] = CSceneX::Create(DEFAULT_POS, DEFAULT_ROT, DEFAULT_SCALE, CLoad::MODEL_RANKINGSTADIUM, 0);
-		m_apStadium[1]->SetScale(D3DXVECTOR3(1.2f, 1.3f, 1.0f));
+		m_apStadium[1]->SetScale(D3DXVECTOR3(1.2f, 1.5f, 1.0f));
 		m_apStadium[1]->SetPosition(D3DXVECTOR3(-145.0f, 0.0f, -80.0f));
 		m_apStadium[1]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI*-0.3f, 0.0f));
 	}
 	if (m_apStadium[2] == NULL)
 	{//左
 		m_apStadium[2] = CSceneX::Create(DEFAULT_POS, DEFAULT_ROT, DEFAULT_SCALE, CLoad::MODEL_RANKINGSTADIUM, 0);
-		m_apStadium[2]->SetScale(D3DXVECTOR3(1.2f, 1.3f, 1.0f));
+		m_apStadium[2]->SetScale(D3DXVECTOR3(1.2f, 1.5f, 1.0f));
 		m_apStadium[2]->SetPosition(D3DXVECTOR3(145.0f, 0.0f, -80.0f));
 		m_apStadium[2]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI*-0.7f, 0.0f));
 	}
 	if (m_apStadium[3] == NULL)
 	{//奥
 		m_apStadium[3] = CSceneX::Create(DEFAULT_POS, DEFAULT_ROT, DEFAULT_SCALE, CLoad::MODEL_RANKINGSTADIUM, 0);
-		m_apStadium[3]->SetScale(D3DXVECTOR3(6.0f, 3.5f, 1.0f));
+		m_apStadium[3]->SetScale(D3DXVECTOR3(6.0f, 5.0f, 1.0f));
 		m_apStadium[3]->SetPosition(D3DXVECTOR3(0.0f, 0.0f, -250.0f));
 		m_apStadium[3]->SetRot(D3DXVECTOR3(0.0f, D3DX_PI*-0.5f, 0.0f));
+	}
+}
+//=============================================================================
+// 観客の配置
+//=============================================================================
+void CResult::SetAudience(void)
+{
+	if (m_apAudience == NULL)
+	{
+		m_apAudience = CScene3D::Create(D3DXVECTOR3(m_apStadium[0]->GetPosition().x, 100.0f, m_apStadium[0]->GetPosition().z),
+			"RANKING_AUDIENCE");
+		m_apAudience->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f,D3DX_PI,0.0f));
+		m_apAudience->SetSize(DEFAULT_SIZE*0.1f, DEFAULT_SIZE*0.1f);
+		m_apAudience->SetAnimation(2,0.5f,1.0f);
 	}
 }
 //=============================================================================
@@ -657,10 +707,7 @@ void CResult::SetAlpha(void)
 {
 	for (int nCnt = 0; nCnt < RESULTTYPE_MAX; nCnt++)
 	{
-		/* 明日の僕へ
-				枠は各色保持したまま透明度下げる方法を考えといてください。
-																	今日の僕より*/
-		m_apScene2D[nCnt]->SetCol(DEFAULT_COL_WHITE_ALPHA_HARF);
+		m_apScene2D[nCnt]->SetCol(D3DXCOLOR(m_apScene2D[nCnt]->GetCol().r, m_apScene2D[nCnt]->GetCol().g, m_apScene2D[nCnt]->GetCol().b, DEFAULT_COL_WHITE_ALPHA_HARF.a));
 	}
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{

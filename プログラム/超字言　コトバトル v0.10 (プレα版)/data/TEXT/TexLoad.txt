@@ -109,5 +109,7 @@ DATA = 00086 data/TEXTURE/tutorial/tutorial_operation003.png TOP003
 
 DATA = 00087 data/TEXTURE/Ranking/Effect_1St.png RANKING_EFFECT
 DATA = 00088 data/TEXTURE/Ranking/Callout.png RANKCHARA_CALLOUT
+DATA = 00089 data/TEXTURE/UV/Leaf.jpg RANKING_MESHFIELD
+DATA = 00090 data/TEXTURE/Ranking/audience.png RANKING_AUDIENCE
 
 END_LOAD
