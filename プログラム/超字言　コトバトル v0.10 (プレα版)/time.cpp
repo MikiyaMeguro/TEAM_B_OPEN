@@ -326,9 +326,9 @@ void CTime::Update(void)
 		}
 
 		//フィーバータイム
-		if (m_nTimeCount == 60 * 30
-			|| m_nTimeCount == 60 * 100
-			|| m_nTimeCount == 60 * 150)
+		if (m_nTimeCount == 60 * 10
+			|| m_nTimeCount == 60 * 110
+			|| m_nTimeCount == 60 * 110)
 		{
 			m_bFever = true;
 		}
@@ -386,7 +386,7 @@ void CTime::Update(void)
 					m_pFeverUI[nCntPlayer]->SetPosition(UIPos);
 					if (UIPos.x < -SCALE_UI)
 					{
-						if (nCntPlayer == 1)
+						if (nCntPlayer == 0)
 						{
 							m_nCntUIRepeat++;
 						}
