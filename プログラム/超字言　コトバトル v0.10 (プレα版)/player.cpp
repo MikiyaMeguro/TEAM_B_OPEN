@@ -1272,6 +1272,7 @@ D3DXVECTOR3     CPlayer::GetBulletMuzzle(void)
 void CPlayer::BulletUI(void)
 {
 	D3DXVECTOR3 size = {};
+	D3DXVECTOR3 rot = {};
 	int nType = NULL;
 
 	// 必要なサイズとUIの種類を設定
@@ -1279,21 +1280,25 @@ void CPlayer::BulletUI(void)
 	{	
 		size = D3DXVECTOR3(200.0f, 0.0f, 260.0f);
 		nType = 0;
+		rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	}
 	else if (m_PlayerType == TYPE_REACH)	// プレイヤーがウサギ(マシンガン)の場合
 	{
 		size = D3DXVECTOR3(20.0f, 0.0f, 500.0f);
 		nType = 1;
+		rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	}
 	else if (m_PlayerType == TYPE_BARANCE)	// プレイヤーが犬(ショットガン)の場合
 	{
 		size = D3DXVECTOR3(100.0f, 0.0f, 190.0f);
 		nType = 0;
+		rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	}
 	else if (m_PlayerType == TYPE_POWER)	// プレイヤーがクマ(爆弾)の場合
 	{
 		size = D3DXVECTOR3(70.0f, 0.0f, 70.0f);
 		nType = 2;
+		rot = D3DXVECTOR3(sinf(m_BulletRot.y) * 150.0f, 0.0f, cosf(m_BulletRot.y) * 150.0f);
 	}
 
 	// 弾のUI表示(プレイヤーの角度を取得する)
@@ -1313,7 +1318,7 @@ void CPlayer::BulletUI(void)
 	if (m_pBulletUI != NULL)
 	{
 		m_pBulletUI->SetBulletUI(size, m_BulletRot, nType);
-		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + (sinf(m_BulletRot.y) * 150.0f),  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + (cosf(m_BulletRot.y) * 150.0f)));
+		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + rot.x,  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + rot.z));
 	}
 
 }
