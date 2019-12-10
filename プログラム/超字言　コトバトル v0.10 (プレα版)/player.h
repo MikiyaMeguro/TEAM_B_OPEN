@@ -209,6 +209,7 @@ private:
 	int				GetNearPlayer(void);		//近いプレイヤーを取得
 	void			PlayerAlpha(float fAlpha);
 	void			BulletUI(void);				// 弾発射UI表示
+	void			BulletUIUninit(void);		// 弾発射準備の終了
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX][BODY_MAX];	//パーツ情報
 
