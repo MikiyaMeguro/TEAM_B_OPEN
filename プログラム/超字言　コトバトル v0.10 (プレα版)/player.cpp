@@ -345,7 +345,7 @@ void CPlayer::Update(void)
 					m_bMachineGun = false;
 					m_pWordManager->Reset();
 				}
-				else if (m_pWordManager->Getm_nStock(0) == 99)
+				else if (m_pWordManager->GetStock(0) == 99)
 				{//ゴミモデル用の発射
 					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
 					m_bMachineGun = false;
@@ -1275,39 +1275,55 @@ void CPlayer::BulletUI(void)
 	D3DXVECTOR3 rot = {};
 	int nType = NULL;
 
-	// 必要なサイズとUIの種類を設定
-	if (m_PlayerType == TYPE_SPEED)			// プレイヤーが猫(ミサイル)の場合
-	{	
-		size = D3DXVECTOR3(200.0f, 0.0f, 260.0f);
-		nType = 0;
-		rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	else if (m_PlayerType == TYPE_REACH)	// プレイヤーがウサギ(マシンガン)の場合
+	if (m_pWordManager != NULL)
 	{
-		size = D3DXVECTOR3(20.0f, 0.0f, 500.0f);
-		nType = 1;
-		rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		if (m_pWordManager->GetStock(0) == NOT_NUM)
+		{	// ゴミの場合
+			size = D3DXVECTOR3(20.0f, 0.0f, 200.0f);
+			nType = 1;
+			rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		}
+		else
+		{
+			// 必要なサイズとUIの種類を設定
+			if (m_PlayerType == TYPE_SPEED)			// プレイヤーが猫(ミサイル)の場合
+			{
+				size = D3DXVECTOR3(200.0f, 0.0f, 260.0f);
+				nType = 0;
+				rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+			else if (m_PlayerType == TYPE_REACH)	// プレイヤーがウサギ(マシンガン)の場合
+			{
+				size = D3DXVECTOR3(20.0f, 0.0f, 500.0f);
+				nType = 1;
+				rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+			else if (m_PlayerType == TYPE_BARANCE)	// プレイヤーが犬(ショットガン)の場合
+			{
+				size = D3DXVECTOR3(100.0f, 0.0f, 190.0f);
+				nType = 0;
+				rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			}
+			else if (m_PlayerType == TYPE_POWER)	// プレイヤーがクマ(爆弾)の場合
+			{
+				size = D3DXVECTOR3(70.0f, 0.0f, 70.0f);
+				nType = 2;
+				rot = D3DXVECTOR3(sinf(m_BulletRot.y) * 150.0f, 0.0f, cosf(m_BulletRot.y) * 150.0f);
+			}
+		}
 	}
-	else if (m_PlayerType == TYPE_BARANCE)	// プレイヤーが犬(ショットガン)の場合
-	{
-		size = D3DXVECTOR3(100.0f, 0.0f, 190.0f);
-		nType = 0;
-		rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-	else if (m_PlayerType == TYPE_POWER)	// プレイヤーがクマ(爆弾)の場合
-	{
-		size = D3DXVECTOR3(70.0f, 0.0f, 70.0f);
-		nType = 2;
-		rot = D3DXVECTOR3(sinf(m_BulletRot.y) * 150.0f, 0.0f, cosf(m_BulletRot.y) * 150.0f);
-	}
+	
 
 	// 弾のUI表示(プレイヤーの角度を取得する)
 	if (m_pBulletUI == NULL)
 	{
-		char *capName[2] = { "LINE", "AVOID" };
+		char *capName[2] = { "BulletUI", "BulletUIEx" };
 		int nNameNum = 0;
 
-		if (m_PlayerType == TYPE_POWER) { nNameNum = 1; }
+		if (m_pWordManager != NULL && m_pWordManager->GetStock(0) != NOT_NUM)
+		{
+			if (m_PlayerType == TYPE_POWER) { nNameNum = 1; }
+		}
 
 		m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName[nNameNum]);
 		m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
@@ -1317,6 +1333,15 @@ void CPlayer::BulletUI(void)
 
 	if (m_pBulletUI != NULL)
 	{
+		char *capName[2] = { "BulletUI", "AVOID" };
+		int nNameNum = 0;
+
+		if (m_pWordManager != NULL && m_pWordManager->GetStock(0) != NOT_NUM)
+		{
+			if (m_PlayerType == TYPE_POWER) { nNameNum = 1; }
+		}
+
+		m_pBulletUI->BindTexture(capName[nNameNum]);
 		m_pBulletUI->SetBulletUI(size, m_BulletRot, nType);
 		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + rot.x,  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + rot.z));
 	}

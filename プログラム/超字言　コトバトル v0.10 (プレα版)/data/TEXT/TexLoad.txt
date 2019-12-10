@@ -119,7 +119,8 @@ DATA = 00094 data/TEXTURE/tutorial/tutorialflowtext000.png TUROFLOWTEXT000
 
 DATA = 00095 data/TEXTURE/tutorial/tutorialfloor.png TUROFLOWFLOOR
 
-DATA = 00096 data/TEXTURE/Line.png LINE
+DATA = 00096 data/TEXTURE/Game/bulletUI.png BulletUI
+DATA = 00096 data/TEXTURE/Game/explosion.png BulletUIEx
 
 
 END_LOAD
