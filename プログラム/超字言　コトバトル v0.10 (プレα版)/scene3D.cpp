@@ -26,6 +26,8 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_TexUV = D3DXVECTOR2(1.0f, 1.0f);
 	m_scene3dType = SCENE3DTYPE_NORMAL;
+	m_bAlphaTest = false;
+	m_bLigntEffect = false;
 }
 
 //=============================================================================
@@ -134,12 +136,18 @@ void CScene3D::Draw(void)
 
 	D3DXMATRIX mtxRot, mtxTrans, mtxView;		// 計算用マトリックス
 
-	// ライト影響受けない
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	////// アルファテストの設定
-	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	//pDevice->SetRenderState(D3DRS_ALPHAREF, 1);
-	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	if (m_bLigntEffect == false)
+	{
+		// ライト影響
+		pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	}
+	if (m_bAlphaTest == true)
+	{
+		// アルファテストの設定
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+		pDevice->SetRenderState(D3DRS_ALPHAREF, 1);
+		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	}
 
 	if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 	{//	ビルボード　			加算合成ありビルボードエフェクト
@@ -219,10 +227,16 @@ void CScene3D::Draw(void)
 
 		}
 	}
-	// ライト影響受けないk
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	// アルファテストを無効
-	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	if (m_bLigntEffect == false)
+	{
+		// ライト影響
+		pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	}
+	if (m_bAlphaTest == true)
+	{
+		// アルファテストを無効
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	}
 }
 //=============================================================================
 // 高さを取得

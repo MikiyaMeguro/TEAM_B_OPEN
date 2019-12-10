@@ -31,10 +31,9 @@ public:
 	void Update(void);
 
 	static void SetLight(int nNum,D3DLIGHT9 light) { m_light[nNum] = light; }
-
+	static D3DLIGHT9 GetLight(int nNum) { return m_light[nNum]; }
 private:
 	static D3DLIGHT9 m_light[MAX_LIGHT];	// ƒ‰ƒCƒg‚Ìî•ñ
-	static D3DLIGHT9 m_SpotLight;
 };
 
 #endif

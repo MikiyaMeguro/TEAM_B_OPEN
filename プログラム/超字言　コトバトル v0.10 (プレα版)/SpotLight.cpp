@@ -38,6 +38,7 @@ CSpotLight *CSpotLight::Create(int nNum, D3DXVECTOR3 pos, D3DXVECTOR3 Dir, D3DXC
 		pSpot = new CSpotLight;
 		if (pSpot != NULL)
 		{
+			pSpot->Init();
 			pSpot->SettingLight(nNum,pos, Dir, Diffuse, Ambient, Specular, fAttenuation0, fAttenuation1, fAttenuation2, fRange, fFalloff, fTheta, fPhi, bSwitch);
 		}
 	}
@@ -56,7 +57,6 @@ void CSpotLight::Init(void)
 //=============================================================================
 void CSpotLight::Uninit(void)
 {
-	CLight::Uninit();
 }
 
 //=============================================================================
@@ -132,6 +132,7 @@ void CSpotLight::SettingLight(int nNum, D3DXVECTOR3 pos, D3DXVECTOR3 Dir, D3DXCO
 //=============================================================================
 void CSpotLight::SetLightEnable(int nNum, bool bEnable)
 {
+	D3DLIGHT9 pLight = CLight::GetLight(nNum);
 	// デバイスの取得
 	CRenderer *pRenderer;
 	pRenderer = CManager::GetRenderer();
@@ -140,4 +141,6 @@ void CSpotLight::SetLightEnable(int nNum, bool bEnable)
 	m_bEnable = bEnable;
 
 	pDevice->LightEnable(nNum, m_bEnable);
+	pDevice->SetLight(nNum, &pLight);
+
 }
