@@ -47,6 +47,10 @@ public:
 	void SaveHeight(void);												// 高さのセーブ
 	void LoadHeight(void);												// 高さのロード
 
+	void BindTexture(LPDIRECT3DTEXTURE9 pTexture);
+	void BindTexture(LPCSTR TexTag);
+
+
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;									// テクスチャへのポインタ
 	LPDIRECT3DINDEXBUFFER9	m_pIdxBuff;									// インデックスバッファへのポインタ

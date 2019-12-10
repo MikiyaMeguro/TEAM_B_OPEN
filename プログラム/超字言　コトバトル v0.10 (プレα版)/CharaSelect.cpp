@@ -32,6 +32,7 @@ CScene2D *CCharaSelect::m_apSelect2D[MAX_CHARASELECT] = {};
 CScene2D *CCharaSelect::m_apConfirm2D = NULL;
 CCharaSelCursol *CCharaSelect::m_apCursol[MAX_PLAYER] = {};
 bool CCharaSelect::m_bCharaCard = false;
+bool CCharaSelect::m_bBackModeColl[MAX_PLAYER] = { false,false ,false ,false };
 //=============================================================================
 //	コンストラクタ
 //=============================================================================
@@ -57,7 +58,6 @@ CCharaSelect::CCharaSelect()
 		m_fFlashAlpha[nCnt] = 0.0f;
 		m_fGaugeSizeX[nCnt] = 0.0f;
 		m_fMaxGaugeX[nCnt]= 0.0f;
-		m_bBackMode[nCnt] = false;
 	}
 	for (int nCnt = 0; nCnt < MAX_CHARASELECT; nCnt++)
 	{
@@ -65,7 +65,6 @@ CCharaSelect::CCharaSelect()
 		m_fCardWidth[nCnt][0] = m_fCharaCardPro_FinishWH[0];
 		m_fCardWidth[nCnt][1] = m_fCharaCardPro_FinishWH[1];
 	}
-	this->m_nId = 0;
 }
 
 //=============================================================================
@@ -174,6 +173,9 @@ void CCharaSelect::Update(void)
 
 	/* 確定ポリのフラッシュ演出 */
 	if (m_bCnfFlash == true) { FlashConf(); }
+
+	/* 戻るポリゴンの演出 */
+	SetBackModeTex();
 #ifdef _DEBUG
 	CDebugProc::Print("c", "キャラセレクト");
 #endif
@@ -620,9 +622,9 @@ void CCharaSelect::DecisionCharactor(CFade *pFade, CManager *pManager, int opera
 //=============================================================================
 // 戻るポリゴンのテクスチャ座標設定
 //=============================================================================
-void CCharaSelect::SetBackModeTex(bool Set)
+void CCharaSelect::SetBackModeTex(void)
 {
-	if (Set == true)
+	if (m_bBackModeColl[0] == true|| m_bBackModeColl[1] == true|| m_bBackModeColl[2] == true|| m_bBackModeColl[3] == true)
 	{
 		m_apScene2D[3]->SetTex(D3DXVECTOR2(0.0f, 0.5f), D3DXVECTOR2(1.0f, 1.0f));
 	}

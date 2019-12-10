@@ -999,6 +999,276 @@ MODELSET						# 茂み
 	BUSH = 3				#草番号
 END_MODELSET
 
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 0.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 -40.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 -80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 -80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 80.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 240.0 200.0 -120.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 280.0 200.0 -120.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 3				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 20.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 60.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 100.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 140.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 180.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 220.0 200.0 -350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 -310.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 -270.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 4				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 20.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 60.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 100.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 140.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 180.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 220.0 200.0 320.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.5 2.0
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
+MODELSET						# 茂み
+	TYPE = 36
+	POS = 120.0 200.0 240.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 2.5 1.5 1.5
+	COLLISION = 13
+	GIMMICK = 1					# 配置の種類を決める
+	BUSH = 5				#草番号
+END_MODELSET
+
 -----------------------------------------------------------
 
 MODELSET						# 床

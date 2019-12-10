@@ -66,7 +66,19 @@ CMeshField *CMeshField::Create(D3DXVECTOR3 pos)
 
 	return pMeshField;
 }
+//=============================================================================
+// テクスチャの設定
+//=============================================================================
+void CMeshField::BindTexture(LPDIRECT3DTEXTURE9 pTexture)
+{
+	//持ってきた情報を代入
+	m_pTexture = pTexture;
+}
 
+void CMeshField::BindTexture(LPCSTR TexTag)
+{
+	m_pTexture = CTexture::GetTexture(TexTag);
+}
 //=============================================================================
 // 初期化処理
 //=============================================================================

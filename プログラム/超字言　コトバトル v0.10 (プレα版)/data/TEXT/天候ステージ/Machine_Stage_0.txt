@@ -1773,22 +1773,353 @@ END_MODELSET
 
 MODELSET						# 草
 	TYPE = 39
-	POS = 185 0.0 487.0
+	POS = 185 0.0 527.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 0.15 0.15 0.15
+	SCALE = 0.2 0.2 0.2
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
------------------------------------------------------------
-
-MODELSET						# 茂み
-	TYPE = 36
+MODELSET						# 草
+	TYPE = 39
 	POS = -460.0 0.0 -160.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 1.5 1.5 1.5
-	COLLISION = 13
+	SCALE = 0.35 0.35 0.35
+	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = -300.0 0.0 530.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = 60.0 0.0 500.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 413.0 0.0 525.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# うさ
+	TYPE = 39					# モデルタイプ
+	POS = 143.0 0.0 553.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# くさ
+	TYPE = 39					# モデルタイプ
+	POS = -80.0 0.0 496.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 280.0 0.0 618.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# ｋすあ
+	TYPE = 39					# モデルタイプ
+	POS = -180.0 0.0 563.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# あすｋ
+	TYPE = 39					# モデルタイプ
+	POS = -534.0 0.0 553.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# あｓく
+	TYPE = 39					# モデルタイプ
+	POS = 528.0 0.0 523.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# あｓく
+	TYPE = 39					# モデルタイプ
+	POS = -512.0 0.0 573.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# くさ
+	TYPE = 39					# モデルタイプ
+	POS = -484.0 0.0 291.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# かうｓ
+	TYPE = 39					# モデルタイプ
+	POS = -501.0 0.0 193.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# ｋすあ
+	TYPE = 39					# モデルタイプ
+	POS = -399.0 0.0 513.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# くさ
+	TYPE = 39					# モデルタイプ
+	POS = -522.0 0.0 103.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = -469.0 0.0 -231.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = -459.0 0.0 3.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = -489.0 0.0 -88.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = -502.0 0.0 -383.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1					# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = -469.0 0.0 -302.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.24 0.24 0.24
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = -264.0 0.0 486.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = -38.0 0.0 567.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 209.0 0.0 526.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = 338.0 0.0 538.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = 566.0 0.0 206.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 401.0 0.0 509.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 444.0 0.0 133.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# kスあ
+	TYPE = 39					# モデルタイプ
+	POS = 441.0 0.0 133.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 431.0 0.0 248.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 451.0 0.0 333.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# クsあ
+	TYPE = 39					# モデルタイプ
+	POS = 481.0 0.0 493.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 451.0 0.0 24.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# クsあ
+	TYPE = 39					# モデルタイプ
+	POS = 536.0 0.0 -68.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 546.0 0.0 -171.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 546.0 0.0 -258.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 553.0 0.0 -378.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 466.0 0.0 -30.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
+END_MODELSET
+
+MODELSET						# 草
+	TYPE = 39					# モデルタイプ
+	POS = 536.0 0.0 137.0		# 位置情報
+	ROT = 0.00 0.00 0.00		# 回転情報
+	SCALE = 0.2 0.2 0.2
+	COLLISION = 0				# コリジョンタイプ情報
+	GIMMICK = 1				# ギミック情報
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
