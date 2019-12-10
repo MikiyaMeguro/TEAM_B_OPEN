@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 47
+NUM_MODEL = 49
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -66,5 +66,7 @@ MODEL_FILENAME = data/MODEL/StageOBJ/StegeGreen.x"			#45 ステージ周り
 
 MODEL_FILENAME = data/MODEL/Ranking/Stadium.x"				#46 ランキングのスタジアム壁
 
+MODEL_FILENAME = data/MODEL/StageOBJ/SnowBush.x"			#47 雪草
+MODEL_FILENAME = data/MODEL/StageOBJ/Pole.x"				#48 ポール
 
 END_SCRIPT		# この行は絶対消さないこと！

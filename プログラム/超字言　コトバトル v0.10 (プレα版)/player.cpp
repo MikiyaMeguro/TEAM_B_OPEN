@@ -19,7 +19,7 @@
 #include "bullet.h"
 #include "explosion.h"
 #include "CameraManager.h"
-
+#include "scene3D.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -62,6 +62,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_bMachineGun = false;
 	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nMachineGunTime = 0;
+	m_pBulletUI = NULL;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
@@ -199,6 +200,8 @@ void CPlayer::Uninit(void)
 		}
 	}
 
+	if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }
+
 	// 文字管理クラスの削除
 	if (m_pWordManager != NULL)
 	{
@@ -313,13 +316,18 @@ void CPlayer::Update(void)
 					BulletRot.y = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
 					//発射方向保持
 					m_BulletRot.y = BulletRot.y;
+
+					BulletUI();		// 弾発射表示
 				}
+
 				m_bAssist = false;//セルフエイムモードに設定
 			}
 			else
 			{
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_bAssist = true;
+
+				if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }
 			}
 
 			//マシンガン発射
@@ -1256,4 +1264,56 @@ D3DXVECTOR3     CPlayer::GetBulletMuzzle(void)
 		}
 	}
 	return D3DXVECTOR3(0.0f,0.0f,0.0f);
+}
+
+//=============================================================================
+// 弾発射UI表示の処理
+//=============================================================================
+void CPlayer::BulletUI(void)
+{
+	D3DXVECTOR3 size = {};
+	int nType = NULL;
+
+	// 必要なサイズとUIの種類を設定
+	if (m_PlayerType == TYPE_SPEED)			// プレイヤーが猫(ミサイル)の場合
+	{	
+		size = D3DXVECTOR3(200.0f, 0.0f, 260.0f);
+		nType = 0;
+	}
+	else if (m_PlayerType == TYPE_REACH)	// プレイヤーがウサギ(マシンガン)の場合
+	{
+		size = D3DXVECTOR3(20.0f, 0.0f, 500.0f);
+		nType = 1;
+	}
+	else if (m_PlayerType == TYPE_BARANCE)	// プレイヤーが犬(ショットガン)の場合
+	{
+		size = D3DXVECTOR3(100.0f, 0.0f, 190.0f);
+		nType = 0;
+	}
+	else if (m_PlayerType == TYPE_POWER)	// プレイヤーがクマ(爆弾)の場合
+	{
+		size = D3DXVECTOR3(70.0f, 0.0f, 70.0f);
+		nType = 2;
+	}
+
+	// 弾のUI表示(プレイヤーの角度を取得する)
+	if (m_pBulletUI == NULL)
+	{
+		char *capName[2] = { "LINE", "AVOID" };
+		int nNameNum = 0;
+
+		if (m_PlayerType == TYPE_POWER) { nNameNum = 1; }
+
+		m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName[nNameNum]);
+		m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
+		m_pBulletUI->SetRot(m_BulletRot);
+		m_pBulletUI->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	}
+
+	if (m_pBulletUI != NULL)
+	{
+		m_pBulletUI->SetBulletUI(size, m_BulletRot, nType);
+		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + (sinf(m_BulletRot.y) * 150.0f),  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + (cosf(m_BulletRot.y) * 150.0f)));
+	}
+
 }
