@@ -34,7 +34,7 @@
 #define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
 #define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))	// デフォルトサイズ
 #define SCALE_CHANGE_TIME	(10)								// スケール変化の時間
-#define SCALE_UI			(200)								// UIの大きさ
+#define SCALE_UI			(100)								// UIの大きさ
 
 //=============================================================================
 //	静的メンバ変数
@@ -114,6 +114,10 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nStageNum = 0;
 	m_nCntUIRepeat = 0;
 	m_bStopUI = false;
+	m_pFeverBillBoard = NULL;
+	m_nUIScaleCounter = 0;
+	m_fUIScale = 0;
+	m_fUIAddScale = 0;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -137,6 +141,7 @@ HRESULT CTime::Init(void)
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
 	m_nTimeOne = 3;
 	m_StageCounter = 0;
+	m_fUIAddScale = 2.0f;
 
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
@@ -163,11 +168,16 @@ HRESULT CTime::Init(void)
 	// Timeのロゴ
 	CSceneBillBoard *pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 20.0f, 12.0f, "TIME");
 	pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
-
+	//ビルボード設定
 	if (m_pColon == NULL)
 	{
 		m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-7.0f, 85.0f, 0.0f), 5.0f, 8.0f,"COLON");
 		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+	if (m_pFeverBillBoard == NULL)
+	{
+		m_pFeverBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(0.0f, 88.0f, 0.0f), 80.0f, 80.0f, "COUNTDOWN0");
+		m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 	}
 
 	//カウントダウン生成
@@ -212,10 +222,8 @@ HRESULT CTime::Init(void)
 		//フィーバーの位置設定
 		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI, SCALE_UI);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI, SCALE_UI);
-		m_pFeverUI[2] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pFeverUI[2]->SetWidthHeight(SCALE_UI, SCALE_UI);
 	}
 	if (m_nNumPlayer == 4)
 	{
@@ -231,12 +239,8 @@ HRESULT CTime::Init(void)
 		//フィーバーの位置設定
 		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI, SCALE_UI);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "COUNTDOWN0");
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI, SCALE_UI);
-		m_pFeverUI[2] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pFeverUI[2]->SetWidthHeight(SCALE_UI, SCALE_UI);
-		m_pFeverUI[3] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pFeverUI[3]->SetWidthHeight(SCALE_UI, SCALE_UI);
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -275,6 +279,12 @@ void CTime::Uninit(void)
 		m_pColon = NULL;
 	}
 
+	if (m_pFeverBillBoard != NULL)
+	{
+		m_pFeverBillBoard->Uninit();
+		m_pFeverBillBoard = NULL;
+	}
+
 	for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
 	{
 		if (m_pScene2D[nCnt] != NULL)
@@ -282,13 +292,17 @@ void CTime::Uninit(void)
 			m_pScene2D[nCnt]->Uninit();
 			m_pScene2D[nCnt] = NULL;
 		}
+	}
 
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	{
 		if (m_pFeverUI[nCnt] != NULL)
 		{
 			m_pFeverUI[nCnt]->Uninit();
 			m_pFeverUI[nCnt] = NULL;
 		}
 	}
+
 
 	Release();
 }
@@ -312,8 +326,9 @@ void CTime::Update(void)
 		}
 
 		//フィーバータイム
-		if (m_nTimeCount == 60 * 10
-			|| m_nTimeCount == 60 * 60)
+		if (m_nTimeCount == 60 * 30
+			|| m_nTimeCount == 60 * 100
+			|| m_nTimeCount == 60 * 150)
 		{
 			m_bFever = true;
 		}
@@ -327,6 +342,9 @@ void CTime::Update(void)
 				m_bFever = false;
 				m_nFeverTime = 0;
 				m_nCntUIRepeat = 0;
+				m_fUIAddScale = 2.0f;
+				m_nUIScaleCounter = 0;
+				m_fUIScale = 0;
 
 				if (m_nNumPlayer == 1)
 				{
@@ -338,25 +356,25 @@ void CTime::Update(void)
 					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
 				}
 				if (m_nNumPlayer == 3)
+
 				{
 					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
-					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
-					m_pFeverUI[2]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
 				}
 				if (m_nNumPlayer == 4)
 				{
 					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
-					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, 0.0f));
-					m_pFeverUI[2]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
-					m_pFeverUI[3]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, 0.0f));
 				}
+
+				m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 			}
 		}
 
 		//フィーバータイムのUI位置更新
 		if (m_bFever == true)
 		{
-			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+			for (int nCntPlayer = 0; nCntPlayer < 2; nCntPlayer++)
 			{
 				if (m_pFeverUI[nCntPlayer] != NULL)
 				{
@@ -380,6 +398,16 @@ void CTime::Update(void)
 						}
 					}
 				}
+			}
+			//ビルボード拡大縮小
+			m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_nUIScaleCounter++;
+			m_fUIScale += m_fUIAddScale;
+			m_pFeverBillBoard->SetBillboard(D3DXVECTOR3(0.0f, 88.0f, 0.0f), 80.0f + m_fUIScale, 80.0f + m_fUIScale);
+			if (m_nUIScaleCounter == 30)
+			{
+				m_fUIAddScale *= -1;
+				m_nUIScaleCounter = 0;
 			}
 		}
 
@@ -459,6 +487,13 @@ void CTime::Draw(void)
 	if (m_pColon != NULL)
 	{
 		m_pColon->Draw();
+	}
+	if (m_pFeverBillBoard != NULL)
+	{
+		if (m_bFever == true)
+		{
+			m_pFeverBillBoard->Draw();
+		}
 	}
 }
 
