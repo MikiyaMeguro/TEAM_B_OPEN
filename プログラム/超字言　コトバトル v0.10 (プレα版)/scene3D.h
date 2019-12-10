@@ -71,6 +71,9 @@ public:
 	void SetAlphaTest(bool bTest) { m_bAlphaTest = bTest; }
 	void SetLightEffect(bool bLight) { m_bLigntEffect = bLight; }
 
+	void SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType);	// ’e‚ÌUI•\Ž¦—p 
+
+
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
 	float GetSizeY(void) { return m_size.y; }

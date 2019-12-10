@@ -94,10 +94,13 @@ private:
 	//フィーバータイム用
 	int							m_nFeverTime;					// フィーバータイムの経過時間
 	static bool					m_bFever;						// フィーバーフラグ
-	CScene2D					*m_pFeverUI[PLAYER_MAX];		// 2Dポリゴンへのポインタ
+	CScene2D					*m_pFeverUI[2];				// 2Dポリゴンへのポインタ
 	bool						m_bStopUI;						// UIを止めるフラグ
 	int							m_nCntUIRepeat;					// UI何回繰り返したか
-
+	CSceneBillBoard				*m_pFeverBillBoard;				// UIビルボード
+	int							m_nUIScaleCounter;				//スケールのカウンター
+	float						m_fUIScale;						//スケールの量
+	float						m_fUIAddScale;					//スケールの足す量
 
 	// ステージ変更用
 	float						m_fWarningCol;					// 色変化

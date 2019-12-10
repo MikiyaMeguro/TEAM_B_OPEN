@@ -33,6 +33,7 @@
 #include "tube.h"
 #include "SetWord.h"
 #include "meshField.h"
+#include "point.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -53,7 +54,7 @@ CResult *CManager::m_pResult = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CInputXPad *CManager::m_pXInput[MAX_PLAYER] = {};
-CManager::MODE CManager::m_mode = CManager::MODE_RESULT;//ゲーム起動時のモード
+CManager::MODE CManager::m_mode = CManager::MODE_TITLE;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
 //=============================================================================
@@ -911,4 +912,20 @@ CMeshField* CManager::GetMeshField(void)
 	}
 
 	return NULL;
+}
+
+CPoint* CManager::GetPoint(int nNum)
+{
+	switch (m_mode)
+	{
+	case MODE_GAME:
+		return CGame::GetPoint(nNum);
+		break;
+	case MODE_TUTORIAL:
+		return CTutorial::GetPoint(nNum);
+		break;
+	}
+
+	return NULL;
+
 }
