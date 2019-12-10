@@ -475,10 +475,13 @@ void CModelBullet::Update(void)
 	}
 
 	//“–‚½‚è”»’è
-	if (SimpleCollision())
+	if (m_Prop != TYPE_BOMB)
 	{
-		Uninit();//“–‚½‚Á‚Ä‚¢‚½‚çÁ‚·
-		return;
+		if (SimpleCollision())
+		{
+			Uninit();//“–‚½‚Á‚Ä‚¢‚½‚çÁ‚·
+			return;
+		}
 	}
 
 	//‘Ì—Í”»’è

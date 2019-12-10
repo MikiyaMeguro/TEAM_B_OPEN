@@ -42,6 +42,7 @@ class CPlayer;
 class CTube;
 class CSetWord;
 class CMeshField;
+class CPoint;
 //=============================================================================
 // É}ÉNÉç
 //=============================================================================
@@ -128,7 +129,7 @@ public:
 	static CTube* GetTube(int nID);
 	static CSetWord* GetWordCreate(void);
 	static CMeshField* GetMeshField(void);
-
+	static CPoint* GetPoint(int nNum);
 private:
 	static CRenderer *m_pRenderer;
 	static CInputKeyboard *m_pInputKeyboard;
