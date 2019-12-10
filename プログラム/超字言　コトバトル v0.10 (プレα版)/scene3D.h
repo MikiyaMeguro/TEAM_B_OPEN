@@ -69,6 +69,8 @@ public:
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
 	void SetTexUV(D3DXVECTOR2 TexUV) { m_TexUV = TexUV; }
 
+	void SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType);	// ’e‚ÌUI•\Ž¦—p 
+
 
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
 	D3DXVECTOR3 GetRot(void) { return m_rot; }
