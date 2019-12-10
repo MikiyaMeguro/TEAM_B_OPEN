@@ -327,7 +327,8 @@ void CPlayer::Update(void)
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_bAssist = true;
 
-				if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }
+				//if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }
+				BulletUIUninit();
 			}
 
 			//マシンガン発射
@@ -1328,12 +1329,11 @@ void CPlayer::BulletUI(void)
 		m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName[nNameNum]);
 		m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
 		m_pBulletUI->SetRot(m_BulletRot);
-		m_pBulletUI->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 	}
 
 	if (m_pBulletUI != NULL)
 	{
-		char *capName[2] = { "BulletUI", "AVOID" };
+		char *capName[2] = { "BulletUI", "BulletUIEx" };
 		int nNameNum = 0;
 
 		if (m_pWordManager != NULL && m_pWordManager->GetStock(0) != NOT_NUM)
@@ -1344,6 +1344,31 @@ void CPlayer::BulletUI(void)
 		m_pBulletUI->BindTexture(capName[nNameNum]);
 		m_pBulletUI->SetBulletUI(size, m_BulletRot, nType);
 		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + rot.x,  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + rot.z));
+		m_pBulletUI->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 	}
+}
 
+//=============================================================================
+// 弾発射UI表示の処理
+//=============================================================================
+void CPlayer::BulletUIUninit(void)
+{
+	if (m_pBulletUI != NULL)
+	{
+		// 透明度の取得
+		float ColA = m_pBulletUI->Getcol().a;
+
+		// 透明度を下げる
+		ColA -= 0.03f;
+
+		m_pBulletUI->SetColor(D3DXCOLOR(m_pBulletUI->Getcol().r, m_pBulletUI->Getcol().g, m_pBulletUI->Getcol().b, ColA));
+
+		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x), m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z));
+
+		if (ColA < 0.3f)
+		{// 指定した値より低い場合
+			m_pBulletUI->Uninit();
+			m_pBulletUI = NULL;
+		}
+	}
 }
