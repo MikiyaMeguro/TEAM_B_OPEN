@@ -111,6 +111,7 @@ void CTexture::Unload(void)
 	//テクスチャ解放
 	ReleaseAll();
 
+	//テクスチャ配列の初期化
 	m_TexData.clear();
 	m_TexData.shrink_to_fit();
 }

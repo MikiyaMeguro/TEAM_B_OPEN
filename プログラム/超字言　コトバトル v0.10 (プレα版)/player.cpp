@@ -708,11 +708,9 @@ bool CPlayer::CollisionDamageObj(void)
 					if (pBullet->GetType() == C3DBullet::TYPE_MODEL)
 					{	// モデルの場合はポイント加算
 						CPoint *pPoint = NULL;
-						if (CManager::GetMode() == CManager::MODE_GAME) { pPoint = CGame::GetPoint(pBullet->GetID()); }
-						if (CManager::GetMode() == CManager::MODE_TUTORIAL) { pPoint = CTutorial::GetPoint(pBullet->GetID()); }
+						pPoint = CManager::GetPoint(pBullet->GetID());
 
 						CModelBullet *pModelBullet = ((CModelBullet*)pBullet);
-
 
 						int nPoint = 0;
 						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
