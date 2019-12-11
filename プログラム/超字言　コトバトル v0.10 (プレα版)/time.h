@@ -62,7 +62,7 @@ private:
 	void CountDown(void);				// カウントダウン
 
 
-	CBillNumber *m_apNumber[TIME_MAX];	// ナンバーへのポインタ
+	CBillNumber *m_apNumber[TIME_MAX];			// ナンバーへのポインタ
 	static int				m_nTime;			// 時間
 	static int				m_nTimeCount;		// 時間のカウンタ
 	static int				m_nTimeOld;
@@ -76,6 +76,7 @@ private:
 	bool					m_bStageCreate;		// ステージ生成時の制限
 	D3DXVECTOR3				m_pos;				// 位置
 	CSceneBillBoard			*m_pColon;			// コロン
+	CSceneBillBoard			*m_pLogo;			// コロン
 
 	static bool m_bCountFlag;			//時間をカウントするか
 

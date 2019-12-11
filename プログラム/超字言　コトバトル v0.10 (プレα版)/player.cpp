@@ -108,6 +108,9 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID,PLAYER_TYPE PlayerType, D3DXVECTOR3 rot)
 {
+	//キャラのID設定
+	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+	m_PlayerType = PlayerType;
 	//キャラ情報クラス生成
 	if (m_pCharactorMove == NULL)
 	{
@@ -117,9 +120,6 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 		}
 	}
 
-	//キャラのID設定
-	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
-	m_PlayerType = PlayerType;
 
 	// 文字管理クラス生成
 	if (m_pWordManager == NULL)
@@ -732,12 +732,19 @@ bool CPlayer::CollisionDamageObj(void)
 						CModelBullet *pModelBullet = ((CModelBullet*)pBullet);
 
 						int nPoint = 0;
-						if (pModelBullet->GetType() == CModelBullet::TYPE_NORMAL) { nPoint = 1; }
-						else if (pModelBullet->GetType() == CModelBullet::TYPE_MACHINEGUN) { nPoint = 1; }
-						else if (pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN
-							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_MEDIUM
-							||pModelBullet->GetType() == CModelBullet::TYPE_SHOTGUN_SLOW) { nPoint = 1; }
-						else if (pModelBullet->GetType() != CModelBullet::TYPE_NORMAL) { nPoint = 3; }
+						switch (pModelBullet->GetType())
+						{//当たった弾のタイプに応じて得点を変える
+						case CModelBullet::TYPE_NORMAL:			   nPoint = 1;			break;//ゴミは１点
+						case CModelBullet::TYPE_MACHINEGUN:		   nPoint = 1;			break;//マシンガンは1点(×6)
+						case CModelBullet::TYPE_SHOTGUN:		   nPoint = 1;			break;//ショットガンは1点(×6)
+						case CModelBullet::TYPE_SHOTGUN_MEDIUM:    nPoint = 1;			break;//同上
+						case CModelBullet::TYPE_SHOTGUN_SLOW:      nPoint = 1;			break;//同上
+						case CModelBullet::TYPE_MISSILE_CENTER:    nPoint = 2;			break;//ミサイルは中央は2点
+						case CModelBullet::TYPE_MISSILE_SIDE:      nPoint = 1;			break;//端は1点
+						case CModelBullet::TYPE_BOMB:		       nPoint = 4;			break;//爆弾は4点
+						default:								   nPoint = 3;			break;//それ以外は3点
+						}
+
 						//フィーバータイム時に得点２倍
 						if (CTime::GetFeverFlag() == true)
 						{
@@ -792,7 +799,7 @@ bool CPlayer::CollisionDamageObj(void)
 				if (sqrtf(X + Y + Z) < fObjSize)
 				{
 					//吹き飛ばし
-					DamageReaction(20.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
+					DamageReaction(10.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
 					return true;
 				}
 
@@ -1331,7 +1338,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 			}
 		}
 	}
-	
+
 
 	// 弾のUI表示(プレイヤーの角度を取得する)
 	if (m_pBulletUI == NULL)
@@ -1345,6 +1352,8 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 		}
 
 		m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName[nNameNum]);
+		m_pBulletUI->SetScene3DType(CScene3D::SCENE3DTYPE_ADDSYNTHESIS);
+		m_pBulletUI->SetAlphaTest(true);
 		m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
 		m_pBulletUI->SetRot(rot);
 	}

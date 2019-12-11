@@ -20,10 +20,15 @@
 // マクロ定義
 //=============================================================================
 #define CENTER_WIDTH		(SCREEN_WIDTH / 2)				// Xの中心座標
-#define TIMER_SPACE			(15.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_SPACE1P2P		(18.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_SPACE3P4P		(38.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_WIDTH1P2P		(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_WIDTH3P4P		(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_HEIGHT1P2P	(20.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_HEIGHT3P4P	(20.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
 #define GAME_TIME			(130)							// ゲーム開始時の時間
-#define GAME_TIME_MAX		(9)							// ゲームの時間最大数
+#define GAME_TIME_MAX		(9)								// ゲームの時間最大数
 #define POWER_X				(10)
 #define TIME_POS_1P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 70.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
@@ -33,10 +38,12 @@
 
 #define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
 #define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))	// デフォルトサイズ
+#define DEFAULT_SIZE1P2P	(D3DXVECTOR3(12.0f, 20.0f, 0.0f))	// デフォルトサイズ
+#define DEFAULT_SIZE3P4P	(D3DXVECTOR3(22.0f, 30.0f, 0.0f))	// デフォルトサイズ
 #define SCALE_CHANGE_TIME	(10)								// スケール変化の時間
-#define SCALE_UI			(100)								// UIの大きさ
-#define SCALE_UI_WIDTH		(180)								// UIの大きさ
-
+#define SCALE_UI			(150)								// UIの大きさ
+#define SCALE_UI_WIDTH		(250)								// UIの大きさ
+#define FEVER_COLOR			(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f))
 //=============================================================================
 //	静的メンバ変数
 //=============================================================================
@@ -149,35 +156,68 @@ HRESULT CTime::Init(void)
 		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
 		{	// タイマー初期設定
 			m_apNumber[nCntTime] = new CBillNumber;
+			float Space = 0.0f;
+			if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+			{
+				Space = TIMER_SPACE1P2P;
+			}
+			else
+			{
+				Space = TIMER_SPACE3P4P;
+			}
+
+
 			if (nCntTime < 2)
 			{	// ３桁まで
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3((m_pos.x - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
-				m_apNumber[nCntTime]->SetPos(D3DXVECTOR3((m_pos.x - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
+				m_apNumber[nCntTime]->Init(D3DXVECTOR3((m_pos.x - Space * nCntTime), m_pos.y, m_pos.z));
+				m_apNumber[nCntTime]->SetPos(D3DXVECTOR3((m_pos.x - Space * nCntTime), m_pos.y, m_pos.z));
 			}
 			else if (nCntTime == 2)
 			{	// 3桁目
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3(((m_pos.x - 10.0f) - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
-				m_apNumber[nCntTime]->SetPos(D3DXVECTOR3(((m_pos.x - 10.0f) - TIMER_SPACE * nCntTime), m_pos.y, m_pos.z));
+				m_apNumber[nCntTime]->Init(D3DXVECTOR3(((m_pos.x - 10.0f) - Space * nCntTime), m_pos.y, m_pos.z));
+				m_apNumber[nCntTime]->SetPos(D3DXVECTOR3(((m_pos.x - 10.0f) - Space * nCntTime), m_pos.y, m_pos.z));
 			}
-
-			m_apNumber[nCntTime]->SetSize(D3DXVECTOR3(10.0f, 15.0f, 0.0f));
+			if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+			{
+				m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE1P2P);
+			}
+			else
+			{
+				m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE3P4P);
+			}
 		}
 		// 数字のテクスチャ設定
 		TexTime(nTexData, m_nTimeOne);
 	}
 
 	// Timeのロゴ
-	CSceneBillBoard *pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 20.0f, 12.0f, "TIME");
-	pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+	if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+	{
+		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_WIDTH1P2P, TIMER_HEIGHT1P2P, "TIME");
+		m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P, TIMER_WIDTH1P2P);
+	}
+	else
+	{
+		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_WIDTH3P4P, TIMER_HEIGHT3P4P, "TIME");
+		m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P, TIMER_WIDTH3P4P);
+	}
+	m_pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	//ビルボード設定
 	if (m_pColon == NULL)
 	{
-		m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-7.0f, 85.0f, 0.0f), 5.0f, 8.0f,"COLON");
+		if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+		{
+			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-10.0f, 88.0f, 0.0f), 5.0f, 10.0f, "COLON");
+		}
+		else
+		{
+			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-40.0f, 88.0f, 0.0f), 10.0f, 14.0f, "COLON");
+		}
 		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 	if (m_pFeverBillBoard == NULL)
 	{
-		m_pFeverBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(0.0f, 500.0f, 0.0f), 60.0f, 60.0f, "FEVERUI");
+		m_pFeverBillBoard = CSceneBillBoard::Create(D3DXVECTOR3(0.0f, 500.0f, 0.0f), 40.0f, 40.0f, "FEVERUI2");
 		m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.0f));
 	}
 
@@ -194,8 +234,9 @@ HRESULT CTime::Init(void)
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, SCREEN_HEIGHT / 2 + 50, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, SCREEN_HEIGHT / 2 + 50, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
+		m_pFeverUI[0]->SetCol(FEVER_COLOR);
 	}
 	else if (m_nNumPlayer == 2)
 	{
@@ -205,10 +246,12 @@ HRESULT CTime::Init(void)
 		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0]->SetCol(FEVER_COLOR);
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
+		m_pFeverUI[1]->SetCol(FEVER_COLOR);
 
 	}
 	else if (m_nNumPlayer == 3)
@@ -221,10 +264,12 @@ HRESULT CTime::Init(void)
 		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0]->SetCol(FEVER_COLOR);
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
+		m_pFeverUI[1]->SetCol(FEVER_COLOR);
 	}
 	if (m_nNumPlayer == 4)
 	{
@@ -238,10 +283,12 @@ HRESULT CTime::Init(void)
 		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[3]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 200.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI, 570.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0]->SetCol(FEVER_COLOR);
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
+		m_pFeverUI[1]->SetCol(FEVER_COLOR);
 	}
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -332,6 +379,7 @@ void CTime::Update(void)
 			|| m_nTimeCount == 60 * 110)
 		{
 			m_bFever = true;
+			m_pLogo->BindTexture("FEVERUI2");
 		}
 
 		if (m_bFever == true)
@@ -368,6 +416,17 @@ void CTime::Update(void)
 					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, 0.0f));
 				}
 
+				if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+				{
+					m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P, TIMER_WIDTH1P2P);
+				}
+				else
+				{
+					m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P, TIMER_WIDTH3P4P);
+				}
+
+
+				m_pLogo->BindTexture("TIME");
 				m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.0f));
 			}
 		}
@@ -401,10 +460,36 @@ void CTime::Update(void)
 				}
 			}
 			//ビルボード拡大縮小
-			m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
+			if (m_bStopUI == true)
+			{
+				m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.0f));
+			}
+			else if (m_bStopUI == false)
+			{
+				m_pFeverBillBoard->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 0.0f));
+			}
 			m_nUIScaleCounter++;
 			m_fUIScale += m_fUIAddScale;
-			m_pFeverBillBoard->SetBillboard(D3DXVECTOR3(0.0f, 120.0f, 0.0f), 60.0f + m_fUIScale, 60.0f + m_fUIScale);
+			m_pFeverBillBoard->SetBillboard(D3DXVECTOR3(0.0f, 120.0f, 0.0f), 40.0f + m_fUIScale, 40.0f + m_fUIScale);
+
+			if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+			{
+				m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P + (m_fUIScale / 2), TIMER_WIDTH1P2P + (m_fUIScale / 2));
+			}
+			else
+			{
+				m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P + (m_fUIScale / 2), TIMER_WIDTH3P4P + (m_fUIScale / 2));
+			}
+
+
+			for (int nCntPlayer = 0; nCntPlayer < 2; nCntPlayer++)
+			{
+				if (m_pFeverUI[nCntPlayer] != NULL)
+				{
+					m_pFeverUI[nCntPlayer]->SetWidthHeight(SCALE_UI_WIDTH + m_fUIScale, SCALE_UI + m_fUIScale);
+				}
+			}
+
 			if (m_nUIScaleCounter == 30)
 			{
 				m_fUIAddScale *= -1;
@@ -727,7 +812,17 @@ void CTime::ScaleNumber(void)
 	{	// ステージ切り替えの警告フラグがfalseならサイズを戻す
 		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
 		{
-			if (m_apNumber[nCntTime] != NULL && m_apNumber[nCntTime]->GetSize() != DEFAULT_SIZE) { m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE); }
+			if (m_apNumber[nCntTime] != NULL && m_apNumber[nCntTime]->GetSize() != DEFAULT_SIZE)
+			{
+				if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+				{
+					m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE1P2P);
+				}
+				else
+				{
+					m_apNumber[nCntTime]->SetSize(DEFAULT_SIZE3P4P);
+				}
+			}
 		}
 		m_nCntScale = 0;
 		return;

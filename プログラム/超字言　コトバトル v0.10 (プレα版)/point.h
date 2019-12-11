@@ -95,6 +95,7 @@ private:
 	CScene2D				*m_pRank;			// 順位のロゴ
 	CSceneBillBoard			*m_pCrown;			// 王冠
 	TYPE_CHARACTER			m_type;				// 種類
+	CSceneBillBoard			*m_pDouble;			// 2倍の表示
 
 	D3DXVECTOR2				m_TexMin, m_TexMax;	// テクスチャ座標保存
 };

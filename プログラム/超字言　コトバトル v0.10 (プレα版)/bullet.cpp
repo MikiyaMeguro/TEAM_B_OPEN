@@ -102,7 +102,6 @@ void C3DBullet::Update(void)
 
 	move = D3DXVECTOR3(Mtxmove._41, Mtxmove._42, Mtxmove._43);	//座標(移動量)を取り出す
 
-
 	//床との当たり判定
 	CMeshField *pMesh = CManager::GetMeshField();
 	float fHeight = pMesh->GetHeight(m_pos + move);
@@ -111,8 +110,8 @@ void C3DBullet::Update(void)
 		move.y = 0.0f;
 	}
 
-	m_MoveResult = move;		//求めた差分を格納
-	m_pos += move;		//座標に移動値をプラス
+	m_MoveResult = move;	//求めた差分を格納
+	m_pos += move;			//座標に移動値をプラス
 
 	//移動後の位置マトリックスを生成
 	D3DXMatrixTranslation(&m_mtxTrans, m_pos.x, m_pos.y, m_pos.z);
@@ -271,7 +270,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 
 	//タイプによって処理を分ける
 	float fSpeed = 3.0f;
-	int nLife = 60;
+	int nLife = 100;
 	switch (m_Prop)
 	{
 	case TYPE_HIGHSPEED:
@@ -283,7 +282,6 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 			m_pOrbit->Set(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 10.0f, &m_mtxTrans, "",
 				D3DXCOLOR(0.0f, 0.6f, 1.0f, 0.7f), 40, 1);
 		}
-
 		break;
 	case TYPE_STINGER:
 		fSpeed = 6.0f;
@@ -316,15 +314,21 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		fSpeed = 6.0f;
 		nLife = 20;
 		break;
-	case TYPE_MISSILE:
+	case TYPE_MISSILE_CENTER:
+		fSpeed = 3.5f;
+		m_fKnockBack = 1.0f;
+		nLife = 80;
+		break;
+	case TYPE_MISSILE_SIDE:
 		fSpeed = 4.0f;
-		m_fKnockBack = 4.0f;
+		m_fKnockBack = 1.0f;
+		nLife = 80;
 		break;
 	case TYPE_BOMB:
-		fSpeed = 4.0f;
+		fSpeed = 3.5f;
 		m_fKnockBack = 10.0f;
+		nLife = 60;
 		break;
-
 	default:
 		fSpeed = 5.0f;
 		m_fKnockBack = 6.0f;
@@ -346,6 +350,7 @@ HRESULT CModelBullet::Init(void)
 	C3DBullet::Init();
 	m_pHomingChara = NULL;
 	m_Type = TYPE_MODEL;
+	m_fBombHaight = 100.0f;
 	return S_OK;
 }
 
@@ -376,7 +381,11 @@ void CModelBullet::Uninit(void)
 		p3D = CExplosion3D::Create();
 		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
-	case TYPE_MISSILE:
+	case TYPE_MISSILE_CENTER:
+		p3D = CExplosion3D::Create();
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
+		break;
+	case TYPE_MISSILE_SIDE:
 		p3D = CExplosion3D::Create();
 		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 30.0f, 60, 0.01f); }
 		break;
@@ -407,11 +416,10 @@ void CModelBullet::Update(void)
 	int& nLife = GetLife();
 	nLife--;
 	m_nCntEffect++;
-	C3DBullet::Update();
 	m_nCount++;
 
 	D3DXVECTOR3 pos = CModelBullet::GetPosition();
-	if (m_Prop == TYPE_MISSILE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
+	if (m_Prop == TYPE_MISSILE_CENTER || m_Prop == TYPE_MISSILE_SIDE || m_Prop == TYPE_STINGER || m_Prop == TYPE_REFLECT)
 	{//ミサイル
 		if (m_nCntEffect % 6 == 0)
 		{
@@ -426,7 +434,7 @@ void CModelBullet::Update(void)
 	else if (m_Prop == TYPE_KNOCKBACK || m_Prop == TYPE_BOMB)
 	{//爆発
 		float fUp = sinf((float)m_nCount / (float) ((float)m_nMaxLife / 4.0f));
-		fUp *= 100.0f;//定数を掛ける
+		fUp *= m_fBombHaight;//定数を掛ける
 
 		GetPosition().y = m_fHeight + fUp;
 
@@ -464,6 +472,8 @@ void CModelBullet::Update(void)
 		}
 	}
 
+	C3DBullet::Update();
+
 	//弾モデルに正しい角度を設定する
 	if (m_pModel != NULL)
 	{
@@ -476,21 +486,19 @@ void CModelBullet::Update(void)
 
 	//当たり判定
 	if (m_Prop != TYPE_BOMB)
-	{
+	{//爆弾は地形を無視する(なるべく爆発が自分に当たらないように)
 		if (SimpleCollision())
 		{
 			Uninit();//当たっていたら消す
 			return;
 		}
 	}
-
 	//体力判定
 	if (nLife < 0)
 	{
 		Uninit();//寿命0なら消す
 		return;
 	}
-
 }
 
 //=============================================================================
@@ -552,7 +560,6 @@ void CModelBullet::Reflect(CManager::DIRECTION dir)
 
 	//モデルにも角度を設定
 	SetModelRot(rot);
-
 }
 
 //=============================================================================

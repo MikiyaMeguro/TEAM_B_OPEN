@@ -135,7 +135,6 @@ void CScene3D::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();			// デバイス取得
 
 	D3DXMATRIX mtxRot, mtxTrans, mtxView;		// 計算用マトリックス
-
 	if (m_bLigntEffect == false)
 	{
 		// ライト影響
@@ -149,10 +148,11 @@ void CScene3D::Draw(void)
 		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	}
 
-	if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
-	{//	ビルボード　			加算合成ありビルボードエフェクト
+	if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT
+		|| m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 
-		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT)
+	{//	ビルボード　			加算合成ありビルボードエフェクト
+		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT|| m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
 		{
 			// αブレンディングを加算合成に設定
 			pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
@@ -169,6 +169,14 @@ void CScene3D::Draw(void)
 		// Zバッファへの書き込み
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	}
+	if (m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
+	{
+		// αブレンディングを加算合成に設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
+
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
@@ -214,11 +222,12 @@ void CScene3D::Draw(void)
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-	if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
+	if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_BILLBOARD
+		|| m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 	{//	ビルボード　			加算合成ありビルボードエフェクト
 	 // Zバッファへの書き込み
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
+		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 		{//	ビルボード
 		 // αブレンディングを元に戻す
 			pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
@@ -355,6 +364,25 @@ void CScene3D::SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V)
 	//頂点バッファをアンロック
 	m_pVtxBuff->Unlock();
 }
+//=============================================================================
+// アニメーションの設定処理
+//=============================================================================
+void CScene3D::SetAnimationTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax)
+{
+	VERTEX_3D*pVtx;	//頂点情報へのポインタ
+
+	//頂点バッファをロック
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// テクスチャ座標の設定
+	pVtx[0].tex = D3DXVECTOR2(texmin.x, texmin.y);
+	pVtx[1].tex = D3DXVECTOR2(texmax.x, texmin.y);
+	pVtx[2].tex = D3DXVECTOR2(texmin.x, texmax.y);
+	pVtx[3].tex = D3DXVECTOR2(texmax.x, texmax.y);
+
+	//頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
 
 //=============================================================================
 // 色の設定
@@ -378,7 +406,6 @@ void CScene3D::SetColor(D3DXCOLOR col)
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 }
-
 //=============================================================================
 // 弾のUI表示
 //=============================================================================
@@ -390,7 +417,7 @@ void CScene3D::SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType)
 	// 頂点情報の設定
 	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
 
-	// 頂点バッファをロックし、頂点データへのポインタを取得
+						// 頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
 	if (nType == 0)	 // (中心点 : 真ん中下) ミサイル : ショットガンに使用
