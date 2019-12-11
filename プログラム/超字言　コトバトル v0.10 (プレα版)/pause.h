@@ -27,8 +27,9 @@ public:
 	void Update(void);
 	void Draw(void);
 
-private:
+protected:
 	CScene2D* m_pSelectMenu[4];//ポーズメニューの個数分用意する
-};
 
+private:
+};
 #endif // !_PAUSE_H_

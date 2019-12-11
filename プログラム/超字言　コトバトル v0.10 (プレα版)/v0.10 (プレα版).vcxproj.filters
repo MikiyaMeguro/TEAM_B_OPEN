@@ -166,6 +166,9 @@
     <ClCompile Include="SpotLight.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">

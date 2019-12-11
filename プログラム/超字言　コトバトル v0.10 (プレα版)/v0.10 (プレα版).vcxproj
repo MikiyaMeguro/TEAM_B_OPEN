@@ -180,6 +180,7 @@
     <ClInclude Include="meshSphere.h" />
     <ClInclude Include="number.h" />
     <ClInclude Include="object.h" />
+    <ClInclude Include="pause.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="PlayerNumSelect.h" />
     <ClInclude Include="point.h" />
@@ -195,6 +196,7 @@
     <ClInclude Include="SetObject.h" />
     <ClInclude Include="SetWord.h" />
     <ClInclude Include="sound.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="StageSelect.h" />
     <ClInclude Include="texture.h" />
     <ClInclude Include="time.h" />
@@ -236,6 +238,7 @@
     <ClCompile Include="meshSphere.cpp" />
     <ClCompile Include="number.cpp" />
     <ClCompile Include="object.cpp" />
+    <ClCompile Include="pause.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="PlayerNumSelect.cpp" />
     <ClCompile Include="point.cpp" />
@@ -251,6 +254,7 @@
     <ClCompile Include="SetObject.cpp" />
     <ClCompile Include="SetWord.cpp" />
     <ClCompile Include="sound.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="StageSelect.cpp" />
     <ClCompile Include="texture.cpp" />
     <ClCompile Include="time.cpp" />
