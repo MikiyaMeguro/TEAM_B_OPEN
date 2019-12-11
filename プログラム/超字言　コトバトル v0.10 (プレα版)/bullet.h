@@ -121,7 +121,7 @@ public:
 	void SetModelRot(const D3DXVECTOR3& rot);
 
 	void SetHomingChara(C3DCharactor* pChara) { m_pHomingChara = pChara; };
-
+	void SetBombHaight(float fHaight) { m_fBombHaight = fHaight; };
 	BULLET_PROPERTY GetType() { return m_Prop; }
 
 private:
@@ -136,6 +136,7 @@ private:
 	int m_nCntEffect;
 	CLineOrbit* m_pOrbit;
 
+	float m_fBombHaight;
 };
 
 //•¶Žš’eƒNƒ‰ƒX

@@ -348,6 +348,7 @@ HRESULT CModelBullet::Init(void)
 	C3DBullet::Init();
 	m_pHomingChara = NULL;
 	m_Type = TYPE_MODEL;
+	m_fBombHaight = 100.0f;
 	return S_OK;
 }
 
@@ -431,7 +432,7 @@ void CModelBullet::Update(void)
 	else if (m_Prop == TYPE_KNOCKBACK || m_Prop == TYPE_BOMB)
 	{//”š”­
 		float fUp = sinf((float)m_nCount / (float) ((float)m_nMaxLife / 4.0f));
-		fUp *= 100.0f;//’è”‚ğŠ|‚¯‚é
+		fUp *= m_fBombHaight;//’è”‚ğŠ|‚¯‚é
 
 		GetPosition().y = m_fHeight + fUp;
 
