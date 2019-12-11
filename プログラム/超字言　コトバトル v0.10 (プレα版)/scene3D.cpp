@@ -150,15 +150,8 @@ void CScene3D::Draw(void)
 
 	if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT
 		|| m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
-	// ライト影響受けない
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	////// アルファテストの設定
-	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	//pDevice->SetRenderState(D3DRS_ALPHAREF, 1);
-	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 
 	{//	ビルボード　			加算合成ありビルボードエフェクト
-
 		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT|| m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
 		{
 			// αブレンディングを加算合成に設定
