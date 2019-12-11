@@ -14,6 +14,7 @@
 #include "scene2D.h"
 #include "tutorial.h"
 #include "sceneBillboard.h"
+#include "time.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -86,6 +87,7 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_bFlag001 = true;
 	m_pRank = NULL;
 	m_pCrown = NULL;
+	m_pDouble = NULL;
 	m_bConfirmFlag = false;
 	m_RnakSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
@@ -146,10 +148,12 @@ void CPoint::Uninit(void)
 		}
 	}
 
-	
+
 	if (m_pRank != NULL) { m_pRank->Uninit(); m_pRank = NULL; }
 
 	if (m_pCrown != NULL) { m_pCrown->Uninit(); m_pCrown = NULL; }
+
+	if (m_pDouble != NULL) { m_pDouble->Uninit(); m_pDouble = NULL; }
 
 	if (m_pIcon != NULL)
 	{
@@ -175,7 +179,7 @@ void CPoint::Update(void)
 		int nTexData = 0;
 		// 数字のテクスチャ設定
 		TexPoint(nTexData);
-		
+
 		// ポイント増減時の変化
 		SizeChange();
 
@@ -298,14 +302,14 @@ int CPoint::PowerCalculation(int nData)
 //=============================================================================
 void CPoint::TimeManagement(void)
 {
-	
+
 }
 //=============================================================================
 // デバック用
 //=============================================================================
 void CPoint::DebugKey(void)
 {
-	
+
 }
 
 //=============================================================================
@@ -383,7 +387,7 @@ void CPoint::UIPosition(int nID)
 		sizeIcon = D3DXVECTOR3(60.0f, 50.0f, 0.0f);
 		sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
 	}
-	
+
 	if (m_type != CPoint::TYPE_CPU)
 	{
 		// キャラクターアイコンのロゴ
@@ -436,10 +440,26 @@ void CPoint::PointPostion()
 			m_pCrown = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z), 20.0f, 30.0f, "crown");
 			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2((0.333f*1), 1.0f));
 		}
+		if (m_pDouble == NULL)
+		{
+			m_pDouble = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z), 20.0f, 30.0f, "crown");
+		}
 
 		if (m_pCrown != NULL)
 		{
 			m_pCrown->Setpos(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z ));
+		}
+		if (m_pDouble != NULL)
+		{
+			m_pDouble->Setpos(D3DXVECTOR3((m_pos.x + 20), m_pos.y, m_pos.z));
+			if (CTime::GetFeverFlag() == true)
+			{
+				m_pDouble->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+			}
+			else
+			{
+				m_pDouble->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f));
+			}
 		}
 	}
 
@@ -470,13 +490,13 @@ void CPoint::RankPos(void)
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer != 2 && m_nID == 0)
 	{	// 1, 3, 4画面 1Pの位置
-		if (m_nNumPlayer == 1) 
+		if (m_nNumPlayer == 1)
 		{
 			pos = POINT_POS_1P_ONE;
 			m_RnakSize = D3DXVECTOR3(80.0f, 80.0f, 0.0f);
 		}
 		if (m_nNumPlayer == 3 || m_nNumPlayer == 4)
-		{ 
+		{
 			pos = D3DXVECTOR3(POINT_POS_1P_ONE.x- 20.0f, POINT_POS_1P_ONE.y - 30.0f, POINT_POS_1P_ONE.z);
 			m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 		}
@@ -527,7 +547,7 @@ void CPoint::SizeChange(void)
 	{
 		if (m_apNumber[nCntPoint] != NULL)
 		{
-			if (m_bSizeChange == true) 
+			if (m_bSizeChange == true)
 			{
 				D3DXVECTOR3 size = m_apNumber[nCntPoint]->GetSize();
 				D3DXVECTOR3 pos = m_apNumber[nCntPoint]->GetPos();
@@ -591,9 +611,9 @@ void CPoint::SizeChange(void)
 		if (m_apNumber[nCntPoint] != NULL)
 		{
 			if (m_bSizeChange == false)
-			{ 
+			{
 				m_apNumber[nCntPoint]->SetPos(D3DXVECTOR3(m_pos.x, m_fPosOld, m_pos.z));
-				m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); 
+				m_apNumber[nCntPoint]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 				m_apNumber[nCntPoint]->SetSize(DEFAULT_SIZE);
 
 			}
@@ -660,7 +680,7 @@ void CPoint::ChangeRank(void)
 			D3DXVECTOR2 size = D3DXVECTOR2(m_pRank->GetSize(0), m_pRank->GetSize(1));
 			float rot = m_pRank->GetRot();
 
-		
+
 			if (size.x >= m_RnakSize.x && size.y >= m_RnakSize.y)
 			{
 				// 順位確定の処理
@@ -705,7 +725,7 @@ void CPoint::ConfirmDirecting(D3DXVECTOR2 size)
 
 	if ((m_nCntbConfirm % CONFIRM_TIME) == 0)
 	{	// 順位入れ替わりを可能に
-		m_bFlag001 = false;  
+		m_bFlag001 = false;
 		m_bRankChangeFlag = false;
 	}
 }

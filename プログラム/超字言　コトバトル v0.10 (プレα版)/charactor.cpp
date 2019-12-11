@@ -986,7 +986,7 @@ void C3DCharactor::Homing_CPU(void)
 	switch (GetThisCharactor()->GetPlayerType())
 	{
 	case CPlayer::TYPE_BARANCE:
-		fLength = 50000;
+		fLength = 30000;
 		break;
 	case CPlayer::TYPE_POWER:
 		fLength = 100000;
@@ -1009,7 +1009,7 @@ void C3DCharactor::Homing_CPU(void)
 	D3DXVECTOR3 TargetPos;
 	float fCircle = 0;				//‹——£
 	float fCompare = 1000000;		//”ä‚×‚é
-	int nNearPlayer;
+	int nNearPlayer = 0;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
