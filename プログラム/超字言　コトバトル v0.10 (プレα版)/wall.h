@@ -45,6 +45,7 @@ private:
 	int m_nAnimCounter;
 	int m_nCounter;
 	D3DXVECTOR3 m_move;
+	int m_TexCounter;
 
 };
 
