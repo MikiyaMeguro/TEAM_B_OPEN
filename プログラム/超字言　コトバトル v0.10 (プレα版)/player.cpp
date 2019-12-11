@@ -765,7 +765,7 @@ bool CPlayer::CollisionDamageObj(void)
 				if (sqrtf(X + Y + Z) < fObjSize)
 				{
 					//‚«”ò‚Î‚µ
-					DamageReaction(20.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
+					DamageReaction(10.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
 					return true;
 				}
 
