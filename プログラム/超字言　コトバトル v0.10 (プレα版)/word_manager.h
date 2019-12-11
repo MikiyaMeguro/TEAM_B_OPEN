@@ -59,7 +59,7 @@ public:
 	static D3DXVECTOR3 *GetAnswerNum(void) { return m_AnswerNum; }
 	static int GetAnswerDataNum(void) { return m_nAnswerDataNum; }
 	bool GetGatherFlag(void) { return m_bGatherFlag; }
-	int Getm_nStock(int nStockNum) { return m_nStock[nStockNum]; }		// ストック数の取得
+	int GetStock(int nStockNum) { return m_nStock[nStockNum]; }		// ストック数の取得
 
 	// デバック用
 	void CreateOblDebug(void);

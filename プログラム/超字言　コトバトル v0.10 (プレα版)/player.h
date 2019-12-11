@@ -24,7 +24,7 @@
 //=============================================================================
 // 前方宣言
 //=============================================================================
-//class CScene3D;
+class CScene3D;
 class CSceneX;
 class CWordManager;
 
@@ -208,6 +208,8 @@ private:
 	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新
 	int				GetNearPlayer(void);		//近いプレイヤーを取得
 	void			PlayerAlpha(float fAlpha);
+	void			BulletUI(void);				// 弾発射UI表示
+	void			BulletUIUninit(void);		// 弾発射準備の終了
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX][BODY_MAX];	//パーツ情報
 
@@ -232,7 +234,8 @@ private:
 	D3DXVECTOR3 m_BulletRot;								//弾発射方向保持
 	int m_nMachineGunTime;									//マシンガン発射時間
 	bool m_bMachineGun;										//マシンガンフラグ
-	D3DXVECTOR3 m_MachineGunPos;									//マシンガン発射位置
+	D3DXVECTOR3 m_MachineGunPos;							//マシンガン発射位置
+	CScene3D	*m_pBulletUI;								//弾のUI
 
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報

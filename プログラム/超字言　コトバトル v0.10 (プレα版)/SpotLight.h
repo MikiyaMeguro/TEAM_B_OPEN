@@ -36,6 +36,8 @@ public:
 
 	static CSpotLight *Create(int nNum, D3DXVECTOR3 pos, D3DXVECTOR3 Dir, D3DXCOLOR Diffuse, D3DXCOLOR Ambient, D3DXCOLOR Specular, float fAttenuation0, float fAttenuation1, float fAttenuation2, float fRange, float fFalloff, float fTheta, float fPhi, bool bSwitch = true);
 	void SetLightEnable(int nNum, bool bEnable);
+	void SpotLightDelete(void) { CLight::Init(); }
+
 private:
 	bool m_bEnable;
 	/* ê›íËèàóù */
