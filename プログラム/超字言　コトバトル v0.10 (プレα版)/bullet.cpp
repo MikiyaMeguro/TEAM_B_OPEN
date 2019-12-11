@@ -315,12 +315,14 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		nLife = 20;
 		break;
 	case TYPE_MISSILE_CENTER:
-		fSpeed = 4.5f;
+		fSpeed = 3.5f;
 		m_fKnockBack = 1.0f;
+		nLife = 80;
 		break;
 	case TYPE_MISSILE_SIDE:
-		fSpeed = 5.0f;
+		fSpeed = 4.0f;
 		m_fKnockBack = 1.0f;
+		nLife = 80;
 		break;
 	case TYPE_BOMB:
 		fSpeed = 3.5f;

@@ -108,6 +108,9 @@ CPlayer* CPlayer::Create(void)
 //=============================================================================
 void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID,PLAYER_TYPE PlayerType, D3DXVECTOR3 rot)
 {
+	//キャラのID設定
+	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
+	m_PlayerType = PlayerType;
 	//キャラ情報クラス生成
 	if (m_pCharactorMove == NULL)
 	{
@@ -117,9 +120,6 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 		}
 	}
 
-	//キャラのID設定
-	m_nID = (nPlayerID % 4);//範囲外の数字が入ったらそれを0～3までの数字にする
-	m_PlayerType = PlayerType;
 
 	// 文字管理クラス生成
 	if (m_pWordManager == NULL)
@@ -721,8 +721,8 @@ bool CPlayer::CollisionDamageObj(void)
 						case CModelBullet::TYPE_SHOTGUN:		   nPoint = 1;			break;//ショットガンは1点(×6)
 						case CModelBullet::TYPE_SHOTGUN_MEDIUM:    nPoint = 1;			break;//同上
 						case CModelBullet::TYPE_SHOTGUN_SLOW:      nPoint = 1;			break;//同上
-						case CModelBullet::TYPE_MISSILE_CENTER:    nPoint = 2;			break;//ミサイルは2点(×3)
-						case CModelBullet::TYPE_MISSILE_SIDE:      nPoint = 2;			break;//同上
+						case CModelBullet::TYPE_MISSILE_CENTER:    nPoint = 2;			break;//ミサイルは中央は2点
+						case CModelBullet::TYPE_MISSILE_SIDE:      nPoint = 1;			break;//端は1点
 						case CModelBullet::TYPE_BOMB:		       nPoint = 4;			break;//爆弾は4点
 						default:								   nPoint = 3;			break;//それ以外は3点
 						}

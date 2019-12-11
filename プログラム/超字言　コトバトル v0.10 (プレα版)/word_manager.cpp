@@ -401,7 +401,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel = CModelBullet::Create();
 					if (pModel != NULL)
 					{//0.75f
-						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, 0.75f, 0.0f),
+						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, 0.85f, 0.0f),
 							(CLoad::MODEL)m_nCreateType,
 							CModelBullet::TYPE_MISSILE_SIDE,
 							nID, m_rot[nType]);
@@ -412,7 +412,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 					pModel = CModelBullet::Create();
 					if (pModel != NULL)
 					{
-						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, -0.75f, 0.0f),
+						pModel->Set(BulletMuzzle, BulletRot + D3DXVECTOR3(0.0f, -0.85f, 0.0f),
 							(CLoad::MODEL)m_nCreateType,
 							CModelBullet::TYPE_MISSILE_SIDE,
 							nID, m_rot[nType]);
