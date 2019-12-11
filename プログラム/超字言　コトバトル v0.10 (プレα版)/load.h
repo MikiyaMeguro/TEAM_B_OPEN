@@ -43,7 +43,7 @@ public:
 		MODEL_PODIUM1,		// 表彰台1
 		MODEL_PODIUM2,		// 表彰台2
 		MODEL_PODIUM3,		// 表彰台3
-		MODEL_PAUL,			// ポール
+		MODEL_PAUL,			// 電気ポール
 		MODEL_ALPHAMODEL00,	// 雷の見えない判定ver1
 		MODEL_ALPHAMODEL01,	// 雷の見えない判定ver2
 		MODEL_Seesaw,		// シーソー
@@ -80,7 +80,8 @@ public:
 		MODEL_RANKINGSTADIUM,	//ランキングのスタジアム背景
 
 		MODEL_SNOWBUSH,			// 雪草むら
-		MODEL_POLE,			    // ポール
+		MODEL_POLE2,		    // ポール
+		MODEL_POLE3,		    // ポール
 
 		//--------------------------------------
 		// 文字モデル
