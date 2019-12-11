@@ -21,7 +21,11 @@
 //=============================================================================
 #define CENTER_WIDTH		(SCREEN_WIDTH / 2)				// Xの中心座標
 #define TIMER_SPACE1P2P		(18.0f)							// 数字と数字の間のサイズ(ゲーム時間)
-#define TIMER_SPACE3P4P		(30.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_SPACE3P4P		(38.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_WIDTH1P2P		(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_WIDTH3P4P		(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_HEIGHT1P2P	(20.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_HEIGHT3P4P	(20.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
 #define GAME_TIME			(130)							// ゲーム開始時の時間
 #define GAME_TIME_MAX		(9)								// ゲームの時間最大数
@@ -189,11 +193,13 @@ HRESULT CTime::Init(void)
 	// Timeのロゴ
 	if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
 	{
-		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 26.0f, 15.6f, "TIME");
+		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_WIDTH1P2P, TIMER_HEIGHT1P2P, "TIME");
+		m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P, TIMER_WIDTH1P2P);
 	}
 	else
 	{
-		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 30.0f, 18.0f, "TIME");
+		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_WIDTH3P4P, TIMER_HEIGHT3P4P, "TIME");
+		m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P, TIMER_WIDTH3P4P);
 	}
 	m_pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	//ビルボード設定
@@ -201,11 +207,11 @@ HRESULT CTime::Init(void)
 	{
 		if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
 		{
-			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-15.0f, 95.0f, 0.0f), 5.0f, 10.0f, "COLON");
+			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-10.0f, 88.0f, 0.0f), 5.0f, 10.0f, "COLON");
 		}
 		else
 		{
-			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-30.0f, 95.0f, 0.0f), 5.0f, 8.0f, "COLON");
+			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-40.0f, 88.0f, 0.0f), 10.0f, 14.0f, "COLON");
 		}
 		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
@@ -412,11 +418,11 @@ void CTime::Update(void)
 
 				if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
 				{
-					m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 26.0f, 15.6f);
+					m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P, TIMER_WIDTH1P2P);
 				}
 				else
 				{
-					m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 30.0f, 18.0f);
+					m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P, TIMER_WIDTH3P4P);
 				}
 
 
@@ -465,7 +471,17 @@ void CTime::Update(void)
 			m_nUIScaleCounter++;
 			m_fUIScale += m_fUIAddScale;
 			m_pFeverBillBoard->SetBillboard(D3DXVECTOR3(0.0f, 120.0f, 0.0f), 40.0f + m_fUIScale, 40.0f + m_fUIScale);
-			m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), 20.0f + (m_fUIScale / 2), 12.0f + (m_fUIScale / 2));
+
+			if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+			{
+				m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P + (m_fUIScale / 2), TIMER_WIDTH1P2P + (m_fUIScale / 2));
+			}
+			else
+			{
+				m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P + (m_fUIScale / 2), TIMER_WIDTH3P4P + (m_fUIScale / 2));
+			}
+
+
 			for (int nCntPlayer = 0; nCntPlayer < 2; nCntPlayer++)
 			{
 				if (m_pFeverUI[nCntPlayer] != NULL)
