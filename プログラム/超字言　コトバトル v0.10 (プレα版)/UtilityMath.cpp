@@ -129,7 +129,7 @@ float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 {
 	fValue *= powf(10.0f,(float)(nRound - 1));	//四捨五入したい値を10の(n-1)乗倍する。
 	fValue = round(fValue);						//小数点以下を四捨五入する。
-	fValue /= pow(10.0f, (float)(nRound - 1));  //10の(n-1)乗で割る。
+	fValue /= powf(10.0f, (float)(nRound - 1));  //10の(n-1)乗で割る。
 
 	return fValue;
 }
@@ -167,13 +167,13 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 	case EASE_LINIAR://線形
 		fResult = fTime;//X = Y
 		break;
-	case EASE_IN_QUAD://二次関数(IN)
+	case EASE_IN_QUAD://二次関数(IN)   f(x) = x^(2)
 		fResult = fTime * fTime;
 		break;
-	case EASE_OUT_QUAD://二次関数(OUT)
+	case EASE_OUT_QUAD://二次関数(OUT) f(x) = -x*(x-2)
 		fResult = -1.0f*fTime*(fTime - 2.0f);
 		break;
-	case EASE_INOUT_QUAD://二次関数(IN&OUT)
+	case EASE_INOUT_QUAD://二次関数(IN&OUT) 上２つの複合
 		fTime /= 0.5f;//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
 
 		/*結果によって処理を変える*/
@@ -187,14 +187,14 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 			fResult = -0.5f * (fTime*(fTime - 2) - 1);
 		}
 		break;
-	case EASE_IN_CUBIC://三次関数(IN)
+	case EASE_IN_CUBIC://三次関数(IN)    f(x) = x^(3)
 		fResult = fTime * fTime * fTime;
 		break;
-	case EASE_OUT_CUBIC://三次関数(OUT)
+	case EASE_OUT_CUBIC://三次関数(OUT)  f(x) = (x-1)^(3)+1
 		fTime = fTime - 1.0f;
 		fResult = (fTime*fTime*fTime + 1);
 		break;
-	case EASE_INOUT_CUBIC://三次関数(IN&OUT)
+	case EASE_INOUT_CUBIC://三次関数(IN&OUT) 上２つの複合
 		fTime /= 0.5f;	//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
 
 		/*結果によって処理を変える*/
@@ -208,13 +208,13 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 			fResult = 0.5f * (fTime*fTime*fTime + 2);
 		}
 		break;
-	case EASE_IN_EXPO:
+	case EASE_IN_EXPO:		//指数関数(IN)  f(x)=2^(10 (x-1))
 		fResult = (float)exp2(10.0 * ((double)fTime - 1.0));
 		break;
-	case EASE_OUT_EXPO:
+	case EASE_OUT_EXPO:		//指数関数(OUT) f(x)=-2^(-10x)+1
 		fResult = (-((float)exp2(-10.0 * (double)fTime)) + 1);
 		break;
-	case EASE_INOUT_EXPO:
+	case EASE_INOUT_EXPO:	//指数関数(IN&OUT) 上２つの複合
 		fTime /= 0.5f;//0～1を0～2へと補正する(後で0.5を掛けて打ち消す)
 		if (fTime < 1)
 		{
