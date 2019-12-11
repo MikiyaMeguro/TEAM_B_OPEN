@@ -1173,7 +1173,7 @@ MODELSET						# 茂み
 	TYPE = 36
 	POS = 120.0 200.0 -310.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 2.5 1.5 1.5
+	SCALE = 2.7 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
 	BUSH = 4				#草番号
@@ -1183,7 +1183,7 @@ MODELSET						# 茂み
 	TYPE = 36
 	POS = 120.0 200.0 -270.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 2.5 1.5 1.5
+	SCALE = 2.7 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
 	BUSH = 4				#草番号
@@ -1253,7 +1253,7 @@ MODELSET						# 茂み
 	TYPE = 36
 	POS = 120.0 200.0 280.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 2.5 1.5 1.5
+	SCALE = 2.7 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
 	BUSH = 5				#草番号
@@ -1263,7 +1263,7 @@ MODELSET						# 茂み
 	TYPE = 36
 	POS = 120.0 200.0 240.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 2.5 1.5 1.5
+	SCALE = 2.7 1.5 1.5
 	COLLISION = 13
 	GIMMICK = 1					# 配置の種類を決める
 	BUSH = 5				#草番号
