@@ -33,7 +33,8 @@ public:
 		SCENE3DTYPE_NORMAL = 0,				// 通常
 		SCENE3DTYPE_BILLBOARD,				// ビルボード
 		SCENE3DTYPE_BILLEFFECT,				// ビルボードエフェクト用加算合成あり
-		SCENE3DTYPE_SUBSYNTHESIS,			// 減算合成のみの3Dポリゴン
+		SCENE3DTYPE_ADDSYNTHESIS,			// 加算合成のみ
+		SCENE3DTYPE_SUBSYNTHESIS,			// 減算合成のみ
 		SCENE3DTYPE_MAX
 	}SCENE3DTYPE;
 
@@ -70,8 +71,8 @@ public:
 	void SetTexUV(D3DXVECTOR2 TexUV) { m_TexUV = TexUV; }
 	void SetAlphaTest(bool bTest) { m_bAlphaTest = bTest; }
 	void SetLightEffect(bool bLight) { m_bLigntEffect = bLight; }
-
-	void SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType);	// 弾のUI表示用 
+	void SetScene3DType(SCENE3DTYPE type) { m_scene3dType = type; };
+	void SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType);	// 弾のUI表示用
 
 
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
@@ -79,7 +80,7 @@ public:
 	float GetSizeY(void) { return m_size.y; }
 	float GetSizeX(void) { return m_size.x; }
 	D3DXCOLOR Getcol(void) { return m_col; }			// 色取得
-	
+
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ

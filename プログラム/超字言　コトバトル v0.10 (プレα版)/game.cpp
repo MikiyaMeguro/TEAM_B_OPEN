@@ -224,7 +224,7 @@ void CGame::Init(void)
 	//先にテクスチャを生成しておく
 	CTexture::GetTexture("モデル_TEX");
 	CTexture::GetTexture("WORD");
-
+	CTexture::GetTexture("EXPLOSION");
 }
 //=============================================================================
 // 終了処理

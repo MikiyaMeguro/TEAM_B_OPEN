@@ -149,10 +149,11 @@ void CScene3D::Draw(void)
 		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
 	}
 
-	if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
+	if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT
+		|| m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 	{//	ビルボード　			加算合成ありビルボードエフェクト
 
-		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT)
+		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT|| m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
 		{
 			// αブレンディングを加算合成に設定
 			pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
@@ -169,6 +170,14 @@ void CScene3D::Draw(void)
 		// Zバッファへの書き込み
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, FALSE);
 	}
+	if (m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
+	{
+		// αブレンディングを加算合成に設定
+		pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
+		pDevice->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+		pDevice->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+	}
+
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtxWorld);
 
@@ -214,11 +223,12 @@ void CScene3D::Draw(void)
 	// ポリゴンの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
 
-	if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
+	if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_BILLBOARD
+		|| m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 	{//	ビルボード　			加算合成ありビルボードエフェクト
 	 // Zバッファへの書き込み
 		pDevice->SetRenderState(D3DRS_ZWRITEENABLE, TRUE);
-		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
+		if (m_scene3dType == SCENE3DTYPE_BILLEFFECT || m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS || m_scene3dType == SCENE3DTYPE_SUBSYNTHESIS)
 		{//	ビルボード
 		 // αブレンディングを元に戻す
 			pDevice->SetRenderState(D3DRS_BLENDOP, D3DBLENDOP_ADD);
