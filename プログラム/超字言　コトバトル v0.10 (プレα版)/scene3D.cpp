@@ -26,6 +26,8 @@ CScene3D::CScene3D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 	m_TexUV = D3DXVECTOR2(1.0f, 1.0f);
 	m_scene3dType = SCENE3DTYPE_NORMAL;
+	m_bAlphaTest = false;
+	m_bLigntEffect = false;
 }
 
 //=============================================================================
@@ -133,6 +135,18 @@ void CScene3D::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();			// デバイス取得
 
 	D3DXMATRIX mtxRot, mtxTrans, mtxView;		// 計算用マトリックス
+	if (m_bLigntEffect == false)
+	{
+		// ライト影響
+		pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
+	}
+	if (m_bAlphaTest == true)
+	{
+		// アルファテストの設定
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+		pDevice->SetRenderState(D3DRS_ALPHAREF, 1);
+		pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	}
 
 	// ライト影響受けない
 	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
@@ -219,10 +233,16 @@ void CScene3D::Draw(void)
 
 		}
 	}
-	// ライト影響受けないk
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-	// アルファテストを無効
-	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	if (m_bLigntEffect == false)
+	{
+		// ライト影響
+		pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
+	}
+	if (m_bAlphaTest == true)
+	{
+		// アルファテストを無効
+		pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	}
 }
 //=============================================================================
 // 高さを取得
@@ -379,6 +399,48 @@ void CScene3D::SetColor(D3DXCOLOR col)
 	pVtx[1].col = m_col;
 	pVtx[2].col = m_col;
 	pVtx[3].col = m_col;
+
+	// 頂点バッファをアンロックする
+	m_pVtxBuff->Unlock();
+}
+//=============================================================================
+// 弾のUI表示
+//=============================================================================
+void CScene3D::SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType)
+{
+	m_rot = rot;
+	m_size = size;
+
+	// 頂点情報の設定
+	VERTEX_3D *pVtx;	// 頂点情報へのポインタ
+
+						// 頂点バッファをロックし、頂点データへのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	if (nType == 0)	 // (中心点 : 真ん中下) ミサイル : ショットガンに使用
+	{
+		// 頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3(-m_size.x, 0.0f, m_size.z);
+		pVtx[1].pos = D3DXVECTOR3(m_size.x, 0.0f, m_size.z);
+		pVtx[2].pos = D3DXVECTOR3(-m_size.x + (m_size.x - 10.0f), 0.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(m_size.x - (m_size.x - 10.0f), 0.0f, 0.0f);
+	}
+	else if (nType == 1)	// (中心点 : 真ん中下) マシンガンに使用
+	{
+		// 頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3(-m_size.x, 0.0f, m_size.z);
+		pVtx[1].pos = D3DXVECTOR3(m_size.x, 0.0f, m_size.z);
+		pVtx[2].pos = D3DXVECTOR3(-m_size.x, 0.0f, 0.0f);
+		pVtx[3].pos = D3DXVECTOR3(m_size.x, 0.0f, 0.0f);
+	}
+	else if (nType == 2)
+	{
+		// 頂点座標の設定
+		pVtx[0].pos = D3DXVECTOR3(-m_size.x, 0.0f, m_size.z);
+		pVtx[1].pos = D3DXVECTOR3(m_size.x, 0.0f, m_size.z);
+		pVtx[2].pos = D3DXVECTOR3(-m_size.x, 0.0f, -m_size.z);
+		pVtx[3].pos = D3DXVECTOR3(m_size.x, 0.0f, -m_size.z);
+	}
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
