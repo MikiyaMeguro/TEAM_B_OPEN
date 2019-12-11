@@ -63,7 +63,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nMachineGunTime = 0;
 	m_pBulletUI = NULL;
-
+	m_fBulletRotOld = 0.0f;
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
@@ -126,6 +126,12 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 	{
 		ObjCreate(m_pWordManager);
 		m_pWordManager->SetID(m_nID);
+	}
+
+	if (CManager::GetXInput(m_nID) != NULL)
+	{
+		m_fStickRX = CManager::GetXInput(m_nID)->GetLStickRotX();
+		m_fStickRY = CManager::GetXInput(m_nID)->GetLStickRotX();
 	}
 
 
@@ -260,7 +266,9 @@ void CPlayer::Update(void)
 		{
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
-			static D3DXVECTOR3 BulletRot;
+			static D3DXVECTOR3 BulletRot = {};
+			//BulletRot.y = m_pCharactorMove->GetRotation().y;
+			BulletRot.y = m_fBulletRotOld;
 			D3DXVECTOR3 BulletPos(GetBulletMuzzle());
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
 
@@ -280,11 +288,13 @@ void CPlayer::Update(void)
 						LockOnObjPos = pChara->GetPosition();
 						LockOnObjRot = pChara->GetRotation();
 						BulletRot.y = atan2f((LockOnObjPos.x - BulletPos.x), (LockOnObjPos.z - BulletPos.z));
+						m_pCharactorMove->GetRotation().y = BulletRot.y;
 						CUtilityMath::RotateNormarizePI(&BulletRot.y);
 					}
 					else
 					{//近いプレイヤーがいなければプレイヤーの向きに打つ
-						BulletRot.y = m_pCharactorMove->GetRotation().y;
+						BulletRot.y = m_fBulletRotOld;
+						m_pCharactorMove->GetRotation().y = BulletRot.y;
 					}
 					//発射方向保持
 					m_BulletRot.y = BulletRot.y;
@@ -310,24 +320,32 @@ void CPlayer::Update(void)
 
 			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID))
 			{
-
 				if (CManager::GetXInput(m_nID) != NULL)
 				{//スティック角を取得して発射角とする
-					BulletRot.y = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
-					//発射方向保持
-					m_BulletRot.y = BulletRot.y;
-
-					BulletUI();		// 弾発射表示
+					if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
+					{	// 右のスティックを動かしてない場合
+						m_fBulletRotOld = CManager::GetXInput(m_nID)->StickRL_XY(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y );
+					}
+					else
+					{
+						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
+						m_fStickRX = CManager::GetXInput(m_nID)->GetRStickRotX();
+						m_fStickRY = CManager::GetXInput(m_nID)->GetRStickRotY();
+					}
 				}
+				//発射方向保持
+				m_BulletRot.y = BulletRot.y;
+				BulletUI(m_BulletRot);		// 弾発射表示
+
 
 				m_bAssist = false;//セルフエイムモードに設定
 			}
 			else
 			{
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
+				m_BulletRot.y = BulletRot.y;
 				m_bAssist = true;
 
-				//if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }
 				BulletUIUninit();
 			}
 
@@ -355,7 +373,7 @@ void CPlayer::Update(void)
 			}
 
 
-			m_pCharactorMove->GetRotation().y = BulletRot.y;
+			//m_pCharactorMove->GetRotation().y = BulletRot.y;
 			m_pCharactorMove->GetSpin().y = 0.0f;
 
 			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
@@ -1270,10 +1288,10 @@ D3DXVECTOR3     CPlayer::GetBulletMuzzle(void)
 //=============================================================================
 // 弾発射UI表示の処理
 //=============================================================================
-void CPlayer::BulletUI(void)
+void CPlayer::BulletUI(D3DXVECTOR3 rot)
 {
 	D3DXVECTOR3 size = {};
-	D3DXVECTOR3 rot = {};
+	D3DXVECTOR3 rotUI = {};
 	int nType = NULL;
 
 	if (m_pWordManager != NULL)
@@ -1282,7 +1300,7 @@ void CPlayer::BulletUI(void)
 		{	// ゴミの場合
 			size = D3DXVECTOR3(20.0f, 0.0f, 200.0f);
 			nType = 1;
-			rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+			rotUI = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 		else
 		{
@@ -1291,25 +1309,25 @@ void CPlayer::BulletUI(void)
 			{
 				size = D3DXVECTOR3(200.0f, 0.0f, 260.0f);
 				nType = 0;
-				rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				rotUI = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 			else if (m_PlayerType == TYPE_REACH)	// プレイヤーがウサギ(マシンガン)の場合
 			{
 				size = D3DXVECTOR3(20.0f, 0.0f, 500.0f);
 				nType = 1;
-				rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				rotUI = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 			else if (m_PlayerType == TYPE_BARANCE)	// プレイヤーが犬(ショットガン)の場合
 			{
 				size = D3DXVECTOR3(100.0f, 0.0f, 190.0f);
 				nType = 0;
-				rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+				rotUI = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 			else if (m_PlayerType == TYPE_POWER)	// プレイヤーがクマ(爆弾)の場合
 			{
-				size = D3DXVECTOR3(70.0f, 0.0f, 70.0f);
+				size = D3DXVECTOR3(100.0f, 0.0f, 70.0f);
 				nType = 2;
-				rot = D3DXVECTOR3(sinf(m_BulletRot.y) * 150.0f, 0.0f, cosf(m_BulletRot.y) * 150.0f);
+				rotUI = D3DXVECTOR3(sinf(rot.y) * 150.0f, 0.0f, cosf(rot.y) * 150.0f);
 			}
 		}
 	}
@@ -1328,7 +1346,7 @@ void CPlayer::BulletUI(void)
 
 		m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName[nNameNum]);
 		m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
-		m_pBulletUI->SetRot(m_BulletRot);
+		m_pBulletUI->SetRot(rot);
 	}
 
 	if (m_pBulletUI != NULL)
@@ -1342,8 +1360,8 @@ void CPlayer::BulletUI(void)
 		}
 
 		m_pBulletUI->BindTexture(capName[nNameNum]);
-		m_pBulletUI->SetBulletUI(size, m_BulletRot, nType);
-		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + rot.x,  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + rot.z));
+		m_pBulletUI->SetBulletUI(size, rot, nType);
+		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) + rotUI.x,  m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z + rotUI.z));
 		m_pBulletUI->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 	}
 }

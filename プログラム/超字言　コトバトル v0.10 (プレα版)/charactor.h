@@ -186,6 +186,7 @@ public:
 
 	D3DXVECTOR3 GetCameraPosR(void) { return m_CameraPosR; };
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
+
 private:
 	void CharaMove_Input(void);
 	void CharaMove_CPU(void);
@@ -236,8 +237,6 @@ private:
 	int m_nMachineGunTime;			//マシンガン発射時間
 	bool m_bMachineGun;				//マシンガンフラグ
 	D3DXVECTOR3 m_MachineGunPos;	//マシンガン発射位置
-
-
 
 public:
 	bool m_bFront;

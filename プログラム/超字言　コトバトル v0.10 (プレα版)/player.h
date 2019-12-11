@@ -208,7 +208,7 @@ private:
 	void			MotionUpdate(BODY body = BODY::LOWER_BODY);			//モーション更新
 	int				GetNearPlayer(void);		//近いプレイヤーを取得
 	void			PlayerAlpha(float fAlpha);
-	void			BulletUI(void);				// 弾発射UI表示
+	void			BulletUI(D3DXVECTOR3 rot);				// 弾発射UI表示
 	void			BulletUIUninit(void);		// 弾発射準備の終了
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX][BODY_MAX];	//パーツ情報
@@ -245,6 +245,11 @@ private:
 	int m_nCntFlame[BODY_MAX];											//フレーム用カウンタ
 	int m_nCntKey[BODY_MAX];											//キー用カウンタ
 	int m_nCntBlendMotion[BODY_MAX];									//モーションブレンド用のカウンタ
+
+	float	m_fBulletRotOld;									// 向き保管
+	SHORT	m_fStickRX;
+	SHORT	m_fStickRY;
+
 };
 
 #endif // !_PLAYER_H_

@@ -67,6 +67,8 @@ public:
 	bool GetConnect(void) { return m_bConnect; };
 
 	float GetStickRot(bool LorR,float fRotDeff = 0.0f);
+	float StickRL_XY(SHORT RX, SHORT RY, float fRotDeff = 0.0f);
+
 	//スティック角取得
 	SHORT GetLStickRotX(void) { return m_sLStickRotX; };
 	SHORT GetLStickRotY(void) { return m_sLStickRotY; };

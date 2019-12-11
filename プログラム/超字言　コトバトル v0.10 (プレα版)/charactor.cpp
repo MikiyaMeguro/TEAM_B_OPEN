@@ -521,6 +521,7 @@ void C3DCharactor::CharaMove_Input(void)
 			}
 			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
+
 	}
 
 	//ステップ移動の設定
@@ -577,6 +578,7 @@ void C3DCharactor::CharaMove_Input(void)
 
 		spin.y = 0.0f;
 	}
+
 #ifdef _DEBUG
 		// 入力情報を取得
 		CInputKeyboard *pInputKeyboard;

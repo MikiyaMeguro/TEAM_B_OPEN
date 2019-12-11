@@ -257,6 +257,19 @@ float CInputXPad::GetStickRot(bool LorR, float fRotDeff)
 
 	return fAngle;
 }
+
+//===================================================================
+//	スティック角度取得処理
+//===================================================================
+float CInputXPad::StickRL_XY(SHORT RX, SHORT RY,  float fRotDeff)
+{
+	float fAngle = fRotDeff;
+	fAngle = atan2f((float)RY, (float)RX);
+	CUtilityMath::RotateNormarizePI(&fAngle);
+
+	return fAngle;
+}
+
 //===================================================================
 //	入力情報取得処理
 //===================================================================
