@@ -29,6 +29,7 @@ CScene2D::CScene2D(int nPriority, OBJTYPE objType) : CScene(nPriority, objType)
 	m_fRight = 0.0f;
 	m_fLeft = 0.0f;
 	m_bDraw = true;
+	m_bAddition = false;
 }
 
 //=============================================================================

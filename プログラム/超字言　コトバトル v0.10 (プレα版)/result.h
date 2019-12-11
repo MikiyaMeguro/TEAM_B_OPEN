@@ -66,6 +66,7 @@ private:
 		RESULTTYPE_MAX			//最大数
 	}STAGESELECTTYPE;
 
+	/* エフェクトのフェード */
 	typedef enum
 	{
 		EFFECTPRO_NONE = 0,
@@ -74,21 +75,41 @@ private:
 		EFFECTPRO_MAX
 	}EFFECTPRO_STATE;
 
+	/* 2Dの演出 */
+	typedef enum
+	{
+		PRODUCTION_NONE = 0,
+		PRODUCTION_START,				// 開始
+		PRODUCTION_FALL_WINDOW,			// 枠降下
+		PRODUCTION_FADERANK,			// 順位フェードイン
+		PRODUCTION_FALL_ICON,			// アイコン降下
+		PRODUCTION_TURN_STAND,			// アイコン回転(裏→立てる)
+		PRODUCTION_TURN,				// アイコン回転（立った状態→表）			
+		PRODUCTION_TURN_TABLE,			// アイコン回転(表完全開示)
+		PRODUCTION_TURN_FADEPLNUM,		// プレイヤーナンバーフェード
+		PRODUCTION_COLLOUT_EXPANSION,	// ポイント枠を表示
+		PRODUCTION_FADEPOINT,			// ポイントを表示
+		PRODUCTION_FINISH,				// 終了
+		PRODUCTION_MAX					// 最大値
+	}PRODUCTION;
+
 	void InitPointer(void);
 	void SetPolygon(void);
 	void SetModel(void);
-	void SetAlpha(void);
 	void Set2DUI(int nNum,int nPosNum);
 	void RankTex(int nNum, int nRank);
 	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void SetNumCallout(int nNum, int nIconPos, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void EffectPro(void);
 	void SetAudience(void);
+	void Production(void);
+
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	static CharaSet m_ResultChara[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-	static CScene3D *m_apAudience[MAX_AUDIENCE];	//観客
+	static CScene3D *m_apAudience[MAX_AUDIENCE];								//観客
+	CScene3D *m_apMask;															//マスク
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];									// ナンバーへのポインタ
 	CScene2D *m_apScene2D[RESULTTYPE_MAX];										//演出系2Dポリゴン
@@ -100,7 +121,8 @@ private:
 	CSpotLight *m_pSpotLight[MAX_PLAYER];										//スポットライト
 	bool m_bMenu;
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ
-	bool m_bEffectPro;							//演出が始まってるかどうかフラグ
+	bool m_bEffectPro;							//エフェクト演出が始まってるかどうかフラグ
+	bool m_bProductin;							//演出のフラグ
 	D3DXVECTOR3 m_RankPos[MAX_PLAYER];			//順位の位置を保存
 	D3DXVECTOR3 m_PlayerNumPos[MAX_PLAYER];		//プレイヤーナンバーの位置を保存
 	D3DXVECTOR3 m_PlayerIconPos[MAX_PLAYER];	//アイコンの位置を保存
@@ -110,5 +132,6 @@ private:
 	D3DXVECTOR3 m_RankEffect[MAX_PLAYER][2];	//プレイヤーナンバーの位置を保存
 	D3DXVECTOR2 m_EffectAlpha;					//エフェクトのalpha値管理（X:エフェクト番号0　Y:エフェクト番号1）
 	EFFECTPRO_STATE m_EffectState;				//エフェクトの状態管理
+	PRODUCTION m_Production;					//演出
 };
 #endif
