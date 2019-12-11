@@ -65,13 +65,11 @@ public:
 	void SetSizeY(float fHeight, float fWidth);
 	void SetRot(D3DXVECTOR3 rot);
 	void SetAnimation(int m_PatternAnim, float fUV_U, float fUV_V);
+	void SetAnimationTex(D3DXVECTOR2 texmin, D3DXVECTOR2 texmax);
+
 	void SetColor(D3DXCOLOR col);
 	void SetPos(D3DXVECTOR3 pos) { m_pos = pos; }
 	void SetTexUV(D3DXVECTOR2 TexUV) { m_TexUV = TexUV; }
-	void SetAlphaTest(bool bTest) { m_bAlphaTest = bTest; }
-	void SetLightEffect(bool bLight) { m_bLigntEffect = bLight; }
-
-	void SetBulletUI(D3DXVECTOR3 size, D3DXVECTOR3 rot, int nType);	// 弾のUI表示用 
 
 
 	D3DXVECTOR3 GetPos(void) { return m_pos; }
@@ -79,7 +77,7 @@ public:
 	float GetSizeY(void) { return m_size.y; }
 	float GetSizeX(void) { return m_size.x; }
 	D3DXCOLOR Getcol(void) { return m_col; }			// 色取得
-	
+
 
 private:
 	LPDIRECT3DTEXTURE9		m_pTexture;					// テクスチャへのポインタ
@@ -93,9 +91,8 @@ private:
 	D3DXCOLOR               m_col;
 	D3DXVECTOR3				m_size;						// 大きさ
 	D3DXVECTOR2				m_TexUV;
-	SCENE3DTYPE m_scene3dType;							// シーン3Dタイプ
-	bool m_bAlphaTest;									//αテストの可否
-	bool m_bLigntEffect;								//ライトの影響の可否
+	SCENE3DTYPE m_scene3dType;					// シーン3Dタイプ
+
 };
 
 #endif
