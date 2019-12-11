@@ -241,7 +241,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\UV\\S3Main.jpg";
+    "data\\TEXTURE\\UV\\Snow2.jpg";
    }
   }
  }
