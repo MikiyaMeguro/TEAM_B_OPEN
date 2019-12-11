@@ -64,6 +64,18 @@ void  CCharaBase::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CHARACTOR_MOVE_TYPE type
 		//m_pWayPoint = CWaypoint::Create(m_pos, 10, 10, "NUMBER");
 	}
 
+	if (m_pThisCharactor != NULL)
+	{
+		if (m_pThisCharactor->GetPlayerType() == CPlayer::TYPE_SPEED)
+		{
+			m_fSpeed = MOVE_DEFAULT_SPEED + 0.05f;
+		}
+		else if (m_pThisCharactor->GetPlayerType() == CPlayer::TYPE_REACH)
+		{
+			m_fSpeed = MOVE_DEFAULT_SPEED - 0.05f;
+		}
+	}
+
 	//コマンド定義
 	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_W);
 	CCommand::RegistCommand("PLAYERMOVE_UP", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_UP);

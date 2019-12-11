@@ -28,6 +28,7 @@ CNumber::CNumber()
 	m_pVtxBuff = NULL;
 	m_pos = D3DXVECTOR2(0.0f, 0.0f);
 	m_col = D3DXCOLOR(1.0f, 1.0f, 1.0, 1.0f);
+	m_bDraw = false;
 }
 
 //=============================================================================
@@ -130,8 +131,11 @@ void CNumber::Draw(void)
 	// ƒeƒNƒXƒ`ƒƒÝ’è
 	pDevice->SetTexture(0, CTexture::GetTexture("NUMBER"));
 
-	// ƒ|ƒŠƒSƒ“•`‰æ
-	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	if (m_bDraw == true)
+	{
+		// ƒ|ƒŠƒSƒ“•`‰æ
+		pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+	}
 }
 
 //=============================================================================

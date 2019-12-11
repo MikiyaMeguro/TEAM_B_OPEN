@@ -315,12 +315,14 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 		nLife = 20;
 		break;
 	case TYPE_MISSILE_CENTER:
-		fSpeed = 4.5f;
+		fSpeed = 3.5f;
 		m_fKnockBack = 1.0f;
+		nLife = 80;
 		break;
 	case TYPE_MISSILE_SIDE:
-		fSpeed = 5.0f;
+		fSpeed = 4.0f;
 		m_fKnockBack = 1.0f;
+		nLife = 80;
 		break;
 	case TYPE_BOMB:
 		fSpeed = 3.5f;
@@ -348,6 +350,7 @@ HRESULT CModelBullet::Init(void)
 	C3DBullet::Init();
 	m_pHomingChara = NULL;
 	m_Type = TYPE_MODEL;
+	m_fBombHaight = 100.0f;
 	return S_OK;
 }
 
@@ -431,7 +434,7 @@ void CModelBullet::Update(void)
 	else if (m_Prop == TYPE_KNOCKBACK || m_Prop == TYPE_BOMB)
 	{//îöî≠
 		float fUp = sinf((float)m_nCount / (float) ((float)m_nMaxLife / 4.0f));
-		fUp *= 100.0f;//íËêîÇä|ÇØÇÈ
+		fUp *= m_fBombHaight;//íËêîÇä|ÇØÇÈ
 
 		GetPosition().y = m_fHeight + fUp;
 

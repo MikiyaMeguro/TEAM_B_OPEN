@@ -163,6 +163,12 @@
     <ClCompile Include="CharaSelect_Cursol.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="SpotLight.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="pause.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -325,6 +331,12 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="CharaSelect_Cursol.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="SpotLight.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

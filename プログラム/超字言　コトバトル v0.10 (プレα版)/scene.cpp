@@ -210,13 +210,6 @@ void CScene::UpdeteAll(void)
 			}
 		}
 	}
-	//#ifdef _DEBUG
-	//	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
-	//	{// 優先順位の数分繰り返す
-	//		// デバック表示の更新
-	//		CDebugProc::Print("ncn", nCntPriority, " : ", m_nNumPriority[nCntPriority]);
-	//	}
-	//#endif
 }
 
 //=============================================================================
@@ -226,15 +219,7 @@ void CScene::DrawAll(int nCamera)
 {
 	CPlayer *pPlayer = NULL;
 
-	if (CManager::GetMode() == CManager::MODE_GAME)
-	{
-		pPlayer = CGame::GetPlayer(nCamera - 1);			// プレイヤーを取得
-	}
-	else if (CManager::GetMode() == CManager::MODE_TUTORIAL)
-	{
-		pPlayer = CTutorial::GetPlayer(nCamera - 1);			// プレイヤーを取得
-	}
-
+	pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取得
 
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
@@ -285,6 +270,13 @@ void CScene::DrawAll(int nCamera)
 				pAvoidUI->SetCameraNum(nCamera - 1);
 				//モデル描画
 				pScene->Draw();
+			}
+			else if (pScene->GetObjType() == OBJTYPE_PAUSE)
+			{//ポーズがONの時のみポーズ画面を描画する
+				if (m_bPause == true)
+				{
+					pScene->Draw();
+				}
 			}
 			else
 			{

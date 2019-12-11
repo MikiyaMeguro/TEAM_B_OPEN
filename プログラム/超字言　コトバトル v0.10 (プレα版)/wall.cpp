@@ -38,6 +38,7 @@ CWall::CWall() : CScene3D(4, CScene::OBJTYPE_WALL)
 	m_nType = 0;
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
+	m_TexCounter = 0;
 	m_nAnimCounter = 0;
 }
 
@@ -97,6 +98,13 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 9) { CScene3D::BindTexture("TUROFLOWTEXT001"); }
 	else if (m_nType == 10) { CScene3D::BindTexture("TUROFLOWTEXT000"); }
 	else if (m_nType == 11) { CScene3D::BindTexture("TUROFLOWFLOOR"); }
+	else if (m_nType == 12) { CScene3D::BindTexture("TUROFLOW010"); }
+	else if (m_nType == 13) { CScene3D::BindTexture("TUROFLOW020"); }
+	else if (m_nType == 14) { CScene3D::BindTexture("TUROFLOW030"); }
+	else if (m_nType == 15) { CScene3D::BindTexture("ƒ‚ƒfƒ‹_TEX"); }
+	else if (m_nType == 16) { CScene3D::BindTexture("TUROFLOW011"); }
+	else if (m_nType == 17) { CScene3D::BindTexture("TUROFLOW021"); }
+	else if (m_nType == 18) { CScene3D::BindTexture("TUROFLOW031"); }
 
 	return S_OK;
 }
@@ -185,6 +193,21 @@ void CWall::Update(void)
 		{
 			m_nAnimCounter++;
 			SetAnimation(m_nAnimCounter, 0.9f, 1.0f);
+		}
+	}
+	else  if (m_nType == 15)
+	{
+		m_nCounter++;
+		if (m_nCounter % 60 == 0)
+		{
+			m_nAnimCounter++;
+			m_TexCounter++;
+			if (m_TexCounter > 74)
+			{
+				m_TexCounter = 0;
+			}
+			SetAnimationTex(D3DXVECTOR2(0.0f + ((m_TexCounter / 10) * 0.125f), 0.0f + ((m_TexCounter % 10) * 0.1f)),
+				D3DXVECTOR2(0.125f + ((m_TexCounter / 10) * 0.125f), 0.125f + ((m_TexCounter % 10) * 0.1f)));
 		}
 	}
 

@@ -19,7 +19,7 @@
 //=============================================================================
 #define BULLET_PRIORITY (1)
 #define BULLET_COLLISION_SIZE (45.0f)
-#define BULLET_HOMING_COEFFICIENT (0.065f)	//’Ç”ö‚É‚©‚©‚éŒW”
+#define BULLET_HOMING_COEFFICIENT (0.06f)	//’Ç”ö‚É‚©‚©‚éŒW”
 
 //=============================================================================
 // ‘O•ûéŒ¾
@@ -121,7 +121,7 @@ public:
 	void SetModelRot(const D3DXVECTOR3& rot);
 
 	void SetHomingChara(C3DCharactor* pChara) { m_pHomingChara = pChara; };
-
+	void SetBombHaight(float fHaight) { m_fBombHaight = fHaight; };
 	BULLET_PROPERTY GetType() { return m_Prop; }
 
 private:
@@ -136,6 +136,7 @@ private:
 	int m_nCntEffect;
 	CLineOrbit* m_pOrbit;
 
+	float m_fBombHaight;
 };
 
 //•¶š’eƒNƒ‰ƒX
