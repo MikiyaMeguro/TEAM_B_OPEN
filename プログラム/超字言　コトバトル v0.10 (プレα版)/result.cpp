@@ -40,14 +40,14 @@
 #define CHARAICON_POS (D3DXVECTOR3(140.0f,150.0f,0.0f))					// アイコンの位置
 #define CHARAICON_INTERVAL (300.0f)										// アイコンの間隔
 #define NUMCALLOUT_CORRECTION (10.0f)									// 数字吹き出しのX位置微調整
-
+#define AUDIENCE_INTERVAL (28.0f)
 //============================================================================
 //静的メンバ変数宣言
 //============================================================================
 CPlayer *CResult::m_pPlayer[MAX_PLAYER] = {};
 CResult::CharaSet CResult::m_ResultChara[MAX_PLAYER] = {};
 CMeshField *CResult::m_pMeshField = NULL;
-CScene3D *CResult::m_apAudience = NULL;
+CScene3D *CResult::m_apAudience[MAX_AUDIENCE] = {};
 
 //=============================================================================
 //	コンストラクタ
@@ -96,21 +96,34 @@ HRESULT CResult::Init(void)
 	float fNext = 42;	//表彰台の間の幅
 
 	InitPointer();
-	//SetPolygon();
+	SetPolygon();
 	SetModel();
 	SetAudience();
 #if 0
-	m_ResultChara[0].nPoint = 3;
-	m_ResultChara[1].nPoint = 2;
-	m_ResultChara[2].nPoint = 0;
-	m_ResultChara[3].nPoint = 1;
+	m_ResultChara[0].nPoint = 0;
+	m_ResultChara[1].nPoint = 1;
+	m_ResultChara[2].nPoint = 2;
+	m_ResultChara[3].nPoint = 2;
 
 	m_ResultChara[0].type = CPlayer::TYPE_BARANCE;
 	m_ResultChara[1].type = CPlayer::TYPE_POWER;
 	m_ResultChara[2].type = CPlayer::TYPE_SPEED;
 	m_ResultChara[3].type = CPlayer::TYPE_REACH;
 #endif
-
+#if 1
+	/* ソート */
+	for (int nRank = 0; nRank < MAX_PLAYER; nRank++)
+	{
+		for (int nRankCnt = nRank + 1; nRankCnt < 4; nRankCnt++)
+		{
+			if (m_ResultChara[nRank].nPoint < m_ResultChara[nRankCnt].nPoint)
+			{
+				nRepCharaSet = m_ResultChara[nRank];
+				m_ResultChara[nRank] = m_ResultChara[nRankCnt];
+				m_ResultChara[nRankCnt] = nRepCharaSet;
+			}
+		}
+	}
 	//順位決め
 	//ソート処理 大きい順
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
@@ -147,7 +160,25 @@ HRESULT CResult::Init(void)
 		//勝利数を初期化
 		nCntWinScore = 0;
 	}
-
+#endif // 0
+	//ナンバーの生成
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		for (int nCntTime = 0; nCntTime < MAX_POINT; nCntTime++)
+		{// ナンバー初期設定
+			m_apNumber[nCntPlayer][nCntTime] = new CNumber;
+			if (m_apNumber[nCntPlayer][nCntTime] != NULL)
+			{
+				if (nCntTime < 2)
+				{	// ３桁まで
+					m_apNumber[nCntPlayer][nCntTime]->Init(D3DXVECTOR3((TIMER_SPACE * nCntTime), CHARAICON_POS.y, CHARAICON_POS.z), 0);
+					m_apNumber[nCntPlayer][nCntTime]->SetSize(D3DXVECTOR2(30.0f, 30.0f),
+						D3DXVECTOR2((TIMER_SPACE * nCntTime) + m_apScene2D[nCntPlayer + 1]->GetPosition().x + 40.0f, m_apScene2D[nCntPlayer + 1]->GetPosition().y));
+					m_apNumber[nCntPlayer][nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				}
+			}
+		}
+	}
 #if 1
 	//メッシュフィールド生成
 	m_pMeshField = NULL;
@@ -215,21 +246,29 @@ HRESULT CResult::Init(void)
 			{
 				fPosX = 30;
 				Set2DUI(nCntPlayer, 1);
+				SetNumCallout(nCntPlayer,1, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(1, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[0] == 1)
 			{
 				fPosX = 70;
 				Set2DUI(nCntPlayer, 0);
+				SetNumCallout(nCntPlayer, 0, m_ResultChara[nCntPlayer].Movetype);	
+				TexPoint(0, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[0] == 2)
 			{
 				fPosX = -12;
 				Set2DUI(nCntPlayer, 2);
+				SetNumCallout(nCntPlayer, 2, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(2, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[0] == 3)
 			{
 				fPosX = -52;
 				Set2DUI(nCntPlayer, 3);
+				SetNumCallout(nCntPlayer, 3, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(3, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			RankPos = D3DXVECTOR3(fPosX, 30.0f, 0.0f);
 			nCntRankPos[0]++;
@@ -239,16 +278,22 @@ HRESULT CResult::Init(void)
 			{
 				fPosX = 70;
 				Set2DUI(nCntPlayer, 0);
+				SetNumCallout(nCntPlayer, 0, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(0, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[1] == 1)
 			{
 				fPosX = -12;
 				Set2DUI(nCntPlayer, 2);
+				SetNumCallout(nCntPlayer, 2, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(2, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[1] == 2)
 			{
 				fPosX = -52;
 				Set2DUI(nCntPlayer, 3);
+				SetNumCallout(nCntPlayer, 3, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(3, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			RankPos = D3DXVECTOR3(fPosX, 20.0f, 0.0f);
 			nCntRankPos[1]++;
@@ -258,11 +303,15 @@ HRESULT CResult::Init(void)
 			{
 				fPosX = -12;
 				Set2DUI(nCntPlayer, 2);
+				SetNumCallout(nCntPlayer, 2, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(2, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[2] == 1)
 			{
 				fPosX = -52;
 				Set2DUI(nCntPlayer, 3);
+				SetNumCallout(nCntPlayer, 3, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+				TexPoint(3, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			RankPos = D3DXVECTOR3(fPosX, 20.0f, 0.0f);
 			nCntRankPos[2]++;
@@ -270,6 +319,8 @@ HRESULT CResult::Init(void)
 		case 4:
 			RankPos = POS_4TH;
 			Set2DUI(nCntPlayer, 3);
+			SetNumCallout(nCntPlayer, 3, m_ResultChara[nCntPlayer].Movetype);	//吹き出しの位置
+			TexPoint(3, m_ResultChara[nCntPlayer].nPoint);							//数字座標設定
 			break;
 		}
 
@@ -279,49 +330,11 @@ HRESULT CResult::Init(void)
 			m_pPlayer[nCntPlayer]->SetMotion(CPlayer::MOTION_UPPER_NEUTRAL, CPlayer::UPPER_BODY);
 			m_pPlayer[nCntPlayer]->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
-	}
-#if 0
 
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-	{	//初期位置設定
+		/* 数字の生成 */
 		RankTex(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank - 1);
 		PLNumTex(nCntPlayer, m_ResultChara[nCntPlayer].type, m_ResultChara[nCntPlayer].Movetype);
-		for (int nCntTime = 0; nCntTime < MAX_POINT; nCntTime++)
-		{// ナンバー初期設定
-			m_apNumber[nCntPlayer][nCntTime] = new CNumber;
-			if (m_apNumber[nCntPlayer][nCntTime] != NULL)
-			{
-				if (nCntTime < 2)
-				{	// ３桁まで
-					m_apNumber[nCntPlayer][nCntTime]->Init(D3DXVECTOR3((TIMER_SPACE * nCntTime), CHARAICON_POS.y, CHARAICON_POS.z), 0);
-					m_apNumber[nCntPlayer][nCntTime]->SetSize(D3DXVECTOR2(30.0f, 30.0f),
-						D3DXVECTOR2((TIMER_SPACE * nCntTime) + (m_apPlayerIcon[nCntPlayer]->GetPosition().x + m_apPlayerIcon[nCntPlayer]->GetSize(0)), CHARAICON_POS.y));
-					m_apNumber[nCntPlayer][nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-				}
-			}
-		}
-		//数字座標設定
-		TexPoint(nCntPlayer, m_ResultChara[nCntPlayer].nPoint);
-		SetNumCallout(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank, m_ResultChara[nCntPlayer].Movetype);
 	}
-#endif // 0
-
-#if 0
-	/* ソート */
-	for (int nRank = 0; nRank < 4; nRank++)
-	{
-		for (int nRankCnt = nRank + 1; nRankCnt < 4; nRankCnt++)
-		{
-			if (m_ResultChara[nRank].nNumRank > m_ResultChara[nRankCnt].nNumRank)
-			{
-				nRepCharaSet = m_ResultChara[nRank];
-				m_ResultChara[nRank] = m_ResultChara[nRankCnt];
-				m_ResultChara[nRankCnt] = nRepCharaSet;
-			}
-		}
-	}
-
-#endif
 #endif
 	//カメラの設定
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
@@ -340,7 +353,7 @@ HRESULT CResult::Init(void)
 		if (m_pSpotLight[nCnt] == NULL)
 		{
 			m_pSpotLight[nCnt] = CSpotLight::Create(nCnt,D3DXVECTOR3(m_pPlayer[nCnt]->GetPosition().x, m_pPlayer[nCnt]->GetPosition().y + 60.0f, m_pPlayer[nCnt]->GetPosition().z),
-				SPOTLIGHT_DIRECTION, SPOTLIGHT_DEFFUSE, SPOTLIGHT_AMBIENT, SPOTLIGHT_SPECULAR, 0.0f, 0.0f, 0.0f, 800.0f, SPOTLIGHT_FALLOFF, D3DXToRadian(30.0f), D3DXToRadian(30.0f));
+				SPOTLIGHT_DIRECTION, SPOTLIGHT_DEFFUSE, SPOTLIGHT_AMBIENT, SPOTLIGHT_SPECULAR, 0.0f, 0.0f, 0.0f, 800.0f, SPOTLIGHT_FALLOFF, D3DXToRadian(30.0f), D3DXToRadian(50.0f));
 			if (m_ResultChara[nCnt].nNumRank != 1)
 			{//一位以外だったらライトをつけてない状態にする
 				m_pSpotLight[nCnt]->SetLightEnable(nCnt, FALSE);
@@ -412,8 +425,14 @@ void CResult::Uninit(void)
 				m_apEffect[nCntPlayer][nCntEff] = NULL;
 			}
 		}
-		if (m_pSpotLight[nCntPlayer] != NULL) { m_pSpotLight[nCntPlayer]->Uninit(); m_pSpotLight[nCntPlayer] = NULL; }
-
+		if (m_pSpotLight[nCntPlayer] != NULL) 
+		{ 
+			m_pSpotLight[nCntPlayer]->SetLightEnable(nCntPlayer, false);//スポットライトを消す
+			m_pSpotLight[nCntPlayer]->SpotLightDelete();				//スポットライト基準からディレクショナルライト基準へ切り替え
+			m_pSpotLight[nCntPlayer]->Uninit();
+			delete m_pSpotLight[nCntPlayer];
+			m_pSpotLight[nCntPlayer] = NULL;
+		}
 	}
 	for (int nCnt = 0; nCnt < RESULTTYPE_MAX; nCnt++)
 	{
@@ -423,10 +442,24 @@ void CResult::Uninit(void)
 			m_apScene2D[nCnt] = NULL;
 		}
 	}
-	if (m_apAudience != NULL)
-	{
-		m_apAudience->Uninit();
-		m_apAudience = NULL;
+	for (int nCntM = 0; nCntM < MAX_MODEL; nCntM++)
+	{//モデルの数
+		if (m_apStadium[nCntM] != NULL)
+		{
+			m_apStadium[nCntM]->Uninit();
+			m_apStadium[nCntM] = NULL;
+		}
+		for (int nCntS = 0; nCntS < MAX_STADIUMSTEP; nCntS++)
+		{//スタジアムの段差の数
+			for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
+			{//観客の数
+				if (m_apAudience[nCnt] != NULL)
+				{
+					m_apAudience[nCnt]->Uninit();
+					m_apAudience[nCnt] = NULL;
+				}
+			}
+		}
 	}
 	//全ての終了処理
 	Release();
@@ -525,11 +558,17 @@ void CResult::TexPoint(int nPlayer, int nPoint)
 		{
 			if (nCntTime > 1)
 			{
-				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint/10);
+				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint / 10);
 			}
 			else if (nCntTime == 1)
 			{
-				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint/1);
+				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint / 1);
+			}
+			if (nCntTime < 2)
+			{	// ３桁まで
+				m_apNumber[nPlayer][nCntTime]->SetSize(D3DXVECTOR2(30.0f, 30.0f),
+					D3DXVECTOR2((TIMER_SPACE * nCntTime) + m_apScene2D[nPlayer + 1]->GetPosition().x + 40.0f, m_apScene2D[nPlayer + 1]->GetPosition().y));
+				m_apNumber[nPlayer][nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 		}
 	}
@@ -583,7 +622,17 @@ void CResult::InitPointer(void)
 		}
 		if (m_pSpotLight[nCnt] != NULL) { m_pSpotLight[nCnt] = NULL; }
 	}
-	if (m_apAudience != NULL) { m_apAudience = NULL; }
+	for (int nCntM = 0; nCntM < MAX_MODEL; nCntM++)
+	{//モデルの数
+		if (m_apStadium[nCntM] != NULL) { m_apStadium[nCntM] = NULL; }
+		for (int nCntS = 0; nCntS < MAX_STADIUMSTEP; nCntS++)
+		{//スタジアムの段差の数
+			for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
+			{
+				if (m_apAudience[nCnt] != NULL) { m_apAudience[nCnt] = NULL; }
+			}
+		}
+	}
 }
 //=============================================================================
 // ポインタの初期化処理
@@ -637,18 +686,17 @@ void CResult::SetPolygon(void)
 		}
 	}
 	/* 数字の下のセリフ枠：左から並べる、並べ替えなし */
-	m_apScene2D[RESULTTYPE_CALLOUT_1] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[0].x+105.0f, m_PlayerIconPos[0].y, 0.0f), "RANKCHARA_CALLOUT", 2);
-	m_apScene2D[RESULTTYPE_CALLOUT_1]->SetWidthHeight(DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
+	m_apScene2D[RESULTTYPE_CALLOUT_1] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[0].x, m_PlayerIconPos[0].y, 0.0f), "RANKCHARA_CALLOUT", 2);
+	m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[0].x, m_PlayerIconPos[0].y, 0.0f), DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
 
-	m_apScene2D[RESULTTYPE_CALLOUT_2] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[1].x + 125.0f, m_PlayerIconPos[1].y, 0.0f), "RANKCHARA_CALLOUT", 2);
-	m_apScene2D[RESULTTYPE_CALLOUT_2]->SetWidthHeight(DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
+	m_apScene2D[RESULTTYPE_CALLOUT_2] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[1].x, m_PlayerIconPos[1].y, 0.0f), "RANKCHARA_CALLOUT", 2);
+	m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[1].x, m_PlayerIconPos[1].y, 0.0f), DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
 
-	m_apScene2D[RESULTTYPE_CALLOUT_3] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[2].x + 105.0f, m_PlayerIconPos[2].y, 0.0f), "RANKCHARA_CALLOUT", 2);
-	m_apScene2D[RESULTTYPE_CALLOUT_3]->SetWidthHeight(DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
+	m_apScene2D[RESULTTYPE_CALLOUT_3] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[2].x, m_PlayerIconPos[2].y, 0.0f), "RANKCHARA_CALLOUT", 2);
+	m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[2].x, m_PlayerIconPos[2].y, 0.0f), DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
 
-	m_apScene2D[RESULTTYPE_CALLOUT_4] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[3].x + 105.0f, m_PlayerIconPos[3].y, 0.0f), "RANKCHARA_CALLOUT", 2);
-	m_apScene2D[RESULTTYPE_CALLOUT_4]->SetWidthHeight(DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
-
+	m_apScene2D[RESULTTYPE_CALLOUT_4] = CScene2D::Create(D3DXVECTOR3(m_PlayerIconPos[3].x, m_PlayerIconPos[3].y, 0.0f), "RANKCHARA_CALLOUT", 2);
+	m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[3].x, m_PlayerIconPos[3].y, 0.0f), DEFAULT_SIZE*0.6f, DEFAULT_SIZE*0.3f);
 
 #endif
 }
@@ -691,13 +739,87 @@ void CResult::SetModel(void)
 //=============================================================================
 void CResult::SetAudience(void)
 {
-	if (m_apAudience == NULL)
+	int nNum = 0;
+	for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
 	{
-		m_apAudience = CScene3D::Create(D3DXVECTOR3(m_apStadium[0]->GetPosition().x, 100.0f, m_apStadium[0]->GetPosition().z),
-			"RANKING_AUDIENCE");
-		m_apAudience->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f,D3DX_PI,0.0f));
-		m_apAudience->SetSize(DEFAULT_SIZE*0.1f, DEFAULT_SIZE*0.1f);
-		m_apAudience->SetAnimation(2,0.5f,1.0f);
+		if (nCnt < 5)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[0]->GetPosition().x + (55.0f + (-AUDIENCE_INTERVAL*nCnt)),
+					75.0f, m_apStadium[0]->GetPosition().z),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI, 0.0f));
+			}
+		}
+		else if (nCnt >= 5 && nCnt < 10)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[0]->GetPosition().x + (55.0f + (-AUDIENCE_INTERVAL*(nCnt - 5))),
+					90.0f, m_apStadium[0]->GetPosition().z - 20.0f),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI, 0.0f));
+			}
+		}
+		else if (nCnt >= 10 && nCnt < 15)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[0]->GetPosition().x + (55.0f + (-AUDIENCE_INTERVAL*(nCnt - 10))),
+					105.0f, m_apStadium[0]->GetPosition().z - 40.0f),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI, 0.0f));
+			}
+		}
+		else if (nCnt >= 15 && nCnt < 18)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[1]->GetPosition().x + (-3.0f+(22.0f*(nCnt - 15))),
+					70.0f, m_apStadium[1]->GetPosition().z+(20.0f+(-20.0f*(nCnt - 15)))),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI*-0.8f, 0.0f));
+			}
+		}
+		else if (nCnt >= 18 && nCnt < 21)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[1]->GetPosition().x + (-18.0f + (22.0f*(nCnt - 18))),
+					90.0f, (m_apStadium[1]->GetPosition().z-35.0f) +(20.0f + (-15.0f*(nCnt - 18)))),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI*-0.8f, 0.0f));
+			}
+		}
+		else if (nCnt >= 21 && nCnt < 24)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[2]->GetPosition().x + (20.0f+(-AUDIENCE_INTERVAL*(nCnt - 21))),
+					70.0f, m_apStadium[2]->GetPosition().z + (10.0f + (-10.0f*(nCnt - 21)))),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI*0.8f, 0.0f));
+			}
+		}
+		else if (nCnt >= 24 && nCnt < 27)
+		{
+			if (m_apAudience[nCnt] == NULL)
+			{
+				m_apAudience[nCnt] = CScene3D::Create(D3DXVECTOR3(m_apStadium[2]->GetPosition().x + (20.0f + (-AUDIENCE_INTERVAL*(nCnt - 24))),
+					85.0f, (m_apStadium[2]->GetPosition().z - 25.0f) + (20.0f + (-5.0f*(nCnt - 24)))),
+					"RANKING_AUDIENCE");
+				m_apAudience[nCnt]->SetRot(D3DXVECTOR3(D3DX_PI*-0.5f, D3DX_PI*0.8f, 0.0f));
+			}
+		}
+		if (m_apAudience[nCnt] != NULL)
+		{
+			nNum = rand() % 2 + 1;
+			m_apAudience[nCnt]->SetSize(DEFAULT_SIZE*0.1f, DEFAULT_SIZE*0.1f);
+			m_apAudience[nCnt]->SetAnimation(nNum, 0.5f, 1.0f);
+			//αテストを適用する
+			m_apAudience[nCnt]->SetAlphaTest(true);
+		}
 	}
 }
 //=============================================================================
@@ -751,7 +873,11 @@ void  CResult::Set2DUI(int nNum, int nPosNum)
 	}
 	if (m_ResultChara[nNum].nNumRank == 1)
 	{//1位の設定をするときのみ別処理をする
-		if (m_apPlayerIcon[nNum] != NULL) { m_apPlayerIcon[nNum]->SetWidthHeight(DEFAULT_SIZE*0.75f, DEFAULT_SIZE*0.75f); }
+		if (m_apPlayerIcon[nNum] != NULL)
+		{
+			m_apPlayerIcon[nNum]->SetWidthHeight(DEFAULT_SIZE*0.75f, DEFAULT_SIZE*0.75f);
+			m_PlayerIconSize[nPosNum].x = m_apPlayerIcon[nNum]->GetSize(0);
+		}
 		if (m_apRanking[nNum] != NULL)
 		{
 			m_apRanking[nNum]->SetPosition(D3DXVECTOR3(m_RankPos[nPosNum].x, m_RankPos[nPosNum].y - (m_apPlayerIcon[nNum]->GetSize(1) - 20.0f), m_RankPos[nPosNum].z));
@@ -787,6 +913,11 @@ void CResult::PLNumTex(int nNum, int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type
 			m_apPlayerIcon[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
 				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
 		}
+		if (m_apPlayerNum[nNum] != NULL)
+		{
+			m_apPlayerNum[nNum]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nNum)),
+				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nNum)));
+		}
 		break;
 	case CCharaBase::MOVETYPE_NPC_AI:
 		if (m_apPlayerIcon[nNum] != NULL)
@@ -805,7 +936,7 @@ void CResult::PLNumTex(int nNum, int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type
 //=============================================================================
 // 数字出す吹き出しの設定
 //=============================================================================
-void CResult::SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE type)
+void CResult::SetNumCallout(int nNum,int nIconPos, CCharaBase::CHARACTOR_MOVE_TYPE type)
 {
 	switch (type)
 	{
@@ -816,32 +947,28 @@ void CResult::SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE 
 			if (m_apScene2D[RESULTTYPE_CALLOUT_2] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_PL1);
-				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x+(m_PlayerIconSize[nIconPos].x/2) , m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		case 1:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_1] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_PL2);
-				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		case 2:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_3] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_PL3);
-				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		case 3:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_4] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_PL4);
-				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		}
@@ -853,32 +980,28 @@ void CResult::SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE 
 			if (m_apScene2D[RESULTTYPE_CALLOUT_2] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_COM);
-				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		case 1:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_1] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_COM);
-				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		case 2:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_3] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_COM);
-				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		case 3:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_4] != NULL)
 			{
 				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_COM);
-				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetPosition(D3DXVECTOR3(m_apNumber[nNum][0]->GetPos().x + NUMCALLOUT_CORRECTION, m_apNumber[nNum][0]->GetPos().y, 0.0f));
-				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.3f);
+				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}
 			break;
 		}

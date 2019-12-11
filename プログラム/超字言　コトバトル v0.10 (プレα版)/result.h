@@ -24,7 +24,9 @@ class CSpotLight;
 //=============================================================================
 #define MAX_PLAYER (4)
 #define MAX_POINT (2)
-#define MAX_MODEL (4)
+#define MAX_MODEL (4)			//観客席の数
+#define MAX_AUDIENCE (27)		//観客全体の数
+#define MAX_STADIUMSTEP (3)		//観客席の段数
 //========================================
 // クラスの定義
 //========================================
@@ -79,23 +81,23 @@ private:
 	void Set2DUI(int nNum,int nPosNum);
 	void RankTex(int nNum, int nRank);
 	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
-	void SetNumCallout(int nNum, int Rank, CCharaBase::CHARACTOR_MOVE_TYPE type);
+	void SetNumCallout(int nNum, int nIconPos, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void EffectPro(void);
 	void SetAudience(void);
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	static CharaSet m_ResultChara[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-	static CScene3D *m_apAudience;
+	static CScene3D *m_apAudience[MAX_AUDIENCE];	//観客
 	CSelectMenu *m_pSeletMenu;
-	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];	// ナンバーへのポインタ
-	CScene2D *m_apScene2D[RESULTTYPE_MAX];		//演出系2Dポリゴン
-	CScene2D *m_apPlayerIcon[MAX_PLAYER];		//プレイヤーのアイコン
-	CScene2D *m_apRanking[MAX_PLAYER];			//順位
-	CScene2D *m_apPlayerNum[MAX_PLAYER];		//プレイヤー番号
-	CScene2D *m_apEffect[MAX_PLAYER][2];		//エフェクト[プレイヤー人数][エフェクト出す数]
-	CSceneX *m_apStadium[MAX_MODEL];			//モデルの配置
-	CSpotLight *m_pSpotLight[MAX_PLAYER];		//スポットライト
+	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];									// ナンバーへのポインタ
+	CScene2D *m_apScene2D[RESULTTYPE_MAX];										//演出系2Dポリゴン
+	CScene2D *m_apPlayerIcon[MAX_PLAYER];										//プレイヤーのアイコン
+	CScene2D *m_apRanking[MAX_PLAYER];											//順位
+	CScene2D *m_apPlayerNum[MAX_PLAYER];										//プレイヤー番号
+	CScene2D *m_apEffect[MAX_PLAYER][2];										//エフェクト[プレイヤー人数][エフェクト出す数]
+	CSceneX *m_apStadium[MAX_MODEL];											//モデルの配置
+	CSpotLight *m_pSpotLight[MAX_PLAYER];										//スポットライト
 	bool m_bMenu;
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ
 	bool m_bEffectPro;							//演出が始まってるかどうかフラグ
