@@ -45,8 +45,10 @@ public:
 	void SetColor(D3DXCOLOR col) { CMeshSphere::SetColor(col); };
 
 	void SetSpinSpeed(D3DXVECTOR3 spinspeed) { m_spinSpeed = spinspeed; };
-
+	void SetID(int nID) { m_nID = nID; };
 	float GetSize(void) { return m_fSize; };
+	int   GetID(void) { return m_nID; };
+
 private:
 	void IsNotDup(bool bDup) { m_bNotDup = bDup; };
 	float m_fSize;		//サイズ
@@ -54,6 +56,7 @@ private:
 	float m_fDestSize;	//目標のサイズ
 	int m_nLife;		//体力
 
+	int m_nID;
 	int m_nExpandTime;	//拡大に使う時間
 	bool m_bNotDup;		//重ねて表示するか
 

@@ -13,7 +13,7 @@
 CExplosion3D::CExplosion3D(int pri, OBJTYPE type) : CMeshSphere(pri, type)
 {
 	m_bNotDup = false;
-
+	m_nID = -1;
 }
 CExplosion3D::~CExplosion3D()
 {

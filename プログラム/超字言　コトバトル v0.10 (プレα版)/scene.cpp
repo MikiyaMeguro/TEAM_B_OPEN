@@ -16,6 +16,7 @@
 #include "game.h"
 #include "avoidui.h"
 #include "point.h"
+#include "CameraManager.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -225,8 +226,8 @@ void CScene::DrawAll(int nCamera)
 	CPlayer *pPlayer = NULL;
 	CPoint *pPoint = NULL;
 
-	pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取得
 	pPoint = CManager::GetPoint(nCamera - 1);	// ポイントの取得
+	pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取
 
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
@@ -237,7 +238,7 @@ void CScene::DrawAll(int nCamera)
 		{// 空になるまで描画する
 		 // Drawの最中に消える可能性があるから先に記録しておく
 			CScene *pSceneNext = pScene->m_pNext;
-			if (pScene->GetObjType() == OBJTYPE_PLAYER && nCamera != 5)
+			if (pScene->GetObjType() == OBJTYPE_PLAYER && nCamera != 5&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CPlayer *pPlayerScene = ((CPlayer*)pScene);
 
@@ -272,7 +273,7 @@ void CScene::DrawAll(int nCamera)
 					}
 				}
 			}
-			else if (pScene->GetObjType() == OBJTYPE_SCENEX)
+			else if (pScene->GetObjType() == OBJTYPE_SCENEX&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CSceneX *pSceneX = ((CSceneX*)pScene);
 				if (pSceneX->GetModelType() == CLoad::MODEL_BUSH)
@@ -287,7 +288,7 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			else if (pScene->GetObjType() == OBJTYPE_AVOIDUI)
+			else if (pScene->GetObjType() == OBJTYPE_AVOIDUI&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CAvoidUi *pAvoidUI = ((CAvoidUi*)pScene);
 				//どのプレイヤーカメラかを渡す
@@ -296,21 +297,22 @@ void CScene::DrawAll(int nCamera)
 				pScene->Draw();
 			}
 			else if (pScene->GetObjType() == OBJTYPE_PAUSE)
-			{//ポーズがONの時のみポーズ画面を描画する
+			{//ポーズ用カメラの時はポーズのみ描画する
 				if (m_bPause == true)
 				{
 					pScene->Draw();
 				}
 			}
-			else if (pScene->GetObjType() == OBJTYPE_SCENE2D || pScene->GetObjType() == OBJTYPE_BILLBOARD
+			else if ((pScene->GetObjType() == OBJTYPE_SCENE2D || pScene->GetObjType() == OBJTYPE_BILLBOARD
 					|| pScene->GetObjType() == OBJTYPE_TIME || pScene->GetObjType() == OBJTYPE_POINT)
+						&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{//
 				if (m_bDebug2Ddraw == false)
 				{
 					pScene->Draw();
 				}
 			}
-			else
+			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				// 描画
 				pScene->Draw();
