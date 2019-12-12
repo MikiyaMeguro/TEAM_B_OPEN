@@ -201,8 +201,8 @@ void CTutorial::Init(void)
 		//m_pWall->Create(D3DXVECTOR3(500.0f, 15.0f, 300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(120.0f, 35.0f, 0.0f),
 		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 10);
 		//	•¶Žšˆê——
-		//m_pWall->Create(D3DXVECTOR3(-520.0f, 0.1f, 00.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(275.0f, 335.0f, 0.0f),
-		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 8);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 16.0f, 2350.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(275.0f, 35.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
 
 	}
 
