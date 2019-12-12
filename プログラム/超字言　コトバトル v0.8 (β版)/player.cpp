@@ -774,7 +774,7 @@ bool CPlayer::CollisionDamageObj(void)
 
 					//吹き飛ばし
 					DamageReaction(pBullet->GetKnockBackPower(),ObjRot);
-
+					m_nCntTransTime = 10;
 					//弾削除
 					pBullet->Uninit();
 
@@ -788,6 +788,8 @@ bool CPlayer::CollisionDamageObj(void)
 		pScene = pSceneNext;
 	}
 
+	if (m_nCntTransTime <= 0)
+	{//無敵時間でないなら
 	/*爆発*/
 	// 先頭のオブジェクトを取得
 	pScene = CScene::GetTop(EXPLOSION_PRIORITY);
@@ -820,12 +822,15 @@ bool CPlayer::CollisionDamageObj(void)
 					}
 					//吹き飛ばし
 					DamageReaction(10.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
+					m_nCntTransTime = 60;
 					return true;
 				}
 
 			}
 		}
 		pScene = pSceneNext;
+	}
+
 	}
 
 	return false;
@@ -843,7 +848,6 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 	move.z += cosf(HitRotation.y) * fDamageValue * 2.0f;
 
 	move.y += fDamageValue;
-	m_nCntTransTime = 30;
 }
 //=============================================================================
 // 当たり判定(オブジェクト)処理

@@ -140,4 +140,7 @@ DATA = 00110 data/TEXTURE/tutorial/tutokotoba.png TUTOKOTOBA
 DATA = 00111 data/TEXTURE/Ranking/Curtain_Mask.png RANKING_MASKCYRTAIN
 
 
+DATA = 00112 data/TEXTURE/tutorial/tutostart.png TUTOSTART
+DATA = 00113 data/TEXTURE/tutorial/tutoriallogo.png TUTOLOGO
+
 END_LOAD

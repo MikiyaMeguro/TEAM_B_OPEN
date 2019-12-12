@@ -36,12 +36,12 @@ class CStageSelect;
 #define CAMERA_ROTX (-(D3DX_PI * 0.5f))		//カメラのデフォルト角度(X)
 #define CAMERA_POSR (100.0f)		//カメラの注視点
 
-#define PLAYER_INITPOSX (45.0f)
-#define PLAYER_INITPOSZ (-80.0f)
+#define PLAYER_INITPOSX (-150.0f)
+#define PLAYER_INITPOSZ (-150.0f)
 
 #define MAX_PLAYER (4)
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
-#define UI_MAX		(16)
+#define UI_MAX		(24)
 
 
 class CTutorial
@@ -77,7 +77,7 @@ private:
 	int m_nChangeNum;
 	static int m_nNumStage;
 	static CPoint *m_pPoint[MAX_PLAYER];
-	CScene2D *m_pScene2D[16];			// 2Dポリゴンへのポインタ
+	CScene2D *m_pScene2D[UI_MAX];			// 2Dポリゴンへのポインタ
 
 };
 #endif

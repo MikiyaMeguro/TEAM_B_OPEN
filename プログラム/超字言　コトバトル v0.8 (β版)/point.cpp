@@ -87,7 +87,6 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 	m_bFlag001 = true;
 	m_pRank = NULL;
 	m_pCrown = NULL;
-	m_pDouble = NULL;
 	m_bConfirmFlag = false;
 	m_RnakSize = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	for (int nCntPoint = 0; nCntPoint < MAX_POINT_NUM; nCntPoint++)
@@ -158,8 +157,6 @@ void CPoint::Uninit(void)
 	if (m_pRank != NULL) { m_pRank->Uninit(); m_pRank = NULL; }
 
 	if (m_pCrown != NULL) { m_pCrown->Uninit(); m_pCrown = NULL; }
-
-	if (m_pDouble != NULL) { m_pDouble->Uninit(); m_pDouble = NULL; }
 
 	if (m_pIcon != NULL)
 	{
@@ -400,12 +397,14 @@ void CPoint::UIPosition(int nID)
 		if (m_pIcon == NULL)
 		{
 			int nIDIcon = 0;
+			CPlayer::PLAYER_TYPE type;
 			if (CGame::GetPlayer(nID) != NULL)
 			{
 				nIDIcon = CGame::GetPlayer(nID)->GetPlayerType();
+				type = CGame::GetPlayer(nID)->GetPlayerType();
 			}
 			m_pIcon = CScene2D::Create(posIcon, "RANKCHARA_ICON", 6);
-			m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (nID * 0.25f)), D3DXVECTOR2(1.0f, 0.25f + (nID * 0.25f)));
+			m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (1.0f / MAX_PLAYER)*(int)type), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(int)type)));
 			m_pIcon->SetWidthHeight(sizeIcon.x, sizeIcon.y);
 			m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			m_pIcon->SetObjType(OBJTYPE_SCENE2D);
@@ -448,26 +447,10 @@ void CPoint::PointPostion()
 			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2((0.333f*1), 1.0f));
 			m_pCrown->SetObjType(CSceneBillBoard::OBJTYPE_CROWN);
 		}
-		if (m_pDouble == NULL)
-		{
-			m_pDouble = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z), 20.0f, 30.0f, "crown");
-		}
 
 		if (m_pCrown != NULL)
 		{
 			m_pCrown->Setpos(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z ));
-		}
-		if (m_pDouble != NULL)
-		{
-			m_pDouble->Setpos(D3DXVECTOR3((m_pos.x + 20), m_pos.y, m_pos.z));
-			if (CTime::GetFeverFlag() == true)
-			{
-				m_pDouble->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-			}
-			else
-			{
-				m_pDouble->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f));
-			}
 		}
 	}
 

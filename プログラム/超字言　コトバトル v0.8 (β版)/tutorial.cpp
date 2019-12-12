@@ -113,18 +113,24 @@ void CTutorial::Init(void)
 
 	if (m_pMeshField == NULL)
 	{
-		m_pMeshField = m_pMeshField->Create(D3DXVECTOR3(0.0f, 0.0f, 1600.0f), 20, 60, 40);
+		m_pMeshField = m_pMeshField->Create(D3DXVECTOR3(0.0f, 0.0f, 2000.0f),20,100,40);
 	}
 
 	if (m_pWall == NULL)
 	{
 		//	チュートリアル
-		m_pWall->Create(D3DXVECTOR3(0.0f, -1.5f, 00.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(1200.0f, 600.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(0.0f, -1.5f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(1200.0f, 600.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 11);
+		//	チュートリアル
+		m_pWall->Create(D3DXVECTOR3(0.0f, -1.5f, 1200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(1200.0f, 600.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 11);
+		//	チュートリアル
+		m_pWall->Create(D3DXVECTOR3(0.0f, -1.5f, 2200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(1200.0f, 600.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 11);
 		//	相手に当てよう
-		m_pWall->Create(D3DXVECTOR3(-280.0f, 0.5f, 740.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(-280.0f, 1.5f, 740.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 8);
-		m_pWall->Create(D3DXVECTOR3(280.0f, 0.5f, 740.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(280.0f, 1.5f, 740.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 8);
 		//	相手に当てよう表記文字
 		m_pWall->Create(D3DXVECTOR3(-280.0f, 12.0f, 860.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(80.0f, 20.0f, 0.0f),
@@ -137,9 +143,9 @@ void CTutorial::Init(void)
 		m_pWall->Create(D3DXVECTOR3(275.0f, 14.0f,712.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(28.0f, 28.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 15);
 		//	コトバを作って
-		m_pWall->Create(D3DXVECTOR3(-280.0f, 0.5f, 420.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(-280.0f, 1.5f, 420.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 3);
-		m_pWall->Create(D3DXVECTOR3(280.0f, 0.5f, 420.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(280.0f, 1.5f, 420.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 3);
 		//	コトバを作って表記文字
 		m_pWall->Create(D3DXVECTOR3(-280.0f, 12.0f, 540.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(80.0f, 20.0f, 0.0f),
@@ -152,9 +158,9 @@ void CTutorial::Init(void)
 		m_pWall->Create(D3DXVECTOR3(280.0f, 17.0f, 410.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(45.0f, 45.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 15);
 		//	文字を拾って
-		m_pWall->Create(D3DXVECTOR3(-280.0f, 0.5f, 100.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(-280.0f, 1.5f, 100.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
-		m_pWall->Create(D3DXVECTOR3(280.0f, 0.5f, 100.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(280.0f, 1.5f, 100.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 160.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
 		//	文字を拾って表記文字
 		m_pWall->Create(D3DXVECTOR3(-280.0f, 12.0f, 220.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(80.0f, 20.0f, 0.0f),
@@ -185,24 +191,45 @@ void CTutorial::Init(void)
 		m_pWall->Create(D3DXVECTOR3(0.0f, 0.2f, 900.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(120.0f, 30.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 19);
 		//	模擬戦へ
-		m_pWall->Create(D3DXVECTOR3(0.0f, 0.2f, 1500), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(120.0f, 50.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(0.0f, 0.2f, 1550), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 50.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 21);
 		//	勝利条件
-		m_pWall->Create(D3DXVECTOR3(0.0f, 75.0f, 1300.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(120.0f, 30.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(0.0f, 75.0f, 1300.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(140.0f, 40.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 20);
 
-		//	ゲームの流れ
-		//m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 290.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 35.0f, 0.0f),
-		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 9);
-		//	ゲームのルール説明
-		//m_pWall->Create(D3DXVECTOR3(500.0f, 0.1f, 150.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(250.0f, 190.0f, 0.0f),
-		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 2);
-		//	ゲームのルール
-		//m_pWall->Create(D3DXVECTOR3(500.0f, 15.0f, 300.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(120.0f, 35.0f, 0.0f),
-		//	D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 10);
 		//	文字一覧
-		m_pWall->Create(D3DXVECTOR3(0.0f, 16.0f, 2350.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(275.0f, 35.0f, 0.0f),
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 2350.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 2280.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 2210.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 2140.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 2070.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 2000.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 1930.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 1860.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 1790.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 1720.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 15.0f, 1650.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 1, 22);
+
+		//	矢印
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 250.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 500.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 750.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
 
 	}
 
@@ -225,6 +252,7 @@ void CTutorial::Init(void)
 	{
 		m_pScene2D[nCnt] = NULL;
 	}
+
 	if (NumPlayer == CPlayerSelect::SELECTPLAYER_1P)
 	{
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(1160.0f,479.0f, 0), "TOP000");
@@ -235,6 +263,11 @@ void CTutorial::Init(void)
 		m_pScene2D[2]->SetWidthHeight(200.0f, 57.0f);
 		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(1140.0f, 685.0f, 0), "TOP001");
 		m_pScene2D[3]->SetWidthHeight(230.0f, 57.0f);
+
+		m_pScene2D[16] = CScene2D::Create(D3DXVECTOR3(170.0f, 50.0f, 0), "TUTOLOGO");
+		m_pScene2D[16]->SetWidthHeight(280.0f, 100.0f);
+		m_pScene2D[17] = CScene2D::Create(D3DXVECTOR3(1100.0f, 45.0f, 0), "TUTOSTART");
+		m_pScene2D[17]->SetWidthHeight(250.0f, 70.0);
 	}
 	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_2P)
 	{
@@ -256,6 +289,15 @@ void CTutorial::Init(void)
 		m_pScene2D[6]->SetWidthHeight(140.0f, 35.0f);
 		m_pScene2D[7] = CScene2D::Create(D3DXVECTOR3(1045.0f, 696.0f, 0), "TOP001");
 		m_pScene2D[7]->SetWidthHeight(160.0f, 36.0f);
+
+		m_pScene2D[16] = CScene2D::Create(D3DXVECTOR3(250.0f, 30.0f, 0), "TUTOLOGO");
+		m_pScene2D[16]->SetWidthHeight(170.0f, 50.0);
+		m_pScene2D[17] = CScene2D::Create(D3DXVECTOR3(1025.0f, 30.0f, 0), "TUTOSTART");
+		m_pScene2D[17]->SetWidthHeight(170.0f, 40.0);
+		m_pScene2D[18] = CScene2D::Create(D3DXVECTOR3(250.0f, 390.0f, 0), "TUTOLOGO");
+		m_pScene2D[18]->SetWidthHeight(170.0f, 50.0);
+		m_pScene2D[19] = CScene2D::Create(D3DXVECTOR3(1025.0f, 390.0f, 0), "TUTOSTART");
+		m_pScene2D[19]->SetWidthHeight(170.0f, 40.0);
 	}
 	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_3P )
 	{
@@ -287,6 +329,18 @@ void CTutorial::Init(void)
 		m_pScene2D[11] = CScene2D::Create(D3DXVECTOR3(1214.0f, 335.0f, 0), "TOP001");
 		m_pScene2D[11]->SetWidthHeight(110.0f, 26.0f);
 
+		m_pScene2D[16] = CScene2D::Create(D3DXVECTOR3(90.0f, 25.0f, 0), "TUTOLOGO");
+		m_pScene2D[16]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[17] = CScene2D::Create(D3DXVECTOR3(540.0f, 28.0f, 0), "TUTOSTART");
+		m_pScene2D[17]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[18] = CScene2D::Create(D3DXVECTOR3(730.0f, 25.0f, 0), "TUTOLOGO");
+		m_pScene2D[18]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[19] = CScene2D::Create(D3DXVECTOR3(1180.0f, 28.0f, 0), "TUTOSTART");
+		m_pScene2D[19]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[20] = CScene2D::Create(D3DXVECTOR3(90.0f, 385.0f, 0), "TUTOLOGO");
+		m_pScene2D[20]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[21] = CScene2D::Create(D3DXVECTOR3(540.0f,393.0f, 0), "TUTOSTART");
+		m_pScene2D[21]->SetWidthHeight(140.0f, 40.0);
 	}
 	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_4P)
 	{
@@ -326,7 +380,26 @@ void CTutorial::Init(void)
 		m_pScene2D[14]->SetWidthHeight(90.0f, 25.0f);
 		m_pScene2D[15] = CScene2D::Create(D3DXVECTOR3(1214.0f, 699.0f, 0), "TOP001");
 		m_pScene2D[15]->SetWidthHeight(110.0f, 26.0f);
+
+		m_pScene2D[16] = CScene2D::Create(D3DXVECTOR3(90.0f, 25.0f, 0), "TUTOLOGO");
+		m_pScene2D[16]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[17] = CScene2D::Create(D3DXVECTOR3(540.0f, 28.0f, 0), "TUTOSTART");
+		m_pScene2D[17]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[18] = CScene2D::Create(D3DXVECTOR3(730.0f, 25.0f, 0), "TUTOLOGO");
+		m_pScene2D[18]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[19] = CScene2D::Create(D3DXVECTOR3(1180.0f, 28.0f, 0), "TUTOSTART");
+		m_pScene2D[19]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[20] = CScene2D::Create(D3DXVECTOR3(90.0f, 385.0f, 0), "TUTOLOGO");
+		m_pScene2D[20]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[21] = CScene2D::Create(D3DXVECTOR3(540.0f, 393.0f, 0), "TUTOSTART");
+		m_pScene2D[21]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[22] = CScene2D::Create(D3DXVECTOR3(730.0f, 385.0f, 0), "TUTOLOGO");
+		m_pScene2D[22]->SetWidthHeight(140.0f, 40.0);
+		m_pScene2D[23] = CScene2D::Create(D3DXVECTOR3(1180.0f, 393.0f, 0), "TUTOSTART");
+		m_pScene2D[23]->SetWidthHeight(140.0f, 40.0);
 	}
+
+
 }
 
 //=============================================================================
@@ -384,8 +457,6 @@ void CTutorial::Uninit(void)
 			m_pScene2D[nCnt] = NULL;
 		}
 	}
-
-
 	//不要なカメラを削除
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
 	if (pCameraManager != NULL)
@@ -551,7 +622,7 @@ void CTutorial::PlayerSetting(int nNum)
 		if (m_pPlayer[0] != NULL)
 		{
 			m_type[0] = CPlayer::TYPE_REACH;
-			m_pPlayer[0]->Set(D3DXVECTOR3(0.0f, 0.0f, -80.0f), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
+			m_pPlayer[0]->Set(D3DXVECTOR3(-150, 0.0f, -150), CCharaBase::MOVETYPE_PLAYER_INPUT, 0, m_type[0], D3DXVECTOR3(0.0f, 1.57f, 0.0f));
 			m_pPlayer[0]->SetCameraName("1P_CAMERA");
 			pCameraManager->SetCameraHomingChara("1P_CAMERA", (C3DCharactor*)m_pPlayer[0]->GetCharaMover());
 		}
@@ -622,20 +693,20 @@ void CTutorial::PlayerSetting(int nNum)
 
 		if (m_pPlayer[1] != NULL)
 		{
-			m_pPlayer[1]->Set(D3DXVECTOR3(PLAYER_INITPOSX+120, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[1]->Set(D3DXVECTOR3(PLAYER_INITPOSX+50, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 1, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[1]->SetCameraName("2P_CAMERA");
 			pCameraManager->SetCameraHomingChara("2P_CAMERA", (C3DCharactor*)m_pPlayer[1]->GetCharaMover());
 		}
 
 		if (m_pPlayer[2] != NULL)
 		{
-			m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOSX + 240, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[2]->Set(D3DXVECTOR3(PLAYER_INITPOSX + 100, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 2, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[2]->SetCameraName("3P_CAMERA");
 			pCameraManager->SetCameraHomingChara("3P_CAMERA", (C3DCharactor*)m_pPlayer[2]->GetCharaMover());
 		}
 		if (m_pPlayer[3] != NULL)
 		{
-			m_pPlayer[3]->Set(D3DXVECTOR3(PLAYER_INITPOSX + 360, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pPlayer[3]->Set(D3DXVECTOR3(PLAYER_INITPOSX + 150, 0.0f, PLAYER_INITPOSZ), CCharaBase::MOVETYPE_PLAYER_INPUT, 3, (CPlayer::PLAYER_TYPE)(rand() % CPlayer::TYPE_MAX), D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 			m_pPlayer[3]->SetCameraName("4P_CAMERA");
 			pCameraManager->SetCameraHomingChara("4P_CAMERA", (C3DCharactor*)m_pPlayer[3]->GetCharaMover());
 		}

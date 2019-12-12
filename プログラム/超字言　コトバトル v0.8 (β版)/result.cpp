@@ -104,7 +104,7 @@ HRESULT CResult::Init(void)
 	SetPolygon();
 	SetModel();
 	SetAudience();
-#if 0
+#if 1
 	m_ResultChara[0].nPoint = 0;
 	m_ResultChara[1].nPoint = 12;
 	m_ResultChara[2].nPoint = 23;
@@ -115,9 +115,9 @@ HRESULT CResult::Init(void)
 	m_ResultChara[2].type = CPlayer::TYPE_SPEED;
 	m_ResultChara[3].type = CPlayer::TYPE_REACH;
 
-	m_ResultChara[1].Movetype = CCharaBase::MOVETYPE_NPC_AI;
-	m_ResultChara[2].Movetype = CCharaBase::MOVETYPE_NPC_AI;
-	m_ResultChara[3].Movetype = CCharaBase::MOVETYPE_NPC_AI;
+	m_ResultChara[1].Movetype = CCharaBase::MOVETYPE_PLAYER_INPUT;
+	m_ResultChara[2].Movetype = CCharaBase::MOVETYPE_PLAYER_INPUT;
+	m_ResultChara[3].Movetype = CCharaBase::MOVETYPE_PLAYER_INPUT;
 
 	m_ResultChara[1].nId = 1;
 	m_ResultChara[2].nId = 2;
@@ -338,7 +338,7 @@ HRESULT CResult::Init(void)
 			break;
 		}
 		RankTex(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank - 1);
-		PLNumTex(nCntPlayer, m_ResultChara[nCntPlayer].type, m_ResultChara[nCntPlayer].Movetype);
+		PLNumTex(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank, m_ResultChara[nCntPlayer].type, m_ResultChara[nCntPlayer].Movetype);
 
 		if (m_pPlayer[nCntPlayer] != NULL)
 		{
@@ -948,15 +948,28 @@ void CResult::RankTex(int nNum, int nRank)
 //=============================================================================
 // キャラアイコンのテクスチャ管理
 //=============================================================================
-void CResult::PLNumTex(int nNum, int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type)
+void CResult::PLNumTex(int nNum, int nRank,int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type)
 {
 	switch (type)
 	{
 	case CCharaBase::MOVETYPE_PLAYER_INPUT:
 		if (m_apPlayerIcon[nNum] != NULL)
 		{
-			m_apPlayerIcon[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
-				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			if (nRank == 1)
+			{
+				m_apPlayerIcon[1]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
+					D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			}
+			else if (nRank == 2)
+			{
+				m_apPlayerIcon[0]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
+					D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			}
+			else
+			{
+				m_apPlayerIcon[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
+					D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			}
 		}
 		if (m_apPlayerNum[nNum] != NULL)
 		{
@@ -967,8 +980,21 @@ void CResult::PLNumTex(int nNum, int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type
 	case CCharaBase::MOVETYPE_NPC_AI:
 		if (m_apPlayerIcon[nNum] != NULL)
 		{
-			m_apPlayerIcon[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
-				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			if (nRank == 1)
+			{
+				m_apPlayerIcon[1]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
+					D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			}
+			else if (nRank == 2)
+			{
+				m_apPlayerIcon[0]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
+					D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			}
+			else
+			{
+				m_apPlayerIcon[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / MAX_PLAYER)*nChara)),
+					D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nChara)));
+			}
 		}
 		if (m_apPlayerNum[nNum] != NULL)
 		{
@@ -1297,7 +1323,7 @@ void CResult::Production(void)
 				if (bTurn[nCnt] != true)
 				{
 					m_apPlayerIcon[nCnt]->BindTexture("RANKCHARA_ICON");
-					PLNumTex(nCnt, m_ResultChara[nCnt].type, m_ResultChara[nCnt].Movetype);
+					PLNumTex(nCnt, m_ResultChara[nCnt].nNumRank, m_ResultChara[nCnt].type, m_ResultChara[nCnt].Movetype);
 					bTurn[nCnt] = true;
 				}
 				ProScal.x = 0.0f;

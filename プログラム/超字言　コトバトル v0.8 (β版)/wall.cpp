@@ -109,6 +109,7 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 20) { CScene3D::BindTexture("TUTOVICTRY"); }
 	else if (m_nType == 21) { CScene3D::BindTexture("TUTOBSTTLE"); }
 	else if (m_nType == 22) { CScene3D::BindTexture("モデル_TEX"); }
+	else if (m_nType == 23) { CScene3D::BindTexture("ベルトコンベア_アイコン"); }
 
 
 	return S_OK;
@@ -305,16 +306,73 @@ void CWall::Update(void)
 		if (m_nCounter % 60 == 0)
 		{
 			m_nAnimCounter++;
-			m_TexCounter++;
-			if (m_TexCounter > 74)
+			if (WallPos.z == 2350.0f)
 			{
-				m_TexCounter = 0;
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((0 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((0 % 10) * 0.1f)));
 			}
-			SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((m_TexCounter % 10) * 0.1f)),
-				D3DXVECTOR2(1.0f, 0.125f + ((m_TexCounter % 10) * 0.1f)));
+			else if (WallPos.z == 2280.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((1 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((1 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 2210.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((2 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((2 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 2140.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((3 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((3 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 2070.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((4 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((4 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 2000.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((5 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((5 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 1930.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((6 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((6 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 1860.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((7 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((7 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 1790.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((8% 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((8 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 1720.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((9 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((9 % 10) * 0.1f)));
+			}
+			else if (WallPos.z == 1650.0f)
+			{
+				SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((10 % 10) * 0.1f)),
+					D3DXVECTOR2(1.0f, 0.125f + ((10 % 10) * 0.1f)));
+			}
+
 		}
 	}
-
+	else if (m_nType == 23)
+	{
+		m_nCounter++;
+		if (m_nCounter % 6 == 0)
+		{
+			m_nAnimCounter++;
+			SetAnimation(-m_nAnimCounter, 0.9f, 1.0f);
+		}
+	}
 
 	WallPos += m_move;
 	CScene3D::SetPos(WallPos);						//	位置の設定
