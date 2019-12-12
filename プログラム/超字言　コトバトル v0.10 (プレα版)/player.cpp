@@ -267,8 +267,8 @@ void CPlayer::Update(void)
 			//セット
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 			static D3DXVECTOR3 BulletRot = {};
-			//BulletRot.y = m_pCharactorMove->GetRotation().y;
-			BulletRot.y = m_fBulletRotOld;
+			BulletRot.y = m_pCharactorMove->GetRotation().y;
+			//BulletRot.y = m_fBulletRotOld;
 			D3DXVECTOR3 BulletPos(GetBulletMuzzle());
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
 
@@ -293,7 +293,7 @@ void CPlayer::Update(void)
 					}
 					else
 					{//近いプレイヤーがいなければプレイヤーの向きに打つ
-						BulletRot.y = m_fBulletRotOld;
+						BulletRot.y = m_pCharactorMove->GetRotation().y;
 						m_pCharactorMove->GetRotation().y = BulletRot.y;
 					}
 				}
@@ -973,10 +973,10 @@ int		CPlayer::GetNearPlayer(void)
 	{
 		pChara = NULL;
 		pPlayer = NULL;
-
+		int nid = m_nID;
 		pPlayer = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
 
-		if (pPlayer != NULL)
+		if (pPlayer != NULL && GetVision(nCntPlayer) == true)
 		{
 			pChara = pPlayer->GetCharaMover();
 			if (pChara != NULL)
@@ -1004,19 +1004,17 @@ int		CPlayer::GetNearPlayer(void)
 	{
 		if (nCntPlayer != m_nID)
 		{//自分以外と判定を行う
-
 			//距離を取得(-は省く)
 			float fLength = fabsf(sqrtf(powf(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, 2.0f) +
 				powf(PlayerPos[m_nID].y - PlayerPos[nCntPlayer].y, 2.0f) +
 				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)));
-
 			//角度比較
-				if (fLength < fNearLength &&
-					fLength < PLAYER_LOCKON_LENGTH)
-				{
-					nPlayerNum = nCntPlayer;
-					fNearLength = fLength;
-				}
+			if (fLength < fNearLength &&
+				fLength < PLAYER_LOCKON_LENGTH)
+			{
+				nPlayerNum = nCntPlayer;
+				fNearLength = fLength;
+			}
 		}
 	}
 	return nPlayerNum;
