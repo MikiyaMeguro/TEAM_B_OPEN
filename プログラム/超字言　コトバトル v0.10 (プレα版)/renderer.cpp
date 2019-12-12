@@ -207,6 +207,12 @@ void CRenderer::Draw(void)
 				{
 					CScene::DrawAll(5);
 				}
+
+				if (pCameraManager->SetCamera("PAUSE_CAMERA") && CScene::GetbPause() == true)
+				{
+					CScene::DrawAll(5);
+				}
+
 				break;
 			case CManager::MODE_TUTORIAL:
 				if (pCameraManager->SetCamera("1P_CAMERA"))
