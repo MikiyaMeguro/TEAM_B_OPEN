@@ -69,5 +69,6 @@ MODEL_FILENAME = data/MODEL/Ranking/Stadium.x"				#46 ランキングのスタジアム壁
 MODEL_FILENAME = data/MODEL/StageOBJ/SnowBush.x"			#47 雪草
 MODEL_FILENAME = data/MODEL/StageOBJ/Pole2.x"				#48 ポール
 MODEL_FILENAME = data/MODEL/StageOBJ/Pole3.x"				#49 ポール
+MODEL_FILENAME = data/MODEL/StageOBJ/SnowMan.x"				#50 雪だるま
 
 END_SCRIPT		# この行は絶対消さないこと！
