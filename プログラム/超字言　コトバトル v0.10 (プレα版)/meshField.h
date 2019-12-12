@@ -18,7 +18,7 @@
 #define POLYGON_X				(20)						// ポリゴンの数（X）
 #define POLYGON_Z				(20)						// ポリゴンの数（Z）
 #define MESHFIELD_SIZE			(40.0f)						// メッシュフィールドの大きさ
-#define NUM_POLYGON				(10000)						// メッシュフィールドの大きさ
+#define NUM_POLYGON				(100000)					// メッシュフィールドの大きさ
 #define MESH_CENTER				((POLYGON_X / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE))	//中央値
 
 //========================================
@@ -33,7 +33,7 @@ public:
 	CMeshField(int nPriority = 3, OBJTYPE objType = OBJTYPE_MESH_FIELD);	// コンストラクタ
 	~CMeshField();														// デストラクタ
 
-	static CMeshField *Create(D3DXVECTOR3 pos);							// オブジェクトの生成
+	static CMeshField *Create(D3DXVECTOR3 pos,int nSplitX, int nSplitZ,float fWidth);							// オブジェクトの生成
 
 	HRESULT Init(void);										// メッシュフィールド初期化処理
 	void Uninit(void);													// メッシュフィールド終了処理
@@ -63,6 +63,8 @@ private:
 	int						m_nNumIndex;								// インデックス数
 	int						m_nNumPolygon;								// ポリゴン数
 	bool					m_bRand;									// ポリゴンに乗っている
+	float					m_fWidth = 0, m_fDepth = 0;							// 幅高さ
+	int						m_nSplitX = 0, m_nSplitZ = 0;						// 分割数
 };
 
 #endif

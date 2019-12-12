@@ -14,7 +14,6 @@
 //=============================================================================
 // グローバル変数宣言
 //=============================================================================
-float g_aHeight[POLYGON_Z + 1][POLYGON_X + 1];
 
 //=============================================================================
 // メッシュフィールドのコンストラクタ
@@ -31,6 +30,10 @@ CMeshField::CMeshField(int nPriority, OBJTYPE objType) : CScene(nPriority, objTy
 	m_pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_bRand = false;
+	m_nSplitX = 0;
+	m_nSplitZ = 0;
+	m_fDepth = 0;
+	m_fWidth = 0;
 
 	for (int nCntNor = 0; nCntNor < NUM_POLYGON; nCntNor++)
 	{
@@ -48,7 +51,7 @@ CMeshField::~CMeshField()
 //=============================================================================
 // オブジェクトの生成処理
 //=============================================================================
-CMeshField *CMeshField::Create(D3DXVECTOR3 pos)
+CMeshField *CMeshField::Create(D3DXVECTOR3 pos, int nSplitX, int nSplitZ, float fWidth)
 {
 	CMeshField *pMeshField = NULL;
 
@@ -60,6 +63,9 @@ CMeshField *CMeshField::Create(D3DXVECTOR3 pos)
 		if (pMeshField != NULL)
 		{
 			pMeshField->m_pos = pos;
+			pMeshField->m_nSplitX = nSplitX;
+			pMeshField->m_nSplitZ = nSplitZ;
+			pMeshField->m_fWidth = fWidth;
 			pMeshField->Init();
 		}
 	}
@@ -100,16 +106,16 @@ HRESULT CMeshField::Init(void)
 	//TestX = MESH_CENTER;
 
 	//MESH_CENTER
-	//m_pos.x = (POLYGON_X / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE / 2);
-	//m_pos.z = (POLYGON_Z / 2) * MESHFIELD_SIZE - (MESHFIELD_SIZE / 2);
+	//m_pos.x = (m_nSplitX / 2) * -MESHFIELD_SIZE + (MESHFIELD_SIZE / 2);
+	//m_pos.z = (m_nSplitZ / 2) * MESHFIELD_SIZE - (MESHFIELD_SIZE / 2);
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z + 1; nCntZ++)
-	{
-		for (int nCntX = 0; nCntX < POLYGON_X + 1; nCntX++)
-		{
-			g_aHeight[nCntZ][nCntX] = 0.0f;
-		}
-	}
+	//for (int nCntZ = 0; nCntZ < m_nSplitZ + 1; nCntZ++)
+	//{
+	//	for (int nCntX = 0; nCntX < m_nSplitX + 1; nCntX++)
+	//	{
+			//g_aHeight[nCntZ][nCntX] = 0.0f;
+	//	}
+	//}
 
 	// レンダラーを取得
 	CRenderer *pRenderer;
@@ -135,12 +141,12 @@ HRESULT CMeshField::Init(void)
 	int nCntIdxX;
 
 	// 頂点数
-	m_nNumVerTex = (POLYGON_X + 1) * (POLYGON_Z + 1);
+	m_nNumVerTex = (m_nSplitX + 1) * (m_nSplitZ + 1);
 
 	// インデックス数
-	m_nNumIndex = (POLYGON_X + 1) * (POLYGON_Z + 1)
-		+ (2 * (POLYGON_Z - 1))
-		+ (POLYGON_X + 1) * (POLYGON_Z - 1);
+	m_nNumIndex = (m_nSplitX + 1) * (m_nSplitZ + 1)
+		+ (2 * (m_nSplitZ - 1))
+		+ (m_nSplitX + 1) * (m_nSplitZ - 1);
 
 	// ポリゴン数
 	m_nNumPolygon = m_nNumIndex - 2;
@@ -167,21 +173,21 @@ HRESULT CMeshField::Init(void)
 	// 頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (nCntVtxZ = 0; nCntVtxZ < POLYGON_Z + 1; nCntVtxZ++)
+	for (nCntVtxZ = 0; nCntVtxZ < m_nSplitZ + 1; nCntVtxZ++)
 	{
-		for (nCntVtxX = 0; nCntVtxX < POLYGON_X + 1; nCntVtxX++)
+		for (nCntVtxX = 0; nCntVtxX < m_nSplitX + 1; nCntVtxX++)
 		{
 			// 頂点座標の設定
-			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].pos = D3DXVECTOR3(TestX + (-MESHFIELD_SIZE + (nCntVtxX * MESHFIELD_SIZE)), 0.0f, TestZ + (MESHFIELD_SIZE - (nCntVtxZ * MESHFIELD_SIZE)));
+			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].pos = D3DXVECTOR3(TestX + (-m_fWidth + (nCntVtxX * m_fWidth)), 0.0f, TestZ + (m_fWidth - (nCntVtxZ * m_fWidth)));
 			// 法線の設定
 			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].nor = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 			// 頂点カラーの設定
 			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
 			// テクスチャ座標の設定
 			pVtx[(nCntVtxZ + nCntVtxX) + nVtxCounter].tex =
-				D3DXVECTOR2(0.0f + (nCntVtxX /** (10.0f / POLYGON_X)*/), 0.0f + (nCntVtxZ /** (10.0f / POLYGON_Z)*/));
+				D3DXVECTOR2(0.0f + (nCntVtxX /** (10.0f / m_nSplitX)*/), 0.0f + (nCntVtxZ /** (10.0f / m_nSplitZ)*/));
 		}
-		nVtxCounter += POLYGON_X;
+		nVtxCounter += m_nSplitX;
 	}
 
 	// 頂点バッファをアンロックする
@@ -197,9 +203,9 @@ HRESULT CMeshField::Init(void)
 	int nData2 = 0;
 	int nData3 = 0;
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX; nCntX++)
 		{
 			D3DXVECTOR3 *pPos0, *pPos1, *pPos2, *pPos3;
 			D3DXVECTOR3 vec0, vec1, vec2;
@@ -207,8 +213,8 @@ HRESULT CMeshField::Init(void)
 
 			// 一方のポリゴンの２つのベクトルから法線を算出
 			pPos0 = &pVtx[nCntX + nCntZ + nCntPolygon].pos;
-			pPos1 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (POLYGON_X + 1)].pos;
-			pPos2 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (POLYGON_X + 1) + 1].pos;
+			pPos1 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (m_nSplitX + 1)].pos;
+			pPos2 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (m_nSplitX + 1) + 1].pos;
 			pPos3 = &pVtx[(nCntX + nCntZ + nCntPolygon) + 1].pos;
 
 			vec0 = *pPos1 - *pPos0;
@@ -220,22 +226,22 @@ HRESULT CMeshField::Init(void)
 			// 正規化する
 			D3DXVec3Normalize(&nor, &nor);
 			// 法線を保存
-			m_aNor[(nCntZ * POLYGON_Z) + (nCntX * POLYGON_X) + nCntPolygon] = nor;
+			m_aNor[(nCntZ * m_nSplitZ) + (nCntX * m_nSplitX) + nCntPolygon] = nor;
 
 			// 外積を使って各ポリゴンの法線を求める
 			D3DXVec3Cross(&nor, &vec2, &vec1);
 			// 正規化する
 			D3DXVec3Normalize(&nor, &nor);
 			// 法線を保存
-			m_aNor[(nCntZ * POLYGON_Z) + (nCntX * POLYGON_X) + nCntPolygon + 1] = nor;
+			m_aNor[(nCntZ * m_nSplitZ) + (nCntX * m_nSplitX) + nCntPolygon + 1] = nor;
 		}
 
-		nCntPolygon += POLYGON_X;
+		nCntPolygon += m_nSplitX;
 	}
 
-	for (int nCntPolygonZ = 0; nCntPolygonZ < POLYGON_Z + 1; nCntPolygonZ++)
+	for (int nCntPolygonZ = 0; nCntPolygonZ < m_nSplitZ + 1; nCntPolygonZ++)
 	{
-		for (int nCntPolygonX = 0; nCntPolygonX < POLYGON_X + 1; nCntPolygonX++)
+		for (int nCntPolygonX = 0; nCntPolygonX < m_nSplitX + 1; nCntPolygonX++)
 		{
 			if (nCntPolygonZ == 0)
 			{// 上端
@@ -243,9 +249,9 @@ HRESULT CMeshField::Init(void)
 				{// 左端
 					pVtx[0].nor = (m_aNor[0] + m_aNor[1]) / 2;
 				}
-				else if (nCntPolygonX == POLYGON_X)
+				else if (nCntPolygonX == m_nSplitX)
 				{// 右端
-					pVtx[POLYGON_X].nor = m_aNor[POLYGON_X + (POLYGON_X - 1)];
+					pVtx[m_nSplitX].nor = m_aNor[m_nSplitX + (m_nSplitX - 1)];
 				}
 				else
 				{// 上端の真ん中
@@ -253,51 +259,51 @@ HRESULT CMeshField::Init(void)
 						(m_aNor[(nCntPolygonX * 2) - 1] + m_aNor[((nCntPolygonX * 2) - 1) + 1] + m_aNor[((nCntPolygonX * 2) - 1) + 2]) / 3;
 				}
 			}
-			else if (nCntPolygonZ == POLYGON_Z)
+			else if (nCntPolygonZ == m_nSplitZ)
 			{// 下端
 				if (nCntPolygonX == 0)
 				{// 左端
-					pVtx[POLYGON_Z * (POLYGON_X + 1)].nor = m_aNor[2 * (POLYGON_X * (POLYGON_Z - 1))];
+					pVtx[m_nSplitZ * (m_nSplitX + 1)].nor = m_aNor[2 * (m_nSplitX * (m_nSplitZ - 1))];
 				}
-				else if (nCntPolygonX == POLYGON_X)
+				else if (nCntPolygonX == m_nSplitX)
 				{// 右端
-					pVtx[(POLYGON_X * POLYGON_Z) + (POLYGON_X + POLYGON_Z)].nor =
-						(m_aNor[(POLYGON_X * (POLYGON_X * (POLYGON_Z - 1))) + (2 * (POLYGON_X - 1))] +
-							m_aNor[((2 * (POLYGON_X * (POLYGON_Z - 1))) + (2 * (POLYGON_X - 1))) + 1]) / 2;
+					pVtx[(m_nSplitX * m_nSplitZ) + (m_nSplitX + m_nSplitZ)].nor =
+						(m_aNor[(m_nSplitX * (m_nSplitX * (m_nSplitZ - 1))) + (2 * (m_nSplitX - 1))] +
+							m_aNor[((2 * (m_nSplitX * (m_nSplitZ - 1))) + (2 * (m_nSplitX - 1))) + 1]) / 2;
 				}
 				else
 				{// 下端の真ん中
-					pVtx[(POLYGON_Z * (POLYGON_X + 1)) + nCntPolygonX].nor =
-						(m_aNor[(POLYGON_Z - 1) * (POLYGON_X * 2) + (nCntPolygonX * 2) - 2] +
-							m_aNor[((POLYGON_Z - 1) * (POLYGON_X * 2) + (nCntPolygonX * 2) - 2) + 1] +
-							m_aNor[((POLYGON_Z - 1) * (POLYGON_X * 2) + (nCntPolygonX * 2) - 2) + 2]) / 3;
+					pVtx[(m_nSplitZ * (m_nSplitX + 1)) + nCntPolygonX].nor =
+						(m_aNor[(m_nSplitZ - 1) * (m_nSplitX * 2) + (nCntPolygonX * 2) - 2] +
+							m_aNor[((m_nSplitZ - 1) * (m_nSplitX * 2) + (nCntPolygonX * 2) - 2) + 1] +
+							m_aNor[((m_nSplitZ - 1) * (m_nSplitX * 2) + (nCntPolygonX * 2) - 2) + 2]) / 3;
 				}
 			}
 			else
 			{// 真ん中
 				if (nCntPolygonX == 0)
 				{// 左端
-					pVtx[(POLYGON_X + 1) * nCntPolygonZ].nor =
-						(m_aNor[(nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)] +
-							m_aNor[(nCntPolygonZ * (2 * POLYGON_X))] +
-							m_aNor[(nCntPolygonZ * (2 * POLYGON_X) + 1)]) / 3;
+					pVtx[(m_nSplitX + 1) * nCntPolygonZ].nor =
+						(m_aNor[(nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)] +
+							m_aNor[(nCntPolygonZ * (2 * m_nSplitX))] +
+							m_aNor[(nCntPolygonZ * (2 * m_nSplitX) + 1)]) / 3;
 				}
-				else if (nCntPolygonX == POLYGON_X)
+				else if (nCntPolygonX == m_nSplitX)
 				{// 右端
-					pVtx[((nCntPolygonZ + 1) * POLYGON_X) + nCntPolygonZ].nor =
-						(m_aNor[((POLYGON_X - 1) * 2 + ((POLYGON_X * 2)* (nCntPolygonZ - 1)))]
-							+ m_aNor[((POLYGON_X - 1) * 2 + ((POLYGON_X * 2)* (nCntPolygonZ - 1))) + 1]
-							+ m_aNor[((POLYGON_X - 1) * 2 + ((POLYGON_X * 2)* (nCntPolygonZ - 1))) + ((POLYGON_X * 2) + 1)]) / 3;
+					pVtx[((nCntPolygonZ + 1) * m_nSplitX) + nCntPolygonZ].nor =
+						(m_aNor[((m_nSplitX - 1) * 2 + ((m_nSplitX * 2)* (nCntPolygonZ - 1)))]
+							+ m_aNor[((m_nSplitX - 1) * 2 + ((m_nSplitX * 2)* (nCntPolygonZ - 1))) + 1]
+							+ m_aNor[((m_nSplitX - 1) * 2 + ((m_nSplitX * 2)* (nCntPolygonZ - 1))) + ((m_nSplitX * 2) + 1)]) / 3;
 				}
 				else
 				{
-					pVtx[(POLYGON_X + 2) + (nCntPolygonX - 1) + ((nCntPolygonZ * (POLYGON_X + 1)) - (POLYGON_X + 1))].nor =
-						(m_aNor[((nCntPolygonX - 1) * 2) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X))] +
-							m_aNor[((((nCntPolygonX - 1) * 2) + 1) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)))] +
-							m_aNor[((((nCntPolygonX - 1) * 2) + 2) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)))] +
-							m_aNor[((2 * POLYGON_X) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X))) + ((nCntPolygonX * 2) - 2)] +
-							m_aNor[((2 * POLYGON_X) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)) + 1) + ((nCntPolygonX * 2) - 2)] +
-							m_aNor[((2 * POLYGON_X) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)) + 2) + ((nCntPolygonX * 2) - 2)]) / 6;
+					pVtx[(m_nSplitX + 2) + (nCntPolygonX - 1) + ((nCntPolygonZ * (m_nSplitX + 1)) - (m_nSplitX + 1))].nor =
+						(m_aNor[((nCntPolygonX - 1) * 2) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX))] +
+							m_aNor[((((nCntPolygonX - 1) * 2) + 1) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)))] +
+							m_aNor[((((nCntPolygonX - 1) * 2) + 2) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)))] +
+							m_aNor[((2 * m_nSplitX) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX))) + ((nCntPolygonX * 2) - 2)] +
+							m_aNor[((2 * m_nSplitX) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)) + 1) + ((nCntPolygonX * 2) - 2)] +
+							m_aNor[((2 * m_nSplitX) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)) + 2) + ((nCntPolygonX * 2) - 2)]) / 6;
 				}
 			}
 		}
@@ -313,18 +319,18 @@ HRESULT CMeshField::Init(void)
 	// インデックスバッファをロックし、インデックスデータへのポインタを取得
 	m_pIdxBuff->Lock(0, 0, (void**)&pIdx, 0);
 
-	for (nCntIdxZ = 0; nCntIdxZ < POLYGON_Z; nCntIdxZ++)
+	for (nCntIdxZ = 0; nCntIdxZ < m_nSplitZ; nCntIdxZ++)
 	{
-		for (nCntIdxX = 0; nCntIdxX < POLYGON_X + 1; nCntIdxX++, nIdxCounter++)
+		for (nCntIdxX = 0; nCntIdxX < m_nSplitX + 1; nCntIdxX++, nIdxCounter++)
 		{
-			pIdx[0] = nIdxCounter + POLYGON_X + 1;
+			pIdx[0] = nIdxCounter + m_nSplitX + 1;
 			pIdx[1] = nIdxCounter;
 			pIdx += 2;
 
-			if (nCntIdxZ < POLYGON_Z - 1 && nCntIdxX == POLYGON_X)
+			if (nCntIdxZ < m_nSplitZ - 1 && nCntIdxX == m_nSplitX)
 			{
 				pIdx[0] = nIdxCounter;
-				pIdx[1] = nIdxCounter + (POLYGON_X + 1) + 1;
+				pIdx[1] = nIdxCounter + (m_nSplitX + 1) + 1;
 				pIdx += 2;
 			}
 		}
@@ -388,9 +394,9 @@ void CMeshField::Update(void)
 	int nCntPolygon = 0;
 	int nCntNorPolygon = 0;
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX; nCntX++)
 		{
 			D3DXVECTOR3 *pPos0, *pPos1, *pPos2, *pPos3;
 			D3DXVECTOR3 vec0, vec1, vec2;
@@ -398,8 +404,8 @@ void CMeshField::Update(void)
 
 			// 一方のポリゴンの２つのベクトルから法線を算出
 			pPos0 = &pVtx[nCntX + nCntZ + nCntPolygon].pos;
-			pPos1 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (POLYGON_X + 1)].pos;
-			pPos2 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (POLYGON_X + 1) + 1].pos;
+			pPos1 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (m_nSplitX + 1)].pos;
+			pPos2 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (m_nSplitX + 1) + 1].pos;
 			pPos3 = &pVtx[(nCntX + nCntZ + nCntPolygon) + 1].pos;
 
 			vec0 = *pPos1 - *pPos0;
@@ -421,16 +427,16 @@ void CMeshField::Update(void)
 			m_aNor[(nCntZ * 2) + (nCntX * 2) + nCntNorPolygon + 1] = nor;
 		}
 
-		nCntPolygon += POLYGON_X;
-		nCntNorPolygon += (POLYGON_X * 2) - 2;
+		nCntPolygon += m_nSplitX;
+		nCntNorPolygon += (m_nSplitX * 2) - 2;
 	}
 
 	int nData0 = 0;
 	int nData1 = 0;
 
-	for (int nCntPolygonZ = 0; nCntPolygonZ < POLYGON_Z + 1; nCntPolygonZ++)
+	for (int nCntPolygonZ = 0; nCntPolygonZ < m_nSplitZ + 1; nCntPolygonZ++)
 	{
-		for (int nCntPolygonX = 0; nCntPolygonX < POLYGON_X + 1; nCntPolygonX++)
+		for (int nCntPolygonX = 0; nCntPolygonX < m_nSplitX + 1; nCntPolygonX++)
 		{
 			if (nCntPolygonZ == 0)
 			{// 上端
@@ -438,9 +444,9 @@ void CMeshField::Update(void)
 				{// 左端
 					pVtx[0].nor = (m_aNor[0] + m_aNor[1]) / 2;
 				}
-				else if (nCntPolygonX == POLYGON_X)
+				else if (nCntPolygonX == m_nSplitX)
 				{// 右端
-					pVtx[POLYGON_X].nor = m_aNor[POLYGON_X + (POLYGON_X - 1)];
+					pVtx[m_nSplitX].nor = m_aNor[m_nSplitX + (m_nSplitX - 1)];
 				}
 				else
 				{// 上端の真ん中
@@ -448,54 +454,54 @@ void CMeshField::Update(void)
 						(m_aNor[(nCntPolygonX * 2) - 1] + m_aNor[((nCntPolygonX * 2) - 1) + 1] + m_aNor[((nCntPolygonX * 2) - 1) + 2]) / 3;
 				}
 			}
-			else if (nCntPolygonZ == POLYGON_Z)
+			else if (nCntPolygonZ == m_nSplitZ)
 			{// 下端
 				if (nCntPolygonX == 0)
 				{// 左端
-					pVtx[POLYGON_Z * (POLYGON_X + 1)].nor = m_aNor[2 * (POLYGON_X * (POLYGON_Z - 1))];
+					pVtx[m_nSplitZ * (m_nSplitX + 1)].nor = m_aNor[2 * (m_nSplitX * (m_nSplitZ - 1))];
 				}
-				else if (nCntPolygonX == POLYGON_X)
+				else if (nCntPolygonX == m_nSplitX)
 				{// 右端
-					pVtx[(POLYGON_X * POLYGON_Z) + (POLYGON_X + POLYGON_Z)].nor =
-						(m_aNor[(2 * (POLYGON_X * (POLYGON_Z - 1))) + (2 * (POLYGON_X - 1))] +
-							m_aNor[((2 * (POLYGON_X * (POLYGON_Z - 1))) + (2 * (POLYGON_X - 1))) + 1]) / 2;
+					pVtx[(m_nSplitX * m_nSplitZ) + (m_nSplitX + m_nSplitZ)].nor =
+						(m_aNor[(2 * (m_nSplitX * (m_nSplitZ - 1))) + (2 * (m_nSplitX - 1))] +
+							m_aNor[((2 * (m_nSplitX * (m_nSplitZ - 1))) + (2 * (m_nSplitX - 1))) + 1]) / 2;
 				}
 				else
 				{// 下端の真ん中
-					pVtx[(POLYGON_Z * (POLYGON_X + 1)) + nCntPolygonX].nor =
-						(m_aNor[(POLYGON_Z - 1) * (POLYGON_X * 2) + (nCntPolygonX * 2) - 2] +
-							m_aNor[((POLYGON_Z - 1) * (POLYGON_X * 2) + (nCntPolygonX * 2) - 2) + 1] +
-							m_aNor[((POLYGON_Z - 1) * (POLYGON_X * 2) + (nCntPolygonX * 2) - 2) + 2]) / 3;
+					pVtx[(m_nSplitZ * (m_nSplitX + 1)) + nCntPolygonX].nor =
+						(m_aNor[(m_nSplitZ - 1) * (m_nSplitX * 2) + (nCntPolygonX * 2) - 2] +
+							m_aNor[((m_nSplitZ - 1) * (m_nSplitX * 2) + (nCntPolygonX * 2) - 2) + 1] +
+							m_aNor[((m_nSplitZ - 1) * (m_nSplitX * 2) + (nCntPolygonX * 2) - 2) + 2]) / 3;
 				}
 			}
 			else
 			{// 真ん中
 				if (nCntPolygonX == 0)
 				{// 左端
-					pVtx[(POLYGON_X + 1) * nCntPolygonZ].nor =
-						(m_aNor[(nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)] +
-						m_aNor[(nCntPolygonZ * (2 * POLYGON_X))] +
-						m_aNor[(nCntPolygonZ * (2 * POLYGON_X) + 1)]) / 3;
+					pVtx[(m_nSplitX + 1) * nCntPolygonZ].nor =
+						(m_aNor[(nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)] +
+						m_aNor[(nCntPolygonZ * (2 * m_nSplitX))] +
+						m_aNor[(nCntPolygonZ * (2 * m_nSplitX) + 1)]) / 3;
 				}
-				else if (nCntPolygonX == POLYGON_X)
+				else if (nCntPolygonX == m_nSplitX)
 				{// 右端
-					pVtx[((nCntPolygonZ + 1) * POLYGON_X) + nCntPolygonZ].nor =
-						(m_aNor[((POLYGON_X - 1) * 2 + ((POLYGON_X * 2)* (nCntPolygonZ - 1)))]
-							+ m_aNor[((POLYGON_X - 1) * 2 + ((POLYGON_X * 2)* (nCntPolygonZ - 1))) + 1]
-							+ m_aNor[((POLYGON_X - 1) * 2 + ((POLYGON_X * 2)* (nCntPolygonZ - 1))) + ((POLYGON_X * 2) + 1)]) / 3;
+					pVtx[((nCntPolygonZ + 1) * m_nSplitX) + nCntPolygonZ].nor =
+						(m_aNor[((m_nSplitX - 1) * 2 + ((m_nSplitX * 2)* (nCntPolygonZ - 1)))]
+							+ m_aNor[((m_nSplitX - 1) * 2 + ((m_nSplitX * 2)* (nCntPolygonZ - 1))) + 1]
+							+ m_aNor[((m_nSplitX - 1) * 2 + ((m_nSplitX * 2)* (nCntPolygonZ - 1))) + ((m_nSplitX * 2) + 1)]) / 3;
 				}
 				else
 				{
-					pVtx[(POLYGON_X + 2) + (nCntPolygonX - 1) + ((nCntPolygonZ * (POLYGON_X + 1)) - (POLYGON_X + 1))].nor =
-						(m_aNor[((nCntPolygonX - 1) * 2) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X))] +
-						 m_aNor[((((nCntPolygonX - 1) * 2) + 1) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)))] +
-						 m_aNor[((((nCntPolygonX - 1) * 2) + 2) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)))] +
-						 m_aNor[((2 * POLYGON_X) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X))) + ((nCntPolygonX * 2) - 1)] +
-						 m_aNor[((2 * POLYGON_X) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)) + 1) + ((nCntPolygonX * 2) - 1)] +
-						 m_aNor[((2 * POLYGON_X) + ((nCntPolygonZ * (2 * POLYGON_X)) - (2 * POLYGON_X)) + 2) + ((nCntPolygonX * 2) - 1)]) / 6;
+					pVtx[(m_nSplitX + 2) + (nCntPolygonX - 1) + ((nCntPolygonZ * (m_nSplitX + 1)) - (m_nSplitX + 1))].nor =
+						(m_aNor[((nCntPolygonX - 1) * 2) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX))] +
+						 m_aNor[((((nCntPolygonX - 1) * 2) + 1) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)))] +
+						 m_aNor[((((nCntPolygonX - 1) * 2) + 2) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)))] +
+						 m_aNor[((2 * m_nSplitX) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX))) + ((nCntPolygonX * 2) - 1)] +
+						 m_aNor[((2 * m_nSplitX) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)) + 1) + ((nCntPolygonX * 2) - 1)] +
+						 m_aNor[((2 * m_nSplitX) + ((nCntPolygonZ * (2 * m_nSplitX)) - (2 * m_nSplitX)) + 2) + ((nCntPolygonX * 2) - 1)]) / 6;
 
-					nData0 = (POLYGON_X + 2) + (nCntPolygonX - 1) + ((nCntPolygonZ * (POLYGON_X + 1)) - (POLYGON_X + 1));
-					/*nData1 = ((2 * (POLYGON_X * (POLYGON_Z - 1))) + (2 * (POLYGON_X - 1))) + 1;*/
+					nData0 = (m_nSplitX + 2) + (nCntPolygonX - 1) + ((nCntPolygonZ * (m_nSplitX + 1)) - (m_nSplitX + 1));
+					/*nData1 = ((2 * (m_nSplitX * (m_nSplitZ - 1))) + (2 * (m_nSplitX - 1))) + 1;*/
 				}
 			}
 		}
@@ -573,29 +579,29 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 
 	bool bX = false;
 	bool bZ = false;
-	bool abX[POLYGON_X];
-	bool abZ[POLYGON_Z];
+	bool *abX = new bool[m_nSplitX];
+	bool *abZ = new bool[m_nSplitZ];
 	bool bRand = false;
 
-	for (int nCount = 0; nCount < POLYGON_X; nCount++)
+	for (int nCount = 0; nCount < m_nSplitX; nCount++)
 	{
 		abX[nCount] = false;
 	}
 
-	for (int nCount = 0; nCount < POLYGON_Z; nCount++)
+	for (int nCount = 0; nCount < m_nSplitZ; nCount++)
 	{
 		abZ[nCount] = false;
 	}
 
 	// 自分が今どのポリゴンに乗っているか
-	for (int nCntZ = 0; nCntZ < POLYGON_Z; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X -1; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX -1; nCntX++)
 		{
-			float  test = MESH_CENTER - MESHFIELD_SIZE + (nCntX * MESHFIELD_SIZE);
-			float  test1 = MESH_CENTER + MESHFIELD_SIZE + (nCntX * MESHFIELD_SIZE);
-			float  test2 = MESH_CENTER - MESHFIELD_SIZE + (nCntZ * MESHFIELD_SIZE);
-			float  test3 = MESH_CENTER  + (nCntZ * MESHFIELD_SIZE);
+			float  test = MESH_CENTER - m_fWidth + (nCntX * m_fWidth);
+			float  test1 = MESH_CENTER + m_fWidth + (nCntX * m_fWidth);
+			float  test2 = MESH_CENTER - m_fWidth + (nCntZ * m_fWidth);
+			float  test3 = MESH_CENTER  + (nCntZ * m_fWidth);
 
 			if (pos.x >= test && pos.x < test1)
 			{
@@ -613,9 +619,9 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 
 	int nCount = 0;
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX; nCntX++)
 		{
 			if (abX[nCntX] == true && abZ[nCntZ] == true)
 			{
@@ -636,9 +642,9 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 	int nCntPolygon = 0;
 	int nCntNorPolygon = 0;
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX; nCntX++)
 		{
 			if (abX[nCntX] == true && abZ[nCntZ] == true)
 			{
@@ -649,8 +655,8 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 
 				// 一方のポリゴンの２つのベクトルから法線を算出
 				pPos0 = &pVtx[nCntX + nCntZ + nCntPolygon].pos;							// 左上
-				pPos1 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (POLYGON_X + 1)].pos;		// 左下
-				pPos2 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (POLYGON_X + 1) + 1].pos;	// 右下
+				pPos1 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (m_nSplitX + 1)].pos;		// 左下
+				pPos2 = &pVtx[(nCntX + nCntZ + nCntPolygon) + (m_nSplitX + 1) + 1].pos;	// 右下
 				pPos3 = &pVtx[(nCntX + nCntZ + nCntPolygon) + 1].pos;					// 右上
 
 				vec0 = *pPos1 - *pPos0;	// 左の辺のベクトル
@@ -683,12 +689,15 @@ float CMeshField::GetHeight(D3DXVECTOR3 pos)
 			}
 		}
 
-		nCntPolygon += POLYGON_X;
-		nCntNorPolygon += (POLYGON_X * 2) - 2;
+		nCntPolygon += m_nSplitX;
+		nCntNorPolygon += (m_nSplitX * 2) - 2;
 	}
 
 	// 頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
+
+	delete[] abX;
+	delete[] abZ;
 
 	return pos.y;
 }
@@ -704,9 +713,9 @@ void CMeshField::SetHeight(D3DXVECTOR3 pos, float fValue, float fRange)
 	// 頂点バッファをロックし、頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z + 1; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ + 1; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X + 1; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX + 1; nCntX++)
 		{
 			// posから対象の頂点までの距離
 			float fLength = sqrtf
@@ -724,7 +733,7 @@ void CMeshField::SetHeight(D3DXVECTOR3 pos, float fValue, float fRange)
 			}
 
 			// 高さを代入
-			g_aHeight[nCntZ][nCntX] = pVtx->pos.y;
+			//g_aHeight[nCntZ][nCntX] = pVtx->pos.y;
 
 			pVtx++;
 		}
@@ -753,26 +762,26 @@ bool CMeshField::GetHeightbool(D3DXVECTOR3 &pos)
 	D3DXVECTOR3 posMtx = pos - m_pos;
 
 	int test1, test2;
-	test1 = POLYGON_X;
-	test2 = POLYGON_Z;
+	test1 = m_nSplitX;
+	test2 = m_nSplitZ;
 	//現在プレイヤーが何ブロック目にいるかを確認する式
-	int			nMeshX = (int)((posMtx.x) / (MESHFIELD_SIZE / POLYGON_X));
-	int			nMeshZ = (int)((posMtx.z) / (MESHFIELD_SIZE / POLYGON_Z) * -1);
+	int			nMeshX = (int)((posMtx.x) / (MESHFIELD_SIZE / m_nSplitX));
+	int			nMeshZ = (int)((posMtx.z) / (MESHFIELD_SIZE / m_nSplitZ) * -1);
 
-	if (nMeshX >= POLYGON_X || nMeshX < 0)
+	if (nMeshX >= m_nSplitX || nMeshX < 0)
 	{
 		return false;
 	}
-	if (nMeshZ >= POLYGON_Z || nMeshZ < 0)
+	if (nMeshZ >= m_nSplitZ || nMeshZ < 0)
 	{
 		return false;
 	}
 
 	//現在の乗っかっているブロックの頂点の出し方
-	int			nMeshLU = nMeshX + nMeshZ * (POLYGON_X + 1);					//例　0番目の頂点
-	int			nMeshRU = (nMeshX + 1) + nMeshZ * (POLYGON_X + 1);			//例　1番目の頂点
-	int			nMeshLD = nMeshX + (nMeshZ + 1) * (POLYGON_X + 1);			//例　3番目の頂点
-	int			nMeshRD = (nMeshX + 1) + (nMeshZ + 1) * (POLYGON_X + 1);		//例　4番目の頂点
+	int			nMeshLU = nMeshX + nMeshZ * (m_nSplitX + 1);					//例　0番目の頂点
+	int			nMeshRU = (nMeshX + 1) + nMeshZ * (m_nSplitX + 1);			//例　1番目の頂点
+	int			nMeshLD = nMeshX + (nMeshZ + 1) * (m_nSplitX + 1);			//例　3番目の頂点
+	int			nMeshRD = (nMeshX + 1) + (nMeshZ + 1) * (m_nSplitX + 1);		//例　4番目の頂点
 
 																				//頂点情報へのポインタ
 	VERTEX_3D *pVtx;
@@ -780,11 +789,11 @@ bool CMeshField::GetHeightbool(D3DXVECTOR3 &pos)
 	//頂点バッファをロックし頂点データへのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 
-	if (posMtx.x < 0 || posMtx.x > pVtx[POLYGON_X].pos.x)
+	if (posMtx.x < 0 || posMtx.x > pVtx[m_nSplitX].pos.x)
 	{
 		return false;
 	}
-	if (posMtx.z > 0 || posMtx.z > pVtx[POLYGON_X].pos.z)
+	if (posMtx.z > 0 || posMtx.z > pVtx[m_nSplitX].pos.z)
 	{
 		return false;
 	}
@@ -873,7 +882,7 @@ void CMeshField::SaveHeight(void)
 
 	if (pFile != NULL)
 	{
-		fwrite(&g_aHeight[0][0], sizeof(float), POLYGON_Z * POLYGON_X, pFile);	// データのアドレス,データのサイズ,データの個数,ファイルポインタ
+		//fwrite(&g_aHeight[0][0], sizeof(float), m_nSplitZ * m_nSplitX, pFile);	// データのアドレス,データのサイズ,データの個数,ファイルポインタ
 
 		fclose(pFile);
 	}
@@ -901,7 +910,7 @@ void CMeshField::LoadHeight(void)
 
 	if (pFile != NULL)
 	{
-		fread(&g_aHeight[0][0], sizeof(float), POLYGON_Z * POLYGON_X, pFile);	// データのアドレス,データのサイズ,データの個数,ファイルポインタ
+		//fread(&g_aHeight[0][0], sizeof(float), m_nSplitZ * m_nSplitX, pFile);	// データのアドレス,データのサイズ,データの個数,ファイルポインタ
 
 		fclose(pFile);
 	}
@@ -910,11 +919,11 @@ void CMeshField::LoadHeight(void)
 		MessageBox(0, "NULLでした", "警告", MB_OK);
 	}
 
-	for (int nCntZ = 0; nCntZ < POLYGON_Z + 1; nCntZ++)
+	for (int nCntZ = 0; nCntZ < m_nSplitZ + 1; nCntZ++)
 	{
-		for (int nCntX = 0; nCntX < POLYGON_X + 1; nCntX++)
+		for (int nCntX = 0; nCntX < m_nSplitX + 1; nCntX++)
 		{// posを代入
-			pVtx->pos.y = g_aHeight[nCntZ][nCntX];
+			//pVtx->pos.y = g_aHeight[nCntZ][nCntX];
 
 			pVtx++;
 		}
