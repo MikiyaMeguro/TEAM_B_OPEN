@@ -334,7 +334,7 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA")
+			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA" && pScene->GetObjType() != OBJTYPE_CROWN && pScene->GetObjType() != OBJTYPE_BULLETUI)
 			{
 				// •`‰æ
 				pScene->Draw();
