@@ -815,7 +815,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -826,7 +826,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -837,7 +837,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -848,7 +848,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -859,7 +859,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -870,7 +870,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -881,7 +881,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -892,7 +892,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -903,7 +903,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -914,7 +914,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -925,7 +925,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -936,7 +936,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -947,7 +947,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -958,7 +958,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -969,7 +969,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -980,7 +980,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -991,7 +991,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1002,7 +1002,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1013,7 +1013,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1024,7 +1024,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1035,7 +1035,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1046,7 +1046,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1057,7 +1057,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1068,7 +1068,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1079,7 +1079,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1090,7 +1090,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1101,7 +1101,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
@@ -1112,7 +1112,7 @@ MODELSET		# 芝生
 	SCALE = 1.7 1.5 1.7			# スケール情報
 	COLLISION = 13				# コリジョンタイプ情報
 	GIMMICK = 1				# ギミック情報
-	BUSH = 4				#草番号
+	BUSH = 1				#草番号
 
 END_MODELSET
 
