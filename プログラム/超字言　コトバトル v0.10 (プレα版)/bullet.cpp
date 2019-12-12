@@ -391,7 +391,8 @@ void CModelBullet::Uninit(void)
 		break;
 	case TYPE_BOMB:
 		p3D = CExplosion3D::Create();
-		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 80.0f, 120, 0.01f); }
+		if (p3D != NULL) { p3D->Set(GetPosition(), 0.001f, 80.0f, 120, 0.01f);
+						   p3D->SetID(GetID());}
 		break;
 
 	default:

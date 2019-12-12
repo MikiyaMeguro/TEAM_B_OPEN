@@ -812,6 +812,12 @@ bool CPlayer::CollisionDamageObj(void)
 				CUtilityMath::RotateNormarizePI(&fRot);
 				if (sqrtf(X + Y + Z) < fObjSize)
 				{
+					CPoint *pPoint = NULL;
+					if (pExp->GetID() != -1)
+					{
+						pPoint = CManager::GetPoint(pExp->GetID());
+						pPoint->AddPoint(3);//爆弾ヒットで3ポイント追加
+					}
 					//吹き飛ばし
 					DamageReaction(10.0f, D3DXVECTOR3(0.0f,fRot,0.0f));
 					return true;
