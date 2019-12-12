@@ -59,6 +59,7 @@ public:
 		OBJTYPE_EXPLOSION,	// 爆発
 		OBJTYPE_ORBIT,		// 軌跡
 		OBJTYPE_AVOIDUI,	// プレイヤー足元UI
+		OBJTYPE_BILLBOARDUI,// ビルボードUI
 		OBJTYPE_MAX			// 総数
 	} OBJTYPE;
 
@@ -102,6 +103,7 @@ private:
 	static int m_nNumPriority[NUM_PRIORITY];					// その優先順位にあるオブジェクトの数
 	OBJTYPE m_objType;											// オブジェクトの種類
 	static bool	m_bPause;										// ポーズ
+	static bool m_bDebug2Ddraw;									// 2D表示のフラグ
 
 };
 

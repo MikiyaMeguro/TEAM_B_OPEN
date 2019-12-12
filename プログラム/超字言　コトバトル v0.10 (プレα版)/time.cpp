@@ -41,8 +41,8 @@
 #define DEFAULT_SIZE1P2P	(D3DXVECTOR3(12.0f, 20.0f, 0.0f))	// デフォルトサイズ
 #define DEFAULT_SIZE3P4P	(D3DXVECTOR3(22.0f, 30.0f, 0.0f))	// デフォルトサイズ
 #define SCALE_CHANGE_TIME	(10)								// スケール変化の時間
-#define SCALE_UI			(150)								// UIの大きさ
-#define SCALE_UI_WIDTH		(250)								// UIの大きさ
+#define SCALE_UI			(100)								// UIの大きさ
+#define SCALE_UI_WIDTH		(200)								// UIの大きさ
 #define FEVER_COLOR			(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f))
 //=============================================================================
 //	静的メンバ変数
@@ -234,7 +234,7 @@ HRESULT CTime::Init(void)
 		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, SCREEN_HEIGHT / 2 + 50, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, SCREEN_HEIGHT / 2 - 100, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[0]->SetCol(FEVER_COLOR);
 	}
@@ -246,10 +246,10 @@ HRESULT CTime::Init(void)
 		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 180.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[0]->SetCol(FEVER_COLOR);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 550.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[1]->SetCol(FEVER_COLOR);
 
@@ -264,10 +264,10 @@ HRESULT CTime::Init(void)
 		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 180.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[0]->SetCol(FEVER_COLOR);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 550.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[1]->SetCol(FEVER_COLOR);
 	}
@@ -283,10 +283,10 @@ HRESULT CTime::Init(void)
 		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 570.0f, m_pos.z), "COUNTDOWN0");
 		m_pScene2D[3]->SetWidthHeight(m_fWidth, m_fHeight);
 		//フィーバーの位置設定
-		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 180.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[0]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[0]->SetCol(FEVER_COLOR);
-		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, m_pos.z), "FEVERUI2");
+		m_pFeverUI[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 550.0f, m_pos.z), "FEVERUI2");
 		m_pFeverUI[1]->SetWidthHeight(SCALE_UI_WIDTH, SCALE_UI);
 		m_pFeverUI[1]->SetCol(FEVER_COLOR);
 	}
@@ -375,8 +375,8 @@ void CTime::Update(void)
 
 		//フィーバータイム
 		if (m_nTimeCount == 60 * 10
-			|| m_nTimeCount == 60 * 110
-			|| m_nTimeCount == 60 * 110)
+			|| m_nTimeCount == 60 * 30
+			|| m_nTimeCount == 60 * 50)
 		{
 			m_bFever = true;
 			m_pLogo->BindTexture("FEVERUI2");
@@ -385,7 +385,7 @@ void CTime::Update(void)
 		if (m_bFever == true)
 		{
 			m_nFeverTime++;
-			if (m_nFeverTime == 60 * 30)
+			if (m_nFeverTime == 60 * 10)
 			{
 				m_bStopUI = false;
 				m_bFever = false;
@@ -401,19 +401,19 @@ void CTime::Update(void)
 				}
 				if (m_nNumPlayer == 2)
 				{
-					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, 0.0f));
-					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, 0.0f));
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 180.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 550.0f, 0.0f));
 				}
 				if (m_nNumPlayer == 3)
 
 				{
-					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, 0.0f));
-					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, 0.0f));
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 180.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 550.0f, 0.0f));
 				}
 				if (m_nNumPlayer == 4)
 				{
-					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 200.0f, 0.0f));
-					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 570.0f, 0.0f));
+					m_pFeverUI[0]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 180.0f, 0.0f));
+					m_pFeverUI[1]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH + SCALE_UI_WIDTH, 550.0f, 0.0f));
 				}
 
 				if (m_nNumPlayer == 1 || m_nNumPlayer == 2)

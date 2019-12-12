@@ -327,7 +327,7 @@ void CPlayer::Update(void)
 				{//スティック角を取得して発射角とする
 					if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
 					{	// 右のスティックを動かしてない場合
-						m_fBulletRotOld = CManager::GetXInput(m_nID)->StickRL_XY(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y );
+						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRot(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y );
 					}
 					else
 					{

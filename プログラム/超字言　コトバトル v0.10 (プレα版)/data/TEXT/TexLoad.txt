@@ -132,4 +132,10 @@ DATA = 00103 data/TEXTURE/tutorial/tutorialflow030.png TUROFLOW030
 DATA = 00104 data/TEXTURE/tutorial/tutorialflow011.png TUROFLOW011
 DATA = 00105 data/TEXTURE/tutorial/tutorialflow021.png TUROFLOW021
 DATA = 00106 data/TEXTURE/tutorial/tutorialflow031.png TUROFLOW031
+
+DATA = 00107 data/TEXTURE/tutorial/tutorialrule.png TURORULE
+DATA = 00108 data/TEXTURE/tutorial/victoryconditions.png TUTOVICTRY
+DATA = 00109 data/TEXTURE/tutorial/tutobattle.png TUTOBSTTLE
+DATA = 00110 data/TEXTURE/tutorial/tutokotoba.png TUTOKOTOBA
+
 END_LOAD

@@ -23,7 +23,7 @@ int CScene::m_nNumPriority[NUM_PRIORITY] = {};
 CScene *CScene::m_apTop[NUM_PRIORITY] = {};
 CScene *CScene::m_apCur[NUM_PRIORITY] = {};
 bool    CScene::m_bPause = false;
-
+bool    CScene::m_bDebug2Ddraw = false;
 //=============================================================================
 // シーンクラスのコンストラクタ
 //=============================================================================
@@ -123,7 +123,11 @@ void CScene::UpdeteAll(void)
 	if (CCommand::GetCommand("PAUSE") && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
 	{
 		m_bPause = m_bPause ? false : true;
-		//CPause::SetPauseBool(m_bPause);
+	}
+
+	if (CCommand::GetCommand("DEBUG2D") == true)
+	{
+		m_bDebug2Ddraw = m_bDebug2Ddraw ? false : true;
 	}
 
 	if (m_bPause == false)
@@ -274,6 +278,14 @@ void CScene::DrawAll(int nCamera)
 			else if (pScene->GetObjType() == OBJTYPE_PAUSE)
 			{//ポーズがONの時のみポーズ画面を描画する
 				if (m_bPause == true)
+				{
+					pScene->Draw();
+				}
+			}
+			else if (pScene->GetObjType() == OBJTYPE_SCENE2D || pScene->GetObjType() == OBJTYPE_BILLBOARD
+					|| pScene->GetObjType() == OBJTYPE_TIME || pScene->GetObjType() == OBJTYPE_POINT)
+			{//
+				if (m_bDebug2Ddraw == false)
 				{
 					pScene->Draw();
 				}
