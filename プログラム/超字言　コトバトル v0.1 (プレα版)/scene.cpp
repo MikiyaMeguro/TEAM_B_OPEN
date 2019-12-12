@@ -15,7 +15,7 @@
 #include "tutorial.h"
 #include "game.h"
 #include "avoidui.h"
-
+#include "point.h"
 #include "CameraManager.h"
 //=============================================================================
 // 静的メンバ変数宣言
@@ -224,8 +224,10 @@ void CScene::UpdeteAll(void)
 void CScene::DrawAll(int nCamera)
 {
 	CPlayer *pPlayer = NULL;
+	CPoint *pPoint = NULL;
 
-		pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取
+	pPoint = CManager::GetPoint(nCamera - 1);	// ポイントの取得
+	pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取
 
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
@@ -250,6 +252,23 @@ void CScene::DrawAll(int nCamera)
 					if (pPlayer->GetVision(pPlayerScene->GetID()) == true)
 					{
 						int ntest = pPlayerScene->GetID();
+						pScene->Draw();
+					}
+				}
+			}
+			else if (pScene->GetObjType() == OBJTYPE_POINT && nCamera != 5)
+			{
+				CPoint *pPlayerScene = ((CPoint*)pScene);
+
+				if (pPlayerScene->GetID() == nCamera - 1)
+				{	// 自分を描画
+					int ntest = pPlayerScene->GetID();
+					pScene->Draw();
+				}
+				else
+				{	// 他プレイヤー描画
+					if (pPlayer->GetVision(pPlayerScene->GetID()) == true)
+					{
 						pScene->Draw();
 					}
 				}

@@ -17,6 +17,7 @@ class CNumber;
 class CBillNumber;
 class CScene2D;
 class CSceneBillBoard;
+class CCrown;
 
 //*****************************************************************************
 // マクロ定義
@@ -51,6 +52,9 @@ public:
 	// 設定　取得　の関数
 	//============================
 	int GetPoint(void) { return m_nTotalPoint; };
+	int GetID(void) { return m_nID; }
+	bool GetVision(int nPlayerID) { return m_bDrowVision[nPlayerID]; };
+	void SetVision(bool bVision, int nPlayerID) { m_bDrowVision[nPlayerID] = bVision; };
 
 	//============================
 	// 加算　減算　の関数
@@ -89,11 +93,12 @@ private:
 	bool					m_bRankChangeFlag;	// 順位入れ替え時のフラグ
 	bool					m_bFlag001;
 	bool					m_bConfirmFlag;		// 順位確定フラグ
+	bool					m_bDrowVision[MAX_PLAYER];		// 他のプレイヤーに見えるか
 	D3DXVECTOR3				m_pos;				// 位置
 	D3DXVECTOR3				m_RnakSize;			// 順位のサイズ
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
 	CScene2D				*m_pRank;			// 順位のロゴ
-	CSceneBillBoard			*m_pCrown;			// 王冠
+	CCrown					*m_pCrown;			// 王冠
 	TYPE_CHARACTER			m_type;				// 種類
 	CSceneBillBoard			*m_pDouble;			// 2倍の表示
 

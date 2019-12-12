@@ -1,6 +1,6 @@
 //=============================================================================
 //
-// 回避UI処理 [avoidui.cpp]
+// 王冠処理 [crown.cpp]
 // Author : YUTARO ABE
 //
 //=============================================================================
@@ -8,11 +8,12 @@
 //*****************************************************************************
 // ヘッダファイルのインクルード
 //*****************************************************************************
-#include "scene3D.h"		// シーン3D
+#include "crown.h"
 #include "manager.h"		// マネージャー
 #include "renderer.h"		// レンダラー
-#include "avoidui.h"
+#include "crown.h"
 #include "game.h"
+#include "sceneBillboard.h"
 
 //*****************************************************************************
 // マクロ定義
@@ -33,7 +34,7 @@
 //=============================================================================
 // コンストラクタ
 //=============================================================================
-CAvoidUi::CAvoidUi() : CScene3D(4, CScene::OBJTYPE_WALL)
+CCrown::CCrown() : CSceneBillBoard()
 {
 	m_move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nCounter = 0;
@@ -48,23 +49,23 @@ CAvoidUi::CAvoidUi() : CScene3D(4, CScene::OBJTYPE_WALL)
 //=============================================================================
 // デストラクタ
 //=============================================================================
-CAvoidUi::~CAvoidUi()
+CCrown::~CCrown()
 {
 }
 
 //=============================================================================
 //	アイテムの生成
 //=============================================================================
-CAvoidUi *CAvoidUi::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV)
+CCrown *CCrown::Create(D3DXVECTOR3 pos, D3DXVECTOR3 size, char *cpName)
 {
-	CAvoidUi *pWall = {};
+	CCrown *pWall = {};
 
 	if (pWall == NULL)
 	{//	アイテムの生成
-		pWall = new CAvoidUi;
+		pWall = new CCrown;
 		if (pWall != NULL)
 		{//アイテムの初期化
-			pWall->Init(pos, rot, size, col, TexUV);
+			pWall->Init(pos, size, cpName);
 		}
 	}
 	return pWall;
@@ -73,13 +74,15 @@ CAvoidUi *CAvoidUi::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D
 //=============================================================================
 // 初期化処理
 //=============================================================================
-HRESULT CAvoidUi::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV)
+HRESULT CCrown::Init(D3DXVECTOR3 pos, D3DXVECTOR3 size, char *cpName)
 {
-	 SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL);
-	CScene3D::Init();
-	CScene3D::SetSizeY(size.y, size.x);
-	CScene3D::BindTexture("AVOID");
-	SetObjType(CScene::OBJTYPE_AVOIDUI);
+	CSceneBillBoard::Init(pos);
+	CSceneBillBoard::SetBillboard(pos, size.y, size.x);
+	CSceneBillBoard::BindTexture("crown");
+	CSceneBillBoard::SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2((0.333f * 1), 1.0f));
+	CSceneBillBoard::SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+	SetObjType(CScene::OBJTYPE_CROWN);
 
 	return S_OK;
 }
@@ -87,31 +90,33 @@ HRESULT CAvoidUi::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXC
 //=============================================================================
 // 終了処理
 //=============================================================================
-void CAvoidUi::Uninit(void)
+void CCrown::Uninit(void)
 {
-	CScene3D::Uninit();
+	CSceneBillBoard::Uninit();
 }
 
 //=============================================================================
 // 更新処理
 //=============================================================================
-void CAvoidUi::Update(void)
+void CCrown::Update(void)
 {
+	D3DXVECTOR3 pos = CSceneBillBoard::GetPos();
 
+	CSceneBillBoard::Setpos(pos);
 }
 
 //=============================================================================
 // 描画処理
 //=============================================================================
-void CAvoidUi::Draw(void)
+void CCrown::Draw(void)
 {
 	// デバイス取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	if (m_bDraw == true && m_bVision[m_nCamera] == true)
+	//if (m_bDraw == true && m_bVision[m_nCamera] == true)
 	{
-		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
-		CScene3D::Draw();
-		pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
+		//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);				// カリングなくす
+		CSceneBillBoard::Draw();
+		//pDevice->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);				// 裏面をカリングに戻す
 	}
 }
