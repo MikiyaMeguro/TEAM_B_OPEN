@@ -374,9 +374,7 @@ void CTime::Update(void)
 		}
 
 		//フィーバータイム
-		if (m_nTimeCount == 60 * 10
-			|| m_nTimeCount == 60 * 30
-			|| m_nTimeCount == 60 * 50)
+		if (m_nTimeCount == 60 * 150)
 		{
 			m_bFever = true;
 			m_pLogo->BindTexture("FEVERUI2");
@@ -385,7 +383,7 @@ void CTime::Update(void)
 		if (m_bFever == true)
 		{
 			m_nFeverTime++;
-			if (m_nFeverTime == 60 * 10)
+			if (m_nFeverTime == 60 * 30)
 			{
 				m_bStopUI = false;
 				m_bFever = false;
