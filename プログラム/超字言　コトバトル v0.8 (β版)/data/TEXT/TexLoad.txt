@@ -1,0 +1,143 @@
+//====================================================================================
+//
+//	テクスチャロード用テキスト[TexLoad.txt]
+//	Author : Kodama Yuto(児玉 優斗)
+//	Editor : 						←最後に編集した人の名前を書く
+//
+//	書き方→ DATA = (ID) (アドレス(.exeから見た相対アドレス)) (タグ)
+//				 ↑↑　↑									↑
+//					半角スペースを必ず空ける!!
+//
+//		IDの五桁目(10000～)はモデルに貼るテクスチャに使うので使わないこと
+//
+//====================================================================================
+START_LOAD
+DATA = 00000 data/TEXTURE/SampleTex000.png  BLOCK
+DATA = 00001 data/TEXTURE/field000.jpg  FIELD
+DATA = 00002 data/TEXTURE/Wall0001.png  WALL
+DATA = 00003 data/TEXTURE/Marker000.png MARKER
+DATA = 00004 data/TEXTURE/player000.png PLAYER
+DATA = 00005 data/TEXTURE/number.png NUMBER
+DATA = 00006 data/TEXTURE/50音一覧.png WORD
+DATA = 00007 data/TEXTURE/word_manager.png TUBE
+DATA = 00008 data/TEXTURE/time.png TIME
+DATA = 00009 data/TEXTURE/colon.png COLON
+DATA = 00010 data/TEXTURE/bg_fream.png BG_FREAME
+DATA = 00011 data/TEXTURE/MENU_UI/Menu000.png MENU_NUMPLAYER
+DATA = 00012 data/TEXTURE/MENU_UI/Menu001.png MENU_TITLE
+DATA = 00013 data/TEXTURE/MENU_UI/Menu002.png MENU_1P
+DATA = 00014 data/TEXTURE/MENU_UI/Menu003.png MENU_2P
+DATA = 00015 data/TEXTURE/MENU_UI/Menu004.png MENU_3P
+DATA = 00016 data/TEXTURE/MENU_UI/Menu005.png MENU_4P
+DATA = 00017 data/TEXTURE/MENU_UI/Menu006.png MENU_START
+DATA = 00018 data/TEXTURE/MENU_UI/Menu007.png MENU_RETRY
+DATA = 00019 data/TEXTURE/MENU_UI/Menu008.png MENU_STAGE
+DATA = 00020 data/TEXTURE/MENU_UI/Menu009.png MENU_CHARA
+DATA = 00021 data/TEXTURE/MENU_UI/Menu010.png MENU_CONTINUE
+DATA = 00022 data/TEXTURE/MENU_UI/Menu011.png MENU_YES
+DATA = 00023 data/TEXTURE/MENU_UI/Menu012.png MENU_NO
+DATA = 00024 data/TEXTURE/MENU_UI/Menu013.png MENU_MOZI
+DATA = 00025 data/TEXTURE/TITLE/TitleBg_Human.png TITLE_HUMAN
+DATA = 00026 data/TEXTURE/TITLE/TitleRogo_kotomon.png TITLE_KOTOMON
+DATA = 00027 data/TEXTURE/TITLE/TitleRogo_Main.png TITLE_ROGO_M
+DATA = 00028 data/TEXTURE/TITLE/TitleRogo_sub.png TITLE_ROGO_S
+DATA = 00029 data/TEXTURE/TITLE/TitleBg_Hibana.png TITLE_HIBANA
+DATA = 00030 data/TEXTURE/UI/PRESS_ANY_BUTTON.png PRESS
+DATA = 00031 data/TEXTURE/ModeSelect/Frame.png FRAME
+DATA = 00032 data/TEXTURE/ModeSelect/SelectMode_UI.png SELECTMODE_UI
+DATA = 00033 data/TEXTURE/ModeSelect/BG.png SELECTMODE_BG
+DATA = 00034 data/TEXTURE/ModeSelect/SelectMode_Explanation.png SELECTMODE_EXPLANATION
+DATA = 00035 data/TEXTURE/ModeSelect/Titleback_anim.png TITLEBACK_A
+DATA = 00036 data/TEXTURE/CharacterIcon/コトモン_スピード_アイコン.png キャラ(スピード)
+DATA = 00037 data/TEXTURE/CharacterIcon/コトモン_バランス_アイコン.png キャラ(バランス)
+DATA = 00038 data/TEXTURE/CharacterIcon/コトモン_パワー_アイコン.png キャラ(パワー)
+DATA = 00039 data/TEXTURE/CharacterIcon/コトモン_リーチ_アイコン.png キャラ(リーチ)
+DATA = 00040 data/TEXTURE/PlayerNum.png プレイ人数
+DATA = 00041 data/TEXTURE/point.png POINT
+
+DATA = 00042 data/TEXTURE/kuma_uv.jpg KUMA_UV
+DATA = 00043 data/TEXTURE/dog_uv.jpg INU_UV
+DATA = 00044 data/TEXTURE/cat_uv.jpg NECO_UV
+DATA = 00045 data/TEXTURE/rabbit_uv.jpg USAGI_UV
+
+DATA = 00046 data/TEXTURE/MENU_UI/Menu014.png MODESELEXT_MENU
+DATA = 00047 data/TEXTURE/UI/operation.png UI_OPERATION1
+DATA = 00048 data/TEXTURE/UI/operation2.png UI_OPERATION2
+DATA = 00049 data/TEXTURE/UI/Select.png UI_SELECT
+DATA = 00050 data/TEXTURE/MENU_UI/Menu015.png PLAYERNUMSELECT_MENU
+DATA = 00051 data/TEXTURE/PlayerSelect/Band.png PLAYERNUMSEL_BAND
+DATA = 00052 data/TEXTURE/PlayerSelect/BG.png PLAYERNUMSEL_BG
+DATA = 00053 data/TEXTURE/CharactorSelect/Band.png CHARACTORSEL_BAND
+DATA = 00054 data/TEXTURE/CharactorSelect/CharaSelect.png CHARACTORSEL_CHARA
+DATA = 00055 data/TEXTURE/CharactorSelect/PLBadge&Cursor.png CHARASEL_BADGE
+DATA = 00056 data/TEXTURE/Gimmick/beltconveyer.png ベルトコンベア_アイコン
+DATA = 00057 data/TEXTURE/Gimmick/Word_POP.png 文字エフェクト
+DATA = 00058 data/TEXTURE/ModelTex/gomi.png ゴミ_モデル
+DATA = 00059 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
+DATA = 00060 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
+DATA = 00061 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
+DATA = 00062 data/TEXTURE/StageSelect/Band.png STAGESEL_BAND
+DATA = 00062 data/TEXTURE/StageSelect/StageIcon.png STAGESEL_ICON
+
+DATA = 000 data/TEXTURE/ModelTex/ModelTex.png モデル_TEX
+DATA = 00063 data/TEXTURE/ExplosionTex001.png EXPLOSION
+DATA = 00064 data/TEXTURE/UI/Countdown00.png COUNTDOWN0
+DATA = 00065 data/TEXTURE/UI/Countdown01.png COUNTDOWN1
+DATA = 00066 data/TEXTURE/UI/Countdown02.png COUNTDOWN2
+DATA = 00067 data/TEXTURE/UI/Countdown03.png COUNTDOWN3
+DATA = 00068 data/TEXTURE/UI/End.png GAME_END
+DATA = 00069 data/TEXTURE/Line.png LINE
+DATA = 00070 data/TEXTURE/tutorial/pad.jpg PAD
+DATA = 00071 data/TEXTURE/tutorial/tutorialflow000.png TUROFLOW000
+DATA = 00072 data/TEXTURE/tutorial/tutorialflow001.png TUROFLOW001
+DATA = 00073 data/TEXTURE/tutorial/next.png NEXT
+DATA = 00074 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLANATION
+DATA = 00075 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
+DATA = 00076 data/TEXTURE/CharactorSelect/CharaSel_ModeBack.png CHARASEL_BACKMODE
+DATA = 00077 data/TEXTURE/field002.jpg FIELD002 
+DATA = 00078 data/TEXTURE/avoidui.png AVOID
+
+DATA = 00079 data/TEXTURE/Ranking/Window.png RANKING_WINDOW
+DATA = 00080 data/TEXTURE/Ranking/Rank&PlayerNum.png RANK&PLNUM
+DATA = 00081 data/TEXTURE/Ranking/ICon.png RANKCHARA_ICON
+DATA = 00082 data/TEXTURE/CharactorSelect/ComDisplay.png RANKCHARA_PLNUM_COM
+
+DATA = 00083 data/TEXTURE/tutorial/tutorial_operation000.png TOP000
+DATA = 00084 data/TEXTURE/tutorial/tutorial_operation001.png TOP001
+DATA = 00085 data/TEXTURE/tutorial/tutorial_operation002.png TOP002
+DATA = 00086 data/TEXTURE/tutorial/tutorial_operation003.png TOP003
+
+DATA = 00087 data/TEXTURE/Ranking/Effect_1St.png RANKING_EFFECT
+DATA = 00088 data/TEXTURE/Ranking/Callout.png RANKCHARA_CALLOUT
+DATA = 00089 data/TEXTURE/UV/Leaf.jpg RANKING_MESHFIELD
+DATA = 00090 data/TEXTURE/Ranking/audience.png RANKING_AUDIENCE
+DATA = 00091 data/TEXTURE/Game/crown.png crown
+
+DATA = 00092 data/TEXTURE/tutorial/tutorialflow002.png TUROFLOW002
+DATA = 00093 data/TEXTURE/tutorial/tutorialflowtext001.png TUROFLOWTEXT001
+DATA = 00094 data/TEXTURE/tutorial/tutorialflowtext000.png TUROFLOWTEXT000
+
+DATA = 00095 data/TEXTURE/tutorial/tutorialfloor.png TUROFLOWFLOOR
+
+DATA = 00096 data/TEXTURE/Line.png LINE
+DATA = 00097 data/TEXTURE/UI/FiverUI.png FEVERUI
+DATA = 00098 data/TEXTURE/UI/FiverUI2.png FEVERUI2
+DATA = 00099 data/TEXTURE/Game/bulletUI.png BulletUI
+DATA = 00100 data/TEXTURE/Game/explosion.png BulletUIEx
+
+DATA = 00101 data/TEXTURE/tutorial/tutorialflow010.png TUROFLOW010
+DATA = 00102 data/TEXTURE/tutorial/tutorialflow020.png TUROFLOW020
+DATA = 00103 data/TEXTURE/tutorial/tutorialflow030.png TUROFLOW030
+
+DATA = 00104 data/TEXTURE/tutorial/tutorialflow011.png TUROFLOW011
+DATA = 00105 data/TEXTURE/tutorial/tutorialflow021.png TUROFLOW021
+DATA = 00106 data/TEXTURE/tutorial/tutorialflow031.png TUROFLOW031
+
+DATA = 00107 data/TEXTURE/tutorial/tutorialrule.png TURORULE
+DATA = 00108 data/TEXTURE/tutorial/victoryconditions.png TUTOVICTRY
+DATA = 00109 data/TEXTURE/tutorial/tutobattle.png TUTOBSTTLE
+DATA = 00110 data/TEXTURE/tutorial/tutokotoba.png TUTOKOTOBA
+DATA = 00111 data/TEXTURE/Ranking/Curtain_Mask.png RANKING_MASKCYRTAIN
+
+
+END_LOAD
