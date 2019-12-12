@@ -15,6 +15,7 @@
 #include "tutorial.h"
 #include "sceneBillboard.h"
 #include "time.h"
+#include "crown.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -95,6 +96,11 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 		m_apNumber[nCntPoint] = NULL;
 	}
 
+	for (int nCntVision = 0; nCntVision < MAX_PLAYER; nCntVision++)
+	{
+		m_bDrowVision[nCntVision] = false;
+	}
+
 }
 
 //=============================================================================
@@ -148,7 +154,6 @@ void CPoint::Uninit(void)
 			m_apNumber[nCntPoint] = NULL;
 		}
 	}
-
 
 	if (m_pRank != NULL) { m_pRank->Uninit(); m_pRank = NULL; }
 
@@ -211,6 +216,9 @@ void CPoint::Draw(void)
 			m_apNumber[nCntPoint]->Draw();
 		}
 	}
+
+	// カメラの種類を渡す
+	if (m_pCrown != NULL) { m_pCrown->Draw(); }
 
 	if (m_pIcon != NULL)
 	{
@@ -439,8 +447,7 @@ void CPoint::PointPostion()
 
 		if (m_pCrown == NULL)
 		{
-			m_pCrown = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z), 20.0f, 30.0f, "crown");
-			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2((0.333f*1), 1.0f));
+			m_pCrown = CCrown::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z), D3DXVECTOR3(20.0f, 0.0f, 30.0f), "crown");
 		}
 		if (m_pDouble == NULL)
 		{

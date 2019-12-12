@@ -60,6 +60,7 @@ public:
 		OBJTYPE_ORBIT,		// 軌跡
 		OBJTYPE_AVOIDUI,	// プレイヤー足元UI
 		OBJTYPE_BILLBOARDUI,// ビルボードUI
+		OBJTYPE_CROWN,		// 王冠
 		OBJTYPE_MAX			// 総数
 	} OBJTYPE;
 
