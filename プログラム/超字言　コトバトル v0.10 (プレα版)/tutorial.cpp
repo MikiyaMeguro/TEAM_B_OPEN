@@ -113,7 +113,7 @@ void CTutorial::Init(void)
 
 	if (m_pMeshField == NULL)
 	{
-		m_pMeshField = m_pMeshField->Create(D3DXVECTOR3(0.0f, 0.0f, 2000.0f));
+		m_pMeshField = m_pMeshField->Create(D3DXVECTOR3(0.0f, 0.0f, 1600.0f), 20, 60, 40);
 	}
 
 	if (m_pWall == NULL)

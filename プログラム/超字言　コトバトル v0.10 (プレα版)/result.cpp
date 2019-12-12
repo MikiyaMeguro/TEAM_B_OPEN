@@ -188,7 +188,7 @@ HRESULT CResult::Init(void)
 	m_pMeshField = NULL;
 	if (m_pMeshField == NULL)
 	{
-		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20, 20, 40);
 		m_pMeshField->BindTexture("RANKING_MESHFIELD");
 	}
 
@@ -257,7 +257,7 @@ HRESULT CResult::Init(void)
 			{
 				fPosX = 70;
 				Set2DUI(nCntPlayer, 0);
-				SetNumCallout(nCntPlayer, 0, m_ResultChara[nCntPlayer].Movetype);	
+				SetNumCallout(nCntPlayer, 0, m_ResultChara[nCntPlayer].Movetype);
 				TexPoint(0, m_ResultChara[nCntPlayer].nPoint);						//数字座標設定
 			}
 			if (nCntRankPos[0] == 2)
@@ -429,8 +429,8 @@ void CResult::Uninit(void)
 				m_apEffect[nCntPlayer][nCntEff] = NULL;
 			}
 		}
-		if (m_pSpotLight[nCntPlayer] != NULL) 
-		{ 
+		if (m_pSpotLight[nCntPlayer] != NULL)
+		{
 			m_pSpotLight[nCntPlayer]->SetLightEnable(nCntPlayer, false);//スポットライトを消す
 			m_pSpotLight[nCntPlayer]->SpotLightDelete();				//スポットライト基準からディレクショナルライト基準へ切り替え
 			m_pSpotLight[nCntPlayer]->Uninit();
@@ -465,10 +465,10 @@ void CResult::Uninit(void)
 			}
 		}
 	}
-	if (m_apMask != NULL) 
+	if (m_apMask != NULL)
 	{
 		m_apMask->Uninit();
-		m_apMask = NULL; 
+		m_apMask = NULL;
 	}
 	//全ての終了処理
 	Release();
@@ -1323,7 +1323,7 @@ void CResult::Production(void)
 				}
 				m_Production = PRODUCTION_FADEPOINT;
 			}
-			m_apScene2D[nCnt + 1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nCnt].x + (m_PlayerIconSize[nCnt].x / 2),m_PlayerIconPos[nCnt].y, 0.0f), 
+			m_apScene2D[nCnt + 1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nCnt].x + (m_PlayerIconSize[nCnt].x / 2),m_PlayerIconPos[nCnt].y, 0.0f),
 				ProScal.x, ProScal.y);
 		}
 		break;

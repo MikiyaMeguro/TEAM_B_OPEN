@@ -354,7 +354,7 @@ void CStageSelect::ProductionIcon(SELECTTYPE type)
 		m_apSelect2D[1]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*0.9f);
 		break;
 
-	case SELECTTYPE_SELECT_WEATHER:	
+	case SELECTTYPE_SELECT_WEATHER:
 		m_apSelect2D[0]->SetWidthHeight(DEFAULT_SIZE*1.3f, DEFAULT_SIZE*0.9f);
 		m_apSelect2D[1]->SetWidthHeight(DEFAULT_SIZE*1.8f, DEFAULT_SIZE*1.2f);
 		break;
@@ -403,7 +403,7 @@ void CStageSelect::StageLoadState(STAGELOAD Load, int nSel)
 		LoadStage(m_nSelect);
 		if (m_pMeshField == NULL)
 		{//è∞ÇÃê∂ê¨
-			m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+			m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f),20, 20, 40);
 		}
 		if (m_pWall[0] == NULL&&m_pWall[1] == NULL&&m_pWall[2] == NULL&&m_pWall[3] == NULL)
 		{//â∫ë§ñ ÇÃê∂ê¨

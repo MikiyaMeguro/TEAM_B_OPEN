@@ -124,7 +124,7 @@ void CGame::Init(void)
 	m_pMeshField = NULL;
 	if (m_pMeshField == NULL)
 	{
-		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20, 20, 40.0f);
 	}
 	switch (m_nNumStage)
 	{
