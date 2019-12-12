@@ -105,6 +105,9 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 16) { CScene3D::BindTexture("TUROFLOW011"); }
 	else if (m_nType == 17) { CScene3D::BindTexture("TUROFLOW021"); }
 	else if (m_nType == 18) { CScene3D::BindTexture("TUROFLOW031"); }
+	else if (m_nType == 19) { CScene3D::BindTexture("TURORULE"); }
+	else if (m_nType == 20) { CScene3D::BindTexture("TUTOVICTRY"); }
+	else if (m_nType == 21) { CScene3D::BindTexture("TUTOBSTTLE"); }
 
 	return S_OK;
 }
@@ -187,7 +190,7 @@ void CWall::Update(void)
 		}
 	}
 	else if (m_nType == 11)
-	{
+	{//	Loop
 		m_nCounter++;
 		if (m_nCounter % 60 == 0)
 		{
@@ -196,7 +199,7 @@ void CWall::Update(void)
 		}
 	}
 	else  if (m_nType == 15)
-	{
+	{//	ÉÇÉfÉãÉeÉNÉXÉ`ÉÉ
 		m_nCounter++;
 		if (m_nCounter % 60 == 0)
 		{
@@ -208,6 +211,90 @@ void CWall::Update(void)
 			}
 			SetAnimationTex(D3DXVECTOR2(0.0f + ((m_TexCounter / 10) * 0.125f), 0.0f + ((m_TexCounter % 10) * 0.1f)),
 				D3DXVECTOR2(0.125f + ((m_TexCounter / 10) * 0.125f), 0.125f + ((m_TexCounter % 10) * 0.1f)));
+		}
+	}
+	else if (m_nType == 20)
+	{//	èüóòèåè
+		m_nCounter++;
+		if (m_nCounter < 30 && m_nCounter > 0)
+		{//	30ïbà»â∫Ç≈è„Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y += 0.15f;
+		}
+		else if (m_nCounter < 60 && m_nCounter > 30)
+		{//60ïbà»â∫Ç≈â∫Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y -= 0.15f;
+		}
+		else if (m_nCounter == 60)
+		{
+			m_nCounter = 0;
+		}
+	}
+	else if (m_nType == 16)
+	{//Å@ÉQÅ[ÉÄÉãÅ[Éãá@
+		m_nCounter++;
+		if (m_nCounter < 40 && m_nCounter > 0)
+		{//	30ïbà»â∫Ç≈è„Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y += 0.35f;
+		}
+		else if (m_nCounter < 80 && m_nCounter > 40)
+		{//60ïbà»â∫Ç≈â∫Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y -= 0.35f;
+		}
+		else if (m_nCounter == 80)
+		{
+			m_move.y = 0.0f;
+		}
+		else if (m_nCounter == 150)
+		{
+			m_nCounter = 0;
+		}
+	}
+	else if (m_nType == 17)
+	{//Å@ÉQÅ[ÉÄÉãÅ[ÉãáA
+		m_nCounter++;
+		if (m_nCounter < 60 && m_nCounter > 20)
+		{//	30ïbà»â∫Ç≈è„Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y += 0.35f;
+		}
+		else if (m_nCounter < 100 && m_nCounter > 60)
+		{//60ïbà»â∫Ç≈â∫Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y -= 0.35f;
+		}
+		else if (m_nCounter == 100)
+		{
+			m_move.y = 0.0f;
+		}
+		else if (m_nCounter == 150)
+		{
+			m_nCounter = 0;
+		}
+	}
+	else if (m_nType == 18)
+	{//Å@ÉQÅ[ÉÄÉãÅ[ÉãáB
+		m_nCounter++;
+		if (m_nCounter < 80 && m_nCounter > 40)
+		{//	30ïbà»â∫Ç≈è„Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y += 0.35f;
+		}
+		else if (m_nCounter < 120 && m_nCounter > 80)
+		{//60ïbà»â∫Ç≈â∫Ç…ìÆÇ≠
+			m_move.y = 0.0f;
+			m_move.y -= 0.35f;
+		}
+		else if (m_nCounter == 120)
+		{
+			m_move.y = 0.0f;
+		}
+		else if (m_nCounter == 150)
+		{
+			m_nCounter = 0;
 		}
 	}
 
