@@ -8,7 +8,7 @@
 //=============================================================================
 #include "pause.h"
 #include "manager.h"
-
+#include "fade.h"
 //=============================================================================
 // コンストラクタ&デストラクタ
 //=============================================================================
@@ -71,11 +71,12 @@ HRESULT CPause::Init(void)
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		m_aMenuDefaultPos[nCnt] = D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 210.0f + (nCnt * 150.0f), 0.0f);
-		m_apSelectMenu[nCnt] = CScene2D::Create(m_aMenuDefaultPos[nCnt], "",7);
+		m_apSelectMenu[nCnt] = CScene2D::Create(m_aMenuDefaultPos[nCnt], "RNKINGSELECT_MENU",7);
 		if (m_apSelectMenu[nCnt] != NULL)
 		{
 			m_apSelectMenu[nCnt]->SetObjType(OBJTYPE_PAUSE);
 			m_apSelectMenu[nCnt]->SetWidthHeight(200.0f, 60.0f);
+			m_apSelectMenu[nCnt]->SetTex(D3DXVECTOR2(0.0f + (0.25f*nCnt),0.0f),D3DXVECTOR2(0.25f + (0.25f*nCnt), 1.0f));
 
 		}
 
@@ -136,8 +137,28 @@ void CPause::Update(void)
 		m_nSelect = (m_nSelect + 1) % 4;
 	}
 
+	if (CCommand::GetCommand("DECISION"))
+	{//決定を押したときのm_nSelectによって挙動が変わる
+		switch (m_nSelect)
+		{
+		case 0:
+			CScene::SetbPause(false);
+			m_nSelect = 0;
+			break;
+		case 1:
+			CFade::SetFade(CManager::MODE_CHARASELECT, CFade::FADE_OUT);
+			break;
+		case 2:
+			CFade::SetFade(CManager::MODE_STAGESELECT, CFade::FADE_OUT);
+			break;
+		case 3:
+			CFade::SetFade(CManager::MODE_TITLE, CFade::FADE_OUT);
+			break;
+		}
+	}
+
 	m_apSelectMenu[m_nSelect]->SetPosition(m_aMenuDefaultPos[m_nSelect] + D3DXVECTOR3(0.0f, cosf(fCntHover / 5.0f) * 1.5f, 0.0f));
-	m_apSelectMenu[m_nSelect]->SetWidthHeight(300.0f, 90.0f);
+	m_apSelectMenu[m_nSelect]->SetWidthHeight(250.0f, 75.0f);
 
 }
 

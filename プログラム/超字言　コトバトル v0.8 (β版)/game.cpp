@@ -309,19 +309,19 @@ void CGame::Update(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 	CDebugProc::Print("c", "ゲームモード");
 	//任意のキーENTER
-	if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
-	{
-		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
-		{
-			CResult::SetRanking(nCntPlayer, m_pPlayer[nCntPlayer]->GetID(),m_type[nCntPlayer], m_pPlayer[nCntPlayer]->GetMovetype(), m_pPoint[nCntPlayer]->GetPoint());
-		}
+	//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
+	//{
+	//	for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
+	//	{
+	//		CResult::SetRanking(nCntPlayer, m_pPlayer[nCntPlayer]->GetID(),m_type[nCntPlayer], m_pPlayer[nCntPlayer]->GetMovetype(), m_pPoint[nCntPlayer]->GetPoint());
+	//	}
 
-		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-	}
-	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
-	{
-		pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
-	}
+	//	pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	//}
+	//if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
+	//{
+	//	pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+	//}
 
 	//カメラ操作（テスト）
 	CCameraManager *pCameraManager = CManager::GetCameraManager();
