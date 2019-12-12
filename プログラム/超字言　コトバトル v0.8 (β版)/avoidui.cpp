@@ -75,7 +75,6 @@ CAvoidUi *CAvoidUi::Create(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D
 //=============================================================================
 HRESULT CAvoidUi::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLOR col, D3DXVECTOR2 TexUV)
 {
-
 	 SetInitAll(pos, rot, size, col, TexUV, SCENE3DTYPE_NORMAL);
 	CScene3D::Init();
 	CScene3D::SetSizeY(size.y, size.x);

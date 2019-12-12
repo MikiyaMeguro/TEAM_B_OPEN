@@ -37,7 +37,7 @@ public:
 		TYPE_MAX
 	}TYPE_CHARACTER;
 
-	CPoint(int nPriority = 6, OBJTYPE objType = OBJTYPE_POINT);
+	CPoint(int nPriority = 4, OBJTYPE objType = OBJTYPE_POINT);
 	~CPoint();
 
 	static CPoint *Create(int nID, int nNumPlayer, TYPE_CHARACTER type);
@@ -50,7 +50,12 @@ public:
 	//============================
 	// 設定　取得　の関数
 	//============================
-	int GetPoint(void) { return m_nTotalPoint; };
+	int GetPoint(void) { return m_nTotalPoint; }
+	bool GetVision(int nNumPlayer) { return m_bDrawVision[nNumPlayer]; }
+	int GetID(void) { return m_nID; }
+	CSceneBillBoard *GetCrwon(void) { return m_pCrown; }
+
+	void SetVision(int nNumPlayer, bool bFlag);
 
 	//============================
 	// 加算　減算　の関数
@@ -89,6 +94,7 @@ private:
 	bool					m_bRankChangeFlag;	// 順位入れ替え時のフラグ
 	bool					m_bFlag001;
 	bool					m_bConfirmFlag;		// 順位確定フラグ
+	bool					m_bDrawVision[MAX_PLAYER];		// 描画フラグ
 	D3DXVECTOR3				m_pos;				// 位置
 	D3DXVECTOR3				m_RnakSize;			// 順位のサイズ
 	CScene2D				*m_pIcon;			// プレイヤーアイコン
