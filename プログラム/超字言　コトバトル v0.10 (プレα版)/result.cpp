@@ -502,6 +502,7 @@ void CResult::Update(void)
 			{
 				m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(530.0f, SCREEN_HEIGHT / 2, 0), 220, 320, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
 				m_pSeletMenu->SetModeSelectBool(true);
+				m_bMenu = true;
 			}
 			// ˆÈ~‚ÌXVˆ—‚ğ”ò‚Î‚·
 			return;
