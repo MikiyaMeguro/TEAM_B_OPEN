@@ -137,6 +137,5 @@ DATA = 00107 data/TEXTURE/tutorial/tutorialrule.png TURORULE
 DATA = 00108 data/TEXTURE/tutorial/victoryconditions.png TUTOVICTRY
 DATA = 00109 data/TEXTURE/tutorial/tutobattle.png TUTOBSTTLE
 DATA = 00110 data/TEXTURE/tutorial/tutokotoba.png TUTOKOTOBA
-DATA = 00111 data/TEXTURE/Ranking/Curtain_Mask.png RANKING_MASKCYRTAIN
 
 END_LOAD
