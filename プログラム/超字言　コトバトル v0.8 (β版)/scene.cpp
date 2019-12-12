@@ -145,9 +145,12 @@ void CScene::UpdeteAll(void)
 			 // Updateの最中に消える可能性があるから先に記録しておく
 				CScene *pSceneNext = pScene->m_pNext;
 				// 更新
-				if (pScene->m_bDeath == false)
+				if (pScene->GetObjType() != OBJTYPE_PAUSE)
 				{
-					pScene->Update();
+					if (pScene->m_bDeath == false)
+					{
+						pScene->Update();
+					}
 				}
 				// 次のシーンに進める
 				pScene = pSceneNext;
@@ -163,12 +166,14 @@ void CScene::UpdeteAll(void)
 				// Updateの最中に消える可能性があるから先に記録しておく
 				CScene *pSceneNext = pScene->m_pNext;
 
-				if (pScene->m_bDeath == true)
+				if (pScene->GetObjType() != OBJTYPE_PAUSE)
 				{
-					// フラグが立っているオブジェクトを消していく
-					pScene->DeleteAll();
+					if (pScene->m_bDeath == true)
+					{
+						// フラグが立っているオブジェクトを消していく
+						pScene->DeleteAll();
+					}
 				}
-
 				// 次のシーンに進める
 				pScene = pSceneNext;
 			}
