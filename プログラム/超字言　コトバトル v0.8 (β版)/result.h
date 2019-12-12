@@ -108,7 +108,7 @@ private:
 	void SetModel(void);
 	void Set2DUI(int nNum,int nPosNum);
 	void RankTex(int nNum, int nRank);
-	void PLNumTex(int nNum, int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
+	void PLNumTex(int nNum, int nRank,int nChara, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void SetNumCallout(int nNum, int nIconPos, CCharaBase::CHARACTOR_MOVE_TYPE type);
 	void EffectPro(void);
 	void SetAudience(void);
