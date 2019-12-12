@@ -395,12 +395,14 @@ void CPoint::UIPosition(int nID)
 		if (m_pIcon == NULL)
 		{
 			int nIDIcon = 0;
+			CPlayer::PLAYER_TYPE type;
 			if (CGame::GetPlayer(nID) != NULL)
 			{
 				nIDIcon = CGame::GetPlayer(nID)->GetPlayerType();
+				type = CGame::GetPlayer(nID)->GetPlayerType();
 			}
 			m_pIcon = CScene2D::Create(posIcon, "RANKCHARA_ICON", 6);
-			m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (nID * 0.25f)), D3DXVECTOR2(1.0f, 0.25f + (nID * 0.25f)));
+			m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (1.0f / MAX_PLAYER)*(int)type), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(int)type)));
 			m_pIcon->SetWidthHeight(sizeIcon.x, sizeIcon.y);
 			m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			m_pIcon->SetObjType(OBJTYPE_SCENE2D);
