@@ -296,19 +296,22 @@ void CPlayer::Update(void)
 						BulletRot.y = m_fBulletRotOld;
 						m_pCharactorMove->GetRotation().y = BulletRot.y;
 					}
-					//発射方向保持
-					m_BulletRot.y = BulletRot.y;
 				}
+				else if (m_bAssist == false)
+				{	// 手動エイムの場合
+					BulletRot.y = m_fBulletRotOld;
+					m_pCharactorMove->GetRotation().y = BulletRot.y;
+				}
+
+				//発射方向保持
+				m_BulletRot.y = BulletRot.y;
 
 				if (m_pWordManager->GetBulletFlag() == true)
 				{	//可視化
 					m_bStealth = false;
-					if (m_PlayerType == TYPE_REACH)
-					{
-						//マシンガン発射時間初期化
-						m_nMachineGunTime = 0;
-						m_bMachineGun = true;
-					}
+					//マシンガン発射時間初期化
+					m_nMachineGunTime = 0;
+					m_bMachineGun = true;
 				}
 
 				if (m_PlayerType != TYPE_REACH)
@@ -324,7 +327,7 @@ void CPlayer::Update(void)
 				{//スティック角を取得して発射角とする
 					if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
 					{	// 右のスティックを動かしてない場合
-						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRot(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y );
+						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRotOld(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y);
 					}
 					else
 					{
@@ -334,7 +337,7 @@ void CPlayer::Update(void)
 					}
 				}
 				//発射方向保持
-				m_BulletRot.y = BulletRot.y;
+				m_BulletRot.y = m_fBulletRotOld;
 				BulletUI(m_BulletRot);		// 弾発射表示
 
 
@@ -351,25 +354,36 @@ void CPlayer::Update(void)
 
 			//マシンガン発射
 			if (m_bMachineGun == true)
-			{
+			{	// 発射時は動かない
 				m_nMachineGunTime++;
-				if (m_nMachineGunTime % 10 == 0)
-				{//10フレームに一回弾発射
-					m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
-					m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
-					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType,NULL);
+				if (m_PlayerType == TYPE_REACH)
+				{	// タイプがウサギならマシンガンの処理
+					if (m_nMachineGunTime % 10 == 0)
+					{//10フレームに一回弾発射
+						m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
+						m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
+						m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
+					}
+					else if (m_nMachineGunTime > 60)
+					{//6回発射したら弾情報を削除
+						m_bMachineGun = false;
+						m_pWordManager->Reset();
+					}
+					else if (m_pWordManager->GetStock(0) == 99)
+					{//ゴミモデル用の発射
+						m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
+						m_bMachineGun = false;
+						m_pWordManager->Reset();
+					}
 				}
-				else if (m_nMachineGunTime > 60)
-				{//6回発射したら弾情報を削除
-					m_bMachineGun = false;
-					m_pWordManager->Reset();
+				else if (m_PlayerType != TYPE_REACH)
+				{
+					if (m_nMachineGunTime % 20 == 0)
+					{
+						m_bMachineGun = false;
+					}
 				}
-				else if (m_pWordManager->GetStock(0) == 99)
-				{//ゴミモデル用の発射
-					m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
-					m_bMachineGun = false;
-					m_pWordManager->Reset();
-				}
+
 			}
 
 
@@ -1364,7 +1378,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 		int nNameNum = 0;
 
 		if (m_pWordManager != NULL && m_pWordManager->GetStock(0) != NOT_NUM)
-		{
+		{	// ゴミ以外なら
 			if (m_PlayerType == TYPE_POWER) { nNameNum = 1; }
 		}
 
@@ -1390,7 +1404,7 @@ void CPlayer::BulletUIUninit(void)
 
 		m_pBulletUI->SetColor(D3DXCOLOR(m_pBulletUI->Getcol().r, m_pBulletUI->Getcol().g, m_pBulletUI->Getcol().b, ColA));
 
-		m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x), m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z));
+		m_pBulletUI->SetPos(m_pBulletUI->GetPos());
 
 		if (ColA < 0.3f)
 		{// 指定した値より低い場合

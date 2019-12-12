@@ -183,7 +183,7 @@ void CScene3D::Draw(void)
 	// ビューマトリックスを取得
 	pDevice->GetTransform(D3DTS_VIEW, &mtxView);
 
-	if (m_scene3dType == SCENE3DTYPE_NORMAL)
+	if (m_scene3dType == SCENE3DTYPE_NORMAL || m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
 	{
 		// 回転を反映
 		D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);

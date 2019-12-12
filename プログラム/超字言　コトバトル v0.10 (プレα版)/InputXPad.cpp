@@ -258,7 +258,7 @@ float CInputXPad::GetStickRot(bool LorR, float fRotDeff)
 	return fAngle;
 }
 
-float CInputXPad::GetStickRot(SHORT RX, SHORT RY,  float fRotDeff)
+float CInputXPad::GetStickRotOld(SHORT RX, SHORT RY,  float fRotDeff)
 {//‘O‚à‚Á‚Ä•Û‚µ‚½Šp“x‚ğg‚Á‚Ä‹‚ß‚éŠÖ”
 	float fAngle = fRotDeff;
 	fAngle = atan2f((float)RY, (float)RX);
