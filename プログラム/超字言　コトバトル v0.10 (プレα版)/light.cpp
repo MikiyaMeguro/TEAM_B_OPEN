@@ -89,19 +89,22 @@ void CLight::Init(void)
 	D3DXVec3Normalize(&vecDir, &vecDir);		// 正規化する
 	m_light[4].Direction = vecDir;
 
-	// ライトを設定する
-	pDevice->SetLight(0, &m_light[0]);
-	pDevice->SetLight(1, &m_light[1]);
-	pDevice->SetLight(2, &m_light[2]);
-	pDevice->SetLight(3, &m_light[3]);
-	pDevice->SetLight(4, &m_light[4]);
+	if (pDevice != NULL)
+	{
+		// ライトを設定する
+		pDevice->SetLight(0, &m_light[0]);
+		pDevice->SetLight(1, &m_light[1]);
+		pDevice->SetLight(2, &m_light[2]);
+		pDevice->SetLight(3, &m_light[3]);
+		pDevice->SetLight(4, &m_light[4]);
 
-	// ライトを有効にする
-	pDevice->LightEnable(0, TRUE);
-	pDevice->LightEnable(1, TRUE);
-	pDevice->LightEnable(2, TRUE);
-	pDevice->LightEnable(3, TRUE);
-	pDevice->LightEnable(4, TRUE);
+		// ライトを有効にする
+		pDevice->LightEnable(0, TRUE);
+		pDevice->LightEnable(1, TRUE);
+		pDevice->LightEnable(2, TRUE);
+		pDevice->LightEnable(3, TRUE);
+		pDevice->LightEnable(4, TRUE);
+	}
 #endif // 1
 
 #if(0)

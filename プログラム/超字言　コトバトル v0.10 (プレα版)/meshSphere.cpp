@@ -157,8 +157,6 @@ void CMeshSphere::Draw(void)
 	CRenderer* pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();
 
-	D3DXMATRIX mtxRot, mtxTrans, mtxScale;	// 計算用マトリックス
-
 	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,m_rot,NULL,m_Size);
 
 	// ワールドマトリックスの設定

@@ -1331,4 +1331,44 @@ MODELSET						# 床周り
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+-----------------------------------------------------------
+ステージ真場外
+-----------------------------------------------------------
+MODELSET						# 雪だるま
+	TYPE = 50
+	POS = -90.0 200.0 540.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.50 1.50 1.50
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 雪だるま
+	TYPE = 50
+	POS = -540.0 200.0 -140.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 2.00 2.00 2.00
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 雪だるま
+	TYPE = 50
+	POS = 530.0 200.0 240.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 3.00 3.00 3.00
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 雪だるま
+	TYPE = 50
+	POS = 340.0 200.0 -480.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.00 1.00 1.00
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
 END_SCRIPT		# この行は絶対消さないこと！

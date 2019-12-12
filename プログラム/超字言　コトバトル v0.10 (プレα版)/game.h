@@ -18,7 +18,7 @@ class CPoint;
 class CSetWord;
 class CWall;
 class CStageSelect;
-
+class CPause;
 //=============================================================================
 // É}ÉNÉçíËã`
 //=============================================================================
@@ -97,6 +97,7 @@ private:
 	static CMeshField *m_pMeshField;
 	static CWall *m_pWall;
 	static bool m_bStageSet;
+	static CPause* m_pPause;
 
 	static CSetWord *m_pWordCreate;
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
