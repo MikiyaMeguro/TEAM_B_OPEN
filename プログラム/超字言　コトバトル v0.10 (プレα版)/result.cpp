@@ -62,6 +62,7 @@ CResult::CResult()
 	m_bProductin = false;
 	m_EffectAlpha = DEFAULT_SIZE2D;
 	m_Production = PRODUCTION_NONE;
+	m_bCurtain = false;
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
 		m_RankPos[nCnt] = DEFAULT_POS;
@@ -71,6 +72,7 @@ CResult::CResult()
 		m_PlayerNumSize[nCnt] = DEFAULT_SIZE2D;
 		m_PlayerIconSize[nCnt] = DEFAULT_SIZE2D;
 		m_EffectState = EFFECTPRO_NONE;
+		m_MaskPro = MASKPRODUCION_NONE;
 		for (int nCntEffe = 0; nCntEffe < 2; nCntEffe++)
 		{
 			m_RankEffect[nCnt][nCntEffe] = DEFAULT_POS;
@@ -102,16 +104,24 @@ HRESULT CResult::Init(void)
 	SetPolygon();
 	SetModel();
 	SetAudience();
-#if 0
+#if 1
 	m_ResultChara[0].nPoint = 0;
-	m_ResultChara[1].nPoint = 1;
-	m_ResultChara[2].nPoint = 2;
-	m_ResultChara[3].nPoint = 2;
+	m_ResultChara[1].nPoint = 12;
+	m_ResultChara[2].nPoint = 23;
+	m_ResultChara[3].nPoint = 34;
 
 	m_ResultChara[0].type = CPlayer::TYPE_BARANCE;
 	m_ResultChara[1].type = CPlayer::TYPE_POWER;
 	m_ResultChara[2].type = CPlayer::TYPE_SPEED;
 	m_ResultChara[3].type = CPlayer::TYPE_REACH;
+
+	m_ResultChara[1].Movetype = CCharaBase::MOVETYPE_NPC_AI;
+	m_ResultChara[2].Movetype = CCharaBase::MOVETYPE_NPC_AI;
+	m_ResultChara[3].Movetype = CCharaBase::MOVETYPE_NPC_AI;
+
+	m_ResultChara[1].nId = 1;
+	m_ResultChara[2].nId = 2;
+	m_ResultChara[3].nId = 3;
 #endif
 #if 1
 	/* ソート */
@@ -327,6 +337,8 @@ HRESULT CResult::Init(void)
 			TexPoint(3, m_ResultChara[nCntPlayer].nPoint);							//数字座標設定
 			break;
 		}
+		RankTex(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank - 1);
+		PLNumTex(nCntPlayer, m_ResultChara[nCntPlayer].type, m_ResultChara[nCntPlayer].Movetype);
 
 		if (m_pPlayer[nCntPlayer] != NULL)
 		{
@@ -335,9 +347,6 @@ HRESULT CResult::Init(void)
 			m_pPlayer[nCntPlayer]->SetMotion(CPlayer::MOTION_LOWER_NEUTRAL, CPlayer::LOWER_BODY);
 		}
 
-		/* 数字の生成 */
-		RankTex(nCntPlayer, m_ResultChara[nCntPlayer].nNumRank - 1);
-		PLNumTex(nCntPlayer, m_ResultChara[nCntPlayer].type, m_ResultChara[nCntPlayer].Movetype);
 	}
 #endif
 	//カメラの設定
@@ -431,7 +440,6 @@ void CResult::Uninit(void)
 		}
 		if (m_pSpotLight[nCntPlayer] != NULL)
 		{
-			m_pSpotLight[nCntPlayer]->SetLightEnable(nCntPlayer, false);//スポットライトを消す
 			m_pSpotLight[nCntPlayer]->SpotLightDelete();				//スポットライト基準からディレクショナルライト基準へ切り替え
 			m_pSpotLight[nCntPlayer]->Uninit();
 			delete m_pSpotLight[nCntPlayer];
@@ -453,22 +461,20 @@ void CResult::Uninit(void)
 			m_apStadium[nCntM]->Uninit();
 			m_apStadium[nCntM] = NULL;
 		}
-		for (int nCntS = 0; nCntS < MAX_STADIUMSTEP; nCntS++)
-		{//スタジアムの段差の数
-			for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
-			{//観客の数
-				if (m_apAudience[nCnt] != NULL)
-				{
-					m_apAudience[nCnt]->Uninit();
-					m_apAudience[nCnt] = NULL;
-				}
-			}
+	}
+	for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
+	{//観客の数
+		if (m_apAudience[nCnt] != NULL)
+		{
+			m_apAudience[nCnt]->Uninit();
+			m_apAudience[nCnt] = NULL;
 		}
 	}
-	if (m_apMask != NULL)
+	for (int nCnt = 0; nCnt < 2; nCnt++)
+	if (m_apMask[nCnt] != NULL) 
 	{
-		m_apMask->Uninit();
-		m_apMask = NULL;
+		m_apMask[nCnt]->Uninit();
+		m_apMask[nCnt] = NULL; 
 	}
 	//全ての終了処理
 	Release();
@@ -500,12 +506,13 @@ void CResult::Update(void)
 		{
 			if (m_bMenu == true)
 			{
-				m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(530.0f, SCREEN_HEIGHT / 2, 0), 220, 320, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
-				m_pSeletMenu->SetModeSelectBool(true);
-				m_bMenu = true;
+				if (m_bCurtain == true)
+				{
+					m_pSeletMenu = CSelectMenu::Create(D3DXVECTOR3(530.0f, SCREEN_HEIGHT / 2, 0), 220, 320, CSelectMenu::MENU_TYPE::MENU_TYPE_RESULT);
+					m_pSeletMenu->SetModeSelectBool(true);
+					m_bMenu = false;
+				}
 			}
-			// 以降の更新処理を飛ばす
-			return;
 		}
 
 		//任意のキーENTER
@@ -517,6 +524,7 @@ void CResult::Update(void)
 				{
 					if (m_bMenu == false)
 					{
+						m_MaskPro = MASKPRODUCION_CLOSE;
 						m_bMenu = true;
 						m_bMenuCreate = true;
 					}
@@ -527,10 +535,24 @@ void CResult::Update(void)
 	/* 演出処理関数呼び出し */
 	EffectPro();
 	Production();
+	MaskPro();
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");
-
+	//if (pInputKeyboard->GetPress(DIK_1) == true)
+	//{
+	//	if (m_MaskPro == MASKPRODUCION_NONE)
+	//	{
+	//		m_MaskPro = MASKPRODUCION_OPEN;
+	//	}
+	//}
+	//if (pInputKeyboard->GetPress(DIK_2) == true)
+	//{
+	//	if (m_MaskPro == MASKPRODUCION_NONE)
+	//	{
+	//		m_MaskPro = MASKPRODUCION_CLOSE;
+	//	}
+	//}
 #endif
 }
 
@@ -554,8 +576,9 @@ void CResult::Draw(void)
 //=============================================================================
 // キャラクター情報を設定
 //=============================================================================
-void CResult::SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, CCharaBase::CHARACTOR_MOVE_TYPE typeM, int nPoint)
+void CResult::SetRanking(int nNumPlayer, int nId, CPlayer::PLAYER_TYPE type, CCharaBase::CHARACTOR_MOVE_TYPE typeM, int nPoint)
 {
+	m_ResultChara[nNumPlayer].nId = nId;
 	m_ResultChara[nNumPlayer].type = type;
 	m_ResultChara[nNumPlayer].Movetype = typeM;
 	m_ResultChara[nNumPlayer].nPoint = nPoint;
@@ -570,13 +593,13 @@ void CResult::TexPoint(int nPlayer, int nPoint)
 	{// テクスチャに反映
 		if (m_apNumber[nPlayer][nCntTime] != NULL)
 		{
-			if (nCntTime > 1)
+			if (nCntTime < 1)
 			{
 				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint / 10);
 			}
 			else if (nCntTime == 1)
 			{
-				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint / 1);
+				m_apNumber[nPlayer][nCntTime]->SetNumber(nPoint);
 			}
 			if (nCntTime < 2)
 			{	// ３桁まで
@@ -639,15 +662,16 @@ void CResult::InitPointer(void)
 	for (int nCntM = 0; nCntM < MAX_MODEL; nCntM++)
 	{//モデルの数
 		if (m_apStadium[nCntM] != NULL) { m_apStadium[nCntM] = NULL; }
-		for (int nCntS = 0; nCntS < MAX_STADIUMSTEP; nCntS++)
-		{//スタジアムの段差の数
-			for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
-			{
-				if (m_apAudience[nCnt] != NULL) { m_apAudience[nCnt] = NULL; }
-			}
-		}
 	}
-	if (m_apMask != NULL) { m_apMask = NULL; }
+	for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
+	{
+		if (m_apAudience[nCnt] != NULL) { m_apAudience[nCnt] = NULL; }
+	}
+	for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
+	{ 
+		if (m_apMask[nCnt] != NULL) { m_apMask[nCnt] = NULL; }
+	}
+
 }
 //=============================================================================
 // 演出系初期設定
@@ -723,13 +747,21 @@ void CResult::SetPolygon(void)
 	m_apScene2D[RESULTTYPE_CALLOUT_4]->SetbDraw(false);
 
 	/* マスク */
-	if (m_apMask == NULL)
+	if (m_apMask[0] == NULL)
 	{
-		m_apMask = CScene3D::Create(D3DXVECTOR3(20.0f, 0.0f, 20.0f), "");
-		m_apMask->SetSize(100.0f, 100.0f);
-		m_apMask->SetRot(D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f));
-		m_apMask->SetColor(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+		m_apMask[0] = CScene3D::Create(D3DXVECTOR3(100.0f, 0.0f, 15.0f), "RANKING_MASKCYRTAIN");
+		m_apMask[0]->SetSize(100.0f, 100.0f);
+		m_apMask[0]->SetRot(D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f));
+		m_apMask[0]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
+	if (m_apMask[1] == NULL)
+	{			 
+		m_apMask[1] = CScene3D::Create(D3DXVECTOR3(-100.0f, 0.0f, 15.0f), "RANKING_MASKCYRTAIN");
+		m_apMask[1]->SetSize(100.0f, 100.0f);
+		m_apMask[1]->SetRot(D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f));
+		m_apMask[1]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	}
+
 #endif
 }
 //=============================================================================
@@ -861,12 +893,12 @@ void  CResult::Set2DUI(int nNum, int nPosNum)
 {
 	if (m_apRanking[nNum] != NULL)
 	{/*ランクの位置と大きさ*/
-		m_apRanking[nNum]->SetPos(D3DXVECTOR3(m_RankPos[nPosNum].x, m_RankPos[nPosNum].y - m_PlayerIconSize[nNum].y, m_RankPos[nPosNum].z),
+		m_apRanking[nNum]->SetPos(D3DXVECTOR3(m_RankPos[nPosNum].x, m_RankPos[nPosNum].y - m_PlayerIconSize[nPosNum].y, m_RankPos[nPosNum].z),
 			0.0f, 1.0f, DEFAULT_COL_WHITE);
 	}
 	if (m_apPlayerNum[nNum] != NULL)
 	{/*PL番号の位置と大きさ*/
-		m_apPlayerNum[nNum]->SetPos(D3DXVECTOR3(m_PlayerNumPos[nPosNum].x, m_PlayerNumPos[nPosNum].y + m_PlayerIconSize[nNum].y, m_PlayerNumPos[nPosNum].z),
+		m_apPlayerNum[nNum]->SetPos(D3DXVECTOR3(m_PlayerNumPos[nPosNum].x, m_PlayerNumPos[nPosNum].y + m_PlayerIconSize[nPosNum].y, m_PlayerNumPos[nPosNum].z),
 			0.0f, 1.0f, DEFAULT_COL_WHITE);
 	}
 	if (m_apPlayerIcon[nNum] != NULL)
@@ -893,7 +925,7 @@ void  CResult::Set2DUI(int nNum, int nPosNum)
 		}
 		if (m_apRanking[nNum] != NULL)
 		{
-			m_apRanking[nNum]->SetPosition(D3DXVECTOR3(m_RankPos[nPosNum].x, m_RankPos[nPosNum].y - (m_apPlayerIcon[nNum]->GetSize(1) - 20.0f), m_RankPos[nPosNum].z));
+			m_apRanking[nNum]->SetPosition(D3DXVECTOR3(m_RankPos[nPosNum].x, m_RankPos[nPosNum].y - (m_PlayerIconSize[nPosNum].y -20.0f), m_RankPos[nPosNum].z));
 			m_apRanking[nNum]->SetWidthHeight(DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.4f);
 		}
 		for (int nCntEff = 0; nCntEff < 2; nCntEff++)
@@ -928,8 +960,8 @@ void CResult::PLNumTex(int nNum, int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type
 		}
 		if (m_apPlayerNum[nNum] != NULL)
 		{
-			m_apPlayerNum[nNum]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*nNum)),
-				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*nNum)));
+			m_apPlayerNum[nNum]->SetTex(D3DXVECTOR2(0.5f, 0.0f + ((1.0f / MAX_PLAYER)*m_ResultChara[nNum].nId)),
+				D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*m_ResultChara[nNum].nId)));
 		}
 		break;
 	case CCharaBase::MOVETYPE_NPC_AI:
@@ -941,8 +973,8 @@ void CResult::PLNumTex(int nNum, int nChara,CCharaBase::CHARACTOR_MOVE_TYPE type
 		if (m_apPlayerNum[nNum] != NULL)
 		{
 			m_apPlayerNum[nNum]->BindTexture("RANKCHARA_PLNUM_COM");
-			m_apPlayerNum[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / 3)*nNum)),
-				D3DXVECTOR2(1.0f, (1.0f / 3) + ((1.0f / 3)*nNum)));
+			m_apPlayerNum[nNum]->SetTex(D3DXVECTOR2(0.0f, 0.0f + ((1.0f / 3)*m_ResultChara[nNum].nId-1)),
+				D3DXVECTOR2(1.0f, (1.0f / 3) + ((1.0f / 3)*m_ResultChara[nNum].nId-1)));
 		}
 	}
 }
@@ -959,29 +991,97 @@ void CResult::SetNumCallout(int nNum,int nIconPos, CCharaBase::CHARACTOR_MOVE_TY
 		case 0:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_2] != NULL)
 			{
-				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_PL1);
-				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x+(m_PlayerIconSize[nIconPos].x/2) , m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+				switch (m_ResultChara[nNum].nId)
+				{
+				case 0:	//PL1
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_PL1);
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 1:	//PL2
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_PL2);
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 2:	//PL3
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_PL3);
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 3:	//PL4
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_PL4);
+					m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				}
 			}
 			break;
 		case 1:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_1] != NULL)
 			{
-				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_PL2);
-				m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+				switch (m_ResultChara[nNum].nId)
+				{
+				case 0:	//PL1
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_PL1);
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 1:	//PL2
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_PL2);
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 2:	//PL3
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_PL3);
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 3:	//PL4
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetCol(DEFAULT_COL_PL4);
+					m_apScene2D[RESULTTYPE_CALLOUT_1]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				}
 			}
 			break;
 		case 2:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_3] != NULL)
 			{
-				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_PL3);
-				m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+				switch (m_ResultChara[nNum].nId)
+				{
+				case 0:	//PL1
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_PL1);
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 1:	//PL2
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_PL2);
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 2:	//PL3
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_PL3);
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 3:	//PL4
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetCol(DEFAULT_COL_PL4);
+					m_apScene2D[RESULTTYPE_CALLOUT_3]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				}
 			}
 			break;
 		case 3:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_4] != NULL)
 			{
-				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_PL4);
-				m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+				switch (m_ResultChara[nNum].nId)
+				{
+				case 0:	//PL1
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_PL1);
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 1:	//PL2
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_PL2);
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 2:	//PL3
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_PL3);
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				case 3:	//PL4
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetCol(DEFAULT_COL_PL4);
+					m_apScene2D[RESULTTYPE_CALLOUT_4]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nIconPos].x + (m_PlayerIconSize[nIconPos].x / 2), m_PlayerIconPos[nIconPos].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
+					break;
+				}
 			}
 			break;
 		}
@@ -1090,6 +1190,7 @@ void CResult::Production(void)
 	D3DXVECTOR3 Production = {};
 	D3DXVECTOR2 ProScal = {};
 	float fProAlpha = 0.0f;
+	bool bTurn[4] = { false,false,false,false };
 	bool bExpantion[2] = {false,false};
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
@@ -1161,19 +1262,22 @@ void CResult::Production(void)
 		for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 		{
 			Production = m_apPlayerIcon[nCnt]->GetPosition();
+
+			if (m_apPlayerIcon[0]->GetPosition().y >= m_PlayerIconPos[0].y&&
+				m_apPlayerIcon[1]->GetPosition().y >= m_PlayerIconPos[1].y&&
+				m_apPlayerIcon[2]->GetPosition().y >= m_PlayerIconPos[2].y&&
+				m_apPlayerIcon[3]->GetPosition().y >= m_PlayerIconPos[3].y)
+			{
+				if (nCnt < MAX_PLAYER)
+				{
+					m_Production = PRODUCTION_TURN_STAND;
+				}
+			}
 			if (Production.y >= m_PlayerIconPos[nCnt].y)
 			{
 				Production.y = m_PlayerIconPos[nCnt].y;
 				m_apPlayerIcon[nCnt]->SetPosition(Production);
 				m_apPlayerIcon[nCnt]->SetWidthHeight(m_PlayerIconSize[nCnt].x, m_PlayerIconSize[nCnt].y);
-
-				if (m_apPlayerIcon[0]->GetPosition().y >= m_PlayerIconPos[0].y&&
-					m_apPlayerIcon[1]->GetPosition().y >= m_PlayerIconPos[1].y&&
-					m_apPlayerIcon[2]->GetPosition().y >= m_PlayerIconPos[2].y&&
-					m_apPlayerIcon[3]->GetPosition().y >= m_PlayerIconPos[3].y)
-				{
-					m_Production = PRODUCTION_TURN_STAND;
-				}
 			}
 			else
 			{
@@ -1190,20 +1294,22 @@ void CResult::Production(void)
 			ProScal.x = m_apPlayerIcon[nCnt]->GetSize(0);
 			if (ProScal.x <= 0.0f)
 			{
-				ProScal.x = 0.0f;
-				m_apPlayerIcon[nCnt]->BindTexture("RANKCHARA_ICON");
-				PLNumTex(nCnt, m_ResultChara[nCnt].type, m_ResultChara[nCnt].Movetype);
-				if (m_apPlayerIcon[0]->GetSize(0) <= 0.0f&&
-					m_apPlayerIcon[1]->GetSize(0) <= 0.0f&&
-					m_apPlayerIcon[2]->GetSize(0) <= 0.0f&&
-					m_apPlayerIcon[3]->GetSize(0) <= 0.0f)
+				if (bTurn[nCnt] != true)
 				{
-					m_Production = PRODUCTION_TURN;
+					m_apPlayerIcon[nCnt]->BindTexture("RANKCHARA_ICON");
+					PLNumTex(nCnt, m_ResultChara[nCnt].type, m_ResultChara[nCnt].Movetype);
+					bTurn[nCnt] = true;
 				}
+				ProScal.x = 0.0f;
 			}
 			else
 			{
 				ProScal.x -= 2.0f;
+			}
+			if (bTurn[0] == true && bTurn[1] == true && bTurn[2] == true && bTurn[3] == true)
+			{
+				m_Production = PRODUCTION_TURN;
+				return;
 			}
 			m_apPlayerIcon[nCnt]->SetWidthHeight(ProScal.x, m_PlayerIconSize[nCnt].y);
 		}
@@ -1216,18 +1322,21 @@ void CResult::Production(void)
 			if (ProScal.x >= m_PlayerIconSize[nCnt].x/3)
 			{
 				ProScal.x = m_PlayerIconSize[nCnt].x / 3;
-				if (m_apPlayerIcon[0]->GetSize(0) >= m_PlayerIconSize[nCnt].x/3&&
-					m_apPlayerIcon[1]->GetSize(0) >= m_PlayerIconSize[nCnt].x/3&&
-					m_apPlayerIcon[2]->GetSize(0) >= m_PlayerIconSize[nCnt].x/3&&
-					m_apPlayerIcon[3]->GetSize(0) >= m_PlayerIconSize[nCnt].x/3)
+				if (bTurn[nCnt] != true)
 				{
-					m_Production = PRODUCTION_TURN_TABLE;
+					bTurn[nCnt] = true;
 				}
 			}
 			else
 			{
 				ProScal.x += 0.5f;
 			}
+			if (bTurn[0] == true && bTurn[1] == true && bTurn[2] == true && bTurn[3] == true)
+			{
+				m_Production = PRODUCTION_TURN_TABLE;
+				return;
+			}
+
 			m_apPlayerIcon[nCnt]->SetWidthHeight(ProScal.x, m_PlayerIconSize[nCnt].y);
 		}
 		break;
@@ -1237,20 +1346,22 @@ void CResult::Production(void)
 			ProScal.x = m_apPlayerIcon[nCnt]->GetSize(0);
 			if (ProScal.x >= m_PlayerIconSize[nCnt].x)
 			{
-				ProScal.x = m_PlayerIconSize[nCnt].x;
 				m_apPlayerNum[nCnt]->SetCol(DEFAULT_COL_WHITEALPHA);
 				m_apPlayerNum[nCnt]->SetbDraw(true);
-				if (m_apPlayerIcon[0]->GetSize(0) >= m_PlayerIconSize[0].x&&
-					m_apPlayerIcon[1]->GetSize(0) >= m_PlayerIconSize[1].x&&
-					m_apPlayerIcon[2]->GetSize(0) >= m_PlayerIconSize[2].x&&
-					m_apPlayerIcon[3]->GetSize(0) >= m_PlayerIconSize[3].x)
+				ProScal.x = m_PlayerIconSize[nCnt].x;
+				if (bTurn[nCnt] != true)
 				{
-					m_Production = PRODUCTION_TURN_FADEPLNUM;
+					bTurn[nCnt] = true;
 				}
 			}
 			else
 			{
 				ProScal.x += 3.0f;
+			}
+			if (bTurn[0] == true && bTurn[1] == true && bTurn[2] == true && bTurn[3] == true)
+			{
+				m_Production = PRODUCTION_TURN_FADEPLNUM;
+				return;
 			}
 			m_apPlayerIcon[nCnt]->SetWidthHeight(ProScal.x, m_PlayerIconSize[nCnt].y);
 		}
@@ -1259,6 +1370,16 @@ void CResult::Production(void)
 	case PRODUCTION_TURN_FADEPLNUM:
 		for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 		{
+			if (m_apPlayerNum[0]->GetCol().a >= 1.0f&&
+				m_apPlayerNum[1]->GetCol().a >= 1.0f&&
+				m_apPlayerNum[2]->GetCol().a >= 1.0f&&
+				m_apPlayerNum[3]->GetCol().a >= 1.0f)
+			{
+				if (bTurn[nCnt] != true)
+				{
+					bTurn[nCnt] = true;
+				}
+			}
 
 			fProAlpha = m_apPlayerNum[nCnt]->GetCol().a;
 			if (fProAlpha >= 1.0f)
@@ -1267,23 +1388,20 @@ void CResult::Production(void)
 
 				m_apScene2D[nCnt + 1]->SetWidthHeight(0.0f, 0.0f);
 				m_apScene2D[nCnt + 1]->SetbDraw(true);
-
-				if (m_apPlayerNum[0]->GetCol().a >= 1.0f&&
-					m_apPlayerNum[1]->GetCol().a >= 1.0f&&
-					m_apPlayerNum[2]->GetCol().a >= 1.0f&&
-					m_apPlayerNum[3]->GetCol().a >= 1.0f)
-				{
-					if (m_bEffectPro != true)
-					{
-						m_EffectState = EFFECTPRO_PATTURN1;
-						m_bEffectPro = true;
-					}
-					m_Production = PRODUCTION_COLLOUT_EXPANSION;
-				}
 			}
 			else
 			{
 				fProAlpha += 0.05f;
+			}
+			if (bTurn[0] == true && bTurn[1] == true && bTurn[2] == true && bTurn[3] == true)
+			{
+				if (m_bEffectPro != true)
+				{
+					m_EffectState = EFFECTPRO_PATTURN1;
+					m_bEffectPro = true;
+				}
+				m_Production = PRODUCTION_COLLOUT_EXPANSION;
+				return;
 			}
 			m_apPlayerNum[nCnt]->SetCol(D3DXCOLOR(DEFAULT_COL_WHITE.r, DEFAULT_COL_WHITE.g, DEFAULT_COL_WHITE.b, fProAlpha));
 		}
@@ -1349,8 +1467,94 @@ void CResult::Production(void)
 		break;
 
 	case PRODUCTION_FINISH:
+		m_MaskPro = MASKPRODUCION_OPEN;
 		m_Production = PRODUCTION_NONE;
 		m_bProductin = true;
+		break;
+	}
+}
+//=============================================================================
+// マスクの演出処理
+//=============================================================================
+void CResult::MaskPro(void)
+{
+	D3DXVECTOR3 Mask = {};
+	bool bMask[2] = { false,false };
+	switch (m_MaskPro)
+	{
+	case MASKPRODUCION_NONE:
+		break;
+	case MASKPRODUCION_OPEN:
+		if (m_apMask[0] != NULL)
+		{
+			Mask = m_apMask[0]->GetPos();
+			if (Mask.x >= 200.0f)
+			{
+				Mask.x = 200.0f;
+				bMask[0] = true;
+			}
+			else
+			{
+				Mask.x += 1.0f;
+			}
+			m_apMask[0]->SetPos(Mask);
+		}
+		if (m_apMask[1] != NULL)
+		{
+			Mask = m_apMask[1]->GetPos();
+			if (Mask.x <= -200.0f)
+			{
+				Mask.x = -200.0f;
+				bMask[1] = true;
+			}
+			else
+			{
+				Mask.x -= 1.0f;
+			}
+			m_apMask[1]->SetPos(Mask);
+		}
+
+		if (bMask[0] == true && bMask[1] == true)
+		{
+			m_MaskPro = MASKPRODUCION_NONE;
+			return;
+		}
+		break;
+	case MASKPRODUCION_CLOSE:
+		if (m_apMask[0] != NULL)
+		{
+			Mask = m_apMask[0]->GetPos();
+			if (Mask.x <= 100.0f)
+			{
+				Mask.x = 100.0f;
+				bMask[0] = true;
+			}
+			else
+			{
+				Mask.x -= 1.0f;
+			}
+			m_apMask[0]->SetPos(Mask);
+		}
+		if (m_apMask[1] != NULL)
+		{
+			Mask = m_apMask[1]->GetPos();
+			if (Mask.x >= -100.0f)
+			{
+				Mask.x = -100.0f;
+				bMask[1] = true;
+			}
+			else
+			{
+				Mask.x += 1.0f;
+			}
+			m_apMask[1]->SetPos(Mask);
+		}
+		if (bMask[0] == true && bMask[1] == true)
+		{
+			m_bCurtain = true;
+			m_MaskPro = MASKPRODUCION_NONE;
+			return;
+		}
 		break;
 	}
 }
