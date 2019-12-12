@@ -82,7 +82,7 @@ public:
 		MODEL_SNOWBUSH,			// 雪草むら
 		MODEL_POLE2,		    // ポール
 		MODEL_POLE3,		    // ポール
-
+		MODEL_SnowMan,		    // オラフスキー
 		//--------------------------------------
 		// 文字モデル
 		//--------------------------------------
@@ -125,11 +125,11 @@ public:
 		MODEL_DICE,		// だいす
 		MODEL_TREASURECHEST,	// たから
 		MODEL_GRASS,	// ガラス
-		MODEL_RING,	// リング
+		MODEL_RING,		// リング
 		MODEL_KUSAYA,	// くさや
 		MODEL_SAZAE,	// サザエ
-		MODEL_TILE,	// タイル
-		MODEL_RICE,	// ライス
+		MODEL_TILE,		// タイル
+		MODEL_RICE,		// ライス
 		MODEL_COMIC,	// マンガ
 		MODEL_FUIGO,	// ふいご
 		MODEL_NAMAKO,	// ナマコ
@@ -166,7 +166,7 @@ public:
 	} MODEL;
 
 	CLoad();		// コンストラクタ
-	~CLoad();	// デストラクタ
+	~CLoad();    	// デストラクタ
 
 	static HRESULT LoadModel(void);
 	static void UnloadModel(void);
@@ -183,9 +183,9 @@ public:
 	static int  PopString(char *pStr, char *pDest);	//行の最後を切り捨て
 
 private:
-	static LPD3DXMESH		*m_pMesh;		// メッシュ情報（頂点情報）へのポインタ
+	static LPD3DXMESH		*m_pMesh;			// メッシュ情報（頂点情報）へのポインタ
 	static LPD3DXBUFFER		*m_pBuffMat;		// マテリアル情報へのポインタ
-	static DWORD			*m_nNumMat;		// マテリアル情報の数
+	static DWORD			*m_nNumMat;			// マテリアル情報の数
 	static char m_apModelName[MODEL_MAX][256];
 	static const char *m_apModelFilename[];
 	static int m_nCntModel;

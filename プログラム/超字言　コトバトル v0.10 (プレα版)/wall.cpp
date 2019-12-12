@@ -108,6 +108,8 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 19) { CScene3D::BindTexture("TURORULE"); }
 	else if (m_nType == 20) { CScene3D::BindTexture("TUTOVICTRY"); }
 	else if (m_nType == 21) { CScene3D::BindTexture("TUTOBSTTLE"); }
+	else if (m_nType == 22) { CScene3D::BindTexture("ÉÇÉfÉã_TEX"); }
+
 
 	return S_OK;
 }
@@ -297,6 +299,22 @@ void CWall::Update(void)
 			m_nCounter = 0;
 		}
 	}
+	else if (m_nType == 22)
+	{
+		m_nCounter++;
+		if (m_nCounter % 60 == 0)
+		{
+			m_nAnimCounter++;
+			m_TexCounter++;
+			if (m_TexCounter > 74)
+			{
+				m_TexCounter = 0;
+			}
+			SetAnimationTex(D3DXVECTOR2(0.0f, 0.0f + ((m_TexCounter % 10) * 0.1f)),
+				D3DXVECTOR2(1.0f, 0.125f + ((m_TexCounter % 10) * 0.1f)));
+		}
+	}
+
 
 	WallPos += m_move;
 	CScene3D::SetPos(WallPos);						//	à íuÇÃê›íË

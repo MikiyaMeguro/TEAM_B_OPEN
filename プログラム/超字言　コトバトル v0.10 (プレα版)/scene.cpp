@@ -15,6 +15,8 @@
 #include "tutorial.h"
 #include "game.h"
 #include "avoidui.h"
+
+#include "CameraManager.h"
 //=============================================================================
 // 静的メンバ変数宣言
 //=============================================================================
@@ -23,7 +25,7 @@ int CScene::m_nNumPriority[NUM_PRIORITY] = {};
 CScene *CScene::m_apTop[NUM_PRIORITY] = {};
 CScene *CScene::m_apCur[NUM_PRIORITY] = {};
 bool    CScene::m_bPause = false;
-
+bool    CScene::m_bDebug2Ddraw = false;
 //=============================================================================
 // シーンクラスのコンストラクタ
 //=============================================================================
@@ -123,7 +125,11 @@ void CScene::UpdeteAll(void)
 	if (CCommand::GetCommand("PAUSE") && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
 	{
 		m_bPause = m_bPause ? false : true;
-		//CPause::SetPauseBool(m_bPause);
+	}
+
+	if (CCommand::GetCommand("DEBUG2D") == true)
+	{
+		m_bDebug2Ddraw = m_bDebug2Ddraw ? false : true;
 	}
 
 	if (m_bPause == false)
@@ -219,7 +225,7 @@ void CScene::DrawAll(int nCamera)
 {
 	CPlayer *pPlayer = NULL;
 
-	pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取得
+		pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取
 
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
@@ -230,7 +236,7 @@ void CScene::DrawAll(int nCamera)
 		{// 空になるまで描画する
 		 // Drawの最中に消える可能性があるから先に記録しておく
 			CScene *pSceneNext = pScene->m_pNext;
-			if (pScene->GetObjType() == OBJTYPE_PLAYER && nCamera != 5)
+			if (pScene->GetObjType() == OBJTYPE_PLAYER && nCamera != 5&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CPlayer *pPlayerScene = ((CPlayer*)pScene);
 
@@ -248,7 +254,7 @@ void CScene::DrawAll(int nCamera)
 					}
 				}
 			}
-			else if (pScene->GetObjType() == OBJTYPE_SCENEX)
+			else if (pScene->GetObjType() == OBJTYPE_SCENEX&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CSceneX *pSceneX = ((CSceneX*)pScene);
 				if (pSceneX->GetModelType() == CLoad::MODEL_BUSH)
@@ -263,7 +269,7 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			else if (pScene->GetObjType() == OBJTYPE_AVOIDUI)
+			else if (pScene->GetObjType() == OBJTYPE_AVOIDUI&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CAvoidUi *pAvoidUI = ((CAvoidUi*)pScene);
 				//どのプレイヤーカメラかを渡す
@@ -272,13 +278,22 @@ void CScene::DrawAll(int nCamera)
 				pScene->Draw();
 			}
 			else if (pScene->GetObjType() == OBJTYPE_PAUSE)
-			{//ポーズがONの時のみポーズ画面を描画する
+			{//ポーズ用カメラの時はポーズのみ描画する
 				if (m_bPause == true)
 				{
 					pScene->Draw();
 				}
 			}
-			else
+			else if ((pScene->GetObjType() == OBJTYPE_SCENE2D || pScene->GetObjType() == OBJTYPE_BILLBOARD
+					|| pScene->GetObjType() == OBJTYPE_TIME || pScene->GetObjType() == OBJTYPE_POINT)
+						&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
+			{//
+				if (m_bDebug2Ddraw == false)
+				{
+					pScene->Draw();
+				}
+			}
+			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				// 描画
 				pScene->Draw();

@@ -26,6 +26,7 @@
 #include "point.h"
 #include "SetWord.h"
 #include"StageSelect.h"
+#include "pause.h"
 
 #include "PlayerNumSelect.h"
 
@@ -80,6 +81,7 @@ CSetWord *CGame::m_pWordCreate = NULL;
 CWall *CGame::m_pWall = NULL;
 CPlayer::PLAYER_TYPE CGame::m_type[MAX_PLAYER] = {};
 int CGame::m_nNumStage = NULL;
+CPause* CGame::m_pPause = NULL;
 bool CGame::m_bStageSet = false;
 //=============================================================================
 //	コンストラクタ
@@ -122,7 +124,7 @@ void CGame::Init(void)
 	m_pMeshField = NULL;
 	if (m_pMeshField == NULL)
 	{
-		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
+		m_pMeshField = CMeshField::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20, 20, 40.0f);
 	}
 	switch (m_nNumStage)
 	{
@@ -221,6 +223,9 @@ void CGame::Init(void)
 
 	SetCreateWord();
 
+	//ポーズ画面の生成
+	m_pPause = CPause::Create();
+
 	//先にテクスチャを生成しておく
 	CTexture::GetTexture("モデル_TEX");
 	CTexture::GetTexture("WORD");
@@ -270,6 +275,12 @@ void CGame::Uninit(void)
 	{
 		m_pWordCreate->Uninit();
 		m_pWordCreate = NULL;
+	}
+
+	if (m_pPause != NULL)
+	{
+		m_pPause->Uninit();
+		m_pPause = NULL;
 	}
 
 	//不要なカメラを削除
@@ -421,6 +432,14 @@ void CGame::CameraSetting(int nNumPlayer)
 			pCameraManager->SetCameraViewPort("4P_CAMERA", 645, 365, 635, 355);
 			break;
 		}
+
+		//ポーズ用カメラ作成
+		pCameraManager->CreateCamera("PAUSE_CAMERA", CCamera::TYPE_TOPVIEW,
+			D3DXVECTOR3(20.0f, 0.0f, 0.0f), D3DXVECTOR3(CAMERA_ROTX, 0.0f, 0.0f),
+			CAMERA_LENGTH_TOPVIEW_PLAY,CCameraManager::PROP_INIT_ZONLY);
+
+		pCameraManager->SetCameraViewPort("PAUSE_CAMERA", 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
 	}
 }
 

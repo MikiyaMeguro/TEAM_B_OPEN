@@ -10,6 +10,8 @@
 
 #define CAMERANAME_SETCAMERA_NONE "NONE"	//カメラがまだセットされてない時にm_SetCameraに入れる文字列
 #define BACK_DEFAULT_COLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
+
+LPCSTR CCameraManager::m_SetCamera = CAMERANAME_SETCAMERA_NONE;
 //===================================================================
 // コンストラクタ&デストラクタ
 //===================================================================
@@ -28,7 +30,6 @@ CCameraManager::~CCameraManager()
 HRESULT CCameraManager::Init(void)
 {
 	m_vecCameraState.clear();
-	m_SetCamera = CAMERANAME_SETCAMERA_NONE;
 	return S_OK;
 }
 
@@ -76,8 +77,7 @@ bool CCameraManager::SetCamera(LPCSTR Tag)
 				m_SetCamera = result->CameraTag;
 
 				// バックバッファ＆Ｚバッファのクリア
-				//pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER),D3DCOLOR_RGBA(100, 149, 237, 0), 1.0f, 0);
-				pDevice->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), D3DCOLOR_RGBA(0, 0, 0, 0), 1.0f, 0);
+				WindowClear(pDevice,result->Property,result->BackgroundColor);
 
 				return true;
 			}
@@ -91,7 +91,7 @@ bool CCameraManager::SetCamera(LPCSTR Tag)
 //===================================================================
 // カメラ生成処理
 //===================================================================
-bool CCameraManager::CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLength)
+bool CCameraManager::CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLength,DRAW_PROPERTY prop)
 {
 	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
 
@@ -106,6 +106,7 @@ bool CCameraManager::CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVEC
 				CameraState.pCamera->Set(type, pos, rot, fLength);
 				CameraState.CameraTag = Tag;
 				CameraState.BackgroundColor = BACK_DEFAULT_COLOR;
+				CameraState.Property = prop;
 				m_vecCameraState.emplace_back(CameraState);
 
 				return true;
@@ -244,5 +245,23 @@ CCamera* CCameraManager::GetCamera(LPCSTR Tag)
 	}
 
 	return NULL;
+
+}
+
+//===================================================================
+// ウィンドウ初期化処理
+//===================================================================
+void CCameraManager::WindowClear(LPDIRECT3DDEVICE9 pDev, DRAW_PROPERTY prop, D3DXCOLOR BG_Color)
+{
+	switch (prop)
+	{
+	case PROP_DEFAULT:
+		pDev->Clear(0, NULL, (D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER), BG_Color, 1.0f, 0);
+		break;
+	case PROP_INIT_ZONLY:
+		pDev->Clear(0, NULL, (D3DCLEAR_ZBUFFER), BG_Color, 1.0f, 0);
+		break;
+	}
+
 
 }

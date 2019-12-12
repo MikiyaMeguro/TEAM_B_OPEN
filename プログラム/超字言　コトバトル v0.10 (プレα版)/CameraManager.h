@@ -22,10 +22,17 @@ class C3DCharactor;
 class CCameraManager
 {
 public:
+	enum DRAW_PROPERTY
+	{
+		PROP_DEFAULT = 0, //通常設定(画面初期化)
+		PROP_INIT_ZONLY,  //Zバッファのみ初期化(これまで描画されたものの上に描画される)
+	};
+
 	struct CAMERA_STATE
 	{//カメラ情報の構造体
 		CCamera* pCamera;			//カメラのポインタ
 		D3DXCOLOR BackgroundColor;	//初期化するときの背景色
+		DRAW_PROPERTY Property;		//描画時の設定
 		LPCSTR CameraTag;			//カメラ識別用のタグ
 
 		bool operator == (const LPCSTR Tag)
@@ -45,7 +52,8 @@ public:
 	bool SetCamera(LPCSTR Tag);
 
 	//カメラ生成
-	bool CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVECTOR3 pos, D3DXVECTOR3 rot, float fLength);
+	bool CreateCamera(LPCSTR Tag, CCamera::CAMERA_TYPE type, D3DXVECTOR3 pos,
+		D3DXVECTOR3 rot, float fLength,DRAW_PROPERTY prop = PROP_DEFAULT);
 
 	//カメラのビューポート設定
 	bool SetCameraViewPort(LPCSTR Tag, int X, int Y, int Width, int Height, float MinZ = 0.0f, float MaxZ = 1.0f);
@@ -67,10 +75,15 @@ public:
 	//カメラ取得
 	CCamera* GetCamera(LPCSTR Tag);
 
+	//現在セットしているカメラ名取得
+	static LPCSTR GetCameraName(void) { return m_SetCamera; };
+
 	int GetCameraNum(void) { return m_vecCameraState.size(); };
 private:
+	void WindowClear(LPDIRECT3DDEVICE9 pDev,DRAW_PROPERTY prop, D3DXCOLOR BG_Color);
+
 	std::vector<CAMERA_STATE> m_vecCameraState;	//カメラ情報の動的配列
 
-	LPCSTR m_SetCamera;		//現在セットしているカメラの名前
+	static LPCSTR m_SetCamera;		//現在セットしているカメラの名前
 };
 #endif // !_CAMERA_MANAGER_H_
