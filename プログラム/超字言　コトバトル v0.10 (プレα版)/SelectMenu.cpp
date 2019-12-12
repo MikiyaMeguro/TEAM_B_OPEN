@@ -256,12 +256,6 @@ void CSelectMenu::Update(void)
 	}
 
 #ifdef _DEBUG
-
-	if (pInput->GetTrigger(DIK_O) == true)
-	{//TRUEÇ»ÇÁFALSE FALSEÇ»ÇÁTRUE
-		m_bModeSelect = m_bModeSelect ? false : true;
-	}
-
 	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
 #endif
 }
