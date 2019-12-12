@@ -210,14 +210,6 @@ void CPlayerSelect::Update(void)
 	}
 	m_apPolygonBG[0]->SetbDraw(m_bModeSelect);
 
-
-#ifdef  _DEBUG
-	if (pInput->GetTrigger(DIK_O) == true)
-	{//TRUEならFALSE FALSEならTRUE
-		m_bModeSelect = m_bModeSelect ? false : true;
-	}
-#endif
-
 	//モードセレクト中
 	if (pFade->GetFade() == CFade::FADE_NONE)
 	{

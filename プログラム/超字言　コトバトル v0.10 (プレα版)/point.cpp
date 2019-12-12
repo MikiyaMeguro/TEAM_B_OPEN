@@ -131,6 +131,7 @@ HRESULT CPoint::Init(void)
 		RankPos();
 	}
 
+	SetObjType(OBJTYPE_POINT);
 	return S_OK;
 }
 
@@ -402,6 +403,7 @@ void CPoint::UIPosition(int nID)
 			m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (nID * 0.25f)), D3DXVECTOR2(1.0f, 0.25f + (nID * 0.25f)));
 			m_pIcon->SetWidthHeight(sizeIcon.x, sizeIcon.y);
 			m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			m_pIcon->SetObjType(OBJTYPE_SCENE2D);
 		}
 
 		// キャラクター番号の設
