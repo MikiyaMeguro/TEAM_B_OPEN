@@ -36,6 +36,7 @@ public:
 
 	typedef struct
 	{
+		int nId;
 		int nNumRank;
 		int nPoint;
 		CPlayer::PLAYER_TYPE type;
@@ -49,7 +50,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	static CMeshField *GetMeshField(void) { return m_pMeshField; }			// 地面の取得
-	static void SetRanking(int nNumPlayer, CPlayer::PLAYER_TYPE type, CCharaBase::CHARACTOR_MOVE_TYPE typeM, int nPoint);
+	static void SetRanking(int nNumPlayer, int nId,CPlayer::PLAYER_TYPE type, CCharaBase::CHARACTOR_MOVE_TYPE typeM, int nPoint);
 	static void SetCharaSelect(int PlNum, CPlayer::PLAYER_TYPE type) { m_type[PlNum] = type; }
 	void TexPoint(int nPlayer, int nPoint);
 	static CPlayer *GetPlayer(int nNumPlayer = 0) { return (nNumPlayer < MAX_PLAYER && nNumPlayer >= 0) ? m_pPlayer[nNumPlayer] : m_pPlayer[0]; }		// プレイヤーの取得
@@ -93,6 +94,15 @@ private:
 		PRODUCTION_MAX					// 最大値
 	}PRODUCTION;
 
+	/* マスクの演出 */
+	typedef enum
+	{
+		MASKPRODUCION_NONE = 0,
+		MASKPRODUCION_OPEN,
+		MASKPRODUCION_CLOSE,
+		MASKPRODUCION_MAX
+	}MASKPRODUCION;
+
 	void InitPointer(void);
 	void SetPolygon(void);
 	void SetModel(void);
@@ -103,13 +113,14 @@ private:
 	void EffectPro(void);
 	void SetAudience(void);
 	void Production(void);
+	void MaskPro(void);
 
 	static CPlayer *m_pPlayer[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	static CharaSet m_ResultChara[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
 	static CScene3D *m_apAudience[MAX_AUDIENCE];								//観客
-	CScene3D *m_apMask;															//マスク
+	CScene3D *m_apMask[2];															//マスク
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];									// ナンバーへのポインタ
 	CScene2D *m_apScene2D[RESULTTYPE_MAX];										//演出系2Dポリゴン
@@ -123,6 +134,7 @@ private:
 	bool m_bMenuCreate;							//メニューを生成したかのフラグ
 	bool m_bEffectPro;							//エフェクト演出が始まってるかどうかフラグ
 	bool m_bProductin;							//演出のフラグ
+	bool m_bCurtain;
 	D3DXVECTOR3 m_RankPos[MAX_PLAYER];			//順位の位置を保存
 	D3DXVECTOR3 m_PlayerNumPos[MAX_PLAYER];		//プレイヤーナンバーの位置を保存
 	D3DXVECTOR3 m_PlayerIconPos[MAX_PLAYER];	//アイコンの位置を保存
@@ -133,5 +145,6 @@ private:
 	D3DXVECTOR2 m_EffectAlpha;					//エフェクトのalpha値管理（X:エフェクト番号0　Y:エフェクト番号1）
 	EFFECTPRO_STATE m_EffectState;				//エフェクトの状態管理
 	PRODUCTION m_Production;					//演出
+	MASKPRODUCION m_MaskPro;					//カーテンの演出
 };
 #endif

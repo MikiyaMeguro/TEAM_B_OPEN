@@ -302,7 +302,7 @@ void CGame::Update(void)
 	{
 		for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
 		{
-			CResult::SetRanking(nCntPlayer, m_type[nCntPlayer], m_pPlayer[nCntPlayer]->GetMovetype(), m_pPoint[nCntPlayer]->GetPoint());
+			CResult::SetRanking(nCntPlayer, m_pPlayer[nCntPlayer]->GetID(),m_type[nCntPlayer], m_pPlayer[nCntPlayer]->GetMovetype(), m_pPoint[nCntPlayer]->GetPoint());
 		}
 
 		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
