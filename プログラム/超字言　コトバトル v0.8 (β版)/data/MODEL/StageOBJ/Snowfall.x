@@ -320,7 +320,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\UV\\Snow.jpg";
+    "data\\TEXTURE\\UV\\Snowwall.jpg";
    }
   }
  }

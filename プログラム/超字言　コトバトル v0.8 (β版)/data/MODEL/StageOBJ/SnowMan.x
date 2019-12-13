@@ -987,7 +987,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "data\\TEXTURE\\TEXTURE\\SnowMan.jpg";
+    "data\\TEXTURE\\UV\\SnowMan.jpg";
    }
   }
  }
