@@ -733,6 +733,7 @@ void CWordManager::SearchAssist(int nCntData)
 			}
 			pScene = pSceneNext;
 		}
+		nCount++;
 	}
 }
 
@@ -781,6 +782,7 @@ void CWordManager::UninitAssist(void)
 			}
 			pScene = pSceneNext;
 		}
+		nCount++;
 	}
 }
 
