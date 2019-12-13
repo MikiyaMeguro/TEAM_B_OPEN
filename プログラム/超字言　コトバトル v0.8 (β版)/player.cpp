@@ -68,7 +68,10 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
 	}
-
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		m_bInbush[nCnt] = false;
+	}
 	for (int nCntBody = 0; nCntBody < BODY_MAX; nCntBody++)
 	{
 		m_nCntKey[nCntBody] = 0;
@@ -884,6 +887,10 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 				m_bLand = pSceneX->Collision(pos, posOld, move, radius, m_nID);
 
 				CObject *pSceneObj = ((CObject*)pSceneX);		// CObjectへキャスト(型の変更)
+				for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+				{
+					m_bInbush[nCnt] = false;
+				}
 				if (m_bLand == true)
 				{// モデルに当たる
 					bHit = true;
@@ -916,6 +923,22 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 						PlayerAlpha(0.5f);
 						//今いる草むらの番号を取得
 						m_nObjNumber = pSceneObj->GetSceneXNum();
+						if (m_nID == 0)
+						{
+							m_bInbush[0] = true;
+						}
+						else if (m_nID == 1)
+						{
+							m_bInbush[1] = true;
+						}
+						else if (m_nID == 2)
+						{
+							m_bInbush[2] = true;
+						}
+						else if (m_nID == 3)
+						{
+							m_bInbush[3] = true;
+						}
 
 						for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 						{
@@ -931,9 +954,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 						}
 						nCntBush++;
 					}
-					else if (pSceneObj->GetCollsionType() == CSceneX::COLLISIONTYPE_BOX)
-					{
-					}
+
 					break;
 				}
 				else

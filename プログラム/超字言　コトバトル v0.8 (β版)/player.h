@@ -194,6 +194,7 @@ public:
 	CCharaBase::CHARACTOR_MOVE_TYPE GetMovetype(void) { return m_pCharactorMove->GetMoveType(); }
 	int				GetLandObjNumber(void)			{ return m_nObjNumber; };
 	bool			GetbMachineGun(void)			{ return m_bMachineGun; };
+	bool			Getbush(int nType) {return m_bInbush[nType]; }
 	//ÉÇÅ[ÉVÉáÉì
 	void		SetMotion(int motion, BODY body, MOTION_STATE state = STATE_BLEND);
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
@@ -251,6 +252,8 @@ private:
 	float	m_fBulletRotOld;									// å¸Ç´ï€ä«
 	SHORT	m_fStickRX;
 	SHORT	m_fStickRY;
+
+	bool m_bInbush[4];
 
 };
 
