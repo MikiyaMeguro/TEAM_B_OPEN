@@ -21,6 +21,7 @@
 #include "waypoint.h"
 
 #include "avoidui.h"
+#include "shadow.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -149,6 +150,8 @@ HRESULT C3DCharactor::Init(void)
 	//	回避UI
 	m_pCAvoidUi = CAvoidUi::Create(CCharaBase::GetPosition() + D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
 		D3DXVECTOR3(18.0f, 18.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f));
+
+	m_pShadow = CShadow::Create(CCharaBase::GetPosition(), 12, 12);
 
 	return S_OK;
 }
@@ -329,7 +332,7 @@ void C3DCharactor::Update(void)
 
 	if (m_pCAvoidUi != NULL)
 	{//	回避UIが使用されてる
-		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 1.0f, 0.0f));
+		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f));
 
 		if (GetMoveType() == MOVETYPE_PLAYER_INPUT)
 		{
@@ -352,6 +355,11 @@ void C3DCharactor::Update(void)
 		//	m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
 		//}
+	}
+
+	if (m_pShadow != NULL)
+	{
+		m_pShadow->SetPos(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f));
 	}
 }
 

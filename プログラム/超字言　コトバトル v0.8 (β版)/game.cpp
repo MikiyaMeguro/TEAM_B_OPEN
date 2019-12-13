@@ -185,11 +185,11 @@ void CGame::Init(void)
 			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 15.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 5);
 			//	噴水からの水
-			m_pWall = CWall::Create(D3DXVECTOR3(200.0f, 5.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f,20.0f, 0.0f),
+			m_pWall = CWall::Create(D3DXVECTOR3(200.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f,20.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
-			m_pWall = CWall::Create(D3DXVECTOR3(-200.0f, 5.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f, 20.0f, 0.0f),
+			m_pWall = CWall::Create(D3DXVECTOR3(-200.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f, 20.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, 200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
+			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 1.0f, 200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
 		}
 		break;
@@ -308,19 +308,14 @@ void CGame::Update(void)
 	CInputKeyboard *pInputKeyboard;
 	pInputKeyboard = CManager::GetInputKeyboard();
 	CDebugProc::Print("c", "ゲームモード");
-	//任意のキーENTER
+	////任意のキーENTER
 	//if (pInputKeyboard->GetTrigger(DIK_RETURN) == true)
 	//{
 	//	for (int nCntPlayer = 0; nCntPlayer < 4; nCntPlayer++)
 	//	{
-	//		CResult::SetRanking(nCntPlayer, m_pPlayer[nCntPlayer]->GetID(),m_type[nCntPlayer], m_pPlayer[nCntPlayer]->GetMovetype(), m_pPoint[nCntPlayer]->GetPoint());
+	//		CResult::SetRanking(nCntPlayer, m_pPlayer[nCntPlayer]->GetID(), m_type[nCntPlayer], m_pPlayer[nCntPlayer]->GetMovetype(), m_pPoint[nCntPlayer]->GetPoint());
 	//	}
-
 	//	pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
-	//}
-	//if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
-	//{
-	//	pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 	//}
 
 	//カメラ操作（テスト）

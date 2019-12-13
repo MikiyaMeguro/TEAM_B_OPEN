@@ -143,4 +143,6 @@ DATA = 00111 data/TEXTURE/Ranking/Curtain_Mask.png RANKING_MASKCYRTAIN
 DATA = 00112 data/TEXTURE/tutorial/tutostart.png TUTOSTART
 DATA = 00113 data/TEXTURE/tutorial/tutoriallogo.png TUTOLOGO
 
+DATA = 00114 data/TEXTURE/Game/shadow000.jpg SHADOW
+
 END_LOAD
