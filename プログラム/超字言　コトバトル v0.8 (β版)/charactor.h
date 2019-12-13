@@ -23,10 +23,9 @@
 
 
 class CWaypoint;
-
 class CPlayer;
-
 class CAvoidUi;
+class CShadow;
 
 class CCharaBase
 {
@@ -232,6 +231,7 @@ private:
 	float m_fOldCircle;				//ˆÚ“®æ‚Ü‚Å‚Ì‹——£
 	int nTestCnt = 0;
 	CAvoidUi *m_pCAvoidUi;
+	CShadow *m_pShadow;
 	//’e”­Ëî•ñ
 	D3DXVECTOR3 m_BulletRot;		//’e”­Ë•ûŒü•Û
 	int m_nMachineGunTime;			//ƒ}ƒVƒ“ƒKƒ“”­ËŠÔ

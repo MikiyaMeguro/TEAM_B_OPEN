@@ -818,10 +818,11 @@ bool CPlayer::CollisionDamageObj(void)
 				if (sqrtf(X + Y + Z) < fObjSize)
 				{
 					CPoint *pPoint = NULL;
-					if (pExp->GetID() != -1)
+					const int nExpID = pExp->GetID();
+					if (nExpID != -1 && nExpID != this->GetID())
 					{
-						pPoint = CManager::GetPoint(pExp->GetID());
-						pPoint->AddPoint(3);//爆弾ヒットで3ポイント追加
+						pPoint = CManager::GetPoint(nExpID);
+						if (pPoint != NULL) { pPoint->AddPoint(3); }//爆弾ヒットで3ポイント追加
 					}
 					//吹き飛ばし
 					DamageReaction(10.0f, D3DXVECTOR3(0.0f,fRot,0.0f));

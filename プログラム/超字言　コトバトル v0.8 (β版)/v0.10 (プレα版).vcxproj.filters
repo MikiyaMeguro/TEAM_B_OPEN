@@ -169,6 +169,9 @@
     <ClCompile Include="pause.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="shadow.cpp">
+      <Filter>ソースファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -337,6 +340,9 @@
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
     <ClInclude Include="pause.h">
+      <Filter>ヘッダーファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="shadow.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
   </ItemGroup>

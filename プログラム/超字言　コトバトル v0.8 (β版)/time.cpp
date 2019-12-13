@@ -309,6 +309,7 @@ HRESULT CTime::Init(void)
 //=============================================================================
 void CTime::Uninit(void)
 {
+	m_nStageNum = 0;
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
@@ -735,7 +736,7 @@ void CTime::TimeManagement(void)
 	if (m_nTime == 0 && m_nTimeOne == 0) {m_nTime = 0; return; }
 
 	if ((m_nStageChange % 60) == 0 && m_bStageCreate == false)
-	{	// 30秒ごとにステージが変わる
+	{	// 60秒ごとにステージが変わる
 		m_bStageCreate = true;
 		CGame::bStageSet(true);
 		int nStageNum = (m_nStageChange / 60);
@@ -868,6 +869,17 @@ void CTime::DebugKey(void)
 	if (CManager::GetInputKeyboard()->GetTrigger(DIK_NUMPAD0))
 	{	// 制限時間加算
 		AddTime(1);
+	}
+
+	if (CManager::GetInputKeyboard()->GetPress(DIK_NUMPAD6))
+	{	// 制限時間加算
+		m_nTimeCount--;
+		m_nStageChange--;
+	}
+	if (CManager::GetInputKeyboard()->GetPress(DIK_NUMPAD4))
+	{	// 制限時間加算
+		m_nTimeCount++;
+		m_nStageChange++;
 	}
 	if (CManager::GetInputKeyboard()->GetTrigger(DIK_NUMPAD9))
 	{	// リザルト画面へ
