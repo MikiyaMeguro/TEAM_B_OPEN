@@ -309,6 +309,7 @@ HRESULT CTime::Init(void)
 //=============================================================================
 void CTime::Uninit(void)
 {
+	m_nStageNum = 0;
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
 		for (int nCntTime = 0; nCntTime < TIME_MAX; nCntTime++)
