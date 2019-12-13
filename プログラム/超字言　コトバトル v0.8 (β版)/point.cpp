@@ -94,6 +94,11 @@ CPoint::CPoint(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objTy
 		m_apNumber[nCntPoint] = NULL;
 	}
 
+	for (int nCntVision = 0; nCntVision < MAX_PLAYER; nCntVision++)
+	{
+		m_bDrawVision[nCntVision] = false;
+	}
+
 }
 
 //=============================================================================
@@ -440,6 +445,7 @@ void CPoint::PointPostion()
 		{
 			m_pCrown = CSceneBillBoard::Create(D3DXVECTOR3(PlayerPos.x, PlayerPos.y + 80.0f, PlayerPos.z), 20.0f, 30.0f, "crown");
 			m_pCrown->SetTexture(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2((0.333f*1), 1.0f));
+			m_pCrown->SetObjType(CSceneBillBoard::OBJTYPE_CROWN);
 		}
 
 		if (m_pCrown != NULL)
@@ -713,4 +719,13 @@ void CPoint::ConfirmDirecting(D3DXVECTOR2 size)
 		m_bFlag001 = false;
 		m_bRankChangeFlag = false;
 	}
+}
+
+//=============================================================================
+// •`‰æ”»’è
+//=============================================================================
+void CPoint::SetVision(int nNumPlayer, bool bFlag)
+{
+	m_bDrawVision[nNumPlayer] = bFlag;
+	if (m_pCrown != NULL) { m_pCrown->SetDrawFlag(bFlag); }
 }

@@ -561,9 +561,10 @@ void CMeshField::Draw(void)
 
 	// ƒeƒNƒXƒ`ƒƒ‚ÌÝ’è
 	pDevice->SetTexture(0, m_pTexture);
-
-	// ƒ|ƒŠƒSƒ“‚Ì•`‰æ
-	pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nNumVerTex, 0, m_nNumPolygon);
+	if (CManager::GetMode() != CManager::MODE_TUTORIAL)
+	{// ƒ|ƒŠƒSƒ“‚Ì•`‰æ
+		pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, m_nNumVerTex, 0, m_nNumPolygon);
+	}
 }
 
 //=============================================================================

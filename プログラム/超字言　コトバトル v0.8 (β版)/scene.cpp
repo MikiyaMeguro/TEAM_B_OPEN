@@ -16,6 +16,7 @@
 #include "game.h"
 #include "avoidui.h"
 
+#include "point.h"
 #include "CameraManager.h"
 //=============================================================================
 // 静的メンバ変数宣言
@@ -229,8 +230,10 @@ void CScene::UpdeteAll(void)
 void CScene::DrawAll(int nCamera)
 {
 	CPlayer *pPlayer = NULL;
+	CPoint *pPioint = NULL;
 
-		pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取
+	pPlayer = CManager::GetPlayer(nCamera - 1);//プレイヤーの取得
+	//pPioint = CManager::GetPoint(nCamera - 1);	// ポイント取得
 
 	for (int nCntPriority = 0; nCntPriority < NUM_PRIORITY; nCntPriority++)
 	{// 優先順位の数分繰り返す
@@ -244,11 +247,14 @@ void CScene::DrawAll(int nCamera)
 			if (pScene->GetObjType() == OBJTYPE_PLAYER && nCamera != 5&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CPlayer *pPlayerScene = ((CPlayer*)pScene);
-
 				if (pPlayerScene->GetID() == nCamera - 1)
 				{	// 自分を描画
 					int ntest = pPlayerScene->GetID();
 					pScene->Draw();
+
+					CPlayer *pPlayerOld = CManager::GetPlayer(pPlayerScene->GetID()); // ポイントのID取得
+					CScene3D *pScene3D = ((CScene3D*)pPlayerOld->GetBulletUI());
+					if (pScene3D != NULL) { pScene3D->Draw(); }
 				}
 				else
 				{	// 他プレイヤー描画
@@ -256,6 +262,36 @@ void CScene::DrawAll(int nCamera)
 					{
 						int ntest = pPlayerScene->GetID();
 						pScene->Draw();
+					}
+				}
+			}
+			else if (pScene->GetObjType() == OBJTYPE_POINT && nCamera != 5 && CCameraManager::GetCameraName() != "PAUSE_CAMERA")
+			{
+				CPoint *pPlayerScene = ((CPoint*)pScene);
+
+				if (pPlayerScene->GetID() == nCamera - 1)
+				{	// 自分を描画
+					int ntest = pPlayerScene->GetID();
+					pPlayerScene->Draw();
+
+					pPioint = CManager::GetPoint(pPlayerScene->GetID()); // ポイントのID取得
+
+					if (pPioint->GetID() == nCamera - 1)
+					{	// 自分を描画
+						CSceneBillBoard *pBill = ((CSceneBillBoard*)pPioint->GetCrwon());
+						if (pBill != NULL) { pBill->Draw(); }
+					}
+				}
+				else
+				{	// 他プレイヤー描画
+					if (pPlayer->GetVision(pPlayerScene->GetID()) == true)
+					{
+						int ntest = pPlayerScene->GetID();
+						pPlayerScene->Draw();
+
+						pPioint = CManager::GetPoint(pPlayerScene->GetID());
+						CSceneBillBoard *pBill = ((CSceneBillBoard*)pPioint->GetCrwon());
+						if (pBill != NULL) { pBill->Draw(); }
 					}
 				}
 			}
@@ -298,7 +334,7 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA")
+			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA" && pScene->GetObjType() != OBJTYPE_CROWN && pScene->GetObjType() != OBJTYPE_BULLETUI)
 			{
 				// 描画
 				pScene->Draw();

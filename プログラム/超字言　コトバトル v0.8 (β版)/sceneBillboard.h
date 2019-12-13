@@ -35,7 +35,8 @@ public:
 	void SetTexture(int PatternAnim, int X, int Y, int nNum);
 	void SetTexture(D3DXVECTOR2 minRect,D3DXVECTOR2 maxRect);
 
-
+	void SetDrawFlag(bool bFlag) { m_bDrawFlag = bFlag; }
+	bool GetDrawFlag(void) {return m_bDrawFlag; }
 private:
 	//メンバ変数
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff = NULL;			//頂点バッファへのポインタ
@@ -44,6 +45,7 @@ private:
 	D3DXVECTOR3				m_move;						// 移動量
 	float					m_fWidth, m_fHeight;		// 幅,高さ
 	D3DXMATRIX				m_mtrxWorld;				// ワールドマトリックス
+	bool					m_bDrawFlag;
 
 };
 

@@ -858,6 +858,8 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 	bool bHit = false;
 	CScene *pScene = NULL;
 	CPlayer *pPlayer[MAX_PLAYER];
+	CPoint *pPoint[MAX_PLAYER];
+
 	int nCntBush = 0;
 
 	// 先頭のオブジェクトを取得
@@ -866,6 +868,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
 		pPlayer[nCntPlayer] = CManager::GetPlayer(nCntPlayer);			// プレイヤーを取得
+		pPoint[nCntPlayer] = CManager::GetPoint(nCntPlayer);
 	}
 
 	while (pScene != NULL)
@@ -923,6 +926,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 								if (m_nObjNumber != pPlayer[nCntPlayer]->GetLandObjNumber())
 								{	//同じ草むらにいないとき
 									pPlayer[nCntPlayer]->SetVision(GetID(), false);
+									if (pPoint[nCntPlayer] != NULL) { pPoint[nCntPlayer]->SetVision(GetID(), false); }
 								}
 							}
 						}
@@ -946,6 +950,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							{	//他プレイヤーに見えている
 								int nte = GetID();
 								pPlayer[nCntPlayer]->SetVision(GetID(), true);
+								if (pPoint[nCntPlayer] != NULL) { pPoint[nCntPlayer]->SetVision(GetID(), true); }
 							}
 						}
 						//m_bStealth = true;
@@ -1376,6 +1381,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 
 		m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName[nNameNum]);
 		m_pBulletUI->SetScene3DType(CScene3D::SCENE3DTYPE_ADDSYNTHESIS);
+		m_pBulletUI->SetObjType(CScene3D::OBJTYPE_BULLETUI);
 		m_pBulletUI->SetAlphaTest(true);
 		m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
 		m_pBulletUI->SetRot(rot);

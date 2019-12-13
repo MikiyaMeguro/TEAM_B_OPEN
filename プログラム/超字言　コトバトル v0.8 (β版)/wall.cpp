@@ -109,6 +109,7 @@ HRESULT CWall::Init(D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXVECTOR3 size, D3DXCOLO
 	else if (m_nType == 20) { CScene3D::BindTexture("TUTOVICTRY"); }
 	else if (m_nType == 21) { CScene3D::BindTexture("TUTOBSTTLE"); }
 	else if (m_nType == 22) { CScene3D::BindTexture("モデル_TEX"); }
+	else if (m_nType == 23) { CScene3D::BindTexture("ベルトコンベア_アイコン"); }
 
 
 	return S_OK;
@@ -363,7 +364,15 @@ void CWall::Update(void)
 
 		}
 	}
-
+	else if (m_nType == 23)
+	{
+		m_nCounter++;
+		if (m_nCounter % 6 == 0)
+		{
+			m_nAnimCounter++;
+			SetAnimation(-m_nAnimCounter, 0.9f, 1.0f);
+		}
+	}
 
 	WallPos += m_move;
 	CScene3D::SetPos(WallPos);						//	位置の設定

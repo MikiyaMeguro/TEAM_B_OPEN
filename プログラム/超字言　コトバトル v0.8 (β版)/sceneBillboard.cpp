@@ -31,7 +31,7 @@ CSceneBillBoard::CSceneBillBoard() : CScene(5, CScene::OBJTYPE_BILLBOARD)
 	m_fHeight = 0;
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtrxWorld);
-
+	m_bDrawFlag = true;
 }
 
 //--------------------------------------------
@@ -146,6 +146,9 @@ void CSceneBillBoard::Update(void)
 //=============================================================================
 void CSceneBillBoard::Draw(void)
 {
+	/*if (m_bDrawFlag == false) { 
+		return; }*/
+
 	//デバイスを取得
 	CRenderer *pRenderer = CManager::GetRenderer();
 	LPDIRECT3DDEVICE9 pDevice = pRenderer->GetDevice();

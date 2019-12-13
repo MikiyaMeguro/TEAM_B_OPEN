@@ -24,27 +24,27 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	POS = -5.0 0.0 -240.0		# 位置情報
+	POS = -80.0 0.0 -320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 245.0 0.0 -240.0		# 位置情報
+	POS = 320.0 0.0 -320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 245.0 0.0 200.0		# 位置情報
+	POS = 320.0 0.0 320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -5.0 0.0 200.0		# 位置情報
+	POS = -80.0 0.0 320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 120.0 0.0 40.0		# 位置情報
+	POS = 120.0 0.0 -15.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 120.0 0.0 -80.0		# 位置情報
+	POS = 340.0 0.0 -80.0		# 位置情報
 END_MODELSET
 
 MODELSET
@@ -60,7 +60,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	POS = 360.0 0.0 -20.0		# 位置情報
+	POS = 340.0 0.0 40.0		# 位置情報
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
