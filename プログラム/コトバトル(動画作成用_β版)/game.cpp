@@ -222,6 +222,7 @@ void CGame::Init(void)
 	//デバック用
 	//CTime::SetTimeFlag(false);
 	CCommand::RegistCommand("MOVIECAMERA",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_TRIGGER,DIK_M);
+	CCommand::RegistCommand("MOVIE_TIMESTOP", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_N);
 
 	SetCreateWord();
 
@@ -318,18 +319,24 @@ void CGame::Update(void)
 		pCam->SetRotation(pCam->GetRotation() + D3DXVECTOR3(0.0f, 0.001f, 0.0f));
 	}
 
-	//動画モード
-	if (CCommand::GetCommand("MOVIECAMERA"))
+	//動画モード(制限時間カウンタ停止)
+	if (CCommand::GetCommand("MOVIE_TIMESTOP"))
 	{
 		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
+	}
+
+	//動画モード(カメラ束縛解除＆１画面化)
+	if (CCommand::GetCommand("MOVIECAMERA"))
+	{
 		m_bMovieFlag = !(m_bMovieFlag);
 	}
 
 	if (m_bMovieFlag == true)
-	{
+	{//カメラ束縛を解除しているときの操作
 		pCam = pCameraManager->GetCamera("MOVIE_CAMERA");
 		if (pCam != NULL)
 		{
+			//回転
 			D3DXVECTOR3 rot = pCam->GetRotation();
 			if (pInputKeyboard->GetPress(DIK_RIGHT) == true)
 			{
@@ -348,8 +355,8 @@ void CGame::Update(void)
 				pCam->SetRotation(rot + D3DXVECTOR3(0.005f, 0.00f, 0.0f));
 			}
 
+			//移動
 			D3DXVECTOR3 move(0.0f, 0.0f, 0.0f);
-
 			if (pInputKeyboard->GetPress(DIK_NUMPAD8) == true)
 			{
 				move = D3DXVECTOR3(sinf(rot.y) * 4.0f, 0.0f, cosf(rot.y)*4.0f);
