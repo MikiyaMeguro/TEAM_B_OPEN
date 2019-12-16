@@ -35,17 +35,20 @@ public:
 	void SetTexture(int PatternAnim, int X, int Y, int nNum);
 	void SetTexture(D3DXVECTOR2 minRect,D3DXVECTOR2 maxRect);
 
-	void SetDrawFlag(bool bFlag) { m_bDrawFlag = bFlag; }
-	bool GetDrawFlag(void) {return m_bDrawFlag; }
+	void SetColFlag(bool bFlag) { m_bColChange = bFlag; }
+	bool GetColFlag(void) { return m_bColChange; }
+	D3DXCOLOR GetCol(void) { return m_col; }
+
 private:
 	//メンバ変数
+	D3DXCOLOR				m_col;
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff = NULL;			//頂点バッファへのポインタ
 	LPDIRECT3DTEXTURE9		m_pTexture = NULL;			// テクスチャへのポインタ
 	D3DXVECTOR3				m_pos;						// ポリゴンの位置
 	D3DXVECTOR3				m_move;						// 移動量
 	float					m_fWidth, m_fHeight;		// 幅,高さ
 	D3DXMATRIX				m_mtrxWorld;				// ワールドマトリックス
-	bool					m_bDrawFlag;
+	bool					m_bColChange;
 
 };
 

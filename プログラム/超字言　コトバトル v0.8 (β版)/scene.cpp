@@ -17,6 +17,7 @@
 #include "avoidui.h"
 
 #include "point.h"
+#include "word.h"
 #include "CameraManager.h"
 //=============================================================================
 // Ã“Iƒƒ“ƒo•Ï”éŒ¾
@@ -309,6 +310,45 @@ void CScene::DrawAll(int nCamera)
 				{	//‘‚Þ‚çˆÈŠO‚ð•`‰æ
 					pScene->Draw();
 				}
+			}
+			if (pScene->GetObjType() == OBJTYPE_WORD && nCamera != 5 && CCameraManager::GetCameraName() != "PAUSE_CAMERA")
+			{
+				CWord *pWord = ((CWord*)pScene);
+
+				CSceneBillBoard *pBill = ((CSceneBillBoard*)pWord->GetPopBill());
+
+				if (pBill != NULL && pBill->GetColFlag() == true)
+				{	// 3•¶Žš–Ú’Tõ‚ª‚ ‚éê‡
+					pBill->SetBillboard(pBill->GetPos(), 200.0f, 17.0f);
+					if (pWord->GetID(nCamera - 1) == 0)
+					{	// 1P‚Ìê‡
+						pBill->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
+					}
+					else if (pWord->GetID(nCamera - 1) == 1)
+					{	// 2P‚Ìê‡
+						pBill->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
+					}
+					else if (pWord->GetID(nCamera - 1) == 2)
+					{	// 3P‚Ìê‡
+						pBill->SetCol(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
+					}
+					else if (pWord->GetID(nCamera - 1) == 3)
+					{	// 4P‚Ìê‡
+						pBill->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+					}
+					else
+					{	// Ž©•ªŽ©g‚Ì”Ô†ˆÈŠO
+						pBill->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+						pBill->SetBillboard(pBill->GetPos(), 80.0f, 17.0f);
+					}
+				}
+				if (pBill != NULL && pBill->GetColFlag() == false)
+				{	// 3•¶Žš–Ú’Tõ‚ª–³‚¢ê‡
+					pBill->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+					pBill->SetBillboard(pBill->GetPos(), 80.0f, 17.0f);
+				}
+				pWord->Draw();
+
 			}
 			else if (pScene->GetObjType() == OBJTYPE_AVOIDUI&& CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
