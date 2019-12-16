@@ -78,6 +78,11 @@ CResult::CResult()
 			m_RankEffect[nCnt][nCntEffe] = DEFAULT_POS;
 		}
 	}
+
+	for (int nCnt = 0; nCnt < MAX_CURTAIN; nCnt++)
+	{
+		m_apMask[nCnt] = NULL;
+	}
 }
 
 //=============================================================================
@@ -541,6 +546,16 @@ void CResult::Update(void)
 #ifdef _DEBUG
 	CDebugProc::Print("c", "リザルト");
 #endif
+	if (pInputKeyboard->GetTrigger(DIK_1) == true)
+	{
+		m_MaskPro = MASKPRODUCION_OPEN;
+	}
+	if (pInputKeyboard->GetTrigger(DIK_2) == true)
+	{
+		m_MaskPro = MASKPRODUCION_CLOSE;
+	}
+
+
 }
 
 //=============================================================================
@@ -653,8 +668,7 @@ void CResult::InitPointer(void)
 	}
 	for (int nCnt = 0; nCnt < MAX_CURTAIN; nCnt++)
 	{
-		if (m_apMask[nCnt] != NULL) { 
-			m_apMask[nCnt] = NULL; }
+		if (m_apMask[nCnt] != NULL) { m_apMask[nCnt] = NULL; }
 	}
 
 }
@@ -741,18 +755,20 @@ void CResult::SetPolygon(void)
 	/* マスク */
 	if (m_apMask[0] == NULL)
 	{
-		m_apMask[0] = CScene3D::Create(D3DXVECTOR3(100.0f, 0.0f, 15.0f), "RANKING_MASKCYRTAIN");
+		m_apMask[0] = m_apMask[0]->Create(D3DXVECTOR3(100.0f, 0.0f, 15.0f), "RANKING_MESHFIELD");
 		m_apMask[0]->SetSize(100.0f, 100.0f);
 		m_apMask[0]->SetRot(D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f));
 		m_apMask[0]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
 	}
 	if (m_apMask[1] == NULL)
 	{
-		m_apMask[1] = CScene3D::Create(D3DXVECTOR3(-100.0f, 0.0f, 15.0f), "RANKING_MASKCYRTAIN");
+		m_apMask[1] = m_apMask[1]->Create(D3DXVECTOR3(-100.0f, 0.0f, 15.0f), "RANKING_MESHFIELD");
 		m_apMask[1]->SetSize(100.0f, 100.0f);
 		m_apMask[1]->SetRot(D3DXVECTOR3(D3DX_PI*0.5f, 0.0f, 0.0f));
 		m_apMask[1]->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
+
 
 #endif
 }

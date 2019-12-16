@@ -77,76 +77,76 @@ DATA = 00059 data/TEXTURE/CharactorSelect/PLUI.png PLAYER_UIWINDOW
 DATA = 00060 data/TEXTURE/CharactorSelect/Confirm.png PLAYER_CONFIRM
 DATA = 00061 data/TEXTURE/CharactorSelect/CharaSelect_back.png PLAYERSELECT_BACK
 DATA = 00062 data/TEXTURE/StageSelect/Band.png STAGESEL_BAND
-DATA = 00062 data/TEXTURE/StageSelect/StageIcon.png STAGESEL_ICON
+DATA = 00063 data/TEXTURE/StageSelect/StageIcon.png STAGESEL_ICON
 
-DATA = 000 data/TEXTURE/ModelTex/ModelTex.png ƒ‚ƒfƒ‹_TEX
-DATA = 00063 data/TEXTURE/ExplosionTex001.png EXPLOSION
-DATA = 00064 data/TEXTURE/UI/Countdown00.png COUNTDOWN0
-DATA = 00065 data/TEXTURE/UI/Countdown01.png COUNTDOWN1
-DATA = 00066 data/TEXTURE/UI/Countdown02.png COUNTDOWN2
-DATA = 00067 data/TEXTURE/UI/Countdown03.png COUNTDOWN3
-DATA = 00068 data/TEXTURE/UI/End.png GAME_END
-DATA = 00069 data/TEXTURE/Line.png LINE
-DATA = 00070 data/TEXTURE/tutorial/pad.jpg PAD
-DATA = 00071 data/TEXTURE/tutorial/tutorialflow000.png TUROFLOW000
-DATA = 00072 data/TEXTURE/tutorial/tutorialflow001.png TUROFLOW001
-DATA = 00073 data/TEXTURE/tutorial/next.png NEXT
-DATA = 00074 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLANATION
-DATA = 00075 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
-DATA = 00076 data/TEXTURE/CharactorSelect/CharaSel_ModeBack.png CHARASEL_BACKMODE
-DATA = 00077 data/TEXTURE/field002.jpg FIELD002 
-DATA = 00078 data/TEXTURE/avoidui.png AVOID
+DATA = 00064 data/TEXTURE/ModelTex/ModelTex.png ƒ‚ƒfƒ‹_TEX
+DATA = 00065 data/TEXTURE/ExplosionTex001.png EXPLOSION
+DATA = 00066 data/TEXTURE/UI/Countdown00.png COUNTDOWN0
+DATA = 00067 data/TEXTURE/UI/Countdown01.png COUNTDOWN1
+DATA = 00068 data/TEXTURE/UI/Countdown02.png COUNTDOWN2
+DATA = 00069 data/TEXTURE/UI/Countdown03.png COUNTDOWN3
+DATA = 00070 data/TEXTURE/UI/End.png GAME_END
+DATA = 00071 data/TEXTURE/Line.png LINE
+DATA = 00072 data/TEXTURE/tutorial/pad.jpg PAD
+DATA = 00073 data/TEXTURE/tutorial/tutorialflow000.png TUROFLOW000
+DATA = 00074 data/TEXTURE/tutorial/tutorialflow001.png TUROFLOW001
+DATA = 00075 data/TEXTURE/tutorial/next.png NEXT
+DATA = 00076 data/TEXTURE/StageSelect/StageSelect_Explanation.png STAGESEL_EXPLANATION
+DATA = 00077 data/TEXTURE/MENU_UI/Menu016.png RNKINGSELECT_MENU
+DATA = 00078 data/TEXTURE/CharactorSelect/CharaSel_ModeBack.png CHARASEL_BACKMODE
+DATA = 00079 data/TEXTURE/field002.jpg FIELD002 
+DATA = 00080 data/TEXTURE/avoidui.png AVOID
 
-DATA = 00079 data/TEXTURE/Ranking/Window.png RANKING_WINDOW
-DATA = 00080 data/TEXTURE/Ranking/Rank&PlayerNum.png RANK&PLNUM
-DATA = 00081 data/TEXTURE/Ranking/ICon.png RANKCHARA_ICON
-DATA = 00082 data/TEXTURE/CharactorSelect/ComDisplay.png RANKCHARA_PLNUM_COM
+DATA = 00081 data/TEXTURE/Ranking/Window.png RANKING_WINDOW
+DATA = 00082 data/TEXTURE/Ranking/Rank&PlayerNum.png RANK&PLNUM
+DATA = 00083 data/TEXTURE/Ranking/ICon.png RANKCHARA_ICON
+DATA = 00084 data/TEXTURE/CharactorSelect/ComDisplay.png RANKCHARA_PLNUM_COM
 
-DATA = 00083 data/TEXTURE/tutorial/tutorial_operation000.png TOP000
-DATA = 00084 data/TEXTURE/tutorial/tutorial_operation001.png TOP001
-DATA = 00085 data/TEXTURE/tutorial/tutorial_operation002.png TOP002
-DATA = 00086 data/TEXTURE/tutorial/tutorial_operation003.png TOP003
+DATA = 00085 data/TEXTURE/tutorial/tutorial_operation000.png TOP000
+DATA = 00086 data/TEXTURE/tutorial/tutorial_operation001.png TOP001
+DATA = 00087 data/TEXTURE/tutorial/tutorial_operation002.png TOP002
+DATA = 00088 data/TEXTURE/tutorial/tutorial_operation003.png TOP003
 
-DATA = 00087 data/TEXTURE/Ranking/Effect_1St.png RANKING_EFFECT
-DATA = 00088 data/TEXTURE/Ranking/Callout.png RANKCHARA_CALLOUT
-DATA = 00089 data/TEXTURE/UV/Leaf.jpg RANKING_MESHFIELD
-DATA = 00090 data/TEXTURE/Ranking/audience.png RANKING_AUDIENCE
-DATA = 00091 data/TEXTURE/Game/crown.png crown
+DATA = 00089 data/TEXTURE/Ranking/Effect_1St.png RANKING_EFFECT
+DATA = 00090 data/TEXTURE/Ranking/Callout.png RANKCHARA_CALLOUT
+DATA = 00091 data/TEXTURE/UV/Leaf.jpg RANKING_MESHFIELD
+DATA = 00092 data/TEXTURE/Ranking/audience.png RANKING_AUDIENCE
+DATA = 00093 data/TEXTURE/Game/crown.png crown
 
-DATA = 00092 data/TEXTURE/tutorial/tutorialflow002.png TUROFLOW002
-DATA = 00093 data/TEXTURE/tutorial/tutorialflowtext001.png TUROFLOWTEXT001
-DATA = 00094 data/TEXTURE/tutorial/tutorialflowtext000.png TUROFLOWTEXT000
+DATA = 00094 data/TEXTURE/tutorial/tutorialflow002.png TUROFLOW002
+DATA = 00095 data/TEXTURE/tutorial/tutorialflowtext001.png TUROFLOWTEXT001
+DATA = 00096 data/TEXTURE/tutorial/tutorialflowtext000.png TUROFLOWTEXT000
 
-DATA = 00095 data/TEXTURE/tutorial/tutorialfloor.png TUROFLOWFLOOR
+DATA = 00097 data/TEXTURE/tutorial/tutorialfloor.png TUROFLOWFLOOR
 
-DATA = 00096 data/TEXTURE/Line.png LINE
-DATA = 00097 data/TEXTURE/UI/FiverUI.png FEVERUI
-DATA = 00098 data/TEXTURE/UI/FiverUI2.png FEVERUI2
-DATA = 00099 data/TEXTURE/Game/bulletUI.png BulletUI
-DATA = 00100 data/TEXTURE/Game/explosion.png BulletUIEx
+DATA = 00098 data/TEXTURE/Line.png LINE
+DATA = 00099 data/TEXTURE/UI/FiverUI.png FEVERUI
+DATA = 00100 data/TEXTURE/UI/FiverUI2.png FEVERUI2
+DATA = 00101 data/TEXTURE/Game/bulletUI.png BulletUI
+DATA = 00102 data/TEXTURE/Game/explosion.png BulletUIEx
 
-DATA = 00101 data/TEXTURE/tutorial/tutorialflow010.png TUROFLOW010
-DATA = 00102 data/TEXTURE/tutorial/tutorialflow020.png TUROFLOW020
-DATA = 00103 data/TEXTURE/tutorial/tutorialflow030.png TUROFLOW030
+DATA = 00103 data/TEXTURE/tutorial/tutorialflow010.png TUROFLOW010
+DATA = 00104 data/TEXTURE/tutorial/tutorialflow020.png TUROFLOW020
+DATA = 00105 data/TEXTURE/tutorial/tutorialflow030.png TUROFLOW030
 
-DATA = 00104 data/TEXTURE/tutorial/tutorialflow011.png TUROFLOW011
-DATA = 00105 data/TEXTURE/tutorial/tutorialflow021.png TUROFLOW021
-DATA = 00106 data/TEXTURE/tutorial/tutorialflow031.png TUROFLOW031
+DATA = 00106 data/TEXTURE/tutorial/tutorialflow011.png TUROFLOW011
+DATA = 00107 data/TEXTURE/tutorial/tutorialflow021.png TUROFLOW021
+DATA = 00108 data/TEXTURE/tutorial/tutorialflow031.png TUROFLOW031
 
-DATA = 00107 data/TEXTURE/tutorial/tutorialrule.png TURORULE
-DATA = 00108 data/TEXTURE/tutorial/victoryconditions.png TUTOVICTRY
-DATA = 00109 data/TEXTURE/tutorial/tutobattle.png TUTOBSTTLE
-DATA = 00110 data/TEXTURE/tutorial/tutokotoba.png TUTOKOTOBA
-DATA = 00111 data/TEXTURE/Ranking/Curtain_Mask.png RANKING_MASKCYRTAIN
+DATA = 00109 data/TEXTURE/tutorial/tutorialrule.png TURORULE
+DATA = 00110 data/TEXTURE/tutorial/victoryconditions.png TUTOVICTRY
+DATA = 00111 data/TEXTURE/tutorial/tutobattle.png TUTOBSTTLE
+DATA = 00112 data/TEXTURE/tutorial/tutokotoba.png TUTOKOTOBA
+DATA = 00113 data/TEXTURE/Ranking/Curtain_Mask.png RANKING_MASKCYRTAIN
 
 
-DATA = 00112 data/TEXTURE/tutorial/tutostart.png TUTOSTART
-DATA = 00113 data/TEXTURE/tutorial/tutoriallogo.png TUTOLOGO
+DATA = 00114 data/TEXTURE/tutorial/tutostart.png TUTOSTART
+DATA = 00115 data/TEXTURE/tutorial/tutoriallogo.png TUTOLOGO
 
-DATA = 00114 data/TEXTURE/Game/shadow000.jpg SHADOW
+DATA = 00116 data/TEXTURE/Game/shadow000.jpg SHADOW
 
-DATA = 00115 data/TEXTURE/MENU_UI/Menu017.png PAUSE_SELECTMENU
-DATA = 00116 data/TEXTURE/MENU_UI/Pause_MainMenu.png PAUSE_MAIN
+DATA = 00117 data/TEXTURE/MENU_UI/Menu017.png PAUSE_SELECTMENU
+DATA = 00118 data/TEXTURE/MENU_UI/Pause_MainMenu.png PAUSE_MAIN
 
 
 
