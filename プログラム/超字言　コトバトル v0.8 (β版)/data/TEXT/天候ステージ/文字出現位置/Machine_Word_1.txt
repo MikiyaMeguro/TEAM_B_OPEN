@@ -16,51 +16,51 @@ NUM_MODEL = 12
 #------------------------------------------------------------
 
 MODELSET
-	POS = -60.0 0.0 40.0		# 位置情報
+	POS = -60.0 -20.0 40.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -60.0 0.0 -80.0		# 位置情報
+	POS = -60.0 -20.0 -80.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -80.0 0.0 -320.0		# 位置情報
+	POS = -80.0 -20.0 -320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 320.0 0.0 -320.0		# 位置情報
+	POS = 320.0 -20.0 -320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 320.0 0.0 320.0		# 位置情報
+	POS = 320.0 -20.0 320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -80.0 0.0 320.0		# 位置情報
+	POS = -80.0 -20.0 320.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 120.0 0.0 -15.0		# 位置情報
+	POS = 120.0 -20.0 -15.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 340.0 0.0 -80.0		# 位置情報
+	POS = 340.0 -20.0 -80.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -340.0 0.0 -340.0		# 位置情報
+	POS = -340.0 -20.0 -340.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -340.0 0.0 -20.0		# 位置情報
+	POS = -340.0 -20.0 -20.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = -340.0 0.0 300.0		# 位置情報
+	POS = -340.0 -20.0 300.0		# 位置情報
 END_MODELSET
 
 MODELSET
-	POS = 340.0 0.0 40.0		# 位置情報
+	POS = 340.0 -20.0 40.0		# 位置情報
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
