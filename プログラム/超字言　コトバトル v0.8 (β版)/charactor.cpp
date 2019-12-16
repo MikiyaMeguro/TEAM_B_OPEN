@@ -138,6 +138,7 @@ HRESULT C3DCharactor::Init(void)
 	m_bMachineGun = false;
 	m_MachineGunPos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_nMachineGunTime = 0;
+	m_CpuThink = THINK_NONE;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
@@ -681,8 +682,6 @@ void C3DCharactor::Think_CPU(void)
 {
 	m_OldCpuThink = m_CpuThink;
 
-	m_CpuThink = THINK_NONE;
-	m_OldCpuThink = THINK_NONE;
 	m_CpuMove = CPU_MOVE_NONE;
 	m_CpuNode = CPU_NODE_NONE;
 
@@ -709,16 +708,19 @@ void C3DCharactor::Think_CPU(void)
 		m_pWayPoint = CWaypoint::Create(m_RespawnPos, 10, 10, "NUMBER");
 	}
 
-	if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
-	{	//弾を持っているとき
-		m_Type = CPU_TYPE_NONE;
-		m_CpuThink = THINK_HAVEBULLET;
-		m_nActionTimer = 30;
-	}
-	else
-	{	//弾を持っていないとき
-		m_CpuThink = THINK_NOTBULLET;
-		m_nActionTimer = 30;
+	if (m_CpuThink == THINK_NONE)
+	{
+		if ((GetThisCharactor()->GetWordManager()->GetBulletFlag() == true))
+		{	//弾を持っているとき
+			m_Type = CPU_TYPE_NONE;
+			m_CpuThink = THINK_HAVEBULLET;
+			m_nActionTimer = 30;
+		}
+		else
+		{	//弾を持っていないとき
+			m_CpuThink = THINK_NOTBULLET;
+			m_nActionTimer = 30;
+		}
 	}
 #endif
 
@@ -850,6 +852,13 @@ void C3DCharactor::Action_CPU(void)
 
 	//タイマーを減らす
 	m_nActionTimer--;
+
+	//アクションの時間が終了
+	if (m_nActionTimer <= 0)
+	{
+		m_nActionTimer = 0;
+		m_CpuThink = THINK_NONE;
+	}
 }
 
 //=============================================================================
@@ -1029,6 +1038,7 @@ void C3DCharactor::Homing_CPU(void)
 
 	float fAngle = CIRCLE_ANGLE;
 	float fLength = 0;
+	int	nLookPlayer = 0;	//見えているプレイヤーの数
 
 	if (m_CpuThink == THINK_WATCH)
 	{//WATCHの時は常に見るように
@@ -1088,7 +1098,9 @@ void C3DCharactor::Homing_CPU(void)
 		{
 			if (pPlayer[nCntPlayer]->GetID() != GetThisCharactor()->GetID() && GetThisCharactor()->GetVision(nCntPlayer) == true)
 			{//自分のIDと一致していなければ実行
-			 // 距離を測る
+				// 見えたプレイヤー加算
+				nLookPlayer++;
+				 // 距離を測る
 				fCircle = ((Pos.x - PlayerPos[nCntPlayer].x) * (Pos.x - PlayerPos[nCntPlayer].x)) + ((Pos.z - PlayerPos[nCntPlayer].z) * (Pos.z - PlayerPos[nCntPlayer].z));
 				if (fCircle < fCompare)
 				{	//一番近いプレイヤーを記憶
@@ -1097,6 +1109,11 @@ void C3DCharactor::Homing_CPU(void)
 				}
 			}
 		}
+	}
+
+	if (nLookPlayer == 0)
+	{//誰も見つからなかった
+		WayPointMove_CPU();
 	}
 
 #if 1
@@ -1149,11 +1166,13 @@ void C3DCharactor::Homing_CPU(void)
 			if (fDestAngle - 0.11f < rot.y && fDestAngle + 0.11f > rot.y)
 			{
 				m_CpuThink = THINK_ATTACK;
+				m_nActionTimer = 60;
 			}
 		}
 		else if(m_bMachineGun == true)
 		{
 			m_CpuThink = THINK_ATTACK;
+			m_nActionTimer = 60;
 		}
 	}
 	else if (fCompare >= fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
@@ -1161,6 +1180,7 @@ void C3DCharactor::Homing_CPU(void)
 		float	fMinCircle = fLength;
 		int nNumWP = 0;
 
+#if 0
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
 		//移動可能なマスは何マスあるか
@@ -1204,7 +1224,10 @@ void C3DCharactor::Homing_CPU(void)
 			}
 			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 		}
+#endif
+		WayPointMove_CPU();
 	}
+
 }
 
 //=============================================================================
@@ -1220,19 +1243,21 @@ void C3DCharactor::Attack_CPU(void)
 		case CPlayer::TYPE_BARANCE:
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 			m_CpuThink = THINK_NONE;
+			m_nActionTimer = 0;
 			break;
 		case CPlayer::TYPE_POWER:
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 			m_CpuThink = THINK_NONE;
+			m_nActionTimer = 0;
 			break;
 		case CPlayer::TYPE_SPEED:
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 			m_CpuThink = THINK_NONE;
+			m_nActionTimer = 0;
 			break;
 		case CPlayer::TYPE_REACH:
 			m_bMachineGun = true;
 			break;
-
 		default:
 			break;
 		}
@@ -1268,6 +1293,7 @@ void C3DCharactor::Attack_CPU(void)
 			m_bMachineGun = false;
 			GetThisCharactor()->GetWordManager()->Reset();
 			m_nMachineGunTime = 0;
+			m_CpuThink = THINK_NONE;
 		}
 	}
 
@@ -1350,6 +1376,7 @@ void C3DCharactor::PickUP_CPU(void)
 	if (GetThisCharactor()->GetWordManager()->GetCntNum() ==  2 && bTango == false)
 	{//
 		m_CpuThink = THINK_ATTACK;
+		m_nActionTimer = 60;
 		bWord = true;
 	}
 
@@ -1363,7 +1390,7 @@ void C3DCharactor::PickUP_CPU(void)
 	{//近くに文字が一つもない
 		m_bWordNear = false;
 		m_CpuThink = THINK_WAYPOINTMOVE;
-		m_nActionTimer = 60;
+		m_nActionTimer = 120;
 	}
 
 }
@@ -1374,8 +1401,6 @@ void C3DCharactor::PickUP_CPU(void)
 void C3DCharactor::HaveBullet_CPU(void)
 {
 	int	nCntNear = 0;
-
-
 
 	//誰が近いか
 	NearOrFur_CPU();
@@ -1422,12 +1447,12 @@ void C3DCharactor::NotBullet_CPU(void)
 	if (nCntNear < 3)
 	{
 		m_CpuThink = THINK_PICKUP;
-		m_nActionTimer = 30;
+		m_nActionTimer = 120;
 	}
 	else
 	{
 		m_CpuThink = THINK_PICKUP;
-		m_nActionTimer = 30;
+		m_nActionTimer = 120;
 	}
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -1501,6 +1526,8 @@ void C3DCharactor::WayPointMove_CPU(void)
 		{
 			m_bNotWayPoint = false;
 		}
+		m_nActionTimer = 0;
+		m_CpuThink = THINK_NONE;
 	}
 
 	// 入力情報を取得
@@ -1677,9 +1704,11 @@ void C3DCharactor::WayPointRoute_CPU(void)
 		m_nTimerMove = 0;
 	}
 	else if (fCircle < 100 && m_bNearWard == true)
-	{
+	{//文字の近くのマスまで移動した
 		m_bNearWard = false;
 		m_nTimerMove = 0;
+		m_CpuThink = THINK_NONE;
+		m_nActionTimer = 30;
 	}
 	else if (m_fOldCircle == fCircle)
 	{
@@ -1694,14 +1723,7 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	}
 	else
 	{
-		//m_nTimerMove++;
-
-		//if (m_nTimerMove >= 240)
-		//{
-		//	m_nTimerMove = 0;
-		//	m_bNotWayPoint = true;
-		//	WayPointMove_CPU();
-		//}
+		m_nActionTimer = 30;
 	}
 
 
