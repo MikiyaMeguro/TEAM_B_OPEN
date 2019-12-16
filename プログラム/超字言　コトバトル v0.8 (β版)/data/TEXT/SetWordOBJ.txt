@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 75					# 読み込んだモデルの最大番号をいれてください
+NUM_MODEL = 83					# 読み込んだモデルの最大番号をいれてください
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -82,15 +82,21 @@ MODEL_FILENAME = data/MODEL/Sign.x"					#65 サイン
 MODEL_FILENAME = data/MODEL/Cannabis.x"				#66 大麻
 MODEL_FILENAME = data/MODEL/Sakura.x"				#67 サクラ
 MODEL_FILENAME = data/MODEL/GunPowder.x"			#68 火薬
+MODEL_FILENAME = data/MODEL/iruihuku.x"				#69 いるい : いふく
+MODEL_FILENAME = data/MODEL/Kotatsu.x"				#70 こたつ
+MODEL_FILENAME = data/MODEL/Kukui.x"				#71 くくい
+MODEL_FILENAME = data/MODEL/Tacos.x"				#72 タコス
+MODEL_FILENAME = data/MODEL/Salad.x"				#73 さらだ
+MODEL_FILENAME = data/MODEL/Mennma.x"				#74 メンマ
+MODEL_FILENAME = data/MODEL/Tarako.x"				#75 たらこ
 
-
-MODEL_FILENAME = data/MODEL/iruihuku.x"			#69 いるい : いふく
-MODEL_FILENAME = data/MODEL/Kotatsu.x"			#70 こたつ
-MODEL_FILENAME = data/MODEL/Kukui.x"			#71 くくい
-MODEL_FILENAME = data/MODEL/Tacos.x"			#72 タコス
-MODEL_FILENAME = data/MODEL/Salad.x"			#73 さらだ
-MODEL_FILENAME = data/MODEL/Mennma.x"			#74 メンマ
-MODEL_FILENAME = data/MODEL/Tarako.x"			#75 たらこ
-
+MODEL_FILENAME = data/MODEL/Husuma.x"				#76 ふすま
+MODEL_FILENAME = data/MODEL/Tance.x"				#77 たんす
+MODEL_FILENAME = data/MODEL/Nameko.x"				#78 なめこ
+MODEL_FILENAME = data/MODEL/Dolphin.x"				#79 いるか
+MODEL_FILENAME = data/MODEL/IchiI.x"				#80 いちい
+MODEL_FILENAME = data/MODEL/Kanna.x"				#81 かんな
+MODEL_FILENAME = data/MODEL/Iei.x"					#82 いえい
+MODEL_FILENAME = data/MODEL/Eye.x"					#83 めだま
 
 END_SCRIPT		# この行は絶対消さないこと！

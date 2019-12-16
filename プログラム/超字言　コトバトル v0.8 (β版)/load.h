@@ -110,7 +110,7 @@ public:
 		MODEL_LANCE,	// ランス
 		MODEL_KADANN,	// かだん
 		MODEL_KATANA,	// 刀
-		MODEL_LOG	,	// まるた
+		MODEL_LOG,	// まるた
 		MODEL_ICE,		// つらら
 		MODEL_DANGO,	// だんご
 		MODEL_MAKURA,	// まくら
@@ -162,6 +162,14 @@ public:
 		MODEL_SARADA,	// サラダ
 		MODEL_MENMA,	// メンマ
 		MODEL_TARAKO,	// たらこ
+		MODEL_HUSUMA,	// ふすま
+		MODEL_TANCE,	// たんす
+		MODEL_NAMEKO,	// なめこ
+		MODEL_DOLPHIN,	// いるか
+		MODEL_ICHII,	// いちい
+		MODEL_KANNA,	// かんな
+		MODEL_IEI,		// いえい
+		MODEL_EYE,		// めだま
 		MODEL_MAX
 	} MODEL;
 

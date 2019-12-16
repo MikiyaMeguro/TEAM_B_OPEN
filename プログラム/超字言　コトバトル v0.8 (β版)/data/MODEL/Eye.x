@@ -485,7 +485,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Eye.jpg";
+   "data\\TEXTURE\\UV\\Eye.jpg";
    }
   }
  }

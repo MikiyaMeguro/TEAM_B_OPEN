@@ -216,7 +216,7 @@ void CPoint::Draw(void)
 
 	if (m_pIcon != NULL)
 	{
-		m_pIcon->Draw();
+		//m_pIcon->Draw();
 	}
 }
 
