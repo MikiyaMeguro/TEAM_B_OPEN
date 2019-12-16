@@ -227,6 +227,9 @@ float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 		break;
 	}
 
+	//double pow2, bounce = 4.0;
+	//while (fTime < ((pow2 = pow(2, --bounce)) - 1) / 11) {}
+	//fResult =  float(1 / pow(4, 3 - bounce) - 7.5625 * pow((pow2 * 3 - 2) / 22 - x, 2));
 	return fResult;
 }
 
