@@ -61,7 +61,7 @@ HRESULT CPause::Init(void)
 	}
 
 	//ƒ|[ƒY•¶Žš‚Ì¶¬
-	m_pPause = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f,75.0f,0.0f),"",7);
+	m_pPause = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2.0f,75.0f,0.0f),"PAUSE_MAIN",7);
 	if (m_pPause != NULL)
 	{
 		m_pPause->SetObjType(OBJTYPE_PAUSE);
@@ -71,7 +71,7 @@ HRESULT CPause::Init(void)
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		m_aMenuDefaultPos[nCnt] = D3DXVECTOR3(SCREEN_WIDTH / 2.0f, 210.0f + (nCnt * 150.0f), 0.0f);
-		m_apSelectMenu[nCnt] = CScene2D::Create(m_aMenuDefaultPos[nCnt], "RNKINGSELECT_MENU",7);
+		m_apSelectMenu[nCnt] = CScene2D::Create(m_aMenuDefaultPos[nCnt], "PAUSE_SELECTMENU",7);
 		if (m_apSelectMenu[nCnt] != NULL)
 		{
 			m_apSelectMenu[nCnt]->SetObjType(OBJTYPE_PAUSE);
