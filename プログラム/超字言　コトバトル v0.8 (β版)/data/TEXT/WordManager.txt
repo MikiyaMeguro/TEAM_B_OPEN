@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 85			# モデル数
+	ANSWERNUM = 92			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名
@@ -963,6 +963,76 @@ MODELSET
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 33.0 15.0 30.0
 	ANSWERMODEL = 82			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 85					# すだち
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 12.0 15.0 16.0
+	ANSWERMODEL = 83			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 86					# りんす
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 39.0 45.0 12.0
+	ANSWERMODEL = 84			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 87					# らんぷ
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 38.0 45.0 27.0
+	ANSWERMODEL = 85			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 88					# さんご
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 10.0 45.0 9.0
+	ANSWERMODEL = 86			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 89					# すまい
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 12.0 30.0 1.0
+	ANSWERMODEL = 87			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 90					# くくり
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 7.0 7.0 39.0
+	ANSWERMODEL = 88			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 91					# こるく
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 9.0 40.0 7.0
+	ANSWERMODEL = 89			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
 

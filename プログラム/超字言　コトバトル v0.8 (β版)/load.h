@@ -170,6 +170,17 @@ public:
 		MODEL_KANNA,	// ‚©‚ñ‚È
 		MODEL_IEI,		// ‚¢‚¦‚¢
 		MODEL_EYE,		// ‚ß‚¾‚Ü
+
+		MODEL_SUDATI,	// ‚·‚¾‚¿
+		MODEL_RINSE,	// ‚è‚ñ‚·
+		MODEL_LAMP,		// ‚ç‚ñ‚Õ
+		MODEL_SANGO,	// ‚³‚ñ‚²
+		MODEL_SUMAI,	// ‚·‚Ü‚¢
+		MODEL_KUKURI,	// ‚­‚­‚è
+		MODEL_CORK,		// ‚±‚é‚­
+
+
+
 		MODEL_MAX
 	} MODEL;
 
