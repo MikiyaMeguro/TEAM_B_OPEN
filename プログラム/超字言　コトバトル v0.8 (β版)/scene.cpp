@@ -311,7 +311,7 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			if (pScene->GetObjType() == OBJTYPE_WORD && nCamera != 5 && CCameraManager::GetCameraName() != "PAUSE_CAMERA")
+			else if (pScene->GetObjType() == OBJTYPE_WORD && nCamera != 5 && CCameraManager::GetCameraName() != "PAUSE_CAMERA")
 			{
 				CWord *pWord = ((CWord*)pScene);
 
