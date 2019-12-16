@@ -20,6 +20,8 @@
 
 #include "waypoint.h"
 
+#include "effect.h"
+
 #include "avoidui.h"
 #include "shadow.h"
 //=============================================================================
@@ -151,7 +153,11 @@ HRESULT C3DCharactor::Init(void)
 	m_pCAvoidUi = CAvoidUi::Create(CCharaBase::GetPosition() + D3DXVECTOR3(0.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f),
 		D3DXVECTOR3(18.0f, 18.0f, 0.0f), D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f));
 
+	m_nCounter = 0;
+
+
 	m_pShadow = CShadow::Create(CCharaBase::GetPosition(), 12, 12);
+
 
 	return S_OK;
 }
@@ -165,7 +171,7 @@ void C3DCharactor::Update(void)
 	D3DXVECTOR3& pos = CCharaBase::GetPosition();
 	D3DXVECTOR3& rot = CCharaBase::GetRotation();
 	D3DXVECTOR3& move = CCharaBase::GetMove();
-
+	m_nCounter++;
 	CPlayer *pPlayer[MAX_PLAYER];
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -345,16 +351,46 @@ void C3DCharactor::Update(void)
 		{
 			m_pCAvoidUi->SetColor(D3DXCOLOR(0.7f, 0.7f, 0.7f, 0.7f));
 		}
-
-		//if (m_nCntStepCoolTime < 1)
-		//{//	stepéûä‘äO
-		//	m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-		//}
-		//else
-		//{//	stepéûä‘ì‡
-		//	m_pCAvoidUi->SetColor(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-
-		//}
+	}
+	if (GetThisCharactor()->GetID() == 0) {
+		if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[0]->Getbush(0) == false)
+		{//	âå
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f), 5, 9);
+		}
+		else if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[0]->Getbush(0) == true)
+		{//	ëê
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 30.0f, 0.0f), 5, 10);
+		}
+	}
+	if (GetThisCharactor()->GetID() == 1) {
+		if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[1]->Getbush(1) == false)
+		{//	âå
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f), 5, 9);
+		}
+		else if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[1]->Getbush(1) == true)
+		{//	ëê
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 30.0f, 0.0f), 5, 10);
+		}
+	}
+	if (GetThisCharactor()->GetID() == 2) {
+		if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[2]->Getbush(2) == false)
+		{//	âå
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f), 5, 9);
+		}
+		else if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[2]->Getbush(2) == true)
+		{//	ëê
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 30.0f, 0.0f), 5, 10);
+		}
+	}
+	if (GetThisCharactor()->GetID() == 3) {
+		if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[3]->Getbush(3) == false)
+		{//	âå
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f), 5, 9);
+		}
+		else if (m_nCounter % 7 == 0 && (move.x > 0.1f || move.x < -0.1f || move.z > 0.1f || move.z < -0.1f) && pPlayer[3]->Getbush(3) == true)
+		{//	ëê
+			CEffect::Create(pos + D3DXVECTOR3(0.0f, 30.0f, 0.0f), 5, 10);
+		}
 	}
 
 	if (m_pShadow != NULL)

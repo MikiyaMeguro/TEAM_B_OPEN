@@ -238,6 +238,8 @@ private:
 	bool m_bMachineGun;				//マシンガンフラグ
 	D3DXVECTOR3 m_MachineGunPos;	//マシンガン発射位置
 
+	int m_nCounter;
+
 public:
 	bool m_bFront;
 };

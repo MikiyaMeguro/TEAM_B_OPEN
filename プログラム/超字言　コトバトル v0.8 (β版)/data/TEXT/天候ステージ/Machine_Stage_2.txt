@@ -1336,7 +1336,7 @@ END_MODELSET
 -----------------------------------------------------------
 MODELSET						# 雪だるま
 	TYPE = 50
-	POS = -80.0 200.0 540.0
+	POS = -50.0 200.0 540.0
 	ROT = 0.0 0.0 0.0
 	SCALE = 3.00 3.00 3.00
 	COLLISION = 0
@@ -1354,7 +1354,7 @@ END_MODELSET
 
 MODELSET						# 雪だるま
 	TYPE = 50
-	POS = 530.0 200.0 240.0
+	POS = 530.0 200.0 160.0
 	ROT = 0.0 1.57 0.0
 	SCALE = 3.00 3.00 3.00
 	COLLISION = 0
@@ -1363,12 +1363,29 @@ END_MODELSET
 
 MODELSET						# 雪だるま
 	TYPE = 50
-	POS = 340.0 200.0 -480.0
-	ROT = 0.0 0.0 0.0
+	POS = 550.0 200.0 550.0
+	ROT = 0.0 0.785 0.0
 	SCALE = 3.00 3.00 3.00
 	COLLISION = 0
 	GIMMICK = 1					# 配置の種類を決める
 END_MODELSET
 
+MODELSET						# 雪だるま
+	TYPE = 50
+	POS = -530.0 200.0 310.0
+	ROT = 0.0 -1.57 0.0
+	SCALE = 3.00 3.00 3.00
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET						# 雪だるま
+	TYPE = 50
+	POS = 530.0 200.0 -270.0
+	ROT = 0.0 1.57 0.0
+	SCALE = 3.00 3.00 3.00
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！
