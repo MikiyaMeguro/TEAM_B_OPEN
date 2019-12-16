@@ -79,6 +79,6 @@ private:
 	D3DXCOLOR				m_Col;
 	bool					m_bDraw;
 	bool					m_bAddition;					//加算合成にするか否かのフラグ
-	D3DXVECTOR2				m_Tex[2];				// テスクチャの座標確保					
+	D3DXVECTOR2				m_Tex[2];				// テスクチャの座標確保
 };
 #endif
