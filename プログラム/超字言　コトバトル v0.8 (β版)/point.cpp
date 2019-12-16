@@ -216,7 +216,7 @@ void CPoint::Draw(void)
 
 	if (m_pIcon != NULL)
 	{
-		m_pIcon->Draw();
+		//m_pIcon->Draw();
 	}
 }
 
@@ -727,5 +727,5 @@ void CPoint::ConfirmDirecting(D3DXVECTOR2 size)
 void CPoint::SetVision(int nNumPlayer, bool bFlag)
 {
 	m_bDrawVision[nNumPlayer] = bFlag;
-	if (m_pCrown != NULL) { m_pCrown->SetDrawFlag(bFlag); }
+	//if (m_pCrown != NULL) { m_pCrown->SetDrawFlag(bFlag); }
 }

@@ -31,7 +31,7 @@ CSceneBillBoard::CSceneBillBoard() : CScene(5, CScene::OBJTYPE_BILLBOARD)
 	m_fHeight = 0;
 	// ワールドマトリックスの初期化
 	D3DXMatrixIdentity(&m_mtrxWorld);
-	m_bDrawFlag = true;
+	m_bColChange = false;
 }
 
 //--------------------------------------------

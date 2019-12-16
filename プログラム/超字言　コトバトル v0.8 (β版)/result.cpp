@@ -469,7 +469,7 @@ void CResult::Uninit(void)
 			m_apAudience[nCnt] = NULL;
 		}
 	}
-	for (int nCnt = 0; nCnt < 2; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CURTAIN; nCnt++)
 	{
 		if (m_apMask[nCnt] != NULL)
 		{
@@ -651,9 +651,10 @@ void CResult::InitPointer(void)
 	{
 		if (m_apAudience[nCnt] != NULL) { m_apAudience[nCnt] = NULL; }
 	}
-	for (int nCnt = 0; nCnt < MAX_AUDIENCE; nCnt++)
+	for (int nCnt = 0; nCnt < MAX_CURTAIN; nCnt++)
 	{
-		if (m_apMask[nCnt] != NULL) { m_apMask[nCnt] = NULL; }
+		if (m_apMask[nCnt] != NULL) { 
+			m_apMask[nCnt] = NULL; }
 	}
 
 }
