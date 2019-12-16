@@ -27,6 +27,7 @@ class CSpotLight;
 #define MAX_MODEL (4)			//観客席の数
 #define MAX_AUDIENCE (27)		//観客全体の数
 #define MAX_STADIUMSTEP (3)		//観客席の段数
+#define MAX_CURTAIN		(2)		// カーテン
 //========================================
 // クラスの定義
 //========================================
@@ -120,7 +121,7 @@ private:
 	static CharaSet m_ResultChara[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
 	static CScene3D *m_apAudience[MAX_AUDIENCE];								//観客
-	CScene3D *m_apMask[2];															//マスク
+	CScene3D *m_apMask[MAX_CURTAIN];															//マスク
 	CSelectMenu *m_pSeletMenu;
 	CNumber *m_apNumber[MAX_PLAYER][MAX_POINT];									// ナンバーへのポインタ
 	CScene2D *m_apScene2D[RESULTTYPE_MAX];										//演出系2Dポリゴン

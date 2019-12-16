@@ -18,15 +18,16 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define AREA_CHASE		(40.0f)			// エリア
-#define AREA_COILLSION	(15.0f)			// コリジョンの範囲
-#define CHASE_MOVE		(4.0f)			// 追従時の速度
+#define AREA_CHASE		(42.0f)			// エリア
+#define AREA_COILLSION	(17.0f)			// コリジョンの範囲
+#define CHASE_MOVE		(5.0f)			// 追従時の速度
 #define END_POS_Y		(15.0f)			// 文字の出現した時の最終位置
 #define FLOATING_MOVE	(0.5f)			// 浮遊速度
 #define POP_POS_Y		(END_POS_Y + 10.0f)	// 出現後の浮遊時の最大位置
 #define POP_POS_Y_SMALL		(END_POS_Y - 5.0f)	// 出現後の浮遊時の最少位置
-#define MAX_SIZE		(D3DXVECTOR2(12.0f, 12.0f))	// サイズの最大値
-#define MAX_SIZE_3or4	(D3DXVECTOR2(20.0f, 23.0f))	// サイズの最大値
+#define MAX_SIZE		(D3DXVECTOR2(25.0f, 15.0f))	// サイズの最大値
+#define MAX_SIZE_3or4	(D3DXVECTOR2(28.0f, 16.0f))	// サイズの最大値
+#define NOT_NOM_DATA	(5)				// 空を示す数字
 
 #define UNITI_TIME		(40)			// 終了する時間
 #define α_COL_TIME		(15)			// 透明度変化時の時間
@@ -80,9 +81,11 @@ CWord::CWord() : CSceneBillBoard()
 	// 3文字候補時の変数
 	m_bSearchFlag = false;
 	m_nCntSearch = 0;
-	m_nNumSearch = 0;
-	m_SearchCol = NULL;
 
+	for (int nCntPlayerID = 0; nCntPlayerID < MAX_PLAYER; nCntPlayerID++)
+	{
+		m_nPlayerID[nCntPlayerID] = NOT_NOM_DATA;
+	}
 }
 
 //--------------------------------------------
@@ -126,24 +129,12 @@ CWord *CWord::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fWidth, float fHei
 //=============================================================================
 HRESULT CWord::Init(D3DXVECTOR3 pos)
 {
-	if (m_SearchCol == NULL)
-	{
-		int nNumSearch = *CPlayerSelect::GetModeSelectMode();
-		//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;
-		m_SearchCol = new D3DXCOLOR[nNumSearch + 1];
-
-		for (int nCntCol = 0; nCntCol < nNumSearch + 1; nCntCol++)
-		{
-			if (&m_SearchCol[nCntCol] != NULL) { m_SearchCol[nCntCol] = COL_DEFAULT; }
-		}
-	}
-
 	CSceneBillBoard::Init(pos);
 	CSceneBillBoard::SetObjType(CScene::OBJTYPE_WORD);
 
 	if (m_pBillBoard[0] == NULL)
 	{
-		m_pBillBoard[0] = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 17.0f, 30.0f, "文字エフェクト");
+		m_pBillBoard[0] = CSceneBillBoard::Create(D3DXVECTOR3(pos.x, 0.0f, pos.z), 17.0f, 80.0f, "文字エフェクト");
 		if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->SetTexture(5, 10, 1, 1); }
 		m_pBillBoard[0]->SetObjType(CScene::OBJTYPE_WORD_EFFECT);
 	}
@@ -175,7 +166,6 @@ void CWord::Uninit(void)
 {
 	if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
 	if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
-	if (&m_SearchCol != NULL) { delete[] m_SearchCol; m_SearchCol = NULL; }
 	CSceneBillBoard::Uninit();
 }
 
@@ -393,17 +383,13 @@ D3DXVECTOR3 CWord::Move(D3DXVECTOR3 pos)
 		{	// 位置が指定した場所より小さい場合
 			m_bMoveFlag = true;
 			m_nCntSearch++;
-			if (m_nCntSearch >= m_nNumSearch) {
-				m_nCntSearch = 0; }
 			//m_colA = 0.2f;
 		}
 	}
 
 	if (m_pBillBoard[0] != NULL)
 	{
-		m_pBillBoard[0]->SetCol(D3DXCOLOR(m_SearchCol[m_nCntSearch].r, m_SearchCol[m_nCntSearch].g, m_SearchCol[m_nCntSearch].b, m_colA));
-		if (m_SearchCol[m_nCntSearch] == COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 30.0f, 17.0f); }
-		else if (m_SearchCol[m_nCntSearch] != COL_DEFAULT) { m_pBillBoard[0]->SetBillboard(m_pBillBoard[0]->GetPos(), 100.0f, 17.0f); }
+		m_pBillBoard[0]->SetCol(D3DXCOLOR(m_pBillBoard[0]->GetCol().r, m_pBillBoard[0]->GetCol().g, m_pBillBoard[0]->GetCol().b, m_colA));
 	}
 
 
@@ -488,59 +474,33 @@ D3DXVECTOR3 CWord::Approach(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, float fAngle,
 //=============================================================================
 // 3文字目に候補の色設定処理
 //=============================================================================
-void CWord::SetSearchCol(D3DXCOLOR col)
+void CWord::SetSearchCol(int nID)
 {
-	int nNumSearch = *CPlayerSelect::GetModeSelectMode();
-	//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;//テスト
-	for (int nCntCol = 0; nCntCol < nNumSearch + 1; nCntCol++)
+	if (m_nPlayerID[nID] == NOT_NOM_DATA)
 	{
-		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == col)
-		{
-			break;
-		}
-		else if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == COL_DEFAULT)
-		{
-			m_SearchCol[nCntCol] = col;		// 色の代入
-			m_nNumSearch++;
-			break;
-		}
+		m_nPlayerID[nID] = nID;		// IDの代入
+	}
+
+	if (m_pBillBoard[0] != NULL)
+	{
+		m_pBillBoard[0]->SetColFlag(true);
 	}
 }
 
 //=============================================================================
 // 3文字目候補が無くなった場合
 //=============================================================================
-void CWord::UninitSearchCol(D3DXCOLOR col)
+void CWord::UninitSearchCol(int nID)
 {
-	int nNumSearch = *CPlayerSelect::GetModeSelectMode();
-	//int nNumSearch = CPlayerSelect::SELECTPLAYER_2P;//テスト
+	if (m_nPlayerID[nID] == nID)
+	{	// 色をデフォルトに戻す
+		m_nPlayerID[nID] = NOT_NOM_DATA;
 
-	int nNum = 0;
-	for (int nCntCol = 0; nCntCol < m_nNumSearch; nCntCol++)
-	{
-		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == col)
-		{	// 色をデフォルトに戻す
-			m_SearchCol[nCntCol] = COL_DEFAULT;
-			nNum--;
-		}
-	}
-
-	m_nNumSearch += nNum;		// 数を減らす
-	if (m_nNumSearch < 0) { m_nNumSearch = 0; }
-
-	for (int nCntCol = 0; nCntCol < nNumSearch; nCntCol++)
-	{
-		if (&m_SearchCol[nCntCol] != NULL && m_SearchCol[nCntCol] == COL_DEFAULT)
+		if (m_pBillBoard[0] != NULL)
 		{
-			if (&m_SearchCol[nCntCol + 1] != NULL)
-			{	// 色の入れ替え
-				m_SearchCol[nCntCol] = m_SearchCol[nCntCol + 1];
-				m_SearchCol[nCntCol + 1] = COL_DEFAULT;
-			}
-			else if (m_SearchCol[nCntCol + 1] == NULL) { m_SearchCol[nCntCol] = COL_DEFAULT; }	// 色をデフォルトに
+			m_pBillBoard[0]->SetColFlag(false);
 		}
 	}
-
 }
 
 //=============================================================================

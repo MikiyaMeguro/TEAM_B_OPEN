@@ -690,21 +690,6 @@ void CWordManager::SearchAssist(int nCntData)
 	if (nCntData == 0) { return; }
 	int nNum = 0;
 	int nCount = 0;
-	int nData = 0;
-	int nPlayerNum = *CPlayerSelect::GetModeSelectMode();
-	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	// 色の振り分け
-	if (m_nPlayerID <= nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
-	{
-		if (m_nPlayerID == 0) { col = COL_1P; }
-		if (m_nPlayerID == 1) { col = COL_2P; }
-		if (m_nPlayerID == 2) { col = COL_3P; }
-		if (m_nPlayerID == 3) { col = COL_4P; }
-	}
-	else if (m_nPlayerID > nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
-	{
-		col = COL_CPU;
-	}
 
 	CScene *pScene = NULL;
 
@@ -726,14 +711,13 @@ void CWordManager::SearchAssist(int nCntData)
 				{
 					if (pWord->GetWordNum() == m_fAnswerData[nCntWord])
 					{
-						pWord->SetSearchCol(col);
+						pWord->SetSearchCol(m_nPlayerID);
 					}
 				}
 				nCount++;
 			}
 			pScene = pSceneNext;
 		}
-		nCount++;
 	}
 }
 
@@ -744,26 +728,11 @@ void CWordManager::UninitAssist(void)
 {
 	int nNum = 0;
 	int nCount = 0;
-	int nPlayerNum = *CPlayerSelect::GetModeSelectMode();
-	D3DXCOLOR col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	// 色の振り分け
-	if (m_nPlayerID <= nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
-	{
-		if (m_nPlayerID == 0) { col = COL_1P; }
-		if (m_nPlayerID == 1) { col = COL_2P; }
-		if (m_nPlayerID == 2) { col = COL_3P; }
-		if (m_nPlayerID == 3) { col = COL_4P; }
-	}
-	else if (m_nPlayerID > nPlayerNum - 1 && nPlayerNum != CPlayerSelect::SELECTPLAYER_NONE)
-	{
-		col = COL_CPU;
-	}
 
 	CScene *pScene = NULL;
 
 	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
 	if (CManager::MODE_TUTORIAL == CManager::GetMode()) { nNum = CTutorial::GetWordCreate()->GetPopNum(); }
-
 
 	while (nCount < nNum)
 	{
@@ -777,8 +746,8 @@ void CWordManager::UninitAssist(void)
 			if (pScene->GetDeath() == false && pScene->GetObjType() == CScene::OBJTYPE_WORD)
 			{// 死亡フラグが立っていないもの
 				CWord *pWord = ((CWord*)pScene);		// CBulletBaseへキャスト(型の変更)
-				pWord->UninitSearchCol(col);
-				nCount++;
+				pWord->UninitSearchCol(m_nPlayerID);
+				//nCount++;
 			}
 			pScene = pSceneNext;
 		}
