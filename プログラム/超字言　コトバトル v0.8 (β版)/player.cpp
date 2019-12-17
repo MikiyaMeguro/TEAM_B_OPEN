@@ -263,7 +263,6 @@ void CPlayer::Update(void)
 		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
 
-
 		//’e‘Å‚¿(ƒvƒŒƒCƒ„[)
 		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT && m_pCharactorMove->m_bWait == false)
 		{
