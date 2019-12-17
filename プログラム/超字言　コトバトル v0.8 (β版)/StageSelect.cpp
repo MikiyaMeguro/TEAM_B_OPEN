@@ -31,7 +31,7 @@
 #define DEFAULT_POS (D3DXVECTOR3(SIZE_X,SIZE_Y,0.0f))								//初期化位置
 #define DEFAULT_ROT (D3DXVECTOR3(0.0f,0.0f,0.0f))									//初期化回転
 #define DEFAULT_COL_WHITE (D3DXCOLOR(1.0f,1.0f,1.0f,1.0f))							//初期化色_白
-#define STAGESELCHOICE_POS	(D3DXVECTOR3(380.0f,110.0f,0.0f))						//選択肢ポリゴンの位置
+#define STAGESELCHOICE_POS	(D3DXVECTOR3(380.0f,130.0f,0.0f))						//選択肢ポリゴンの位置
 #define STAGESELCHOICE_INTERVAL (480.0f)											//選択肢ポリゴン同士の間隔
 #define STAGESEL_DIFF (0.3f)														//移動の変化量
 #define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")	//機械ステージ
@@ -263,7 +263,7 @@ void CStageSelect::InitPolygon(void)
 	//字幕
 	m_apScene2D[STAGESELECTTYPE_EXPLANATION] = CScene2D::Create(D3DXVECTOR3(SIZE_X, SCREEN_HEIGHT - 80.0f, 0.0f), "STAGESEL_EXPLANATION");
 	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetWidthHeight(DEFAULT_SIZE*4.8f, DEFAULT_SIZE*0.8f);
-	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f / 3));
+	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, 0.0f), D3DXVECTOR2(1.0f, 1.0f / 2));
 
 	//UI_スティック
 	m_apScene2D[STAGESELECTTYPE_UI_OPERATION] = CScene2D::Create(D3DXVECTOR3(200.0f, 465.0f, 0.0f), "UI_OPERATION1", 4);
@@ -272,7 +272,7 @@ void CStageSelect::InitPolygon(void)
 
 	//UI_選択中
 	m_apScene2D[STAGESELECTTYPE_UI_DECISION] = CScene2D::Create(m_apSelect2D[0]->GetPosition(), "UI_SELECT", 4);
-	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetWidthHeight(DEFAULT_SIZE*1.85f, DEFAULT_SIZE*1.05f);
+	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetWidthHeight(DEFAULT_SIZE*1.85f, DEFAULT_SIZE*1.4f);
 	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
 
 	//マスク
@@ -298,8 +298,8 @@ void CStageSelect::ScrollMenu(STAGESELECTTYPE type, float fScroolSpeed)
 void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CManager *pManager)
 {
 	/* 字幕のテクスチャ座標移動 */
-	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, (1.0f / MAX_STAGE)*m_nSelect),
-													D3DXVECTOR2(1.0f, (1.0f / MAX_STAGE) + (1.0f / MAX_STAGE)*m_nSelect));
+	m_apScene2D[STAGESELECTTYPE_EXPLANATION]->SetTex(D3DXVECTOR2(0.0f, (1.0f / 2)*m_nSelect),
+													D3DXVECTOR2(1.0f, (1.0f / 2) + (1.0f / 2)*m_nSelect));
 
 	CSound *pSound = CManager::GetSound();		//	音の取得
 
@@ -362,7 +362,7 @@ void CStageSelect::ProductionIcon(SELECTTYPE type)
 		break;
 	}
 	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetPosition(m_apSelect2D[(int)type]->GetPosition());
-	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetWidthHeight(DEFAULT_SIZE*1.85f, DEFAULT_SIZE*1.05f);
+	m_apScene2D[STAGESELECTTYPE_UI_DECISION]->SetWidthHeight(DEFAULT_SIZE*1.85f, DEFAULT_SIZE*1.15f);
 
 	if (m_typeOld != type)
 	{
