@@ -833,6 +833,7 @@ void C3DCharactor::Action_CPU(void)
 		WayPointRoute_CPU();
 		break;
 	default:
+		m_nActionTimer = 0;
 		break;
 	}
 
@@ -969,14 +970,14 @@ void C3DCharactor::CharaMove_CPU(void)
 
 	spin.y = 0.0f;
 
-	//ˆÚ“®’†‚É•Ç‚É‚Ô‚Â‚©‚Á‚½
-	if (m_bFront == true)
-	{
-		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 2;
-		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
-		m_bFront = false;
-	}
+	////ˆÚ“®’†‚É•Ç‚É‚Ô‚Â‚©‚Á‚½
+	//if (m_bFront == true)
+	//{
+	//	m_CpuThink = THINK_ROTATION;
+	//	m_nActionTimer = 2;
+	//	m_CpuRotation = (CPU_ROTATION)(rand() % 3);
+	//	m_bFront = false;
+	//}
 
 }
 
@@ -1015,6 +1016,9 @@ void C3DCharactor::Rotation_CPU(void)
 
 	spin.y = 0.0f;
 
+	m_CpuThink = THINK_MOVE;
+	m_nActionTimer = 20;
+	m_CpuMove = CPU_MOVE_FRONT;
 }
 
 //=============================================================================
@@ -1735,7 +1739,7 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	if (m_bFront == true)
 	{
 		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 5;
+		m_nActionTimer = 2;
 		m_CpuRotation = (CPU_ROTATION)(rand() % 2);
 		m_bFront = false;
 	}

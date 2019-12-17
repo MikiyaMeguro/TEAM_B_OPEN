@@ -260,8 +260,7 @@ void CPlayer::Update(void)
 			cosf(m_pCharactorMove->GetRotation().y) * 10);
 		testpos += testposFRONT;
 		//前にObjectがあるかどうか
-		CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
-
+		m_pCharactorMove->m_bFront = CollisonObject(&D3DXVECTOR3(testpos.x, testpos.y, testpos.z), &D3DXVECTOR3(m_posOld.x, m_posOld.y, m_posOld.z), &testmove, PLAYER_COLLISON);
 
 		//弾打ち(プレイヤー)
 		if (m_pCharactorMove->GetMoveType() == C3DCharactor::MOVETYPE_PLAYER_INPUT && m_pCharactorMove->m_bWait == false)
@@ -956,6 +955,7 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 							}
 						}
 						nCntBush++;
+						bHit = false;
 					}
 
 					break;
