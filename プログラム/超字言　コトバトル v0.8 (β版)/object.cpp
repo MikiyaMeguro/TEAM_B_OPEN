@@ -17,7 +17,7 @@
 #include "scene3D.h"
 #include "effect.h"
 #include "word.h"
-
+#include "PlayerNumSelect.h"
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -255,6 +255,13 @@ void CObject::BeltConveyor(D3DXVECTOR3 *pMove, bool bSwitch)
 //=============================================================================
 void CObject::BGModelMove(D3DXVECTOR3 pos)
 {
+	CPlayerSelect::SELECTPLAYER NumPlayer = {};
+	NumPlayer = *CPlayerSelect::GetModeSelectMode();	// プレイヤー人数取得
+	D3DXVECTOR2 size = {};
+
+	if (NumPlayer == CPlayerSelect::SELECTPLAYER_1P || NumPlayer == CPlayerSelect::SELECTPLAYER_2P) { size = MAX_SIZE; }
+	else if (NumPlayer == CPlayerSelect::SELECTPLAYER_4P || NumPlayer == CPlayerSelect::SELECTPLAYER_3P) { size = MAX_SIZE_3or4; }
+
 	D3DXVECTOR3 scale = CSceneX::GetScale();
 	if (CSceneX::GetModelType() == CLoad::MODEL_DRAWN_X)
 	{//　X座標の移動をするドローン
@@ -271,7 +278,8 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	文字を出す
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+				
+				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), size.x, size.y, "WORD", nAnswer, 1, 45);
 				scale.y = m_InitScale.y + 0.2f;
 				pos.y = m_InitPos.y + 4.0f;
 				m_nCounter = 0;
@@ -321,7 +329,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	文字を出す
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);
+				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), size.x, size.y, "WORD", nAnswer, 1, 45);
 				scale.y = m_InitScale.y + 0.2f;
 				pos.y = m_InitPos.y + 2.0f;
 				m_nCounter = 0;
@@ -450,9 +458,9 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	文字を出す
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(0.8f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45);}
-				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-0.8f, 0.0f, 0.0f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
-				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.8f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
+				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(0.8f, 0.0f, 0.0f), size.x, size.x, "WORD", nAnswer, 1, 45);}
+				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-0.8f, 0.0f, 0.0f), size.x, size.x, "WORD", nAnswer, 1, 45); }
+				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.8f), size.x, size.x, "WORD", nAnswer, 1, 45); }
 				//else if (nAnswerB == 3) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, -0.8f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
 				m_nCounter = 0;
 			}

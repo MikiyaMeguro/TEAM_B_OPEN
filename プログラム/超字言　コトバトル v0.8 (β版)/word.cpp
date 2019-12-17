@@ -25,8 +25,6 @@
 #define FLOATING_MOVE	(0.5f)			// 浮遊速度
 #define POP_POS_Y		(END_POS_Y + 10.0f)	// 出現後の浮遊時の最大位置
 #define POP_POS_Y_SMALL		(END_POS_Y - 5.0f)	// 出現後の浮遊時の最少位置
-#define MAX_SIZE		(D3DXVECTOR2(25.0f, 15.0f))	// サイズの最大値
-#define MAX_SIZE_3or4	(D3DXVECTOR2(28.0f, 16.0f))	// サイズの最大値
 #define NOT_NOM_DATA	(5)				// 空を示す数字
 
 #define UNITI_TIME		(40)			// 終了する時間
