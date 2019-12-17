@@ -256,6 +256,9 @@ void CScene::DrawAll(int nCamera)
 					CPlayer *pPlayerOld = CManager::GetPlayer(pPlayerScene->GetID()); // ポイントのID取得
 					CScene3D *pScene3D = ((CScene3D*)pPlayerOld->GetBulletUI());
 					if (pScene3D != NULL) { pScene3D->Draw(); }
+
+					CSceneBillBoard *pSceneBill = ((CSceneBillBoard*)pPlayerOld->GetMissileUI());
+					if (pSceneBill != NULL) { pSceneBill->Draw(); }
 				}
 				else
 				{	// 他プレイヤー描画
@@ -263,6 +266,14 @@ void CScene::DrawAll(int nCamera)
 					{
 						int ntest = pPlayerScene->GetID();
 						pScene->Draw();
+
+						CPlayer *pPlayerOld = CManager::GetPlayer(pPlayerScene->GetID()); // ポイントのID取得
+						if (pPlayerOld->GetMissileTargetID() == nCamera - 1)
+						{
+							CSceneBillBoard *pSceneBill = ((CSceneBillBoard*)pPlayerOld->GetMissileUI());
+							if (pSceneBill != NULL) { pSceneBill->Draw(); }
+						}
+
 					}
 				}
 			}
@@ -374,7 +385,8 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA" && pScene->GetObjType() != OBJTYPE_CROWN && pScene->GetObjType() != OBJTYPE_BULLETUI)
+			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA" && pScene->GetObjType() != OBJTYPE_CROWN && 
+				pScene->GetObjType() != OBJTYPE_BULLETUI && pScene->GetObjType() != OBJTYPE_MISSILEUI)
 			{
 				// 描画
 				pScene->Draw();

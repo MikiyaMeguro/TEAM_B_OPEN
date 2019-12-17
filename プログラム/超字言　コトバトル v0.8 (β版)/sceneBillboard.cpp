@@ -232,6 +232,8 @@ void CSceneBillBoard::SetBillboard(D3DXVECTOR3 pos, float fHeight, float fWidth)
 					//頂点バッファをロックし頂点データのポインタを取得
 	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
 	m_pos = pos;
+	m_fHeight = fHeight;
+	m_fWidth = fWidth;
 
 	//頂点座標
 	pVtx[0].pos = D3DXVECTOR3(-fWidth, fHeight, 0.0f);
@@ -269,6 +271,7 @@ D3DXVECTOR3 CSceneBillBoard::GetPos(void)
 //=============================================================================
 void CSceneBillBoard::SetCol(D3DXCOLOR col)
 {
+	m_col = col;
 	//頂点情報へのポインタ
 	VERTEX_3D *pVtx;
 	//頂点バッファをロックし頂点データのポインタを取得

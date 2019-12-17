@@ -61,7 +61,8 @@ public:
 		OBJTYPE_AVOIDUI,	// プレイヤー足元UI
 		OBJTYPE_BILLBOARDUI,// ビルボードUI
 		OBJTYPE_CROWN,		// 王冠
-		OBJTYPE_BULLETUI,		// 弾発射UI
+		OBJTYPE_BULLETUI,	// 弾発射UI
+		OBJTYPE_MISSILEUI,	// ミサイル発射UI
 		OBJTYPE_MAX			// 総数
 	} OBJTYPE;
 

@@ -177,6 +177,7 @@ public:
 	D3DXVECTOR3		GetRotation(void)				{ return (GetCharaMover() != NULL) ? GetCharaMover()->GetRotation() : D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	};
 	int				GetID(void)						{ return m_nID; };
+	int				GetMissileTargetID(void)		{ return m_nTargetID; }
 	LPCSTR			GetCameraName(void)				{ return m_ChildCameraName; };
 	void			SetCameraName(LPCSTR name)		{ m_ChildCameraName = name; };
 	void			SetTransTime(int nTime)			{ m_nCntTransTime = nTime; };
@@ -204,6 +205,7 @@ public:
 	void SetPartsAlpha(float fAlpha);
 
 	CScene3D *GetBulletUI(void) { return m_pBulletUI; }
+	CSceneBillBoard *GetMissileUI(void) { return m_pMissileUI; }
 private:
 	bool			CollisionDamageObj(void);			//弾との当たり判定
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
@@ -234,12 +236,13 @@ private:
 	bool m_bVision[4];										//見えているかどうか
 	int	 m_nStealthTimer;									//見えている時間をカウント
 	int  m_nObjNumber;										//今いるオブジェクトの番号
+	int	 m_nTargetID;										//ミサイルの標的になるPlayerのID保管
 	D3DXVECTOR3 m_BulletRot;								//弾発射方向保持
 	int m_nMachineGunTime;									//マシンガン発射時間
 	bool m_bMachineGun;										//マシンガンフラグ
 	D3DXVECTOR3 m_MachineGunPos;							//マシンガン発射位置
 	CScene3D	*m_pBulletUI;								//弾のUI
-
+	CSceneBillBoard *m_pMissileUI;							// ミサイルのUI
 	/* Motion */
 	MotionProperty m_propMotion[MOTION_UPPER_MAX][BODY_MAX];			//モーション情報
 	int m_motion[BODY_MAX];												//現在のモーション

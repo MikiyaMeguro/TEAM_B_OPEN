@@ -38,6 +38,7 @@ public:
 	void SetColFlag(bool bFlag) { m_bColChange = bFlag; }
 	bool GetColFlag(void) { return m_bColChange; }
 	D3DXCOLOR GetCol(void) { return m_col; }
+	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else if (nNum == 1) { return m_fHeight; } }
 
 private:
 	//メンバ変数
@@ -46,6 +47,7 @@ private:
 	LPDIRECT3DTEXTURE9		m_pTexture = NULL;			// テクスチャへのポインタ
 	D3DXVECTOR3				m_pos;						// ポリゴンの位置
 	D3DXVECTOR3				m_move;						// 移動量
+	D3DXVECTOR3				m_size;						// サイズ
 	float					m_fWidth, m_fHeight;		// 幅,高さ
 	D3DXMATRIX				m_mtrxWorld;				// ワールドマトリックス
 	bool					m_bColChange;
