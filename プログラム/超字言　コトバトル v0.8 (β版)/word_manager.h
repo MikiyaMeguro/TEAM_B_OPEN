@@ -39,6 +39,7 @@ public:
 	~CWordManager();
 
 	void Reset(void);	// リセット
+	void WordReset(void);	// 文字リセット
 
 	// 設定の関数
 	void SetWord(int nType);

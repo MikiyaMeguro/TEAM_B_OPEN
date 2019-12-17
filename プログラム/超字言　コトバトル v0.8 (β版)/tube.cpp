@@ -48,8 +48,10 @@
 #define AREA_STAR		(5.0f * 5.0f)
 
 #define WORD_SCALE		(0.5f)															// 文字が縮む速度
-
 #define STAR_POS		(D3DXVECTOR3(640.0f, 300.0f, 0.0f))
+#define UNINIT_TIME		(15 * 60)															// 文字取得後終了するまでのフレーム
+#define FLASHING_TIME	(8 * 60)															// 文字取得後終了するまでのフレーム
+#define FLASHING_TIME_SECOND	(12 * 60)															// 文字取得後終了するまでのフレーム
 //=============================================================================
 // シーンクラスのコンストラクタ
 //=============================================================================
@@ -69,11 +71,10 @@ CTube::CTube(int nPriority, OBJTYPE objType) : CScene2D(nPriority, objType)
 	m_nAnswer = 0;
 	m_nStockNum = 0;
 	m_nAnswerModelNum = 0;
+	m_nCntUninit = 0;
 	m_bModelTexFlag = false;
 	m_bCreateFlag = false;
 	m_bTowardFlag = false;
-
-
 }
 
 //=============================================================================
@@ -254,6 +255,14 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 
 	if (nNum == 2)
 	{
+		for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+		{
+			if (m_apWord[nCntWord] != NULL)
+			{
+				 m_apWord[nCntWord]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); 
+			}
+		}
+
 		m_bCreateFlag = true;
 		//m_bModelTexFlag = true;
 	}
@@ -366,6 +375,7 @@ void CTube::Collect(void)
 	{
 		if (m_apWord[nCntWord] != NULL)
 		{
+			if (m_apWord[nCntWord]->GetCol() != D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)) { m_apWord[nCntWord]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); }
 			m_apWord[nCntWord]->SetWidthHeight(m_apWord[nCntWord]->GetSize(0) - WORD_SCALE, m_apWord[nCntWord]->GetSize(1) - WORD_SCALE);
 			Approach(m_apWord[nCntWord]->GetPosition(), m_AnswerPos, nCntWord);
 		}
@@ -401,6 +411,8 @@ void CTube::Collect(void)
 			SizeChange(size);	// サイズの変化
 		}
 	}
+
+	m_nCntUninit = 0;
 }
 
 //=============================================================================
@@ -523,6 +535,7 @@ void CTube::UninitChack(bool bFlag)
 
 	}
 	m_nAnswerModelNum = 0;
+	m_nCntUninit = 0;
 	m_bCreateFlag = false;
 }
 
@@ -612,6 +625,7 @@ void CTube::WordCreate2D(void)
 	}
 
 	if (nCount == MAX_WORD) { m_bModelTexFlag = true; }		// 中心点に集まる
+	else if (nCount == MAX_WORD - 1) { WordUninit(); }
 }
 
 //=============================================================================
@@ -638,5 +652,54 @@ void CTube::SizeChange(D3DXVECTOR2 size)
 	if (m_pAnswerModel[m_nStockNum] != NULL)
 	{
 		m_pAnswerModel[m_nStockNum]->SetWidthHeight(size.x, size.y);
+	}
+}
+
+//=============================================================================
+// 文字取得後、終了するまでの時間
+//=============================================================================
+void CTube::WordUninit(void)
+{
+	// カウントを回す
+	m_nCntUninit++;
+
+	// カウントが指定した値以上の場合
+	if (m_nCntUninit > FLASHING_TIME && m_nCntUninit < FLASHING_TIME_SECOND)
+	{	// 点滅処理
+		for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+		{
+			if (m_apWord[nCntWord] != NULL)
+			{
+				D3DXCOLOR fCol = m_apWord[nCntWord]->GetCol();
+
+				if (fCol.a > 0.3f) { fCol.a -= 0.05f; }
+				else { fCol.a = 1.0f; }
+				m_apWord[nCntWord]->SetCol(fCol);
+			}
+		}
+	}
+	else if (m_nCntUninit >= FLASHING_TIME_SECOND && m_nCntUninit < UNINIT_TIME)
+	{	// 点滅処理
+		for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+		{
+			if (m_apWord[nCntWord] != NULL)
+			{
+				D3DXCOLOR fCol = m_apWord[nCntWord]->GetCol();
+
+				if (fCol.a > 0.3f) { fCol.a -= 0.2f; }
+				else { fCol.a = 1.0f; }
+				m_apWord[nCntWord]->SetCol(fCol);
+			}
+		}
+	}
+	if ((m_nCntUninit % UNINIT_TIME) == 0)
+	{	// 持っている文字を破棄する
+		for (int nCntWord = 0; nCntWord < MAX_WORD; nCntWord++)
+		{
+			if (m_apWord[nCntWord] != NULL) { m_apWord[nCntWord]->Uninit(); m_apWord[nCntWord] = NULL; }
+		}
+		m_nCntUninit = 0;
+
+		CManager::GetPlayer(m_nID)->GetWordManager()->WordReset();
 	}
 }

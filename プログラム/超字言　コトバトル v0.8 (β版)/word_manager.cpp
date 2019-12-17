@@ -358,6 +358,32 @@ void CWordManager::Reset(void)
 }
 
 //=============================================================================
+// •¶ŽšƒŠƒZƒbƒgŠÖ”
+//=============================================================================
+void CWordManager::WordReset(void)
+{
+	m_nCntNum = 0;
+
+	if (m_nStock > 0)
+	{
+		for (int nCntWord = m_nCntNum; nCntWord < MAX_WORD; nCntWord++)
+		{
+			m_aWord[nCntWord].nNum = EMPTINESS_NUM;
+			m_aWord[nCntWord].cWord = "NULL";
+		}
+	}
+
+	for (int nCount = 0; nCount < MAX_WORD; nCount++)
+	{
+		m_bAnswer[nCount] = false;
+	}
+
+	m_bGatherFlag = false;
+
+	m_nCntaAnswer = 0;
+}
+
+//=============================================================================
 // ’e‚Ì¶¬  Editor : Kodama Yuto
 //=============================================================================
 void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 BulletRot, CPlayer::PLAYER_TYPE type, C3DCharactor* pChara)
@@ -712,6 +738,7 @@ void CWordManager::SearchAssist(int nCntData)
 					if (pWord->GetWordNum() == m_fAnswerData[nCntWord])
 					{
 						pWord->SetSearchCol(m_nPlayerID);
+						nCount++;
 					}
 				}
 				nCount++;
