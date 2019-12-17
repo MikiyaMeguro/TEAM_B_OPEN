@@ -738,6 +738,7 @@ void CWordManager::SearchAssist(int nCntData)
 					if (pWord->GetWordNum() == m_fAnswerData[nCntWord])
 					{
 						pWord->SetSearchCol(m_nPlayerID);
+						nCount++;
 					}
 				}
 				nCount++;
