@@ -49,6 +49,7 @@ private:
 	void Toward(void);		// 向かっていく処理
 	void WordCreate2D(void);	// 文字の表示
 	void SizeChange(D3DXVECTOR2 size);
+	void WordUninit();		// 文字取得後、消えるまでのカウント
 
 	D3DXVECTOR3 m_AnswerPos;
 	D3DXVECTOR2 m_size;
@@ -59,11 +60,13 @@ private:
 	int			m_anAnswerNum[MAX_WORD];
 	int		    m_nAnswer;
 	int			m_nID;
+	int			m_nCntUninit;	// 文字取得後消えるまでの時間
 
 	bool	 m_bModelTexFlag;
 	bool	 m_bCreateFlag;
 	bool	 m_bTowardFlag;	// 目的の場所に向かう処理
 	bool	 m_bSizeFlag;	// サイズ変化のフラグ
+	bool	 m_bUninitFlag;	// 終了フラグ
 	int m_nAnswerModelNum;	// 答えの番号
 	int m_nStockNum;
 
