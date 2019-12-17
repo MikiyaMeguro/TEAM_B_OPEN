@@ -1369,7 +1369,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 			}
 			else if (m_PlayerType == TYPE_REACH)	// プレイヤーがウサギ(マシンガン)の場合
 			{
-				size = D3DXVECTOR3(20.0f, 0.0f, 500.0f);
+				size = D3DXVECTOR3(20.0f, 0.0f, 300.0f);
 				nType = 1;
 				rotUI = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}

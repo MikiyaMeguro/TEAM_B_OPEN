@@ -297,7 +297,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	case TYPE_MACHINEGUN:
 		m_fKnockBack = 0.0f;
 		fSpeed = 7.0f;
-		nLife = 150;
+		nLife = 40;
 		break;
 	case TYPE_SHOTGUN:
 		m_fKnockBack = 3.0f;
@@ -332,6 +332,7 @@ void CModelBullet::Set(D3DXVECTOR3 pos, D3DXVECTOR3 rot, CLoad::MODEL model, BUL
 	default:
 		fSpeed = 5.0f;
 		m_fKnockBack = 6.0f;
+		nLife = 30;
 		break;
 	}
 	m_modelRotateOffSet = RotateOffset;
