@@ -833,6 +833,7 @@ void C3DCharactor::Action_CPU(void)
 		WayPointRoute_CPU();
 		break;
 	default:
+		m_nActionTimer = 0;
 		break;
 	}
 
@@ -969,14 +970,14 @@ void C3DCharactor::CharaMove_CPU(void)
 
 	spin.y = 0.0f;
 
-	//ˆÚ“®’†‚É•Ç‚É‚Ô‚Â‚©‚Á‚½
-	if (m_bFront == true)
-	{
-		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 2;
-		m_CpuRotation = (CPU_ROTATION)(rand() % 3);
-		m_bFront = false;
-	}
+	////ˆÚ“®’†‚É•Ç‚É‚Ô‚Â‚©‚Á‚½
+	//if (m_bFront == true)
+	//{
+	//	m_CpuThink = THINK_ROTATION;
+	//	m_nActionTimer = 2;
+	//	m_CpuRotation = (CPU_ROTATION)(rand() % 3);
+	//	m_bFront = false;
+	//}
 
 }
 
@@ -1015,6 +1016,9 @@ void C3DCharactor::Rotation_CPU(void)
 
 	spin.y = 0.0f;
 
+	m_CpuThink = THINK_MOVE;
+	m_nActionTimer = 20;
+	m_CpuMove = CPU_MOVE_FRONT;
 }
 
 //=============================================================================
@@ -1235,6 +1239,9 @@ void C3DCharactor::Homing_CPU(void)
 //=============================================================================
 void C3DCharactor::Attack_CPU(void)
 {
+	C3DCharactor* pChara = NULL;
+	int nNear = GetThisCharactor()->GetNearPlayer();
+
 	//’e‚Ì¶¬	’e‚ðŽ‚Á‚Ä‚¢‚é‚Æ‚«‚¾‚¯
 	if (GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && CGame::GetbStageSet() == false)
 	{
@@ -1251,7 +1258,8 @@ void C3DCharactor::Attack_CPU(void)
 			m_nActionTimer = 0;
 			break;
 		case CPlayer::TYPE_SPEED:
-			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
+			pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
+			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), pChara);
 			m_CpuThink = THINK_NONE;
 			m_nActionTimer = 0;
 			break;
@@ -1385,6 +1393,7 @@ void C3DCharactor::PickUP_CPU(void)
 	{
 		//WayPointMove_CPU();
 		WayPointRoute_CPU();
+		m_nActionTimer = 120;
 	}
 	else if (nCntNearWord == 0)
 	{//‹ß‚­‚É•¶Žš‚ªˆê‚Â‚à‚È‚¢
@@ -1723,10 +1732,17 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	}
 	else
 	{
-		m_nActionTimer = 30;
+		//m_nActionTimer = 30;
 	}
 
-
+	//ˆÚ“®’†‚É•Ç‚É‚Ô‚Â‚©‚Á‚½
+	if (m_bFront == true)
+	{
+		m_CpuThink = THINK_ROTATION;
+		m_nActionTimer = 2;
+		m_CpuRotation = (CPU_ROTATION)(rand() % 2);
+		m_bFront = false;
+	}
 
 	// –Ú“I‚ÌŠp“x
 	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
