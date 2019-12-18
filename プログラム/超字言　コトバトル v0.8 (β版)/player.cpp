@@ -23,7 +23,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
+#define PLAYER_LOCKON_LENGTH (200.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 #define LOCKON_FUTURE_ROTATE (20.0f)								//ロックオンの弾角度決定時に敵の移動速度に掛ける定数
 
@@ -1374,7 +1374,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 			// 必要なサイズとUIの種類を設定
 			if (m_PlayerType == TYPE_SPEED)			// プレイヤーが猫(ミサイル)の場合
 			{
-				if (nNear != -1)	// プレイヤーがウサギ(マシンガン) か && 射程範囲内の場合
+				if (nNear != -1)	// 射程範囲内
 				{
 					pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
 					m_nTargetID = nNear;
@@ -1383,12 +1383,12 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 				}
 				else
 				{
-					size = D3DXVECTOR3(200.0f, 0.0f, 260.0f);
+					size = D3DXVECTOR3(200.0f, 0.0f, 200.0f);
 					nType = 0;
 					rotUI = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 				}
 			}
-			else if (m_PlayerType == TYPE_REACH)
+			else if (m_PlayerType == TYPE_REACH)	// うさぎ
 			{
 				size = D3DXVECTOR3(20.0f, 0.0f, 300.0f);
 				nType = 1;
