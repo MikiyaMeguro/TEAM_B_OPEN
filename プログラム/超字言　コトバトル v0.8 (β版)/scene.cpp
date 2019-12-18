@@ -331,21 +331,9 @@ void CScene::DrawAll(int nCamera)
 				if (pBill != NULL && pBill->GetColFlag() == true)
 				{	// 3•¶š–Ú’Tõ‚ª‚ ‚éê‡
 					pBill->SetBillboard(pBill->GetPos(), 200.0f, 17.0f);
-					if (pWord->GetID(nCamera - 1) == 0)
-					{	// 1P‚Ìê‡
+					if (pWord->GetID(nCamera - 1) >= 0 && pWord->GetID(nCamera - 1) <= 3)
+					{	// 1P`4P‚Ìê‡
 						pBill->SetCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 1.0f));
-					}
-					else if (pWord->GetID(nCamera - 1) == 1)
-					{	// 2P‚Ìê‡
-						pBill->SetCol(D3DXCOLOR(0.0f, 0.0f, 1.0f, 1.0f));
-					}
-					else if (pWord->GetID(nCamera - 1) == 2)
-					{	// 3P‚Ìê‡
-						pBill->SetCol(D3DXCOLOR(0.0f, 1.0f, 0.0f, 1.0f));
-					}
-					else if (pWord->GetID(nCamera - 1) == 3)
-					{	// 4P‚Ìê‡
-						pBill->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 					}
 					else
 					{	// ©•ª©g‚Ì”Ô†ˆÈŠO
