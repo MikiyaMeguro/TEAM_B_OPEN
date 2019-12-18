@@ -38,7 +38,7 @@ public:
 	void SetColFlag(bool bFlag) { m_bColChange = bFlag; }
 	bool GetColFlag(void) { return m_bColChange; }
 	D3DXCOLOR GetCol(void) { return m_col; }
-	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else if (nNum == 1) { return m_fHeight; } }
+	float GetSize(int nNum) { if (nNum == 0) { return m_fWidth; } else if (nNum == 1) { return m_fHeight; } return 0.0f; }
 
 private:
 	//ƒƒ“ƒo•Ï”

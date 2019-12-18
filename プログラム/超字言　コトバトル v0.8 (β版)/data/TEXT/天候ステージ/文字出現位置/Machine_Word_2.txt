@@ -68,7 +68,7 @@ MODELSET# [45]
 END_MODELSET
 
 MODELSET# [46]
-	POS = 0.0 -200.0 -340.0		# 位置情報
+	POS = 0.0 -20.0 -340.0		# 位置情報
 END_MODELSET
 
 END_SCRIPT		# この行は絶対消さないこと！

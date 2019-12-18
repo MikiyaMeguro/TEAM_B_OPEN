@@ -16,6 +16,7 @@
 #include "camera.h"
 
 class C3DCharactor;
+
 //===================================================================
 // クラスの定義
 //===================================================================
@@ -40,6 +41,7 @@ public:
 			return (strcmp(CameraTag, Tag) == 0);
 		}
 	};
+
 
 	CCameraManager();
 	~CCameraManager();
@@ -66,6 +68,10 @@ public:
 
 	//カメラの画角の設定
 	bool SetCameraAngle(LPCSTR Tag,float fAngle);
+
+	//カメラの長さ設定
+	bool SetCameraLength(LPCSTR Tag,float fLength);
+
 	//背景色設定
 	bool SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col);
 
@@ -75,15 +81,20 @@ public:
 	//カメラ取得
 	CCamera* GetCamera(LPCSTR Tag);
 
+	float GetLength(LPCSTR Tag);
 	//現在セットしているカメラ名取得
 	static LPCSTR GetCameraName(void) { return m_SetCamera; };
 
 	int GetCameraNum(void) { return m_vecCameraState.size(); };
 private:
+	CCamera* CameraSearch(LPCSTR Tag);
+
 	void WindowClear(LPDIRECT3DDEVICE9 pDev,DRAW_PROPERTY prop, D3DXCOLOR BG_Color);
 
 	std::vector<CAMERA_STATE> m_vecCameraState;	//カメラ情報の動的配列
 
 	static LPCSTR m_SetCamera;		//現在セットしているカメラの名前
 };
+
+
 #endif // !_CAMERA_MANAGER_H_

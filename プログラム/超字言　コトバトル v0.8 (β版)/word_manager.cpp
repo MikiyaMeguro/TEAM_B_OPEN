@@ -721,7 +721,7 @@ void CWordManager::SearchAssist(int nCntData)
 
 	nNum = CManager::GetWordCreate()->GetPopNum();
 
-	while (nCount < nNum)
+	while (nCount < CWord::GetAllNum())
 	{
 		// 先頭のオブジェクトを取得
 		pScene = CScene::GetTop(5);
@@ -738,7 +738,6 @@ void CWordManager::SearchAssist(int nCntData)
 					if (pWord->GetWordNum() == m_fAnswerData[nCntWord])
 					{
 						pWord->SetSearchCol(m_nPlayerID);
-						nCount++;
 					}
 				}
 				nCount++;
@@ -762,7 +761,7 @@ void CWordManager::UninitAssist(void)
 	if (CManager::MODE_GAME == CManager::GetMode()) { nNum = CGame::GetWordCreate()->GetPopNum(); }
 	if (CManager::MODE_TUTORIAL == CManager::GetMode()) { nNum = CTutorial::GetWordCreate()->GetPopNum(); }
 
-	while (nCount < nNum)
+	while (nCount < CWord::GetAllNum())
 	{
 		// 先頭のオブジェクトを取得
 		pScene = CScene::GetTop(5);
@@ -775,11 +774,10 @@ void CWordManager::UninitAssist(void)
 			{// 死亡フラグが立っていないもの
 				CWord *pWord = ((CWord*)pScene);		// CBulletBaseへキャスト(型の変更)
 				pWord->UninitSearchCol(m_nPlayerID);
-				//nCount++;
+				nCount++;
 			}
 			pScene = pSceneNext;
 		}
-		nCount++;
 	}
 }
 

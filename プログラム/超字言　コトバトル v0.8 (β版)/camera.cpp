@@ -94,6 +94,7 @@ void CCamera::Update(void)
 {
 	CInputKeyboard* pInput = CManager::GetInputKeyboard();
 
+
 	switch (m_Type)
 	{
 	case TYPE_FPS:
@@ -136,6 +137,11 @@ void CCamera::Update(void)
 			m_posVdest = m_pHomingChara->GetCameraPosR() - D3DXVECTOR3(sinf(m_rot.y) * m_fLength,
 				-m_fLength,
 				cosf(m_rot.y) * m_fLength);
+
+			//m_posVdest = m_pHomingChara->GetCameraPosR() + D3DXVECTOR3((sinf(m_rot.y) * m_fLength)*(sinf(m_rot.x) * m_fLength),
+			//	cosf(m_rot.y) * m_fLength,
+			//	(sinf(m_rot.y) * m_fLength)*(cosf(m_rot.x) * m_fLength));
+
 			m_posV += (m_posVdest - m_posV) * CAMERA_POSV_COEFFICIENT;
 		}
 
