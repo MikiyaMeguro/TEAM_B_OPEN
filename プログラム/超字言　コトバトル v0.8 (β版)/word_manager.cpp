@@ -744,7 +744,6 @@ void CWordManager::SearchAssist(int nCntData)
 			}
 			pScene = pSceneNext;
 		}
-		nCount++;
 	}
 }
 

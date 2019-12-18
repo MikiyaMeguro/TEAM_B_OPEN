@@ -971,15 +971,6 @@ void C3DCharactor::CharaMove_CPU(void)
 
 	spin.y = 0.0f;
 
-	////移動中に壁にぶつかった
-	//if (m_bFront == true)
-	//{
-	//	m_CpuThink = THINK_ROTATION;
-	//	m_nActionTimer = 2;
-	//	m_CpuRotation = (CPU_ROTATION)(rand() % 3);
-	//	m_bFront = false;
-	//}
-
 }
 
 
@@ -1182,10 +1173,10 @@ void C3DCharactor::Homing_CPU(void)
 	}
 	else if (fCompare >= fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && m_CpuThink != THINK_MISSING)
 	{// 距離外で弾を持っている時
-		float	fMinCircle = fLength;
+		float	fMinCircle = 1000000;
 		int nNumWP = 0;
 
-#if 1
+#if 0
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
 		//移動可能なマスは何マスあるか
@@ -1230,13 +1221,30 @@ void C3DCharactor::Homing_CPU(void)
 			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 		}
 #endif
-		//WayPointMove_CPU();
+		WayPointMove_CPU();
 	}
 	else if (m_CpuThink == THINK_MISSING)
 	{// 近くに敵がいなくて見失ったとき
 		float	fMinCircle = 100000000;
 		int nNumWP = 0;
 #if 1
+
+		for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+		{
+			if (pPlayer[nCntPlayer] != NULL)
+			{
+				if (pPlayer[nCntPlayer]->GetID() != GetThisCharactor()->GetID())
+				{
+					// 距離を測る
+					fCircle = ((Pos.x - PlayerPos[nCntPlayer].x) * (Pos.x - PlayerPos[nCntPlayer].x)) + ((Pos.z - PlayerPos[nCntPlayer].z) * (Pos.z - PlayerPos[nCntPlayer].z));
+					if (fCircle < fCompare)
+					{	//一番近いプレイヤーを記憶
+						nNearPlayer = nCntPlayer;
+					}
+				}
+			}
+		}
+
 		//目標のマスの位置を渡す
 		m_MarkWayPoint = PlayerPos[nNearPlayer];
 		// 目的の角度
@@ -1420,6 +1428,13 @@ void C3DCharactor::PickUP_CPU(void)
 		}
 		// 次のシーンに進める
 		pScene = pSceneNext;
+	}
+
+	if (GetThisCharactor()->GetWordManager()->GetCntNum() == 2 && bTango == false)
+	{//
+		m_CpuThink = THINK_ATTACK;
+		m_nActionTimer = 60;
+		bWord = true;
 	}
 
 	//ワードが範囲内にある時移動する
@@ -1781,13 +1796,13 @@ void C3DCharactor::WayPointRoute_CPU(void)
 	}
 
 	//移動中に壁にぶつかった
-	if (m_bFront == true)
-	{
-		m_CpuThink = THINK_ROTATION;
-		m_nActionTimer = 2;
-		m_CpuRotation = (CPU_ROTATION)(rand() % 2);
-		m_bFront = false;
-	}
+	//if (m_bFront == true)
+	//{
+	//	m_CpuThink = THINK_ROTATION;
+	//	m_nActionTimer = 2;
+	//	m_CpuRotation = (CPU_ROTATION)(rand() % 2);
+	//	m_bFront = false;
+	//}
 
 	// 目的の角度
 	float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
