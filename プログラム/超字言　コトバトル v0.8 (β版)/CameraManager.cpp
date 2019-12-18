@@ -12,6 +12,8 @@
 #define BACK_DEFAULT_COLOR (D3DXCOLOR(0.0f,0.0f,0.0f,1.0f))
 
 LPCSTR CCameraManager::m_SetCamera = CAMERANAME_SETCAMERA_NONE;
+
+
 //===================================================================
 // コンストラクタ&デストラクタ
 //===================================================================
@@ -150,12 +152,10 @@ bool CCameraManager::DeleteCamera(LPCSTR Tag)
 //===================================================================
 bool CCameraManager::SetCameraViewPort(LPCSTR Tag, int X, int Y, int Width, int Height, float MinZ, float MaxZ)
 {
-	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
-
-	if (result != m_vecCameraState.end())
-	{//カメラ名が定義されていれば
-		result->pCamera->SetViewPort(X,Y,Width,Height,MinZ,MaxZ);
-
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		pCamera->SetViewPort(X,Y,Width,Height,MinZ,MaxZ);
 		return true;
 	}
 
@@ -167,11 +167,10 @@ bool CCameraManager::SetCameraViewPort(LPCSTR Tag, int X, int Y, int Width, int 
 //===================================================================
 bool CCameraManager::SetCameraHomingChara(LPCSTR Tag, C3DCharactor* pHomingChara)
 {
-	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
-
-	if (result != m_vecCameraState.end())
-	{//カメラ名が定義されていれば
-		result->pCamera->SetHomingChara(pHomingChara);
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		pCamera->SetHomingChara(pHomingChara);
 		return true;
 	}
 
@@ -180,16 +179,40 @@ bool CCameraManager::SetCameraHomingChara(LPCSTR Tag, C3DCharactor* pHomingChara
 }
 
 //===================================================================
+// カメラの長さ設定処理
+//===================================================================
+bool CCameraManager::SetCameraLength(LPCSTR Tag, float fLength)
+{
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		pCamera->SetLength(fLength);
+		return true;
+	}
+
+	return false;
+
+}
+float CCameraManager::GetLength(LPCSTR Tag)
+{
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		return pCamera->GetLength();
+	}
+
+	return -10000000000.0f;
+}
+
+//===================================================================
 // カメラの追跡対象設定処理
 //===================================================================
 bool CCameraManager::SetCameraLockOnChara(LPCSTR Tag, C3DCharactor* pLockOnChara)
 {
-	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
-
-	if (result != m_vecCameraState.end())
-	{//カメラ名が定義されていれば
-		result->pCamera->SetLockOnChara(pLockOnChara);
-
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		pCamera->SetLockOnChara(pLockOnChara);
 		return true;
 	}
 
@@ -202,12 +225,10 @@ bool CCameraManager::SetCameraLockOnChara(LPCSTR Tag, C3DCharactor* pLockOnChara
 //===================================================================
 bool CCameraManager::SetCameraAngle(LPCSTR Tag, float fAngle)
 {
-	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
-
-	if (result != m_vecCameraState.end())
-	{//カメラ名が定義されていれば
-		result->pCamera->SetCameraAngle(fAngle);
-
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		pCamera->SetCameraAngle(fAngle);
 		return true;
 	}
 	return false;
@@ -237,17 +258,22 @@ bool CCameraManager::SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col)
 //===================================================================
 CCamera* CCameraManager::GetCamera(LPCSTR Tag)
 {
+	return CameraSearch(Tag);
+}
+
+//===================================================================
+// カメラ取得処理
+//===================================================================
+CCamera* CCameraManager::CameraSearch(LPCSTR Tag)
+{
 	auto result = std::find(m_vecCameraState.begin(), m_vecCameraState.end(), Tag);
 
 	if (result != m_vecCameraState.end())
 	{//カメラ名が定義されていれば
 		return result->pCamera;
 	}
-
 	return NULL;
-
 }
-
 //===================================================================
 // ウィンドウ初期化処理
 //===================================================================
