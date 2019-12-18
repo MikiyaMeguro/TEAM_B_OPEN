@@ -342,7 +342,7 @@ void CPoint::UIPosition(int nID)
 		}
 		else if (m_nNumPlayer == 3 || m_nNumPlayer == 4)
 		{
-			posIcon = D3DXVECTOR3(40.0f, 65.0f, 0.0f);
+			posIcon = D3DXVECTOR3(40.0f, 34.0f, 0.0f);
 			posNumber = D3DXVECTOR3(40.0f, 21.0f, 0.0f);
 
 			sizeIcon = D3DXVECTOR3(50.0f, 40.0f, 0.0f);
@@ -351,7 +351,7 @@ void CPoint::UIPosition(int nID)
 	}
 	else if (nID == 1 && m_nNumPlayer == 3 || nID == 1 && m_nNumPlayer == 4)
 	{	// 3画面 2P, 4画面 2Pの位置
-		posIcon = D3DXVECTOR3(690.0f, 65.0f, 0.0f);
+		posIcon = D3DXVECTOR3(685.0f, 33.0f, 0.0f);
 		posNumber = D3DXVECTOR3(690.0f, 21.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(50.0f, 40.0f, 0.0f);
@@ -359,7 +359,7 @@ void CPoint::UIPosition(int nID)
 	}
 	else if (nID == 2 && m_nNumPlayer == 3 || nID == 2 && m_nNumPlayer == 4)
 	{ // 3画面 3P, 4画面 3Pの位置
-		posIcon = D3DXVECTOR3(40.0f, 435.0f, 0.0f);
+		posIcon = D3DXVECTOR3(40.0f, 400.0f, 0.0f);
 		posNumber = D3DXVECTOR3(40.0f, 386.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(50.0f, 40.0f, 0.0f);
@@ -367,7 +367,7 @@ void CPoint::UIPosition(int nID)
 	}
 	else if  (nID == 3 && m_nNumPlayer == 4)
 	{	// 4画面 4Pの位置
-		posIcon = D3DXVECTOR3(690.0f, 435.0f, 0.0f);
+		posIcon = D3DXVECTOR3(685.0f, 400.0f, 0.0f);
 		posNumber = D3DXVECTOR3(690.0f, 386.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(50.0f, 40.0f, 0.0f);
@@ -376,7 +376,7 @@ void CPoint::UIPosition(int nID)
 
 	else if (m_nNumPlayer == 2 && nID == 0)
 	{	// 2画面 1P
-		posIcon = D3DXVECTOR3(185.0f, 40.0f, 0.0f);
+		posIcon = D3DXVECTOR3(186.0f, 40.0f, 0.0f);
 		posNumber = D3DXVECTOR3(185.0f, 31.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(60.0f, 50.0f, 0.0f);
@@ -384,7 +384,7 @@ void CPoint::UIPosition(int nID)
 	}
 	else if (nID == 1 && m_nNumPlayer == 2)
 	{	// 2画面 2P
-		posIcon = D3DXVECTOR3(188.0f, 405.0f, 0.0f);
+		posIcon = D3DXVECTOR3(187.0f, 405.0f, 0.0f);
 		posNumber = D3DXVECTOR3(185.0f, 386.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(60.0f, 50.0f, 0.0f);
@@ -488,24 +488,24 @@ void CPoint::RankPos(void)
 		}
 		if (m_nNumPlayer == 3 || m_nNumPlayer == 4)
 		{
-			pos = D3DXVECTOR3(POINT_POS_1P_ONE.x- 20.0f, POINT_POS_1P_ONE.y - 30.0f, POINT_POS_1P_ONE.z);
+			pos = D3DXVECTOR3(POINT_POS_1P_ONE.x / 2 - 15.0f, POINT_POS_1P_ONE.y / 2 -14.0f, POINT_POS_1P_ONE.z);
 			m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 		}
 	}
 	else if (m_nID == 1 && m_nNumPlayer == 3 || m_nID == 1 && m_nNumPlayer == 4)
 	{	// 3画面 2P, 4画面 2Pの位置
-		pos = D3DXVECTOR3(POINT_POS_4P_ONE.x - 445.0f, POINT_POS_4P_ONE.y + 10.0f, POINT_POS_4P_ONE.z);
+		pos = D3DXVECTOR3(POINT_POS_4P_ONE.x - 5.0f, POINT_POS_4P_ONE.y + 270.0f, POINT_POS_4P_ONE.z);
 		m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 	}
 	else if (m_nID == 2 && m_nNumPlayer == 3 || m_nID == 2 && m_nNumPlayer == 4)
 	{ // 3画面 3P, 4画面 3Pの位置
-		pos = D3DXVECTOR3(POINT_POS_2P_TWO.x - 20.0f, POINT_POS_2P_TWO.y + 10.0f, POINT_POS_2P_TWO.z);
+		pos = D3DXVECTOR3(POINT_POS_2P_TWO.x + 430.0f, POINT_POS_2P_TWO.y + 263.0f, POINT_POS_2P_TWO.z);
 		m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 
 	}
 	else if ( m_nID == 3 && m_nNumPlayer == 4)
 	{	// 4画面 4Pの位置
-		pos = D3DXVECTOR3(POINT_POS_4P_TWO.x - 445.0f, POINT_POS_4P_TWO.y + 10.0f, POINT_POS_4P_TWO.z);
+		pos = D3DXVECTOR3(POINT_POS_4P_TWO.x - 4.0f, POINT_POS_4P_TWO.y + 265.0f, POINT_POS_4P_TWO.z);
 		m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 	}
 
