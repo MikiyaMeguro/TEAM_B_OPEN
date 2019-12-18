@@ -45,11 +45,14 @@ public:
 	bool GetUninitFlag(void) { return m_bFlagUninit; }
 
 	CSceneBillBoard *GetPopBill(void) { return m_pBillBoard[0]; }
+
+	static int GetAllNum(void) { return m_nAllNum; }
 private:
 	D3DXVECTOR3 Move(D3DXVECTOR3 pos);
 	void SizeScale(D3DXVECTOR3 *size, float fMove, D3DXVECTOR2 MaxSize);		// 拡大縮小
 	void FlashingCol(void);						// 点滅する時の関数
 
+	static int m_nAllNum;
 
 	D3DXVECTOR3 m_move;		// サイズ
 

@@ -49,7 +49,7 @@
 //*****************************************************************************
 // 静的メンバ変数
 //*****************************************************************************
-
+int CWord::m_nAllNum = 0;
 //--------------------------------------------
 // コンストラクタ
 //--------------------------------------------
@@ -117,6 +117,7 @@ CWord *CWord::Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, float fWidth, float fHei
 			pWord->SetTexture(nWord, 10, 5, 1);
 			pWord->m_nNum = nNum;
 			pWord->m_move = move;
+			m_nAllNum++;
 		}
 	}
 
@@ -164,6 +165,7 @@ void CWord::Uninit(void)
 {
 	if (m_pBillBoard[0] != NULL) { m_pBillBoard[0]->Uninit(); m_pBillBoard[0] = NULL; }
 	if (m_pBillBoard[1] != NULL) { m_pBillBoard[1]->Uninit(); m_pBillBoard[1] = NULL; }
+	m_nAllNum--;
 	CSceneBillBoard::Uninit();
 }
 
