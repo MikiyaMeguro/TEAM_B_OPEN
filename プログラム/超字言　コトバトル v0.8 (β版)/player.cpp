@@ -345,6 +345,7 @@ void CPlayer::Update(void)
 				if (m_pWordManager->GetStockNum() > 0)
 				{
 					BulletUI(m_BulletRot);		// ’e”­ŽË•\Ž¦
+					pCameraManager->SetCameraLength(m_ChildCameraName, 300.0f);
 				}
 
 
@@ -355,6 +356,7 @@ void CPlayer::Update(void)
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_BulletRot.y = BulletRot.y;
 				m_bAssist = true;
+				pCameraManager->SetCameraLength(m_ChildCameraName, 350.0f);
 
 				BulletUIUninit();
 			}
@@ -1470,7 +1472,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 			if (col.g < 0.8f && col.b < 0.8f) { col.g += 0.02f; col.b += 0.01f; }
 			else { col.g = 0.0f; col.b = 0.0f; }
 
-			if (size.x < 30.0f && size.y < 40.0f) { 
+			if (size.x < 30.0f && size.y < 40.0f) {
 				size.x += 0.5f; size.y += 0.5f; }
 			else { size.x = 20.0f; size.y = 30.0f; }
 
