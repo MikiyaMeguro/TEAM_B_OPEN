@@ -1034,7 +1034,7 @@ END_MODELSET
 MODELSET
 	TYPE = 89					# すまい
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.2 0.2 0.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 12.0 30.0 1.0
 	ANSWERMODEL = 87			# 答えのモデル
@@ -1044,7 +1044,7 @@ END_MODELSET
 MODELSET
 	TYPE = 90					# くくり
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 0.5 0.5 0.5			# スケール
+	SCALE = 0.2 0.2 0.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 7.0 7.0 39.0
 	ANSWERMODEL = 88			# 答えのモデル
@@ -1054,7 +1054,7 @@ END_MODELSET
 MODELSET
 	TYPE = 91					# こるく
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.6 0.6 0.6			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 9.0 40.0 7.0
 	ANSWERMODEL = 89			# 答えのモデル
@@ -1083,10 +1083,10 @@ END_MODELSET
 
 MODELSET
 	TYPE = 94					# すずめ
-	ROT = 0.0 0.0 0.0			# 向き 
+	ROT = 0.0 180.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 12.0 42.0 33.0
+	ANSWER = 12.0 12.0 33.0
 	ANSWERMODEL = 92			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
