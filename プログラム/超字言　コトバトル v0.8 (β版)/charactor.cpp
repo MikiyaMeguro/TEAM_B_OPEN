@@ -763,6 +763,7 @@ void C3DCharactor::Action_CPU(void)
 	case  THINK_SIGHT:	//敵が見えたとき
 		break;
 	case  THINK_MISSING:	//敵を見失った
+		Homing_CPU();
 		break;
 	case  THINK_HAVEBULLET:	//弾を持っているとき
 		if (m_bMachineGun == true)
@@ -1061,10 +1062,10 @@ void C3DCharactor::Homing_CPU(void)
 		fLength = 30000;
 		break;
 	case CPlayer::TYPE_POWER:
-		fLength = 100000;
+		fLength = 70000;
 		break;
 	case CPlayer::TYPE_SPEED:
-		fLength = 100000;
+		fLength = 70000;
 		break;
 	case CPlayer::TYPE_REACH:
 		fLength = 200000;
@@ -1179,12 +1180,12 @@ void C3DCharactor::Homing_CPU(void)
 			m_nActionTimer = 60;
 		}
 	}
-	else if (fCompare >= fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true)
+	else if (fCompare >= fLength && GetThisCharactor()->GetWordManager()->GetBulletFlag() == true && m_CpuThink != THINK_MISSING)
 	{// 距離外で弾を持っている時
 		float	fMinCircle = fLength;
 		int nNumWP = 0;
 
-#if 0
+#if 1
 		//位置情報を取得
 		m_pWayPointPos = &m_pWayPoint->ReturnPointMove();
 		//移動可能なマスは何マスあるか
@@ -1229,9 +1230,49 @@ void C3DCharactor::Homing_CPU(void)
 			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 		}
 #endif
-		WayPointMove_CPU();
+		//WayPointMove_CPU();
 	}
+	else if (m_CpuThink == THINK_MISSING)
+	{// 近くに敵がいなくて見失ったとき
+		float	fMinCircle = 100000000;
+		int nNumWP = 0;
+#if 1
+		//目標のマスの位置を渡す
+		m_MarkWayPoint = PlayerPos[nNearPlayer];
+		// 目的の角度
+		float fDestAngle = atan2f((m_MarkWayPoint.x - sinf(rot.y)) - Pos.x, (m_MarkWayPoint.z - cosf(rot.y)) - Pos.z);
+		// 差分
+		float fDiffAngle = fDestAngle - rot.y;
+		DiffAngle(fDiffAngle);
+		//移動
+		move.x += sinf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
+		move.z += cosf(atan2f(m_MarkWayPoint.x - Pos.x, m_MarkWayPoint.z - Pos.z)) * speed;
 
+		//移動中に壁にぶつかった
+		if (m_bFront == true)
+		{
+			m_CpuThink = THINK_ROTATION;
+			m_nActionTimer = 2;
+			m_CpuRotation = (CPU_ROTATION)(rand() % 2);
+			m_bFront = false;
+		}
+
+		if (GetThisCharactor()->GetMotion() != 6 &&
+			GetThisCharactor()->GetMotion() != 7)
+		{//今のモーションがステップでも弾打ちでもなければ
+		 //モーション分け
+			if (GetThisCharactor()->GetWordManager()->GetBulletFlag())
+			{
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_SETUP_WALK, CPlayer::UPPER_BODY);
+			}
+			else
+			{
+				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
+			}
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
+		}
+#endif
+	}
 }
 
 //=============================================================================
@@ -1381,17 +1422,9 @@ void C3DCharactor::PickUP_CPU(void)
 		pScene = pSceneNext;
 	}
 
-	if (GetThisCharactor()->GetWordManager()->GetCntNum() ==  2 && bTango == false)
-	{//
-		m_CpuThink = THINK_ATTACK;
-		m_nActionTimer = 60;
-		bWord = true;
-	}
-
 	//ワードが範囲内にある時移動する
 	if (bWord == true)
 	{
-		//WayPointMove_CPU();
 		WayPointRoute_CPU();
 		m_nActionTimer = 120;
 	}
@@ -1428,7 +1461,7 @@ void C3DCharactor::HaveBullet_CPU(void)
 	}
 	else
 	{//近くに敵がいない
-		m_CpuThink = THINK_WAYPOINTMOVE;
+		m_CpuThink = THINK_MISSING;
 		m_CpuMove = CPU_MOVE_FRONT;
 		m_nActionTimer = 60;
 	}
@@ -1568,6 +1601,15 @@ void C3DCharactor::WayPointMove_CPU(void)
 			m_bRandomGoal = false;
 		}
 	}
+	else if(m_bRandomGoal == false)
+	{//たどり着けない状態が続いた
+		m_nTimerMove++;
+		if (m_nTimerMove >= 150)
+		{
+			m_nTimerMove = 0;
+			m_bNotWayPoint = true;
+		}
+	}
 
 	if (m_bNotWayPoint == true)
 	{
@@ -1603,6 +1645,9 @@ void C3DCharactor::WayPointMove_CPU(void)
 		}
 		GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 	}
+
+	//距離を記憶
+	m_fOldCircle = fCircle;
 
 #ifdef _DEBUG
 	CDebugProc::Print("cfcfcf", "目標のマスの位置 : X ", m_MarkWayPoint.x, " Y ", m_MarkWayPoint.y, " Z ", m_MarkWayPoint.z);
