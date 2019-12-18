@@ -181,13 +181,19 @@ public:
 		MODEL_KUKURI,	// くくり
 		MODEL_CORK,		// こるく
 
-						// なふだ
-						// サンゴ
-						
-						// するめ
-						// すずめ
-						// コアラ
+		MODEL_NAUDA,	// なふだ						
+		MODEL_SURUME,	// するめ
+		MODEL_SUZUME,	// すずめ
+		MODEL_COARA,	// コアラ
 
+
+		MODEL_TITAN,	// チタン
+		MODEL_KANAGU,	// カナグ
+		MODEL_ZARAME,	// ざらめ
+		MODEL_ZUKAN,	// 図鑑
+		MODEL_SUBUTA,	// 酢豚
+		MODEL_SUZURI,	// すずり
+		MODEL_KAIKO,	// カイコ
 		MODEL_MAX
 	} MODEL;
 

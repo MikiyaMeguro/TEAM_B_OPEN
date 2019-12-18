@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 90					# 読み込んだモデルの最大番号をいれてください
+NUM_MODEL = 101				# 読み込んだモデルの最大番号をいれてください
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -90,6 +90,7 @@ MODEL_FILENAME = data/MODEL/Salad.x"				#73 さらだ
 MODEL_FILENAME = data/MODEL/Mennma.x"				#74 メンマ
 MODEL_FILENAME = data/MODEL/Tarako.x"				#75 たらこ
 
+
 MODEL_FILENAME = data/MODEL/Husuma.x"				#76 ふすま
 MODEL_FILENAME = data/MODEL/Tance.x"				#77 たんす
 MODEL_FILENAME = data/MODEL/Nameko.x"				#78 なめこ
@@ -99,12 +100,25 @@ MODEL_FILENAME = data/MODEL/Kanna.x"				#81 かんな
 MODEL_FILENAME = data/MODEL/Iei.x"					#82 いえい
 MODEL_FILENAME = data/MODEL/Eye.x"					#83 めだま
 
-MODEL_FILENAME = data/MODEL/Husuma.x"				#84 すだち
-MODEL_FILENAME = data/MODEL/Husuma.x"				#85 りんす
-MODEL_FILENAME = data/MODEL/Husuma.x"				#86 らんぷ
-MODEL_FILENAME = data/MODEL/Husuma.x"				#87 さんご
-MODEL_FILENAME = data/MODEL/Husuma.x"				#88 すまい
-MODEL_FILENAME = data/MODEL/Husuma.x"				#89 くくり
-MODEL_FILENAME = data/MODEL/Husuma.x"				#90 こるく
+MODEL_FILENAME = data/MODEL/Sudachi.x"				#84 すだち
+MODEL_FILENAME = data/MODEL/Rinse.x"				#85 りんす
+MODEL_FILENAME = data/MODEL/Lamp.x"					#86 らんぷ
+MODEL_FILENAME = data/MODEL/Sango.x"				#87 さんご
+MODEL_FILENAME = data/MODEL/StageOBJ/House.x"		#88 すまい
+MODEL_FILENAME = data/MODEL/Kukuri.x"				#89 くくり
+MODEL_FILENAME = data/MODEL/Cork.x"					#90 こるく
+
+MODEL_FILENAME = data/MODEL/NameTag.x"				#91 なふだ 
+MODEL_FILENAME = data/MODEL/Surume.x"				#92 するめ 
+MODEL_FILENAME = data/MODEL/Suzume.x"				#93 すずめ 
+MODEL_FILENAME = data/MODEL/Korea.x"				#94 コアラ
+
+MODEL_FILENAME = data/MODEL/Ti.x"					#95 チタン
+MODEL_FILENAME = data/MODEL/Korea.x"				#96 カナグ
+MODEL_FILENAME = data/MODEL/Korea.x"				#97 ざらめ
+MODEL_FILENAME = data/MODEL/Korea.x"				#98 図鑑
+MODEL_FILENAME = data/MODEL/Korea.x"				#99 すぶた
+MODEL_FILENAME = data/MODEL/Korea.x"				#100 すずり
+MODEL_FILENAME = data/MODEL/Korea.x"				#101 かいこ
 
 END_SCRIPT		# この行は絶対消さないこと！

@@ -206,7 +206,7 @@ void CWordManager::Update(void)
 					m_nStock[m_nCntStock] = nCntAnswer;
 					if (CManager::GetTube(m_nPlayerID) != NULL)
 					{
-						CManager::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType], m_nCntStock);
+						CManager::GetTube(m_nPlayerID)->SetAnswer(nCntAnswer, m_nCntStock);
 						CManager::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
 						CManager::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 					}
