@@ -619,10 +619,10 @@ END_MODELSET
 
 MODELSET						# ’n‰º
 	TYPE = 3
-	POS = 0.0 -60.1 0.0
+	POS = 0.0 -200.0 0.0
 	ROT = 0.0 0.0 0.0
-	SCALE = 19.9 3.0 19.9
-	COLLISION = 12
+	SCALE = 20.0 20.0 20.0
+	COLLISION = 1
 	GIMMICK = 0					# ”z’u‚ÌŽí—Þ‚ðŒˆ‚ß‚é
 END_MODELSET
 
