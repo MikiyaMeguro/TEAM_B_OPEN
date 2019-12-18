@@ -1474,7 +1474,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\game105\\Desktop\\ステー時用\\くくり\\Titen.jpg";
+    "data\\TEXTURE\\UV\\Titen.jpg";
    }
   }
  }
