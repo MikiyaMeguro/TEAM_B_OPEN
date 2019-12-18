@@ -162,6 +162,8 @@ public:
 		MODEL_SARADA,	// サラダ
 		MODEL_MENMA,	// メンマ
 		MODEL_TARAKO,	// たらこ
+
+
 		MODEL_HUSUMA,	// ふすま
 		MODEL_TANCE,	// たんす
 		MODEL_NAMEKO,	// なめこ
@@ -179,7 +181,12 @@ public:
 		MODEL_KUKURI,	// くくり
 		MODEL_CORK,		// こるく
 
-
+						// なふだ
+						// サンゴ
+						
+						// するめ
+						// すずめ
+						// コアラ
 
 		MODEL_MAX
 	} MODEL;
