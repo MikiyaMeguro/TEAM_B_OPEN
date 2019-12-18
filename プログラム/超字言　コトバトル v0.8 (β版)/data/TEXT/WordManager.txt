@@ -1144,7 +1144,7 @@ END_MODELSET
 MODELSET
 	TYPE = 100					# かなぐ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 0.6 0.6 0.6			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 20.0 7.0
 	ANSWERMODEL = 95			# 答えのモデル
@@ -1154,7 +1154,7 @@ END_MODELSET
 MODELSET
 	TYPE = 101					# ざらめ
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 10.0 38.0 33.0
 	ANSWERMODEL = 96			# 答えのモデル
