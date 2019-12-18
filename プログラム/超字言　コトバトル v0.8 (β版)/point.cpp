@@ -22,7 +22,7 @@
 #define TIMER_SPACE			(10.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
 #define POWER_X				(10)
-#define POINT_POS_1P_ONE	(D3DXVECTOR3(155.0f, 100.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define POINT_POS_1P_ONE	(D3DXVECTOR3(1203.0f, 682.0f, 0.0f))	// 順位の位置(1Pだけの場合)
 #define POINT_POS_2P_ONE	(D3DXVECTOR3(835.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define POINT_POS_3P_ONE	(D3DXVECTOR3(1035.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
 #define POINT_POS_4P_ONE	(D3DXVECTOR3(1235.0f, 60.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
@@ -334,7 +334,7 @@ void CPoint::UIPosition(int nID)
 	{	// 1, 3, 4画面 1Pの位置
 		if (m_nNumPlayer == 1)
 		{
-			posIcon = D3DXVECTOR3(45.0f, 85.0f, 0.0f);
+			posIcon = D3DXVECTOR3(42.5f, 37.0f, 0.0f);
 			posNumber = D3DXVECTOR3(45.0f, 31.0f, 0.0f);
 
 			sizeIcon = D3DXVECTOR3(60.0f, 50.0f, 0.0f);
@@ -376,7 +376,7 @@ void CPoint::UIPosition(int nID)
 
 	else if (m_nNumPlayer == 2 && nID == 0)
 	{	// 2画面 1P
-		posIcon = D3DXVECTOR3(185.0f, 85.0f, 0.0f);
+		posIcon = D3DXVECTOR3(185.0f, 40.0f, 0.0f);
 		posNumber = D3DXVECTOR3(185.0f, 31.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(60.0f, 50.0f, 0.0f);
@@ -384,7 +384,7 @@ void CPoint::UIPosition(int nID)
 	}
 	else if (nID == 1 && m_nNumPlayer == 2)
 	{	// 2画面 2P
-		posIcon = D3DXVECTOR3(185.0f, 440.0f, 0.0f);
+		posIcon = D3DXVECTOR3(188.0f, 405.0f, 0.0f);
 		posNumber = D3DXVECTOR3(185.0f, 386.0f, 0.0f);
 
 		sizeIcon = D3DXVECTOR3(60.0f, 50.0f, 0.0f);
@@ -484,7 +484,7 @@ void CPoint::RankPos(void)
 		if (m_nNumPlayer == 1)
 		{
 			pos = POINT_POS_1P_ONE;
-			m_RnakSize = D3DXVECTOR3(80.0f, 80.0f, 0.0f);
+			m_RnakSize = D3DXVECTOR3(100.0f, 100.0f, 0.0f);
 		}
 		if (m_nNumPlayer == 3 || m_nNumPlayer == 4)
 		{
@@ -511,12 +511,12 @@ void CPoint::RankPos(void)
 
 	else if (m_nNumPlayer == 2 && m_nID == 0)
 	{	// 2画面 1P
-		pos = D3DXVECTOR3(POINT_POS_1P_ONE.x + 140.0f, POINT_POS_1P_ONE.y, POINT_POS_1P_ONE.z);
+		pos = D3DXVECTOR3(POINT_POS_1P_ONE.x - 120.0f, POINT_POS_1P_ONE.y / 2 - 10, POINT_POS_1P_ONE.z);
 		m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 	}
 	else if (m_nID == 1 && m_nNumPlayer == 2)
 	{	// 2画面 2P
-		pos = D3DXVECTOR3(POINT_POS_2P_TWO.x + 140.0f, POINT_POS_2P_TWO.y + 20.0f, POINT_POS_2P_TWO.z);
+		pos = D3DXVECTOR3(POINT_POS_2P_TWO.x + 932.0f, POINT_POS_2P_TWO.y + 265, POINT_POS_2P_TWO.z);
 		m_RnakSize = D3DXVECTOR3(70.0f, 70.0f, 0.0f);
 	}
 
