@@ -171,7 +171,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "Ti.jpg";
+    "data\\TEXTURE\\UV\\Ti.jpg";
    }
   }
  }
