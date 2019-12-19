@@ -134,7 +134,7 @@ void CScene3D::Draw(void)
 {
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();			// デバイス取得
 
-	D3DXMATRIX mtxRot, mtxTrans, mtxView;		// 計算用マトリックス
+	D3DXMATRIX mtxView;		// 計算用マトリックス
 	if (m_bLigntEffect == false)
 	{
 		// ライト影響
@@ -185,27 +185,13 @@ void CScene3D::Draw(void)
 
 	if (m_scene3dType == SCENE3DTYPE_NORMAL || m_scene3dType == SCENE3DTYPE_ADDSYNTHESIS)
 	{
-		// 回転を反映
-		D3DXMatrixRotationYawPitchRoll(&mtxRot, m_rot.y, m_rot.x, m_rot.z);
-		D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+		CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,m_rot);
 	}
 	else if (m_scene3dType == SCENE3DTYPE_BILLBOARD || m_scene3dType == SCENE3DTYPE_BILLEFFECT)
 	{//	ビルボード　			加算合成ありビルボードエフェクト
 	 // 逆行列
-		m_mtxWorld._11 = mtxView._11;
-		m_mtxWorld._12 = mtxView._21;
-		m_mtxWorld._13 = mtxView._31;
-		m_mtxWorld._21 = mtxView._12;
-		m_mtxWorld._22 = mtxView._22;
-		m_mtxWorld._23 = mtxView._32;
-		m_mtxWorld._31 = mtxView._13;
-		m_mtxWorld._32 = mtxView._23;
-		m_mtxWorld._33 = mtxView._33;
+		CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_pos,D3DXVECTOR3(0.0f,0.0f,0.0f),NULL,D3DXVECTOR3(1.0f,1.0f,1.0f),&mtxView);
 	}
-
-	// 位置を反映
-	D3DXMatrixTranslation(&mtxTrans, m_pos.x, m_pos.y, m_pos.z);
-	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
 
 	// ワールドマトリックスの設定
 	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
