@@ -755,7 +755,7 @@ void CTime::TimeManagement(void)
 #ifdef _DEBUG
 	if (CManager::GetRepeat() == true)
 	{
-		nFlameSecond = 1;
+		nFlameSecond = 3;
 	}
 #endif
 	if (m_nTimeCount % nFlameSecond == 0)
