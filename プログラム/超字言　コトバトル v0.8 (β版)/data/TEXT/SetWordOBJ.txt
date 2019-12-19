@@ -115,9 +115,9 @@ MODEL_FILENAME = data/MODEL/Suzume.x"				#93 すずめ
 MODEL_FILENAME = data/MODEL/Ti.x"					#94 チタン
 MODEL_FILENAME = data/MODEL/Metallic.x"				#95 カナグ
 MODEL_FILENAME = data/MODEL/Zarame.x"				#96 ざらめ
-MODEL_FILENAME = data/MODEL/Korea.x"				#97 図鑑
+MODEL_FILENAME = data/MODEL/Book.x"					#97 図鑑
 MODEL_FILENAME = data/MODEL/Korea.x"				#98 すぶた
-MODEL_FILENAME = data/MODEL/Korea.x"				#99 すずり
+MODEL_FILENAME = data/MODEL/Suzuri.x"				#99 すずり
 MODEL_FILENAME = data/MODEL/Kiko.x"					#100 かいこ
 
 END_SCRIPT		# この行は絶対消さないこと！

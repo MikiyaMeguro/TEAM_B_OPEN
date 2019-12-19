@@ -1175,7 +1175,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 7.0 5.0 45.0
+	ANSWER = 12.0 5.0 45.0
 	ANSWERMODEL = 96			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
@@ -1185,7 +1185,7 @@ MODELSET
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 7.0 27.0 15.0
+	ANSWER = 12.0 27.0 15.0
 	ANSWERMODEL = 97			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
