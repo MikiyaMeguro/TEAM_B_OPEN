@@ -121,7 +121,7 @@ private:
 	float						m_fSpace;										//幅
 	float						m_fInitYpos;									//メニューの初期高さ
 	CScene2D					*m_apPolygon_ModeSel[MAX_SELECTMODE_MODESEL];	// メニューのポリゴン
-	
+
 	/* モード選択 */
 	MENU_TYPE					m_MenuType;										// メニューのタイプ
 	SELECTMENU					m_aModeSelectMenu[MAX_SELECTMENU];				// セレクトメニュー
@@ -134,7 +134,7 @@ private:
 
 	/* リザルト */
 	CScene3D					*m_apPolygon3D_Ranking;
-	CScene2D					*m_apPolygon2D_Ranking[MAX_SELECTMODE_RANKING];	
+	CScene2D					*m_apPolygon2D_Ranking[MAX_SELECTMODE_RANKING];
 	bool						m_bResultFade;
 
 	/* 演出面変数 */
@@ -146,6 +146,10 @@ private:
 	float m_fChangeMode;	//選択中モードアイコンの移動制御カウンター
 	float m_fMoveMode;		//選択中モードアイコンの移動量を計る
 	float m_fResultAlpha;	//リザルトのマスクのalpha値を保管
+
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 
 #endif

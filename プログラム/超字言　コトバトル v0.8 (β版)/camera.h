@@ -12,7 +12,7 @@
 class C3DCharactor;
 
 #define ANGLE_MOVE  (0.03f) //カメラ角度の移動量
-#define CAMERA_POSR_COEFFICIENT (0.50f) 	//カメラ注視点の係数
+#define CAMERA_POSR_COEFFICIENT (0.40f) 	//カメラ注視点の係数
 #define CAMERA_POSV_COEFFICIENT (0.35f)	    //カメラ視点の係数
 
 #define CAMERA_ROT_COEFFICIENT (0.20f)		//カメラ角度の係数

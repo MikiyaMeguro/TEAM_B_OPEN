@@ -308,10 +308,10 @@ void C3DCharactor::Update(void)
 
 	if (m_pWayPoint != NULL)
 	{
-		CDebugProc::Print("cfcfcf", "MarkWayPoint : X ", m_MarkWayPoint.x, " Y ", m_MarkWayPoint.y, " Z ", m_MarkWayPoint.z);
-		CDebugProc::Print("cn", "m_bGoal : ", (int)m_bGoal);
-		CDebugProc::Print("cn", "m_bNearWard : ", (int)m_bNearWard);
-		CDebugProc::Print("cn", "m_bSearch : ", (int)m_bSearch);
+	CDebugProc::Print("cfcfcf", "MarkWayPoint : X ", m_MarkWayPoint.x, " Y ", m_MarkWayPoint.y, " Z ", m_MarkWayPoint.z);
+	CDebugProc::Print("cn", "m_bGoal : ", (int)m_bGoal);
+	CDebugProc::Print("cn", "m_bNearWard : ", (int)m_bNearWard);
+	CDebugProc::Print("cn", "m_bSearch : ", (int)m_bSearch);
 	}
 
 	switch (m_CpuThink)
@@ -1616,7 +1616,7 @@ void C3DCharactor::WayPointMove_CPU(void)
 			m_bRandomGoal = false;
 		}
 	}
-	else if(m_bRandomGoal == false)
+	else if (m_bRandomGoal == false && m_bNotWayPoint == false)
 	{//‚½‚Ç‚è’…‚¯‚È‚¢ó‘Ô‚ª‘±‚¢‚½
 		m_nTimerMove++;
 		if (m_nTimerMove >= 150)
@@ -1634,7 +1634,17 @@ void C3DCharactor::WayPointMove_CPU(void)
 		{
 			m_nTimerMove = 0;
 			m_bRandomGoal = true;
+			m_CpuThink = THINK_NONE;
 		}
+	}
+
+	//ˆÚ“®’†‚É•Ç‚É‚Ô‚Â‚©‚Á‚½
+	if (m_bFront == true)
+	{
+		m_CpuThink = THINK_ROTATION;
+		m_nActionTimer = 2;
+		m_CpuRotation = (CPU_ROTATION)(rand() % 2);
+		m_bFront = false;
 	}
 
 	// –Ú“I‚ÌŠp“x

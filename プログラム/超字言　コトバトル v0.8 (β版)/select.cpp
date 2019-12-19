@@ -63,9 +63,9 @@ void CSelect::Uninit(void)
 //=============================================================================
 void CSelect::Update(void)
 {
-#ifdef _DEBUG
-	CDebugProc::Print("c", "セレクト");
-#endif
+	//フェードを取得
+	CManager *pManager = NULL;
+	CFade *pFade = pManager->GetFade();
 }
 
 //=============================================================================

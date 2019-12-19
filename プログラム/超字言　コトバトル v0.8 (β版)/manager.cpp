@@ -57,6 +57,19 @@ CInputXPad *CManager::m_pXInput[MAX_PLAYER] = {};
 CManager::MODE CManager::m_mode = CManager::MODE_SELECT;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
+#ifdef _DEBUG
+//回数カウント用 trueならリピートモード
+bool CManager::bRepeatGame = false;
+
+int CManager::nTitleCnt    = 0;
+int CManager::nSelectCnt   = 0;
+int CManager::nTutoCnt     = 0;
+int CManager::nCharaSelCnt = 0;
+int CManager::nStaSelCnt   = 0;
+int CManager::nGameCnt     = 0;
+int CManager::nResultCnt   = 0;
+#endif
+
 //=============================================================================
 // マネージャクラスのコンストラクタ
 //=============================================================================
@@ -402,6 +415,14 @@ void CManager::Update(void)
 #ifdef _DEBUG
 	// デバック表示を消す
 	CDebugProc::ReleseStr();
+	//回数カウント用
+	CDebugProc::Print("cn", "nTitleCnt    = ", nTitleCnt);
+	CDebugProc::Print("cn", "nSelectCnt   = ", nSelectCnt);
+	CDebugProc::Print("cn", "nTutoCnt     = ", nTutoCnt);
+	CDebugProc::Print("cn", "nCharaSelCnt = ", nCharaSelCnt);
+	CDebugProc::Print("cn", "nStaSelCnt   = ", nStaSelCnt);
+	CDebugProc::Print("cn", "nGameCnt     = ", nGameCnt);
+	CDebugProc::Print("cn", "nResultCnt   = ", nResultCnt);
 
 	CDebugProc::Print("cn", "FADESTATE = ", (int)m_pFade->GetFade());
 #endif
@@ -697,6 +718,11 @@ void CManager::SetMode(MODE mode)
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TITLE);
 				// 初期化処理
 				m_pTitle->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nTitleCnt++;
+#endif
+
 			}
 			else
 			{
@@ -719,6 +745,10 @@ void CManager::SetMode(MODE mode)
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_CHARACTERSELECT);
 				// 初期化処理
 				m_pCharaSelect->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nCharaSelCnt++;
+#endif
 			}
 			else
 			{
@@ -740,6 +770,10 @@ void CManager::SetMode(MODE mode)
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_STAGESELECT);
 				// 初期化処理
 				m_pStageSelect->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nStaSelCnt++;
+#endif
 			}
 			else
 			{
@@ -761,6 +795,10 @@ void CManager::SetMode(MODE mode)
 				m_pSound[0]->PlaySound(m_pSound[0]->SOUND_LABEL_BGM_GAME000);
 				// 初期化処理
 				m_pGame->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nGameCnt++;
+#endif
 			}
 			else
 			{
@@ -784,6 +822,10 @@ void CManager::SetMode(MODE mode)
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_RANKING);
 				// 初期化処理
 				m_pResult->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nResultCnt++;
+#endif
 			}
 			else
 			{
@@ -805,6 +847,10 @@ void CManager::SetMode(MODE mode)
 				//リザルトのBGMを再生
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_TUTORIAL);
 				m_pTutorial->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nTutoCnt++;
+#endif
 			}
 			else
 			{
@@ -828,6 +874,10 @@ void CManager::SetMode(MODE mode)
 				m_pSound[0]->PlaySound(CSound::SOUND_LABEL_BGM_SELECT);
 				// 初期化処理
 				m_pSelect->Init();
+#ifdef _DEBUG
+				//回数カウント用
+				nSelectCnt++;
+#endif
 			}
 			else
 			{

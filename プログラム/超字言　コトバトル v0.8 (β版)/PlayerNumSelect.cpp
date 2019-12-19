@@ -453,6 +453,18 @@ void CPlayerSelect::Update(void)
 	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
 #endif
 
+#ifdef _DEBUG
+	if (CManager::GetRepeat() == true)
+	{
+		nCntFadeTime++;
+		if (nCntFadeTime > 30)
+		{
+			m_SelectMode = SELECTPLAYER_4P;
+			pFade->SetFade(pManager->MODE_TUTORIAL, pFade->FADE_OUT);
+		}
+	}
+#endif
+
 }
 
 //=============================================================================

@@ -231,6 +231,18 @@ void CSelectMenu::Update(void)
 		SelectAnimation(m_nSelect);
 
 		SetSelectAnimation(POLYGONTYPE_BG, ANIMTYPE_X, 8, 4, 1, 15);
+#ifdef _DEBUG
+		if (CManager::GetRepeat() == true)
+		{
+			nCntFadeTime++;
+			if (nCntFadeTime > 30)
+			{
+				m_SelectMode = SELECT_MENU_ONE;
+				MenuDecide(SELECT_MENU_ONE);
+			}
+		}
+#endif
+
 		break;
 
 	case MENU_TYPE_RESULT:
@@ -258,6 +270,7 @@ void CSelectMenu::Update(void)
 #ifdef _DEBUG
 	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
 #endif
+
 }
 
 //=============================================================================

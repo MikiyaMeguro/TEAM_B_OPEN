@@ -22,7 +22,7 @@ class CScene2D;
 #define COL_DEFAULT_TRANSPARENT (D3DXCOLOR(1.0f,1.0f,1.0f,0.0f))		// 色:透明
 #define COL_PRODUCTION_HUMAN (D3DXCOLOR(1.0f,1.0f,1.0f,0.8f))			// 背景(人間)の変更後の色
 #define POS_DEFOLT (D3DXVECTOR3(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,0.0f))	// 画面の中心座標
-#define TITLEROGO_CORRECTION (28.0f)									// タイトルロゴの微調整値	
+#define TITLEROGO_CORRECTION (28.0f)									// タイトルロゴの微調整値
 
 //クラス（シーン2Dの派生クラス）
 class CTitle
@@ -87,7 +87,7 @@ private:
 		FLASHSTATE_FINISH	// フラッシュの終了
 
 	}FLASHSTATE;
-		
+
 	CScene2D* m_pScene2D[MAX_TITLEPOLYGON];	//シーン2Dのポインタ
 	/* 演出全体変数 */
 	PRODUCTIONSTATE m_ProductionState;		//演出の状態
@@ -109,5 +109,9 @@ private:
 
 	/* タイトルロゴ変数 */
 	float m_fTitleScal;						//拡縮のサイズ
+
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 #endif
