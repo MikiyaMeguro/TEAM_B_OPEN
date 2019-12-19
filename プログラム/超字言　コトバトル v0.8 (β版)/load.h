@@ -184,7 +184,6 @@ public:
 		MODEL_NAUDA,	// なふだ						
 		MODEL_SURUME,	// するめ
 		MODEL_SUZUME,	// すずめ
-		MODEL_COARA,	// コアラ
 
 
 		MODEL_TITAN,	// チタン

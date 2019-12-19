@@ -6,7 +6,7 @@
 #============================================================
 SCRIPT			# この行は絶対消さないこと！
 
-	ANSWERNUM = 109			# モデル数
+	ANSWERNUM = 108			# モデル数
 
 #------------------------------------------------------------
 #    モデルファイル名
@@ -60,7 +60,7 @@ SCRIPT			# この行は絶対消さないこと！
 	# 46 : なまこ
 	# 47 : コンブ
 	# 48 : らいち
-	# 49 : かめん
+	# 49 : マスク
 	# 50 : めかぶ
 	# 51 : くすり
 	# 52 : かいが
@@ -86,7 +86,7 @@ SCRIPT			# この行は絶対消さないこと！
 	# 72 : さらだ
 	# 73 : メンマ
 	# 74 : たらこ
-	# 55 : マスク = 49番の仮面と同じ
+	# 75 : かめん = 49番のマスクと同じ
 	# 76 : いふく = 68番のいるいと同じ
 
 	
@@ -108,20 +108,19 @@ SCRIPT			# この行は絶対消さないこと！
 	# 92 : なふだ
 	# 93 : するめ
 	# 94 : すずめ
-	# 95 : こあら
-	# 96 : チタン
-	# 97 : やさい = サラダ 74
-	# 98 : ふめん = 楽譜 61
-	# 99 : マグマ = かざん 30
-	# 100 : かなぐ
-	# 101 : ざらめ
-	# 102 : カマス = さかな 29
-	# 103 : たたら = ふいご 45
-	# 104 : ずかん
-	# 105 : すぶた
-	# 106 : すずり
-	# 107 ; かいこ
-	# 108 : めだか = さかな 29
+	# 95 : チタン
+	# 96 : やさい = サラダ 74
+	# 97 : ふめん = 楽譜 61
+	# 98 : マグマ = かざん 30
+	# 99 : かなぐ
+	# 100 : ざらめ
+	# 101 : カマス = さかな 29
+	# 102 : たたら = ふいご 45
+	# 103 : ずかん
+	# 104 : すぶた
+	# 105 : すずり
+	# 106 ; かいこ
+	# 107 : めだか = さかな 29
 	
 #------------------------------------------------------------
 #                      文字の情報
@@ -630,11 +629,11 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 49					# かめん
+	TYPE = 49					# マスク
 	ROT = 0.0 1.57 0.0			# 向き 
 	SCALE = 1.4 1.4 1.4			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 5.0 33.0 45.0
+	ANSWER = 30.0 12.0 7.0
 	ANSWERMODEL = 49			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
@@ -891,11 +890,11 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 75					# マスク
+	TYPE = 75					# かめん 
 	ROT = 0.0 1.57 0.0			# 向き 
 	SCALE = 1.4 1.4 1.4			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 30.0 12.0 7.0
+	ANSWER = 5.0 33.0 45.0 
 	ANSWERMODEL = 49			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
@@ -1092,27 +1091,17 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 95					# こあら
+	TYPE = 95					# チタン
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 9.0 0.0 38.0
+	ANSWER = 16.0 15.0 45.0
 	ANSWERMODEL = 93			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
-	TYPE = 96					# チタン
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 16.0 15.0 45.0
-	ANSWERMODEL = 94			# 答えのモデル
-	POINT = 2					# 獲得ポイント
-END_MODELSET
-
-MODELSET
-	TYPE = 97					# やさい
+	TYPE = 96					# やさい
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
@@ -1122,7 +1111,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 98					# ふめん
+	TYPE = 97					# ふめん
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
@@ -1132,7 +1121,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 99					# まぐま
+	TYPE = 98					# まぐま
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
@@ -1142,27 +1131,27 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 100					# かなぐ
+	TYPE = 99					# かなぐ
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 0.6 0.6 0.6			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 5.0 20.0 7.0
+	ANSWERMODEL = 94			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 100					# ざらめ
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.2 1.2 1.2			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 10.0 38.0 33.0
 	ANSWERMODEL = 95			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
-	TYPE = 101					# ざらめ
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.2 1.2 1.2			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 10.0 38.0 33.0
-	ANSWERMODEL = 96			# 答えのモデル
-	POINT = 2					# 獲得ポイント
-END_MODELSET
-
-MODELSET
-	TYPE = 102					# カマス
+	TYPE = 101					# カマス
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
@@ -1172,7 +1161,7 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 103					# たたら
+	TYPE = 102					# たたら
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
@@ -1182,47 +1171,47 @@ MODELSET
 END_MODELSET
 
 MODELSET
-	TYPE = 104					# ずかん
+	TYPE = 103					# ずかん
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 7.0 5.0 45.0
+	ANSWER = 12.0 5.0 45.0
+	ANSWERMODEL = 96			# 答えのモデル
+	POINT = 2					# 獲得ポイント
+END_MODELSET
+
+MODELSET
+	TYPE = 104					# すぶた
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.0 1.0 1.0			# スケール
+	BULLETTYPE = 2				# 弾の種類
+	ANSWER = 12.0 27.0 15.0
 	ANSWERMODEL = 97			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
-	TYPE = 105					# すぶた
+	TYPE = 105					# すずり
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 7.0 27.0 15.0
+	ANSWER = 12.0 12.0 39.0
 	ANSWERMODEL = 98			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
-	TYPE = 106					# すずり
+	TYPE = 106					# かいこ
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 12.0 12.0 39.0
+	ANSWER = 5.0 1.0 9.0
 	ANSWERMODEL = 99			# 答えのモデル
 	POINT = 2					# 獲得ポイント
 END_MODELSET
 
 MODELSET
-	TYPE = 107					# かいこ
-	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.0 1.0 1.0			# スケール
-	BULLETTYPE = 2				# 弾の種類
-	ANSWER = 5.0 1.0 9.0
-	ANSWERMODEL = 100			# 答えのモデル
-	POINT = 2					# 獲得ポイント
-END_MODELSET
-
-MODELSET
-	TYPE = 108					# めだか
+	TYPE = 107					# めだか
 	ROT = 0.0 0.0 0.0			# 向き 
 	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類

@@ -135,12 +135,6 @@ HRESULT CPlayerSelect::Init(void)
 
 	//オブジェクト種類の設定
 	CScene::SetObjType(CScene::OBJTYPE_MODESELECT);
-
-	/* コマンド */
-	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_BACKSPACE);
-	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_X);
-	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_PRESS, CInputXPad::XPAD_LEFT_SHOULDER);
-
 	return S_OK;
 }
 

@@ -497,12 +497,6 @@ void CTutorial::Update(void)
 		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
 	}
 
-	if (pInputKeyboard->GetTrigger(DIK_BACKSPACE) == true)
-	{
-		CEffect::Create(D3DXVECTOR3(0.0f, 30.0f, 0.0f), 4, 4);
-	}
-
-
 #ifdef _DEBUG
 	CDebugProc::Print("c", "チュートリアル");
 	if (CManager::GetRepeat() == true)

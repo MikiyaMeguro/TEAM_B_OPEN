@@ -33,7 +33,7 @@
 //=============================================================================
 // ê√ìIÉÅÉìÉoïœêî
 //=============================================================================
-D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(99.0f, 99.0f, 99.0f);
+D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(NOT_NUM, NOT_NUM, NOT_NUM);
 int CWordManager::m_nAnswerDataNum = 0;
 D3DXVECTOR3 *CWordManager::m_Scale = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 D3DXVECTOR3 *CWordManager::m_rot = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);

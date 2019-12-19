@@ -84,7 +84,7 @@ void CInputKeyboard::Update(void)
 			m_aState[nCntKey].KeyStateTrigger = (m_aState[nCntKey].KeyState ^ aKeyState[nCntKey]) & aKeyState[nCntKey];//トリガー
 			m_aState[nCntKey].KeyState = aKeyState[nCntKey];//プレス
 			m_aState[nCntKey].KeyStateRepeat = 0;
-
+			m_aState[nCntKey].KeyStateHold = 0;
 			if (GetPress(nCntKey))
 			{
 				m_aState[nCntKey].nCntRepeatTime++;

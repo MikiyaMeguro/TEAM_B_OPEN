@@ -9,7 +9,7 @@ SCRIPT			# この行は絶対消さないこと！
 #------------------------------------------------------------
 #         モデル数 ※プログラム内でも変更してください
 #------------------------------------------------------------
-NUM_MODEL = 101				# 読み込んだモデルの最大番号をいれてください
+NUM_MODEL = 100				# 読み込んだモデルの最大番号をいれてください
 
 #------------------------------------------------------------
 #    モデルファイル名  ※プログラム内でも変更してください
@@ -111,14 +111,13 @@ MODEL_FILENAME = data/MODEL/Cork.x"					#90 こるく
 MODEL_FILENAME = data/MODEL/NameTag.x"				#91 なふだ 
 MODEL_FILENAME = data/MODEL/Surume.x"				#92 するめ 
 MODEL_FILENAME = data/MODEL/Suzume.x"				#93 すずめ 
-MODEL_FILENAME = data/MODEL/Korea.x"				#94 コアラ
 
-MODEL_FILENAME = data/MODEL/Ti.x"					#95 チタン
-MODEL_FILENAME = data/MODEL/Metallic.x"				#96 カナグ
-MODEL_FILENAME = data/MODEL/Zarame.x"				#97 ざらめ
-MODEL_FILENAME = data/MODEL/Korea.x"				#98 図鑑
-MODEL_FILENAME = data/MODEL/Korea.x"				#99 すぶた
-MODEL_FILENAME = data/MODEL/Korea.x"				#100 すずり
-MODEL_FILENAME = data/MODEL/Kiko.x"					#101 かいこ
+MODEL_FILENAME = data/MODEL/Ti.x"					#94 チタン
+MODEL_FILENAME = data/MODEL/Metallic.x"				#95 カナグ
+MODEL_FILENAME = data/MODEL/Zarame.x"				#96 ざらめ
+MODEL_FILENAME = data/MODEL/Book.x"					#97 図鑑
+MODEL_FILENAME = data/MODEL/Sububu.x"				#98 すぶた
+MODEL_FILENAME = data/MODEL/Suzuri.x"				#99 すずり
+MODEL_FILENAME = data/MODEL/Kiko.x"					#100 かいこ
 
 END_SCRIPT		# この行は絶対消さないこと！

@@ -196,26 +196,29 @@ bool  CCommand::CheckKey_XPad(CInputXPad* pInputX, INPUT_STATE InputState, int n
 
 	if (pInputX != NULL)
 	{//XPadクラスが生成されていたら
-		switch (InputState)
+		if (pInputX->GetConnect() == true)
 		{
-		case INPUTSTATE_PRESS:	//プレス
-			bCommand = pInputX->GetPress((CInputXPad::XPAD_KEY)nKey);
-			break;
-		case INPUTSTATE_TRIGGER://トリガー
-			bCommand = pInputX->GetTrigger((CInputXPad::XPAD_KEY)nKey);
-			break;
-		case INPUTSTATE_RELEASE://リリース
-			bCommand = pInputX->GetRelease((CInputXPad::XPAD_KEY)nKey);
-			break;
-		case INPUTSTATE_NOTPRESS://ノットプレス(押してない時)
-			bCommand = !(pInputX->GetPress((CInputXPad::XPAD_KEY)nKey));
-			break;
-		case INPUTSTATE_REPEAT://リピート
-			bCommand = pInputX->GetRepeat((CInputXPad::XPAD_KEY)nKey);
-			break;
-		case INPUTSTATE_HOLD://ホールド
-			bCommand = pInputX->GetHold((CInputXPad::XPAD_KEY)nKey);
-			break;
+			switch (InputState)
+			{
+			case INPUTSTATE_PRESS:	//プレス
+				bCommand = pInputX->GetPress((CInputXPad::XPAD_KEY)nKey);
+				break;
+			case INPUTSTATE_TRIGGER://トリガー
+				bCommand = pInputX->GetTrigger((CInputXPad::XPAD_KEY)nKey);
+				break;
+			case INPUTSTATE_RELEASE://リリース
+				bCommand = pInputX->GetRelease((CInputXPad::XPAD_KEY)nKey);
+				break;
+			case INPUTSTATE_NOTPRESS://ノットプレス(押してない時)
+				bCommand = !(pInputX->GetPress((CInputXPad::XPAD_KEY)nKey));
+				break;
+			case INPUTSTATE_REPEAT://リピート
+				bCommand = pInputX->GetRepeat((CInputXPad::XPAD_KEY)nKey);
+				break;
+			case INPUTSTATE_HOLD://ホールド
+				bCommand = pInputX->GetHold((CInputXPad::XPAD_KEY)nKey);
+				break;
+			}
 		}
 	}
 

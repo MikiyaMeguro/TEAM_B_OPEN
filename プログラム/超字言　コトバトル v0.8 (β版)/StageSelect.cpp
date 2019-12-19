@@ -108,10 +108,6 @@ void CStageSelect::Init(void)
 	m_pcStageSelect[0] = MACHINE_STAGE_MACHINE;
 	m_pcStageSelect[1] = MACHINE_STAGE_WEATHER;
 
-	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_TRIGGER, DIK_BACKSPACE);
-	CCommand::RegistCommand("", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_X);
-	CCommand::RegistCommand("DELETE", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_TRIGGER, CInputXPad::XPAD_LEFT_SHOULDER);
-
 }
 
 //=============================================================================

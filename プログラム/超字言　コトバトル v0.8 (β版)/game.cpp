@@ -327,10 +327,10 @@ void CGame::Update(void)
 	}
 
 	//時間停止(デバック用)
-	if (CCommand::GetCommand("TIMECOUNT_STOP"))
-	{
-		CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
-	}
+	//if (CCommand::GetCommand("TIMECOUNT_STOP"))
+	//{
+	//	CTime::SetTimeFlag(!(CTime::GetTimeFlag()));	//現在のフラグを反転させる
+	//}
 
 	RankingUpdata();	// 順位を常に変更
 
