@@ -749,7 +749,14 @@ void CTime::TimeManagement(void)
 		m_bChangeStage = true;
 	}
 
-	if (m_nTimeCount % 60 == 0)
+	//リピートモードの時は早く
+	int nFlameSecond = 60;
+	if (CManager::GetRepeat() == true)
+	{
+		nFlameSecond = 4;
+	}
+
+	if (m_nTimeCount % nFlameSecond == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
 		m_nStageChange++;

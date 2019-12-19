@@ -86,7 +86,7 @@ private:
 		PRODUCTION_FADERANK,			// 順位フェードイン
 		PRODUCTION_FALL_ICON,			// アイコン降下
 		PRODUCTION_TURN_STAND,			// アイコン回転(裏→立てる)
-		PRODUCTION_TURN,				// アイコン回転（立った状態→表）			
+		PRODUCTION_TURN,				// アイコン回転（立った状態→表）
 		PRODUCTION_TURN_TABLE,			// アイコン回転(表完全開示)
 		PRODUCTION_TURN_FADEPLNUM,		// プレイヤーナンバーフェード
 		PRODUCTION_COLLOUT_EXPANSION,	// ポイント枠を表示
@@ -147,5 +147,9 @@ private:
 	EFFECTPRO_STATE m_EffectState;				//エフェクトの状態管理
 	PRODUCTION m_Production;					//演出
 	MASKPRODUCION m_MaskPro;					//カーテンの演出
+
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 #endif

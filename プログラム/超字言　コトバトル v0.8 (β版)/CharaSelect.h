@@ -105,7 +105,7 @@ private:
 	void Initpointer(void);											//ポインタの初期化
 	void ScrollMenu(CHARASEL_POLYGONTYPE type, float fScroolSpeed);	//テクスチャスクロール処理
 	void InitCharaSelectPoly(void);									//ポインタの初期化
-	bool ConfirmationSelect(void);									//プレイヤーが全員選択したか確認する												
+	bool ConfirmationSelect(void);									//プレイヤーが全員選択したか確認する
 	bool collisionConf(int operation);								//確定ポリとあたり判定
 	bool ProductionConf(void);										//確定ポリの演出
 	void FlashConf(void);											//確定ポリの点滅
@@ -133,6 +133,9 @@ private:
 	float m_fCharaCardPro_FinishWH[2];								//選択カードの最終幅と高さ
 	float m_fGaugeSizeX[MAX_PLAYER];								//戻るゲージの長さを保管
 	float m_fMaxGaugeX[MAX_PLAYER];									//ゲージの最大の長さ
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 
 };
 #endif

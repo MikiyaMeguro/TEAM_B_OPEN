@@ -178,6 +178,22 @@ void CCharaSelect::Update(void)
 	SetBackModeTex();
 #ifdef _DEBUG
 	CDebugProc::Print("c", "キャラセレクト");
+	if (CManager::GetRepeat() == true)
+	{
+		nCntFadeTime++;
+		if (nCntFadeTime > 120)
+		{
+			m_CharaType[0] = CPlayer::TYPE_BARANCE;
+			m_CharaType[1] = CPlayer::TYPE_POWER;
+			m_CharaType[2] = CPlayer::TYPE_SPEED;
+			m_CharaType[3] = CPlayer::TYPE_REACH;
+			for (int nCnt = 0; nCnt < *m_PlayerNum; nCnt++)
+			{//プレイヤー人数分キャラの種類を渡す
+				CGame::SetCharaSelect(nCnt, m_CharaType[nCnt]);
+			}
+			pFade->SetFade(pManager->MODE_STAGESELECT, pFade->FADE_OUT);
+		}
+	}
 #endif
 }
 

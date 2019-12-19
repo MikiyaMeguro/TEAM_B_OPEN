@@ -47,7 +47,7 @@ void CDebugProc::Init(void)
 	}
 
 	// デバッグ情報表示用フォントの生成
-	D3DXCreateFont(pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
+	D3DXCreateFont(pDevice, 23, 0, 0, 0, FALSE, SHIFTJIS_CHARSET,
 		OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &m_pFont);
 #endif
 
@@ -133,7 +133,7 @@ void CDebugProc::Draw(void)
 	RECT rect = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 
 	//色指定
-	D3DXCOLOR col = D3DXCOLOR(1.0f,1.0f,1.0f,1.0f);
+	D3DXCOLOR col = D3DXCOLOR(1.0f,0.0f,0.0f,1.0f);
 	// テキスト描画
 	m_pFont->DrawText(NULL, m_strDebug.c_str(), -1, &rect, DT_LEFT, col);
 

@@ -27,5 +27,9 @@ public:
 	//メンバ変数
 private:
 	int m_nTimer;		//終了タイマー加算
+
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 #endif
