@@ -528,7 +528,7 @@ void CTime::Update(void)
 					CResult::SetRanking(nCntPlayer, CGame::GetPlayer(nCntPlayer)->GetID(), CGame::GetPlayerType(nCntPlayer), CGame::GetPlayer(nCntPlayer)->GetMovetype(), CGame::GetPoint(nCntPlayer)->GetPoint());
 				}
 
-				CFade::SetFade(CManager::MODE_RESULT, CFade::FADE_OUT);
+				CFade::SetFade(CManager::MODE_GAME, CFade::FADE_OUT);
 			}
 		}
 
@@ -749,13 +749,15 @@ void CTime::TimeManagement(void)
 		m_bChangeStage = true;
 	}
 
+
 	//リピートモードの時は早く
 	int nFlameSecond = 60;
+#ifdef _DEBUG
 	if (CManager::GetRepeat() == true)
 	{
-		nFlameSecond = 4;
+		nFlameSecond = 1;
 	}
-
+#endif
 	if (m_nTimeCount % nFlameSecond == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
