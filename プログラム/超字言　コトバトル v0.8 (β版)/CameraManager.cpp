@@ -235,6 +235,24 @@ bool CCameraManager::SetCameraAngle(LPCSTR Tag, float fAngle)
 }
 
 //===================================================================
+// カメラの注視点設定処理
+//===================================================================
+bool CCameraManager::SetCameraPosR(LPCSTR Tag, D3DXVECTOR3 posR, bool bLeap)
+{
+	CCamera* pCamera = CameraSearch(Tag);
+	if (pCamera != NULL)
+	{
+		pCamera->SetPosRDest(posR);//差分値に値を入れる
+		if (bLeap == false)
+		{//ワープさせる時は直接posRにも入れる
+			pCamera->SetPosR(posR);
+		}
+		return true;
+	}
+	return false;
+}
+
+//===================================================================
 // 背景色設定処理
 //===================================================================
 bool CCameraManager::SetBackGroundColor(LPCSTR Tag, D3DXCOLOR col)

@@ -69,6 +69,9 @@ public:
 	//カメラの画角の設定
 	bool SetCameraAngle(LPCSTR Tag,float fAngle);
 
+	//カメラの注視点設定
+	bool SetCameraPosR(LPCSTR Tag,D3DXVECTOR3 posR,bool bLeap);
+
 	//カメラの長さ設定
 	bool SetCameraLength(LPCSTR Tag,float fLength);
 
