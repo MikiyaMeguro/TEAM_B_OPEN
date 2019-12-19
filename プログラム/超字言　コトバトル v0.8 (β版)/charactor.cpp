@@ -1056,7 +1056,7 @@ void C3DCharactor::Homing_CPU(void)
 		fLength = 70000;
 		break;
 	case CPlayer::TYPE_SPEED:
-		fLength = 70000;
+		fLength = 60000;
 		break;
 	case CPlayer::TYPE_REACH:
 		fLength = 200000;
