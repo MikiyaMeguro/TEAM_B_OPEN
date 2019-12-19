@@ -318,8 +318,8 @@ void CTube::SetAnswer(int nAnswer, int nStock)
 		else if (NOT_NUM != m_nAnswerModelNum)
 		{	// 正解のモデルを出す
 			m_pAnswerModel[nStock] = CScene2D::Create(m_AnswerPos, "モデル_TEX", 3);
-			m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * 0.1f), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
-						D3DXVECTOR2(0.1f + ((m_nAnswerModelNum / 10) * 0.1f), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
+			m_pAnswerModel[nStock]->SetTex(D3DXVECTOR2(0.0f + ((m_nAnswerModelNum / 10) * (1.0f / 12.0f)), 0.0f + ((m_nAnswerModelNum % 10) * 0.1f)),
+						D3DXVECTOR2((1.0f / 12.0f) + ((m_nAnswerModelNum / 10) * (1.0f / 12.0f)), 0.1f + ((m_nAnswerModelNum % 10) * 0.1f)));
 		}
 		//	文字で作れるモデルをまとめた画像に変える
 		m_pAnswerModel[nStock]->SetWidthHeight(0.0f, 0.0f);	// サイズ設定
