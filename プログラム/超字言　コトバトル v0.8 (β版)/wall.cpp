@@ -208,12 +208,12 @@ void CWall::Update(void)
 		{
 			m_nAnimCounter++;
 			m_TexCounter++;
-			if (m_TexCounter > 74)
+			if (m_TexCounter > 107)
 			{
 				m_TexCounter = 0;
 			}
-			SetAnimationTex(D3DXVECTOR2(0.0f + ((m_TexCounter / 10) * 0.125f), 0.0f + ((m_TexCounter % 10) * 0.1f)),
-				D3DXVECTOR2(0.125f + ((m_TexCounter / 10) * 0.125f), 0.125f + ((m_TexCounter % 10) * 0.1f)));
+			SetAnimationTex(D3DXVECTOR2(0.0f + ((m_TexCounter / 10) * 0.1f), 0.0f + ((m_TexCounter % 10) * 0.1f)),
+				D3DXVECTOR2(0.1f + ((m_TexCounter / 10) * 0.1f), 0.125f + ((m_TexCounter % 10) * 0.1f)));
 		}
 	}
 	else if (m_nType == 20)
