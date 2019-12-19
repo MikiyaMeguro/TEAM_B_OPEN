@@ -1344,7 +1344,7 @@ void C3DCharactor::Attack_CPU(void)
 			m_CpuThink = THINK_NONE;
 			m_nMachineGunTime = 0;
 		}
-		else if (GetThisCharactor()->GetWordManager()->GetStock(0) == 99)
+		else if (GetThisCharactor()->GetWordManager()->GetStock(0) == NOT_NUM)
 		{//ƒSƒ~ƒ‚ƒfƒ‹—p‚Ì”­ŽË
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition() + m_MachineGunPos, CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), NULL);
 			m_bMachineGun = false;
