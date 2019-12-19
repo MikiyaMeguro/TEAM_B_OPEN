@@ -122,7 +122,9 @@ public:
 	static CSound *GetSound(void) { return m_pSound[0]; }			// サウンド取得
 
 	static CCameraManager* GetCameraManager(void) { return m_pCameraManager; };
+#ifdef _DEBUG
 	static bool GetRepeat(void) { return bRepeatGame; };
+#endif
 
 	//複数のモードが持っている値を取得
 	static CPlayer* GetPlayer(int nID);
