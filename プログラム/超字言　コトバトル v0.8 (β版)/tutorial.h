@@ -28,9 +28,9 @@ class CStageSelect;
 // マクロ定義
 //*****************************************************************************
 #define MAX_TUTORIAL			(3)
-#define CAMERA_LENGTH_1P_PLAY (300.0f)				//カメラの距離(1pプレイ用)
-#define CAMERA_LENGTH_2P_PLAY (300.0f)				//カメラの距離(2pプレイ用)
-#define CAMERA_LENGTH_3P4P_PLAY (300.0f)			//カメラの距離(3p4pプレイ用)
+#define CAMERA_LENGTH_1P_PLAY (250.0f)				//カメラの距離(1pプレイ用)
+#define CAMERA_LENGTH_2P_PLAY (220.0f)				//カメラの距離(2pプレイ用)
+#define CAMERA_LENGTH_3P4P_PLAY (180.0f)			//カメラの距離(3p4pプレイ用)
 #define CAMERA_LENGTH_TOPVIEW_PLAY (650.0f)			//カメラの距離(3pプレイ時のトップビューカメラ用)
 
 #define CAMERA_ROTX (-(D3DX_PI * 0.5f))		//カメラのデフォルト角度(X)
