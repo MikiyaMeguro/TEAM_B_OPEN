@@ -33,7 +33,7 @@
 //=============================================================================
 // Ã“Iƒƒ“ƒo•Ï”
 //=============================================================================
-D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(99.0f, 99.0f, 99.0f);
+D3DXVECTOR3 *CWordManager::m_AnswerNum = &D3DXVECTOR3(NOT_NUM, NOT_NUM, NOT_NUM);
 int CWordManager::m_nAnswerDataNum = 0;
 D3DXVECTOR3 *CWordManager::m_Scale = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 D3DXVECTOR3 *CWordManager::m_rot = &D3DXVECTOR3(0.0f, 0.0f, 0.0f);
@@ -206,7 +206,7 @@ void CWordManager::Update(void)
 					m_nStock[m_nCntStock] = nCntAnswer;
 					if (CManager::GetTube(m_nPlayerID) != NULL)
 					{
-						CManager::GetTube(m_nPlayerID)->SetAnswer(m_nAnswerTypeModel[m_nCreateType], m_nCntStock);
+						CManager::GetTube(m_nPlayerID)->SetAnswer(nCntAnswer, m_nCntStock);
 						CManager::GetTube(m_nPlayerID)->SetPoint(m_nPoint[m_nCreateType], m_nPlayerID, false);
 						CManager::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 					}
