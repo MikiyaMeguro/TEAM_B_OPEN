@@ -258,6 +258,7 @@ private:
 
 	bool m_bInbush[4];
 
+	int m_nShotCameraMove;
 };
 
 #endif // !_PLAYER_H_
