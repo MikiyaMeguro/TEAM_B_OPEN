@@ -187,10 +187,17 @@ HRESULT CPlayer::Init(void)
 	m_nCntTransTime = 0;
 	m_pLockOnCharactor = NULL;
 	//コマンドセット
-	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_LSHIFT);
+	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_SPACE);
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
 
-	CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
+	//CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_HOLD, DIK_SPACE);
+
+	CCommand::RegistCommand("SELF_AIM_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_UP);
+	CCommand::RegistCommand("SELF_AIM_DOWN", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_DOWN);
+	CCommand::RegistCommand("SELF_AIM_LEFT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_LEFT);
+	CCommand::RegistCommand("SELF_AIM_RIGHT", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_PRESS, DIK_RIGHT);
+
 	return S_OK;
 }
 
@@ -304,6 +311,7 @@ void CPlayer::Update(void)
 				{	// 手動エイムの場合
 					BulletRot.y = m_fBulletRotOld;
 					m_pCharactorMove->GetRotation().y = BulletRot.y;
+					BulletUIUninit();
 				}
 
 				//発射方向保持
@@ -324,11 +332,28 @@ void CPlayer::Update(void)
 				}
 			}
 
-			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID))
+			if (CCommand::GetCommand("PLAYER_SELF_AIM", m_nID) == true)
 			{
-				if (CManager::GetXInput(m_nID) != NULL)
+				//まずキーボードの矢印キーから角度を決める
+				if (CCommand::GetCommand("SELF_AIM_LEFT"))
+				{
+					if (CCommand::GetCommand("SELF_AIM_UP")) { m_fBulletRotOld = D3DX_PI * -0.25f; }
+					else if (CCommand::GetCommand("SELF_AIM_DOWN")) { m_fBulletRotOld = D3DX_PI * -0.75f; }
+					else { m_fBulletRotOld = D3DX_PI * -0.5f; }
+				}
+				else if (CCommand::GetCommand("SELF_AIM_RIGHT"))
+				{
+					if (CCommand::GetCommand("SELF_AIM_UP")) { m_fBulletRotOld = D3DX_PI * 0.25f; }
+					else if (CCommand::GetCommand("SELF_AIM_DOWN")) { m_fBulletRotOld = D3DX_PI * 0.75f; }
+					else { m_fBulletRotOld = D3DX_PI * 0.5f; }
+				}
+				else if (CCommand::GetCommand("SELF_AIM_UP")) {m_fBulletRotOld = D3DX_PI * 0.0f; }
+				else if (CCommand::GetCommand("SELF_AIM_DOWN")) { m_fBulletRotOld = D3DX_PI * 1.0f; }
+
+				//パッドが刺さっている場合はパッドの右スティック角度を優先する
+				if (CManager::GetXInput(m_nID) != NULL && CManager::GetXInput(m_nID)->GetConnect() == true)
 				{//スティック角を取得して発射角とする
-					if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
+              		if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
 					{	// 右のスティックを動かしてない場合
 						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRotOld(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y);
 					}
@@ -344,10 +369,9 @@ void CPlayer::Update(void)
 
 				if (m_pWordManager->GetStockNum() > 0)
 				{
-					BulletUI(m_BulletRot);		// 弾発射表示
+            		BulletUI(m_BulletRot);		// 弾発射表示
 					pCameraManager->SetCameraLength(m_ChildCameraName, 300.0f);
 				}
-
 
 				m_bAssist = false;//セルフエイムモードに設定
 			}
@@ -355,11 +379,12 @@ void CPlayer::Update(void)
 			{
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_BulletRot.y = BulletRot.y;
-				m_bAssist = true;
 				pCameraManager->SetCameraLength(m_ChildCameraName, 350.0f);
-
 				BulletUIUninit();
+				m_bAssist = true;
 			}
+
+			CDebugProc::Print("cn","bAssist = ", (m_bAssist == true) ? 1 : 0);
 
 			//マシンガン発射
 			if (m_bMachineGun == true)
@@ -378,7 +403,7 @@ void CPlayer::Update(void)
 						m_bMachineGun = false;
 						m_pWordManager->Reset();
 					}
-					else if (m_pWordManager->GetStock(0) == 99)
+					else if (m_pWordManager->GetStock(0) == NOT_NUM)
 					{//ゴミモデル用の発射
 						m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
 						if (m_nMachineGunTime % 20 == 0)

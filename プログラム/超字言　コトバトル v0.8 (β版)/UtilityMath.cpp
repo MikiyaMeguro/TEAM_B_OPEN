@@ -34,14 +34,14 @@ D3DXMATRIX* CUtilityMath::CalWorldMatrix(D3DXMATRIX* pOut, const D3DXVECTOR3& po
 
 		//出来た行列に回転を反映してワールドマトリックスに入れる
 		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
-		D3DXMatrixMultiply(pOut, &mtxInv, &mtxRot);
+		D3DXMatrixMultiply(&mtxRot, &mtxInv, &mtxRot);
 	}
 	else
 	{//ビルボードでないなら
 		//普通に回転を反映
 		D3DXMatrixRotationYawPitchRoll(&mtxRot, rot.y, rot.x, rot.z);
-		D3DXMatrixMultiply(pOut, pOut, &mtxRot);
 	}
+	D3DXMatrixMultiply(pOut, pOut, &mtxRot);
 
 	//拡大縮小の反映
 	D3DXMatrixScaling(&mtxScale, scale.x, scale.y, scale.z);
@@ -144,7 +144,6 @@ float CUtilityMath::RoundF_n(float& fValue, const int nRound)
 //	IN = 初めのほうに掛ける　OUT = 後ろのほうに掛ける　INOUT = 両方に掛ける
 //	QUAD = 二次関数の変形(QuadFunc.)　CUBIC = 三次関数の変形(CubicFunc.)　
 //	EXPO = 指数関数の変形(ExpoFunc.)
-//
 //=============================================================================
 float CEasingFunc::Easing(CEasingFunc::EASE_TYPE type, float& fTime)
 {
