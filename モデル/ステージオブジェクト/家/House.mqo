@@ -2,13 +2,13 @@ Metasequoia Document
 Format Text Ver 1.0
 
 Scene {
-	pos -15.2629 -91.5773 3840.0000
+	pos -93.5493 -248.1500 6144.0000
 	lookat 0.0000 0.0000 0.0000
-	head -0.1036
-	pich 0.4536
+	head 0.3764
+	pich 0.0936
 	bank 0.0000
 	ortho 0
-	zoom2 1.9531
+	zoom2 1.2207
 	amb 0.250 0.250 0.250
 	dirlights 1 {
 		light {
@@ -18,7 +18,7 @@ Scene {
 	}
 }
 Material 1 {
-	"initialShadingGroup" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("C:\Users\game109\Desktop\フォルダー\チーム制作_WWW\天候ステージ\三角屋根の家\House.jpg")
+	"initialShadingGroup" col(1.000 1.000 1.000 1.000) dif(0.800) amb(0.600) emi(0.000) spc(0.000) power(5.00) tex("House.jpg")
 }
 Object "obj1" {
 	visible 15
