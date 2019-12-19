@@ -189,6 +189,7 @@ HRESULT CPlayer::Init(void)
 	m_ChildCameraName = "";
 	m_nCntTransTime = 0;
 	m_pLockOnCharactor = NULL;
+	m_nShotCameraMove = 0;
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_SPACE);
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
@@ -398,16 +399,29 @@ void CPlayer::Update(void)
 				}
 
 				m_bAssist = false;//セルフエイムモードに設定
+				m_nShotCameraMove = -1;
 			}
 			else
 			{
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_BulletRot.y = BulletRot.y;
-				pCameraManager->SetCameraLength(m_ChildCameraName, fCameraLength);
 				BulletUIUninit();
+				if (m_bAssist == false)
+				{
+					m_nShotCameraMove = 90;
+				}
 				m_bAssist = true;
 			}
 
+			if (m_nShotCameraMove > -1)
+			{
+				m_nShotCameraMove--;
+				if (m_nShotCameraMove <= 0)
+				{
+					pCameraManager->SetCameraLength(m_ChildCameraName, fCameraLength);
+					m_nShotCameraMove = -1;
+				}
+			}
 			CDebugProc::Print("cn","bAssist = ", (m_bAssist == true) ? 1 : 0);
 
 			//マシンガン発射
