@@ -21,25 +21,25 @@
 //=============================================================================
 #define CENTER_WIDTH		(SCREEN_WIDTH / 2)				// Xの中心座標
 #define TIMER_SPACE1P2P		(18.0f)							// 数字と数字の間のサイズ(ゲーム時間)
-#define TIMER_SPACE3P4P		(38.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_SPACE3P4P		(22.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_WIDTH1P2P		(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
-#define TIMER_WIDTH3P4P		(40.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_WIDTH3P4P		(30.0f)							// 数字と数字の間のサイズ(ゲーム時間)
 #define TIMER_HEIGHT1P2P	(20.0f)							// 数字と数字の間のサイズ(ゲーム時間)
-#define TIMER_HEIGHT3P4P	(20.0f)							// 数字と数字の間のサイズ(ゲーム時間)
-#define TIMER_POSITION_Y	(70.0f)							// タイマーのY座標(ゲーム時間)
+#define TIMER_HEIGHT3P4P	(15.0f)							// 数字と数字の間のサイズ(ゲーム時間)
+#define TIMER_POSITION_Y	(40.0f)							// タイマーのY座標(ゲーム時間)
 #define GAME_TIME			(130)							// ゲーム開始時の時間
 #define GAME_TIME_MAX		(9)								// ゲームの時間最大数
 #define POWER_X				(10)
-#define TIME_POS_1P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 70.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
-#define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
-#define TIME_POS_3P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 140.0f, 440.0f, 0.0f))	// 制限時間の位置(3Pだけの場合)
-#define TIME_POS_4P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 40.0f, 380.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define TIME_POS_1P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 30.0f, 70.0f, 0.0f))	// 制限時間の位置(1Pだけの場合)
+#define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 50.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
+#define TIME_POS_3P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 150.0f, 440.0f, 0.0f))	// 制限時間の位置(3Pだけの場合)
+#define TIME_POS_4P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 160.0f, 380.0f, 0.0f))	// 制限時間の位置(4Pだけの場合)
 #define WAIT_TIME_END		(180)							// 待ち時間
 
 #define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
 #define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))	// デフォルトサイズ
 #define DEFAULT_SIZE1P2P	(D3DXVECTOR3(12.0f, 20.0f, 0.0f))	// デフォルトサイズ
-#define DEFAULT_SIZE3P4P	(D3DXVECTOR3(22.0f, 30.0f, 0.0f))	// デフォルトサイズ
+#define DEFAULT_SIZE3P4P	(D3DXVECTOR3(12.0f, 20.0f, 0.0f))	// デフォルトサイズ
 #define SCALE_CHANGE_TIME	(10)								// スケール変化の時間
 #define SCALE_UI			(100)								// UIの大きさ
 #define SCALE_UI_WIDTH		(200)								// UIの大きさ
@@ -193,13 +193,13 @@ HRESULT CTime::Init(void)
 	// Timeのロゴ
 	if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
 	{
-		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_WIDTH1P2P, TIMER_HEIGHT1P2P, "TIME");
-		m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_HEIGHT1P2P, TIMER_WIDTH1P2P);
+		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(10.0f, 105.0f, 0.0f), TIMER_WIDTH1P2P, TIMER_HEIGHT1P2P, "TIME");
+		m_pLogo->SetBillboard(D3DXVECTOR3(10.0f, 115.0f, 0.0f), TIMER_HEIGHT1P2P, TIMER_WIDTH1P2P);
 	}
 	else
 	{
-		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(5.0f, 105.0f, 0.0f), TIMER_WIDTH3P4P, TIMER_HEIGHT3P4P, "TIME");
-		m_pLogo->SetBillboard(D3DXVECTOR3(5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P, TIMER_WIDTH3P4P);
+		m_pLogo = CSceneBillBoard::Create(D3DXVECTOR3(-5.0f, 105.0f, 0.0f), TIMER_WIDTH3P4P, TIMER_HEIGHT3P4P, "TIME");
+		m_pLogo->SetBillboard(D3DXVECTOR3(-5.0f, 120.0f, 0.0f), TIMER_HEIGHT3P4P, TIMER_WIDTH3P4P);
 	}
 	m_pLogo->SetCol(D3DXCOLOR(1.0f, 1.0f, 0.0f, 1.0f));
 	//ビルボード設定
@@ -211,7 +211,7 @@ HRESULT CTime::Init(void)
 		}
 		else
 		{
-			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-40.0f, 88.0f, 0.0f), 10.0f, 14.0f, "COLON");
+			m_pColon = CSceneBillBoard::Create(D3DXVECTOR3(-17.0f, 86.0f, 0.0f), 7.0f, 10.0f, "COLON");
 		}
 		m_pColon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
@@ -755,7 +755,7 @@ void CTime::TimeManagement(void)
 #ifdef _DEBUG
 	if (CManager::GetRepeat() == true)
 	{
-		nFlameSecond = 3;
+		nFlameSecond = 1;
 	}
 #endif
 	if (m_nTimeCount % nFlameSecond == 0)
