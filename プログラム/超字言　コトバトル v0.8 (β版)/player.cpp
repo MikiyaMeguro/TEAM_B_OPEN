@@ -378,7 +378,7 @@ void CPlayer::Update(void)
 						m_bMachineGun = false;
 						m_pWordManager->Reset();
 					}
-					else if (m_pWordManager->GetStock(0) == 99)
+					else if (m_pWordManager->GetStock(0) == NOT_NUM)
 					{//ƒSƒ~ƒ‚ƒfƒ‹—p‚Ì”­ŽË
 						m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
 						if (m_nMachineGunTime % 20 == 0)
