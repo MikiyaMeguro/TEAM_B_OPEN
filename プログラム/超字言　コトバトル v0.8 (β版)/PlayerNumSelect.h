@@ -99,7 +99,7 @@ private:
 	void ScrollMenu(PLNUMSELECTBGTYPE type, float fScroolSpeed);				//スクロール
 	void PlayerSelectMove(PLNUMSELECTBGTYPE type, int MenuNum);					//ポリゴン移動演出
 	void SetPlayerSelNumMenuPos(int MenuNum);									//選択肢の基本位置
-	void SetSelectAnimation(PLNUMSELECTBGTYPE type, ANIMTYPE AnimType, 
+	void SetSelectAnimation(PLNUMSELECTBGTYPE type, ANIMTYPE AnimType,
 		int MenuNum, int MaxAnimPatternX, int MaxAnimPatternY, int AnimSpeed);	//アニメーション
 
 	D3DXVECTOR3					m_InitPos;										//人数選択の初期位置
@@ -135,6 +135,10 @@ private:
 	int m_nPatturnAnim;		//アニメーションのパターン
 	float m_fChangeMode;	//選択中モードアイコンの移動制御カウンター
 	float m_fMoveMode;		//選択中モードアイコンの移動量を計る
+
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 
 #endif

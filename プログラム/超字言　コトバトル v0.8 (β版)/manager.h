@@ -122,7 +122,7 @@ public:
 	static CSound *GetSound(void) { return m_pSound[0]; }			// サウンド取得
 
 	static CCameraManager* GetCameraManager(void) { return m_pCameraManager; };
-
+	static bool GetRepeat(void) { return bRepeatGame; };
 
 	//複数のモードが持っている値を取得
 	static CPlayer* GetPlayer(int nID);
@@ -151,7 +151,19 @@ private:
 	static CCameraManager* m_pCameraManager;
 	static CInputXPad *m_pXInput[MAX_PLAYER];
 	static MODE m_mode;
-	static CSound			*m_pSound[MAX_SOUND];	// サウンドのポインタ
+	static CSound	*m_pSound[MAX_SOUND];	// サウンドのポインタ
+
+
+#ifdef _DEBUG
+	static bool bRepeatGame;
+	static int nTitleCnt;
+	static int nSelectCnt;
+	static int nTutoCnt;
+	static int nCharaSelCnt;
+	static int nStaSelCnt;
+	static int nGameCnt;
+	static int nResultCnt;
+#endif
 };
 
 //==================================================================================================//

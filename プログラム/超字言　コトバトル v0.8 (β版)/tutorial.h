@@ -78,6 +78,8 @@ private:
 	static int m_nNumStage;
 	static CPoint *m_pPoint[MAX_PLAYER];
 	CScene2D *m_pScene2D[UI_MAX];			// 2Dポリゴンへのポインタ
-
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 #endif

@@ -72,6 +72,10 @@ void CTitle::Init(void)
 
 	/* シーン2Dの初期設定処理 */
 	SetScene2D();
+
+#ifdef _DEBUG
+	nCntFadeTime = 0;
+#endif
 }
 
 //=============================================================================
@@ -141,8 +145,19 @@ void CTitle::Update(void)
 			}
 		}
 	}
+
+
 #ifdef _DEBUG
 	CDebugProc::Print("c", "タイトル");
+
+	if (CManager::GetRepeat() == true)
+	{
+		nCntFadeTime++;
+		if (nCntFadeTime > 600)
+		{
+			pFade->SetFade(pManager->MODE_SELECT, pFade->FADE_OUT);
+		}
+	}
 #endif
 }
 

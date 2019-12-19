@@ -543,9 +543,6 @@ void CResult::Update(void)
 	Production();
 	MaskPro();
 
-#ifdef _DEBUG
-	CDebugProc::Print("c", "リザルト");
-#endif
 	if (pInputKeyboard->GetTrigger(DIK_1) == true)
 	{
 		m_MaskPro = MASKPRODUCION_OPEN;
@@ -554,8 +551,24 @@ void CResult::Update(void)
 	{
 		m_MaskPro = MASKPRODUCION_CLOSE;
 	}
+#ifdef _DEBUG
+	CDebugProc::Print("c", "リザルト");
 
+	if (CManager::GetRepeat() == true)
+	{
+		nCntFadeTime++;
 
+		if (nCntFadeTime > 480)
+		{
+			m_bMenu = true;
+		}
+
+		if (nCntFadeTime > 1200)
+		{
+			pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
+		}
+	}
+#endif
 }
 
 //=============================================================================
@@ -678,7 +691,7 @@ void CResult::InitPointer(void)
 void CResult::SetPolygon(void)
 {
 	D3DXVECTOR3 Iconpos = {};
-	
+
 	m_apScene2D[RESULTTYPE_WINDOW] = CScene2D::Create(D3DXVECTOR3(SIZE_X, ((DEFAULT_SIZE*1.25f) / 2)+39.5f, 0.0f), "RANKING_WINDOW",1);
 	m_apScene2D[RESULTTYPE_WINDOW]->SetWidthHeight(DEFAULT_SIZE*6.2f, DEFAULT_SIZE*1.2f);
 	m_apScene2D[RESULTTYPE_WINDOW]->SetbDraw(false);
@@ -1110,7 +1123,7 @@ void CResult::SetNumCallout(int nNum,int nIconPos, CCharaBase::CHARACTOR_MOVE_TY
 			break;
 		case 1:
 			if (m_apScene2D[RESULTTYPE_CALLOUT_2] != NULL)
-			{								   
+			{
 				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetCol(DEFAULT_COL_COM);
 				m_apScene2D[RESULTTYPE_CALLOUT_2]->SetScene2DLeftCenter(D3DXVECTOR3(m_PlayerIconPos[nNum].x + (m_PlayerIconSize[nNum].x / 2), m_PlayerIconPos[nNum].y, 0.0f), DEFAULT_SIZE*0.7f, DEFAULT_SIZE*0.2f);
 			}

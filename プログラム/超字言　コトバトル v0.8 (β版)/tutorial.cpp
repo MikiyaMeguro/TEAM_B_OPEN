@@ -499,6 +499,14 @@ void CTutorial::Update(void)
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "チュートリアル");
+	if (CManager::GetRepeat() == true)
+	{
+		nCntFadeTime++;
+		if (nCntFadeTime > 30)
+		{
+			pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
+		}
+	}
 #endif
 }
 

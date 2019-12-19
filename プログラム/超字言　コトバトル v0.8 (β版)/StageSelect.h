@@ -111,5 +111,9 @@ private:
 	float m_fMaskAlpha;
 	int m_nCntAnim;													//アニメーションのカウンター
 	int m_nPatturnAnim;												//アニメーションのパターン
+
+#ifdef _DEBUG
+	int nCntFadeTime = 0;
+#endif
 };
 #endif

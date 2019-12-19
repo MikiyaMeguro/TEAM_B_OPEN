@@ -20,6 +20,9 @@
 #include "explosion.h"
 #include "CameraManager.h"
 #include "scene3D.h"
+
+#include "PlayerNumSelect.h"
+
 //=============================================================================
 // マクロ定義
 //=============================================================================
@@ -190,7 +193,7 @@ HRESULT CPlayer::Init(void)
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_SPACE);
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
 
-	//CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
+	CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_HOLD, CInputXPad::XPAD_RIGHT_SHOULDER);
 	CCommand::RegistCommand("PLAYER_SELF_AIM", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_HOLD, DIK_SPACE);
 
 	CCommand::RegistCommand("SELF_AIM_UP",CCommand::INPUTTYPE_KEYBOARD,CCommand::INPUTSTATE_PRESS,DIK_UP);
@@ -239,6 +242,27 @@ void CPlayer::Update(void)
 	CCameraManager* pCameraManager = CManager::GetCameraManager();
 
 	CPlayer *pPlayer[MAX_PLAYER];
+
+	float fCameraLength = 250.0f;
+
+	switch (*CPlayerSelect::GetModeSelectMode())
+	{
+	case CPlayerSelect::SELECTPLAYER_1P:
+		fCameraLength = 250.0f;
+		break;
+	case CPlayerSelect::SELECTPLAYER_2P:
+		fCameraLength = 220.0f;
+		break;
+	case CPlayerSelect::SELECTPLAYER_3P:
+		fCameraLength = 180.0f;
+		break;
+	case CPlayerSelect::SELECTPLAYER_4P:
+		fCameraLength = 180.0f;
+		break;
+
+	}
+
+
 	// プレイヤーを取得
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -370,7 +394,7 @@ void CPlayer::Update(void)
 				if (m_pWordManager->GetStockNum() > 0)
 				{
             		BulletUI(m_BulletRot);		// 弾発射表示
-					pCameraManager->SetCameraLength(m_ChildCameraName, 300.0f);
+					pCameraManager->SetCameraLength(m_ChildCameraName, fCameraLength + 100.0f);
 				}
 
 				m_bAssist = false;//セルフエイムモードに設定
@@ -379,7 +403,7 @@ void CPlayer::Update(void)
 			{
 				BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_BulletRot.y = BulletRot.y;
-				pCameraManager->SetCameraLength(m_ChildCameraName, 350.0f);
+				pCameraManager->SetCameraLength(m_ChildCameraName, fCameraLength);
 				BulletUIUninit();
 				m_bAssist = true;
 			}

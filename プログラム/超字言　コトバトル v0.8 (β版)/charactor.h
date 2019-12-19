@@ -183,6 +183,8 @@ public:
 	void Uninit(void) {};
 	void Update(void);
 
+	void SetCameraPosR(D3DXVECTOR3 posR) { m_CameraPosR = posR; };
+
 	D3DXVECTOR3 GetCameraPosR(void) { return m_CameraPosR; };
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
 

@@ -206,9 +206,20 @@ void CStageSelect::Update(void)
 	SetSelectAnimation(STAGESELECTTYPE_UI_OPERATION,0,4,1,15);
 
 #ifdef _DEBUG
-	CDebugProc::Print("c", "ステージセレクト");
-	CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
-	CDebugProc::Print("cf", "カメラRot : ", m_CameraRot.y);
+	//CDebugProc::Print("c", "ステージセレクト");
+	//CDebugProc::Print("cn", "m_nSelect : ", m_nSelect);
+	//CDebugProc::Print("cf", "カメラRot : ", m_CameraRot.y);
+
+	CDebugProc::Print("c", "タイトル");
+	if (CManager::GetRepeat() == true)
+	{
+		nCntFadeTime++;
+		if (nCntFadeTime > 120)
+		{
+			m_nSelect = 1;
+			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
+		}
+	}
 #endif
 }
 
