@@ -14,6 +14,7 @@
 #include "load.h"
 #include "texture.h"
 #include "debugProc.h"
+#include "credit.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -296,8 +297,9 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 			CPlayerSelect::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), 150);
 			Uninit();
 			break;
-		case SELECT_MENU_TWO:
-			//CFade::SetFade(CManager::MODE_TUTORIAL, pFade->FADE_OUT);
+		case SELECT_MENU_TWO:	// クレジット用
+			CCredit::Create();
+			Uninit();
 			break;
 		case SELECT_MENU_THREE:
 			CFade::SetFade(CManager::MODE_TITLE, pFade->FADE_OUT);
