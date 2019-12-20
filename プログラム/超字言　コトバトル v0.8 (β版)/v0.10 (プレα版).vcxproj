@@ -161,6 +161,7 @@
     <ClInclude Include="CharaSelect.h" />
     <ClInclude Include="CharaSelect_Cursol.h" />
     <ClInclude Include="Command.h" />
+    <ClInclude Include="credit.h" />
     <ClInclude Include="debugProc.h" />
     <ClInclude Include="effect.h" />
     <ClInclude Include="explosion.h" />
@@ -220,6 +221,7 @@
     <ClCompile Include="CharaSelect.cpp" />
     <ClCompile Include="CharaSelect_Cursol.cpp" />
     <ClCompile Include="Command.cpp" />
+    <ClCompile Include="credit.cpp" />
     <ClCompile Include="debugProc.cpp" />
     <ClCompile Include="effect.cpp" />
     <ClCompile Include="explosion.cpp" />
@@ -268,6 +270,9 @@
     <ClCompile Include="waypoint.cpp" />
     <ClCompile Include="word.cpp" />
     <ClCompile Include="word_manager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="toul.bin" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

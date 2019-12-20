@@ -172,6 +172,7 @@
     <ClCompile Include="shadow.cpp">
       <Filter>ソースファイル</Filter>
     </ClCompile>
+    <ClCompile Include="credit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bullet.h">
@@ -345,6 +346,7 @@
     <ClInclude Include="shadow.h">
       <Filter>ヘッダーファイル</Filter>
     </ClInclude>
+    <ClInclude Include="credit.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースファイル">
@@ -353,5 +355,8 @@
     <Filter Include="ヘッダーファイル">
       <UniqueIdentifier>{cc60e4b2-cae0-4cd4-935d-31873be29cfe}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="toul.bin" />
   </ItemGroup>
 </Project>
