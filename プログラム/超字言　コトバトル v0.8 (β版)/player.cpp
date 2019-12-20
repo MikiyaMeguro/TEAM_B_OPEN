@@ -69,6 +69,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_pMissileUI = NULL;
 	m_fBulletRotOld = 0.0f;
 	m_nTargetID = MAX_PLAYER;
+	m_bBulletFlag = false;
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
@@ -448,25 +449,37 @@ void CPlayer::Update(void)
 
 				if (m_PlayerType == TYPE_REACH)
 				{	// タイプがウサギならマシンガンの処理
-					if (m_nMachineGunTime % 10 == 0)
-					{//10フレームに一回弾発射
-						m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
-						m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
-						m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
+					if (m_pWordManager->GetStock(0) != NOT_NUM && m_bBulletFlag == false)
+					{
+						if (m_nMachineGunTime % 10 == 0)
+						{//10フレームに一回弾発射
+							m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
+							m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
+							m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
+						}
+						else if (m_nMachineGunTime > 60)
+						{//6回発射したら弾情報を削除
+							m_bMachineGun = false;
+							m_pWordManager->Reset();
+						}
 					}
-					else if (m_nMachineGunTime > 60)
-					{//6回発射したら弾情報を削除
-						m_bMachineGun = false;
-						m_pWordManager->Reset();
-					}
-					else if (m_pWordManager->GetStock(0) == NOT_NUM)
+					else if (m_pWordManager->GetStock(0) == NOT_NUM )
 					{//ゴミモデル用の発射
-						m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
-						if (m_nMachineGunTime % 20 == 0)
+						if (m_bBulletFlag == false)
 						{
+							m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
+							m_pWordManager->Reset();
+							m_bBulletFlag = true;
+						}
+					}
+
+					if (m_bBulletFlag == true)
+					{
+						if (m_nMachineGunTime % 10 == 0)
+						{
+							m_bBulletFlag = false;
 							m_bMachineGun = false;
 						}
-						m_pWordManager->Reset();
 					}
 				}
 				else if (m_PlayerType != TYPE_REACH)

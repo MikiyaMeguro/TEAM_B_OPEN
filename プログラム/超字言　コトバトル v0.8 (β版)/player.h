@@ -259,6 +259,7 @@ private:
 	bool m_bInbush[4];
 
 	int m_nShotCameraMove;
+	bool m_bBulletFlag;
 };
 
 #endif // !_PLAYER_H_

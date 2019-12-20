@@ -54,7 +54,7 @@ CResult *CManager::m_pResult = NULL;
 CFade *CManager::m_pFade = NULL;
 CCharacterMove *CManager::m_pCharacterMove = NULL;
 CInputXPad *CManager::m_pXInput[MAX_PLAYER] = {};
-CManager::MODE CManager::m_mode = CManager::MODE_SELECT;	//ゲーム起動時のモード
+CManager::MODE CManager::m_mode = CManager::MODE_TITLE;	//ゲーム起動時のモード
 CSound	*CManager::m_pSound[MAX_SOUND] = {};
 
 #ifdef _DEBUG
