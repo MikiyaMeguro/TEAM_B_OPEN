@@ -492,7 +492,7 @@ void CTutorial::Update(void)
 	}
 
 	//”CˆÓ‚ÌƒL[ENTER
-	if (CCommand::GetCommand("PAUSE"))
+	if (CCommand::GetCommand("PAUSE") || CManager::GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
 		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
 	}
