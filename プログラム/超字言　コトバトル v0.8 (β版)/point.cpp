@@ -340,13 +340,13 @@ void CPoint::UIPosition(int nID)
 		{
 			//位置
 			posIcon = D3DXVECTOR3(56.0f, 49.0f, 0.0f);
-			posNumber = D3DXVECTOR3(83.0f, 78.0f, 0.0f);
-			posBg = D3DXVECTOR3(83.0f, 78.0f, 0.0f);
+			posNumber = D3DXVECTOR3(85.0f, 79.0f, 0.0f);
+			posBg = D3DXVECTOR3(83.0f, 79.0f, 0.0f);
 
 			//大きさ
 			sizeIcon = D3DXVECTOR3(80.0f, 70.0f, 0.0f);
-			sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
-			sizeBg = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
+			sizeNumber = D3DXVECTOR3(60.0f, 30.0f, 0.0f);
+			sizeBg = D3DXVECTOR3(42.0f, 26.0f, 0.0f);
 		}
 		//3・4プレイ時
 		else if (m_nNumPlayer == 3 || m_nNumPlayer == 4)
@@ -415,7 +415,7 @@ void CPoint::UIPosition(int nID)
 		//大きさ
 		sizeIcon = D3DXVECTOR3(70.0f, 60.0f, 0.0f);
 		sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
-		sizeBg = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(41.0f, 25.0f, 0.0f);
 	}
 	else if (nID == 1 && m_nNumPlayer == 2)
 	{
@@ -426,8 +426,8 @@ void CPoint::UIPosition(int nID)
 
 		//大きさ
 		sizeIcon = D3DXVECTOR3(70.0f, 60.0f, 0.0f);
-		sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
-		sizeBg = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
+		sizeNumber = D3DXVECTOR3(55.0f, 25.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(41.0f, 25.0f, 0.0f);
 	}
 
 	if (m_type != CPoint::TYPE_CPU)
