@@ -323,11 +323,14 @@ void CPoint::UIPosition(int nID)
 	char *cName[MAX_PLAYER] = { "キャラ(バランス)", "キャラ(パワー)", "キャラ(スピード)", "キャラ(リーチ)" };
 	D3DXVECTOR3 posIcon = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	D3DXVECTOR3 posNumber = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	D3DXVECTOR3 posBg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	D3DXVECTOR3 sizeIcon = D3DXVECTOR3(40.0f, 30.0f, 0.0f);		// アイコンのサイズ
-	D3DXVECTOR3 sizeNumber = D3DXVECTOR3(60.0f, 20.0f, 0.0f);		// 何Pかのサイズ
+	D3DXVECTOR3 sizeNumber = D3DXVECTOR3(60.0f, 20.0f, 0.0f);	// 何Pかのサイズ
+	D3DXVECTOR3 sizeBg = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 
 	CScene2D *pNumber = NULL;
+	CScene2D *pBg = NULL;
 
 	// 人数が指定数内 かつ プレイヤーIDが指定した番号の場合
 	if (m_nNumPlayer != 2 && nID == 0)
@@ -338,52 +341,67 @@ void CPoint::UIPosition(int nID)
 			//位置
 			posIcon = D3DXVECTOR3(56.0f, 49.0f, 0.0f);
 			posNumber = D3DXVECTOR3(83.0f, 78.0f, 0.0f);
+			posBg = D3DXVECTOR3(83.0f, 78.0f, 0.0f);
 
 			//大きさ
 			sizeIcon = D3DXVECTOR3(80.0f, 70.0f, 0.0f);
 			sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
+			sizeBg = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
 		}
 		//3・4プレイ時
 		else if (m_nNumPlayer == 3 || m_nNumPlayer == 4)
 		{
 			//位置
-			posIcon = D3DXVECTOR3(41.0f, 35.0f, 0.0f);
-			posNumber = D3DXVECTOR3(55.0f, 54.0f, 0.0f);
+			posIcon = D3DXVECTOR3(42.0f, 34.0f, 0.0f);
+			posNumber = D3DXVECTOR3(58.0f, 54.0f, 0.0f);
+			posBg = D3DXVECTOR3(54.0f, 52.0f, 0.0f);
+
 
 			//大きさ
 			sizeIcon = D3DXVECTOR3(57.0f, 47.0f, 0.0f);
-			sizeNumber = D3DXVECTOR3(55.0f, 20.0f, 0.0f);
+			sizeNumber = D3DXVECTOR3(56.0f, 35.0f, 0.0f);
+			sizeBg = D3DXVECTOR3(39.0f, 24.0f, 0.0f);
+
 		}
 	}
 	else if (nID == 1 && m_nNumPlayer == 3 || nID == 1 && m_nNumPlayer == 4)
 	{
 		// 3画面・4画面　2Ｐの位置
-		posIcon = D3DXVECTOR3(685.0f, 35.0f, 0.0f);
-		posNumber = D3DXVECTOR3(700.0f, 54.0f, 0.0f);
+		posIcon = D3DXVECTOR3(685.0f, 34.0f, 0.0f);
+		posNumber = D3DXVECTOR3(699.0f, 54.0f, 0.0f);
+		posBg = D3DXVECTOR3(698.0f, 52.0f, 0.0f);
+
 
 		//大きさ
 		sizeIcon = D3DXVECTOR3(57.0f, 47.0f, 0.0f);
-		sizeNumber = D3DXVECTOR3(55.0f, 20.0f, 0.0f);
+		sizeNumber = D3DXVECTOR3(54.0f, 35.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(39.0f, 24.0f, 0.0f);
+
 	}
 	else if (nID == 2 && m_nNumPlayer == 3 || nID == 2 && m_nNumPlayer == 4)
 	{
 		// 3画面・4画面 3Pの位置
 		posIcon = D3DXVECTOR3(41.0f, 400.0f, 0.0f);
-		posNumber = D3DXVECTOR3(55.0f, 418.0f, 0.0f);
+		posNumber = D3DXVECTOR3(54.0f, 420.0f, 0.0f);
+		posBg = D3DXVECTOR3(54.0f, 418.0f, 0.0f);
 
 		//大きさ
 		sizeIcon = D3DXVECTOR3(57.0f, 47.0f, 0.0f);
-		sizeNumber = D3DXVECTOR3(55.0f, 20.0f, 0.0f);
+		sizeNumber = D3DXVECTOR3(55.0f, 35.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(39.0f, 24.0f, 0.0f);
+
 	}
 	else if  (nID == 3 && m_nNumPlayer == 4)
 	{
 		// 4画面　4Pの位置
-		posIcon = D3DXVECTOR3(685.0f, 400.0f, 0.0f);
-		posNumber = D3DXVECTOR3(700.0f, 418.0f, 0.0f);
+		posIcon = D3DXVECTOR3(685.0f, 400.0f, 0.0f);		//　アイコン
+		posNumber = D3DXVECTOR3(699.0f, 421.0f, 0.0f);		//　ナンバー
+		posBg = D3DXVECTOR3(699.0f, 418.0f, 0.0f);			//　バック
 
 		// 大きさ
 		sizeIcon = D3DXVECTOR3(57.0f, 47.0f, 0.0f);
-		sizeNumber = D3DXVECTOR3(55.0f, 20.0f, 0.0f);
+		sizeNumber = D3DXVECTOR3(54.0f, 35.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(39.0f, 23.0f, 0.0f);
 	}
 
 	// 2画面
@@ -392,24 +410,36 @@ void CPoint::UIPosition(int nID)
 		//　1P
 		posIcon = D3DXVECTOR3(190.0f, 42.0f, 0.0f);
 		posNumber = D3DXVECTOR3(212.0f, 68.0f, 0.0f);
+		posBg = D3DXVECTOR3(212.0f, 68.0f, 0.0f);
 
 		//大きさ
 		sizeIcon = D3DXVECTOR3(70.0f, 60.0f, 0.0f);
 		sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
 	}
 	else if (nID == 1 && m_nNumPlayer == 2)
 	{
 		// 2画面 2P
 		posIcon = D3DXVECTOR3(190.0f, 406.5f, 0.0f);
 		posNumber = D3DXVECTOR3(212.0f, 432.0f, 0.0f);
+		posBg = D3DXVECTOR3(212.0f, 432.0f, 0.0f);
 
 		//大きさ
 		sizeIcon = D3DXVECTOR3(70.0f, 60.0f, 0.0f);
 		sizeNumber = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
+		sizeBg = D3DXVECTOR3(60.0f, 25.0f, 0.0f);
 	}
 
 	if (m_type != CPoint::TYPE_CPU)
 	{
+		if (pBg == NULL)
+		{	// 背景
+			pBg = new CScene2D(4, CScene2D::OBJTYPE_SCENE2D);
+			pBg->Init(posBg);									// 位置
+			pBg->SetWidthHeight(sizeBg.x, sizeBg.y);			// サイズ
+			pBg->SetCol(D3DXCOLOR(0.3f, 0.3f, 0.3f, 0.8f));		// 色
+		}
+
 		// キャラクターアイコンのロゴ
 		if (m_pIcon == NULL)
 		{
@@ -420,7 +450,7 @@ void CPoint::UIPosition(int nID)
 				nIDIcon = CGame::GetPlayer(nID)->GetPlayerType();
 				type = CGame::GetPlayer(nID)->GetPlayerType();
 			}
-			m_pIcon = CScene2D::Create(posIcon, "RANKCHARA_ICON", 6);
+			m_pIcon = CScene2D::Create(posIcon, "RANKCHARA_ICON", 3);
 			m_pIcon->SetTex(D3DXVECTOR2(0.0f, 0.0f + (1.0f / MAX_PLAYER)*(int)type), D3DXVECTOR2(1.0f, (1.0f / MAX_PLAYER) + ((1.0f / MAX_PLAYER)*(int)type)));
 			m_pIcon->SetWidthHeight(sizeIcon.x, sizeIcon.y);
 			m_pIcon->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
@@ -428,9 +458,9 @@ void CPoint::UIPosition(int nID)
 		}
 
 		// キャラクター番号の設定  (プレイ人数 : PLAYER_NUM2)
-		pNumber = CScene2D::Create(posNumber, "プレイ人数", 6);
+		pNumber = CScene2D::Create(posNumber, "RANK&PLNUM", 5);
 		pNumber->SetWidthHeight(sizeNumber.x, sizeNumber.y);
-		pNumber->SetTex(D3DXVECTOR2(0.0f, nID * 0.2f), D3DXVECTOR2(1.0f, (nID * 0.2f) + 0.2f));
+		pNumber->SetTex(D3DXVECTOR2(0.5f, nID * 0.25f), D3DXVECTOR2(1.0f, (nID * 0.25f) + 0.25f));
 		pNumber->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
