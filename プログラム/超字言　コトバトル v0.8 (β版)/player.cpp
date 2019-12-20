@@ -329,7 +329,7 @@ void CPlayer::Update(void)
 					else
 					{//近いプレイヤーがいなければプレイヤーの向きに打つ
 						BulletRot.y = m_pCharactorMove->GetRotation().y;
-						m_pCharactorMove->GetRotation().y = BulletRot.y;
+						//m_pCharactorMove->GetRotation().y = BulletRot.y;
 					}
 				}
 				else if (m_bAssist == false)
@@ -399,8 +399,8 @@ void CPlayer::Update(void)
 					pCameraManager->SetCameraLength(m_ChildCameraName, fCameraLength + 100.0f);
 				}
 
+				m_nShotCameraMove = 90;
 				m_bAssist = false;//セルフエイムモードに設定
-				m_nShotCameraMove = -1;
 			}
 			else
 			{
@@ -414,7 +414,7 @@ void CPlayer::Update(void)
 				m_bAssist = true;
 			}
 
-			if (m_nShotCameraMove > -1)
+			if (m_nShotCameraMove > 0)
 			{
 				m_nShotCameraMove--;
 				if (m_nShotCameraMove <= 0)
@@ -423,7 +423,7 @@ void CPlayer::Update(void)
 					m_nShotCameraMove = -1;
 				}
 			}
-			CDebugProc::Print("cn","bAssist = ", (m_bAssist == true) ? 1 : 0);
+			CDebugProc::Print("cn","m_nShotCameraMove = ", m_nShotCameraMove);
 
 			//マシンガン発射
 			if (m_bMachineGun == true)
@@ -434,7 +434,14 @@ void CPlayer::Update(void)
 				{//スティック角を取得して発射角とする
 					if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
 					{	// 右のスティックを動かしてない場合
-						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRotOld(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y);
+						if (m_fStickRX == 0 && m_fStickRY == 0)
+						{
+							m_fBulletRotOld = m_pCharactorMove->GetRotation().y;
+						}
+						else
+						{
+							m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRotOld(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y);
+						}
 					}
 					else
 					{
