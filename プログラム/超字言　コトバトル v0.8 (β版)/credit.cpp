@@ -9,8 +9,8 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define BACK_BG_POS	 (D3DXVECTOR3(900.0f, 600.0f, 0.0f))	// 戻るの位置
-#define BACK_BG_SIZE (D3DXVECTOR2(200.0f, 200.0f))			// 戻るのサイズ
+#define BACK_BG_POS	 (D3DXVECTOR3(1170.0f, 680.0f, 0.0f))	// 戻るの位置
+#define BACK_BG_SIZE (D3DXVECTOR2(150.0f, 50.0f))			// 戻るのサイズ
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
@@ -94,16 +94,17 @@ void CCredit::Draw(void){}
 void CCredit::SetInit(void)
 {
 	if (m_pCredit == NULL)
-	{
-		m_pCredit = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 , 0.0f), "CREDIT", 5);
+	{	//クレジット
+		m_pCredit = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 , 0.0f), "CREADIT_BG", 5);
 		m_pCredit->SetWidthHeight(SCREEN_WIDTH, SCREEN_HEIGHT);
 	}
 
 	if (m_pBack == NULL)
-	{
-		D3DXVECTOR3 pos = BACK_BG_SIZE;
-		m_pBack = CScene2D::Create(pos, "BACK", 6);
+	{	// 戻るボタン
+		D3DXVECTOR3 pos = BACK_BG_POS;
+		m_pBack = CScene2D::Create(pos, "BACK_PRESS", 6);
 		m_pBack->SetWidthHeight(BACK_BG_SIZE.x, BACK_BG_SIZE.y);
+		m_pBack->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
 
@@ -115,10 +116,12 @@ void CCredit::Flash(void)
 	if (m_pBack != NULL)
 	{
 		D3DXCOLOR col = m_pBack->GetCol();
-		col.a -= 0.03f;
+		col.a -= 0.01f;
 		if (col.a < 0.3f) 
 		{	// 指定した色の値以下の場合
 			col.a = 1.0f;
 		}
+
+		m_pBack->SetCol(col);
 	}
 }
