@@ -9,8 +9,10 @@
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
-#define BACK_BG_POS	 (D3DXVECTOR3(900.0f, 600.0f, 0.0f))	// 戻るの位置
-#define BACK_BG_SIZE (D3DXVECTOR2(200.0f, 200.0f))			// 戻るのサイズ
+#define BACK_BG_POS	 (D3DXVECTOR3(1190.0f, 660.0f, 0.0f))	// 戻るの位置
+#define BACK_BG_SIZE (D3DXVECTOR2(100.0f, 80.0f))			// 戻るのサイズ
+#define COL_A		 (0.01f)								// 色の減算値
+#define PURPOSE_COL_A	(0.3f)								// 指定した値以下の場合
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
@@ -76,7 +78,8 @@ void CCredit::Update(void)
 {
 	Flash();	// 点滅処理
 
-	if (CManager::GetXInput(0)->GetTrigger(CInputXPad::XPAD_RIGHT_SHOULDER) || CManager::GetInputKeyboard()->GetTrigger(DIK_BACKSPACE))
+	if (CManager::GetXInput(0)->GetTrigger(CInputXPad::XPAD_RIGHT_SHOULDER) || CManager::GetInputKeyboard()->GetTrigger(DIK_BACKSPACE)
+		|| CManager::GetInputKeyboard()->GetTrigger(DIK_ESCAPE) || CManager::GetInputKeyboard()->GetTrigger(DIK_RETURN))
 	{
 		Uninit();
 		CManager::SetMode(CManager::MODE_SELECT);
@@ -94,16 +97,17 @@ void CCredit::Draw(void){}
 void CCredit::SetInit(void)
 {
 	if (m_pCredit == NULL)
-	{
-		m_pCredit = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 , 0.0f), "CREDIT", 5);
-		m_pCredit->SetWidthHeight(SCREEN_WIDTH, SCREEN_HEIGHT);
+	{	//クレジット
+		m_pCredit = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 , 0.0f), "CREADIT_BG", 5);
+		m_pCredit->SetWidthHeight(SCREEN_WIDTH-450, SCREEN_HEIGHT-205);
 	}
 
 	if (m_pBack == NULL)
-	{
-		D3DXVECTOR3 pos = BACK_BG_SIZE;
-		m_pBack = CScene2D::Create(pos, "BACK", 6);
+	{	// 戻るボタン
+		D3DXVECTOR3 pos = BACK_BG_POS;
+		m_pBack = CScene2D::Create(pos, "BACK_PRESS", 6);
 		m_pBack->SetWidthHeight(BACK_BG_SIZE.x, BACK_BG_SIZE.y);
+		m_pBack->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 }
 
@@ -115,10 +119,12 @@ void CCredit::Flash(void)
 	if (m_pBack != NULL)
 	{
 		D3DXCOLOR col = m_pBack->GetCol();
-		col.a -= 0.03f;
-		if (col.a < 0.3f) 
+		col.a -= COL_A;
+		if (col.a < PURPOSE_COL_A)
 		{	// 指定した色の値以下の場合
 			col.a = 1.0f;
 		}
+
+		m_pBack->SetCol(col);
 	}
 }

@@ -360,4 +360,7 @@
       <UniqueIdentifier>{cc60e4b2-cae0-4cd4-935d-31873be29cfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="toul.bin" />
+  </ItemGroup>
 </Project>
