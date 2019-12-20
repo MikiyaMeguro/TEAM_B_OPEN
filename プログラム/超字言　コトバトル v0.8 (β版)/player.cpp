@@ -337,6 +337,7 @@ void CPlayer::Update(void)
 					BulletRot.y = m_fBulletRotOld;
 					m_pCharactorMove->GetRotation().y = BulletRot.y;
 					BulletUIUninit();
+					m_bAssist = true;
 				}
 
 				//発射方向保持
@@ -428,6 +429,23 @@ void CPlayer::Update(void)
 			if (m_bMachineGun == true)
 			{	// 発射時は動かない
 				m_nMachineGunTime++;
+				//パッドが刺さっている場合はパッドの右スティック角度を優先する
+				if (CManager::GetXInput(m_nID) != NULL && CManager::GetXInput(m_nID)->GetConnect() == true)
+				{//スティック角を取得して発射角とする
+					if (CManager::GetXInput(m_nID)->GetRStickRotY() == 0 && CManager::GetXInput(m_nID)->GetRStickRotX() == 0)
+					{	// 右のスティックを動かしてない場合
+						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRotOld(m_fStickRX, m_fStickRY, m_pCharactorMove->GetRotation().y);
+					}
+					else
+					{
+						m_fBulletRotOld = CManager::GetXInput(m_nID)->GetStickRot(false, m_pCharactorMove->GetRotation().y);
+						m_fStickRX = CManager::GetXInput(m_nID)->GetRStickRotX();
+						m_fStickRY = CManager::GetXInput(m_nID)->GetRStickRotY();
+					}
+				}
+				m_BulletRot.y = m_fBulletRotOld;
+				m_pCharactorMove->GetRotation().y = m_fBulletRotOld;
+
 				if (m_PlayerType == TYPE_REACH)
 				{	// タイプがウサギならマシンガンの処理
 					if (m_nMachineGunTime % 10 == 0)
