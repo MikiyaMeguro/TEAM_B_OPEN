@@ -11,6 +11,8 @@
 //*****************************************************************************
 #define BACK_BG_POS	 (D3DXVECTOR3(1170.0f, 680.0f, 0.0f))	// 戻るの位置
 #define BACK_BG_SIZE (D3DXVECTOR2(150.0f, 50.0f))			// 戻るのサイズ
+#define COL_A		 (0.01f)								// 色の減算値
+#define PURPOSE_COL_A	(0.3f)								// 指定した値以下の場合
 //--------------------------------------------
 //静的メンバ変数宣言
 //--------------------------------------------
@@ -116,8 +118,8 @@ void CCredit::Flash(void)
 	if (m_pBack != NULL)
 	{
 		D3DXCOLOR col = m_pBack->GetCol();
-		col.a -= 0.01f;
-		if (col.a < 0.3f) 
+		col.a -= COL_A;
+		if (col.a < PURPOSE_COL_A)
 		{	// 指定した色の値以下の場合
 			col.a = 1.0f;
 		}
