@@ -118,7 +118,10 @@ void CTitle::Update(void)
 			if (CCommand::GetCommand("DECISION"))
 			{//ƒGƒ“ƒ^[‰Ÿ‰º
 				m_bPressMode = true;
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_TITLE);
+				if (pFade->GetFade() != CFade::FADE_OUT)
+				{
+					pSound->PlaySound(CSound::SOUND_LABEL_SE_TITLE);
+				}
 				pFade->SetFade(pManager->MODE_SELECT, pFade->FADE_OUT);
 			}
 		}

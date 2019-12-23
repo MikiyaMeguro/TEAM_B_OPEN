@@ -261,7 +261,6 @@ void CPlayer::Update(void)
 	case CPlayerSelect::SELECTPLAYER_4P:
 		fCameraLength = 180.0f;
 		break;
-
 	}
 
 
@@ -275,6 +274,8 @@ void CPlayer::Update(void)
 	if (m_pCharactorMove != NULL &&
 		(CManager::GetMode() == CManager::MODE_GAME ||CManager::GetMode() == CManager::MODE_TUTORIAL))
 	{
+		int nNear = GetNearPlayer();
+
 		// 前のフレームの位置代入
 		m_posOld = m_pCharactorMove->GetPosition();
 		//移動、回転の更新
@@ -312,7 +313,6 @@ void CPlayer::Update(void)
 			if (CCommand::GetCommand("PLAYER_BULLET", m_nID) && CGame::GetbStageSet() == false && m_bMachineGun == false)
 			{
 				C3DCharactor* pChara = NULL;
-				int nNear = GetNearPlayer();
 				if (nNear != -1)
 				{//近いプレイヤーがいればその方向に弾を打つ
 					pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
@@ -1112,7 +1112,6 @@ bool CPlayer::CollisonObject(D3DXVECTOR3 *pos, D3DXVECTOR3 * posOld, D3DXVECTOR3
 int		CPlayer::GetNearPlayer(void)
 {
 	D3DXVECTOR3 PlayerPos[4] = {};
-	D3DXVECTOR3 PlayerRot[4] = {};
 	CCharaBase* pChara = NULL;
 	CPlayer* pPlayer = NULL;
 	int nCntPlayer = 0;
@@ -1130,18 +1129,15 @@ int		CPlayer::GetNearPlayer(void)
 			if (pChara != NULL)
 			{//キャラクラス内にある座標を取得
 				PlayerPos[nCntPlayer] = pChara->GetPosition();
-				PlayerRot[nCntPlayer] = pChara->GetRotation();	//比較に使うためyの値にπを足す
 			}
 			else
 			{//キャラクラスが消えた場合も巨大な値を入れる
 				PlayerPos[nCntPlayer] = D3DXVECTOR3(-99999.9f, -99999.9f, -99999.9f);
-				PlayerRot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 			}
 		}
 		else
 		{	//プレイヤーがいない場合は巨大な値を入れる
 			PlayerPos[nCntPlayer] = D3DXVECTOR3(-99999.9f, -99999.9f, -99999.9f);
-			PlayerRot[nCntPlayer] = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 		}
 	}
 
@@ -1156,7 +1152,7 @@ int		CPlayer::GetNearPlayer(void)
 			float fLength = fabsf(sqrtf(powf(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, 2.0f) +
 				powf(PlayerPos[m_nID].y - PlayerPos[nCntPlayer].y, 2.0f) +
 				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)));
-			//角度比較
+
 			if (fLength < fNearLength &&
 				fLength < PLAYER_LOCKON_LENGTH)
 			{
