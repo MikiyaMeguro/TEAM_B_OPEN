@@ -110,6 +110,10 @@ private:
 	/* タイトルロゴ変数 */
 	float m_fTitleScal;						//拡縮のサイズ
 
+	//タイトルコール
+	bool m_bTitleCall;						//タイトルコールフラグ
+	int  m_nTitleCallCnt;					//コールのタイミング
+
 #ifdef _DEBUG
 	int nCntFadeTime = 0;
 #endif
