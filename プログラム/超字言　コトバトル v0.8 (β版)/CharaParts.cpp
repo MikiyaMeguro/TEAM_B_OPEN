@@ -58,6 +58,8 @@ HRESULT CCharaParts::Init(void)
 
 	m_Pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_Rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+	m_Scale = D3DXVECTOR3(1.0f,1.0f,1.0f);
+
 	m_WorldPosition = D3DXVECTOR3(0.0f,0.0f,0.0f);
 	m_bDrawFlag = true;
 
@@ -119,7 +121,7 @@ void CCharaParts::Draw(void)
 	D3DXMATERIAL *pMat;			//マテリアルデータのポインタ
 	float fOrgMatAlpha = 0.0f;
 	//マトリックスの計算
-	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_Pos,m_Rot,m_pParent);
+	CUtilityMath::CalWorldMatrix(&m_mtxWorld,m_Pos,m_Rot,m_pParent,m_Scale);
 
 	//ワールドマトリックスから座標を取り出して保管する
 	m_WorldPosition = D3DXVECTOR3(m_mtxWorld._41, m_mtxWorld._42, m_mtxWorld._43);

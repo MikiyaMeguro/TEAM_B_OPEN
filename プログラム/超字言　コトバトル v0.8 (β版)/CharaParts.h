@@ -26,7 +26,7 @@ public:
 	CCharaParts();
 	~CCharaParts();
 
-	void Set(LPCSTR ModelFile,D3DXVECTOR3 pos, D3DXVECTOR3 rot,D3DXMATRIX* pParent);
+	void Set(LPCSTR ModelFile, D3DXVECTOR3 pos, D3DXVECTOR3 rot, D3DXMATRIX* pParent);
 
 	HRESULT Init(void);
 	void Uninit(void);
@@ -38,6 +38,10 @@ public:
 
 	void SetRotation(D3DXVECTOR3 rot) { m_Rot = rot; };
 	D3DXVECTOR3 GetRotation(void) { return m_Rot; };
+
+	void SetScale(D3DXVECTOR3 scale) { m_Scale = scale; };
+	void SetScale(float fSize) { m_Scale = D3DXVECTOR3(fSize,fSize,fSize); };
+	D3DXVECTOR3 GetScale(void) { return m_Scale; };
 
 	void SetParent(D3DXMATRIX* pParent) { m_pParent = pParent;};
 	D3DXMATRIX* GetMatrix(void) { return &m_mtxWorld; };
@@ -61,6 +65,7 @@ private:
 
 	D3DXVECTOR3 m_Pos;		//位置(親から見た相対位置)
 	D3DXVECTOR3 m_Rot;		//角度(親から見た相対角度)
+	D3DXVECTOR3 m_Scale;	//大きさ
 	D3DXMATRIX* m_pParent;	//親マトリックス
 
 	float m_fDiffuseAlpha;	//頂点色のα値
