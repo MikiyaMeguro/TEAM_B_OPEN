@@ -70,6 +70,8 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_fBulletRotOld = 0.0f;
 	m_nTargetID = MAX_PLAYER;
 	m_bBulletFlag = false;
+	m_bVoice = false;
+
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
 		m_bVision[nCnt] = true;
@@ -305,7 +307,6 @@ void CPlayer::Update(void)
 			CCamera* pCam = pCameraManager->GetCamera(m_ChildCameraName);
 			static D3DXVECTOR3 BulletRot = {};
 			BulletRot.y = m_pCharactorMove->GetRotation().y;
-			//BulletRot.y = m_fBulletRotOld;
 			D3DXVECTOR3 BulletPos(GetBulletMuzzle());
 			D3DXVECTOR3 LockOnObjRot, LockOnObjPos, LockOnMove;
 
@@ -352,10 +353,12 @@ void CPlayer::Update(void)
 					m_bMachineGun = true;
 				}
 
-				if (m_PlayerType != TYPE_REACH)
+				if (m_PlayerType != TYPE_REACH && m_pWordManager->GetBulletFlag() == true)
 				{	//ウサギ以外
 					m_pWordManager->BulletCreate(m_nID, BulletPos, m_BulletRot, m_PlayerType,
 						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
+					//ボイス再生
+ 					PlayVoice(m_PlayerType);
 				}
 			}
 
@@ -405,7 +408,7 @@ void CPlayer::Update(void)
 			}
 			else
 			{
-				BulletRot.y = m_pCharactorMove->GetRotation().y;
+				//BulletRot.y = m_pCharactorMove->GetRotation().y;
 				m_BulletRot.y = BulletRot.y;
 				BulletUIUninit();
 				if (m_bAssist == false)
@@ -456,8 +459,15 @@ void CPlayer::Update(void)
 
 				if (m_PlayerType == TYPE_REACH)
 				{	// タイプがウサギならマシンガンの処理
+
 					if (m_pWordManager->GetStock(0) != NOT_NUM && m_bBulletFlag == false)
 					{
+						if (m_bVoice == false)
+						{	//ボイス再生
+							PlayVoice(m_PlayerType);
+							m_bVoice = true;
+						}
+
 						if (m_nMachineGunTime % 10 == 0)
 						{//10フレームに一回弾発射
 							m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
@@ -468,6 +478,7 @@ void CPlayer::Update(void)
 						{//6回発射したら弾情報を削除
 							m_bMachineGun = false;
 							m_pWordManager->Reset();
+							m_bVoice = false;
 						}
 					}
 					else if (m_pWordManager->GetStock(0) == NOT_NUM )
@@ -477,6 +488,8 @@ void CPlayer::Update(void)
 							m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
 							m_pWordManager->Reset();
 							m_bBulletFlag = true;
+							//ボイス再生
+							PlayVoice(m_PlayerType);
 						}
 					}
 
@@ -813,6 +826,8 @@ void CPlayer::SetPartsAlpha(float fAlpha)
 	}
 }
 
+
+
 //=============================================================================
 // 当たり判定(弾)処理
 //=============================================================================
@@ -955,6 +970,8 @@ bool CPlayer::CollisionDamageObj(void)
 //=============================================================================
 void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	D3DXVECTOR3& move = m_pCharactorMove->GetMove();
 
 	//
@@ -962,6 +979,29 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 	move.z += cosf(HitRotation.y) * fDamageValue * 2.0f;
 
 	move.y += fDamageValue;
+
+	switch (m_PlayerType)
+	{
+		case CPlayer::TYPE_BARANCE:
+		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_DAMAGE00, 5.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_DAMAGE00);
+		break;
+	case CPlayer::TYPE_POWER:
+		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00, 5.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00);
+		break;
+	case CPlayer::TYPE_SPEED:
+		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00, 5.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00);
+		break;
+	case CPlayer::TYPE_REACH:
+		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_DAMAGE00, 5.0f);
+		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_DAMAGE00);
+		break;
+	default:
+		break;
+	}
+
 }
 //=============================================================================
 // 当たり判定(オブジェクト)処理
@@ -1624,4 +1664,67 @@ void CPlayer::BulletUIUninit(void)
 	}
 
 	m_nTargetID = MAX_PLAYER;
+}
+
+//=============================================================================
+// 音声再生処理
+//=============================================================================
+void CPlayer::PlayVoice(CPlayer::PLAYER_TYPE type)
+{
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
+												//キャラごとの音声(ランダム２種類)
+	switch (type)
+	{
+	case CPlayer::TYPE_BARANCE:
+		if (rand() % 2 == 0)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_ATTACK00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_ATTACK00);
+		}
+		else
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_ATTACK01, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_ATTACK01);
+		}
+		break;
+	case CPlayer::TYPE_POWER:
+		if (rand() % 2 == 0)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK00);
+		}
+		else
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK01, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK01);
+		}
+		break;
+	case CPlayer::TYPE_SPEED:
+		if (rand() % 2 == 0)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_ATTACK00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_ATTACK00);
+		}
+		else
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_ATTACK01, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_ATTACK01);
+		}
+		break;
+	case CPlayer::TYPE_REACH:
+		if (rand() % 2 == 0)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK00);
+		}
+		else
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK01, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK01);
+		}
+		break;
+	default:
+		break;
+	}
 }

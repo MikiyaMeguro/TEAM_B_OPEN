@@ -1291,6 +1291,8 @@ void C3DCharactor::Homing_CPU(void)
 //=============================================================================
 void C3DCharactor::Attack_CPU(void)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	C3DCharactor* pChara = NULL;
 	int nNear = GetThisCharactor()->GetNearPlayer();
 
@@ -1303,21 +1305,54 @@ void C3DCharactor::Attack_CPU(void)
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 			m_CpuThink = THINK_NONE;
 			m_nActionTimer = 0;
+			//ボイス再生
+			if (rand() % 2 == 0)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_ATTACK00, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_ATTACK00);
+			}
+			else
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_ATTACK01, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_ATTACK01);
+			}
 			break;
 		case CPlayer::TYPE_POWER:
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType());
 			m_CpuThink = THINK_NONE;
 			m_nActionTimer = 0;
+			//ボイス再生
+			if (rand() % 2 == 0)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK00, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK00);
+			}
+			else
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK01, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_ATTACK01);
+			}
 			break;
 		case CPlayer::TYPE_SPEED:
 			pChara = (C3DCharactor*)CManager::GetPlayer(nNear)->GetCharaMover();
 			GetThisCharactor()->GetWordManager()->BulletCreate(GetThisCharactor()->GetID(), CCharaBase::GetPosition(), CCharaBase::GetRotation(), GetThisCharactor()->GetPlayerType(), pChara);
 			m_CpuThink = THINK_NONE;
 			m_nActionTimer = 0;
+			//ボイス再生
+			if (rand() % 2 == 0)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_ATTACK01, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_ATTACK01);
+			}
+			else
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_ATTACK01, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_ATTACK01);
+			}
 			break;
 		case CPlayer::TYPE_REACH:
 			m_bMachineGun = true;
-			break;
+
 		default:
 			break;
 		}
@@ -1334,6 +1369,22 @@ void C3DCharactor::Attack_CPU(void)
 	if (m_bMachineGun == true)
 	{
 		m_nMachineGunTime++;
+
+		if (m_nMachineGunTime == 1)
+		{	//ボイス再生
+			if (rand() % 2 == 0)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK00, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK00);
+			}
+			else
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK01, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_ATTACK01);
+			}
+		}
+
+
 		if (m_nMachineGunTime % 10 == 0)
 		{//10フレームに一回弾発射
 			m_MachineGunPos.x = (float)(rand() % 16) - (rand() % 16);

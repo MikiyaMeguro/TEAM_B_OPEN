@@ -92,7 +92,6 @@ private:
 	bool m_bFlag;
 	bool m_bAnswerCheck;
 	bool m_bGatherFlag;		// 集めるフラグ
-
 	/* デバック用*/
 	void DebugWordCreate(void);
 	int nDebugNUm;

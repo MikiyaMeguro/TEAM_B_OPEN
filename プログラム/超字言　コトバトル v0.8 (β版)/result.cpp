@@ -110,10 +110,10 @@ HRESULT CResult::Init(void)
 	SetModel();
 	SetAudience();
 #if 0
-	m_ResultChara[0].nPoint = 10;
+	m_ResultChara[0].nPoint = 30;
 	m_ResultChara[1].nPoint = 20;
-	m_ResultChara[2].nPoint = 30;
-	m_ResultChara[3].nPoint = 40;
+	m_ResultChara[2].nPoint = 20;
+	m_ResultChara[3].nPoint = 20;
 
 	m_ResultChara[0].type = CPlayer::TYPE_BARANCE;
 	m_ResultChara[1].type = CPlayer::TYPE_POWER;
@@ -1502,6 +1502,8 @@ void CResult::Production(void)
 //=============================================================================
 void CResult::MaskPro(void)
 {
+	CSound *pSound = CManager::GetSound();		//	‰¹‚ÌŽæ“¾
+
 	D3DXVECTOR3 Mask = {};
 	bool bMask[2] = { false,false };
 	switch (m_MaskPro)
@@ -1541,6 +1543,37 @@ void CResult::MaskPro(void)
 		if (bMask[0] == true && bMask[1] == true)
 		{
 			m_MaskPro = MASKPRODUCION_NONE;
+
+			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+			{	//‰ŠúˆÊ’uÝ’è
+				if (m_ResultChara[nCntPlayer].nNumRank == 1)
+				{
+					switch (m_ResultChara[nCntPlayer].type)
+					{
+					case CPlayer::PLAYER_TYPE::TYPE_BARANCE:
+						pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_VICTORY, 5.0f);
+						pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_VICTORY);
+						break;
+					case CPlayer::PLAYER_TYPE::TYPE_POWER:
+						pSound = CManager::GetSound(1);		//	‰¹‚ÌŽæ“¾
+						pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_VICTORY, 5.0f);
+						pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_VICTORY);
+						break;
+					case CPlayer::PLAYER_TYPE::TYPE_SPEED:
+						pSound = CManager::GetSound(2);		//	‰¹‚ÌŽæ“¾
+						pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_VICTORY, 5.0f);
+						pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_VICTORY);
+						break;
+					case CPlayer::PLAYER_TYPE::TYPE_REACH:
+						pSound = CManager::GetSound(3);		//	‰¹‚ÌŽæ“¾
+						pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_VICTORY, 5.0f);
+						pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_VICTORY);
+						break;
+					default:
+						break;
+					}
+				}
+			}
 			return;
 		}
 		break;

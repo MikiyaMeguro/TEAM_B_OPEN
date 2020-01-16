@@ -112,6 +112,7 @@ private:
 
 	//タイトルコール
 	bool m_bTitleCall;						//タイトルコールフラグ
+	bool m_bSubTitleCall;
 	int  m_nTitleCallCnt;					//コールのタイミング
 
 #ifdef _DEBUG
