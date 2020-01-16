@@ -50,6 +50,8 @@ void CTitle::Init(void)
 	m_FlashSkip = false;						//フラッシュスキップされていない
 	m_ProductionState = PRODUCTIONSTATE_NONE;	//演出状態の初期化
 	m_FlashSate = FLASHSTATE_NONE;				//フラッシュ状態の初期化
+	m_bTitleCall = false;
+	m_nTitleCallCnt = 0;
 
 	/*火花*/
 	m_fChangeSparkMove = 3.5f;
@@ -147,6 +149,21 @@ void CTitle::Update(void)
 				m_FlashSate = FLASHSTATE_FINISH;
 			}
 		}
+	}
+
+	//タイトルコール
+	if (m_bTitleCall == true)
+	{
+		if(m_nTitleCallCnt == 0)
+		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE00);
+		}
+		if (m_nTitleCallCnt == 40)
+		{
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE01);
+			m_bTitleCall = false;
+		}
+		m_nTitleCallCnt++;
 	}
 
 
@@ -291,6 +308,8 @@ void CTitle::SetScene2D(void)
 //=============================================================================
 void CTitle::Production(void)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	switch (m_ProductionState)
 	{
 	case PRODUCTIONSTATE_NONE:
@@ -362,6 +381,7 @@ void CTitle::Production(void)
 		/* 演出全工程が終わった */
 		m_bProductionSkip = true;					//演出をスキップ状態
 		m_ProductionState = PRODUCTIONSTATE_NONE;	//演出がない状態に戻す
+		m_bTitleCall = true;
 		break;
 	}
 	Flash();

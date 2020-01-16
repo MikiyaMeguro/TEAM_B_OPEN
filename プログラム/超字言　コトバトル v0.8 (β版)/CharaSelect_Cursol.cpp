@@ -409,6 +409,7 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE02);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}
@@ -420,6 +421,7 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE03);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}
@@ -431,6 +433,7 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE04);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}
@@ -442,6 +445,7 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE05);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}

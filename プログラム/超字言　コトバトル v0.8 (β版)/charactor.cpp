@@ -1412,6 +1412,7 @@ void C3DCharactor::PickUP_CPU(void)
 							bTango = true;
 							break;
 						}
+
 					}
 					if (bTango == true)
 					{
@@ -1419,7 +1420,7 @@ void C3DCharactor::PickUP_CPU(void)
 					}
 				}
 
-				if (GetThisCharactor()->GetWordManager()->GetCntNum() < 2 && fCircle < 50000 && bTango == false)
+				if (GetThisCharactor()->GetWordManager()->GetCntNum() < 3 && fCircle < 50000 && bTango == false)
 				{//範囲内に文字があった
 					nCntNearWord++;
 					 //一番近い距離を記憶
@@ -1433,12 +1434,12 @@ void C3DCharactor::PickUP_CPU(void)
 		pScene = pSceneNext;
 	}
 
-	if (GetThisCharactor()->GetWordManager()->GetCntNum() == 2 && bTango == false)
-	{//
-		m_CpuThink = THINK_ATTACK;
-		m_nActionTimer = 60;
-		bWord = true;
-	}
+	//if (GetThisCharactor()->GetWordManager()->GetCntNum() == 2 && bTango == false)
+	//{//
+	//	m_CpuThink = THINK_ATTACK;
+	//	m_nActionTimer = 60;
+	//	bWord = true;
+	//}
 
 	//ワードが範囲内にある時移動する
 	if (bWord == true)
@@ -1579,6 +1580,7 @@ void C3DCharactor::WayPointMove_CPU(void)
 
 	float fCircle = ((Pos.x - m_MarkWayPoint.x) * (Pos.x - m_MarkWayPoint.x)) + ((Pos.z - m_MarkWayPoint.z) * (Pos.z - m_MarkWayPoint.z));
 
+	//目標が近い時
 	if (fCircle < 100)
 	{
 		m_bRandomGoal = true;
@@ -1629,6 +1631,7 @@ void C3DCharactor::WayPointMove_CPU(void)
 		}
 	}
 
+	//たどり着けなかった 目標を探しなおす
 	if (m_bNotWayPoint == true)
 	{
 		m_nTimerMove++;
@@ -1637,6 +1640,7 @@ void C3DCharactor::WayPointMove_CPU(void)
 		{
 			m_nTimerMove = 0;
 			m_bRandomGoal = true;
+			m_bNotWayPoint = false;
 			m_CpuThink = THINK_NONE;
 		}
 	}
