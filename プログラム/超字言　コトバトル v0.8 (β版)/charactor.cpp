@@ -471,7 +471,8 @@ void C3DCharactor::CharaMove_Input(void)
 			{
 				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
 			}
-			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_RIGHT, CPlayer::LOWER_BODY);
+			//GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_RIGHT, CPlayer::LOWER_BODY);
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
 
 		}
 	}
@@ -513,7 +514,9 @@ void C3DCharactor::CharaMove_Input(void)
 			{
 				GetThisCharactor()->SetMotion(CPlayer::MOTION_UPPER_WALK, CPlayer::UPPER_BODY);
 			}
-			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_LEFT, CPlayer::LOWER_BODY);
+			//GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_LEFT, CPlayer::LOWER_BODY);
+			GetThisCharactor()->SetMotion(CPlayer::MOTION_LOWER_WALK_FRONT, CPlayer::LOWER_BODY);
+
 		}
 	}
 	else if (CCommand::GetCommand("PLAYERMOVE_UP", nID))
