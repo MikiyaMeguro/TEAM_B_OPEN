@@ -154,6 +154,7 @@ HRESULT CWord::Init(D3DXVECTOR3 pos)
 	if (nNum == CPlayerSelect::SELECTPLAYER_1P || nNum == CPlayerSelect::SELECTPLAYER_2P) { m_SelectNumSize = MAX_SIZE; }
 	if (nNum == CPlayerSelect::SELECTPLAYER_4P || nNum == CPlayerSelect::SELECTPLAYER_3P) { m_SelectNumSize = MAX_SIZE_3or4; }
 
+	m_bFlag = false;
 
 	return S_OK;
 }
@@ -430,12 +431,29 @@ void CWord::Distance(D3DXVECTOR3 Pos, D3DXVECTOR3 OtherPos, int nNumPlayer)
 //=============================================================================
 int CWord::ComparisonDistance(int nNum)
 {
-	int nNumPlayer = 0;
+	int nNumPlayer = 0;	//近いプレイヤーを記憶
 
 	for (int nCntPlayer = 0; nCntPlayer < (int)nNum - 1; nCntPlayer++)
 	{
+#if 0
+		//元の式
 		if (m_fDistance[nCntPlayer] > m_fDistance[nCntPlayer + 1])
 		{	// 数値を代入
+			nNumPlayer = nCntPlayer + 1;
+		}
+		//仮定
+		//m_fDistance[0] = 5000;
+		//m_fDistance[1] = 500;
+		//m_fDistance[2] = 10000;
+		//m_fDistance[3] = 100;
+
+#endif
+		if (m_fDistance[nNumPlayer] < m_fDistance[nCntPlayer + 1])
+		{	//比べられる側が近い // 数値を代入 0と1 1と2 2と3
+			nNumPlayer = nNumPlayer;
+		}
+		else
+		{	//比べる側が近い
 			nNumPlayer = nCntPlayer + 1;
 		}
 	}
