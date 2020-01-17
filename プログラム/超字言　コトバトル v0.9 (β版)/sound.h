@@ -109,9 +109,10 @@ public:
 		SOUND_LABEL_WORDVOICE_KAMERA,		// ‚©‚ß‚ç
 		SOUND_LABEL_WORDVOICE_KOEDA,		// ‚±‚¦‚¾
 		SOUND_LABEL_WORDVOICE_ITIGO,		// ‚¢‚¿‚²
-
 		SOUND_LABEL_WORDVOICE_TAMAGO,		// ‚½‚Ü‚²
 		SOUND_LABEL_WORDVOICE_RANNSU,		// ‚ç‚ñ‚·
+
+
 		SOUND_LABEL_WORDVOICE_KADAN,		// ‚©‚¾‚ñ
 		SOUND_LABEL_WORDVOICE_KATANA,		// ‚©‚½‚È
 		SOUND_LABEL_WORDVOICE_MARUTA,		// ‚Ü‚é‚½
@@ -309,11 +310,11 @@ protected:
 		{ "data/SE/WORDVOICE/00‚­‚é‚Ü.wav", 0 },			//	ŽÔ
 		{ "data/SE/WORDVOICE/00‚·‚¢‚©.wav", 0 },			//	‚·‚¢‚©
 		{ "data/SE/WORDVOICE/01‚½‚Ü‚².wav", 0 },			//	‚½‚Ü‚²
-		{ "data/SE/WORDVOICE/02k‚©‚´‚ñ.wav", 0 },			//	‚©‚´‚ñ
+		{ "data/SE/WORDVOICE/02‚©‚´‚ñ.wav", 0 },			//	‚©‚´‚ñ
 		{ "data/SE/WORDVOICE/03‚­‚³‚â.wav", 0 },			//	‚­‚³‚â
 		{ "data/SE/WORDVOICE/04‚ß‚©‚Ô.wav", 0 },			//	‚ß‚©‚Ô
 		{ "data/SE/WORDVOICE/05‚ª‚­‚Ó.wav", 0 },			//	‚ª‚­‚Ó
-		{ "data/SE/WORDVOICE/06‚­‚­‚è.wav", 0 },			//	‚­‚­‚è
+		{ "data/SE/WORDVOICE/06‚­‚­‚¢.wav", 0 },			//	‚­‚­‚è
 		{ "data/SE/WORDVOICE/07‚¢‚é‚©.wav", 0 },			//	‚¢‚é‚©
 		{ "data/SE/WORDVOICE/08‚­‚­‚è.wav", 0 },			//	‚­‚­‚è
 		{ "data/SE/WORDVOICE/09‚´‚ç‚ß.wav", 0 },			//	‚´‚ç‚ß
@@ -322,7 +323,7 @@ protected:
 		{ "data/SE/WORDVOICE/11‚½‚ç‚¢.wav", 0 },			//	‚½‚ç‚¢
 		{ "data/SE/WORDVOICE/12‚ç‚ñ‚·.wav", 0 },			//	‚ç‚ñ‚·
 		{ "data/SE/WORDVOICE/13‚È‚·‚©.wav", 0 },			//	‚È‚·‚©
-		{ "data/SE/WORDVOICE/14‚´‚´‚¦.wav", 0 },			//	‚³‚´‚¦
+		{ "data/SE/WORDVOICE/14‚³‚´‚¦.wav", 0 },			//	‚³‚´‚¦
 		{ "data/SE/WORDVOICE/15‚­‚·‚è.wav", 0 },			//	‚­‚·‚è
 		{ "data/SE/WORDVOICE/16‚½‚¢‚Â.wav", 0 },			//	‚½‚¢‚Â
 		{ "data/SE/WORDVOICE/17‚½‚±‚·.wav", 0 },			//	‚½‚±‚·
@@ -351,7 +352,7 @@ protected:
 		{ "data/SE/WORDVOICE/38‚Õ‚ç‚®.wav", 0 },			//	‚Õ‚ç‚®
 		{ "data/SE/WORDVOICE/39‚ß‚ñ‚Ü.wav", 0 },			//	‚ß‚ñ‚Ü
 		{ "data/SE/WORDVOICE/40‚¢‚¦‚¢.wav", 0 },			//	‚¢‚¦‚¢
-		{ "data/SE/WORDVOICE/41‚·‚é‚ß.wav", 0 },			//	‚·‚é‚ß
+		{ "data/SE/WORDVOICE/41‚ß‚¾‚©.wav", 0 },			//	‚·‚é‚ß
 		{ "data/SE/WORDVOICE/42‚¸‚©‚ñ.wav", 0 },			//	‚¸‚©‚ñ
 
 		{ "data/SE/WORDVOICE/43‚È‚¢‚Ó.wav", 0 },			//	‚È‚¢‚Ó
