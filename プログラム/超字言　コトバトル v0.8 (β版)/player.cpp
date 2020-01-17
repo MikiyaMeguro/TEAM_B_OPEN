@@ -26,7 +26,7 @@
 //=============================================================================
 // マクロ定義
 //=============================================================================
-#define PLAYER_LOCKON_LENGTH (200.0f)								//ロックオンできる最遠距離
+#define PLAYER_LOCKON_LENGTH (300.0f)								//ロックオンできる最遠距離
 #define PLAYER_COLLISON (D3DXVECTOR3(5.0f, 40.0f, 5.0f))			//キャラクターの当たり判定
 #define LOCKON_FUTURE_ROTATE (20.0f)								//ロックオンの弾角度決定時に敵の移動速度に掛ける定数
 
@@ -43,6 +43,8 @@
 #define USAGI_REACH_LOADTEXT_LOWER "data/MOTION/motion_rabbit_down.txt"			//猫(スピード型)の下半身のロードテキスト
 
 #define STEALTH_TIMER		(120)
+
+#define GUNSCALE_TIME (30)
 
 //=============================================================================
 // 静的メンバ変数宣言
@@ -69,6 +71,7 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_pMissileUI = NULL;
 	m_fBulletRotOld = 0.0f;
 	m_nTargetID = MAX_PLAYER;
+	m_nCntGunScale = 0;
 	m_bBulletFlag = false;
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
@@ -356,6 +359,8 @@ void CPlayer::Update(void)
 				{	//ウサギ以外
 					m_pWordManager->BulletCreate(m_nID, BulletPos, m_BulletRot, m_PlayerType,
 						(m_PlayerType == TYPE_SPEED) ? pChara : NULL);
+
+					m_nCntGunScale = GUNSCALE_TIME;
 				}
 			}
 
@@ -469,6 +474,7 @@ void CPlayer::Update(void)
 							m_bMachineGun = false;
 							m_pWordManager->Reset();
 						}
+						m_nCntGunScale = GUNSCALE_TIME;
 					}
 					else if (m_pWordManager->GetStock(0) == NOT_NUM )
 					{//ゴミモデル用の発射
@@ -478,6 +484,7 @@ void CPlayer::Update(void)
 							m_pWordManager->Reset();
 							m_bBulletFlag = true;
 						}
+						m_nCntGunScale = GUNSCALE_TIME;
 					}
 
 					if (m_bBulletFlag == true)
@@ -504,6 +511,19 @@ void CPlayer::Update(void)
 			m_pCharactorMove->GetSpin().y = 0.0f;
 
 			CDebugProc::Print("cfcfcf","BulletRot = X:",BulletRot.x,"| Y:",BulletRot.y,"| Z:",BulletRot.z);
+		}
+
+		//銃のスケール変化
+		if (m_nCntGunScale > 0)
+		{
+			m_pPlayerParts[8][CPlayer::UPPER_BODY]->SetScale(1.7f);
+			m_nCntGunScale--;
+
+			if (m_nCntGunScale <= 0)
+			{
+				m_nCntGunScale = 0;
+				m_pPlayerParts[8][CPlayer::UPPER_BODY]->SetScale(1.0f);
+			}
 		}
 
 		//弾発射時に半透明

@@ -258,7 +258,8 @@ private:
 
 	bool m_bInbush[4];
 
-	int m_nShotCameraMove;
+	int m_nShotCameraMove;			//ƒJƒƒ‰Šgk‚ÌŠÔ
+	int m_nCntGunScale;				//e‚ª‘å‚«‚­‚È‚éŠÔ
 	bool m_bBulletFlag;
 };
 
