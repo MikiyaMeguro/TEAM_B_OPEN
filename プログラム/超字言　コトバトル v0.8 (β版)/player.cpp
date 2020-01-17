@@ -1608,7 +1608,7 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 	}
 	else if (bType == true)
 	{
-		if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }	// ’e‚ÌUI”jŠü
+		//if (m_pBulletUI != NULL) { m_pBulletUI->Uninit(); m_pBulletUI = NULL; }	// ’e‚ÌUI”jŠü
 
 		D3DXVECTOR3 pos = D3DXVECTOR3(pChara->GetPosition().x, pChara->GetPosition().y, pChara->GetPosition().z - 12.0f);
 
@@ -1638,6 +1638,28 @@ void CPlayer::BulletUI(D3DXVECTOR3 rot)
 
 			m_fBulletRotOld = atan2f((pChara->GetPosition().x - m_pCharactorMove->GetPosition().x), (pChara->GetPosition().z - m_pCharactorMove->GetPosition().z));
 		}
+
+		char *capName = { "BulletUI" };
+
+		if (m_pBulletUI == NULL)
+		{
+			m_pBulletUI = CScene3D::Create(D3DXVECTOR3(m_pCharactorMove->GetPosition().x, 1.0f, m_pCharactorMove->GetPosition().z + 30.0f), capName);
+			m_pBulletUI->SetScene3DType(CScene3D::SCENE3DTYPE_ADDSYNTHESIS);
+			m_pBulletUI->SetObjType(CScene3D::OBJTYPE_BULLETUI);
+			m_pBulletUI->SetAlphaTest(true);
+			m_pBulletUI->SetTexUV(D3DXVECTOR2(1.0f, 1.0f));
+			m_pBulletUI->SetRot(rot);
+
+		}
+
+		if (m_pBulletUI != NULL)
+		{
+			m_pBulletUI->BindTexture(capName);
+			m_pBulletUI->SetBulletUI(D3DXVECTOR3(20.0f, 0.0f, 300.0f),D3DXVECTOR3(rot.x, m_fBulletRotOld, rot.z), 1);
+			m_pBulletUI->SetPos(D3DXVECTOR3((m_pCharactorMove->GetPosition().x) , m_pCharactorMove->GetPosition().y + 3.0f, m_pCharactorMove->GetPosition().z ));
+			m_pBulletUI->SetColor(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+		}
+
 	}
 }
 
