@@ -112,9 +112,9 @@ HRESULT CResult::Init(void)
 	SetModel();
 	SetAudience();
 #if 0
-	m_ResultChara[0].nPoint = 30;
-	m_ResultChara[1].nPoint = 20;
-	m_ResultChara[2].nPoint = 20;
+	m_ResultChara[0].nPoint = 10;
+	m_ResultChara[1].nPoint = 30;
+	m_ResultChara[2].nPoint = 30;
 	m_ResultChara[3].nPoint = 20;
 
 	m_ResultChara[0].type = CPlayer::TYPE_BARANCE;
@@ -929,7 +929,12 @@ void  CResult::Set2DUI(int nNum, int nPosNum)
 		}
 		for (int nCntEff = 0; nCntEff < 2; nCntEff++)
 		{
-			if (m_apEffect[nNum][nCntEff] != NULL) { m_apEffect[nNum][nCntEff]->SetbDraw(true); }
+			if (m_apEffect[nNum][nCntEff] != NULL) 
+			{
+				m_apEffect[nNum][nCntEff]->SetPosition(m_RankEffect[nPosNum][nCntEff]);
+				m_apEffect[nNum][nCntEff]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.5f);
+				m_apEffect[nNum][nCntEff]->SetbDraw(true); 
+			}
 		}
 	}
 	else
