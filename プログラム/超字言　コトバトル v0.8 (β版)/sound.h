@@ -54,28 +54,33 @@ public:
 		SOUND_LABEL_SE_SELECT03,		// キャラクター選択音
 		SOUND_LABEL_SE_SELECT04,		// ゲームスタート
 
-		SOUND_LABEL_SE_VOICE00,		//タイトルコール
-		SOUND_LABEL_SE_VOICE01,		//タイトルコール2
-		SOUND_LABEL_SE_VOICE02,		//キャラ選択音　犬
-		SOUND_LABEL_SE_VOICE03,		//キャラ選択音　熊
-		SOUND_LABEL_SE_VOICE04,		//キャラ選択音　猫
-		SOUND_LABEL_SE_VOICE05,		//キャラ選択音　兎
-		SOUND_LABEL_SE_VOICE06,		//犬　攻撃ボイス
-		SOUND_LABEL_SE_VOICE07,		//犬　攻撃ボイス
-		SOUND_LABEL_SE_VOICE08,		//犬　被弾ボイス
-		SOUND_LABEL_SE_VOICE09,		//熊　攻撃ボイス
-		SOUND_LABEL_SE_VOICE10,		//熊　攻撃ボイス
-		SOUND_LABEL_SE_VOICE11,		//熊　被弾ボイス
-		SOUND_LABEL_SE_VOICE12,		//猫　攻撃ボイス
-		SOUND_LABEL_SE_VOICE13,		//猫　攻撃ボイス
-		SOUND_LABEL_SE_VOICE14,		//猫　被弾ボイス
-		SOUND_LABEL_SE_VOICE15,		//兎　攻撃ボイス
-		SOUND_LABEL_SE_VOICE16,		//兎　攻撃ボイス
-		SOUND_LABEL_SE_VOICE17,		//兎　被弾ボイス
-		SOUND_LABEL_SE_VOICE18,		//犬　優勝コメント
-		SOUND_LABEL_SE_VOICE19,		//熊　優勝コメント
-		SOUND_LABEL_SE_VOICE20,		//猫　優勝コメント
-		SOUND_LABEL_SE_VOICE21,		//兎　優勝コメント
+		SOUND_LABEL_VOICE_TITLECALL00,		//タイトルコール
+		SOUND_LABEL_VOICE_TITLECALL01,		//タイトルコール2
+		SOUND_LABEL_VOICE_SELECT_DOG,		//キャラ選択音　犬
+		SOUND_LABEL_VOICE_SELECT_BEAR,		//キャラ選択音　熊
+		SOUND_LABEL_VOICE_SELECT_CAT,		//キャラ選択音　猫
+		SOUND_LABEL_VOICE_SELECT_RABBIT,	//キャラ選択音　兎
+		SOUND_LABEL_VOICE_DOG_ATTACK00,		//犬　攻撃ボイス
+		SOUND_LABEL_VOICE_DOG_ATTACK01,		//犬　攻撃ボイス
+		SOUND_LABEL_VOICE_DOG_DAMAGE00,		//犬　被弾ボイス
+		SOUND_LABEL_VOICE_BEAR_ATTACK00,	//熊　攻撃ボイス
+		SOUND_LABEL_VOICE_BEAR_ATTACK01,	//熊　攻撃ボイス
+		SOUND_LABEL_VOICE_BEAR_DAMAGE00,	//熊　被弾ボイス
+		SOUND_LABEL_VOICE_CAT_ATTACK00,		//猫　攻撃ボイス
+		SOUND_LABEL_VOICE_CAT_ATTACK01,		//猫　攻撃ボイス
+		SOUND_LABEL_VOICE_CAT_DAMAGE00,		//猫　被弾ボイス
+		SOUND_LABEL_VOICE_RABBIT_ATTACK00,	//兎　攻撃ボイス
+		SOUND_LABEL_VOICE_RABBIT_ATTACK01,	//兎　攻撃ボイス
+		SOUND_LABEL_VOICE_RABBIT_DAMAGE00,	//兎　被弾ボイス
+		SOUND_LABEL_VOICE_DOG_VICTORY,		//犬　優勝コメント
+		SOUND_LABEL_VOICE_BEAR_VICTORY,		//熊　優勝コメント
+		SOUND_LABEL_VOICE_CAT_VICTORY,		//猫　優勝コメント
+		SOUND_LABEL_VOICE_RABBIT_VICTORY,	//兎　優勝コメント
+
+		SOUND_LABEL_SE_GAMESTART00,	//コトバトル
+		SOUND_LABEL_SE_GAMESTART01,	//スタート
+		SOUND_LABEL_SE_GAMEEND,		//そこまで
+
 
 		SOUND_LABEL_SE_TITLE,		// タイトル
 
@@ -146,28 +151,33 @@ protected:
 		{ "data/SE/Select4.wav", 0 },	// キャラクター選択音
 		{ "data/SE/Select5.wav", 0 },	// ゲームスタート
 
-		{ "data/VOICE/TitleCall.wav", 0 },			//タイトルコール
-		{ "data/VOICE/TitleCall2.wav", 0 },			//タイトルコール2
-		{ "data/VOICE/DogSelectVoice.wav", 0 },		//キャラ選択音　犬
-		{ "data/VOICE/BearSelectVoice.wav", 0 },	//キャラ選択音　熊
-		{ "data/VOICE/CatSelectVoice.wav", 0 },		//キャラ選択音　猫
-		{ "data/VOICE/RabbitSelectVoice.wav", 0 },	//キャラ選択音　兎
-		{ "data/VOICE/DogAttack.wav", 0 },			//犬　攻撃ボイス
-		{ "data/VOICE/DogAttack2.wav", 0 },			//犬　攻撃ボイス
-		{ "data/VOICE/DogDamage.wav", 0 },			//犬　被弾ボイス
-		{ "data/VOICE/BearAttack.wav", 0 },			//熊　攻撃ボイス
-		{ "data/VOICE/BearAttack2.wav", 0 },		//熊　攻撃ボイス
-		{ "data/VOICE/BearDamage.wav", 0 },			//熊　被弾ボイス
-		{ "data/VOICE/CatAttack.wav", 0 },			//猫　攻撃ボイス
-		{ "data/VOICE/CatAttack2.wav", 0 },			//猫　攻撃ボイス
-		{ "data/VOICE/CatDamage.wav", 0 },			//猫　被弾ボイス
-		{ "data/VOICE/RabbitAttack.wav", 0 },		//兎　攻撃ボイス
-		{ "data/VOICE/RabbitAttack2.wav", 0 },		//兎　攻撃ボイス
-		{ "data/VOICE/RabbitDamage.wav", 0 },		//兎　被弾ボイス
-		{ "data/VOICE/DogWin.wav", 0 },				//犬　優勝コメント
-		{ "data/VOICE/BearWin.wav", 0 },			//熊　優勝コメント
-		{ "data/VOICE/CatWin.wav", 0 },				//猫　優勝コメント
-		{ "data/VOICE/RabbitWin.wav", 0 },			//兎　優勝コメント
+		{ "data/VOICE/titlecall000.wav", 0 },		//タイトルコール
+		{ "data/VOICE/titlecall001.wav", 0 },		//タイトルコール2
+		{ "data/VOICE/dog_select.wav", 0 },			//キャラ選択音　犬
+		{ "data/VOICE/bea_select.wav", 0 },			//キャラ選択音　熊
+		{ "data/VOICE/cat_select.wav", 0 },			//キャラ選択音　猫
+		{ "data/VOICE/rabit_select.wav", 0 },		//キャラ選択音　兎
+		{ "data/VOICE/dog_atk000.wav", 0 },			//犬　攻撃ボイス
+		{ "data/VOICE/dog_atk001.wav", 0 },			//犬　攻撃ボイス
+		{ "data/VOICE/dog_damege.wav", 0 },			//犬　被弾ボイス
+		{ "data/VOICE/bea_atk000.wav", 0 },			//熊　攻撃ボイス
+		{ "data/VOICE/bea_atk001.wav", 0 },			//熊　攻撃ボイス
+		{ "data/VOICE/bea_damege.wav", 0 },			//熊　被弾ボイス
+		{ "data/VOICE/cat_atk000.wav", 0 },			//猫　攻撃ボイス
+		{ "data/VOICE/cat_atk001.wav", 0 },			//猫　攻撃ボイス
+		{ "data/VOICE/cat_damege.wav", 0 },			//猫　被弾ボイス
+		{ "data/VOICE/rabit_atk000.wav", 0 },		//兎　攻撃ボイス
+		{ "data/VOICE/rabit_atk001.wav", 0 },		//兎　攻撃ボイス
+		{ "data/VOICE/rabit_damege.wav", 0 },		//兎　被弾ボイス
+		{ "data/VOICE/dog_victory.wav", 0 },		//犬　優勝
+		{ "data/VOICE/bea_victory.wav", 0 },		//熊　優勝
+		{ "data/VOICE/cat_victory.wav", 0 },		//猫　優勝
+		{ "data/VOICE/rabit_victory.wav", 0 },		//兎　優勝
+
+		{ "data/VOICE/gamestart000.wav", 0 },		//コトバトル
+		{ "data/VOICE/gamestart001.wav", 0 },		//スタート
+		{ "data/VOICE/gameend000.wav", 0 },			//そこまで
+
 
 		{ "data/SE/Title.wav", 0 },	// タイトル
 

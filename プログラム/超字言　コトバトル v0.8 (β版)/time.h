@@ -111,5 +111,8 @@ private:
 	// 拡大縮小用
 	bool						m_bScaleFlag;					// スケール変化時のフラグ
 	int							m_nCntScale;					// スケール変化の時間管理
+	// サウンド用
+	bool						m_bStartSound;
+
 };
 #endif

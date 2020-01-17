@@ -409,7 +409,8 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE02);
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_SELECT_DOG, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_SELECT_DOG);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}
@@ -421,7 +422,8 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE03);
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_SELECT_BEAR, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_SELECT_BEAR);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}
@@ -433,7 +435,8 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE04);
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_SELECT_CAT, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_SELECT_CAT);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}
@@ -445,7 +448,8 @@ void CCharaSelCursol::Move(CFade *pFade, CManager *pManager, int nControllNum)
 			pCharaSel->SetWindowCharaDraw(nControllNum, true);
 			if (CCommand::GetCommand("DECISION", nControllNum) == true && m_SelectState == CCharaSelect::SELECTSTATE_NOSELECT)
 			{
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE05);
+				pSound->SetVolume(CSound::SOUND_LABEL_VOICE_SELECT_RABBIT, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_VOICE_SELECT_RABBIT);
 				m_SelectState = CCharaSelect::SELECTSTATE_FLASH;
 				m_bPCSelMove = true;
 			}

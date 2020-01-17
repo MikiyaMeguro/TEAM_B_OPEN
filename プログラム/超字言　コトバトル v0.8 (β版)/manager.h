@@ -58,7 +58,7 @@ class CPoint;
 #define ENEMY_B_BUTTON		(DIK_NUMPADENTER)
 #define ENEMY_C_BUTTON		(DIK_NUMPAD5)
 #define PLAYER_C_BUTTON		(DIK_S)
-#define MAX_SOUND			(3)
+#define MAX_SOUND			(4)
 #define MAX_PLAYER			(4)
 
 //=============================================================================

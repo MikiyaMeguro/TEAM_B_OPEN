@@ -202,11 +202,12 @@ public:
 	int			GetMotion(BODY body = BODY::LOWER_BODY) { return m_motion[body]; };
 
 	PLAYER_TYPE GetPlayerType(void) { return m_PlayerType; }
-
 	void SetPartsAlpha(float fAlpha);
-
 	CScene3D *GetBulletUI(void) { return m_pBulletUI; }
 	CSceneBillBoard *GetMissileUI(void) { return m_pMissileUI; }
+
+	void PlayVoice(CPlayer::PLAYER_TYPE type);	//ボイス再生
+
 private:
 	bool			CollisionDamageObj(void);			//弾との当たり判定
 	void			DamageReaction(float fDamageValue,D3DXVECTOR3 HitRotation);	//fDamageValue = ダメージ量 | HitRotation = 攻撃を受けた向き
@@ -261,6 +262,8 @@ private:
 	int m_nShotCameraMove;			//カメラ拡縮の時間
 	int m_nCntGunScale;				//銃が大きくなる時間
 	bool m_bBulletFlag;
+	bool m_bVoice;	//ボイス
+
 };
 
 #endif // !_PLAYER_H_

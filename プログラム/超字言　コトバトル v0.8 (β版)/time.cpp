@@ -126,6 +126,7 @@ CTime::CTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority, objType
 	m_nUIScaleCounter = 0;
 	m_fUIScale = 0;
 	m_fUIAddScale = 0;
+	m_bStartSound = false;
 
 	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 	{
@@ -150,6 +151,7 @@ HRESULT CTime::Init(void)
 	m_nTimeOne = 3;
 	m_StageCounter = 0;
 	m_fUIAddScale = 1.0f;
+	m_bStartSound = false;
 
 	if (CManager::GetMode() == CManager::MODE_GAME)
 	{
@@ -361,6 +363,8 @@ void CTime::Uninit(void)
 //=============================================================================
 void CTime::Update(void)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	//現在のモードの取得
 	CManager::MODE GameMode = CManager::GetMode();
 	DebugKey();		// デバック用
@@ -496,14 +500,18 @@ void CTime::Update(void)
 			}
 		}
 
-
-
 		int nTexData = 0;
 		// 数字のテクスチャ設定
 		TexTime(nTexData, m_nTimeOne);
 
 		if (m_nTime == 0 && m_nTimeOne == 0 && GameMode == CManager::MODE_GAME)
 		{
+			//ゲーム終了ボイス
+			if (m_bStartSound == false)
+			{
+				m_bStartSound = true;
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_GAMEEND);
+			}
 			for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 			{	// プレイヤーを行動できないように
 				m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(true);
@@ -587,9 +595,18 @@ void CTime::Draw(void)
 //=============================================================================
 void CTime::CountDown(void)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
+
 	//カウントダウン
 	if (m_bEndCntDown == false)
 	{
+		if (m_bStartSound == false)
+		{
+			pSound->SetVolume(CSound::SOUND_LABEL_SE_GAMESTART00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_SE_GAMESTART00);
+			m_bStartSound = true;
+		}
+
 		//大きさ変化
 		m_fScale += COUNTDOWN_SCALE;
 		//透明度上げ
@@ -607,14 +624,19 @@ void CTime::CountDown(void)
 			m_fScale = COUNTDOWN_SCALE * 75;
 			if (m_nType < 1)
 			{
+				//テクスチャ替え
 				m_bCntDown = true;
 				m_nType += 1;
 				m_fScale = 0;
 				m_Col.a = 1.0f;
+
+				pSound->SetVolume(CSound::SOUND_LABEL_SE_GAMESTART01, 5.0f);
+				pSound->PlaySound(CSound::SOUND_LABEL_SE_GAMESTART01);
 			}
 			else if (m_nType == 1)
 			{
 				m_bEndCntDown = true;
+				m_bStartSound = false;
 				m_Col.a = 0.0f;
 				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
 				{	// プレイヤーを取得
@@ -636,6 +658,7 @@ void CTime::CountDown(void)
 						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
 						break;
 					case 1:
+						//スタート表示
 						m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
 						m_pScene2D[nCnt]->SetWidthHeight(m_fWidth + 100, m_fHeight + 100);
 						break;

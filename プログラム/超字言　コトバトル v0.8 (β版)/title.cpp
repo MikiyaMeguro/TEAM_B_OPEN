@@ -51,6 +51,7 @@ void CTitle::Init(void)
 	m_ProductionState = PRODUCTIONSTATE_NONE;	//演出状態の初期化
 	m_FlashSate = FLASHSTATE_NONE;				//フラッシュ状態の初期化
 	m_bTitleCall = false;
+	m_bSubTitleCall = false;
 	m_nTitleCallCnt = 0;
 
 	/*火花*/
@@ -154,13 +155,15 @@ void CTitle::Update(void)
 	//タイトルコール
 	if (m_bTitleCall == true)
 	{
-		if(m_nTitleCallCnt == 0)
+		if(m_nTitleCallCnt == 0  && m_bSubTitleCall == false)
 		{
-			pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE00);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_TITLECALL00);
+			m_bSubTitleCall = true;
 		}
 		if (m_nTitleCallCnt == 40)
 		{
-			pSound->PlaySound(CSound::SOUND_LABEL_SE_VOICE01);
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_TITLECALL01, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_TITLECALL01);
 			m_bTitleCall = false;
 		}
 		m_nTitleCallCnt++;
@@ -359,6 +362,9 @@ void CTitle::Production(void)
 		{
 			m_ProductionState = PRODUCTIONSTATE_TITLE_MAIN;
 		}
+
+		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_TITLECALL00);
+		m_bSubTitleCall = true;
 		break;
 
 	case PRODUCTIONSTATE_TITLE_MAIN:
@@ -367,6 +373,7 @@ void CTitle::Production(void)
 		{
 			m_ProductionState = PRODUCTIONSTATE_FLASH;
 		}
+		m_bTitleCall = true;
 		break;
 
 	case PRODUCTIONSTATE_FLASH:
