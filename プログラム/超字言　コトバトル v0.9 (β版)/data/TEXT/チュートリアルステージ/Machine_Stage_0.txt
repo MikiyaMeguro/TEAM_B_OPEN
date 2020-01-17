@@ -1,0 +1,2066 @@
+#============================================================
+#
+# [モデル配置ツール]スクリプトファイル 
+#  Author : Daisuke Ozaki
+#
+#============================================================
+SCRIPT			# この行は絶対消さないこと！
+
+#------------------------------------------------------------
+#         モデル数 ※プログラム内でも変更してください
+#------------------------------------------------------------
+
+#------------------------------------------------------------
+#    モデルの種類 (読み込み済み)
+#------------------------------------------------------------
+	# 0 : 小さい壁  
+	# 1 : 大きい壁
+	# 2 : 歯車
+	# 3 :はてなぼっくす
+	# 4 : 文字土台
+	# 6 : プロペラの土台
+	# 7 : プロペラ
+	# 8 : ドローンX移動
+	# 9 : ドローンZ移動
+	# 10 : 背景床
+	
+#------------------------------------------------------------
+#    配置の種類 (読み込み済み)
+#------------------------------------------------------------
+	# 0 : ただの配置物
+	# 1 : 何かしらの動きがある物
+	
+#------------------------------------------------------------
+#    当たり判定の種類 
+#------------------------------------------------------------
+	# 0 : 当たり判定無し
+	# 1 : ボックス当り判定
+	# 2 : ベルトコンベア ( 移動方向 -> 前方 )
+	# 3 : ベルトコンベア ( 移動方向 -> 右 )
+	# 4 : ベルトコンベア ( 移動方向 -> 後方 )
+	# 5 : ベルトコンベア ( 移動方向 -> 左 )
+	# 6 : ノックバック ( 威力-> 小 )
+	# 7 : ノックバック ( 威力-> 中 )
+	# 8 : ノックバック ( 威力-> 大 )
+	# 9 : ボタン	   ( スイッチ )
+	
+
+#------------------------------------------------------------
+#                      モデル配置情報
+#------------------------------------------------------------
+
+#------------------------------------------
+# 背景床
+#------------------------------------------
+MODELSET
+	TYPE = 43
+	POS = 0.0 -1.0 200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 20.0 0.01 20.0
+	COLLISION = 1
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 43
+	POS = 0.0 -1.0 980.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 20.0 0.01 19.0
+	COLLISION = 1
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 43
+	POS = 0.0 -1.0 1480.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 0.01 6.0
+	COLLISION = 1
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 43
+	POS = 0.0 -1.0 2000.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 20.0 0.01 20.0
+	COLLISION = 1
+	GIMMICK = 0					# 配置の種類を決める
+END_MODELSET
+
+#------------------------------------------
+# ポール
+#-------------------------------------------
+MODELSET
+	TYPE = 48
+	POS = -400.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -355.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -310.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -265.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -220.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -175.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -130.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -85.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -40.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 5.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 50.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 95.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 140.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 185.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 230.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 275.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 320.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 365.0 0.0 -200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 -160.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 -115.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 -70.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 -25.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 20.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 65.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 110.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 155.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 245.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 290.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 0.0 425.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 460.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 460.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 505.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 550.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 595.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 640.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 685.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 725.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 760.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 805.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 850.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 895.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 940.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 990.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1030.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1075.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1110.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1155.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1245.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1290.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 350.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 305.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 270.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 230.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 190.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 145.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 100.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 -160.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 -115.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 -70.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 -25.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 20.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 65.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 110.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 155.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 245.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 290.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 0.0 425.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 460.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 460.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 505.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 550.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 595.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 640.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 685.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 725.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 760.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 805.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 850.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 895.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 940.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 990.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1030.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1075.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1110.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1155.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1200.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1245.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1290.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -350.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -395.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -305.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -270.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -230.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -190.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -145.0 5.0 1335.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -100.0 5.0 1335.0
+	ROT = 0.0 3.14 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -100.0 5.0 1380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -100.0 5.0 1430.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -100.0 5.0 1475.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -100.0 5.0 1510.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -100.0 5.0 1550.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -100.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = 100.0 5.0 1380.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 100.0 5.0 1430.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 100.0 5.0 1475.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 100.0 5.0 1510.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 100.0 5.0 1550.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 100.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -350.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -395.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -305.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -270.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -230.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -190.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -145.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -100.0 5.0 1590.0
+	ROT = 0.0 3.14 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+
+
+MODELSET
+	TYPE = 48
+	POS = 350.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 305.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 270.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 230.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 190.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 145.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 100.0 5.0 1590.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1640.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1690.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1730.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1775.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1810.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1855.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1900.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1945.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 1990.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2025.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2065.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2105.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2195.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2230.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2275.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2310.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2355.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = 395.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+
+
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1640.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1690.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1730.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1775.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1810.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1855.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1900.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1945.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 1990.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2025.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2065.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2105.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2150.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2195.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2230.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2275.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2310.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2355.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 49
+	POS = -395.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -395.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+
+MODELSET
+	TYPE = 48
+	POS = -350.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -305.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -265.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -220.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -175.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -130.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -95.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -50.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = -5.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 40.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 85.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 120.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 155.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 200.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 245.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 290.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.0 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 48
+	POS = 335.0 5.0 2400.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 1.5 1.0 1.0
+	COLLISION = 1
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+#------------------------------------------
+# 文字土台
+#-------------------------------------------
+MODELSET
+	TYPE = 4
+	POS = -294.0 -20.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 3.0 5.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -253.0 -20.0 65.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 3.0 5.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -293.5 -20.0 2.5
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 3.0 5.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 260.0 -20.0 130.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 3.0 5.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 305.0 -20.0 65.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 3.0 5.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 265.5 -20.0 1.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 5.0 3.0 5.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 2350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 2280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 2210.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 2140.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 2070.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 2000.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 1930.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 1860.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 1790.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 1720.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = 370.0 -20.0 1650.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+
+
+
+
+
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 2350.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 2280.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 2210.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 2140.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 2070.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 2000.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 1930.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 1860.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 1790.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 1720.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+MODELSET
+	TYPE = 4
+	POS = -370.0 -20.0 1650.0
+	ROT = 0.0 0.0 0.0
+	SCALE = 3.0 3.0 3.0
+	COLLISION = 0
+	GIMMICK = 1					# 配置の種類を決める
+END_MODELSET
+
+END_SCRIPT		# この行は絶対消さないこと！
