@@ -308,122 +308,123 @@ protected:
 
 		// •¶Žšƒ‚ƒfƒ‹–¼ SE
 		{ "data/SE/WORDVOICE/00‚­‚é‚Ü.wav", 0 },			//	ŽÔ
-		{ "data/SE/WORDVOICE/00‚·‚¢‚©.wav", 0 },			//	‚·‚¢‚©
-		{ "data/SE/WORDVOICE/01‚½‚Ü‚².wav", 0 },			//	‚½‚Ü‚²
-		{ "data/SE/WORDVOICE/02‚©‚´‚ñ.wav", 0 },			//	‚©‚´‚ñ
-		{ "data/SE/WORDVOICE/03‚­‚³‚â.wav", 0 },			//	‚­‚³‚â
-		{ "data/SE/WORDVOICE/04‚ß‚©‚Ô.wav", 0 },			//	‚ß‚©‚Ô
-		{ "data/SE/WORDVOICE/05‚ª‚­‚Ó.wav", 0 },			//	‚ª‚­‚Ó
-		{ "data/SE/WORDVOICE/06‚­‚­‚¢.wav", 0 },			//	‚­‚­‚è
-		{ "data/SE/WORDVOICE/07‚¢‚é‚©.wav", 0 },			//	‚¢‚é‚©
-		{ "data/SE/WORDVOICE/08‚­‚­‚è.wav", 0 },			//	‚­‚­‚è
-		{ "data/SE/WORDVOICE/09‚´‚ç‚ß.wav", 0 },			//	‚´‚ç‚ß
-
 		{ "data/SE/WORDVOICE/10‚Ü‚¢‚­.wav", 0 },			//	‚Ü‚¢‚­
-		{ "data/SE/WORDVOICE/11‚½‚ç‚¢.wav", 0 },			//	‚½‚ç‚¢
-		{ "data/SE/WORDVOICE/12‚ç‚ñ‚·.wav", 0 },			//	‚ç‚ñ‚·
-		{ "data/SE/WORDVOICE/13‚È‚·‚©.wav", 0 },			//	‚È‚·‚©
-		{ "data/SE/WORDVOICE/14‚³‚´‚¦.wav", 0 },			//	‚³‚´‚¦
-		{ "data/SE/WORDVOICE/15‚­‚·‚è.wav", 0 },			//	‚­‚·‚è
-		{ "data/SE/WORDVOICE/16‚½‚¢‚Â.wav", 0 },			//	‚½‚¢‚Â
-		{ "data/SE/WORDVOICE/17‚½‚±‚·.wav", 0 },			//	‚½‚±‚·
-		{ "data/SE/WORDVOICE/18‚¢‚¿‚¢.wav", 0 },			//	‚¢‚¿‚¢
-		{ "data/SE/WORDVOICE/19‚±‚é‚­.wav", 0 },			//	‚±‚é‚­
-		{ "data/SE/WORDVOICE/20‚©‚Ü‚·.wav", 0 },			//	‚©‚Ü‚·
-
 		{ "data/SE/WORDVOICE/21‚Â‚­‚¦.wav", 0 },			//	‚Â‚­‚¦
-		{ "data/SE/WORDVOICE/22‚â‚©‚ñ.wav", 0 },			//	‚â‚©‚ñ
-		{ "data/SE/WORDVOICE/23‚©‚¾‚ñ.wav", 0 },			//	‚©‚¾‚ñ
-		{ "data/SE/WORDVOICE/24‚½‚ñ‚­.wav", 0 },			//	‚½‚ñ‚­
-		{ "data/SE/WORDVOICE/25‚½‚¢‚é.wav", 0 },			//	‚½‚¢‚é
-		{ "data/SE/WORDVOICE/26‚©‚¢‚ª.wav", 0 },			//	‚©‚¢‚ª
-		{ "data/SE/WORDVOICE/27‚©‚¦‚é.wav", 0 },			//	‚©‚¦‚é
-		{ "data/SE/WORDVOICE/28‚³‚ç‚¾.wav", 0 },			//	‚³‚ç‚¾
-		{ "data/SE/WORDVOICE/29‚©‚ñ‚È.wav", 0 },			//	‚©‚ñ‚È
-		{ "data/SE/WORDVOICE/30‚È‚Ó‚¾.wav", 0 },			//	‚È‚Ó‚¾
-		{ "data/SE/WORDVOICE/31‚½‚½‚ç.wav", 0 },			//	‚½‚½‚ç
-
 		{ "data/SE/WORDVOICE/32‚Õ‚è‚ñ.wav", 0 },			//	‚Õ‚è‚ñ
-		{ "data/SE/WORDVOICE/33‚¢‚©‚è.wav", 0 },			//	‚¢‚©‚è
-		{ "data/SE/WORDVOICE/34‚©‚½‚È.wav", 0 },			//	‚©‚½‚È
-		{ "data/SE/WORDVOICE/35‚â‚®‚ç.wav", 0 },			//	‚â‚®‚ç
-		{ "data/SE/WORDVOICE/36‚ç‚¢‚·.wav", 0 },			//	‚ç‚¢‚·
-		{ "data/SE/WORDVOICE/37‚¢‚­‚ç.wav", 0 },			//	‚¢‚­‚ç
-		{ "data/SE/WORDVOICE/38‚Õ‚ç‚®.wav", 0 },			//	‚Õ‚ç‚®
-		{ "data/SE/WORDVOICE/39‚ß‚ñ‚Ü.wav", 0 },			//	‚ß‚ñ‚Ü
-		{ "data/SE/WORDVOICE/40‚¢‚¦‚¢.wav", 0 },			//	‚¢‚¦‚¢
-		{ "data/SE/WORDVOICE/41‚ß‚¾‚©.wav", 0 },			//	‚·‚é‚ß
-		{ "data/SE/WORDVOICE/42‚¸‚©‚ñ.wav", 0 },			//	‚¸‚©‚ñ
-
 		{ "data/SE/WORDVOICE/43‚È‚¢‚Ó.wav", 0 },			//	‚È‚¢‚Ó
-		{ "data/SE/WORDVOICE/44‚¢‚©‚¾.wav", 0 },			//	‚¢‚©‚¾
-		{ "data/SE/WORDVOICE/45‚Ü‚é‚½.wav", 0 },			//	‚Ü‚é‚½
-		{ "data/SE/WORDVOICE/46‚´‚¢‚·.wav", 0 },			//	‚´‚¢‚·
-		{ "data/SE/WORDVOICE/47‚Ü‚ñ‚ª.wav", 0 },			//	‚Ü‚ñ‚ª
-		{ "data/SE/WORDVOICE/48‚ß‚ñ‚±.wav", 0 },			//	‚ß‚ñ‚±
-		{ "data/SE/WORDVOICE/49‚³‚¢‚ñ.wav", 0 },			//	‚³‚¢‚ñ
-		{ "data/SE/WORDVOICE/50‚½‚ç‚±.wav", 0 },			//	‚½‚ç‚±
-		{ "data/SE/WORDVOICE/51‚ß‚¾‚Ü.wav", 0 },			//	‚ß‚¾‚Ü
-		{ "data/SE/WORDVOICE/52‚·‚¸‚ß.wav", 0 },			//	‚·‚¸‚ß
-		{ "data/SE/WORDVOICE/53‚·‚Ô‚½.wav", 0 },			//	‚·‚Ô‚½
-
 		{ "data/SE/WORDVOICE/54‚è‚ñ‚².wav", 0 },			//	‚è‚ñ‚²
-		{ "data/SE/WORDVOICE/55‚³‚¢‚Ó.wav", 0 },			//	‚³‚¢‚Ó
-		{ "data/SE/WORDVOICE/56‚Â‚ç‚ç.wav", 0 },			//	‚Â‚ç‚ç
-		{ "data/SE/WORDVOICE/57‚±‚ñ‚ª.wav", 0 },			//	‚±‚ñ‚ª
-		{ "data/SE/WORDVOICE/58‚Ó‚¢‚².wav", 0 },			//	‚Ó‚¢‚²
-		{ "data/SE/WORDVOICE/59‚ß‚¢‚·.wav", 0 },			//	‚ß‚¢‚·
-		{ "data/SE/WORDVOICE/60‚½‚¢‚Ü.wav", 0 },			//	‚½‚¢‚Ü
-		{ "data/SE/WORDVOICE/61‚©‚ß‚ñ.wav", 0 },			//	‚©‚ß‚ñ
-		{ "data/SE/WORDVOICE/62‚·‚¾‚¿.wav", 0 },			//	‚·‚¾‚¿
-		{ "data/SE/WORDVOICE/63‚¿‚½‚ñ.wav", 0 },			//	‚¿‚½‚ñ
-		{ "data/SE/WORDVOICE/64‚·‚·‚è.wav", 0 },			//	‚½‚¢‚Ü
-
 		{ "data/SE/WORDVOICE/65‚¦‚Ì‚®.wav", 0 },			//	‚¦‚Ì‚®
-		{ "data/SE/WORDVOICE/66‚©‚é‚½.wav", 0 },			//	‚©‚é‚½
-		{ "data/SE/WORDVOICE/67‚¾‚ñ‚².wav", 0 },			//	‚¾‚ñ‚²
-		{ "data/SE/WORDVOICE/68‚¾‚¢‚·.wav", 0 },			//	‚¾‚¢‚·
-		{ "data/SE/WORDVOICE/69‚È‚Ü‚±.wav", 0 },			//	‚È‚Ü‚±
-		{ "data/SE/WORDVOICE/70‚³‚ç‚¢.wav", 0 },			//	‚³‚ç‚¢
-		{ "data/SE/WORDVOICE/71‚³‚­‚ç.wav", 0 },			//	‚³‚­‚ç
-		{ "data/SE/WORDVOICE/72‚¢‚Ó‚­.wav", 0 },			//	‚¢‚Ó‚­
-		{ "data/SE/WORDVOICE/73‚è‚ñ‚·.wav", 0 },			//	‚è‚ñ‚·
-		{ "data/SE/WORDVOICE/74‚â‚³‚¢.wav", 0 },			//	‚â‚³‚¢
-		{ "data/SE/WORDVOICE/75‚©‚¢‚±.wav", 0 },			//	‚©‚¢‚±
-
 		{ "data/SE/WORDVOICE/76‚½‚¢‚â.wav", 0 },			//	‚½‚¢‚â
-		{ "data/SE/WORDVOICE/77‚©‚ß‚ç.wav", 0 },			//	‚©‚ß‚ç
-		{ "data/SE/WORDVOICE/78‚Ü‚­‚ç.wav", 0 },			//	‚Ü‚­‚ç
-		{ "data/SE/WORDVOICE/79‚½‚©‚ç.wav", 0 },			//	‚½‚©‚ç
-		{ "data/SE/WORDVOICE/80‚±‚ñ‚Ô.wav", 0 },			//	‚±‚ñ‚Ô
-		{ "data/SE/WORDVOICE/81‚¢‚ñ‚­.wav", 0 },			//	‚¢‚ñ‚­
-		{ "data/SE/WORDVOICE/82‚©‚â‚­.wav", 0 },			//	‚©‚â‚­
-		{ "data/SE/WORDVOICE/83‚Ó‚·‚Ü.wav", 0 },			//	‚Ó‚·‚Ü
-		{ "data/SE/WORDVOICE/84‚ç‚ñ‚Õ.wav", 0 },			//	‚ç‚ñ‚Õ
-		{ "data/SE/WORDVOICE/85‚Ó‚ß‚ñ.wav", 0 },			//	‚Ó‚ß‚ñ
-		{ "data/SE/WORDVOICE/86‚ß‚¾‚©.wav", 0 },			//	‚ß‚¾‚©
-
 		{ "data/SE/WORDVOICE/87‚½‚¢‚±.wav", 0 },			//	‚½‚¢‚±
-		{ "data/SE/WORDVOICE/88‚±‚¦‚¾.wav", 0 },			//	‚±‚¦‚¾
-		{ "data/SE/WORDVOICE/89‚­‚È‚¢.wav", 0 },			//	‚­‚È‚¢
-		{ "data/SE/WORDVOICE/90‚ª‚ç‚·.wav", 0 },			//	‚ª‚ç‚·
-		{ "data/SE/WORDVOICE/91‚ç‚¢‚¿.wav", 0 },			//	‚ç‚¢‚¿
-		{ "data/SE/WORDVOICE/92‚´‚¢‚é.wav", 0 },			//	‚´‚¢‚é
-		{ "data/SE/WORDVOICE/93‚¢‚é‚¢.wav", 0 },			//	‚¢‚é‚¢
-		{ "data/SE/WORDVOICE/94‚½‚ñ‚·.wav", 0 },			//	‚½‚ñ‚·
-		{ "data/SE/WORDVOICE/95‚³‚ñ‚².wav", 0 },			//	‚³‚ñ‚²
-		{ "data/SE/WORDVOICE/96‚Ü‚®‚Ü.wav", 0 },			//	‚Ü‚®‚Ü
-
 		{ "data/SE/WORDVOICE/97‚±‚¢‚ñ.wav", 0 },			//	‚±‚¢‚ñ
+
+		{ "data/SE/WORDVOICE/00‚·‚¢‚©.wav", 0 },			//	‚·‚¢‚©
+		{ "data/SE/WORDVOICE/11‚½‚ç‚¢.wav", 0 },			//	‚½‚ç‚¢
+		{ "data/SE/WORDVOICE/22‚â‚©‚ñ.wav", 0 },			//	‚â‚©‚ñ
+		{ "data/SE/WORDVOICE/33‚¢‚©‚è.wav", 0 },			//	‚¢‚©‚è
+		{ "data/SE/WORDVOICE/44‚¢‚©‚¾.wav", 0 },			//	‚¢‚©‚¾
+		{ "data/SE/WORDVOICE/55‚³‚¢‚Ó.wav", 0 },			//	‚³‚¢‚Ó
+		{ "data/SE/WORDVOICE/66‚©‚é‚½.wav", 0 },			//	‚©‚é‚½
+		{ "data/SE/WORDVOICE/77‚©‚ß‚ç.wav", 0 },			//	‚©‚ß‚ç
+		{ "data/SE/WORDVOICE/88‚±‚¦‚¾.wav", 0 },			//	‚±‚¦‚¾
 		{ "data/SE/WORDVOICE/98‚¢‚¿‚².wav", 0 },			//	‚¢‚¿‚²
+
+		{ "data/SE/WORDVOICE/01‚½‚Ü‚².wav", 0 },			//	‚½‚Ü‚²
+		{ "data/SE/WORDVOICE/12‚ç‚ñ‚·.wav", 0 },			//	‚ç‚ñ‚·
+		{ "data/SE/WORDVOICE/23‚©‚¾‚ñ.wav", 0 },			//	‚©‚¾‚ñ
+		{ "data/SE/WORDVOICE/34‚©‚½‚È.wav", 0 },			//	‚©‚½‚È
+		{ "data/SE/WORDVOICE/45‚Ü‚é‚½.wav", 0 },			//	‚Ü‚é‚½
+		{ "data/SE/WORDVOICE/56‚Â‚ç‚ç.wav", 0 },			//	‚Â‚ç‚ç
+		{ "data/SE/WORDVOICE/67‚¾‚ñ‚².wav", 0 },			//	‚¾‚ñ‚²
+		{ "data/SE/WORDVOICE/78‚Ü‚­‚ç.wav", 0 },			//	‚Ü‚­‚ç
+		{ "data/SE/WORDVOICE/89‚­‚È‚¢.wav", 0 },			//	‚­‚È‚¢
 		{ "data/SE/WORDVOICE/99‚³‚©‚È.wav", 0 },			//	‚³‚©‚È
+
+		{ "data/SE/WORDVOICE/02‚©‚´‚ñ.wav", 0 },			//	‚©‚´‚ñ
+		{ "data/SE/WORDVOICE/13‚È‚·‚©.wav", 0 },			//	‚È‚·‚©
+		{ "data/SE/WORDVOICE/24‚½‚ñ‚­.wav", 0 },			//	‚½‚ñ‚­
+		{ "data/SE/WORDVOICE/35‚â‚®‚ç.wav", 0 },			//	‚â‚®‚ç
+		{ "data/SE/WORDVOICE/46‚´‚¢‚·.wav", 0 },			//	‚´‚¢‚·
+		{ "data/SE/WORDVOICE/57‚±‚ñ‚ª.wav", 0 },			//	‚±‚ñ‚ª
+		{ "data/SE/WORDVOICE/68‚¾‚¢‚·.wav", 0 },			//	‚¾‚¢‚·
+		{ "data/SE/WORDVOICE/79‚½‚©‚ç.wav", 0 },			//	‚½‚©‚ç
+		{ "data/SE/WORDVOICE/90‚ª‚ç‚·.wav", 0 },			//	‚ª‚ç‚·
 		{ "data/SE/WORDVOICE/100‚è‚ñ‚®.wav", 0 },			//	‚è‚ñ‚®
+
+		{ "data/SE/WORDVOICE/03‚­‚³‚â.wav", 0 },			//	‚­‚³‚â
+		{ "data/SE/WORDVOICE/14‚³‚´‚¦.wav", 0 },			//	‚³‚´‚¦
+		{ "data/SE/WORDVOICE/25‚½‚¢‚é.wav", 0 },			//	‚½‚¢‚é
+		{ "data/SE/WORDVOICE/36‚ç‚¢‚·.wav", 0 },			//	‚ç‚¢‚·
+		{ "data/SE/WORDVOICE/47‚Ü‚ñ‚ª.wav", 0 },			//	‚Ü‚ñ‚ª
+		{ "data/SE/WORDVOICE/58‚Ó‚¢‚².wav", 0 },			//	‚Ó‚¢‚²
+		{ "data/SE/WORDVOICE/69‚È‚Ü‚±.wav", 0 },			//	‚È‚Ü‚±
+		{ "data/SE/WORDVOICE/80‚±‚ñ‚Ô.wav", 0 },			//	‚±‚ñ‚Ô
+		{ "data/SE/WORDVOICE/91‚ç‚¢‚¿.wav", 0 },			//	‚ç‚¢‚¿
 		{ "data/SE/WORDVOICE/101‚Ü‚·‚­.wav", 0 },			//	‚Ü‚·‚­
+
+		{ "data/SE/WORDVOICE/04‚ß‚©‚Ô.wav", 0 },			//	‚ß‚©‚Ô
+		{ "data/SE/WORDVOICE/15‚­‚·‚è.wav", 0 },			//	‚­‚·‚è
+		{ "data/SE/WORDVOICE/26‚©‚¢‚ª.wav", 0 },			//	‚©‚¢‚ª
+		{ "data/SE/WORDVOICE/37‚¢‚­‚ç.wav", 0 },			//	‚¢‚­‚ç
+		{ "data/SE/WORDVOICE/48‚ß‚ñ‚±.wav", 0 },			//	‚ß‚ñ‚±
+		{ "data/SE/WORDVOICE/59‚ß‚¢‚·.wav", 0 },			//	‚ß‚¢‚·
+		{ "data/SE/WORDVOICE/70‚³‚ç‚¢.wav", 0 },			//	‚³‚ç‚¢
+		{ "data/SE/WORDVOICE/81‚¢‚ñ‚­.wav", 0 },			//	‚¢‚ñ‚­
+		{ "data/SE/WORDVOICE/92‚´‚¢‚é.wav", 0 },			//	‚´‚¢‚é
 		{ "data/SE/WORDVOICE/102‚¢‚È‚è.wav", 0 },			//	‚¢‚È‚è
+
+		{ "data/SE/WORDVOICE/05‚ª‚­‚Ó.wav", 0 },			//	‚ª‚­‚Ó
+		{ "data/SE/WORDVOICE/16‚½‚¢‚Â.wav", 0 },			//	‚½‚¢‚Â
+		{ "data/SE/WORDVOICE/27‚©‚¦‚é.wav", 0 },			//	‚©‚¦‚é
+		{ "data/SE/WORDVOICE/38‚Õ‚ç‚®.wav", 0 },			//	‚Õ‚ç‚®
+		{ "data/SE/WORDVOICE/49‚³‚¢‚ñ.wav", 0 },			//	‚³‚¢‚ñ
+		{ "data/SE/WORDVOICE/60‚½‚¢‚Ü.wav", 0 },			//	‚½‚¢‚Ü
+		{ "data/SE/WORDVOICE/71‚³‚­‚ç.wav", 0 },			//	‚³‚­‚ç
+		{ "data/SE/WORDVOICE/82‚©‚â‚­.wav", 0 },			//	‚©‚â‚­
+		{ "data/SE/WORDVOICE/93‚¢‚é‚¢.wav", 0 },			//	‚¢‚é‚¢
 		{ "data/SE/WORDVOICE/103‚±‚½‚Â.wav", 0 },			//	‚±‚½‚Â
+
+		{ "data/SE/WORDVOICE/06‚­‚­‚¢.wav", 0 },			//	‚­‚­‚è
+		{ "data/SE/WORDVOICE/17‚½‚±‚·.wav", 0 },			//	‚½‚±‚·
+		{ "data/SE/WORDVOICE/28‚³‚ç‚¾.wav", 0 },			//	‚³‚ç‚¾
+		{ "data/SE/WORDVOICE/39‚ß‚ñ‚Ü.wav", 0 },			//	‚ß‚ñ‚Ü
+		{ "data/SE/WORDVOICE/50‚½‚ç‚±.wav", 0 },			//	‚½‚ç‚±
+		{ "data/SE/WORDVOICE/61‚©‚ß‚ñ.wav", 0 },			//	‚©‚ß‚ñ
+		{ "data/SE/WORDVOICE/72‚¢‚Ó‚­.wav", 0 },			//	‚¢‚Ó‚­
+		{ "data/SE/WORDVOICE/83‚Ó‚·‚Ü.wav", 0 },			//	‚Ó‚·‚Ü
+		{ "data/SE/WORDVOICE/94‚½‚ñ‚·.wav", 0 },			//	‚½‚ñ‚·
 		{ "data/SE/WORDVOICE/104‚È‚ß‚±.wav", 0 },			//	‚È‚ß‚±
+
+		{ "data/SE/WORDVOICE/07‚¢‚é‚©.wav", 0 },			//	‚¢‚é‚©
+		{ "data/SE/WORDVOICE/18‚¢‚¿‚¢.wav", 0 },			//	‚¢‚¿‚¢
+		{ "data/SE/WORDVOICE/29‚©‚ñ‚È.wav", 0 },			//	‚©‚ñ‚È
+		{ "data/SE/WORDVOICE/40‚¢‚¦‚¢.wav", 0 },			//	‚¢‚¦‚¢
+		{ "data/SE/WORDVOICE/51‚ß‚¾‚Ü.wav", 0 },			//	‚ß‚¾‚Ü
+		{ "data/SE/WORDVOICE/62‚·‚¾‚¿.wav", 0 },			//	‚·‚¾‚¿
+		{ "data/SE/WORDVOICE/73‚è‚ñ‚·.wav", 0 },			//	‚è‚ñ‚·
+		{ "data/SE/WORDVOICE/84‚ç‚ñ‚Õ.wav", 0 },			//	‚ç‚ñ‚Õ
+		{ "data/SE/WORDVOICE/95‚³‚ñ‚².wav", 0 },			//	‚³‚ñ‚²
 		{ "data/SE/WORDVOICE/105‚·‚Ü‚¢.wav", 0 },			//	‚·‚Ü‚¢
+
+		{ "data/SE/WORDVOICE/08‚­‚­‚è.wav", 0 },			//	‚­‚­‚è
+		{ "data/SE/WORDVOICE/19‚±‚é‚­.wav", 0 },			//	‚±‚é‚­
+		{ "data/SE/WORDVOICE/30‚È‚Ó‚¾.wav", 0 },			//	‚È‚Ó‚¾
+		{ "data/SE/WORDVOICE/41‚ß‚¾‚©.wav", 0 },			//	‚·‚é‚ß
+		{ "data/SE/WORDVOICE/52‚·‚¸‚ß.wav", 0 },			//	‚·‚¸‚ß
+		{ "data/SE/WORDVOICE/63‚¿‚½‚ñ.wav", 0 },			//	‚¿‚½‚ñ
+		{ "data/SE/WORDVOICE/74‚â‚³‚¢.wav", 0 },			//	‚â‚³‚¢
+		{ "data/SE/WORDVOICE/85‚Ó‚ß‚ñ.wav", 0 },			//	‚Ó‚ß‚ñ
+		{ "data/SE/WORDVOICE/96‚Ü‚®‚Ü.wav", 0 },			//	‚Ü‚®‚Ü
 		{ "data/SE/WORDVOICE/106‚©‚È‚®.wav", 0 },			//	‚©‚È‚®
+
+		{ "data/SE/WORDVOICE/09‚´‚ç‚ß.wav", 0 },			//	‚´‚ç‚ß
+		{ "data/SE/WORDVOICE/20‚©‚Ü‚·.wav", 0 },			//	‚©‚Ü‚·
+		{ "data/SE/WORDVOICE/31‚½‚½‚ç.wav", 0 },			//	‚½‚½‚ç
+		{ "data/SE/WORDVOICE/42‚¸‚©‚ñ.wav", 0 },			//	‚¸‚©‚ñ
+		{ "data/SE/WORDVOICE/53‚·‚Ô‚½.wav", 0 },			//	‚·‚Ô‚½
+		{ "data/SE/WORDVOICE/64‚·‚·‚è.wav", 0 },			//	‚½‚¢‚Ü
+		{ "data/SE/WORDVOICE/75‚©‚¢‚±.wav", 0 },			//	‚©‚¢‚±
+		{ "data/SE/WORDVOICE/86‚ß‚¾‚©.wav", 0 },			//	‚ß‚¾‚©
 	};
 };
 #endif
