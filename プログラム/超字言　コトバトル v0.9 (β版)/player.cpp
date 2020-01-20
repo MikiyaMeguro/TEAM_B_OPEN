@@ -1031,7 +1031,7 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00);
 			break;
 		case CPlayer::TYPE_SPEED:
-			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00, 5.0f);
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00, 2.0f);
 			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00);
 			break;
 		case CPlayer::TYPE_REACH:
