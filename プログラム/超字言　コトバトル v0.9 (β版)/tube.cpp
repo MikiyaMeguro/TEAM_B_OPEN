@@ -259,7 +259,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 		{
 			if (m_apWord[nCntWord] != NULL)
 			{
-				 m_apWord[nCntWord]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); 
+				 m_apWord[nCntWord]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 		}
 
@@ -656,7 +656,6 @@ void CTube::SizeChange(D3DXVECTOR2 size)
 		{
 			int nCntSound = 0;
 			nCntSound = m_nAnswerModelNum + (int)CSound::SOUND_LABEL_WORDVOICE_KURUMA;	// ŽÔ‚Ìƒ{ƒCƒX‚©‚ç
-
 			CManager::GetSound()->SetVolume((CSound::SOUND_LABEL)nCntSound, 5.0f);
 			CManager::GetSound()->PlaySoundA((CSound::SOUND_LABEL)nCntSound);
 		}

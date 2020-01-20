@@ -264,6 +264,9 @@ private:
 	bool m_bBulletFlag;
 	bool m_bVoice;	//É{ÉCÉX
 
+	bool m_bDamageVoice;
+	int m_nTimerDamageVoice;
+
 };
 
 #endif // !_PLAYER_H_
