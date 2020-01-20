@@ -259,7 +259,7 @@ void CTube::SetWordNum(int nWordNum, int nNum, int nStock)
 		{
 			if (m_apWord[nCntWord] != NULL)
 			{
-				 m_apWord[nCntWord]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f)); 
+				 m_apWord[nCntWord]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 		}
 
@@ -533,7 +533,16 @@ void CTube::UninitChack(bool bFlag)
 
 		//m_pAnswerModel[m_nStockNum]->SetWidthHeight(m_sizeAnswer.x, m_sizeAnswer.y);
 
+		if (m_nAnswerModelNum != NOT_NUM)
+		{
+			int nCntSound = 0;
+			nCntSound = m_nAnswerModelNum + (int)CSound::SOUND_LABEL_WORDVOICE_KURUMA;	// 車のボイスから
+
+			CManager::GetSound()->SetVolume((CSound::SOUND_LABEL)nCntSound, 5.0f);
+			CManager::GetSound()->PlaySoundA((CSound::SOUND_LABEL)nCntSound);
+		}
 	}
+
 	m_nAnswerModelNum = 0;
 	m_nCntUninit = 0;
 	m_bCreateFlag = false;
@@ -643,10 +652,18 @@ void CTube::SizeChange(D3DXVECTOR2 size)
 
 	if (size.x >= m_sizeAnswer.x && size.y >= m_sizeAnswer.y)
 	{
+		if (m_bModelTexFlag == true && m_nAnswerModelNum != NOT_NUM)
+		{
+			int nCntSound = 0;
+			nCntSound = m_nAnswerModelNum + (int)CSound::SOUND_LABEL_WORDVOICE_KURUMA;	// 車のボイスから
+			CManager::GetSound()->SetVolume((CSound::SOUND_LABEL)nCntSound, 5.0f);
+			CManager::GetSound()->PlaySoundA((CSound::SOUND_LABEL)nCntSound);
+		}
 		m_bModelTexFlag = false;
 		m_bCreateFlag = false;
-		m_nAnswerModelNum = 0;
 		m_bSizeFlag = false;
+
+		m_nAnswerModelNum = 0;
 	}
 
 	if (m_pAnswerModel[m_nStockNum] != NULL)

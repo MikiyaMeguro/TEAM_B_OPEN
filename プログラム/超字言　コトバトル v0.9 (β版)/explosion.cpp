@@ -77,7 +77,6 @@ void CExplosion3D::Set(D3DXVECTOR3 pos, float fStartSize, float fDestSize, int n
 			pSound->SetVolume(CSound::SOUND_LABEL_SE_EXPLOSION, 5.0f);
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_EXPLOSION);
 		}
-
 	}
 	m_bNotDup = true;
 

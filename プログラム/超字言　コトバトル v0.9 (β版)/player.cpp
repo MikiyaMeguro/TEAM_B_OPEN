@@ -74,6 +74,8 @@ CPlayer::CPlayer(int nPriority) : CScene(nPriority)
 	m_nCntGunScale = 0;
 	m_bBulletFlag = false;
 	m_bVoice = false;
+	m_bDamageVoice = false;
+	m_nTimerDamageVoice = 0;
 
 	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{	//他プレイヤーから見えているかどうか
@@ -196,6 +198,10 @@ HRESULT CPlayer::Init(void)
 	m_nCntTransTime = 0;
 	m_pLockOnCharactor = NULL;
 	m_nShotCameraMove = 0;
+
+	m_bDamageVoice = false;
+	m_nTimerDamageVoice = 0;
+
 	//コマンドセット
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_KEYBOARD, CCommand::INPUTSTATE_RELEASE, DIK_SPACE);
 	CCommand::RegistCommand("PLAYER_BULLET", CCommand::INPUTTYPE_PAD_X, CCommand::INPUTSTATE_RELEASE, CInputXPad::XPAD_RIGHT_SHOULDER);
@@ -602,6 +608,17 @@ void CPlayer::Update(void)
 		}
 	}
 
+	//ダメージ音のカウント
+	if (m_bDamageVoice == true)
+	{
+		m_nTimerDamageVoice++;
+		if (m_nTimerDamageVoice > 40)
+		{
+			m_bDamageVoice = false;
+			m_nTimerDamageVoice = 0;
+		}
+	}
+
 	MotionUpdate(LOWER_BODY);
 	MotionUpdate(UPPER_BODY);
 
@@ -1000,26 +1017,32 @@ void CPlayer::DamageReaction(float fDamageValue, D3DXVECTOR3 HitRotation)
 
 	move.y += fDamageValue;
 
-	switch (m_PlayerType)
+
+	if (m_bDamageVoice == false)
 	{
+		switch (m_PlayerType)
+		{
 		case CPlayer::TYPE_BARANCE:
-		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_DAMAGE00, 5.0f);
-		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_DAMAGE00);
-		break;
-	case CPlayer::TYPE_POWER:
-		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00, 5.0f);
-		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00);
-		break;
-	case CPlayer::TYPE_SPEED:
-		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00, 5.0f);
-		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00);
-		break;
-	case CPlayer::TYPE_REACH:
-		pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_DAMAGE00, 5.0f);
-		pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_DAMAGE00);
-		break;
-	default:
-		break;
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_DOG_DAMAGE00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_DOG_DAMAGE00);
+			break;
+		case CPlayer::TYPE_POWER:
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_BEAR_DAMAGE00);
+			break;
+		case CPlayer::TYPE_SPEED:
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_CAT_DAMAGE00);
+			break;
+		case CPlayer::TYPE_REACH:
+			pSound->SetVolume(CSound::SOUND_LABEL_VOICE_RABBIT_DAMAGE00, 5.0f);
+			pSound->PlaySound(CSound::SOUND_LABEL_VOICE_RABBIT_DAMAGE00);
+			break;
+		default:
+			break;
+		}
+		//音を再生した
+		m_bDamageVoice = true;
 	}
 
 }

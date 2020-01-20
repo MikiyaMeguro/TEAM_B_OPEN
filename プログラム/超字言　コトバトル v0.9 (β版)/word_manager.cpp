@@ -410,6 +410,7 @@ void CWordManager::BulletCreate(int nID, D3DXVECTOR3 BulletMuzzle, D3DXVECTOR3 B
 				nType = m_nStock[0];
 				m_nCreateType = m_nAnswerTypeModel[nType] + (int)CLoad::MODEL_CAR0;	//弾になるモデルの位置までタイプをずらす
 
+
 				switch (type)
 				{
 				case CPlayer::TYPE_SPEED://猫はミサイル型
