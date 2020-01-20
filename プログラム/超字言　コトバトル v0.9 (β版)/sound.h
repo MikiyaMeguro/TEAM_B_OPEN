@@ -84,6 +84,7 @@ public:
 
 		SOUND_LABEL_SE_TITLE,		// タイトル
 
+		SOUND_LABEL_SE_EXPLOSION, //爆発
 
 		SOUND_LABEL_MAX,
 	} SOUND_LABEL;
@@ -181,6 +182,7 @@ protected:
 
 
 		{ "data/SE/Title.wav", 0 },	// タイトル
+		{ "data/SE/Explosion001.wav", 0 },	// 爆発
 
 	};
 };
