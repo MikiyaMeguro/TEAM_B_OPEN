@@ -339,7 +339,7 @@ void C3DCharactor::Update(void)
 
 	if (m_pCAvoidUi != NULL)
 	{//	‰ñ”ðUI‚ªŽg—p‚³‚ê‚Ä‚é
-		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f));
+		m_pCAvoidUi->SetPos(pos + D3DXVECTOR3(0.0f, 5.0f, 0.0f));
 
 		if (GetMoveType() == MOVETYPE_PLAYER_INPUT)
 		{
@@ -396,7 +396,7 @@ void C3DCharactor::Update(void)
 
 	if (m_pShadow != NULL)
 	{
-		m_pShadow->SetPos(pos + D3DXVECTOR3(0.0f, 2.0f, 0.0f));
+		m_pShadow->SetPos(pos + D3DXVECTOR3(0.0f, 4.0f, 0.0f));
 	}
 }
 
