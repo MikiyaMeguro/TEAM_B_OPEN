@@ -96,22 +96,6 @@ CTutoTime::CTutoTime(int nPriority, CScene::OBJTYPE objType) : CScene(nPriority,
 	m_nTimeCount = 0;
 	m_nTimeNum = 3;
 	m_nWaitTime = 0;
-	m_StageCounter = 0;
-	//値の初期化
-	m_bCntDown = false;
-	m_ScaleCounter = 0;
-	m_fScale = 0;
-	m_Col = D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f);
-	m_nColorFlash = 0;
-	m_nType = 0;
-	m_fWidth = 100;
-	m_fHeight = 100;
-	m_bEndCntDown = false;
-
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-	{
-		m_pPlayer[nCntPlayer] = NULL;			// プレイヤーを取得
-	}
 }
 
 //=============================================================================
@@ -129,100 +113,88 @@ HRESULT CTutoTime::Init(void)
 	m_nTimeOld = GAME_TIME - 30;
 	m_nTimeNum = PowerCalculation(m_nTime, 0);
 	m_nTimeOne = 3;
-	m_StageCounter = 0;
+	int nHeight = 0;
+	int nWidth = 0;
+
+	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
+	{
+		for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
+		{
+			m_apNumber[nCntTime][nCntPlayer] = NULL;
+		}
+	}
 
 	if (CManager::GetMode() == CManager::MODE_TUTORIAL)
 	{
-		for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
-		{	// タイマー初期設定
-			m_apNumber[nCntTime] = new CNumber;
-			float Space = 0.0f;
-			if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
-			{
-				Space = TIMER_SPACE1P2P;
-			}
-			else
-			{
-				Space = TIMER_SPACE3P4P;
-			}
+		for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
+		{
+			for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
+			{	// タイマー初期設定
+				m_apNumber[nCntTime][nCntPlayer] = new CNumber;
+				float Space = 0.0f;
+				if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
+				{
+					Space = TIMER_SPACE1P2P;
+				}
+				else
+				{
+					Space = TIMER_SPACE3P4P;
+				}
 
+				if (nCntTime < 2)
+				{	// ３桁まで
+					m_apNumber[nCntTime][nCntPlayer]->Init(D3DXVECTOR3(100.0f, 200.0f, 0.0f), 0);
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(50, 70), D3DXVECTOR2(410.0f + (68 * nCntTime), 650.0f));
+					m_apNumber[nCntTime][nCntPlayer]->SetNumber(0);
+					m_apNumber[nCntTime][nCntPlayer]->SetbDraw(true);
+				}
 
-			if (nCntTime < 2)
-			{	// ３桁まで
-				//m_apNumber[nCntTime]->Init(D3DXVECTOR3((m_pos.x - Space * nCntTime), m_pos.y, m_pos.z),1);
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3(100.0f, 200.0f, 0.0f), 0);
-			}
-			else if (nCntTime == 2)
-			{	// 3桁目
-				//m_apNumber[nCntTime]->Init(D3DXVECTOR3(((m_pos.x - 10.0f) - Space * nCntTime), m_pos.y, m_pos.z),2);
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3(100.0f, 200.0f, 0.0f), 0);
-			}
-			if (m_nNumPlayer == 1 || m_nNumPlayer == 2)
-			{
-				//m_apNumber[nCntTime]->SetSize(D3DXVECTOR2(TIMER_WIDTH1P2P, TIMER_HEIGHT1P2P), D3DXVECTOR2((m_pos.x - 10.0f) - Space * nCntTime, m_pos.y));
-				m_apNumber[nCntTime]->Init(D3DXVECTOR3(100.0f, 200.0f, 0.0f), 0);
-			}
-			else
-			{
-				m_apNumber[nCntTime]->SetSize(D3DXVECTOR2(100, 100), D3DXVECTOR2(100.0f, 200.0f));
+				if (m_nNumPlayer == 1)
+				{
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(50, 70), D3DXVECTOR2(430.0f - (68 * nCntTime), 650.0f));
+				}
+				else if(m_nNumPlayer == 2)
+				{
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(50, 70), D3DXVECTOR2(430.0f - (68 * nCntTime), 300.0f + (360 * nCntPlayer)));
+				}
+				else if (m_nNumPlayer == 3)
+				{
+					if (nCntPlayer == 1)
+					{
+						nHeight = 1;
+					}
+					if (nCntPlayer == 2)
+					{
+						nWidth = 1;
+						nHeight = 0;
+					}
+
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(25, 35), D3DXVECTOR2(270.0f - (35 * nCntTime) + (650 * nWidth), 320.0f + (360 * nHeight)));
+				}
+				else if (m_nNumPlayer == 4)
+				{
+					if (nCntPlayer == 1)
+					{
+						nHeight = 1;
+					}
+					if (nCntPlayer == 2)
+					{
+						nWidth = 1;
+						nHeight = 0;
+					}
+					if (nCntPlayer == 3)
+					{
+						nWidth = 1;
+						nHeight = 1;
+					}
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(25, 35), D3DXVECTOR2(270.0f - (35 * nCntTime) + (650 * nWidth), 320.0f + (360 * nHeight)));
+				}
 			}
 		}
 		// 数字のテクスチャ設定
+		m_nTime = 30;
 		TexTime(nTexData, m_nTimeOne);
 	}
-
-	//カウントダウン生成
-	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
-	{
-		m_pScene2D[nCnt] = NULL;
-	}
-
-	if (m_nNumPlayer == 1)
-	{
-		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2+50, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-	}
-	else if (m_nNumPlayer == 2)
-	{
-		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 200.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(SCREEN_WIDTH / 2, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
-	}
-	else if (m_nNumPlayer == 3)
-	{
-		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(940.0f, 200.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
-	}
-	if (m_nNumPlayer == 4)
-	{
-		//カウントダウンの位置設定
-		m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(320.0f, 200.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[0]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(940.0f, 200.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[1]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(320.0f, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[2]->SetWidthHeight(m_fWidth, m_fHeight);
-		m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(940.0f, 570.0f, m_pos.z), "COUNTDOWN0");
-		m_pScene2D[3]->SetWidthHeight(m_fWidth, m_fHeight);
-	}
-
-	for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-	{	// プレイヤーを取得
-		m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
-		if (m_pPlayer[nCntPlayer] != NULL)
-		{
-			m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(true);
-		}
-	}
-
 
 	return S_OK;
 }
@@ -233,24 +205,18 @@ HRESULT CTutoTime::Init(void)
 void CTutoTime::Uninit(void)
 {
 	m_nStageNum = 0;
-	if (CManager::GetMode() == CManager::MODE_GAME)
+	if (CManager::GetMode() == CManager::MODE_TUTORIAL)
 	{
-		for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
-		{	// タイマーの破棄
-			if (m_apNumber[nCntTime] != NULL)
-			{
-				m_apNumber[nCntTime]->Uninit();
-				m_apNumber[nCntTime] = NULL;
-			}
-		}
-	}
-
-	for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
-	{
-		if (m_pScene2D[nCnt] != NULL)
+		for (int nCntPlayer = 0; nCntPlayer < PLAYER_MAX; nCntPlayer++)
 		{
-			m_pScene2D[nCnt]->Uninit();
-			m_pScene2D[nCnt] = NULL;
+			for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
+			{	// タイマーの破棄
+				if (m_apNumber[nCntTime][nCntPlayer] != NULL)
+				{
+					m_apNumber[nCntTime][nCntPlayer]->Uninit();
+					m_apNumber[nCntTime][nCntPlayer] = NULL;
+				}
+			}
 		}
 	}
 
@@ -268,7 +234,7 @@ void CTutoTime::Update(void)
 	CManager::MODE GameMode = CManager::GetMode();
 	DebugKey();		// デバック用
 
-	if ((GameMode == CManager::MODE_GAME) && m_bEndCntDown == true || (GameMode == CManager::MODE_TUTORIAL) && m_bEndCntDown == true)
+	if (GameMode == CManager::MODE_TUTORIAL)
 	{//制限時間
 	 //ゲーム
 		if (m_bCountFlag == true)
@@ -281,30 +247,18 @@ void CTutoTime::Update(void)
 		// 数字のテクスチャ設定
 		TexTime(nTexData, m_nTimeOne);
 
-		if (m_nTime == 0 && m_nTimeOne == 0 && GameMode == CManager::MODE_GAME)
+		if (m_nTime == 0 && GameMode == CManager::MODE_TUTORIAL)
 		{
 			// ゲーム終了
 			m_nWaitTime++;	// 待ち時間の加算
 			if ((m_nWaitTime % WAIT_TIME_END) == 0)
 			{
-				CFade::SetFade(CManager::MODE_GAME, CFade::FADE_OUT);
+				CFade::SetFade(CManager::MODE_CHARASELECT, CFade::FADE_OUT);
 			}
 		}
 	}
 
-	CountDown();	// カウントダウン処理
-
-	//ステージ生成完了タイマー
-	if (CGame::GetbStageSet() == true)
-	{
-		m_StageCounter++;
-		if (m_StageCounter > 120)
-		{
-			CManager::GetGame()->SetCreateWord();
-			m_StageCounter = 0;
-			CGame::bStageSet(false);
-		}
-	}
+	//CountDown();	// カウントダウン処理
 
 }
 
@@ -313,11 +267,14 @@ void CTutoTime::Update(void)
 //=============================================================================
 void CTutoTime::Draw(void)
 {
-	for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
+	for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
 	{
-		if (m_apNumber[nCntTime] != NULL)
+		for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
 		{
-			m_apNumber[nCntTime]->Draw();
+			if (m_apNumber[nCntTime][nCntPlayer] != NULL)
+			{
+				m_apNumber[nCntTime][nCntPlayer]->Draw();
+			}
 		}
 	}
 }
@@ -328,106 +285,35 @@ void CTutoTime::Draw(void)
 void CTutoTime::CountDown(void)
 {
 	CSound *pSound = CManager::GetSound();		//	音の取得
-
-	//カウントダウン
-	if (m_bEndCntDown == false)
-	{
-		//大きさ変化
-		m_fScale += COUNTDOWN_SCALE;
-		//透明度上げ
-		if (m_fScale > 200 && m_fScale <= 250)
-		{
-			//カウンター加算
-			if (m_bCntDown == false)
-			{
-				m_Col.a -= 0.1f;
-			}
-		}
-		//大きさ最大
-		if (m_fScale > COUNTDOWN_SCALE * 75)
-		{
-			m_fScale = COUNTDOWN_SCALE * 75;
-			if (m_nType < 1)
-			{
-				//テクスチャ替え
-				m_bCntDown = true;
-				m_nType += 1;
-				m_fScale = 0;
-				m_Col.a = 1.0f;
-
-				pSound->SetVolume(CSound::SOUND_LABEL_SE_GAMESTART01, 5.0f);
-				pSound->PlaySound(CSound::SOUND_LABEL_SE_GAMESTART01);
-			}
-			else if (m_nType == 1)
-			{
-				m_bEndCntDown = true;
-				m_Col.a = 0.0f;
-				for (int nCntPlayer = 0; nCntPlayer < MAX_PLAYER; nCntPlayer++)
-				{	// プレイヤーを取得
-					m_pPlayer[nCntPlayer] = CGame::GetPlayer(nCntPlayer);
-					if (m_pPlayer[nCntPlayer] != NULL)
-					{
-						m_pPlayer[nCntPlayer]->GetCharaMover()->SetWaitBool(false);
-					}
-				}
-			}
-
-			for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
-			{
-				if (m_pScene2D[nCnt] != NULL)
-				{
-					switch (m_nType)
-					{
-					case 0:
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN0");
-						break;
-					case 1:
-						//スタート表示
-						m_pScene2D[nCnt]->BindTexture("COUNTDOWN1");
-						m_pScene2D[nCnt]->SetWidthHeight(m_fWidth + 100, m_fHeight + 100);
-						break;
-					default:
-						break;
-					}
-				}
-			}
-		}
-		//色・大きさ更新
-		for (int nCnt = 0; nCnt < PLAYER_MAX; nCnt++)
-		{
-			if (m_pScene2D[nCnt] != NULL)
-			{
-				m_pScene2D[nCnt]->SetCol(m_Col);
-				m_pScene2D[nCnt]->SetScale(m_fScale);
-			}
-		}
-	}
-
 }
 //=============================================================================
 // タイマーのTexture管理
 //=============================================================================
 void CTutoTime::TexTime(int nTexData, int nTimeOne)
 {
+	int nTime[4] = { 0,0,0,0 };
 	nTexData = m_nTime;
 
-	//for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
-	//{// テクスチャに反映
-
-	//	if (m_apNumber[nCntTime] != NULL)
-	//	{
-	//		if (nCntTime < 2)
-	//		{
-	//			m_apNumber[nCntTime]->SetNumber(nTexData);
-	//			nTexData /= 10;
-	//		}
-	//		else if (nCntTime == 2)
-	//		{
-	//			m_apNumber[nCntTime]->SetNumber(nTimeOne);
-	//			nTexData /= 10;
-	//		}
-	//	}
-	//}
+	for (int nCntPlayer = 0; nCntPlayer < PLAYER_MAX; nCntPlayer++)
+	{
+		nTime[nCntPlayer] = m_nTime;
+		for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
+		{// テクスチャに反映
+			if (m_apNumber[nCntTime][nCntPlayer] != NULL)
+			{
+				if (nCntTime < 2)
+				{
+					m_apNumber[nCntTime][nCntPlayer]->SetNumber(nTime[nCntPlayer]);
+					nTime[nCntPlayer] /= 10;
+				}
+				else if (nCntTime == 2)
+				{
+					m_apNumber[nCntTime][nCntPlayer]->SetNumber(nTime[nCntPlayer]);
+					nTime[nCntPlayer] /= 10;
+				}
+			}
+		}
+	}
 }
 //=============================================================================
 // タイム加算処理
@@ -479,7 +365,7 @@ void CTutoTime::TimeManagement(void)
 	if (m_nTimeCount % nFlameSecond == 0)
 	{// 1秒ごとに減算(制限時間)
 		m_nTime--;
-		if (m_nTime < 0) { m_nTime = 59; m_nTimeOne -= 1; 	DefaultCol();}
+		if (m_nTime < 0) { m_nTime = 0; m_nTimeOne -= 1; 	DefaultCol();}
 		//m_nTimeNum = PowerCalculation(m_nTime, 0);
 	}
 }
@@ -496,11 +382,14 @@ void CTutoTime::ChangeStage(void)
 //=============================================================================
 void CTutoTime::DefaultCol(void)
 {
-	for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
-	{// テクスチャに反映
-		if (m_apNumber[nCntTime] != NULL)
-		{
-			m_apNumber[nCntTime]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+	for (int nCntPlayer = 0; nCntPlayer < PLAYER_MAX; nCntPlayer++)
+	{
+		for (int nCntTime = 0; nCntTime < TUTOTIME_MAX; nCntTime++)
+		{// テクスチャに反映
+			if (m_apNumber[nCntTime][nCntPlayer] != NULL)
+			{
+				m_apNumber[nCntTime][nCntPlayer]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+			}
 		}
 	}
 }
