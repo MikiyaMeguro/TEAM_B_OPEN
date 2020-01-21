@@ -511,6 +511,8 @@ void CManager::Update(void)
 	case CManager::MODE_SELECT:
 		if (m_pSelect != NULL)
 		{
+			m_pSound[0]->SetVolume(CSound::SOUND_LABEL_BGM_SELECT, 0.7f);
+
 			m_pSelect->Update();
 		}
 		//キャラセレクトモード更新処理

@@ -15,6 +15,7 @@
 #include "texture.h"
 #include "debugProc.h"
 #include "credit.h"
+
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -151,6 +152,28 @@ HRESULT CSelectMenu::Init()
 				m_apPolygon[nCnt]->SetbDraw(true);
 			}
 		}
+		CSound *pSound = CManager::GetSound();		//	音の取得
+
+		//if (MenuSelect == SELECT_MENU_ONE)
+		/*{
+			pSound->SetVolume(CSound::SOUND_LABEL_1_PLAYER, 3.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_1_PLAYER);
+		}*/
+		////else if (MenuSelect == SELECT_MENU_TWO)
+		//{
+		//	pSound->SetVolume(CSound::SOUND_LABEL_2_PLAYER, 3.5f);
+		//	pSound->PlaySound(CSound::SOUND_LABEL_2_PLAYER);
+		//}
+		////else if (MenuSelect == SELECT_MENU_THREE)
+		//{
+		//	pSound->SetVolume(CSound::SOUND_LABEL_3_PLAYER, 3.5f);
+		//	pSound->PlaySound(CSound::SOUND_LABEL_3_PLAYER);
+		//}
+		//else if (MenuSelect == SELECT_MENU_FOUR)
+		//{
+		//	pSound->SetVolume(CSound::SOUND_LABEL_4_PLAYER, 3.5f);
+		//	pSound->PlaySound(CSound::SOUND_LABEL_4_PLAYER);
+		//}
 		break;
 	}
 
@@ -287,7 +310,7 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 	//フェードを取得
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
-
+	CSound *pSound = CManager::GetSound();		//	音の取得
 	switch (m_MenuType)
 	{
 	case MENU_TYPE_MODESELECT:
@@ -328,6 +351,7 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 		}
 		break;
 	case MENU_TYPE_PAUSE:
+
 		switch (MenuSelect)
 		{
 		case SELECT_MENU_ONE:
@@ -351,8 +375,8 @@ void CSelectMenu::MenuDecide(SELECT_MENU MenuSelect)
 //=============================================================================
 void CSelectMenu::MoveMenu(void)
 {
-
 	CSound *pSound = CManager::GetSound();		//	音の取得
+
 
 	//選択処理
 	if (CCommand::GetCommand("RIGHT"))
@@ -555,6 +579,8 @@ void CSelectMenu::SelectModeExplanation(int MenuSelect)
 //=============================================================================
 void CSelectMenu::SelectAnimation(int MenuSelect)
 {
+	//サウンド情報を取得
+	CSound *pSound = CManager::GetSound(0);
 	if (m_MenuType == MENU_TYPE_MODESELECT)
 	{
 		switch (MenuSelect)
@@ -566,7 +592,7 @@ void CSelectMenu::SelectAnimation(int MenuSelect)
 				m_nPatturnAnim++;
 				m_nCntAnim = 0;
 
-				m_apPolygon_ModeSel[5]->SetTex(D3DXVECTOR2(0.0f+(0.5f*m_nPatturnAnim),0.666f), D3DXVECTOR2(0.5f + (0.5f*m_nPatturnAnim), 0.999f));
+				m_apPolygon_ModeSel[5]->SetTex(D3DXVECTOR2(0.0f + (0.5f*m_nPatturnAnim), 0.666f), D3DXVECTOR2(0.5f + (0.5f*m_nPatturnAnim), 0.999f));
 
 				if (m_nPatturnAnim > 2)
 				{
@@ -607,8 +633,32 @@ void CSelectMenu::SelectAnimation(int MenuSelect)
 			}
 			break;
 		}
+		m_nCounter++;
+		if (m_nCounter > 8 && m_nCounter < 12)
+		{
+			if (MenuSelect == 0)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_PLAYSELECT, 4.5f);
+				pSound->PlaySound(CSound::SOUND_LABEL_PLAYSELECT);
+			}
+			else if (MenuSelect == 1)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_CREDIT, 4.5f);
+				pSound->PlaySound(CSound::SOUND_LABEL_CREDIT);
+			}
+			else if (MenuSelect == 2)
+			{
+				pSound->SetVolume(CSound::SOUND_LABEL_TITLEBACK, 4.5f);
+				pSound->PlaySound(CSound::SOUND_LABEL_TITLEBACK);
+			}
+		}
+		if (CCommand::GetCommand("RIGHT") || CCommand::GetCommand("LEFT"))
+		{
+			m_nCounter = 0;
+		}
 	}
 }
+
 //=============================================================================
 // セレクトしてるモードの移動演出
 //=============================================================================

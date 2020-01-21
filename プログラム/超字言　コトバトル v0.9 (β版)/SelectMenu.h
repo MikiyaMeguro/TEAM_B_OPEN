@@ -147,6 +147,9 @@ private:
 	float m_fMoveMode;		//選択中モードアイコンの移動量を計る
 	float m_fResultAlpha;	//リザルトのマスクのalpha値を保管
 
+	int m_nCounter;	//	カウント
+
+
 #ifdef _DEBUG
 	int nCntFadeTime = 0;
 #endif
