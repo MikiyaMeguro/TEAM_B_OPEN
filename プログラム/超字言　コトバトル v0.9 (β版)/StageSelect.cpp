@@ -36,6 +36,8 @@
 #define STAGESEL_DIFF (0.3f)														//移動の変化量
 #define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")	//機械ステージ
 #define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")	//天候ステージ
+//#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\TEST.txt")	//機械ステージ
+//#define MACHINE_STAGE_WEATHER	("data\\TEXT\\機械ステージ\\TEST.txt")	//天候ステージ
 
 //============================================================================
 //静的メンバ変数宣言
