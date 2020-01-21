@@ -34,10 +34,10 @@
 #define STAGESELCHOICE_POS	(D3DXVECTOR3(380.0f,130.0f,0.0f))						//選択肢ポリゴンの位置
 #define STAGESELCHOICE_INTERVAL (480.0f)											//選択肢ポリゴン同士の間隔
 #define STAGESEL_DIFF (0.3f)														//移動の変化量
-//#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")	//機械ステージ
-//#define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")	//天候ステージ
-#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\TEST.txt")	//機械ステージ
-#define MACHINE_STAGE_WEATHER	("data\\TEXT\\機械ステージ\\TEST.txt")	//天候ステージ
+#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\Machine_Stage_0.txt")	//機械ステージ
+#define MACHINE_STAGE_WEATHER	("data\\TEXT\\天候ステージ\\Machine_Stage_0.txt")	//天候ステージ
+//#define MACHINE_STAGE_MACHINE	("data\\TEXT\\機械ステージ\\TEST.txt")	//機械ステージ
+//#define MACHINE_STAGE_WEATHER	("data\\TEXT\\機械ステージ\\TEST.txt")	//天候ステージ
 
 //============================================================================
 //静的メンバ変数宣言
