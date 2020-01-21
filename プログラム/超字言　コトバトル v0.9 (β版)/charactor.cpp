@@ -614,10 +614,11 @@ void C3DCharactor::CharaMove_Input(void)
 	}
 	CDebugProc::Print("cn", "STEP_COOLTIME : ", m_nCntStepCoolTime);
 
-	//e‚ðŒ‚‚Á‚Ä‚¢‚éŠÔˆÚ“®‚³‚¹‚È‚¢
+	//ƒ}ƒVƒ“ƒKƒ“‚ðŒ‚‚Á‚Ä‚¢‚éŠÔ‚ÍˆÚ“®—Ê‚ð‰º‚°‚é
 	if (GetThisCharactor()->GetbMachineGun() == true)
 	{
-		move = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
+		move.x *= 0.75f;
+		move.z *= 0.75f;
 	}
 	pos += move;
 

@@ -483,7 +483,7 @@ void CPlayer::Update(void)
 						{//10フレームに一回弾発射
 							m_MachineGunPos.x = (float)((rand() % 16) - (rand() % 16));
 							m_MachineGunPos.z = (float)((rand() % 16) - (rand() % 16));
-							m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, m_BulletRot, m_PlayerType, NULL);
+							m_pWordManager->BulletCreate(m_nID, BulletPos + m_MachineGunPos, BulletRot, m_PlayerType, NULL);
 						}
 						else if (m_nMachineGunTime > 60)
 						{//6回発射したら弾情報を削除
@@ -1233,7 +1233,6 @@ int		CPlayer::GetNearPlayer(void)
 		{//自分以外と判定を行う
 			//距離を取得(-は省く)
 			float fLength = fabsf(sqrtf(powf(PlayerPos[m_nID].x - PlayerPos[nCntPlayer].x, 2.0f) +
-				powf(PlayerPos[m_nID].y - PlayerPos[nCntPlayer].y, 2.0f) +
 				powf(PlayerPos[m_nID].z - PlayerPos[nCntPlayer].z, 2.0f)));
 
 			if (fLength < fNearLength &&
