@@ -278,7 +278,7 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	ï∂éöÇèoÇ∑
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				
+
 				CWord::Create(pos, D3DXVECTOR3(0.0f, 0.0f, 0.0f), size.x, size.y, "WORD", nAnswer, 1, 45);
 				scale.y = m_InitScale.y + 0.2f;
 				pos.y = m_InitPos.y + 4.0f;
@@ -458,9 +458,9 @@ void CObject::BGModelMove(D3DXVECTOR3 pos)
 		{//	ï∂éöÇèoÇ∑
 			if (CManager::GetMode() == CManager::MODE_GAME)
 			{
-				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(0.8f, 0.0f, 0.0f), size.x, size.x, "WORD", nAnswer, 1, 45);}
-				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-0.8f, 0.0f, 0.0f), size.x, size.x, "WORD", nAnswer, 1, 45); }
-				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.8f), size.x, size.x, "WORD", nAnswer, 1, 45); }
+				if (nAnswerB == 0){CWord::Create(pos + D3DXVECTOR3(10.0f, 50.0f, 0.0f), D3DXVECTOR3(0.8f, 0.0f, 0.0f), size.x, size.y, "WORD", nAnswer, 1, 45);}
+				else if (nAnswerB == 1) { CWord::Create(pos + D3DXVECTOR3(-10.0f, 50.0f, 0.0f), D3DXVECTOR3(-0.8f, 0.0f, 0.0f), size.x, size.y, "WORD", nAnswer, 1, 45); }
+				else if (nAnswerB == 2) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, 10.0f), D3DXVECTOR3(0.0f, 0.0f, 0.8f), size.x, size.y, "WORD", nAnswer, 1, 45); }
 				//else if (nAnswerB == 3) { CWord::Create(pos + D3DXVECTOR3(0.0f, 50.0f, -10.0f), D3DXVECTOR3(0.0f, 0.0f, -0.8f), 12.0f, 12.0f, "WORD", nAnswer, 1, 45); }
 				m_nCounter = 0;
 			}
