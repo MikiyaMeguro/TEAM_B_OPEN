@@ -68,6 +68,7 @@ private:
 	int						m_nNumPlayer;		// 人数保管
 	bool					m_bStart;
 	D3DXVECTOR3				m_pos;				// 位置
+	CScene2D				*m_pScene2D[PLAYER_MAX];		// 2Dポリゴンへのポインタ
 
 	static bool m_bCountFlag;			//時間をカウントするか
 };

@@ -80,6 +80,7 @@ private:
 	CScene2D *m_pScene2D[UI_MAX];			// 2Dポリゴンへのポインタ
 
 	bool m_bEndFlag;
+	bool m_bCreateTimer;
 #ifdef _DEBUG
 	int nCntFadeTime = 0;
 #endif
