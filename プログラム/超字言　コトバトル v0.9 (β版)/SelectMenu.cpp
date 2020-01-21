@@ -15,6 +15,7 @@
 #include "texture.h"
 #include "debugProc.h"
 #include "credit.h"
+
 //*****************************************************************************
 // É}ÉNÉçíËã`
 //*****************************************************************************
@@ -633,21 +634,21 @@ void CSelectMenu::SelectAnimation(int MenuSelect)
 			break;
 		}
 		m_nCounter++;
-		if (m_nCounter < 2)
+		if (m_nCounter > 8 && m_nCounter < 12)
 		{
 			if (MenuSelect == 0)
 			{
-				pSound->SetVolume(CSound::SOUND_LABEL_PLAYSELECT, 3.5f);
+				pSound->SetVolume(CSound::SOUND_LABEL_PLAYSELECT, 4.5f);
 				pSound->PlaySound(CSound::SOUND_LABEL_PLAYSELECT);
 			}
 			else if (MenuSelect == 1)
 			{
-				pSound->SetVolume(CSound::SOUND_LABEL_CREDIT, 3.5f);
+				pSound->SetVolume(CSound::SOUND_LABEL_CREDIT, 4.5f);
 				pSound->PlaySound(CSound::SOUND_LABEL_CREDIT);
 			}
 			else if (MenuSelect == 2)
 			{
-				pSound->SetVolume(CSound::SOUND_LABEL_TITLEBACK, 3.5f);
+				pSound->SetVolume(CSound::SOUND_LABEL_TITLEBACK, 4.5f);
 				pSound->PlaySound(CSound::SOUND_LABEL_TITLEBACK);
 			}
 		}

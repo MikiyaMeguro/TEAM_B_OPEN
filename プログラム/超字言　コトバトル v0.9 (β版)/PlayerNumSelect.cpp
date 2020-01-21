@@ -270,7 +270,7 @@ void CPlayerSelect::Update(void)
 			}
 
 			m_nCounter++;
-			if (m_nCounter < 2)
+			if (m_nCounter > 20&& m_nCounter < 22)
 			{
 				if (m_nSelect == 0)
 				{
