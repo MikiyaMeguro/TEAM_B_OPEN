@@ -133,6 +133,8 @@ private:
 	float m_fCharaCardPro_FinishWH[2];								//選択カードの最終幅と高さ
 	float m_fGaugeSizeX[MAX_PLAYER];								//戻るゲージの長さを保管
 	float m_fMaxGaugeX[MAX_PLAYER];									//ゲージの最大の長さ
+	int m_nCounter;
+
 #ifdef _DEBUG
 	int nCntFadeTime = 0;
 #endif

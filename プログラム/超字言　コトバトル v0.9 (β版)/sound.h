@@ -208,6 +208,20 @@ public:
 		SOUND_LABEL_WORDVOICE_KAIKO,		// かいこ
 		SOUND_LABEL_WORDVOICE_MEDAKA,		// めだか
 
+		SOUND_LABEL_1_PLAYER,				// 1セレクト
+		SOUND_LABEL_2_PLAYER,				// 2セレクト
+		SOUND_LABEL_3_PLAYER,				// 3セレクト
+		SOUND_LABEL_4_PLAYER,				// 4セレクト
+
+		SOUND_LABEL_AREYOUREADY,			// AREYOUREDY
+
+		SOUND_LABEL_PLAYSELECT,				// プレイセレクト
+		SOUND_LABEL_CREDIT,					// クレジット
+		SOUND_LABEL_TITLEBACK,				// タイトルに戻る
+
+		SOUND_LABEL_MACHINESTAGE,				// 機械ステージ-
+		SOUND_LABEL_NATURESTAGE,				// 自然ステージ-
+
 		SOUND_LABEL_MAX
 	} SOUND_LABEL;
 	// パラメータ構造体定義
@@ -425,6 +439,22 @@ protected:
 		{ "data/SE/WORDVOICE/64すすり.wav", 0 },			//	たいま
 		{ "data/SE/WORDVOICE/75かいこ.wav", 0 },			//	かいこ
 		{ "data/SE/WORDVOICE/86めだか.wav", 0 },			//	めだか
+
+		{ "data/SE/SELECTVOICE/1人プレイ.wav", 0 },			//	1人プレイ
+		{ "data/SE/SELECTVOICE/2人プレイ.wav", 0 },			//	2人プレイ
+		{ "data/SE/SELECTVOICE/3人プレイ.wav", 0 },			//	3人プレイ
+		{ "data/SE/SELECTVOICE/4人プレイ.wav", 0 },			//	4人プレイ
+
+		{ "data/SE/SELECTVOICE/areyouready.wav", 0 },		//	areyouready
+		{ "data/SE/SELECTVOICE/プレイ人数選択.wav", 0 },	//	プレイ人数選択
+		{ "data/SE/SELECTVOICE/クレジット.wav", 0 },		//	クレジット
+		{ "data/SE/SELECTVOICE/タイトルに戻る.wav", 0 },	//	タイトルに戻る
+
+		{ "data/SE/SELECTVOICE/機械ステージ.wav", 0 },	//	機械ステージ
+		{ "data/SE/SELECTVOICE/天候ステージ.wav", 0 },	//	自然ステージ
+
+
+
 	};
 };
 #endif

@@ -136,6 +136,9 @@ private:
 	float m_fChangeMode;	//選択中モードアイコンの移動制御カウンター
 	float m_fMoveMode;		//選択中モードアイコンの移動量を計る
 
+	int m_nCounter;			//カウント
+
+
 #ifdef _DEBUG
 	int nCntFadeTime = 0;
 #endif

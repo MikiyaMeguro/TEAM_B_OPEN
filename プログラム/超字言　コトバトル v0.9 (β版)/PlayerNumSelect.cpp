@@ -64,7 +64,7 @@ CPlayerSelect::CPlayerSelect(int nPriority) : CScene(7)
 	m_fMoveMode = 0.0f;
 	m_nCntAnim = 0;
 	m_nPatturnAnim = 0;
-
+	m_nCounter = 0;
 }
 
 //--------------------------------------------
@@ -192,8 +192,6 @@ void CPlayerSelect::Update(void)
 	//フェードを取得
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
-
-
 	//サウンド情報を取得
 	CSound *pSound = CManager::GetSound(0);
 
@@ -207,6 +205,10 @@ void CPlayerSelect::Update(void)
 	//モードセレクト中
 	if (pFade->GetFade() == CFade::FADE_NONE)
 	{
+		if (m_bModeSelect == false)
+		{
+			m_nCounter = 0;
+		}
 		if (m_bModeSelect == true)
 		{
 			//選択処理
@@ -265,6 +267,35 @@ void CPlayerSelect::Update(void)
 					m_nSelect = (m_nSelect + 3) % 4;
 				}
 				m_aModeSelectMenu[m_nSelect].select = SELECTTYPE_SELECT;
+			}
+
+			m_nCounter++;
+			if (m_nCounter < 2)
+			{
+				if (m_nSelect == 0)
+				{
+					pSound->SetVolume(CSound::SOUND_LABEL_1_PLAYER, 3.5f);
+					pSound->PlaySound(CSound::SOUND_LABEL_1_PLAYER);
+				}
+				else if (m_nSelect == 1)
+				{
+					pSound->SetVolume(CSound::SOUND_LABEL_2_PLAYER, 3.5f);
+					pSound->PlaySound(CSound::SOUND_LABEL_2_PLAYER);
+				}
+				else if (m_nSelect == 2)
+				{
+					pSound->SetVolume(CSound::SOUND_LABEL_3_PLAYER, 3.5f);
+					pSound->PlaySound(CSound::SOUND_LABEL_3_PLAYER);
+				}
+				else if (m_nSelect == 3)
+				{
+					pSound->SetVolume(CSound::SOUND_LABEL_4_PLAYER, 3.5f);
+					pSound->PlaySound(CSound::SOUND_LABEL_4_PLAYER);
+				}
+			}
+			if (CCommand::GetCommand("DOWN") || CCommand::GetCommand("UP") || CCommand::GetCommand("RIGHT") || CCommand::GetCommand("LEFT"))
+			{
+				m_nCounter = 0;
 			}
 
 			//エンターキー

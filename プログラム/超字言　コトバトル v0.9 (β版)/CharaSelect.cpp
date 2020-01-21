@@ -131,6 +131,7 @@ void CCharaSelect::Uninit(void)
 //=============================================================================
 void CCharaSelect::Update(void)
 {
+
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
 	// 入力情報を取得
@@ -172,7 +173,7 @@ void CCharaSelect::Update(void)
 	ScrollMenu(CHARASEL_POLYGONTYPE_BAND_L, -0.005f);
 
 	/* 確定ポリのフラッシュ演出 */
-	if (m_bCnfFlash == true) { FlashConf(); }
+	if (m_bCnfFlash == true) { FlashConf();}
 
 	/* 戻るポリゴンの演出 */
 	SetBackModeTex();
@@ -422,6 +423,7 @@ bool CCharaSelect::ConfirmationSelect(void)
 	if (nCount == (int)*m_PlayerNum)
 	{
 		bCnfirmation = true;
+
 	}
 	return bCnfirmation;
 }
@@ -453,9 +455,11 @@ bool CCharaSelect::ProductionConf(void)
 	switch (m_CnfProState)
 	{
 	case CONFPRODUCTION_NONE:
+
 		break;
 
 	case CONFPRODUCTION_MOVE_START:
+
 		m_apConfirm2D->SetPosition(D3DXVECTOR3(0.0f- DEFAULT_SIZE*5.1f, SCREEN_HEIGHT / 2, 0.0f));
 		m_apConfirm2D->SetbDraw(true);
 		m_moveConfPro = 100.0f;
@@ -463,6 +467,7 @@ bool CCharaSelect::ProductionConf(void)
 		break;
 
 	case CONFPRODUCTION_MOVE:
+
 		pos.x += m_moveConfPro;
 		if (m_apConfirm2D->GetPosition().x >= SCREEN_WIDTH/2 - 50.0f)
 		{
@@ -476,6 +481,8 @@ bool CCharaSelect::ProductionConf(void)
 		break;
 
 	case CONFPRODUCTION_MOVE_END:
+
+
 		m_apConfirm2D->SetPosition(D3DXVECTOR3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.0f));
 		if (m_fFlashAlpha[0] <= 0.0f&&m_fFlashAlpha[1] <= 0.0f&&m_fFlashAlpha[2] <= 0.0f&&m_fFlashAlpha[3] <= 0.0f)
 		{
@@ -491,6 +498,7 @@ bool CCharaSelect::ProductionConf(void)
 //=============================================================================
 void CCharaSelect::FlashConf(void)
 {
+	CSound *pSound = CManager::GetSound();		//	音の取得
 	m_CntFlash++;
 	if (m_CntFlash >= 3)
 	{
@@ -502,6 +510,8 @@ void CCharaSelect::FlashConf(void)
 		m_apConfirm2D->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
 	}
+	pSound->SetVolume(CSound::SOUND_LABEL_AREYOUREADY, 4.5f);
+	pSound->PlaySound(CSound::SOUND_LABEL_AREYOUREADY);
 }
 //=============================================================================
 // キャラ選択カードの演出処理
