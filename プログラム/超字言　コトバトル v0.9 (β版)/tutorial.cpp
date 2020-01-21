@@ -26,7 +26,8 @@
 #include "object.h"
 #include "point.h"
 #include "SetWord.h"
-#include"StageSelect.h"
+#include "StageSelect.h"
+#include "tutotime.h"
 
 #include "PlayerNumSelect.h"
 
@@ -102,6 +103,7 @@ void CTutorial::Init(void)
 
 	m_nChangeNum = 0;
 	m_nNumStage = 0;
+	m_bEndFlag = false;
 
 	//	チュートリアル
 	m_pcStageName[0][0] = { MACHINE_STAGE_00 };
@@ -399,7 +401,7 @@ void CTutorial::Init(void)
 		m_pScene2D[23]->SetWidthHeight(140.0f, 40.0);
 	}
 
-
+	CTutoTime::Create(NumPlayer);
 }
 
 //=============================================================================
@@ -496,6 +498,19 @@ void CTutorial::Update(void)
 	{
 		pFade->SetFade(pManager->MODE_CHARASELECT, pFade->FADE_OUT);
 	}
+
+
+	for (int nCnt = 0; nCnt < 4; nCnt++)
+	{
+		if (m_pPlayer[nCnt] != NULL && m_pPlayer[nCnt]->GetPosition().z > 1600)
+		{
+			if (m_bEndFlag == false)
+			{
+				m_bEndFlag = true;
+			}
+		}
+	}
+
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "チュートリアル");

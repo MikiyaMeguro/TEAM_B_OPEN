@@ -203,6 +203,7 @@
     <ClCompile Include="title.cpp" />
     <ClCompile Include="tube.cpp" />
     <ClCompile Include="tutorial.cpp" />
+    <ClCompile Include="tutotime.cpp" />
     <ClCompile Include="UtilityMath.cpp" />
     <ClCompile Include="wall.cpp" />
     <ClCompile Include="waypoint.cpp" />
@@ -263,6 +264,7 @@
     <ClInclude Include="title.h" />
     <ClInclude Include="tube.h" />
     <ClInclude Include="tutorial.h" />
+    <ClInclude Include="tutotime.h" />
     <ClInclude Include="UtilityMath.h" />
     <ClInclude Include="wall.h" />
     <ClInclude Include="waypoint.h" />
