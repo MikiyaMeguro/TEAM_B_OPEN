@@ -104,7 +104,7 @@ void CTutorial::Init(void)
 	m_nChangeNum = 0;
 	m_nNumStage = 0;
 	m_bEndFlag = false;
-
+	m_bCreateTimer = false;
 	//	チュートリアル
 	m_pcStageName[0][0] = { MACHINE_STAGE_00 };
 	m_pcStageName[0][1] = { MACHINE_STAGE_01 };
@@ -401,7 +401,6 @@ void CTutorial::Init(void)
 		m_pScene2D[23]->SetWidthHeight(140.0f, 40.0);
 	}
 
-	CTutoTime::Create(NumPlayer);
 }
 
 //=============================================================================
@@ -480,6 +479,7 @@ void CTutorial::Update(void)
 {
 	CManager *pManager = NULL;
 	CFade *pFade = pManager->GetFade();
+	CPlayerSelect::SELECTPLAYER NumPlayer = *CPlayerSelect::GetModeSelectMode();
 
 	// 入力情報を取得
 	CInputKeyboard *pInputKeyboard;
@@ -503,12 +503,19 @@ void CTutorial::Update(void)
 	for (int nCnt = 0; nCnt < 4; nCnt++)
 	{
 		if (m_pPlayer[nCnt] != NULL && m_pPlayer[nCnt]->GetPosition().z > 1600)
-		{
+		{//文字エリアに入ったらフラグを立てる
 			if (m_bEndFlag == false)
 			{
 				m_bEndFlag = true;
 			}
 		}
+	}
+
+	//チュートリアルタイマー生成
+	if (m_bEndFlag == true && m_bCreateTimer == false)
+	{
+		m_bCreateTimer = true;
+		CTutoTime::Create((int)NumPlayer);
 	}
 
 

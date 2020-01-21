@@ -34,7 +34,7 @@
 #define TIME_POS_2P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 50.0f, 440.0f, 0.0f))	// 制限時間の位置(2Pだけの場合)
 #define TIME_POS_3P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 150.0f, 440.0f, 0.0f))	// 制限時間の位置(3Pだけの場合)
 #define TIME_POS_4P			(D3DXVECTOR3(SCREEN_WIDTH / 2 + 160.0f, 380.0f, 0.0f))	// 制限時間の位置(4Pだけの場合)
-#define WAIT_TIME_END		(180)							// 待ち時間
+#define WAIT_TIME_END		(60)							// 待ち時間
 
 #define COUNTDOWN_SCALE		(3.5f)							// 待ち時間
 #define DEFAULT_SIZE		(D3DXVECTOR3(10.0f, 15.0f, 0.0f))	// デフォルトサイズ
@@ -124,6 +124,11 @@ HRESULT CTutoTime::Init(void)
 		}
 	}
 
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		m_pScene2D[nCnt] = NULL;
+	}
+
 	if (CManager::GetMode() == CManager::MODE_TUTORIAL)
 	{
 		for (int nCntPlayer = 0; nCntPlayer < m_nNumPlayer; nCntPlayer++)
@@ -151,11 +156,18 @@ HRESULT CTutoTime::Init(void)
 
 				if (m_nNumPlayer == 1)
 				{
-					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(50, 70), D3DXVECTOR2(430.0f - (68 * nCntTime), 650.0f));
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(50, 70), D3DXVECTOR2(450.0f - (68 * nCntTime), 650.0f));
+					m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(700, 650, m_pos.z), "TUTOTIME");
+					m_pScene2D[0]->SetWidthHeight(500, 80);
+
 				}
 				else if(m_nNumPlayer == 2)
 				{
-					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(50, 70), D3DXVECTOR2(430.0f - (68 * nCntTime), 300.0f + (360 * nCntPlayer)));
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(30, 50), D3DXVECTOR2(480.0f - (50 * nCntTime), 310.0f + (360 * nCntPlayer)));
+					m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(700, 310, m_pos.z), "TUTOTIME");
+					m_pScene2D[0]->SetWidthHeight(470, 50);
+					m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(700, 670, m_pos.z), "TUTOTIME");
+					m_pScene2D[1]->SetWidthHeight(470, 50);
 				}
 				else if (m_nNumPlayer == 3)
 				{
@@ -169,7 +181,14 @@ HRESULT CTutoTime::Init(void)
 						nHeight = 0;
 					}
 
-					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(25, 35), D3DXVECTOR2(270.0f - (35 * nCntTime) + (650 * nWidth), 320.0f + (360 * nHeight)));
+					m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(400, 320, m_pos.z), "TUTOTIME");
+					m_pScene2D[0]->SetWidthHeight(210, 40);
+					m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(1040, 320, m_pos.z), "TUTOTIME");
+					m_pScene2D[1]->SetWidthHeight(210, 40);
+					m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(400, 680, m_pos.z), "TUTOTIME");
+					m_pScene2D[2]->SetWidthHeight(210, 40);
+
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(25, 35), D3DXVECTOR2(290.0f - (35 * nCntTime) + (640 * nWidth), 320.0f + (360 * nHeight)));
 				}
 				else if (m_nNumPlayer == 4)
 				{
@@ -187,7 +206,17 @@ HRESULT CTutoTime::Init(void)
 						nWidth = 1;
 						nHeight = 1;
 					}
-					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(25, 35), D3DXVECTOR2(270.0f - (35 * nCntTime) + (650 * nWidth), 320.0f + (360 * nHeight)));
+
+					m_pScene2D[0] = CScene2D::Create(D3DXVECTOR3(400, 320, m_pos.z), "TUTOTIME");
+					m_pScene2D[0]->SetWidthHeight(210, 40);
+					m_pScene2D[1] = CScene2D::Create(D3DXVECTOR3(1040, 320, m_pos.z), "TUTOTIME");
+					m_pScene2D[1]->SetWidthHeight(210, 40);
+					m_pScene2D[2] = CScene2D::Create(D3DXVECTOR3(400, 680, m_pos.z), "TUTOTIME");
+					m_pScene2D[2]->SetWidthHeight(210, 40);
+					m_pScene2D[3] = CScene2D::Create(D3DXVECTOR3(1040, 680, m_pos.z), "TUTOTIME");
+					m_pScene2D[3]->SetWidthHeight(210, 40);
+
+					m_apNumber[nCntTime][nCntPlayer]->SetSize(D3DXVECTOR2(25, 35), D3DXVECTOR2(290.0f - (35 * nCntTime) + (640 * nWidth), 320.0f + (360 * nHeight)));
 				}
 			}
 		}
@@ -216,6 +245,12 @@ void CTutoTime::Uninit(void)
 					m_apNumber[nCntTime][nCntPlayer]->Uninit();
 					m_apNumber[nCntTime][nCntPlayer] = NULL;
 				}
+			}
+
+			if (m_pScene2D[nCntPlayer] != NULL)
+			{
+				m_pScene2D[nCntPlayer]->Uninit();
+				m_pScene2D[nCntPlayer] = NULL;
 			}
 		}
 	}
