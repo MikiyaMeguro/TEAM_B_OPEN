@@ -157,6 +157,15 @@ void CPause::Update(void)
 		}
 	}
 
+	//フェードしていないときにポーズできる
+	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	{
+		if (CCommand::GetCommand("PAUSE", nCnt) && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME && CScene::GetbPause() == true)
+		{
+			CScene::SetbPause(false);
+		}
+	}
+
 	m_apSelectMenu[m_nSelect]->SetPosition(m_aMenuDefaultPos[m_nSelect] + D3DXVECTOR3(0.0f, cosf(fCntHover / 5.0f) * 1.5f, 0.0f));
 	m_apSelectMenu[m_nSelect]->SetWidthHeight(250.0f, 75.0f);
 

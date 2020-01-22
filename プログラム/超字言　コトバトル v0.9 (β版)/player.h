@@ -216,6 +216,7 @@ private:
 	void			PlayerAlpha(float fAlpha);
 	void			BulletUI(D3DXVECTOR3 rot);				// 弾発射UI表示
 	void			BulletUIUninit(void);		// 弾発射準備の終了
+	void			SetPauseFlag(void);				// ポーズの設定
 
 	static PlayerLoadState m_PlayerLoadState[TYPE_MAX][BODY_MAX];	//パーツ情報
 
@@ -266,6 +267,8 @@ private:
 
 	bool m_bDamageVoice;
 	int m_nTimerDamageVoice;
+
+	bool m_bPauseFlag;				// ポーズしているかどうか
 
 };
 

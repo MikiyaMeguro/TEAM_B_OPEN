@@ -20,6 +20,7 @@
 #include "explosion.h"
 #include "CameraManager.h"
 #include "scene3D.h"
+#include "fade.h"
 
 #include "PlayerNumSelect.h"
 
@@ -639,6 +640,9 @@ void CPlayer::Update(void)
 			}
 		}
 	}
+
+	SetPauseFlag();	// ポーズ呼び出す処理
+
 #ifdef _DEBUG
 	testpos = m_pCharactorMove->GetPosition();
 	testmove = m_pCharactorMove->GetMove();
@@ -1791,5 +1795,18 @@ void CPlayer::PlayVoice(CPlayer::PLAYER_TYPE type)
 		break;
 	default:
 		break;
+	}
+}
+
+//=============================================================================
+// ポーズ設定の処理
+//=============================================================================
+void CPlayer::SetPauseFlag(void)
+{
+	if (CCommand::GetCommand("PAUSE", m_nID) && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME &&
+		CScene::GetbPause() == false)
+	{
+		m_bPauseFlag =  true;
+		CScene::SetbPause(true);
 	}
 }

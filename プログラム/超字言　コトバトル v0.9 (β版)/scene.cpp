@@ -132,13 +132,13 @@ void CScene::UpdeteAll(void)
 	pInputKeyboard = CManager::GetInputKeyboard();
 
 	//フェードしていないときにポーズできる
-	for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
+	/*for (int nCnt = 0; nCnt < MAX_PLAYER; nCnt++)
 	{
-		if (CCommand::GetCommand("PAUSE", nCnt) && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME)
+		if (CCommand::GetCommand("PAUSE", nCnt) && CFade::GetFade() == CFade::FADE_NONE && CManager::GetMode() == CManager::MODE_GAME && m_bPause == true)
 		{
-			m_bPause = m_bPause ? false : true;
+			m_bPause = false;
 		}
-	}
+	}*/
 
 
 	if (CCommand::GetCommand("DEBUG2D") == true)
