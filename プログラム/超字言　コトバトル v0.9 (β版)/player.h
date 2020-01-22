@@ -163,7 +163,7 @@ public:
 
 	void Set(D3DXVECTOR3 pos,CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int nPlayerID, PLAYER_TYPE PlayerType,D3DXVECTOR3 rot = D3DXVECTOR3(0.0f,0.0f,0.0f));
 
-	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body,bool bReLoad = false);
+	HRESULT ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body);
 
 	HRESULT Init(void);
 	void Uninit(void);

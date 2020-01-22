@@ -19,6 +19,10 @@
 #define NUMBER_SIZE_X		(18.0f)									// 数字の横幅
 #define NUMBER_SIZE_Y		(22.0f)									// 数字の縦幅
 
+
+LPDIRECT3DTEXTURE9  CNumber::m_pTexture = NULL;
+LPDIRECT3DTEXTURE9  CBillNumber::m_pTexture = NULL;
+
 //=============================================================================
 // コンストラクタ
 //=============================================================================
@@ -91,6 +95,11 @@ HRESULT CNumber::Init(D3DXVECTOR3 pos, int nType)
 	// 頂点バッファをアンロック
 	m_pVtxBuff->Unlock();
 
+	if (m_pTexture == NULL)
+	{
+		m_pTexture = CTexture::GetTexture("NUMBER");
+	}
+
 	return S_OK;
 }
 
@@ -129,7 +138,7 @@ void CNumber::Draw(void)
 	pDevice->SetFVF(FVF_VERTEX_2D);
 
 	// テクスチャ設定
-	pDevice->SetTexture(0, CTexture::GetTexture("NUMBER"));
+	pDevice->SetTexture(0, m_pTexture);
 
 	if (m_bDraw == true)
 	{
@@ -272,6 +281,11 @@ HRESULT CBillNumber::Init(D3DXVECTOR3 pos)
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 
+	if (m_pTexture == NULL)
+	{
+		m_pTexture = CTexture::GetTexture("NUMBER");
+	}
+
 	return S_OK;
 }
 
@@ -328,7 +342,7 @@ void CBillNumber::Draw(void)
 	pDevice->SetFVF(FVF_VERTEX_3D);
 
 	//テクスチャの設定
-	pDevice->SetTexture(0, CTexture::GetTexture("NUMBER"));
+	pDevice->SetTexture(0, m_pTexture);
 
 	// ビルボードの描画
 	pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP,

@@ -34,6 +34,7 @@ public:
 	bool GetDraw(void) { return m_bDraw; }
 
 private:
+	static LPDIRECT3DTEXTURE9   m_pTexture;				//テクスチャのポインタ
 	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;				// 頂点バッファへのポインタ
 	int							m_nType;				// テクスチャの番号
 	D3DXVECTOR2					m_size;					// サイズ
@@ -63,6 +64,7 @@ public:
 	D3DXCOLOR GetCol(void) { return m_col; }
 
 private:
+	static LPDIRECT3DTEXTURE9   m_pTexture;				//テクスチャのポインタ
 	LPDIRECT3DVERTEXBUFFER9		m_pVtxBuff;				// 頂点バッファへのポインタ
 	int							m_nType;				// テクスチャの番号
 	D3DXVECTOR3					m_size;					// サイズ
