@@ -111,7 +111,7 @@ HRESULT CResult::Init(void)
 	SetPolygon();
 	SetModel();
 	SetAudience();
-#if 1
+#if 0
 	m_ResultChara[0].nPoint = 10;
 	m_ResultChara[1].nPoint = 30;
 	m_ResultChara[2].nPoint = 30;
@@ -554,6 +554,7 @@ void CResult::Update(void)
 		m_MaskPro = MASKPRODUCION_CLOSE;
 	}
 
+#if 0
 	nCntFadeTime++;
 	if (nCntFadeTime == 1100)
 	{
@@ -564,6 +565,7 @@ void CResult::Update(void)
 	{
 		pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
 	}
+#endif
 
 #ifdef _DEBUG
 	CDebugProc::Print("c", "ƒŠƒUƒ‹ƒg");
