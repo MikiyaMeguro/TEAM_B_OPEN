@@ -232,7 +232,12 @@ void CTutorial::Init(void)
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
 		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 750.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(270.0f, 30.0f, 0.0f),
 			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
-
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 1000.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 1250.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
+		m_pWall->Create(D3DXVECTOR3(0.0f, 1.0f, 1500.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 30.0f, 0.0f),
+			D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(1.0f, 1.0f), 0, 23);
 	}
 
 	// ÉvÉåÉCÉÑÅ[ÇÃê∂ê¨
