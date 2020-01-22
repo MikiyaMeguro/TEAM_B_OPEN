@@ -104,6 +104,7 @@ void CScene::ReleseAll(void)
 			{
 				// フラグが立っているオブジェクトを消していく
 				pScene->DeleteAll();
+				pScene = NULL;
 			}
 
 			// 次のシーンに進める
@@ -174,6 +175,7 @@ void CScene::UpdeteAll(void)
 					{
 						// フラグが立っているオブジェクトを消していく
 						pScene->DeleteAll();
+						pScene = NULL;
 					}
 				}
 				// 次のシーンに進める
@@ -216,6 +218,7 @@ void CScene::UpdeteAll(void)
 				{
 					// フラグが立っているオブジェクトを消していく
 					pScene->DeleteAll();
+					pScene = NULL;
 				}
 
 				// 次のシーンに進める
@@ -373,7 +376,7 @@ void CScene::DrawAll(int nCamera)
 					pScene->Draw();
 				}
 			}
-			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA" && pScene->GetObjType() != OBJTYPE_CROWN && 
+			else if(CCameraManager::GetCameraName() != "PAUSE_CAMERA" && pScene->GetObjType() != OBJTYPE_CROWN &&
 				pScene->GetObjType() != OBJTYPE_BULLETUI && pScene->GetObjType() != OBJTYPE_MISSILEUI)
 			{
 				// 描画
