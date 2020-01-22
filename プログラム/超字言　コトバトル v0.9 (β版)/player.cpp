@@ -138,12 +138,14 @@ void CPlayer::Set(D3DXVECTOR3 pos, CCharaBase::CHARACTOR_MOVE_TYPE MoveType, int
 
 
 	// •¶ŽšŠÇ—ƒNƒ‰ƒX¶¬
-	if (m_pWordManager == NULL)
+	if (CManager::GetMode() != CManager::MODE_RESULT)
 	{
-		ObjCreate(m_pWordManager);
-		m_pWordManager->SetID(m_nID);
+		if (m_pWordManager == NULL)
+		{
+			ObjCreate(m_pWordManager);
+			m_pWordManager->SetID(m_nID);
+		}
 	}
-
 	if (CManager::GetXInput(m_nID) != NULL)
 	{
 		m_fStickRX = CManager::GetXInput(m_nID)->GetLStickRotX();
