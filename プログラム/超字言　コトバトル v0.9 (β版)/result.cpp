@@ -111,7 +111,7 @@ HRESULT CResult::Init(void)
 	SetPolygon();
 	SetModel();
 	SetAudience();
-#if 0
+#if 1
 	m_ResultChara[0].nPoint = 10;
 	m_ResultChara[1].nPoint = 30;
 	m_ResultChara[2].nPoint = 30;
@@ -553,6 +553,18 @@ void CResult::Update(void)
 	{
 		m_MaskPro = MASKPRODUCION_CLOSE;
 	}
+
+	nCntFadeTime++;
+	if (nCntFadeTime == 1100)
+	{
+		pFade->SetFade(pManager->MODE_RESULT, pFade->FADE_OUT);
+	}
+
+	if (pInputKeyboard->GetTrigger(DIK_NUMPADPLUS) == true)
+	{
+		pFade->SetFade(pManager->MODE_TITLE, pFade->FADE_OUT);
+	}
+
 #ifdef _DEBUG
 	CDebugProc::Print("c", "ƒŠƒUƒ‹ƒg");
 
@@ -929,11 +941,11 @@ void  CResult::Set2DUI(int nNum, int nPosNum)
 		}
 		for (int nCntEff = 0; nCntEff < 2; nCntEff++)
 		{
-			if (m_apEffect[nNum][nCntEff] != NULL) 
+			if (m_apEffect[nNum][nCntEff] != NULL)
 			{
 				m_apEffect[nNum][nCntEff]->SetPosition(m_RankEffect[nPosNum][nCntEff]);
 				m_apEffect[nNum][nCntEff]->SetWidthHeight(DEFAULT_SIZE*0.5f, DEFAULT_SIZE*0.5f);
-				m_apEffect[nNum][nCntEff]->SetbDraw(true); 
+				m_apEffect[nNum][nCntEff]->SetbDraw(true);
 			}
 		}
 	}

@@ -148,8 +148,7 @@ private:
 	PRODUCTION m_Production;					//演出
 	MASKPRODUCION m_MaskPro;					//カーテンの演出
 	bool		m_bCurtainSound;
-#ifdef _DEBUG
+
 	int nCntFadeTime = 0;
-#endif
 };
 #endif
