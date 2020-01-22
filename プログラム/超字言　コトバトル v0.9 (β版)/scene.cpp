@@ -95,6 +95,12 @@ void CScene::ReleseAll(void)
 	{// 優先順位の数分繰り返す
 		pScene = m_apTop[nCntPriority];
 
+		if (m_nNumPriority[nCntPriority] <= 0)
+		{
+			m_apTop[nCntPriority] = NULL;
+			m_apCur[nCntPriority] = NULL;
+		}
+
 		while (pScene != NULL)
 		{
 			// Updateの最中に消える可能性があるから先に記録しておく
@@ -110,6 +116,7 @@ void CScene::ReleseAll(void)
 			// 次のシーンに進める
 			pScene = pSceneNext;
 		}
+
 	}
 }
 
