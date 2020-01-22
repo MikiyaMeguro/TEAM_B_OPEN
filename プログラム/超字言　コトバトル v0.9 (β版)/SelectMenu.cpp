@@ -634,7 +634,7 @@ void CSelectMenu::SelectAnimation(int MenuSelect)
 			break;
 		}
 		m_nCounter++;
-		if (m_nCounter > 8 && m_nCounter < 12)
+		if (m_nCounter > 30 && m_nCounter < 33)
 		{
 			if (MenuSelect == 0)
 			{
