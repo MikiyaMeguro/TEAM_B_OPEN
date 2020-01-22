@@ -78,7 +78,7 @@ CTube *CGame::m_apTube[MAX_PLAYER] = {};
 CMeshField *CGame::m_pMeshField = NULL;
 CPoint *CGame::m_pPoint[MAX_PLAYER] = {};
 CSetWord *CGame::m_pWordCreate = NULL;
-CWall *CGame::m_pWall = NULL;
+CWall *CGame::m_pWall[MAX_WALLGAME] = {};
 CPlayer::PLAYER_TYPE CGame::m_type[MAX_PLAYER] = {};
 int CGame::m_nNumStage = NULL;
 CPause* CGame::m_pPause = NULL;
@@ -136,17 +136,21 @@ void CGame::Init(void)
 		m_pcStageNameWord[0][0] = { FILE_NAME00 };
 		m_pcStageNameWord[0][1] = { FILE_NAME01 };
 		m_pcStageNameWord[0][2] = { FILE_NAME02 };
-		m_pWall = NULL;
-		if (m_pWall == NULL)
+
+		for (int nCount = 0; nCount < MAX_WALLGAME; nCount++)
+		{
+			m_pWall[nCount] = NULL;
+		}
+		if (m_pWall[0] == NULL)
 		{
 			//	下の壁
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[0] = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[1] = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[2] = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[3] = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 		}
 		break;
@@ -158,38 +162,41 @@ void CGame::Init(void)
 		m_pcStageNameWord[1][0] = { FILE_NAME10 };
 		m_pcStageNameWord[1][1] = { FILE_NAME11 };
 		m_pcStageNameWord[1][2] = { FILE_NAME12 };
-		m_pWall = NULL;
-		if (m_pWall == NULL)
+		for (int nCount = 0; nCount < MAX_WALLGAME; nCount++)
+		{
+			m_pWall[nCount] = NULL;
+		}
+		if (m_pWall[0] == NULL)
 		{
 			//	下の壁
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[0] = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, 400.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[1] = CWall::Create(D3DXVECTOR3(0.0f, -100.0f, -400.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[2] = CWall::Create(D3DXVECTOR3(400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
-			m_pWall = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
+			m_pWall[3] = CWall::Create(D3DXVECTOR3(-400.0f, -100.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(400.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), D3DXVECTOR2(5.0f, 5.0f), 0, 0);
 			//	噴水の壁
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, 100.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+			m_pWall[4] = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, 100.0f), D3DXVECTOR3(0.0f, 3.14f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+			m_pWall[5] = CWall::Create(D3DXVECTOR3(0.0f, 5.0f, -100.0f), D3DXVECTOR3(0.0f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
-			m_pWall = CWall::Create(D3DXVECTOR3(100.0f, 5.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+			m_pWall[6] = CWall::Create(D3DXVECTOR3(100.0f, 5.0f, 0.0f), D3DXVECTOR3(0.0f, -D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
-			m_pWall = CWall::Create(D3DXVECTOR3(-100.0f, 5.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
+			m_pWall[7] = CWall::Create(D3DXVECTOR3(-100.0f, 5.0f, 0.0f), D3DXVECTOR3(0.0f, D3DX_PI * 0.5f, 0.0f), D3DXVECTOR3(100.0f, 10.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 2.0f), 0, 5);
 			//	噴水の上
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
+			m_pWall[7] = CWall::Create(D3DXVECTOR3(0.0f, 10.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.7f), D3DXVECTOR2(5.0f, 5.0f), 0, 5);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 15.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
+			m_pWall[8] = CWall::Create(D3DXVECTOR3(0.0f, 15.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(100.0f, 100.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 5);
 			//	噴水からの水
-			m_pWall = CWall::Create(D3DXVECTOR3(200.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f,20.0f, 0.0f),
+			m_pWall[9] = CWall::Create(D3DXVECTOR3(200.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f,20.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
-			m_pWall = CWall::Create(D3DXVECTOR3(-200.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f, 20.0f, 0.0f),
+			m_pWall[10] = CWall::Create(D3DXVECTOR3(-200.0f, 1.0f, 0.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(200.0f, 20.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
-			m_pWall = CWall::Create(D3DXVECTOR3(0.0f, 1.0f, 200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
+			m_pWall[11] = CWall::Create(D3DXVECTOR3(0.0f, 1.0f, 200.0f), D3DXVECTOR3(D3DX_PI * 0.5f, 0.0f, 0.0f), D3DXVECTOR3(20.0f, 200.0f, 0.0f),
 				D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.4f), D3DXVECTOR2(5.0f, 5.0f), 0, 6);
 		}
 		break;
@@ -241,6 +248,16 @@ void CGame::Uninit(void)
 	{
 		m_pMeshField->Uninit();
 		m_pMeshField = NULL;
+	}
+
+	//壁の破棄
+	for (int nCount = 0; nCount < MAX_WALLGAME; nCount++)
+	{
+		if (m_pWall[nCount] != NULL)
+		{
+			m_pWall[nCount]->Uninit();
+			m_pWall[nCount] = NULL;
+		}
 	}
 
 	CEffect::Unload();			//	エフェクトの開放

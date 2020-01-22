@@ -43,6 +43,7 @@ class CStageSelect;
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
 #define UI_MAX		(24)
 
+#define MAX_WALL_TUTO	(48)
 
 class CTutorial
 {
@@ -70,7 +71,7 @@ private:
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPlayer::PLAYER_TYPE m_type[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-	static CWall *m_pWall;
+	static CWall *m_pWall[MAX_WALL_TUTO];
 	static CSetWord *m_pWordCreate;
 	char *m_pcStageName[MAX_STAGE][MAX_STAGECOUNT];		// ステージの名前保管
 	char *m_pcStageNameWord[MAX_STAGE][MAX_STAGECOUNT];	// ステージの名前保管

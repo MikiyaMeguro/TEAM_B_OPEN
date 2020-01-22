@@ -54,6 +54,9 @@ class CPause;
 #define MAX_STAGE	(3)			// ステージの最大数
 #define MAX_STAGECOUNT	(3)		// 各ステージの数
 
+#define MAX_WALLGAME	(12)		// 壁の最大数
+
+
 //クラス（シーン2Dの派生クラス）
 class CGame
 {
@@ -95,7 +98,7 @@ private:
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPoint *m_pPoint[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-	static CWall *m_pWall;
+	static CWall *m_pWall[MAX_WALLGAME];
 	static bool m_bStageSet;
 	static CPause* m_pPause;
 
