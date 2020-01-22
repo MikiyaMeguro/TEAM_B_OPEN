@@ -1266,7 +1266,7 @@ void CPlayer::PlayerAlpha(float fAlpha)
 //=============================================================================
 // モデルロード処理
 //=============================================================================
-HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool bReLoad)
+HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body)
 {
 	FILE* pFile = NULL;		// ファイルポインタ
 	char ReadText[256];		// 読み込んだ文字列を入れておく
@@ -1286,9 +1286,8 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 			ObjRelease(m_pPlayerParts[nCntParts][body]);
 			m_pPlayerParts[nCntParts][body] = NULL;
 		}
-	if (m_PlayerLoadState[type][body].bLoad == false ||
-		(m_PlayerLoadState[type][body].bLoad == true && bReLoad == true))
-	{//	まだこの情報がロードされていないorされているが再度ロードしたければ
+	if (m_PlayerLoadState[type][body].bLoad == false)
+	{//	まだこの情報がロードされていなければ
 		for (int nCntMotion = 0; nCntMotion < MOTION_UPPER_MAX; nCntMotion++)
 		{
 			m_PlayerLoadState[type][body].prop[nCntMotion]();
@@ -1466,7 +1465,6 @@ HRESULT CPlayer::ModelLoad(LPCSTR pFileName, PLAYER_TYPE type, BODY body, bool b
 
 			if (ObjCreate(m_pPlayerParts[nCntParts][body]))
 			{//生成されたら
-
 				m_pPlayerParts[nCntParts][body]->Set(m_PlayerLoadState[type][body].info[nCntParts].FileName,
 					m_PlayerLoadState[type][body].info[nCntParts].pos,
 					m_PlayerLoadState[type][body].info[nCntParts].rot, NULL);
