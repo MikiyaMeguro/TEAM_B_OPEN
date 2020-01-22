@@ -358,7 +358,7 @@ END_MODELSET
 MODELSET
 	TYPE = 22					# かだん
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.1 1.1 1.1			# スケール
+	SCALE = 0.8 0.8 0.8			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 5.0 15.0 45.0
 	ANSWERMODEL = 22			# 答えのモデル
@@ -368,7 +368,7 @@ END_MODELSET
 MODELSET
 	TYPE = 23					# かたな
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.5 1.5 1.5		# スケール
+	SCALE = 1.0 1.0 1.0		# スケール
 	BULLETTYPE = 3				# 弾の種類
 	ANSWER = 5.0 15.0 20.0
 	ANSWERMODEL = 23			# 答えのモデル
@@ -690,8 +690,8 @@ END_MODELSET
 
 MODELSET
 	TYPE = 55					# めいす
-	ROT = 0.0 0.0 1.57			# 向き 
-	SCALE = 1.5 1.5 1.5			# スケール
+	ROT = 0.0 0.0 0.0			# 向き 
+	SCALE = 1.2 1.2 1.2			# スケール
 	BULLETTYPE = 1				# 弾の種類
 	ANSWER = 33.0 1.0 12.0
 	ANSWERMODEL = 55			# 答えのモデル
@@ -842,7 +842,7 @@ END_MODELSET
 MODELSET
 	TYPE = 70					# くくい
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.5 1.5 1.5			# スケール
+	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 7.0 7.0 1.0
 	ANSWERMODEL = 70			# 答えのモデル
@@ -1033,7 +1033,7 @@ END_MODELSET
 MODELSET
 	TYPE = 89					# すまい
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 0.5 0.5 0.5			# スケール
+	SCALE = 0.3 0.3 0.3			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 12.0 30.0 1.0
 	ANSWERMODEL = 87			# 答えのモデル
@@ -1093,7 +1093,7 @@ END_MODELSET
 MODELSET
 	TYPE = 95					# チタン
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.5 1.5 1.5		# スケール
+	SCALE = 1.0 1.0 1.0		# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 16.0 15.0 45.0
 	ANSWERMODEL = 93			# 答えのモデル
@@ -1173,7 +1173,7 @@ END_MODELSET
 MODELSET
 	TYPE = 103					# ずかん
 	ROT = 0.0 0.0 0.0			# 向き 
-	SCALE = 1.5 1.5 1.5			# スケール
+	SCALE = 1.0 1.0 1.0			# スケール
 	BULLETTYPE = 2				# 弾の種類
 	ANSWER = 12.0 5.0 45.0
 	ANSWERMODEL = 96			# 答えのモデル
