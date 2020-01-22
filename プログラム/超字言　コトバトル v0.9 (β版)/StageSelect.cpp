@@ -109,9 +109,6 @@ void CStageSelect::Init(void)
 	//読み込むテキストデータを登録
 	m_pcStageSelect[0] = MACHINE_STAGE_MACHINE;
 	m_pcStageSelect[1] = MACHINE_STAGE_WEATHER;
-	CSound *pSound = CManager::GetSound();		//	音の取得
-	pSound->SetVolume(CSound::SOUND_LABEL_MACHINESTAGE, 3.5f);
-	pSound->PlaySound(CSound::SOUND_LABEL_MACHINESTAGE);
 }
 
 //=============================================================================
@@ -317,11 +314,11 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 	switch (TYPE)
 	{
 	case SELECTTYPE_SELECT_MACHINE:	//機械
-		pSound->SetVolume(CSound::SOUND_LABEL_NATURESTAGE, 3.5f);
-		pSound->PlaySound(CSound::SOUND_LABEL_NATURESTAGE);
 		//任意のキーENTER
 		if (CCommand::GetCommand("DECISION") == true)
 		{
+			pSound->SetVolume(CSound::SOUND_LABEL_MACHINESTAGE, 3.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_MACHINESTAGE);
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT04);
 
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
@@ -329,12 +326,11 @@ void CStageSelect::Selecttype(CStageSelect::SELECTTYPE TYPE, CFade *pFade, CMana
 		break;
 
 	case SELECTTYPE_SELECT_WEATHER:	//天候　
-		pSound->SetVolume(CSound::SOUND_LABEL_MACHINESTAGE, 3.5f);
-		pSound->PlaySound(CSound::SOUND_LABEL_MACHINESTAGE);
 		if (CCommand::GetCommand("DECISION") == true)
 		{
+			pSound->SetVolume(CSound::SOUND_LABEL_NATURESTAGE, 3.5f);
+			pSound->PlaySound(CSound::SOUND_LABEL_NATURESTAGE);
 			pSound->PlaySound(CSound::SOUND_LABEL_SE_SELECT04);
-
 			pFade->SetFade(pManager->MODE_GAME, pFade->FADE_OUT);
 		}
 		break;
