@@ -211,6 +211,13 @@ void CWordManager::Update(void)
 						CManager::GetTube(m_nPlayerID)->SetStockNum(m_nCntStock);
 					}
 
+					// 文字modelのサウンド再生
+					int nCntSound = 0;
+					nCntSound = m_nCreateType + (int)CSound::SOUND_LABEL_WORDVOICE_KURUMA;	// 車のボイスから
+
+					CManager::GetSound()->SetVolume((CSound::SOUND_LABEL)nCntSound, 8.0f);
+					CManager::GetSound()->PlaySoundA((CSound::SOUND_LABEL)nCntSound);
+
 					m_nCntaAnswer = 0;
 					m_nCntStock++;
 					if (m_nCntStock >= MAX_WORD) { m_nCntStock = MAX_WORD;  m_bGatherFlag = true; }

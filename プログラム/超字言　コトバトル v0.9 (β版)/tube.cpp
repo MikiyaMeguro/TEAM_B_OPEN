@@ -532,15 +532,6 @@ void CTube::UninitChack(bool bFlag)
 		}
 
 		//m_pAnswerModel[m_nStockNum]->SetWidthHeight(m_sizeAnswer.x, m_sizeAnswer.y);
-
-		if (m_nAnswerModelNum != NOT_NUM)
-		{
-			int nCntSound = 0;
-			nCntSound = m_nAnswerModelNum + (int)CSound::SOUND_LABEL_WORDVOICE_KURUMA;	// 車のボイスから
-
-			CManager::GetSound()->SetVolume((CSound::SOUND_LABEL)nCntSound, 5.0f);
-			CManager::GetSound()->PlaySoundA((CSound::SOUND_LABEL)nCntSound);
-		}
 	}
 
 	m_nAnswerModelNum = 0;
@@ -652,13 +643,6 @@ void CTube::SizeChange(D3DXVECTOR2 size)
 
 	if (size.x >= m_sizeAnswer.x && size.y >= m_sizeAnswer.y)
 	{
-		if (m_bModelTexFlag == true && m_nAnswerModelNum != NOT_NUM)
-		{
-			int nCntSound = 0;
-			nCntSound = m_nAnswerModelNum + (int)CSound::SOUND_LABEL_WORDVOICE_KURUMA;	// 車のボイスから
-			CManager::GetSound()->SetVolume((CSound::SOUND_LABEL)nCntSound, 5.0f);
-			CManager::GetSound()->PlaySoundA((CSound::SOUND_LABEL)nCntSound);
-		}
 		m_bModelTexFlag = false;
 		m_bCreateFlag = false;
 		m_bSizeFlag = false;

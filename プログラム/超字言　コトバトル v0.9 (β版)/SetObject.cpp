@@ -85,7 +85,7 @@ void CSetObject::Update(void)
 
 	if (pInput->GetTrigger(DIK_RCONTROL) == true)
 	{	//ファイルロード
-		LoadFile(FILE_NAME0);
+		//LoadFile(FILE_NAME0);
 	}
 }
 
