@@ -129,7 +129,8 @@ HRESULT CMeshField::Init(void)
 	}
 
 	// テクスチャの読み込み
-	D3DXCreateTextureFromFile(pDevice, MESHFIELD_TEXTURE_NAME, &m_pTexture);
+	//D3DXCreateTextureFromFile(pDevice, MESHFIELD_TEXTURE_NAME, &m_pTexture);
+	m_pTexture = CTexture::GetTexture("FIELD001");
 
 	// 頂点情報の作成
 	int nVtxCounter = 0;
@@ -352,7 +353,7 @@ void CMeshField::Uninit(void)
 	// テクスチャの破棄
 	if (m_pTexture != NULL)
 	{
-		m_pTexture->Release();
+		//m_pTexture->Release();
 		m_pTexture = NULL;
 	}
 

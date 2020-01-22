@@ -152,6 +152,7 @@ DATA = 00119 data/TEXTURE/gAME/Target.png TARGET
 DATA = 00120 data/TEXTURE/Credit/Back_Press.png BACK_PRESS
 DATA = 00121 data/TEXTURE/Credit/Creadit.jpg CREADIT_BG
 DATA = 00122 data/TEXTURE/tutorial/startIcon.png TUTOTIME
+DATA = 00123 data/TEXTURE/field001.jpg FIELD001 
 
 
 END_LOAD
