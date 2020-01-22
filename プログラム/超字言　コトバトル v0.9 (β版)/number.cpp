@@ -95,10 +95,7 @@ HRESULT CNumber::Init(D3DXVECTOR3 pos, int nType)
 	// 頂点バッファをアンロック
 	m_pVtxBuff->Unlock();
 
-	if (m_pTexture == NULL)
-	{
-		m_pTexture = CTexture::GetTexture("NUMBER");
-	}
+	m_pTexture = CTexture::GetTexture("NUMBER");
 
 	return S_OK;
 }
@@ -281,10 +278,7 @@ HRESULT CBillNumber::Init(D3DXVECTOR3 pos)
 	//頂点バッファをアンロックする
 	m_pVtxBuff->Unlock();
 
-	if (m_pTexture == NULL)
-	{
-		m_pTexture = CTexture::GetTexture("NUMBER");
-	}
+	m_pTexture = CTexture::GetTexture("NUMBER");
 
 	return S_OK;
 }

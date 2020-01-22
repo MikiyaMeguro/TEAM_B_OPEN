@@ -350,12 +350,12 @@ HRESULT CMeshField::Init(void)
 //=============================================================================
 void CMeshField::Uninit(void)
 {
-	// テクスチャの破棄
-	if (m_pTexture != NULL)
-	{
-		//m_pTexture->Release();
-		m_pTexture = NULL;
-	}
+	//// テクスチャの破棄
+	//if (m_pTexture != NULL)
+	//{
+	//  m_pTexture->Release();
+	//	m_pTexture = NULL;
+	//}
 
 	// 頂点バッファの開放
 	if (m_pVtxBuff != NULL)
