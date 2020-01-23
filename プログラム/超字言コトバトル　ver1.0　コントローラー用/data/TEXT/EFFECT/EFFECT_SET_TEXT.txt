@@ -1,0 +1,2 @@
+NUM_TEXT = 1
+TEXT_NAME = data/TEXT/EFFECT/EFFECT_SET/SetEffect.txt
