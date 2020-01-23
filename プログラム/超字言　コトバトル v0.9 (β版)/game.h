@@ -98,7 +98,7 @@ private:
 	static CTube *m_apTube[MAX_PLAYER];
 	static CPoint *m_pPoint[MAX_PLAYER];
 	static CMeshField *m_pMeshField;
-	static CWall *m_pWall[MAX_WALLGAME];
+	static CWall *m_pWall;
 	static bool m_bStageSet;
 	static CPause* m_pPause;
 
