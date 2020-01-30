@@ -1,4 +1,5 @@
 BGM
+HURT RECORD
 
 SE
 ÅEOn jin
